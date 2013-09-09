@@ -15,7 +15,6 @@ SUBDIRS = base \
           optimization \
           matching \
           network
-#          ocr
 
 # Include opencv?
 enabled(opencv):SUBDIRS += opencv
@@ -34,15 +33,14 @@ SUBDIRS += calibration \
            io/emulator
 
 # Camera drivers
-CAMERADRIVERS = multicam iport currera pylon simplon pleora webcam
+CAMERADRIVERS = webcam
 for(driver, CAMERADRIVERS) {
   enabled($$driver): SUBDIRS += camera/$$driver
 }
 
 # Io drivers
-IODRIVERS = multicam advantech currera modbus
+IODRIVERS = modbus
 for(driver, IODRIVERS) {
   enabled($$driver): SUBDIRS += io/$$driver
 }
 
-SUBDIRS += gui

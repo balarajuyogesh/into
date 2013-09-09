@@ -17,21 +17,12 @@
 
 #include "PiiNetworkCameraOperation.h"
 #include "PiiCameraOperation.h"
-#include "protocols/PiiAviivaM2CLSerialProtocol.h"
-#include "protocols/PiiAviivaSC2CLSerialProtocol.h"
 
 PII_IMPLEMENT_PLUGIN(PiiCameraPlugin);
 
 PII_REGISTER_OPERATION(PiiNetworkCameraOperation);
 PII_REGISTER_OPERATION(PiiCameraOperation);
-PII_REGISTER_CLASS(PiiAviivaM2CLSerialProtocol, PiiCameraConfigurationProtocol);
-PII_REGISTER_CLASS(PiiAviivaSC2CLSerialProtocol, PiiCameraConfigurationProtocol);
 
-
-#ifndef PII_NO_FIREWIRE
-#include "firewire/PiiFireWireOperation.h"
-PII_REGISTER_OPERATION(PiiFireWireOperation);
-#endif
 
 
 

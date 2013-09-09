@@ -12,3 +12,21 @@
  * to use Into as a part of open source software projects. Please
  * refer to LICENSE.AGPL3 for details.
  */
+
+#ifndef _TESTPIIVARIANT_H
+#define _TESTPIIVARIANT_H
+
+#include <QObject>
+
+class TestPiiVariant : public QObject
+{
+  Q_OBJECT
+
+private slots:
+  void construct();
+  void copy();
+  void serialization();
+  void mapType();
+};
+
+#endif //_TESTPIIVARIANT_H
