@@ -1,0 +1,30 @@
+# Into pre-installation script
+
+error()
+{
+  echo "Could not extract license file."
+  exit 1
+}
+
+check_answer()
+{
+  echo "$1" | tr "[A-Z]" "[a-z]" | grep '^\(yes\|no\)$'
+}
+
+sed -n -e ':a /^#EOF/ bc; n; ba; :b p; :c n; bb' < "$0" | tar zxO into/COPYING | more -d || error
+echo
+while true; do
+  read -p "Accept license terms? [yes/no] " answer
+  case `check_answer $answer` in
+    yes)
+      break
+      ;;
+    no)
+      echo "Installation cancelled."
+      exit 2
+      ;;
+    *)
+      echo "Please answer \"yes\" or \"no\"."
+      ;;
+  esac
+done

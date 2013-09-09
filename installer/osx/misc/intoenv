@@ -1,0 +1,5 @@
+export DYLD_LIBRARY_PATH=/Developer/into/lib:$DYLD_LIBRARY_PATH
+export PATH=/Developer/into/bin:$PATH
+export INTODIR=/Developer/into/src
+export QT_PLUGIN_PATH=/Developer/into/bin
+export QMAKESPEC=macx-g++

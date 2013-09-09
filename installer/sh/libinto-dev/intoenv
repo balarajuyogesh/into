@@ -1,0 +1,30 @@
+if [ -z "$QTDIR" ]; then
+  qtdir=$(ls -d $HOME/qtsdk* 2> /dev/null | sort | tail -n 1)
+  if [ -z "$qtdir" ]; then
+    echo "Warning! Qt environment is not set up correctly."
+    echo "Please set the QTDIR environment variable to the qt framework installation directory."
+    echo "For example: export QTDIR=/usr/local/qtsdk-2010.05/qt"
+  else
+    export QTDIR=$qtdir/qt
+  fi
+fi
+
+addtopath()
+{
+  local oldval
+  oldval=$(eval echo \$$1)
+  if ! echo $oldval | grep -q "$2"; then
+    eval $1=$2${oldval:+:$oldval}
+  fi
+}
+
+if [ -n "$QTDIR" ]; then
+  addtopath PATH "$QTDIR/bin"
+  addtopath LD_LIBRARY_PATH "$QTDIR/lib"
+fi
+
+addtopath LD_LIBRARY_PATH ROOT/into/lib
+addtopath PATH ROOT/into/bin
+export QT_PLUGIN_PATH=ROOT/into/bin
+export PATH
+export LD_LIBRARY_PATH

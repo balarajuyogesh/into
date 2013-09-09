@@ -1,0 +1,748 @@
+Commercial License Agreement for Into Development Tool
+Agreement ID 212
+
+   Important information about the software you are going to download,
+   install or use. Read this agreement carefully before installing or
+   using the software.
+
+   Intopii is willing to license the software to you only upon the
+   condition that you accept all the terms and conditions of this
+   agreement. Any use of the software without accepting the terms and
+   conditions is strictly prohibited and illegal.
+
+   By installing and using the software you indicate that you accept,
+   understand and agree to be bound by the terms and conditions of this
+   agreement. Moreover, you hereby confirm that you have legal rights to
+   enter into agreement with Intopii.
+
+   If you do not agree on all of the terms and conditions of this
+   agreement, you have to cancel installation, start-up, or download and
+   permanently remove Into from your computer or any other device or mass
+   storage.
+
+   This Commercial License Agreement for Into Development Tool
+   (“Agreement”) is a legal agreement between Intopii Oy (later “Intopii”
+   or as applicable “Party”), Business ID FI16007485, with its registered
+   office at Intopii Oy, P.O.Box 478, FIN-90101 OULU and You, either an
+   individual or a legal entity (later “Customer” or as applicable “Party”
+   and together with Intopii, the “Parties”).
+
+   This Agreement is applicable to the Into Development tool, a software
+   product of Intopii, (later “Into”) delivered to you, unless otherwise
+   agreed. Into is a proprietary product of Intopii and it is protected by
+   copyright laws and international treaties.
+
+  1 Definitions
+
+   Affiliate
+          of a Party shall mean an entity (i) which is directly or
+          indirectly controlling such Party; (ii) which is under the same
+          direct or indirect ownership or control as such Party; or (iii)
+          which is directly or indirectly owned or controlled by such
+          Party. For these purposes, an entity shall be treated as being
+          controlled by another if that other entity has fifty percent (50
+          %) or more of the votes in such entity, is able to direct its
+          affairs and/or to control the composition of its board of
+          directors or equivalent body.
+
+   Application(s)
+          shall mean software product(s) created using the Into.
+          Applications may include portions of the Into.
+
+   Designated User(s)
+          shall mean the employee(s) of Customer (incl. Employee(s) at
+          Customer’s Affiliates) acting within the scope of their
+          employment or Customer’s consultant(s) or contractor(s) acting
+          within the scope of their services for Customer and on behalf of
+          Customer; or and individual, if Customer is a person. Change of
+          Designated User requires a written permission from Intopii.
+
+   Documentation
+          shall mean all user manuals, technical reference manuals and
+          other written materials related to the use, operation, support,
+          maintenance or warranty of Into, that are generally made
+          available to users, published in internet or otherwise delivered
+          directly to Designated User(s) or to Customer.
+
+   License Certificate
+          shall mean the document accompanying the Into that specifies
+          designated Platforms and Designated Users. Any new License
+          Certificate sent or put available for download by Intopii will
+          invalidate the previous License Certificate.
+
+   Into
+          shall mean the computer software, "online" or electronic
+          documentation, associated media and printed materials, including
+          the source code, example programs and the Documentation
+          delivered by Intopii or an authorized reseller to Customer under
+          a commercial license agreement in conjunction with this
+          Agreement. Such a Intopii Product may include versions,
+          configurations, Updates and enhancements, and Documentation of
+          Intopii Product; as applicable with this Agreement.
+
+   Modified Software
+          shall mean modifications made to Into by Customer.
+
+   Platform(s)
+          shall mean the operating systems and/or hardware configurations
+          listed in the License Certificate.
+
+   Redistributables
+          shall mean the portions of Into set forth in Section 3.2 that
+          may be distributed with or as part of Applications in object
+          code form only.
+
+   Update(s)
+          shall mean a release or version of Into containing enhancements,
+          new features, bug fixes, error corrections and other changes
+          that are generally made available to users, published in
+          internet or otherwise delivered directly to Designated User(s)
+          or Customer.
+
+   Third Party and Third Parties
+          shall mean any individual or legal entity other than Customer or
+          Intopii.
+
+   Third Party Product
+          shall mean any computer software and associated documentation
+          (regardless its format) that is not owned by Intopii or by
+          Customer.
+
+   Intellectual Property Rights and/or IPR rights
+          means all patents and patent rights, utility models, copyright
+          rights, mask work rights, trademark rights, trade secret rights,
+          and all other intellectual property or proprietary rights
+          anywhere in the world, irrespective of whether they are
+          registrable or not including, without limitation, all
+          applications and registrations with respect to the foregoing.
+
+   Intopii Product(s)
+          shall mean the software products and services developed and
+          provided by Intopii, regardless their format. Intopii Products
+          include but are not limited to Intopii Development Tool(s).
+
+  2 Preconditions and Validity of the Agreement
+
+   Customer acknowledges that Customer’s electronic submissions
+   constitutes Customer’s agreement and intent to be bound by and to pay
+   for such agreements and transactions. Thus, by installing, copying
+   and/or otherwise using Into Customer understands and agrees to be bound
+   by the terms and conditions of this Agreement.
+
+   If Customer does not agree to all of the terms and conditions contained
+   herein, Customer may not install, copy, or otherwise use Into and shall
+   destroy or return Into and all copies thereof to Intopii or to the
+   dealer from whom Into has been obtained.
+
+   By installing, copying, or otherwise using any Updates or other
+   components of Into that Customer receives or downloads, Customer agrees
+   to be bound by any additional license terms that accompany such
+   Updates. If Customer does not agree to the additional license terms
+   that accompany such Updates, Customer may not install, copy, or
+   otherwise use such Updates.
+
+   If you are installing, copying, and/or using Into on behalf of legal
+   entity you hereby that you have legal rights to enter into agreements
+   with Intopii behalf of such legal entity.
+
+  3 Grant of License
+
+   The licenses granted in this Section 3 and its subsections by
+   Intopii to Customer are subject to Customer’s compliance with this
+   Agreement.
+
+    3.1 Using, Modifying and Copying
+
+   Intopii grants to Customer a non-exclusive, royalty-free,
+   non-transferable, perpetual license to use, modify and copy Into for
+   the Designated User(s) specified in the License Certificate for the
+   sole purposes of designing, developing, and testing Application(s).
+
+   Provided that Customer and Designated User(s) comply with all terms of
+   this Agreement they are allowed to:
+     * install copies of Into on an unlimited number of computers provided
+       that only the Designated User(s) use Into; and,
+     * modify Into as limited by section 3.4 below; and,
+     * compile Into and/or Modified Software source code into object code;
+       and,
+     * reproduce and distribute the object code form of Redistributables
+       for execution on the specified Platforms as limited by sections
+       3.2, 3.3 and 3.4 below; and,
+     * distribute, transfer, assign or otherwise dispose of Applications
+       in binary/compiled form, or in source code form;
+
+   Customer shall be liable for Designated User(s)compliance with the
+   terms of this Agreement. This grant of license will become valid only
+   after the license fee has been fully paid.
+
+    3.2 Redistribution
+
+   Copies of Into’s main and plug-in libraries (“later Redistributables”)
+   are permitted for distribution only with Applications and for the sole
+   purpose of executing Applications permitted under this Agreement. Under
+   no circumstances may any copies of Redistributables be distributed
+   separately. Customer shall distribute Redistributables only in object
+   code form.
+
+   This Agreement does not give Customer any rights to distribute any of
+   the parts of Into (neither as a whole nor as parts or snippets of code)
+   listed herein:
+     * Into’s source code and header files; and
+     * Into’s documentation;and
+     * Into’s demonstration programs;
+
+    3.3 Application Restrictions
+
+   Applications may not compete with Into. Therefore, Customer hereby
+   acknowledges that Application shall not:
+     * be a software development tool that directly or indirectly reveals
+       the programming interface of Into; and,
+     * pass on functionality which in any way makes it possible for others
+       to create software with Into. Customer may use Into’s scripting
+       functionality solely in order to enable scripting that augments the
+       functionality of the Application(s) without adding primary and
+       substantial functionality to the Application(s).
+
+   Customer shall not lease, lend or loan Into for time sharing or service
+   bureau purposes or otherwise distribute or put Into available to Third
+   Parties or otherwise grant access to any other parties than Designated
+   Users.
+
+    3.4 Conditions for creating Applications and distributing Redistributables
+
+   The licenses granted in this Agreement for Customer to create and
+   distribute Applications and the Redistributables (if any) is subject to
+   all of the following conditions:
+     * all copies of the Applications must bear a valid copyright notice
+       and Customer may not remove or alter any copyright, trademark or
+       other proprietary rights notice contained in any portion of Into;
+       and
+     * Customer shall use Intopii’s name logos, or trademarks only to
+       state that Application was developed using Into; and
+     * Redistributables, if any, shall be delivered to Customer’s customer
+       “as is”; and,
+     * Customer shall indemnify and hold Intopii, its Affiliates,
+       contractors, licensors, agents, its suppliers, officers,
+       principals, directors, and employees harmless from and against any
+       claims or liabilities arising out of the use, reproduction or
+       distribution of Applications; and,
+     * Applications must be developed using a licensed, fully-paid,
+       registered copy of Into; and,
+     * Applications must add primary and substantial functionality to Into
+       and they shall not violate the restrictions stated in section
+       3.3.
+
+    3.5 Replacing Designated User
+
+   Customer may designate another Designated User to replace a
+   then-current Designated User provided that i) the then-current
+   Designated User has not been designated as a replacement during the
+   last six (6) months; and ii) there is no more than the specified number
+   of Designated Users at any given time. The change of a Designated User
+   needs to be confirmed by Intopii with a new License Certificate before
+   becoming valid. A new License Certificate will invalidate the previous
+   License Certificate.
+
+    3.6 Combining Open Source Editions with Into is prohibited
+
+   Intopii Products that are available under open source license terms
+   (collectively referred to as “Open Product(s)”) are not licensed under
+   this Agreement. If Customer has, at any time, developed any portions of
+   the Application(s) using Open Products, Customer may not combine such
+   development work with Into. Customer shall license such Application(s)
+   (or any portions thereof) under the applicable terms of license
+   accompanying such an Open Product. The most commonly used license for
+   Open Products is the Free Software Foundation’s GNU Affero General
+   Public License version 3, whose terms are available at
+   http://www.gnu.org/licenses/agpl-3.0.html.
+
+  4 Ownership
+
+    4.1 No Transfer of Intellectual Property Rights of Intopii
+
+   Into is protected by copyright, trade secret, industrial and other
+   intellectual property laws and treaties. Into is licensed, not sold.
+
+   Subject to the rights granted to Into under this Agreement and/or
+   applicable mandatory legislation, all right, title and ownership in and
+   to Into, as well as Documentation, including without limitation any and
+   all intellectual property rights whether registrable or not, vest in
+   and are and shall remain the sole and exclusive property of Intopii and
+   its Licensors.
+
+   Intopii shall own all right, title and interest including the
+   Intellectual Property Rights in and to the information on bug fixes or
+   error corrections related to Into that are submitted by Customer to
+   Intopii as well as any Intellectual Property Rights to the correction
+   of any errors. To the extent any rights do not automatically vest in
+   Intopii, Customer assigns, and shall ensure that all of its Affiliates,
+   agents, subcontractors and employees assign, all such rights to
+   Intopii.
+
+   All Intopii’s and/or its Licensors’ trademarks, service marks, trade
+   names, logos or other words or symbols are and shall remain the
+   exclusive property of Intopii or its Licensors respectively. Intopii
+   shall have the right to use, sell, assign, transfer, license and
+   sub-license copies of and/or rights to Into to any party in case it so
+   desires and such actions shall remain at the sole and exclusive
+   discretion of Intopii.
+
+   Customer shall not without Intopii’s consent alter or remove any
+   details of ownership, copyrights, product identification, trademark or
+   other proprietary rights notices connected with Into.
+
+   Designated User shall not without Intopii’s consent alter or remove any
+   details of ownership, copyrights, product identification, trademark or
+   other proprietary rights notices connected with Into.
+
+    4.2 Third Party Products,Software and IPR
+
+   The delivery of Into or Updates may contain Third Party Products, which
+   require notices and/or additional terms and conditions. Third Party
+   Products do not comprise part of Into. Such Third Party Product notices
+   and/or additional terms and conditions are included in the product
+   documentation. By accepting this Agreement, Customer also accept the
+   additional terms and conditions, if any.
+
+   Customer acknowledges that some part of Third Party Product may require
+   additional licensing of copyright and patents from the owners of such,
+   and that distribution or use of any of Into, Updates or Application
+   referencing any portion of a Third Party Product may require
+   appropriate licensing from such Third Parties.
+
+   Customer is solely responsible for complying with all Third Party
+   licenses and that Customer uses Third Party Product at its sole costs
+   and risks.
+
+   The delivery of Into or Updates may contain access to Third Party
+   Software as a convenience for development and testing. Third Party
+   source code and libraries may be listed in the source tree delivered
+   with Into or documented in Into where the Third Party Software is used.
+   Into may also provide links to Third Party libraries or code to
+   implement various functions. ditional licensing of copyright and
+   patents from the owners of such, and that distribution or use of any of
+   Into, Updates or Application referencing any portion of a Third Party
+   Product may require appropriate licensing from such Third Parties.
+
+   Customer is solely responsible for complying with all Third Party
+   licenses and that Customer uses Third Party Product at its sole costs
+   and risks.
+
+  5 Support and Updates
+
+   Intopii shall not be responsible for developing, offering or delivering
+   any Support or Updates for Into. However, Intopii may offer Support and
+   Updates in accordance with Intopii’s then current polices and
+   procedures, if any. Such policies and procedures may change from time
+   to time.
+
+   Intopii may offer Community Services (like support forums) and free
+   bug-fixing Updates. Customer is allowed to receive and use Updates,
+   and/or free Support which are generally offered or published or
+   otherwise put available in public by Intopii. Intopii shall deliver
+   Into and its Updates (if any) on any media of its choice.
+
+   Customer may purchase additional Support and Updates according to
+   Intopii’s terms and conditions applicable at the time of the purchase.
+   Intopii retains rights to refuse making Into, Support or Updates
+   available to Customer. Any such support is subject to a separate
+   agreement between the Parties.
+
+   Whenever Intopii publishes, offers for delivery or download, or
+   delivers Updates or Support;
+     * Intopii retains rights to make any modifications to Into, and
+     * Intopii disclaims any responsibility for the use of Into or its
+       Updates or effects related to complying of advices given in
+       Support, and
+     * Intopii does not guarantee compatibility with earlier version of
+       Into, Updates, or with anything produced with Into, and
+     * Customer shall at her/his/its own expense and risk bring the
+       operating environment in conformity with the Documentation and
+       instructions given by Intopii, and
+     * Customer is solely responsible of any effects, expenses and costs
+       related to installing and using Updates of Into, and
+     * Customer is solely responsible of any effects, expenses and costs
+       related to following the advices and/or recommendations given in
+       Support, and
+     * Customer is solely responsible for verifying and complying to
+       changed terms and conditions of use Into and any Third Party
+       Product IPR and license rights, and
+     * Intopii shall have the right to use the know-how and the general
+       competence and feedback information learned during this Agreement.
+       Such use is however subject to the Confidentiality terms (6) of
+       this Agreement.
+
+  6 Confidentiality
+
+   Customer acknowledges that during this Agreement Customer may have
+   access to information about Intopii’s business, business methods,
+   business plans, customers, business relations, technology, computer
+   programs, source code, files, specifications, documents, analyses,
+   reports, documentation, plans, data bases, passwords and other
+   information, that is confidential and of great value to Intopii, and
+   the value of which would be significantly reduced if disclosed to Third
+   Parties (“Confidential Information”). Accordingly, when Customer
+   receives Confidential Information from Intopii, Customer shall
+     * maintain the Confidential Information in strict confidence, and
+     * not disclose the Confidential Information to a Third Party without
+       the Intopii’s prior written approval, and
+     * not, directly or indirectly, use the Confidential Information for
+       any purpose other than for exercising its rights and fulfilling its
+       responsibilities pursuant to this Agreement, and
+     * obligate its employees, directors, agents, and Affiliates to comply
+       with the terms of this section.
+
+   Customer shall take reasonable measures to protect the Confidential
+   Information of Intopii, which measures shall not be less than the
+   measures taken by Customer to protect its own confidential and
+   proprietary information.
+
+   “Confidential Information” shall not include information that
+     * is or becomes generally known to the public through no act or
+       omission of Customer, or
+     * was in Customer’s lawful possession prior to the disclosure
+       hereunder and was not subject to limitations on disclosure or use,
+       or
+     * is developed by Customer without access to the Confidential
+       Information of Intopii or by persons who have not had access to the
+       Confidential Information of Intopii as proven by the written
+       records of the Customer, or
+     * is lawfully disclosed to Customer without restrictions by a Third
+       Party not under an obligation of confidentiality, or
+     * Customer is legally compelled to disclose the information, in which
+       case Customer shall assert the privileged and confidential nature
+       of the information and cooperate fully with Intopii to protect
+       against and prevent disclosure of any Confidential Information and
+       to limit the scope of disclosure and the dissemination of disclosed
+       Confidential Information by all legally available means.
+
+   Intopii shall have the right to use the know-how and the general
+   competence and feedback information learned during this Agreement,
+   however, such use is always subject to the Confidentiality terms of
+   this Agreement
+
+   The obligations of the Agreement under this Section shall continue for
+   a period of five (5) years after expiration or termination of this
+   Agreement or for five (5) years after the receiving of the Confidential
+   Information, whichever is later.
+
+   Intopii and Customer may separately agree on additional Non-Disclosure
+   Agreement during the Support if Customer is submitting its Confidential
+   Information to Intopii.
+
+   If the terms of a separate Non-Disclosure Agreement between Intopii and
+   Customer conflict with the terms of this Agreement, this Agreement
+   shall be controlling over the terms of the Non-Disclosure Agreement.
+
+  7 Verification
+
+   Intopii or any Third Party acting on behalf of Intopii may, upon its
+   reasonable request, audit Customer with respect to the use of Into.
+   Such audit may be conducted by mail, electronic means, during support
+   processes or through an in-person visit to Customer’s place of
+   business. If not otherwise agreed such an in-person audit shall be
+   conducted during regular business hours at Customer’s facilities.
+   Customer shall provide reasonable assistance to Intopii or a certified
+   auditor at its own expense within reasonable time schedule. If an audit
+   reveals that the use of Into by Customer conflicts with the terms of
+   this Agreement, Customer shall pay Intopii’s reasonable costs of
+   conducting the audit. In the case of a material violation, Customer
+   agrees to pay Intopii all costs attributable to the unauthorized use.
+   Otherwise, Intopii reserves the right, at Intopii’s sole option, to
+   terminate the licenses for Into.
+
+  8 Limited Warranty and Warranty Disclamer
+
+   Intopii hereby represents and warrants with respect to Into that it has
+   the power and authority to grant the rights and licenses granted to
+   Customer under this Agreement.
+
+   Into is provided “as is” and without warranty of any kind. The entire
+   risk as to the use, results and performance of Into is assumed by
+   Customer.
+
+   To the maximum extent permitted by applicable law, Intopii on behalf of
+   itself and its suppliers, disclaims any expressed or implied warranties
+   and conditions, including, but not limited to implied warranties of
+   merchantability, fitness for a particular purpose, title and
+   non-infringement or any warranty arising of any proposal, specification
+   or sample with regard to Into. Intopii neither warrants nor represents
+   that Into will meet Customer’s expectations.
+
+  9 Limitation of Liability
+
+   Customer is responsible for examining whether Into is encumbered by or
+   infringes upon a right held by a Third Party. Intopii has not
+   undertaken any such investigations and has no knowledge of nor does
+   accept any liability for any such encumbrances or infringements.
+
+   Customer undertakes not to pursue any claims whatsoever against Intopii
+   or its Affiliates relating to or emanating from Into.
+
+   If, Intopii’s warranty disclaimer notwithstanding, Intopii is held
+   liable to Customer, whether in contract, tort or any other legal
+   theory, based on Into, Intopii’s entire liability to Customer and
+   Customer’s exclusive remedy shall be, at Intopii’s option, either (i)
+   return of the price Customer paid for Into, provided Customer stops
+   using of any copies of Into as originally delivered to Customer and
+   removes such a copies from any applicable mass storage, or (ii) repair
+   or replacement of Into.
+
+   In no event shall Intopii be liable to Customer for any direct,
+   indirect, incidental, special, punitive, exemplary, or consequential
+   damages (including, but not limited to, procurement of substitute goods
+   or services; loss of use, data or profits; or business interruption)
+   however caused and on any theory of liability, whether in contract,
+   strict liability, or tort (including negligence or otherwise) arising
+   in any way out of the use of this Into, even if advised of the
+   possibility of such damage or failure resulted from accident, abuse or
+   misapplication. Any award of damages from Intopii to Customer shall not
+   exceed the total amount of one (1) euro.
+
+   Customer shall imdemnify and hold Intopii and its Affiliates,
+   contractors, agents, licensors, directors, officier, principals and
+   employees harmless form any claims whatsoever from any Third Party
+   against Intopii or its Affiliates relating or emanating from Customer’s
+   use of Into under this Agreement. The foregoing indemnification
+   includes but is not limited to any and all damages, costs and expenses
+   (including reasonable attoreny’s fees).
+
+  10 Termination
+
+   Customer’s rights under this Agreement shall terminate automatically
+   without notice from Intopii if Customer fails to comply with any
+   term(s) of this Agreement. Intopii has the right to terminate the
+   Agreement at any time with immediate effect with a written notice if
+   Customer or Designated User breaches the terms of this Agreement.
+
+   Customer can terminate this Agreement by destroying, permanently
+   erasing and stopping use of the Into.
+
+    10.1 Termination with Cause
+
+   Nothwithstanding the other terms of this Agreement each Party has a
+   right to terminate this Agreement with immediate effect with a written
+   notice in the event that the other Party: (i) commits a material breach
+   of its obligations contained herein and fails to remedy such material
+   breach with forty-five (45) days of written notice of the other Party,
+   or (ii) becomes insolvent, files for any form of bankruptcy, enters
+   into a deed of arrangement or makes any assignment for the benefit of
+   creditors, or (iii) has a receiver, administrative receiver or officer
+   appointed over the whole or a substantial part of its assets, ceases to
+   conduct business, or suffers the appointment of an administrator or
+   ceases to conduct business, or iv) an act equivalent to any of the
+   above occurs under the laws of the jurisdiction of the other Party.
+
+    10.2 Termination in Force Majeure situation
+
+   Nothwithstanding the other terms of this Agreement if any event of
+   Force Majeure (defined in 11.6) results in a delay or
+   non-performance of a Party for a period of three (3) months or longer,
+   then either Party shall have the right to terminate this Agreement with
+   immediate effect without any liability (except for the obligations of
+   payment arising prior to the event of such Force Majeure) towards the
+   other Party.
+
+    10.3 Consequences of Termination
+
+   Upon termination of this Agreement, Customer shall at its own costs
+   immediately cease using and developing any copies of Into and relating
+   material, and immediately cease creating and distributing itself any
+   software or service which contains Into or any part thereof and erase
+   or destroy all a copies of Into from applicable mass storage. Customer
+   or an officer of Customer must promptly (latest within 30 days) deliver
+   to Intopii a written confirmation that this has occurred.
+
+   Customer shall pay all fees due and payable to Intopii at the time of
+   termination (if any).
+
+  11 General Provisions
+
+    11.1 Delivery
+
+   Intopii shall deliver Into and its Updates (if any) on such media as it
+   wants. Customer shall at Customer own expense acquire and prepare the
+   operating environment in conformity of the Documentation and
+   instructions given by Intopii. Intopii shall not be any kind
+   responsible for the installation of Into.
+
+    11.2 Marketing and Reference rights
+
+   If a Party so desires, the Party may publish in its public
+   communication and marketing material (in any format) the existence of
+   this Agreement between Customer and Intopii. The Party may include the
+   following information (but not limited to) in such a published
+   material, (i) Party’s name and/or Party’s company name, and/or Party’s
+   product name, (ii) Party’s logo and/or Logo of Party’s product or
+   service, and (iii) links to Party’s web page.
+
+   Customer shall use the material put available for such a purposes by
+   Intopii and use them according to Intopii’s advice and instructions.
+   The Parties may also separately agree on publishing more detailed
+   information.
+
+    11.3 Intopii’s rights to use subcontractors
+
+   Intopii shall have a right to use subcontractors, contractors and
+   licensors for fulfilling its obligations set forth in this Agreement.
+
+    11.4 No Assignment
+
+   Except as a part of total or partial tranfer of business Customer shall
+   not be entitled to assign or transfer all or any of its rights,
+   benefits and obligations under this Agreement without the prior written
+   consent of Intopii.
+
+   Intopii has rights to assign and transfer this Agreement to the Third
+   Party without prior noticement to Customer.
+
+    11.5 No Implied License
+
+   There are no implied licenses or other implied rights granted under
+   this Agreement, and all rights, save for those expressly granted
+   hereunder, shall remain with Intopii and its Licensors. In addition, no
+   licenses or immunities are granted to the combination of Into and
+   Modified Software, as applicable, with any other software or hardware
+   not delivered by Intopii under this Agreement.
+
+    11.6 Force Majeure
+
+   Neither party shall be liable to the other for any delay or
+   non-performance of its obligations hereunder other than the obligation
+   of paying the license fees for Intopii in the event and to the extent
+   that such delay or non-performance is due to an event of Force Majeure.
+   For purposes thereof, events of “Force Majeure” shall mean the events
+   beyond the control of the Party and whose effects are not capable of
+   being overcome without unreasonable expense and/or loss of time to the
+   Party concerned. Events of Force Majeure shall include (without being
+   limited to) war, acts of government, export regulations, acts of
+   terrorism, natural disasters, fire and explosions that prevents either
+   party for fulfilling its obligations under this Agreement.
+
+    11.7 Payments and Taxes
+
+   All payments made to Intopii shall be in Euros or US Dollars depending
+   Intopii’s notice without any rights of choice by Customer. In case of
+   missig notice the payments shall be paid in Euros.
+
+   With exception of advanced payments, all payments under this Agreement
+   are due within thirty (30) net of the date Intopii mails its invoice to
+   Customer if not otherwise agreed in written.
+
+   All amounts payable are gross amounts but exclusive of any value added
+   tax, use tax, sales tax or similar tax. Customer shall be entitled to
+   withhold from payments any applicable withholding taxes and comply with
+   all applicable tax and employment legislation. Each Party shall pay all
+   taxes (including, but not limited to, taxes based upon its income) or
+   levies imposed on it under applicable laws, regulations and tax
+   treaties as a result of this Agreement and any payments made hereunder
+   (including those required to be withheld or deducted from payments).
+   Each Party shall furnish evidence of such paid taxes as is sufficient
+   to enable the other Party to obtain any credits available to it,
+   including original withholding tax certificates.
+
+    11.8 Export Control
+
+   Customer acknowledges that Into may be subject to export control
+   restrictions of various countries. Customer agrees to fully comply with
+   all applicable export license restrictions and requirements as well as
+   with all laws and regulations relating to the importation of Into
+   and/or Modified Software and/or Applications and shall procure all
+   necessary governmental authorizations, including without limitation,
+   all necessary licenses, approvals, permissions or consents, where
+   necessary for the re-exportation of Into, Modified Software or
+   Applications.
+
+    11.9 US Government End Users
+
+   A “U.S. Government End User” shall mean any agency or entity of the
+   government of the United States. The following shall apply if Customer
+   is a U.S. Government End User. Into is a “commercial item”, as that
+   term is defined in 48 C.F.R. 2.101 (Oct. 1995), consisting of
+   “commercial computer software” and “commercial computer software
+   documentation”, as such terms are used in 48 C.F.R. 12.212 (Sept.
+   1995). Consistent with 48 C.F.R. 12.212 and 48 C.F.R. 227.7202-1
+   through 227.7202-4 (June 1995), all U.S. Government End Users acquire
+   Into with only those rights set forth herein. Into (including related
+   documentation) is provided to U.S. Government End Users: i) only as a
+   commercial end item; and ii) only pursuant to this Agreement.
+
+    11.10 Entire Agreement
+
+   This Agreement constitutes the complete agreement between the Parties
+   and supersedes all prior or contemporaneous discussions, marketing
+   material representations, and proposals, written or oral, with respect
+   to the subject matters discussed herein, with the exception of a
+   separate non-disclosure agreement executed by the parties in connection
+   with this Agreement (“Non-Disclosure Agreement”), if any, shall be
+   subject to the confidentiality terms set forth in Section 6.
+
+   Remedies and Waivers;
+          A failure to exercise, or any delay in exercising, on the part
+          of either Party, any right or remedy hereunder shall neither
+          operate as a waiver thereof, nor shall any single or partial
+          exercise of any right or remedy prevent any further or other
+          exercise thereof or the exercise of any other right or remedy.
+          If any remedy provided is determined to have failed for its
+          essential purpose, all limitations of liability and exclusions
+          of damages set forth in this Agreement shall remain in effect.
+
+   Partial Invalidity;
+          If, at any time, any provision of this Agreement, including its
+          Appendices (if any), is deemed by a court of competent
+          jurisdiction to be illegal, invalid or unenforceable in any
+          respect, the legality, validity or enforceability of the
+          remaining provisions shall in no way be affected or impaired
+          thereby. The invalid provision shall be replaced by a valid one
+          which achieves to the extent possible the original purpose and
+          commercial goal of the invalid provision.
+
+   Injuctive Relief;
+          A breach by one Party of any of the promises or agreements
+          contained in this Agreement may result in irreparable and
+          continuing damage to the other Party for which there may be no
+          adequate remedy at law, and the other Party is therefore
+          entitled to seek injunctive relief, as well as such other and
+          further relief as may be appropriate.
+
+   Headings;
+          Headings are used for the purposes of references only and shall
+          not affect the interpretation of this Agreement.
+
+    11.11 Applicable Law and Jurisdiction
+
+   This Agreement shall be governed,construed and interpreted in
+   accordance with the laws of Finland, excluding its choice of law
+   provisions.
+
+   Any and all disputes, controversy, claim, differences or questions
+   between the Parties with respect to any matter arising out of or
+   relating to this Agreement shall be finally settled in the district
+   court of Helsinki, Finland. The language to be used in the proceedings
+   shall be Finnish. Each communication and document made or delivered by
+   one party to the other party pursuant to this Agreement shall be in the
+   Finnish or English language or accompanied by a translation thereof.
+
+   Any notice given by one party to the other shall be deemed properly
+   given and deemed received if specifically acknowledged by the receiving
+   party in writing or when successfully delivered to the recipient by
+   hand, or special courier during normal business hours on a business day
+   to the addresses specified at the beginning of this Agreement or such
+   other address as may be notified in writing from time to time by either
+   Party.
+
+   In case you need help in interpreting the terms of this Agreement you
+   are invited to send your requests via e-mail to license@intopii.com.
+   Please note that the aforementioned post address is the formal way of
+   communication.
+
+    11.12 Surviving Sections
+
+   Any terms and conditions that by their nature or otherwise reasonably
+   should survive a cancellation or termination of this Agreement shall
+   also be deemed to survive. Such terms and conditions include, but are
+   not limited to Sections
+   1, 4, 4.2, 6, 7, 8, 9, 10.3, 11.2,
+   11.5, 11.7, 11.8, 11.10, 11.11 and 11.12 of
+   this Agreement.
+
