@@ -7,7 +7,6 @@ SUBDIRS =  utils \
            dsp \
            imageprocessing \
            matching \
-           network \
            tracking \
            video \
            intodemo
