@@ -81,7 +81,7 @@ namespace Pii
     return ((c << n) | (c >> (INTBITS-n)));
   }
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
   inline unsigned int rol(unsigned int c, const unsigned char n)
   {
     asm ("roll %2, %0"
