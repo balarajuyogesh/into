@@ -5,8 +5,8 @@ CONFIG += ordered
 
 SUBDIRS  = core \
            ydin \
-           plugins \
            gui \
+           plugins \
            script \
            test \
            demos

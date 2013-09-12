@@ -166,8 +166,34 @@ template <class T> bool operator!= (T v, const PiiValueSet<T,5>& set)
     !Pii::valueSetEqual(v, set.v5);
 }
 
+template <class Iterable> struct PiiIterableValueSet
+{
+public:
+  PiiIterableValueSet(const Iterable& iterable) : iterable(iterable) {}
+  const Iterable& iterable;
+};
+
+template <class Iterable> bool operator== (typename std::iterator_traits<Iterable>::value_type v,
+                                           const PiiIterableValueSet<Iterable>& set)
+{
+  for (typename Iterable::const_iterator it=set.iterable.begin(); it != set.iterable.end(); ++it)
+    if (*it == v)
+      return true;
+  return false;
+}
+template <class Iterable> bool operator!= (typename std::iterator_traits<Iterable>::value_type v,
+                                           const PiiIterableValueSet<Iterable>& set)
+{
+  for (typename Iterable::const_iterator it=set.iterable.begin(); it != set.iterable.end(); ++it)
+    if (*it != v)
+      return false;
+  return true;
+}
+
 namespace Pii
 {
+  template <class Iterable> PiiIterableValueSet<Iterable> inline valueSet(const Iterable& iterable)
+  { return PiiIterableValueSet<Iterable>(iterable); }
   template <class T> PiiValueSet<T,2> inline valueSet(T v1, T v2)
   { return PiiValueSet<T,2>(v1, v2); }
   template <class T> PiiValueSet<T,3> inline valueSet(T v1, T v2, T v3)

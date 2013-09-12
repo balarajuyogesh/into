@@ -4,7 +4,6 @@ TEMPLATE        = lib
 TARGET          = piicore
 HEADERS         = *.h
 SOURCES         = *.cc serialization/*.cc matrix/*.cc
-INCLUDEPATH     += $$(QTDIR)/include/Qt
 
 !contains(DISABLE,network) {
   HEADERS += network/*.h
