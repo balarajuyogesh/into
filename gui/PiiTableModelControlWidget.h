@@ -28,7 +28,6 @@ class QPushButton;
  * controlling a PiiTableModel.
  *
  *
- * @ingroup Gui
  */
 class PII_GUI_EXPORT PiiTableModelControlWidget : public QWidget
 {
@@ -43,13 +42,13 @@ class PII_GUI_EXPORT PiiTableModelControlWidget : public QWidget
   /**
    * Show/hide move buttons. The buttons are show by default. If you
    * do not want the user to be able to move items in a PiiTableModel,
-   * set this flag to @p false.
+   * set this flag to `false`.
    */
   Q_PROPERTY(bool moveButtonsVisible READ moveButtonsVisible WRITE setMoveButtonsVisible);
    
 public:
   /**
-   * Create a new %PiiTableModelControlWidget with the given parent
+   * Create a new PiiTableModelControlWidget with the given parent
    * widget.
    */
   PiiTableModelControlWidget(QWidget* parent = 0);
@@ -59,7 +58,7 @@ public:
   ~PiiTableModelControlWidget();
 
   /**
-   * Connect the control widget to the given @p model. The Delete and
+   * Connect the control widget to the given `model`. The Delete and
    * Move buttons of a connected widget will be automatically enabled
    * and disabled. Pushing the buttons will modify the model.
    */

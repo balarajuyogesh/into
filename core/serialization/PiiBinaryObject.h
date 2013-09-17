@@ -28,7 +28,6 @@
  * A serialization wrapper for binary data. Note that this wrapper
  * only works with primitive data types.
  *
- * @ingroup Serialization
  */
 template <class T> struct PiiBinaryObject
 {
@@ -47,7 +46,7 @@ template <class T> struct PiiBinaryObject
   PII_SEPARATE_SAVE_LOAD_MEMBERS
 
   /**
-   * Calls @p archive.writeArray().
+   * Calls `archive`.writeArray().
    */
   template <class Archive> void save(Archive& archive, const unsigned int)
   {
@@ -55,7 +54,7 @@ template <class T> struct PiiBinaryObject
   }
 
   /**
-   * Calls @p archive.readArray().
+   * Calls `archive`.readArray().
    */
   template <class Archive> void load(Archive& archive, const unsigned int)
   {

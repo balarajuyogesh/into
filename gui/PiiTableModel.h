@@ -28,7 +28,7 @@ class PiiModelItem;
 /**
  * A hybrid of a table model and an item "delegate". This model can be
  * used with Qt's view classes to create editable lists and tables. 
- * %PiiTableModel is useful with data such as database query results
+ * PiiTableModel is useful with data such as database query results
  * where all items in a table column contain similar data. The same
  * editor is used for each row, but columns may have different
  * editors.
@@ -37,16 +37,15 @@ class PiiModelItem;
  * item in the model has two associated values with different data
  * roles:
  *
- * @lip Qt::DisplayRole - the text displayed in the table cell when
+ * - `Qt::DisplayRole` - the text displayed in the table cell when
  * the editor is not active.
  *
- * @lip ColumnEditorValueRole - the actual value of the cell, which
+ * - `ColumnEditorValueRole` - the actual value of the cell, which
  * may be different from the text. For example, the value of an
  * element in a combo box column is the index of the selected item,
  * but the cell displays the text associated with the index. See
- * #EditorType for data types associated with editors.
+ * [EditorType] for data types associated with editors.
  *
- * @ingroup Gui
  */
 class PII_GUI_EXPORT PiiTableModel : public QAbstractTableModel
 {
@@ -54,21 +53,21 @@ class PII_GUI_EXPORT PiiTableModel : public QAbstractTableModel
 
 public:
   /**
-   * Custom data roles used by %PiiTableModel to store information
+   * Custom data roles used by PiiTableModel to store information
    * about column editors and their values.
    *
-   * @lip ColumnDefaultValueRole - the default value for a cell in a
+   * - `ColumnDefaultValueRole` - the default value for a cell in a
    * column. Any variant. Used only in header items.
    *
-   * @lip ColumnEditorTypeRole - the type of the column editor. An
-   * integer. See #EditorType for valid values. Used only in header
+   * - `ColumnEditorTypeRole` - the type of the column editor. An
+   * integer. See [EditorType] for valid values. Used only in header
    * items.
    *
-   * @lip ColumnEditorPropertiesRole - a QVariantMap that can be used
+   * - `ColumnEditorPropertiesRole` - a QVariantMap that can be used
    * to customize the column editor's properties. Used only in header
    * items.
    *
-   * @lip ColumnEditorValueRole - the current value of the item, in
+   * - `ColumnEditorValueRole` - the current value of the item, in
    * the editor's internal representation. Any variant type. Used only
    * in table data items.
    */
@@ -83,29 +82,29 @@ public:
   /**
    * Supported editor types.
    *
-   * @lip LineEditor - a QLineEdit. Suitable for text input with or
+   * - `LineEditor` - a QLineEdit. Suitable for text input with or
    * without validation. The value and text are the same. To configure
-   * a validator for the editor, use the @p validator property
+   * a validator for the editor, use the `validator` property
    * (QVariantMap).
    *
-   * @lip IntegerSpinBoxEditor - a QSpinBox. Suitable for integer
-   * input. The value is an integer. If the spin box has the @p prefix
-   * a and @p suffix properties set, the text will be different from
+   * - `IntegerSpinBoxEditor` - a QSpinBox. Suitable for integer
+   * input. The value is an integer. If the spin box has the `prefix`
+   * a and `suffix` properties set, the text will be different from
    * the value.
    *
-   * @lip DoubleSpinBoxEditor - a QDoubleSpinBox. Suitable for
+   * - `DoubleSpinBoxEditor` - a QDoubleSpinBox. Suitable for
    * double-precision value input. The value is a double. If the spin
-   * box has the @p prefix a and @p suffix properties set, the text
+   * box has the `prefix` a and `suffix` properties set, the text
    * will be different from the value.
    *
-   * @lip ComboBoxEditor - a QComboBox. Suitable for multiple choices
+   * - `ComboBoxEditor` - a QComboBox. Suitable for multiple choices
    * type input. The value is an integer that stores the index of the
    * selected choice. The text is the corresponding element in the
-   * combo box. To set the selectable items, use the @p items property
+   * combo box. To set the selectable items, use the `items` property
    * (StringList).
    *
-   * @see #setColumnEditorType()
-   * @see #setColumnEditorProperties()
+   * @see [setColumnEditorType()]
+   * @see [setColumnEditorProperties()]
    */
   enum EditorType
     {
@@ -116,7 +115,7 @@ public:
     };
 
   /**
-   * A flag for #setValue() that can be used to enable/disable
+   * A flag for [setValue()] that can be used to enable/disable
    * automatic setting of the displayed text of the element.
    */
   enum ValueChangeBehavior
@@ -126,8 +125,8 @@ public:
     };
 
   /**
-   * Creates a new %PiiTableModel and binds it to the @p parent view. 
-   * Since %PiiTableModel is not a pure model, but works also as the
+   * Creates a new PiiTableModel and binds it to the `parent` view. 
+   * Since PiiTableModel is not a pure model, but works also as the
    * "delegate", it cannot be used with many views simultaneously.
    */
   PiiTableModel(QAbstractItemView *parent);
@@ -148,13 +147,13 @@ public:
    */
   PiiModelItem* itemAt(int row, int column = 0) const;
   /**
-   * Returns the data associated with @p role in the given cell. If
+   * Returns the data associated with `role` in the given cell. If
    * there is no such cell or no such data, an invalid variant will be
    * returned.
    */
   QVariant data(int row, int column, int role = Qt::DisplayRole) const;
   /**
-   * Sets the data associated with @p role in the given cell.
+   * Sets the data associated with `role` in the given cell.
    */
   void setData(int row, int column, const QVariant& value, int role);
   /**
@@ -166,58 +165,58 @@ public:
    */
   inline void setText(int row, int column, const QString& text) { setData(row, column, text, Qt::DisplayRole); }
   /**
-   * Returns the data associated with @p ColumnEditorValueRole in the
+   * Returns the data associated with `ColumnEditorValueRole` in the
    * given cell.
    */
   inline QVariant value(int row, int column) const { return data(row, column, ColumnEditorValueRole); }
 
   /**
-   * Returns all data associated with @p ColumnEditorValueRole in the
-   * given @p column as a variant list.
+   * Returns all data associated with `ColumnEditorValueRole` in the
+   * given `column` as a variant list.
    */
   QVariantList columnValues(int column) const;
   /**
-   * Sets all data associated with @p ColumnEditorValueRole in the
-   * given @p column as a variant list. The number of rows in the
-   * model will be adjusted to match the length of @p values.
+   * Sets all data associated with `ColumnEditorValueRole` in the
+   * given `column` as a variant list. The number of rows in the
+   * model will be adjusted to match the length of `values`.
    */
   void setColumnValues(int column, const QVariantList& values);
 
   /**
-   * Returns all data associated with @p Qt::DisplayRole in the given
-   * @p column as a string list.
+   * Returns all data associated with `Qt::DisplayRole` in the given
+   * `column` as a string list.
    */
   QStringList columnTexts(int column) const;
   /**
-   * Returns all data associated with @p Qt::DisplayRole in the given
-   * @p column as a string list. The number of rows in the model will
-   * be adjusted to match the length of @p texts.
+   * Returns all data associated with `Qt::DisplayRole` in the given
+   * `column` as a string list. The number of rows in the model will
+   * be adjusted to match the length of `texts`.
    */
   void setColumnTexts(int column, const QStringList& texts);
   
   /**
    * Sets the value of the element at the given coordinates. The value
-   * may be different from the displayed text. If @p behavior is @p
-   * ChangeTextAutomatically, the text will be automatically set based
+   * may be different from the displayed text. If `behavior` is 
+   * `ChangeTextAutomatically`, the text will be automatically set based
    * on column configuration. For example, setting the value of a
    * combo box column automatically changes the text based on the
-   * combo's item list. To disable the default behavior, set @p
-   * behavior @p DoNotChangeText.
+   * combo's item list. To disable the default behavior, set 
+   * `behavior` `DoNotChangeText`.
    */
   void setValue(int row, int column, const QVariant& value, ValueChangeBehavior behavior = ChangeTextAutomatically);
   /**
-   * Converts @p value into user-displayable text. The default
+   * Converts `value` into user-displayable text. The default
    * implementation returns different text depending on the column
    * editor.
    *
-   * @li LineEditor - the value will be converted to a QString
+   * - LineEditor - the value will be converted to a QString
    *
-   * @li {Integer,Double}SpinBoxEditor - the value will be converted
-   * to a QString and wrapped into the editor's @p prefix and @p
-   * suffix, if set. The @p specialValueText property of the spin box
+   * - {Integer,Double}SpinBoxEditor - the value will be converted
+   * to a QString and wrapped into the editor's `prefix` and 
+   * `suffix`, if set. The `specialValueText` property of the spin box
    * will be taken into account.
    *
-   * @li ComboBoxEditor - the value is converted to an int, and the
+   * - ComboBoxEditor - the value is converted to an int, and the
    * corresponding text in the combo's item list will be returned.
    */
   virtual QString textForValue(int column, const QVariant& value) const;
@@ -235,7 +234,7 @@ public:
   void insertRow(const QList<PiiModelItem*>& items);
   
   /**
-   * Removes @p row and returns its items as a list. The model no
+   * Removes `row` and returns its items as a list. The model no
    * longer owns the pointers, and they must be deleted by the caller.
    */
   QList<PiiModelItem*> takeRow(int row);
@@ -256,14 +255,14 @@ public:
   bool setHeaderData(int section, Qt::Orientation, const QVariant& value, int role);
 
   /**
-   * Sets the default @p value for cells in @p column.
+   * Sets the default `value` for cells in `column`.
    */
   inline void setDefaultValue(int column, const QVariant& value)
   {
     setHeaderData(column, Qt::Horizontal, value, ColumnDefaultValueRole);
   }
   /**
-   * Returns the default value for cells in @p column.
+   * Returns the default value for cells in `column`.
    */
   inline QVariant defaultValue(int column) const
   {
@@ -285,10 +284,10 @@ public:
   }
   /**
    * Configures the column editor in the specified column. Except for
-   * a few special properties recognized by %PiiTableModel, the given
+   * a few special properties recognized by PiiTableModel, the given
    * properties will be directly transferred to the editor widget.
    *
-   * @code
+   * ~~~
    * pModel->setHeaderTitles(QStringList() << "Combo" << "IntSpin"
    *                                       << "DoubleSpin" << "Text");
    * // Combo box for column 0
@@ -320,9 +319,9 @@ public:
    * mapValidator["regexp"] = "[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}";
    * map["validator"] = mapValidator;
    * pModel->setColumnEditorProperties(3, map);
-   * @endcode
+   * ~~~
    *
-   * @note @p LineEditor supports regexp and numeric validators. If
+   * ! `LineEditor` supports regexp and numeric validators. If
    * the editor properties contains a QVariantMap named "validator",
    * its properties will be used to configure a validator. The
    * validator's type is auto-detected based on the properties. If
@@ -335,8 +334,8 @@ public:
     setHeaderData(column, Qt::Horizontal, properties, ColumnEditorPropertiesRole);
   }
   /**
-   * Returns the properties of the editor at @p column. This function
-   * returns the properties set with #setColumnEditorProperties()
+   * Returns the properties of the editor at `column`. This function
+   * returns the properties set with [setColumnEditorProperties()]
    * only. No other properties will be returned.
    */
   inline QVariantMap columnEditorProperties(int column) const
@@ -354,7 +353,7 @@ public:
 
   /**
    * Returns data associated with any role at the given model index. 
-   * See @ref PiiModelItem::_d().
+   * See [PiiModelItem::_d()].
    */
   QMap<int, QVariant> itemData(const QModelIndex &index) const;
 
@@ -377,32 +376,32 @@ public:
 
   /**
    * Enables/disables deletion of the last row in the model. If this
-   * flag is set to @p false, #canDelete() will return @p false if
+   * flag is set to `false`, [canDelete()] will return `false` if
    * there is only one row left.
    */
   void setCanDeleteLast(bool canDeleteLast);
   /**
-   * Returns @p true if the last row can be deleted, @p false
+   * Returns `true` if the last row can be deleted, `false`
    * otherwise.
    */
   bool canDeleteLast() const;  
   
   /**
-   * Returns @p true if the selected rows can be moved up, @p false
+   * Returns `true` if the selected rows can be moved up, `false`
    * otherwise. Moving rows up is possible if a) at least one row is
    * selected and b) the first row is not selected.
    */
   bool canMoveUp() const;
   /**
-   * Returns @p true if the selected rows can be moved down, @p false
+   * Returns `true` if the selected rows can be moved down, `false`
    * otherwise. Moving rows down is possible if a) at least one row is
    * selected and b) the last row is not selected.
    */
   bool canMoveDown() const;
   /**
-   * Returns @p true if the selected rows can be deleted, @p false
+   * Returns `true` if the selected rows can be deleted, `false`
    * otherwise. Deleting rows down is possible if a) at least one row
-   * is selected and b) either the #canDeleteLast() flag is @p true or
+   * is selected and b) either the [canDeleteLast()] flag is `true` or
    * there are more than one row left.
    */
   bool canDelete() const;
@@ -417,18 +416,18 @@ signals:
    */
   void currentItemChanged();
   /**
-   * Emitted whenever the selection has changed. If the @p enabled
-   * flag is @p true, the selected rows can be moved up.
+   * Emitted whenever the selection has changed. If the `enabled`
+   * flag is `true`, the selected rows can be moved up.
    */
   void moveUpEnabled(bool enabled);
   /**
-   * Emitted whenever the selection has changed. If the @p enabled
-   * flag is @p true, the selected rows can be moved down.
+   * Emitted whenever the selection has changed. If the `enabled`
+   * flag is `true`, the selected rows can be moved down.
    */
   void moveDownEnabled(bool enabled);
   /**
-   * Emitted whenever the selection has changed. If the @p enabled
-   * flag is @p true, there are selected rows.
+   * Emitted whenever the selection has changed. If the `enabled`
+   * flag is `true`, there are selected rows.
    */
   void deleteEnabled(bool enabled);
 
@@ -475,7 +474,7 @@ protected:
   
   /**
    * Creates a new item at the given coordinates. The default
-   * implementation sets the item's value (@p ColumnEditorValueRole)
+   * implementation sets the item's value (`ColumnEditorValueRole`)
    * to the default value of the column, if given.
    */
   virtual PiiModelItem* createItem(int row, int column);
@@ -483,18 +482,18 @@ protected:
    * Creates an editor for editing the item at the given coordinates. 
    * The default implementation creates one of the supported editor
    * types, based on header data. If you override this function, you
-   * probably need to override #setEditorData(), #setModelData(), and
-   * #textForValue() as well.
+   * probably need to override [setEditorData()], [setModelData()], and
+   * [textForValue()] as well.
    */
   virtual QWidget* createEditor(QWidget* parent, int row, int column) const;
   /**
-   * Sets up the contents of @p editor based on the contents of the
+   * Sets up the contents of `editor` based on the contents of the
    * cell at the given position.
    */
   virtual void setEditorData(QWidget* editor, int row, int column) const;
   /**
    * Modifies the cell at the given position based on the contents of
-   * @p editor.
+   * `editor`.
    */
   virtual void setModelData(QWidget* editor, int row, int column);
 

@@ -23,7 +23,7 @@
  * objects are represented as row vectors. The geometric object
  * structures are provided to conveniently handle such matrices.
  *
- * @code
+ * ~~~
  * // A matrix that stores two points
  * PiiMatrix<int> mat(2,  2,
  *                    1,  1,
@@ -44,9 +44,8 @@
  *
  * // Store the matrix row into a circle structure
  * PiiCircle<float> circle2 = *circle;
- * @endcode
+ * ~~~
  *
- * @ingroup Core
  */
 template <class T> struct PiiPoint
 {

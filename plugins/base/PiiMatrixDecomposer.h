@@ -24,15 +24,16 @@
  * be same as output count. You must set output counts with
  * outputCount-property first, default is 1.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in input - any row matrix
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out outputX - outputX is element (0,X) in input matrix.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiMatrixDecomposer : public PiiDefaultOperation
 {

@@ -22,30 +22,31 @@
 
 /**
  * Perform histogram back-projection. In histogram back-projection,
- * the pixels in an input image are replaced with values in a @e model
+ * the pixels in an input image are replaced with values in a *model*
  * histogram.
  *
  * @see PiiImage::backProject().
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - input image. Any integer-valued one-channel (i.e. 
  * gray-level) image.
  *
- * @in channel0 - alias for @p image. More intuitive to the programmer
+ * @in channel0 - alias for `image`. More intuitive to the programmer
  * with two-dimensional backprojection.
  *
  * @in channel1 - optional input that is used only with
  * two-dimensional backprojection.
  *
  * @in model - optional input for a changing model histogram. 
- * Overrides #model if connected.
+ * Overrides [model] if connected.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out image - backprojected image. Type depends on the model.
  *
- * @ingroup PiiImagePlugin
  */
 class PiiHistogramBackProjector : public PiiDefaultOperation
 {
@@ -63,7 +64,7 @@ public:
   PiiHistogramBackProjector();
 
   /**
-   * Maps @p channel0 to @p image.
+   * Maps `channel0` to `image`.
    */
   PiiInputSocket* input(const QString& name) const;
 

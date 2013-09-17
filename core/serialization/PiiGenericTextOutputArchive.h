@@ -25,7 +25,6 @@
  * A shorthand for a text output archive derived from
  * PiiGenericOutputArchive.
  *
- * @ingroup Serialization
  */
 typedef PiiGenericOutputArchive::Impl<PiiTextOutputArchive> PiiGenericTextOutputArchive;
 

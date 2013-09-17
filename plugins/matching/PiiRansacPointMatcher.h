@@ -21,13 +21,12 @@
 class PiiRansac;
 
 /**
- * A superclass for operations that use @ref PiiRansac "RANSAC" for
+ * A superclass for operations that use [RANSAC](PiiRansac) for
  * matching points. This class performs no useful action of its own,
  * but merely reflects the configuration values of the RANSAC
  * algorithm as properties. See PiiRansac for documentation on the
  * properties.
  *
- * @ingroup PiiMatchingPlugin
  */
 class PII_MATCHING_EXPORT PiiRansacPointMatcher : public PiiPointMatchingOperation
 {
@@ -67,7 +66,7 @@ protected:
   PiiRansacPointMatcher(Data* data);
 
   /**
-   * Constructs a new %PiiRansacPointMatcher with the given number of
+   * Constructs a new PiiRansacPointMatcher with the given number of
    * dimensions for the point space and a pointer to a newly allocated
    * RANSAC estimator. This class takes the ownership of the pointer.
    */

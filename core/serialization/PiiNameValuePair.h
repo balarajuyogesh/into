@@ -34,22 +34,22 @@
  *
  * @param the value, typically a class member
  *
- * @code
+ * ~~~
  * archive & PII_NVP("member", member);
- * @endcode
+ * ~~~
  */
 #define PII_NVP(name, value) ::PiiSerialization::makeNvp(name, value)
 
 /**
- * A convenience macro that writes/retrieves @p member to/from @p
- * archive. The name of the value will be written to the archive as
+ * A convenience macro that writes/retrieves `member` to/from 
+ * `archive`. The name of the value will be written to the archive as
  * such (if the archive supports name-value pairs).
  */
 #define PII_SERIALIZE(archive, member) archive & PII_NVP(#member, member)
 
 /**
- * A convenience macro that writes/retrieves @p member to/from @p
- * archive with a custom name. This is useful if the name of your
+ * A convenience macro that writes/retrieves `member` to/from 
+ * `archive` with a custom name. This is useful if the name of your
  * member variable is not human-friendly.
  */
 #define PII_SERIALIZE_NAMED(archive, member, name) archive & PII_NVP(name, member)
@@ -59,7 +59,6 @@
  * serialization has special use for the name, other implementations
  * typically ignore it.
  *
- * @ingroup Serialization
  */
 template <class T> struct PiiNameValuePair
 {
@@ -84,7 +83,7 @@ namespace PiiSerialization
 {
   /**
    * Create a PiiNameValuePair wrapper for a type automatically
-   * determined by the @p value parameter.
+   * determined by the `value` parameter.
    *
    * @param name the name of the variable
    *

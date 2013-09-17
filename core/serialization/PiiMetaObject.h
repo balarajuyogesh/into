@@ -21,7 +21,6 @@
  *
  * Declarations, macros and functions for dealing with meta objects.
  *
- * @ingroup Serialization
  */
 
 #include "PiiSerializationTraits.h"
@@ -29,7 +28,7 @@
 
 /**
  * A convenience macro for fetching the meta object for the given
- * object. The parameter @p obj must be a reference type.
+ * object. The parameter `obj` must be a reference type.
  *
  * @relates PiiMetaObject
  */
@@ -42,14 +41,13 @@
  * and not included in the meta object (see
  * PiiSerializationTraits::Tracking).
  *
- * @ingroup Serialization
  */
 class PII_SERIALIZATION_EXPORT PiiMetaObject
 {
 public:
   /**
    * Create a new meta object with the given class name and version
-   * number. The @p storeClassInfo flag determines whether the version
+   * number. The `storeClassInfo` flag determines whether the version
    * number is saved or not.
    */
   PiiMetaObject(const char* className,

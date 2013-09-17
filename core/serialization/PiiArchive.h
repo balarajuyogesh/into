@@ -24,7 +24,6 @@
  * This file contains types and constants used by both input and
  * output archives.
  *
- * @ingroup PiiSerialization
  */
 
 /// Major archive version number.
@@ -39,13 +38,12 @@
  * that may be affected by the details of its own format. Subclasses
  * must take care of storing and restoring the version numbers.
  *
- * @ingroup Serialization
  */
 class PII_SERIALIZATION_EXPORT PiiArchive
 {
 public:
   /**
-   * Initializes major version to @ref PII_ARCHIVE_VERSION and minor
+   * Initializes major version to [PII_ARCHIVE_VERSION] and minor
    * version to 0.
    */
   PiiArchive() :

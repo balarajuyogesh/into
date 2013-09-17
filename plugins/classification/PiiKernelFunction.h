@@ -20,7 +20,6 @@
 
 /**
  * @file
- * @ingroup PiiClassificationPlugin
  */
 
 #ifdef PII_CXX0X
@@ -31,11 +30,11 @@ template <class SampleSet> using PiiKernelFunction = PiiDistanceMeasure<SampleSe
 
 /**
  * Type definition for a polymorphic implementation of the function
- * object @a KERNEL.
+ * object *KERNEL*.
  *
- * @code
+ * ~~~
  * PiiKernelFunction<ConstFeatureIterator>* pKernel = new PII_POLYMORPHIC_KERNEL(PiiGaussianKernel);
- * @endcode
+ * ~~~
  */
 #define PII_POLYMORPHIC_KERNEL(KERNEL) typename PiiKernelFunction<ConstFeatureIterator>::template Impl<KERNEL<ConstFeatureIterator> >
 

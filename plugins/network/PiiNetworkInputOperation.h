@@ -27,17 +27,18 @@ class PiiHttpServer;
 
 /**
  * An operation that receives objects through a network connection
- * with the HTTP protol. @p %PiiNetworkInputOperation registers itself
+ * with the HTTP protol. @p PiiNetworkInputOperation registers itself
  * as a handler into a PiiHttpServer's protocol. It accepts many
  * different input formats and is able to automatically decode data in
  * various formats.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in status - an optional input for HTTP status code (int). The
  * default status code is 200.
  *
- * @code
+ * ~~~
  * // This code implements a complete HTTP/1.1 server that calculates
  * // the sum of two numerical query arguments. The server supports
  * // both GET and POST queries.
@@ -84,20 +85,20 @@ class PiiHttpServer;
  *   // Run eternally
  *   return app.exec();
  * }
- * @endcode
+ * ~~~
  *
- * @par Input decoding
+ * Input decoding
+ * --------------
  *
  * The operation does its best in guessing the type of the input data,
  * if the type is not explicitly specified. The operation supports
  * HTML form submissions (GET and POST with
  * application/x-www-form-urlencoded and multipart/form-data
  * encodings). If the string representing the value of a submitted
- * form field can be converted to an @p int, it will be converted. @p
- * double will be tried next, and if that is not successful, the value
+ * form field can be converted to an `int`, it will be converted. 
+ * `double` will be tried next, and if that is not successful, the value
  * will be used as a string.
  *
- * @ingroup PiiNetworkPlugin
  */
 class PiiNetworkInputOperation : public PiiNetworkOperation,
                                  public PiiHttpProtocol::UriHandler
@@ -112,17 +113,17 @@ class PiiNetworkInputOperation : public PiiNetworkOperation,
    * this operation only, use a URI here. See
    * PiiHttpServer::addServer() for URI syntax.
    *
-   * @code
+   * ~~~
    * PiiOperation* pReceiver = engine.createOperation("PiiNetworkInputOperation");
    * pReceiver->setProperty("httpServer", "tcp://0.0.0.0:8080/");
-   * @endcode
+   * ~~~
    */
   Q_PROPERTY(QString httpServer READ httpServer WRITE setHttpServer);
 
   /**
    * The URI of the operation within the server. Note that each
    * operation must have a unique URI in the context of a HTTP server. 
-   * If @p uri is empty, @p /objectName will be used as the URI.
+   * If `uri` is empty, @p /objectName will be used as the URI.
    */
   Q_PROPERTY(QString uri READ uri WRITE setUri);
 

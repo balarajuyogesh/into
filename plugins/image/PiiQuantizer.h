@@ -23,7 +23,6 @@
  * A class that quantizes (floating point) values to integers. Each
  * quantization level corresponds to a continuous range of values.
  *
- * @ingroup PiiImagePlugin
  */
 template <class T> class PiiQuantizer
 {
@@ -33,7 +32,7 @@ public:
    */
   PiiQuantizer() {}
   /**
-   * Create a new quantizer with quantization limits. See #setLimits()
+   * Create a new quantizer with quantization limits. See [setLimits()]
    * for details.
    */
   PiiQuantizer(const PiiMatrix<T>& limits) : _matLimits(limits) {}
@@ -58,13 +57,13 @@ public:
    * Set quantization limits. Quantization limits are represented as a
    * row matrix of monotonically increasing numbers.
    *
-   * @code
+   * ~~~
    * PiiQuantizer<float> q;
    * PiiMatrix<float> limits(1,4, 0.0, 0.1, 0.5, 0.7);
    * q.setLimits(limits);
    * q.quantize(0.3); // returns 2
    * q.quantize(-1.0); // returns 0
-   * @endcode
+   * ~~~
    */
   void setLimits(const PiiMatrix<T>& limits) { _matLimits = limits; }
   /**
@@ -77,15 +76,15 @@ public:
    * boundaries are derived from the training data so that each
    * quantization range has an equal number of entries.
    *
-   * @code
+   * ~~~
    * PiiMatrix<int> data(1,9, 5, 2, 1, 1, 3, 4, 1, 5, 5);
    * PiiMatrix<int> levels(PiiQuantizer<int>::divideEqually(data, levels));
    * // returns (2, 5)
    * PiiQuantizer<int> q(levels); // converts ints to ints
-   * @endcode
+   * ~~~
    *
-   * Note that @p data may be modified. Best performance is attained
-   * if @p data is a contiguous matrix.
+   * Note that `data` may be modified. Best performance is attained
+   * if `data` is a contiguous matrix.
    */
   static PiiMatrix<T> divideEqually(PiiMatrix<T>& data, int levels);
 

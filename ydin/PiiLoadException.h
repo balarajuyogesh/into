@@ -21,7 +21,6 @@
  *
  * Thrown when the loading of a plug-in fails.
  *
- * @ingroup Ydin
  */
 #include "PiiYdin.h"
 

@@ -21,7 +21,8 @@
 /**
  * Sets indidivual color channels in images.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - a color image to which color channels are to be set. 
  * Optional. If this input is not connected, the output will be
@@ -34,40 +35,40 @@
  * All inputs are optional, but at least one of them must be
  * connected.
  *
- * @outputs
+ * Outputs
+ * -------
  *
- * @out image - result image. If @p image is connected, the output
- * will be the same type. Otherwise, if @p channel3 is connected, or
- * if the #defaultValue3 property is set to a valid number, the output
+ * @out image - result image. If `image` is connected, the output
+ * will be the same type. Otherwise, if `channel3` is connected, or
+ * if the [defaultValue3] property is set to a valid number, the output
  * image will have four color channels. Otherwise, there will be three
  * channels. The data type of the output channels is the same as that
  * of the first connected channel input.
  *
- * @ingroup PiiColorsPlugin
  */
 class PiiColorChannelSetter : public PiiDefaultOperation
 {
   Q_OBJECT
 
   /**
-   * Default value for color channel 0. If the @p channel0 input is
-   * not connected and this value is not @p NaN, the whole channel
-   * will be set to this value. The default value is @p NaN.
+   * Default value for color channel 0. If the `channel0` input is
+   * not connected and this value is not `NaN`, the whole channel
+   * will be set to this value. The default value is `NaN`.
    */
   Q_PROPERTY(double defaultValue0 READ defaultValue0 WRITE setDefaultValue0);
 
   /**
-   * Default value for color channel 1. See #defaultValue0.
+   * Default value for color channel 1. See [defaultValue0].
    */
   Q_PROPERTY(double defaultValue1 READ defaultValue1 WRITE setDefaultValue1);
 
   /**
-   * Default value for color channel 2. See #defaultValue0.
+   * Default value for color channel 2. See [defaultValue0].
    */
   Q_PROPERTY(double defaultValue2 READ defaultValue2 WRITE setDefaultValue2);
 
   /**
-   * Default value for color channel 3. See #defaultValue0.
+   * Default value for color channel 3. See [defaultValue0].
    */
   Q_PROPERTY(double defaultValue3 READ defaultValue3 WRITE setDefaultValue3);
 

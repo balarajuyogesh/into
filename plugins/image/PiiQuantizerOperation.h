@@ -22,16 +22,17 @@
 /**
  * Quantizes any numeric matrix to discrete levels.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - input image. Any numeric matrix.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out image - input image quantized to discrete levels. 
  * PiiMatrix<int>.
  *
- * @ingroup PiiImagePlugin
  */
 class PiiQuantizerOperation : public PiiDefaultOperation
 {

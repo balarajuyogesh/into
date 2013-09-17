@@ -28,7 +28,6 @@
  * counting mechanism. In these scenarios, a pointer to a PiiPtrHolder
  * object is passed instead of the object pointer itself.
  *
- * @ingroup Core
  */
 template <class T> class PiiPtrHolder : public PiiSharedObject
 {
@@ -36,8 +35,8 @@ public:
   PiiPtrHolder() : pointer(0) {}
 
   /**
-   * Creates a PiiPtrHolder that wraps the given pointer @a ptr. The
-   * pointer will be owned by %PiiPtrHolder and must not be deleted by
+   * Creates a PiiPtrHolder that wraps the given pointer *ptr*. The
+   * pointer will be owned by PiiPtrHolder and must not be deleted by
    * the caller.
    */
   PiiPtrHolder(T* ptr) : pointer(ptr) {}

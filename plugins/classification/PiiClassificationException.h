@@ -23,7 +23,6 @@
  * PiiClassificationException is thrown when errors occur in
  * classification.
  *
- * @ingroup PiiClassificationPlugin
  */
 class PII_CLASSIFICATION_EXPORT PiiClassificationException : public PiiException
 {
@@ -31,9 +30,9 @@ public:
   /**
    * Codes for different exception types.
    *
-   * @lip Unknown - unknown error
+   * - `Unknown` - unknown error
    *
-   * @lip LearningInterrupted - learning was interrupted by user.
+   * - `LearningInterrupted` - learning was interrupted by user.
    */
   enum Code
     {
@@ -49,7 +48,7 @@ public:
   PiiClassificationException(Code code, const QString& location = "");
 
   /**
-   * Construct a @p Unknown exception with the given error message.
+   * Construct a `Unknown` exception with the given error message.
    */
   PiiClassificationException(const QString& message, const QString& location = "");
   

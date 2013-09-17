@@ -30,7 +30,6 @@
 
 /**
  * @namespace PiiOpenCv
- * @ingroup PiiOpenCvPlugin
  *
  * @brief Definitions for OpenCV-related routines.
  */

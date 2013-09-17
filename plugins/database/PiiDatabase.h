@@ -22,23 +22,23 @@
 namespace PiiDatabase
 {
   /**
-   * Create a database connection to @p databaseUri.
+   * Create a database connection to `databaseUri`.
    *
    * @param databaseUri the URI of the database. The general syntax is
-   * @p driver://user:password\@host:port/database. E.g. @p
-   * psql://me:secret\@localhost/mybase
+   * `driver:`//user:password\@host:port/database. E.g. 
+   * `psql:`//me:secret\@localhost/mybase
    *
    * @param connectionName the name of the connection. The database
    * can be later retrieved with QSqlDatabase::database() with the
    * given name. If this parameter is omitted, the new database
    * connection becomes the default connection.
    *
-   * @code
+   * ~~~
    * PiiDatabase::createDb("mysql://localhost/test", "myConnection");
    * QSqlDatabase db = QSqlDatabase::database("myConnection");
    * if (db.isValid())
    *   doSomething();
-   * @endcode
+   * ~~~
    */
   bool PII_DATABASE_EXPORT createDb(const QString& databaseUri, const QString& connectionName = "");
 }

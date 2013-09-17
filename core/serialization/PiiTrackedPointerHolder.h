@@ -20,8 +20,8 @@
 
 /**
  * A class that is used by PiiOutputArchive to store tracked
- * pointers while serializing them. When a tracked pointer of type @p
- * T is saved first time, PiiOutputArchive calls
+ * pointers while serializing them. When a tracked pointer of type 
+ * `T` is saved first time, PiiOutputArchive calls
  * PiiSerialization::createTrackedPointerHolder(T*) and inserts the
  * returned object to the list of tracked pointers. The list
  * is consulted whenever a tracked pointer is being saved. If its
@@ -36,7 +36,7 @@
  * during serialization.
  *
  *
- * @code
+ * ~~~
  * class MyRefCountedObjHolder : public PiiTrackedPointerHolder
  * {
  *   public:
@@ -59,9 +59,8 @@
  *     return new MyRefCountedObjHolder(ptr);
  *   }
  * }
- * @endcode
+ * ~~~
  *
- * @ingroup Serialization
  */
 class PII_SERIALIZATION_EXPORT PiiTrackedPointerHolder
 {
@@ -102,8 +101,8 @@ public:
   int pointerIndex() const { return _iPointerIndex; }
 
   /**
-   * Returns @p true if the object pointed to by the held pointer was
-   * saved by a reference, and @p false otherwise.
+   * Returns `true` if the object pointed to by the held pointer was
+   * saved by a reference, and `false` otherwise.
    */
   bool isSavedByReference() const { return _bSavedByReference; }
   /**

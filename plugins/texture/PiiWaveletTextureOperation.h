@@ -29,17 +29,18 @@
  * and gmrf based schemes. IEE Proc. Vis. Image Signal Process. 144
  * (3), 180-188.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - an image whose texture features are to be
  * calculated. (Any gray-scale image)
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out features - feature vector. For each image, four values are
  * calculated and output as as 1-by-4 matrix. (PiiMatrix<float>)
  *
- * @ingroup PiiTexturePlugin
  */
 class PiiWaveletTextureOperation : public PiiDefaultOperation
 {
@@ -55,14 +56,14 @@ class PiiWaveletTextureOperation : public PiiDefaultOperation
    * The number of features to calculate for each decomposition
    * level. Feature counts have the following meanings:
    *
-   * @li 1 - rotation invariant texture descriptor as described in the
+   * - 1 - rotation invariant texture descriptor as described in the
    * aforementioned paper.
    *
-   * @li 2 - consider only horizontal and vertical details
+   * - 2 - consider only horizontal and vertical details
    *
-   * @li 3 - consider also diagonal details (default value)
+   * - 3 - consider also diagonal details (default value)
    *
-   * @li 4 - use also the approximation coefficients on each
+   * - 4 - use also the approximation coefficients on each
    * level. This information is redundant.
    */
   Q_PROPERTY(int featuresPerLevel READ featuresPerLevel WRITE setFeaturesPerLevel);

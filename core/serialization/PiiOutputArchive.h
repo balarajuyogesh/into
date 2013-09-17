@@ -30,7 +30,6 @@
  * A base class for output archive implementations. This class
  * provides functions for saving pointers.
  *
- * @ingroup Serialization
  */
 template <class Archive> class PiiOutputArchive
 {
@@ -70,7 +69,7 @@ public:
   Archive* self() { return static_cast<Archive*>(this); }
 
   /**
-   * Writes an array of @a size elements to the archive.
+   * Writes an array of *size* elements to the archive.
    */
   template <class T> void writeArray(const T* ptr, unsigned int size)
   {
@@ -93,7 +92,7 @@ public:
   Archive& operator<< (char* value) { return self()->operator<< (const_cast<const char*>(value)); }
 
   /**
-   * Default implementation for the << operator. If @p Archive does
+   * Default implementation for the << operator. If `Archive` does
    * not have any overrides, this will be called by operator&. This
    * function calls save(value). You may provide any overrides
    * applicable to your archive type. At the minimum, an override for

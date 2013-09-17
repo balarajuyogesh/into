@@ -24,7 +24,6 @@
  * + M_i) @f$. This distance measure doesn't however divide the sum by
  * two.
  *
- * @ingroup PiiClassificationPlugin
  */
 PII_DEFAULT_DISTANCE_MEASURE_DEF(PiiChiSquaredDistance)
 {

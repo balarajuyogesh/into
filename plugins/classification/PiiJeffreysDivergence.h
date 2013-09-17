@@ -21,11 +21,10 @@
 /**
  * Jeffrey's Divergence is a statistical dissimilarity measure. It is
  * defined as @f$ d = -\sum S_i \log(2 S_i / (M_i + S_i)) + M_i \log(2
- * M_i / (M_i + S_i)) @f$, where @e S and @e M represent the sample
+ * M_i / (M_i + S_i)) @f$, where *S* and *M* represent the sample
  * and model distributions, respectively. Input features are assumed
  * to be distributions that sum up to unity.
  *
- * @ingroup PiiClassificationPlugin
  */
 PII_DEFAULT_DISTANCE_MEASURE_DEF(PiiJeffreysDivergence)
 {

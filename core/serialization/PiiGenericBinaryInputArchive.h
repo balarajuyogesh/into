@@ -25,7 +25,6 @@
  * A shorthand for a binary input archive derived from
  * PiiGenericInputArchive.
  *
- * @ingroup Serialization
  */
 typedef PiiGenericInputArchive::Impl<PiiBinaryInputArchive> PiiGenericBinaryInputArchive;
 

@@ -25,7 +25,6 @@
  * interrupt() is called. PiiBasicOperation provides no means of
  * handling incoming objects in input sockets.
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiBasicOperation : public PiiOperation
 {
@@ -38,9 +37,9 @@ public:
    * Check the operation for execution. If any non-optional sockets is
    * not connected, an exception is thrown.
    *
-   * @param reset if @p true, all sockets are cleared.
+   * @param reset if `true`, all sockets are cleared.
    *
-   * @note If you override this function, remember to call the
+   * ! If you override this function, remember to call the
    * parent's check() function in your own implementation.
    */
   void check(bool reset);
@@ -60,9 +59,9 @@ public:
   QList<PiiOutputSocket*> outputSockets() const;
 
   /**
-   * Returns the value of a property associated with @a socket. If @a
-   * name is "name", returns the @p objectName property of @a socket. 
-   * Otherwise returns the named property. If @a socket is not
+   * Returns the value of a property associated with *socket*. If 
+   * *name* is "name", returns the `objectName` property of *socket*. 
+   * Otherwise returns the named property. If *socket* is not
    * attached to this operation, returns an invalid QVariant.
    */
   QVariant socketProperty(PiiAbstractSocket* socket, const char* name) const;
@@ -78,7 +77,7 @@ public:
   /**
    * Check if the operation has connected inputs.
    *
-   * @param return @p true if the operation has input sockets and at
+   * @param return `true` if the operation has input sockets and at
    * least of them is connected.
    */
   bool hasConnectedInputs() const;
@@ -88,7 +87,7 @@ public:
   PiiInputSocket* input(const QString& name) const;
   
   /**
-   * Returns the input a @p index. No overflow checking will be performed.
+   * Returns the input a `index`. No overflow checking will be performed.
    */
   PiiInputSocket* inputAt(int index = 0) const;
 
@@ -97,7 +96,7 @@ public:
   PiiOutputSocket* output(const QString& name) const;
 
   /**
-   * Returns the output a @p index. No overflow checking will be performed.
+   * Returns the output a `index`. No overflow checking will be performed.
    */
   PiiOutputSocket* outputAt(int index = 0) const;
 
@@ -175,14 +174,14 @@ protected:
   void removeSocket(PiiOutputSocket* socket);
 
   /**
-   * Removes the input at @p index. The socket will be removed from the
+   * Removes the input at `index`. The socket will be removed from the
    * socket list and returned. To actually break the connection to
    * this socket, one needs to explicitly disconnect or delete the
    * socket:
    *
-   * @code
+   * ~~~
    * delete operation.removeInput(0);
-   * @endcode
+   * ~~~
    *
    * @return a pointer to the removed socket, or 0 if the index is out
    * of bounds.
@@ -190,14 +189,14 @@ protected:
   PiiInputSocket* removeInput(int index);
 
   /**
-   * Removes the input at @p index. The socket will be removed from the
+   * Removes the input at `index`. The socket will be removed from the
    * socket list and returned. To actually break the connections from
    * this socket, one needs to explicitly disconnect or delete the
    * socket:
    *
-   * @code
+   * ~~~
    * delete operation.removeOutput(0);
-   * @endcode
+   * ~~~
    *
    * @return a pointer to the removed socket, or 0 if the index is out
    * of bounds.
@@ -206,7 +205,7 @@ protected:
 
   /**
    * A convenience function that reads the first object in the input
-   * queue of input at @p index.
+   * queue of input at `index`.
    */
   PiiVariant readInput(int index) const;
 
@@ -217,7 +216,7 @@ protected:
   PiiVariant readInput() const;
 
   /**
-   * Sends @p obj to the output at @p index. A shorthand for
+   * Sends `obj` to the output at `index`. A shorthand for
    * output(index)->emitObject(obj).
    *
    * @see PiiOutputSocket::emitObject().
@@ -225,7 +224,7 @@ protected:
   void emitObject(const PiiVariant& obj, int index = 0);
 
   /**
-   * Sends @p value to the output at @p index. A shorthand for
+   * Sends `value` to the output at `index`. A shorthand for
    * output(index)->emitObject(value).
    *
    * @see PiiOutputSocket::emitObject().
@@ -236,13 +235,13 @@ protected:
   }
   
   /**
-   * Sets the state to @p state. If the current state is equal to @p
-   * state, does nothing. Otherwise, the current state will be set to
-   * @p state and a @ref PiiOperation::stateChanged() "stateChanged"
+   * Sets the state to `state`. If the current state is equal to 
+   * `state`, does nothing. Otherwise, the current state will be set to
+   * `state` and a [stateChanged](PiiOperation::stateChanged())
    * signal will be emitted.
    *
-   * @note This function is a primitive utility function that is not
-   * protected with the @ref PiiOperation::stateLock() "state lock".
+   * ! This function is a primitive utility function that is not
+   * protected with the [state lock](PiiOperation::stateLock()).
    * Subclasses must acquire the lock where needed.
    */
   void setState(State state);
@@ -262,12 +261,12 @@ protected:
    * (PiiExecutionException::Finished).
    *
    * One may override this function to perform cleanup before
-   * stopping. The difference in this and the #aboutToChangeState()
+   * stopping. The difference in this and the [aboutToChangeState()]
    * function is that this function will be called before the
    * operation passes stop tags to output sockets. It is therefore
    * possible to send objects to outputs, if needed. If the default
    * implementation is not called, the overridden function must throw
-   * a @p Finished exception.
+   * a `Finished` exception.
    */
   virtual void operationStopped();
   
@@ -279,22 +278,22 @@ protected:
    * throws an exception (PiiExecutionException::Paused).
    *
    * One may override this function to prepare for pausing. The
-   * difference in this and the #aboutToChangeState() function is that
+   * difference in this and the [aboutToChangeState()] function is that
    * this function will becalled before the operation passes pause
    * tags to output sockets. If the default implementation is not
-   * called, the overridden function must throw a @p Paused exception.
+   * called, the overridden function must throw a `Paused` exception.
    */
   virtual void operationPaused();
 
   /**
-   * Signals that this operation has resumed from @p Paused state
+   * Signals that this operation has resumed from `Paused` state
    * because it has received a resume tag to all connected inputs. 
    * This function resolves the state of all input groups and resumes
    * the corresponding synchronized outputs by calling
    * PiiOutputSocket::resume().
    *
    * One may override this function to restore from pause. The
-   * difference in this and the #aboutToChangeState() function is that
+   * difference in this and the [aboutToChangeState()] function is that
    * this function will becalled before the operation passes resume
    * tags to output sockets.
    */
@@ -317,8 +316,8 @@ protected:
   /**
    * Maintains a set of numbered inputs at the end of the input list.
    *
-   * @param count the number of inputs, numbered sequentially from @a
-   * firstIndex to @a firstIndex + @a count - 1.
+   * @param count the number of inputs, numbered sequentially from 
+   * *firstIndex* to *firstIndex* + *count* - 1.
    *
    * @param staticInputs retain this many inputs at the beginning.
    *
@@ -326,36 +325,36 @@ protected:
    *
    * @param firstIndex the index of the first numbered input
    *
-   * @code
+   * ~~~
    * // Add one static socket in the beginning of the input list
    * addSocket(new PiiInputSocket("first"));
    * // Add three inputs (input0, input1, input2) after the first one.
    * setNumberedInputs(3, 1);
    * // Remove the last two inputs
    * setNumberedInputs(1, 1);
-   * @endcode
+   * ~~~
    */
   void setNumberedInputs(int count, int staticInputs = 0, const QString& prefix = "input", int firstIndex = 0);
 
   /**
    * Maintains a set of numbered inputs at the end of the output list.
-   * This function works analogously to #setNumberedInputs().
+   * This function works analogously to [setNumberedInputs()].
    */
   void setNumberedOutputs(int count, int staticOutputs = 0, const QString& prefix = "output", int firstIndex = 0);
 
   /**
-   * Sends a start tag to outputs between (and including) @a
-   * firstOutput and @a lastOutput.
+   * Sends a start tag to outputs between (and including) 
+   * *firstOutput* and *lastOutput*.
    */
   void startMany(int firstOutput = 0, int lastOutput = -1);
   /**
-   * Sends an end tag to outputs between (and including) @a
-   * firstOutput and @a lastOutput.
+   * Sends an end tag to outputs between (and including) 
+   * *firstOutput* and *lastOutput*.
    */
   void endMany(int firstOutput = 0, int lastOutput = -1);
   
   /**
-   * Called by #setState() just before the operation changes to a new
+   * Called by [setState()] just before the operation changes to a new
    * state. The function will be called independent of the cause of
    * the state change (internal or external). Derived classes may
    * implement this function to perform whatever functionality is

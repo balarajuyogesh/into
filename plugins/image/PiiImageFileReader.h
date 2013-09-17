@@ -25,16 +25,18 @@
 /**
  * Reads images from files.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in trigger - an optional trigger input. A new image is emitted
  * whenever any object is received in this input.
  *
  * @in filename - an optional filename input (QString). If this input
- * is connected, file names are read from it instead of the #fileNames
+ * is connected, file names are read from it instead of the [fileNames]
  * property.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out image - the image output. Emits either four-channel color (the
  * default, PiiMatrix<PiiColor4<unsigned char> >) or grayscale images
@@ -45,17 +47,16 @@
  * @out key - the name of a meta-data field in the image (QString). 
  * There may be 0-N meta-data fields that will be emitted per image. 
  * This output emits them all with a flow level one higher than that
- * of @a image.
+ * of *image*.
  *
- * @out value - the value of the field corresponding to @p key
+ * @out value - the value of the field corresponding to `key`
  * (QString).
  *
- * @out metaX - X ranges from 0 to the number of #metaFields - 1. 
+ * @out metaX - X ranges from 0 to the number of [metaFields] - 1. 
  * Emits the value of the meta field X, where X is an index to
- * #metaFields. If there is no such meta field, uses the default
+ * [metaFields]. If there is no such meta field, uses the default
  * value.
  *
- * @ingroup PiiImagePlugin
  */
 class PII_IMAGE_EXPORT PiiImageFileReader : public PiiImageReaderOperation
 {
@@ -63,18 +64,18 @@ class PII_IMAGE_EXPORT PiiImageFileReader : public PiiImageReaderOperation
 
   /**
    * A list of file names to open. The names may be either absolute or
-   * relative. Setting this value clears #fileNamePattern.
+   * relative. Setting this value clears [fileNamePattern].
    *
-   * @code
+   * ~~~
    * pReader->setProperty("fileNames", QStringList() << "image1.bmp" << "image2.png" << "/tmp/image3.ppm");
-   * @endcode
+   * ~~~
    */
   Q_PROPERTY(QStringList fileNames READ fileNames WRITE setFileNames);
 
   /**
    * A file name pattern that matches all the image files you want to
    * be opened. An example: "images/img_*.jpg". Setting this value
-   * overwrites #fileNames.
+   * overwrites [fileNames].
    */
   Q_PROPERTY(QString fileNamePattern READ fileNamePattern WRITE setFileNamePattern STORED false);
 
@@ -90,8 +91,8 @@ class PII_IMAGE_EXPORT PiiImageFileReader : public PiiImageReaderOperation
 
   /**
    * The total number of images the source will emit. This may be
-   * different from @ref PiiImageReaderOperation::maxImages
-   * "maxImages", if #repeatCount is set. -1 means eternally.
+   * different from [PiiImageReaderOperation::maxImages]
+   * "maxImages", if [repeatCount] is set. -1 means eternally.
    */
   Q_PROPERTY(int totalImageCount READ totalImageCount);
 
@@ -104,7 +105,7 @@ class PII_IMAGE_EXPORT PiiImageFileReader : public PiiImageReaderOperation
   /**
    * Lock files for reading. See PiiImageFileWriter::lockFiles for a
    * detailed description. This flag has no effect on Windows. The
-   * default value is @p false.
+   * default value is `false`.
    */
   Q_PROPERTY(bool lockFiles READ lockFiles WRITE setLockFiles);
 
@@ -112,23 +113,23 @@ class PII_IMAGE_EXPORT PiiImageFileReader : public PiiImageReaderOperation
    * A list of meta-data fields to be extracted from the image. Each
    * element in this list is a QVariantMap with two elements:
    *
-   * @lip name - the name of the meta field to extract from the image
+   * - `name` - the name of the meta field to extract from the image
    * (QString)
    *
-   * @lip defaultValue - default value for the field (int, double, or
+   * - `defaultValue` - default value for the field (int, double, or
    * QString). The meta field will be automatically converted to the
    * type of the default value.
    *
-   * @code
+   * ~~~
    * // Extracts the "Software" meta field from input images
    * QVariantMap meta;
    * meta["name"] = "Software";
    * meta["defaultValue"] = QString();
    * pReader->setProperty("metaFields", QVariantList() << meta);
-   * @endcode
+   * ~~~
    *
-   * The meta field at index X in the list will be sent to the @p
-   * metaX output.
+   * The meta field at index X in the list will be sent to the 
+   * `metaX` output.
    */
   Q_PROPERTY(QVariantList metaFields READ metaFields WRITE setMetaFields);
 
@@ -137,14 +138,14 @@ public:
   /**
    * Emission order randomization mode.
    *
-   * @lip NoRandomization - the order of images is determined by the
+   * - `NoRandomization` - the order of images is determined by the
    * order of file names.
    *
-   * @lip RandomizeOnce - the order of images is shuffled once in the
+   * - `RandomizeOnce` - the order of images is shuffled once in the
    * beginning.
    *
-   * @lip RandomizeOnEachIteration - the order is shuffled at the
-   * start of each repeat, if @ref repeatCount is larger than one.
+   * - `RandomizeOnEachIteration` - the order is shuffled at the
+   * start of each repeat, if [repeatCount] is larger than one.
    */
   enum RandomizationMode { NoRandomization, RandomizeOnce, RandomizeOnEachIteration };
 
@@ -155,7 +156,7 @@ public:
   PiiImageFileReader(const QString& pattern = "");
 
   /**
-   * Read an image from the file denoted by @p fileName. The image is
+   * Read an image from the file denoted by `fileName`. The image is
    * automatically converted to gray scale. (Y = (R+G+B)/3)
    *
    * @return a newly allocated PiiQImage. Must be deleted by the
@@ -163,7 +164,7 @@ public:
    */
   static PiiGrayQImage* readGrayImage(const QString& fileName);
   /**
-   * Read an image from the file denoted by @p fileName. The image is
+   * Read an image from the file denoted by `fileName`. The image is
    * automatically converted to 32-bit RGBA. For most image types, the
    * alpha channel is zero.
    *

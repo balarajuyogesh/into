@@ -25,7 +25,6 @@
  * neighbors rule. See PiiClassifierOperation and PiiKnnClassifier for
  * more information.
  *
- * @ingroup PiiClassificationPlugin
  */
 class PiiKnnClassifierOperation : public PiiVectorQuantizerOperation
 {

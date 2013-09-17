@@ -35,7 +35,6 @@ class PiiGenericInputArchive;
  * Declares the PiiVariant class and provides macros for making custom
  * variant types serializable.
  *
- * @ingroup Core
  */
 
 /**
@@ -69,17 +68,17 @@ class PiiGenericInputArchive;
     PiiVariant::VTableImpl<TYPE >::instance(Pii::typeId<TYPE >())
 
 /**
- * Registers @a ID as an alternative type id for @a TYPE. You must
+ * Registers *ID* as an alternative type id for *TYPE*. You must
  * register all custom type ids for non-primitive types before using
  * them. If you don't, the sofware will crash.
  *
- * @code
+ * ~~~
  * // This is a static initializer; use in the global scope
  * PII_MAP_VARIANT_ID_TO_TYPE(0x55378008, QString);
  *
  * // Somewhere else in your code
  * PiiVariant var(QString("Alternative id"), 0x55378008);
- * @endcode
+ * ~~~
  *
  * @relates PiiVariant
  */
@@ -109,11 +108,11 @@ PII_TYPEMAP(PiiVariantValueMap)
  * A type ID is used in determining the type of the stored object. To
  * check the type of a variant, do the following:
  *
- * @code
+ * ~~~
  * PiiVariant variant(3);
  * if (variant.type() == PiiVariant::IntType)
  *   int i = variant.valueAs<int>();
- * @endcode
+ * ~~~
  *
  * Any type can be made compatible with PiiVariant. For this, one
  * needs to first choose a unique variant type ID for the type. The
@@ -124,7 +123,7 @@ PII_TYPEMAP(PiiVariantValueMap)
  * new type must then be registered by the @ref
  * PII_REGISTER_VARIANT_TYPE macro.
  *
- * @code
+ * ~~~
  * // MyClass.h
  * class MyClass {};
  *
@@ -138,9 +137,8 @@ PII_TYPEMAP(PiiVariantValueMap)
  * // In MyClass.cc
  * #include "MyClass.h"
  * PII_REGISTER_VARIANT_TYPE(MyClass);
- * @endcode
+ * ~~~
  *
- * @ingroup Core
  */
 class PII_CORE_EXPORT PiiVariant
 {
@@ -208,14 +206,14 @@ class PII_CORE_EXPORT PiiVariant
 public:
   /**
    * An enumeration for primitive types. The names correspond to
-   * primitive C++ types. @p InvalidType (0xffffffff) indicates an
+   * primitive C++ types. `InvalidType` (0xffffffff) indicates an
    * unknown type. The type IDs are composed so that their categories
    * can be quickly determined by bit masking. The system is analogous
    * to the netaddress/netmask system with IPv4 addresses.
    *
    * Primitive types cover the IDs 0-31. Thus, they have a
    * "netaddress" of 0 and a netmask of ~0x1f. Testing for
-   * "primitiveness" is just @p anding with ~0x1f (0xffffffe0) and
+   * "primitiveness" is just `anding` with ~0x1f (0xffffffe0) and
    * comparing for zero.
    *
    * When adding template instances as custom variant types, it is
@@ -223,8 +221,8 @@ public:
    * ID always tell the primitive type, if possible. It is then
    * possible to quickly check for "integerness" or "floatness" of any
    * template type. For example, assume that the "subnet" 1/~0xff (IDs
-   * 0x100 - 0x1ff) is reserved for your template type @p MyType<T>. 
-   * Then, 0x100 (0x100 + @p CharType) should be @p MyType<@p char>
+   * 0x100 - 0x1ff) is reserved for your template type `MyType`<T>. 
+   * Then, 0x100 (0x100 + `CharType`) should be `MyType`<`char`>
    * and so on.
    */
   enum PrimitiveType
@@ -269,35 +267,35 @@ public:
   explicit inline PiiVariant(void*);
 
   /**
-   * Creates a variant that stores @a value. The type @p T must be
-   * declared with the @ref PII_DECLARE_VARIANT_TYPE macro and
-   * registered with the @ref PII_REGISTER_VARIANT_TYPE macro.
+   * Creates a variant that stores *value*. The type `T` must be
+   * declared with the [PII_DECLARE_VARIANT_TYPE] macro and
+   * registered with the [PII_REGISTER_VARIANT_TYPE] macro.
    */
   template <class T> explicit PiiVariant(const T& value);
 
   /**
    * Creates a variant with a non-default type ID. If you want to give
    * a special meaning to a variant while still storing its actual
-   * value as, say, an @p int, you can do this:
+   * value as, say, an `int`, you can do this:
    *
-   * @code
+   * ~~~
    * const int MyCustomTypeId = 0x31415927;
    * PiiVariant var(3, MyCustomTypeId);
-   * @endcode
+   * ~~~
    *
-   * @note If T is a non-primitive type, you must connect it to your
-   * custom @a typeId with @ref PII_MAP_VARIANT_ID_TO_TYPE.
+   * ! If T is a non-primitive type, you must connect it to your
+   * custom *typeId* with [PII_MAP_VARIANT_ID_TO_TYPE].
    */
   template <class T> PiiVariant(T value, unsigned int typeId, typename Pii::OnlyPrimitive<T>::Type = 0);
   template <class T> PiiVariant(T value, unsigned int typeId, typename Pii::OnlyNonPrimitive<T,int>::Type = 0);
 
   /**
-   * Creates a copy of @a other.
+   * Creates a copy of *other*.
    */
   PiiVariant(const PiiVariant& other);
 
   /**
-   * Copies the contents of @a other to @p this.
+   * Copies the contents of *other* to `this`.
    */
   PiiVariant& operator= (const PiiVariant& other);
 
@@ -307,66 +305,66 @@ public:
   ~PiiVariant();
   
   /**
-   * Returns @p true if this variant is a primitive type, @p false
+   * Returns `true` if this variant is a primitive type, `false`
    * otherwise.
    */
   bool isPrimitive() const { return type() <= LastPrimitiveType; }
   /**
-   * Returns @p true if @a type represents a primitive type, @p false
+   * Returns `true` if *type* represents a primitive type, `false`
    * otherwise.
    */
   static bool isPrimitive(unsigned int type) { return type <= LastPrimitiveType; }
   
   /**
-   * Returns @p true if this variant is an integer type (char, short,
-   * int, qint64) and @p false otherwise. Note that the function may
+   * Returns `true` if this variant is an integer type (char, short,
+   * int, qint64) and `false` otherwise. Note that the function may
    * return true even if the type is not primitive, because it is
    * sometimes useful to be able to check for "integerness" of a
    * template type. To check whether the variant is a "primitive
    * integer", use
    *
-   * @code
+   * ~~~
    * if (variant.isPrimitive() && variant.isInteger())
    *   dealWithAnIntegerType(variant);
-   * @endcode
+   * ~~~
    */
   bool isInteger() const { return (type() & 0x10) == 0; }
   /**
-   * Returns @p true if @a type represents an integer type (char,
-   * short, int, qint64) and @p false otherwise.
+   * Returns `true` if *type* represents an integer type (char,
+   * short, int, qint64) and `false` otherwise.
    */
   static bool isInteger(unsigned int type) { return (type & 0x10) == 0; }
 
   /**
-   * Returns @p true if this variant is a floating point type and @p
-   * false otherwise. See #isInteger() for more information.
+   * Returns `true` if this variant is a floating point type and 
+   * `false` otherwise. See [isInteger()] for more information.
    */
   bool isFloat() const { return (type() & 0x18) == 0x10; }
   /**
-   * Returns @p true if @p type represents a floating point type and
-   * @p false otherwise. See #isInteger() for more information.
+   * Returns `true` if `type` represents a floating point type and
+   * `false` otherwise. See [isInteger()] for more information.
    */
   static bool isFloat(unsigned int type) { return (type & 0x18) == 0x10; }
   
   /**
-   * Returns @p true if this variant is an unsigned integer type and
-   * @p false otherwise. See isInteger() for more information.
+   * Returns `true` if this variant is an unsigned integer type and
+   * `false` otherwise. See isInteger() for more information.
    */
   bool isUnsigned() const { return (type() & 0x18) == 0x8; }
   /**
-   * Returns @p true if @a type represents an unsigned integer type
-   * and @p false otherwise. See isInteger() for more information.
+   * Returns `true` if *type* represents an unsigned integer type
+   * and `false` otherwise. See isInteger() for more information.
    */
   static bool isUnsigned(unsigned int type) { return (type & 0x18) == 0x8; }
 
   /**
-   * Returns @p true if the type of this variant is not @p
-   * InvalidType, and @p false otherwise.
+   * Returns `true` if the type of this variant is not 
+   * `InvalidType`, and `false` otherwise.
    */
   bool isValid() const { return type() != InvalidType; }
   /**
-   * Returns @p true if @a type is different from @p InvalidType, and
-   * @p false otherwise.
+   * Returns `true` if *type* is different from `InvalidType`, and
+   * `false` otherwise.
    */
   static bool isValid(unsigned int type) { return type != InvalidType; }
       
@@ -374,24 +372,24 @@ public:
    * Get the type of the variant. To compare for a certain type, you
    * may do the following:
    *
-   * @code
+   * ~~~
    * if (variant.type() == PiiVariant::DoubleType)
    *   calculateAccurately(variant.valueAs<double>());
    * else if (variant.type() == MyOwnTypeId)
    *   doSomethingElse(variant.valueAs<MyOwnTypeId>());
-   * @endcode
+   * ~~~
    */
   unsigned int type() const { return _uiType; }
 
   /**
-   * Returns the value of the variant as a @p T.
+   * Returns the value of the variant as a `T`.
    *
-   * @note This function doesn't check that the stored value actually
-   * is of type @p T. The entire responsibility for checking the type
+   * ! This function doesn't check that the stored value actually
+   * is of type `T`. The entire responsibility for checking the type
    * is at the caller.
    *
-   * @return a @p const reference to the wrapped object, if the type
-   * @p T is not one of the primitive types supported by %PiiVariant. 
+   * @return a `const` reference to the wrapped object, if the type
+   * `T` is not one of the primitive types supported by PiiVariant. 
    * Otherwise, returns the primitive type as a value.
    */
   template <class T> inline typename PII_MAP_TYPE(PiiVariantValueMap, T) valueAs() const
@@ -672,15 +670,15 @@ namespace Pii
 {
   /**
    * A utility function that creates a QVariant holding a
-   * PiiVariant that in turn holds the given @p value. A shorthand for
+   * PiiVariant that in turn holds the given `value`. A shorthand for
    * QVariant::fromValue(PiiVariant(value)). This function is useful in
    * setting properties whose type is PiiVariant.
    *
-   * @code
+   * ~~~
    * classifier->setProperty("codeBook", Pii::createQVariant(PiiMatrix<int>(2, 2,
    *                                                                        1, 2,
    *                                                                        3, 4)));
-   * @endcode
+   * ~~~
    *
    * @relates PiiVariant
    */

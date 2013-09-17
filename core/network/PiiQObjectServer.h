@@ -22,22 +22,24 @@
  * An object that maps QObject's functions and properties into the URI
  * space of a PiiHttpProtocol.
  *
- * @par Usage example
+ * Usage example
+ * -------------
  *
  * If you just need to start quick, do this:
  *
- * @code
+ * ~~~
  * QTimer t; // ... or any other class derived from QObject
  * PiiHttpServer* pHttpServer = PiiHttpServer::addServer("My server", "tcp://0.0.0.0:3142");
  * PiiQObjectServer* pQObjectServer = new PiiQObjectServer(&t);
  * pHttpServer->protocol()->registerUriHandler("/timer/", pQObjectServer);
  * pHttpServer->start();
- * @endcode
+ * ~~~
  *
  * See PiiRemoteQObject for the client side. If you want the details,
  * read on.
  *
- * @par Slots and other functions
+ * Slots and other functions
+ * -------------------------
  *
  * PiiQObjectServer makes a QObject's properties, signals, slots, and
  * other invokable functions available to client software by mapping
@@ -46,16 +48,16 @@
  * available as sub-URIs. For example, a QTimer registered at /timer/
  * would create the following URI structure:
  *
- * @li /timer/
- * @li /timer/functions/
- * @li /timer/functions/start
- * @li /timer/functions/stop
- * @li /timer/signals/
- * @li /timer/signals/timeout()
- * @li /timer/properties/
- * @li /timer/properties/active
- * @li /timer/properties/interval
- * @li /timer/properties/singleShot
+ * - /timer/
+ * - /timer/functions/
+ * - /timer/functions/start
+ * - /timer/functions/stop
+ * - /timer/signals/
+ * - /timer/signals/timeout()
+ * - /timer/properties/
+ * - /timer/properties/active
+ * - /timer/properties/interval
+ * - /timer/properties/singleShot
  *
  * Note that the QTimer::start() function has two overloaded versions,
  * both of which can be accessed through the same URI. The server
@@ -73,7 +75,8 @@ GET /timer/functions/start HTTP/1.1
 GET /timer/functions/start?1000 HTTP/1.1
 @endverbatim
  *
- * @par Properties
+ * Properties
+ * ----------
  *
  * The properties of a QObject are provided under the "/properties/"
  * URI. Each property has a URI that corresponds to its name. By
@@ -149,7 +152,8 @@ Content-Length: 30
 interval=1000&singleShot=false
 @endverbatim
  *
- * @par Signals
+ * Signals
+ * -------
  *
  * Signals are implemented using the channel mechanism of
  * PiiObjectServer. A return channel must be set up before a signal
@@ -165,9 +169,10 @@ GET /channels/4A40938-2229-9F31-D008-2EFA98EC4E6C/connect?signals/timeout() HTTP
 @endverbatim
  *
  * When a signal is emitted, its function parameters will be encoded
- * as a QVariantList using Into's @ref Serialization mechanism.
+ * as a QVariantList using Into's [Serialization] mechanism.
  *
- * @par Thread-safety issues
+ * Thread-safety issues
+ * --------------------
  *
  * Qt's threading architecture makes it impossible to do certain
  * things from many threads even if mutual exclusion was handled
@@ -180,7 +185,7 @@ GET /channels/4A40938-2229-9F31-D008-2EFA98EC4E6C/connect?signals/timeout() HTTP
  * provides a way of marking unsafe properties and functions with
  * class info fields:
  *
- * @code
+ * ~~~
  * class MyClass : public QObject
  * {
  *   Q_OBJECT
@@ -196,7 +201,7 @@ GET /channels/4A40938-2229-9F31-D008-2EFA98EC4E6C/connect?signals/timeout() HTTP
  *
  *   // ...
  * };
- * @endcode
+ * ~~~
  *
  * Property names and function signatures are both separated with a
  * single space. Use the normalized function signature for functions.
@@ -205,19 +210,18 @@ GET /channels/4A40938-2229-9F31-D008-2EFA98EC4E6C/connect?signals/timeout() HTTP
  * PiiObjectServer::setSafetyLevel() "default safety level" using
  * Q_CLASSINFO:
  *
- * @code
+ * ~~~
  * class MyClass : public QObject
  * {
  *   Q_OBJECT
  *   Q_CLASSINFO("safetyLevel", "AccessFromMainThread");
  * };
- * @endcode
+ * ~~~
  *
- * @b NOTE: If the safety level of the whole object or any of its
+ * **NOTE:** If the safety level of the whole object or any of its
  * members is set to AccessFromMainThread, the PiiQObjectServer
  * instance must be created in the main thread.
  *
- * @ingroup Network
  */   
 class PII_NETWORK_EXPORT PiiQObjectServer :
   public PiiObjectServer
@@ -242,18 +246,18 @@ public:
   Q_DECLARE_FLAGS(ExposedFeatures, ExposedFeature);
   
   /**
-   * Creates a new %PiiRemoteObjectServer that maps HTTP request to
-   * the given @a object. There will be only one instance of the
+   * Creates a new PiiRemoteObjectServer that maps HTTP request to
+   * the given *object*. There will be only one instance of the
    * remote object, and all client requests will use it. The caller
-   * owns @a object; PiiRemoteObjectServer will not delete it.
+   * owns *object*; PiiRemoteObjectServer will not delete it.
    *
    * @param object an object to which remote function calls and
    * properties are mapped.
    *
    * @param features a list of features exposed to the HTTP interface.
    *
-   * @note If @a object is a QWidget or a QWindow, thread safety level
-   * will be set to @p AccessFromMainThread.
+   * ! If *object* is a QWidget or a QWindow, thread safety level
+   * will be set to `AccessFromMainThread`.
    */
   PiiQObjectServer(QObject* object, ExposedFeatures features = ExposeDefault);
 
@@ -278,8 +282,8 @@ public:
   QStringList listRoot() const;
   
   /**
-   * Sets the safety level of an individual property, identified by @a
-   * propertyName.
+   * Sets the safety level of an individual property, identified by 
+   * *propertyName*.
    */
   void setPropertySafetyLevel(const QString& propertyName, ThreadSafetyLevel safetyLevel);
   /**

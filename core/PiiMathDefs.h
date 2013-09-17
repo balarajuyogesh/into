@@ -64,7 +64,7 @@
 #ifndef INFINITY
 /**
  * Double-precision infinity. Some systems don't have the C99-standard
- * macro @p INFINITY defined. Gcc does as an extension, but MSVC
+ * macro `INFINITY` defined. Gcc does as an extension, but MSVC
  * doesn't.
  */
 #  define INFINITY std::numeric_limits<double>::infinity()
@@ -73,7 +73,7 @@
 #ifndef NAN
 /**
  * Double-precision not-a-number. Some systems don't have the
- * C99-standard macro @p NAN defined. Gcc does as an extension, but
+ * C99-standard macro `NAN` defined. Gcc does as an extension, but
  * MSVC doesn't.
  */
 #  define NAN std::numeric_limits<double>::quiet_NaN()
@@ -83,12 +83,12 @@
 namespace Pii
 {
   /**
-   * Returns true if @p f equals Inf.
+   * Returns true if `f` equals Inf.
    */
   template <class T> inline bool isInf(T f) { return f == std::numeric_limits<T>::infinity(); }
   
   /**
-   * Returns true if @p f is NaN.
+   * Returns true if `f` is NaN.
    */
   template <class T> inline bool isNan(T f) { return f != f; }
   

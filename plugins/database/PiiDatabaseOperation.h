@@ -28,12 +28,11 @@ class QSqlDriver;
  * This class provides functionality for maintaining the database
  * connection.
  *
- * @note Due to limitations of the low-level SQL drivers, database
+ * ! Due to limitations of the low-level SQL drivers, database
  * queries must be always made from the thread that initiated the
- * driver. Therefore, %PiiDatabaseOperation disallows changing its
- * @ref PiiDefaultOperation::processingMode "processing mode".
+ * driver. Therefore, PiiDatabaseOperation disallows changing its
+ * [processing mode](PiiDefaultOperation::processingMode).
  *
- * @ingroup PiiDatabasePlugin
  */
 class PII_DATABASE_EXPORT PiiDatabaseOperation : public PiiDefaultOperation
 {
@@ -45,27 +44,27 @@ class PII_DATABASE_EXPORT PiiDatabaseOperation : public PiiDefaultOperation
    * scheme://[user:password@]host[:port][/database]. Bracketed parts
    * are optional. "scheme" tells the database type. Valid values are:
    *
-   * @lip db2 - IBM DB2, v7.1 and higher
-   * @lip ibase - Borland InterBase
-   * @lip mysql - MySQL
-   * @lip oci - Oracle
-   * @lip odbc - ODBC (includes Microsoft SQL Server)
-   * @lip psql - PostgreSQL 7.3 and above
-   * @lip sqlite - SQLite version 3 or above
-   * @lip sqlite2 - SQLite version 2
-   * @lip tds - Sybase Adaptive Server
-   * @lip qt - use a connection created by
+   * - `db2` - IBM DB2, v7.1 and higher
+   * - `ibase` - Borland InterBase
+   * - `mysql` - MySQL
+   * - `oci` - Oracle
+   * - `odbc` - ODBC (includes Microsoft SQL Server)
+   * - `psql` - PostgreSQL 7.3 and above
+   * - `sqlite` - SQLite version 3 or above
+   * - `sqlite2` - SQLite version 2
+   * - `tds` - Sybase Adaptive Server
+   * - `qt` - use a connection created by
    * QSqlDatabase::addDatabase(). If the database name is empty, the
    * default database connection will be used.
-   * @lip null - no output (default value)
+   * - `null` - no output (default value)
    *
    * Some examples:
    *
-   * @lip mysql://user:password\@10.10.10.2/dumpdb
-   * @lip null://
-   * @lip qt://main
+   * - `mysql:`//user:password\@10.10.10.2/dumpdb
+   * - `null:`//
+   * - `qt:`//main
    *
-   * @see #databaseName
+   * @see [databaseName]
    */
   Q_PROPERTY(QString databaseUri READ databaseUri WRITE setDatabaseUri);
 
@@ -75,7 +74,7 @@ class PII_DATABASE_EXPORT PiiDatabaseOperation : public PiiDefaultOperation
    * either a DSN, a DSN file name (must end with .dsn), or a
    * connection string.
    *
-   * @code
+   * ~~~
    * PiiOperation* pDb = engine.createOperation("PiiDatabaseWriter");
    *
    * // Open a Microsoft Access database
@@ -88,16 +87,16 @@ class PII_DATABASE_EXPORT PiiDatabaseOperation : public PiiDefaultOperation
    * // Append to or read from a CSV file
    * pDb->setProperty("databaseUri", "csv://");
    * pDb->setProperty("databaseName", "outputfile.csv");
-   * @endcode
+   * ~~~
    *
    * The database name can also be omitted. In such a case you can set
-   * it directly with @p databaseUri.
+   * it directly with `databaseUri`.
    */
   Q_PROPERTY(QString databaseName READ databaseName WRITE setDatabaseName);
 
   /**
    * By default, all errors cause a run-time exception and stop the
-   * operation. Setting this flag to @p true suppresses the exceptions
+   * operation. Setting this flag to `true` suppresses the exceptions
    * and allows the operation to continue running. A log message will
    * be generated instead.
    */
@@ -105,7 +104,7 @@ class PII_DATABASE_EXPORT PiiDatabaseOperation : public PiiDefaultOperation
 
   /**
    * The number of times to retry a failed query before giving up. If
-   * #ignoreErrors is @p false, the operation will stop after this
+   * [ignoreErrors] is `false`, the operation will stop after this
    * many unsuccessful retry attempts. Default is 0. Only
    * connection-related errors (not SQL errors) may cause a retrial.
    */
@@ -158,16 +157,16 @@ protected:
   void setRetryCount(int retryCount);
 
   /**
-   * Opens a database connection to the given #databaseUri. This
+   * Opens a database connection to the given [databaseUri]. This
    * function must be called from the process() function to ensure the
    * database is always accessed from the same thread. This is a
    * limitation of the low-level SQL drivers.
    *
-   * @return @p true if the connection was successfully opened, @p
-   * false otherwise.
+   * @return `true` if the connection was successfully opened, 
+   * `false` otherwise.
    *
    * @exception PiiExecutionException& if the connection cannot be
-   * opened and #ignoreErrors is @p false.
+   * opened and [ignoreErrors] is `false`.
    */
   bool openConnection();
   
@@ -188,7 +187,7 @@ protected:
   QSqlDriver* driver();
 
   /**
-   * Returns @p true if the database connection is open and @p false
+   * Returns `true` if the database connection is open and `false`
    * otherwise.
    */
   bool isConnected() const;
@@ -206,25 +205,25 @@ protected:
                                        const QString& database);
 
   /**
-   * Throws a PiiExecutionException with the given @a message, if
-   * #ignoreErrors is @p false. Otherwise, writes @a message to log.
+   * Throws a PiiExecutionException with the given *message*, if
+   * [ignoreErrors] is `false`. Otherwise, writes *message* to log.
    */
   void error(const QString& message);
 
   /**
-   * Executes @a query. If the query fails with a connection-related
-   * error, retries #retryCount times.
+   * Executes *query*. If the query fails with a connection-related
+   * error, retries [retryCount] times.
    */
   bool exec(QSqlQuery& query);
   /**
-   * Checks an executed @a query for errors. Returns @p true if the
-   * query was successfully executed, @p false otherwise. Throws a
-   * PiiExecutionException if the query failed and #ignoreErrors is @p
-   * false.
+   * Checks an executed *query* for errors. Returns `true` if the
+   * query was successfully executed, `false` otherwise. Throws a
+   * PiiExecutionException if the query failed and [ignoreErrors] is 
+   * `false`.
    */
   bool checkQuery(QSqlQuery& query);
   /**
-   * Closes the database connection if @a state is @p Stopped.
+   * Closes the database connection if *state* is `Stopped`.
    */
   void aboutToChangeState(State state);
 

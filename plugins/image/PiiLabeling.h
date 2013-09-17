@@ -23,7 +23,6 @@
 
 /**
  * @file
- * @ingroup PiiImagePlugin
  *
  * Functions for labeling images.
  */
@@ -31,7 +30,7 @@
 namespace PiiImage
 {
   /**
-   * A class that collects object labels as the #labelImage() function
+   * A class that collects object labels as the [labelImage()] function
    * processes the input image. This is the default implementation
    * which does nothing.
    *
@@ -47,7 +46,7 @@ namespace PiiImage
   };
 
   /**
-   * An object size limiter for #labelImage(). This class counts the
+   * An object size limiter for [labelImage()]. This class counts the
    * occurrences of each label and removes all objects smaller than or
    * equal to than the specified threshold
    */
@@ -55,8 +54,8 @@ namespace PiiImage
   {
   public:
     /**
-     * Creates a size limiter that only accepts objects larger than @p
-     * sizeThreshold.
+     * Creates a size limiter that only accepts objects larger than 
+     * `sizeThreshold`.
      */
     inline ObjectSizeLimiter(int sizeThreshold) : _iSizeThreshold(sizeThreshold) {}
     /**
@@ -75,7 +74,7 @@ namespace PiiImage
       _vecCounts.append(0);
     }
     /**
-     * The labelImage() function found a pixel it labeled as @p label.
+     * The labelImage() function found a pixel it labeled as `label`.
      * Increases the label's histogram.
      */
     inline void addPixel(int label)
@@ -83,7 +82,7 @@ namespace PiiImage
       ++_vecCounts[label];
     }
     /**
-     * Retains all labels with more than @p sizeThreshold histogram
+     * Retains all labels with more than `sizeThreshold` histogram
      * entries. Sets all other labels to zero. The input vector labels
      * maps labels to final label indices.
      */
@@ -132,19 +131,19 @@ namespace PiiImage
    * treated as objects.
    *
    * @param rule find objects by applying this unary predicate. All
-   * pixels to which <tt>op(pixel)</tt> returns true are treated as
+   * pixels to which `op(pixel)` returns true are treated as
    * object pixels.
    *
    * @param limiter a template class that selects which objects to
    * accept for labeling
    *
-   * @return a labeled image, whose maximum value equals to @p
-   * labelCount
+   * @return a labeled image, whose maximum value equals to 
+   * `labelCount`
    *
    * @param labelCount an optional output-value parameter that stores
    * the number of labels found
    *
-   * @code
+   * ~~~
    * PiiMatrix<float> img;
    * int iLabelCount = 0;
    * // Every pixel with an intensity greater than 0.5 is an object.
@@ -152,7 +151,7 @@ namespace PiiImage
    *                      std::bind2nd(std::greater<float>(), 0.5f),
    *                      PiiImage::DefaultLabelingLimiter(),
    *                      &iLabelCount));
-   * @endcode
+   * ~~~
    *
    * @see DefaultLabelingLimiter
    * @see ObjectSizeLimiter
@@ -319,7 +318,7 @@ namespace PiiImage
    * @param labelCount an optional output-value parameter that stores
    * the number of labels found
    *
-   * @return a labeled image, whose maximum value equals to @p labelCount
+   * @return a labeled image, whose maximum value equals to `labelCount`
    */
   template <class Matrix> PiiMatrix<int> labelImage(const Matrix& mat,
                                                     int* labelCount = 0)
@@ -330,19 +329,19 @@ namespace PiiImage
 
   /**
    * Label all 4-connected objects whose size (in pixels) is larger
-   * than @p sizeLimit.
+   * than `sizeLimit`.
    *
    * @param mat a matrix to be labeled. All non-zero values are
    * treated as objects.
    *
    * @param sizeLimit only label objects larger than this. Smaller
-   * objects will be set to zero. If @e sizeLimit is negative or zero,
+   * objects will be set to zero. If *sizeLimit* is negative or zero,
    * only the largest object will be retained.
    *
    * @param labelCount an optional output-value parameter that stores
    * the number of labels found
    *
-   * @return a labeled image, whose maximum value equals to @p labelCount
+   * @return a labeled image, whose maximum value equals to `labelCount`
    */
   template <class Matrix> PiiMatrix<int> labelLargerThan(const Matrix& mat,
                                                          int sizeLimit, int* labelCount = 0)
@@ -452,15 +451,15 @@ namespace PiiImage
    *
    * @param mat the matrix to be labeled
    *
-   * @param rule1 a unary predicate that determines if a pixel in @p
-   * mat is an object pixel candidate. A pixel candidate is not
+   * @param rule1 a unary predicate that determines if a pixel in 
+   * `mat` is an object pixel candidate. A pixel candidate is not
    * necessarily an object pixel unless at least one pixel in the
-   * object matches @p rule2.
+   * object matches `rule2`.
    *
    * @param rule2 a unary predicate that each connected component must
    * meet at least once. If a connected component only has pixels that
-   * match @p rule1, it won't be labeled. If any of the pixels matches
-   * @p rule2, the whole component will be labeled.
+   * match `rule1`, it won't be labeled. If any of the pixels matches
+   * `rule2`, the whole component will be labeled.
    *
    * @param connectivity the connectivity type
    *
@@ -469,10 +468,10 @@ namespace PiiImage
    * all found objects with ones.
    *
    * @param labelCount an optional output value parameter that stores
-   * the maximum label. If @p labelIncrement is one, this value equals
+   * the maximum label. If `labelIncrement` is one, this value equals
    * to the number of objects labeled.
    *
-   * @code
+   * ~~~
    * PiiMatrix<bool> binaryImg;
    * PiiMatrix<int> labels;
    * // Label all 8-connected non-zero pixels
@@ -490,7 +489,7 @@ namespace PiiImage
    *                               std::bind2nd(std::greater<int>(), 100),
    *                               PiiImage::Connect4,
    *                               0);
-   * @endcode
+   * ~~~
    *
    * @see hysteresisThreshold()
    */

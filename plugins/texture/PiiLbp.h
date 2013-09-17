@@ -31,7 +31,7 @@
  * and the codes are collected into a histogram. Alternatively, each
  * pixel in the input image can be converted to a LBP code. The number
  * of different LBP codes and hence the number of bins in the output
- * histogram depends on LBP parameters. See #Mode for details.
+ * histogram depends on LBP parameters. See [Mode] for details.
  *
  * Usually, the local neighborhood in LBP is circular, parameterized
  * by the number of samples and the neighborhood radius as shown in
@@ -41,12 +41,11 @@
  * result of the comparison, one bit of a binary number is set to
  * either zero or one. Usually, the neighbors are compared to the
  * pixel at the center of the circle. In symmetric LBP, opposing
- * neighbors are compared to each other. In @ref PiiRandomLbp "random
+ * neighbors are compared to each other. In [PiiRandomLbp] "random
  * LBP", the compared pixels are chosen at random.
  *
  * @image html lbp_neighborhoods.png
  *
- * @ingroup PiiTexturePlugin
  */
 class PII_TEXTURE_EXPORT PiiLbp
 {
@@ -57,11 +56,11 @@ public:
   /**
    * The operation mode of the LBP. Possible values are:
    *
-   * @lip Standard - no modifications. All binary codes build up their
-   * own histogram bins. The total number of bins is @f$2^N@f$. For
+   * - `Standard` - no modifications. All binary codes build up their
+   * own histogram bins. The total number of bins is \(2^N\). For
    * example, an 8-bit LBP produces a 256-bin histogram.
    *
-   * @lip Uniform - only "uniform" binary codes are accepted. Others
+   * - `Uniform` - only "uniform" binary codes are accepted. Others
    * build up a single "miscellaneous" bin. This reduces the number of
    * bins significantly and increases robustness in some applications. 
    * Uniform binary codes are binary numbers that have at most two
@@ -69,21 +68,21 @@ public:
    * binary representation. For example, the 8-bit binary number
    * 10000011 is uniform whereas 10000101 is not.
    *
-   * @lip RotationInvariant - each code is rotated to its minimum
+   * - `RotationInvariant` - each code is rotated to its minimum
    * value so that rotation of the image does not (ideally) change the
    * result. This reduces the number of codes. For example, the 8-bit
    * codes 11100000, 01110000, and 00111000 would all become 00000111. 
    *
-   * @lip UniformRotationInvariant - like @p RotationInvariant, but
+   * - `UniformRotationInvariant` - like `RotationInvariant`, but
    * only uniform codes are accepted. This results in a short,
    * rotation invariant feature vector.
    *
-   * @lip Symmetric - An LBP operator that compares opposing pairs of
+   * - `Symmetric` - An LBP operator that compares opposing pairs of
    * pixels in a circular neighborhood and ignores the center. The
    * advantage is that only N/2 comparisons per pixel are needed
    * compared to N comparisons in the original LBP operator. 
    * Furthermore, the length of the (standard) feature vector will be
-   * @f$2^{N/2}@f$ instead of @f$2^N@f$, which makes classification
+   * \(2^{N/2}\) instead of \(2^N\), which makes classification
    * faster. Unfortunately, there is no free lunch. The symmetric
    * version cannot be made rotation invariant as easily as the basic
    * LBP. Its classification accuracy may also be somewhat worse. 
@@ -135,8 +134,8 @@ public:
    * @param interpolation the type of interpolation. Due to the
    * circular neighborhood, not all samples fall exactly on pixels. 
    * For such samples, interpolation is needed. Supported
-   * interpolation types are @p NearestNeighborInterpolation and @p
-   * LinearInterpolation. The default is nearest neighbor.
+   * interpolation types are `NearestNeighborInterpolation` and 
+   * `LinearInterpolation`. The default is nearest neighbor.
    */
   void setParameters(int samples, double radius, Mode mode, Pii::Interpolation interpolation);
 
@@ -166,8 +165,8 @@ public:
    * function is an entry point that selects the appropriate optimized
    * LBP implementation based on the current mode.
    *
-   * The template parameter @p T is for the primitive type. @p
-   * MatrixClass is a special class derived from PiiMatrix<int> that
+   * The template parameter `T` is for the primitive type. 
+   * `MatrixClass` is a special class derived from PiiMatrix<int> that
    * has a known structure. By changing this class one can use the LBP
    * operator to create either histograms or feature images. See
    * PiiLbp::Histogram and PiiLbp::Image for details.
@@ -177,15 +176,15 @@ public:
    * @param roi region-of-interest. See PiiRoi.
    *
    * @param centerFunc the "center function" is applied to each pixel
-   * before comparing it to the neighbors. See #basicLbp().
+   * before comparing it to the neighbors. See [basicLbp()].
    *
-   * @code
+   * ~~~
    * PiiMatrix<int> image;
    * PiiLbp lbp;
    * lbp.genericLbp<PiiLbp::Histogram>(image, PiiRoi::DefaultRoi(), Pii::Identity<int>()); // Outputs histogram
    * lbp.genericLbp<PiiLbp::Image>(image, PiiRoi::DefaultRoi(),
    *                               std::bind2nd(std::plus<int>(), 3)); // Outputs feature image
-   * @endcode
+   * ~~~
    */
   template <class MatrixClass, class T, class Roi, class UnaryFunction>
   PiiMatrix<int> genericLbp(const PiiMatrix<T>& image, Roi roi, UnaryFunction centerFunc);
@@ -222,15 +221,15 @@ public:
    * to increase LBP's noise tolerance is to add a constant value to
    * the center pixel before comparing it to neighbors:
    *
-   * @code
+   * ~~~
    * PiiMatrix<unsigned char> image;
    * PiiLbp::basicLbp<PiiLbp::Histogram>(image, PiiRoi::DefaultRoi(),
    *                                     std::bind2nd(std::plus<unsigned>(), 4));
-   * @endcode
+   * ~~~
    *
-   * Please ensure that the result type of @p centerFunc can store the
+   * Please ensure that the result type of `centerFunc` can store the
    * calculation result without overflows or underflows. For example,
-   * using @p unsigned @p char is not a good idea because 255 + 4 = 3.
+   * using `unsigned` `char` is not a good idea because 255 + 4 = 3.
    */
   template <class MatrixClass, class T, class Roi, class UnaryFunction>
   static PiiMatrix<int> basicLbp(const PiiMatrix<T>& image, Roi roi, UnaryFunction centerFunc);

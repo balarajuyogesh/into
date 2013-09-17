@@ -55,9 +55,9 @@
 
 /**
  * Case clauses for signed integer types. This code converts any
- * signed integer value to an @p int:
+ * signed integer value to an `int:`
  *
- * @code
+ * ~~~
  * void MyOperation::process()
  * {
  *   PiiVariant obj = readInput();
@@ -67,7 +67,7 @@
  *     PII_INTEGER_CASES(value = (int)PiiYdin::primitiveAs, obj);
  *   };
  * }
- * @endcode
+ * ~~~
  *
  * @param func a template function that takes one or no parameters. 
  * The function template is instantiated with the primitive type
@@ -80,11 +80,11 @@
  */
 #define PII_INTEGER_CASES(func, param) PII_DO_INTEGER_CASES(func, (param))
 /**
- * Same as @ref PII_INTEGER_CASES but for multiple parameters. If your
+ * Same as [PII_INTEGER_CASES] but for multiple parameters. If your
  * template function takes more than one parameter, you may want to
  * use this macro instead.
  *
- * @code
+ * ~~~
  * void MyOperation::process()
  * {
  *   PiiVariant obj = readInput();
@@ -101,7 +101,7 @@
  *   T value = a.valueAs<T>();
  *   // ...
  * }
- * @endcode
+ * ~~~
  *
  * @param func a template function that takes one or no parameters. 
  * The function template is instantiated with the primitive type
@@ -135,13 +135,13 @@
 */
 
 /**
- * Case clauses for unsigned integers. See @ref PII_INTEGER_CASES for
+ * Case clauses for unsigned integers. See [PII_INTEGER_CASES] for
  * details.
  */
 #define PII_UNSIGNED_INTEGER_CASES(func, param) PII_DO_UNSIGNED_INTEGER_CASES(func, (param))
 /**
- * Same as @ref PII_UNSIGNED_INTEGER_CASES but for multiple
- * parameters. See @ref PII_INTEGER_CASES_M for an example.
+ * Same as [PII_UNSIGNED_INTEGER_CASES] but for multiple
+ * parameters. See [PII_INTEGER_CASES_M] for an example.
  */
 #define PII_UNSIGNED_INTEGER_CASES_M(func, params) PII_DO_UNSIGNED_INTEGER_CASES_M(func, param)
 
@@ -163,7 +163,7 @@
  */
 #define PII_FLOAT_CASES(func, param) PII_DO_FLOAT_CASES(func, (param))
 /**
- * Same as @ref PII_FLOAT_CASES but for multiple parameters.
+ * Same as [PII_FLOAT_CASES] but for multiple parameters.
  */
 #define PII_FLOAT_CASES_M(func, params) PII_DO_FLOAT_CASES(func, params)
 
@@ -179,7 +179,7 @@
 #define PII_NUMERIC_CASES(func, param) PII_DO_NUMERIC_CASES(func, (param))
 
 /**
- * Same as @ref PII_NUMERIC_CASES but for multiple parameters.
+ * Same as [PII_NUMERIC_CASES] but for multiple parameters.
  */
 #define PII_NUMERIC_CASES_M(func, params) PII_DO_NUMERIC_CASES(func, params)
 
@@ -196,7 +196,7 @@
  */
 #define PII_PRIMITIVE_CASES(func, param) PII_DO_PRIMITIVE_CASES(func, (param))
 /**
- * Same as @ref PII_PRIMITIVE_CASES but for multiple parameters.
+ * Same as [PII_PRIMITIVE_CASES] but for multiple parameters.
  */
 #define PII_PRIMITIVE_CASES_M(func, params) PII_DO_PRIMITIVE_CASES(func, params)
 
@@ -218,7 +218,7 @@
  */
 #define PII_COMPLEX_CASES(func, param) PII_DO_COMPLEX_CASES(func, (param))
 /**
- * Same as @ref PII_COMPLEX_CASES but for multiple parameters.
+ * Same as [PII_COMPLEX_CASES] but for multiple parameters.
  */
 #define PII_COMPLEX_CASES_M(func, params) PII_DO_COMPLEX_CASES(func, params)
 
@@ -243,13 +243,13 @@
     break
 */
 /**
- * Case clauses for integer matrices. See @ref PII_ALL_MATRIX_CASES
+ * Case clauses for integer matrices. See [PII_ALL_MATRIX_CASES]
  * for more information.
  */
 #define PII_INTEGER_MATRIX_CASES(func, param) PII_DO_INTEGER_MATRIX_CASES(func, (param))
 /**
  * Case clauses for integer matrices and multiple function parameters. 
- * See @ref PII_ALL_MATRIX_CASES_M for more information.
+ * See [PII_ALL_MATRIX_CASES_M] for more information.
  */
 #define PII_INTEGER_MATRIX_CASES_M(func, params) PII_DO_INTEGER_MATRIX_CASES(func, params)
 
@@ -276,12 +276,12 @@
 
 /**
  * Case clauses for unsigned integer matrices. See
- * @ref PII_ALL_MATRIX_CASES for more information.
+ * [PII_ALL_MATRIX_CASES] for more information.
  */
 #define PII_UNSIGNED_MATRIX_CASES(func, param) PII_DO_UNSIGNED_MATRIX_CASES(func, (param))
 /**
  * Case clauses for unsigned integer matrices and multiple function
- * parameters. See @ref PII_ALL_MATRIX_CASES_M for more information.
+ * parameters. See [PII_ALL_MATRIX_CASES_M] for more information.
  */
 #define PII_UNSIGNED_MATRIX_CASES_M(func, params) PII_DO_UNSIGNED_MATRIX_CASES(func, params)
 
@@ -307,7 +307,7 @@
 #define PII_FLOAT_MATRIX_CASES(func, param) PII_DO_FLOAT_MATRIX_CASES(func, (param))
 /**
  * Case clauses for floating-point matrices and multiple function
- * parameters. See @ref PII_ALL_MATRIX_CASES_M for more information.
+ * parameters. See [PII_ALL_MATRIX_CASES_M] for more information.
  */
 #define PII_FLOAT_MATRIX_CASES_M(func, params) PII_DO_FLOAT_MATRIX_CASES(func, params)
 
@@ -325,7 +325,7 @@
 
 /**
  * Case clauses for all numeric matrices and multiple function
- * parameters. See @ref PII_ALL_MATRIX_CASES_M for more information.
+ * parameters. See [PII_ALL_MATRIX_CASES_M] for more information.
  */
 #define PII_NUMERIC_MATRIX_CASES_M(func, params) PII_DO_NUMERIC_MATRIX_CASES(func, params)
 
@@ -343,7 +343,7 @@
 #define PII_PRIMITIVE_MATRIX_CASES(func, param) PII_DO_PRIMITIVE_MATRIX_CASES(func, (param))
 /**
  * Case clauses for all primitive matrix types and multiple function
- * parameters. See @ref PII_ALL_MATRIX_CASES_M for more information.
+ * parameters. See [PII_ALL_MATRIX_CASES_M] for more information.
  */
 #define PII_PRIMITIVE_MATRIX_CASES_M(func, params) PII_DO_PRIMITIVE_MATRIX_CASES(func, params)
 
@@ -362,13 +362,13 @@
   */
 
 /**
- * Case clauses for complex matrices. See @ref PII_ALL_MATRIX_CASES
+ * Case clauses for complex matrices. See [PII_ALL_MATRIX_CASES]
  * for more information.
  */
 #define PII_COMPLEX_MATRIX_CASES(func, param) PII_DO_COMPLEX_MATRIX_CASES(func, (param))
 /**
  * Case clauses for complex matrices and multiple function parameters. 
- * See @ref PII_ALL_MATRIX_CASES_M for more information.
+ * See [PII_ALL_MATRIX_CASES_M] for more information.
  */
 #define PII_COMPLEX_MATRIX_CASES_M(func, params) PII_DO_COMPLEX_MATRIX_CASES(func, params)
 
@@ -378,7 +378,7 @@
  * You only need to create a template function that works for all
  * types. Typically, a PiiVariant is passed as its only argument.
  *
- * @code
+ * ~~~
  * template <class T> void myFunction(const PiiVariant& obj)
  * {
  *   PiiMatrix<T> value = obj.valueAs<PiiMatrix<T> >();
@@ -394,19 +394,19 @@
  *   default:
  *     sendToDevNull(obj);
  *   };
- * @endcode
+ * ~~~
  *
- * This code will call @p myFunction<char>(obj) if @p obj.type()
- * returns @p PiiYdin::CharMatrixType and similarly for all
+ * This code will call `myFunction`<char>(obj) if `obj`.type()
+ * returns `PiiYdin::CharMatrixType` and similarly for all
  * primitive types.
  *
  * @param func the name of a function template to call with the given
  * parameter. The function may be a class method, if the macro is used
  * within a class method. If the function returns a value, you may
  * also use the syntax "var = func". For example,
- * <tt>PII_ALL_MATRIX_CASES(myInt = myFunction, obj)</tt>. The @ref
+ * `PII_ALL_MATRIX_CASES(myInt = myFunction, obj)`. The @ref
  * PiiYdin::matrixAs() function template is a utility function
- * often used as the @p func parameter.
+ * often used as the `func` parameter.
  *
  * @param param a parameter to the function, usually a PiiVariant.
  */
@@ -415,10 +415,10 @@
   PII_COMPLEX_MATRIX_CASES(func, param)
 
 /**
- * Analogous to @ref PII_ALL_MATRIX_CASES, but this version accepts
+ * Analogous to [PII_ALL_MATRIX_CASES], but this version accepts
  * many function parameters at once.
  *
- * @code
+ * ~~~
  * template <class T> void myFunction(const PiiVariant& obj, const char* str)
  * {
  *   PiiMatrix<T> value = obj.valueAs<PiiMatrix<T> >();
@@ -434,7 +434,7 @@
  *   default:
  *     sendToDevNull(obj);
  *   };
- * @endcode
+ * ~~~
  *
  * @param func the function template to call with the parameters
  *
@@ -456,12 +456,12 @@
 
 /**
  * Case clauses for integer-valued gray-scale image types. See
- * @ref PII_ALL_MATRIX_CASES for more information.
+ * [PII_ALL_MATRIX_CASES] for more information.
  */
 #define PII_INT_GRAY_IMAGE_CASES(func, param) PII_DO_INT_GRAY_IMAGE_CASES(func, (param))
 /**
  * Case clauses for integer-valued gray-scale image types with
- * multiple function parameters. See @ref PII_ALL_MATRIX_CASES_M for
+ * multiple function parameters. See [PII_ALL_MATRIX_CASES_M] for
  * more information.
  */
 #define PII_INT_GRAY_IMAGE_CASES_M(func, params) PII_DO_INT_GRAY_IMAGE_CASES(func, params)
@@ -480,7 +480,7 @@
 #define PII_GRAY_IMAGE_CASES(func, param) PII_DO_GRAY_IMAGE_CASES(func, (param))
 /**
  * Case clauses for all gray-scale image types with multiple function
- * parameters. See @ref PII_ALL_MATRIX_CASES_M for more information.
+ * parameters. See [PII_ALL_MATRIX_CASES_M] for more information.
  */
 #define PII_GRAY_IMAGE_CASES_M(func, params) PII_DO_GRAY_IMAGE_CASES(func, params)
 
@@ -503,7 +503,7 @@
 #define PII_INT_COLOR_IMAGE_CASES(func, param) PII_DO_INT_COLOR_IMAGE_CASES(func, (param))
 /**
  * Case clauses for integer-valued color image types and multiple
- * function parameters. See @ref PII_ALL_MATRIX_CASES for more
+ * function parameters. See [PII_ALL_MATRIX_CASES] for more
  * information.
  */
 #define PII_INT_COLOR_IMAGE_CASES_M(func, params) PII_DO_INT_COLOR_IMAGE_CASES(func, params)
@@ -523,14 +523,14 @@
 #define PII_COLOR_IMAGE_CASES(func, param) PII_DO_COLOR_IMAGE_CASES(func, (param))
 /**
  * Case clauses for all color image types and multiple function
- * parameters. See @ref PII_ALL_MATRIX_CASES_M for more information.
+ * parameters. See [PII_ALL_MATRIX_CASES_M] for more information.
  */
 #define PII_COLOR_IMAGE_CASES_M(func, params) PII_DO_COLOR_IMAGE_CASES(func, params)
 
 
 /**
  * Case clauses for all gray scale and color image types. See
- * @ref PII_ALL_MATRIX_CASES for more information.
+ * [PII_ALL_MATRIX_CASES] for more information.
  */
 #define PII_ALL_IMAGE_CASES(func, param)     \
   PII_GRAY_IMAGE_CASES(func, param);         \
@@ -538,7 +538,7 @@
 
 /**
  * Case clauses for all gray scale and color image types, and multiple
- * function parameters. See @ref PII_ALL_MATRIX_CASES_M for more
+ * function parameters. See [PII_ALL_MATRIX_CASES_M] for more
  * information.
  */
 #define PII_ALL_IMAGE_CASES_M(func, params)  \
@@ -552,7 +552,6 @@
  * matrices and colors, and strings. Primitive types are already
  * handled by PiiVariant.
  *
- * @ingroup Ydin
  */
 #ifdef Q_MOC_RUN
 class PiiYdin
@@ -587,23 +586,23 @@ public:
    * synchronization purposes. The ID numbers 0x20-0x3f
    * (network/netmask: 0x20/~0x1f) are reserved for control objects.
    *
-   * @lip SynchronizationTagType - synchronization tag. 
+   * - `SynchronizationTagType` - synchronization tag. 
    * Synchronization tags either raise or lower the current flow level
    * in a synchronous socket group. The value of a synchronization tag
-   * is a signed @p int that will be added to the current flow level.
+   * is a signed `int` that will be added to the current flow level.
    *
-   * @lip StopTagType - a tag that causes the end of execution of
+   * - `StopTagType` - a tag that causes the end of execution of
    * an operation when received.
    *
-   * @lip PauseTagType - a tag that suspends the execution of an
+   * - `PauseTagType` - a tag that suspends the execution of an
    * operation when received.
    *
-   * @lip ResumeTagType - used to restore flow levels after pausing. 
+   * - `ResumeTagType` - used to restore flow levels after pausing. 
    * Works almost equally to a synchronization tag, but informs the
    * receiver that partial content may follow. The value of a resume
    * tag is a PiiSocketState.
    *
-   * @lip ReconfigurationTagType - a tag used for synchronized
+   * - `ReconfigurationTagType` - a tag used for synchronized
    * reconfigurations. Reconfiguration tags work almost equivalently
    * to pause tags, but they don't change the state of the receiving
    * operation. The value of the tag is a QString that specifies the
@@ -660,8 +659,8 @@ public:
     };
 
   /**
-   * Returns @p true if @a type is in the matrix type id range, @p
-   * false otherwise.
+   * Returns `true` if *type* is in the matrix type id range, 
+   * `false` otherwise.
    */
   inline bool isMatrixType(int type)
   {
@@ -709,16 +708,16 @@ public:
 
   /**
    * A utility function that returns a copy of a primitive object held
-   * by @p obj as a type compatible with QVariant. The function
+   * by `obj` as a type compatible with QVariant. The function
    * returns a primitive value that can be directly set to a QVariant.
    *
-   * @code
+   * ~~~
    * QVariant value;
    * switch (obj.type())
    *   {
    *      PII_PRIMITIVE_CASES(value = qVariantAs, obj);
    *   }
-   * @endcode
+   * ~~~
    */
   template <class T> typename QVariantTraits<T>::Type qVariantAs(const PiiVariant& obj)
   {
@@ -728,17 +727,17 @@ public:
   /**
    * A utility function template that returns a reference to
    * PiiMatrix<T> held by the variant argument. This can be used with
-   * the @p PII_XXX_MATRIX_CASES macros as the function argument. This
+   * the `PII_XXX_MATRIX_CASES` macros as the function argument. This
    * code converts any integer matrix to PiiMatrix<int>:
    *
-   * @code
+   * ~~~
    * PiiVariant obj = readInput();
    * PiiMatrix<int> mat;
    * switch (obj.type())
    *   {
    *     PII_INTEGER_MATRIX_CASES(mat = (PiiMatrix<int>)PiiYdin::matrixAs, obj);
    *   }
-   * @endcode
+   * ~~~
    */
   template <class T> inline PiiMatrix<T> matrixAs(const PiiVariant& obj)
   {
@@ -747,7 +746,7 @@ public:
 
   /**
    * Returns the primitive type held by the variant argument. This can
-   * be used with the @p PII_XXX_CASES macros as the function
+   * be used with the `PII_XXX_CASES` macros as the function
    * argument.
    */
   template <class T> inline T primitiveAs(const PiiVariant& obj)
@@ -756,7 +755,7 @@ public:
   }
 
   /**
-   * Converts the primitive value held by @a obj to @p T, if possible. 
+   * Converts the primitive value held by *obj* to `T`, if possible. 
    * If the value cannot be converted, returns a default-constructed
    * value.
    */
@@ -778,15 +777,15 @@ public:
   }
 
   /**
-   * A utility function that returns the value in @p input as the
-   * given type. Make sure there is an object in @p input.
+   * A utility function that returns the value in `input` as the
+   * given type. Make sure there is an object in `input`.
    *
    * @param input an input socket with a non-null object received
    *
-   * @return the value of the incoming object as the given type @p T
+   * @return the value of the incoming object as the given type `T`
    *
    * @exception PiiExecutionException& if the received object cannot
-   * be converted to @p T.
+   * be converted to `T`.
    */
   template <class T> T primitiveAs(PiiInputSocket* input)
   {
@@ -812,9 +811,9 @@ public:
   }
 
   /**
-   * Returns the number of columns in the matrix stored in @p obj.
+   * Returns the number of columns in the matrix stored in `obj`.
    *
-   * @note The caller must ensure that @a obj holds an instance of
+   * ! The caller must ensure that *obj* holds an instance of
    * PiiTypelessMatrix.
    *
    * @see isMatrixType()
@@ -825,9 +824,9 @@ public:
   }
 
   /**
-   * Returns the number of rows in the matrix stored in @p obj.
+   * Returns the number of rows in the matrix stored in `obj`.
    *
-   * @note The caller must ensure that @a obj holds an instance of
+   * ! The caller must ensure that *obj* holds an instance of
    * PiiTypelessMatrix.
    *
    * @see isMatrixType()
@@ -838,9 +837,9 @@ public:
   }
 
   /**
-   * Returns the stride of the matrix stored in @p obj.
+   * Returns the stride of the matrix stored in `obj`.
    *
-   * @note The caller must ensure that @a obj holds an instance of
+   * ! The caller must ensure that *obj* holds an instance of
    * PiiTypelessMatrix.
    *
    * @see isMatrixType()
@@ -854,7 +853,7 @@ public:
    * Converts a PiiVariant containing a numeric type into a
    * QString.
    *
-   * @note The caller must ensure that @a obj holds an instance of
+   * ! The caller must ensure that *obj* holds an instance of
    * QString.
    */
   template <class T> inline QString numberToQString(const PiiVariant& obj)
@@ -864,9 +863,9 @@ public:
 
   /**
    * Returns either "true" or "false", depending on the boolean value
-   * in @a obj.
+   * in *obj*.
    *
-   * @note The caller must ensure that @a obj holds a boolean value.
+   * ! The caller must ensure that *obj* holds a boolean value.
    */
   template <> inline QString numberToQString<bool>(const PiiVariant& obj)
   {
@@ -886,7 +885,7 @@ public:
   //inline PiiVariant createResumeTag(PiiSocketState state) { return PiiVariant(state); }
 
   /**
-   * Converts the object in @p input to a QString, if possible.
+   * Converts the object in `input` to a QString, if possible.
    *
    * @exception PiiExecutionException& if the received object cannot
    * be converted to QString.
@@ -894,20 +893,20 @@ public:
   PII_YDIN_EXPORT QString convertToQString(PiiInputSocket* input);
 
   /**
-   * Converts @a variant to a QString, if possible. Otherwise returns
-   * a @p null QString.
+   * Converts *variant* to a QString, if possible. Otherwise returns
+   * a `null` QString.
    */
   PII_YDIN_EXPORT QString convertToQString(const PiiVariant& variant);
 
   /**
-   * Convert the object in @p input into the type specified by @p T.
+   * Convert the object in `input` into the type specified by `T`.
    *
-   * @code
+   * ~~~
    * double dValue = PiiYdin::convertPrimitiveTo<double>(input(0));
-   * @endcode
+   * ~~~
    *   
    * @exception PiiExecutionException& if the received object cannot
-   * be converted to @p T.
+   * be converted to `T`.
    */
   template <class T> T convertPrimitiveTo(PiiInputSocket* input)
   {
@@ -920,8 +919,8 @@ public:
   }
 
   /**
-   * Converts @a obj into a matrix whose element type is specified by
-   * @p T. If the object cannot be converted, returns an empty
+   * Converts *obj* into a matrix whose element type is specified by
+   * `T`. If the object cannot be converted, returns an empty
    * PiiMatrix<T>.
    */
   template <class T> PiiMatrix<T> convertMatrixTo(const PiiVariant& obj)
@@ -936,12 +935,12 @@ public:
   }
 
   /**
-   * Converts the object in @p input into a matrix whose element type
-   * is specified by @p T.
+   * Converts the object in `input` into a matrix whose element type
+   * is specified by `T`.
    *
-   * @code
+   * ~~~
    * PiiMatrix<double> m = PiiYdin::convertMatrixTo<double>(input(0));
-   * @endcode
+   * ~~~
    *   
    * @exception PiiExecutionException& if the received object cannot
    * be converted to PiiMatrix<T>.
@@ -959,9 +958,9 @@ public:
   }
 
   /**
-   * Reads an object from @a input as the type specified by the
-   * template parameter @p T. If the object is not an instance of @p
-   * T, a PiiExecutionException& will be thrown.
+   * Reads an object from *input* as the type specified by the
+   * template parameter `T`. If the object is not an instance of 
+   * `T`, a PiiExecutionException& will be thrown.
    */
   template <class T> T& readInputAs(PiiInputSocket* input)
   {

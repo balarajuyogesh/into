@@ -23,12 +23,12 @@
  * A template that adds support for arithmetic operators for any data
  * structure that can be iterated over. This class is intended to be
  * used with the CRTP (curiously recurring template pattern). The
- * derived class must have have stl-style @p begin() and @p end()
+ * derived class must have have stl-style `begin`() and `end`()
  * functions for iterators. Information about the element type itself
- * is provided through the helper type @p Traits. The required type
+ * is provided through the helper type `Traits`. The required type
  * definitions are shown in the example below.
  *
- * @code
+ * ~~~
  * // Forward declaration for the rebinder in MyTraits.
  * template <class T> class MyClass;
  *
@@ -71,14 +71,13 @@
  * // Now, you can do this:
  * MyClass a, b;
  * MyClass c = a + b;
- * @endcode
+ * ~~~
  *
- * @note The length of the vector/array is assumed to be fixed. That
+ * ! The length of the vector/array is assumed to be fixed. That
  * is, all instances of the derived class should hold the same amount
  * of elements. If this is not the case, your program will (in the
  * best case) crash.
  *
- * @ingroup Core
  */
 template <class Derived, class Traits> class PiiArithmeticBase
 {
@@ -87,10 +86,10 @@ public:
    * A typedef for the traits template parameter. Can be used to
    * access the rebinder and other parts of the traits directly.
    *
-   * @code
+   * ~~~
    * PiiColor<> clr;
    * PiiColor<double> clr2 = PiiColor<>::TraitsType::Rebind<double>::Type();
-   * @endcode
+   * ~~~
    */
   typedef Traits TraitsType;
   /**
@@ -140,51 +139,51 @@ public:
    */
   Derived operator* (const Derived& other) const { return binaryOp(std::multiplies<T>(), other); }
   /**
-   * Add corresponding elements in @p other to this.
+   * Add corresponding elements in `other` to this.
    */
   void operator+= (const Derived& other) { return binaryOp(std::plus<T>(), other); }
   /**
-   * Subtract corresponding elements in @p other from this.
+   * Subtract corresponding elements in `other` from this.
    */
   void operator-= (const Derived& other) { return binaryOp(std::minus<T>(), other); }
   /**
-   * Divide corresponding elements in this by @p other.
+   * Divide corresponding elements in this by `other`.
    */
   void operator/= (const Derived& other) { return binaryOp(std::divides<T>(), other); }
   /**
-   * Multiply corresponding elements in this by @p other.
+   * Multiply corresponding elements in this by `other`.
    */
   void operator*= (const Derived& other) { return binaryOp(std::multiplies<T>(), other); }
   /**
-   * Add @p value to all elements.
+   * Add `value` to all elements.
    */
   Derived operator+ (T value) const { return binaryOp(std::plus<T>(), value); }
   /**
-   * Subtract @p value from all elements.
+   * Subtract `value` from all elements.
    */
   Derived operator- (T value) const { return binaryOp(std::minus<T>(), value); }
   /**
-   * Divide all elements by @p value.
+   * Divide all elements by `value`.
    */
   Derived operator/ (T value) const { return binaryOp(std::divides<T>(), value); }
   /**
-   * Multiply all elements by @p value.
+   * Multiply all elements by `value`.
    */
   Derived operator* (T value) const { return binaryOp(std::multiplies<T>(), value); }
   /**
-   * Add @p value to all elements.
+   * Add `value` to all elements.
    */
   void operator+= (T value) { return binaryOp(std::plus<T>(), value); }
   /**
-   * Subtract @p value from all elements.
+   * Subtract `value` from all elements.
    */
   void operator-= (T value) { return binaryOp(std::minus<T>(), value); }
   /**
-   * Divide all elements by @p value.
+   * Divide all elements by `value`.
    */
   void operator/= (T value) { return binaryOp(std::divides<T>(), value); }
   /**
-   * Multiply all elements by @p value.
+   * Multiply all elements by `value`.
    */
   void operator*= (T value) { binaryOp(std::multiplies<T>(), value); }
   /**
@@ -192,17 +191,17 @@ public:
    */
   Derived operator- () const { return unaryOp(std::negate<T>()); }
   /**
-   * Assign the values in @p other to this.
+   * Assign the values in `other` to this.
    */
   Derived& operator= (const Derived& other) { binaryOp(Pii::SelectSecond<typename Traits::Type>(), other); return *self(); }
   /**
-   * Set all elements to @p value.
+   * Set all elements to `value`.
    */
   Derived& operator= (T value) { binaryOp(Pii::SelectSecond<typename Traits::Type>(), value); return *self(); }
 
   /**
-   * Returns @p true if all elements in @p this and @p other are
-   * equal, @p false otherwise.
+   * Returns `true` if all elements in `this` and `other` are
+   * equal, `false` otherwise.
    */
   bool operator==(const Derived& other) const
   {
@@ -214,8 +213,8 @@ public:
     return true;
   }
   /**
-   * Returns @p false if all elements in @p this and @p other are
-   * equal, @p true otherwise.
+   * Returns `false` if all elements in `this` and `other` are
+   * equal, `true` otherwise.
    */
   bool operator!=(const Derived& other) const
   {
@@ -266,7 +265,7 @@ public:
 
   /**
    * Apply a binary function to all elements using the corresponding
-   * elements in @p this and @p other as function parameters. Return a
+   * elements in `this` and `other` as function parameters. Return a
    * new object.
    */
   template <class Operation> typename Traits::template Rebind<typename Operation::result_type>::Type
@@ -292,7 +291,7 @@ public:
   
   /**
    * Apply a binary function to all elements using the corresponding
-   * elements in @p this and @p other as function parameters. Modify
+   * elements in `this` and `other` as function parameters. Modify
    * elements in place.
    */
   template <class Operation>
@@ -314,7 +313,7 @@ public:
   }
 
   /**
-   * Apply a binary function to all elements using @p value as the
+   * Apply a binary function to all elements using `value` as the
    * second function parameter. Return a new object.
    */
   template <class Operation> typename Traits::template Rebind<typename Operation::result_type>::Type
@@ -327,7 +326,7 @@ public:
   }
   
   /**
-   * Apply a binary function to all elements using @p value as the
+   * Apply a binary function to all elements using `value` as the
    * second function parameter. Modify elements in place.
    */
   template <class Operation> void binaryOp(Operation op, typename Operation::second_argument_type value)

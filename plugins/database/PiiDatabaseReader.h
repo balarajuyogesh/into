@@ -25,20 +25,21 @@ class QSqlQuery;
 /**
  * PiiDatabaseReader description
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in name - Description
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out outputX - X ranges from 0 to the number of column names - 1. 
  * The outputs can also be retrieved with the column name using the
- * #output() function. The type of data emitted through the output
+ * [output()] function. The type of data emitted through the output
  * depends on the type of the database column. With CSV input, the
  * type is always QString unless explicitly changed with the
- * #defaultValues property.
+ * [defaultValues] property.
  *
- * @ingroup PiiDatabasePlugin
  */
 class PiiDatabaseReader : public PiiDatabaseOperation
 {
@@ -46,7 +47,7 @@ class PiiDatabaseReader : public PiiDatabaseOperation
 
   /**
    * The name of the table data will be read from. The table
-   * description must match the column names set with #columnNames.
+   * description must match the column names set with [columnNames].
    */
   Q_PROPERTY(QString tableName READ tableName WRITE setTableName);
 
@@ -58,24 +59,24 @@ class PiiDatabaseReader : public PiiDatabaseOperation
    *
    * To create two outputs, do this:
    *
-   * @code
+   * ~~~
    * reader->setProperty("columnNames", QStringList() << "filename" << "objects");
-   * @endcode
+   * ~~~
    */
   Q_PROPERTY(QStringList columnNames READ columnNames WRITE setColumnNames);
 
   /**
    * A map that speficies default values for some columns. These
    * columns are allowed to have NULL values in the database. For CSV
-   * input, the @p defaultValues map will also be used to determine
+   * input, the `defaultValues` map will also be used to determine
    * the type of the data field.
    *
-   * @code
+   * ~~~
    * QVariantMap values;
    * values["filename"] = "N/A";
    * values["objects"] = 0;
    * reader->setProperty("defaultValues", values);
-   * @endcode
+   * ~~~
    */
   Q_PROPERTY(QVariantMap defaultValues READ defaultValues WRITE setDefaultValues);
 

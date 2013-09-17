@@ -24,7 +24,6 @@
 
 /**
  * @file
- * @ingroup PiiImagePlugin
  *
  * Functions for calculating the properties (features) of objects in
  * binary images.
@@ -38,7 +37,7 @@ namespace PiiImage
    * @param mat labeled matrix
    *
    * @param labels number of labeled objects. Must equal to the
-   * maximum value in @p mat. Set to zero if unknown.
+   * maximum value in `mat`. Set to zero if unknown.
    *
    * @param areas the number of pixels in each labeled object. A
    * N-by-1 matrix, where N is the number of labels.
@@ -56,9 +55,9 @@ namespace PiiImage
   
 
   /**
-   * Calculates the dominant orientation of an object in @p mat. This
+   * Calculates the dominant orientation of an object in `mat`. This
    * function uses PCA to find the most prominent orientation of the
-   * object marked with @p label in image.
+   * object marked with `label` in image.
    *
    * @param mat labeled image
    *
@@ -89,12 +88,12 @@ namespace PiiImage
   /**
    * This function takes a decision function as a parameter.
    *
-   * @code
+   * ~~~
    * PiiMatrix<int> matInput;
    * // All pixels with a gray level higher than 3 are foreground
    * PiiMatrix<double> matDir(Pii::calculateDirection(matInput,
    *                                                  std::bind2nd(std::greater<int>(), 3));
-   * @endcode
+   * ~~~
    */
   template <class T, class UnaryFunction>
   PiiMatrix<double> calculateDirection(const PiiMatrix<T>& mat,

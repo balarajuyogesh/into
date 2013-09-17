@@ -26,22 +26,24 @@
  * values of the image pixels. The background model is updated
  * according to the following formula:
  *
- * @f[
+ * \[
  * B_{t+1} = B_t + (\alpha_1 * (1 - I_t) + \alpha_2 * I_t) * (I_t - B_t),
- * @f]
+ * \]
  * 
- * where @f$B_t@f$ is the background model at the time moment @e t and
- * @f$I_t@f$ the current intensity of a pixel. @f$\alpha_1@f$ and
- * @f$\alpha_2@f$ are learning weights that control the speed at which
+ * where \(B_t\) is the background model at the time moment *t* and
+ * \(I_t\) the current intensity of a pixel. \(\alpha_1\) and
+ * \(\alpha_2\) are learning weights that control the speed at which
  * the foreground pixels are merged in the background. Note that the
  * input image is normalized so that the maximum pixel intensity is
  * always one.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - any color or gray-scale image.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out image - an image (PiiMatrix<int>) in which background pixels
  * are zero. The value of a pixel determines the number of successive
@@ -49,10 +51,9 @@
  *
  * @out movement - this output emits a boolean value that determines
  * if there is significant movement in the current frame. The emitted
- * value will be @p true if the relative number of detected foreground
- * pixels is above #movementThreshold, and @p false otherwise.
+ * value will be `true` if the relative number of detected foreground
+ * pixels is above [movementThreshold], and `false` otherwise.
  *
- * @ingroup PiiImagePlugin
  */
 class PiiBackgroundExtractor : public PiiDefaultOperation
 {

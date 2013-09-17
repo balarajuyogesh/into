@@ -26,15 +26,17 @@
  * to integrate OpenCV to Into and not intended for production-grade
  * applications.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - the input image. Any gray-scale image.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out correlation - a matrix in which each element denotes the
  * correlation (or difference) between the input image and the
- * template. If @p SquaredDiff or @p NormedSquaredDiff method is used,
+ * template. If `SquaredDiff` or `NormedSquaredDiff` method is used,
  * smaller values mean better matches. If any other method is used,
  * larger values mean better matches. If the size of the input image
  * is R x C, and the size of the template is r x c, the size of the
@@ -42,12 +44,11 @@
  * smaller than the template, an empty matrix will be emitted. 
  * (PiiMatrix<float>)
  *
- * @out mask - a binary matrix in which a mask (#maskFile) is placed
+ * @out mask - a binary matrix in which a mask ([maskFile]) is placed
  * on each correlation peak. If mask has not been set, a matrix with
  * correlation peaks will be emitted. The size of the mask is equal to
  * the size of the input image. (PiiMatrix<bool>)
  *
- * @ingroup PiiOpenCvPlugin
  */
 class PiiTemplateMatcher : public PiiDefaultOperation
 {
@@ -62,8 +63,8 @@ class PiiTemplateMatcher : public PiiDefaultOperation
    * The name of the mask file. Mask is a binary image that describes
    * the interesting parts of template (the ROI). Once the template
    * matching has succeeded, the mask is placed on each peak, and the
-   * result is emitted to the @p mask output. Non-zero values in the
-   * mask are regarded as @p true. The size of the mask must be equal
+   * result is emitted to the `mask` output. Non-zero values in the
+   * mask are regarded as `true`. The size of the mask must be equal
    * to the size of the template.
    */
   Q_PROPERTY(QString maskFile READ maskFile WRITE setMaskFile);
@@ -75,7 +76,7 @@ class PiiTemplateMatcher : public PiiDefaultOperation
   Q_PROPERTY(double threshold READ threshold WRITE setThreshold);
   
   /**
-   * Matching method. The default is @p SquaredDiff.
+   * Matching method. The default is `SquaredDiff`.
    */
   Q_PROPERTY(MatchingMethod matchingMethod READ matchingMethod WRITE setMatchingMethod);
   Q_ENUMS(MatchingMethod);

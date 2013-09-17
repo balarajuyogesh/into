@@ -24,26 +24,27 @@
  * An operation that emits current time whenever a trigger is
  * received or whenever a timer times out.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in trigger - the trigger. Any object type.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
- * @out time - the time as a QString, formatted according to #format.
+ * @out time - the time as a QString, formatted according to [format].
  *
  * @out timestamp - the unix timestamp.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiClock : public PiiDefaultOperation
 {
   Q_OBJECT
 
   /**
-   * The type of the @p trigger input. This property determines how
-   * the operation interprets objects received in the @p trigger
-   * input. The default value is @p TriggerInput.
+   * The type of the `trigger` input. This property determines how
+   * the operation interprets objects received in the `trigger`
+   * input. The default value is `TriggerInput`.
    */
   Q_PROPERTY(InputType inputType READ inputType WRITE setInputType);
   Q_ENUMS(InputType);
@@ -51,10 +52,10 @@ class PiiClock : public PiiDefaultOperation
   /**
    * Set a type of the output time. Supported time types:
    *
-   * @lip LocalTime - Locale dependent time (Timezones and Daylight
+   * - `LocalTime` - Locale dependent time (Timezones and Daylight
    * Savings Time). This is the default.
    *
-   * @lip UTC - Coordinated Universal Time, replaces Greenwich Mean
+   * - `UTC` - Coordinated Universal Time, replaces Greenwich Mean
    * Time.
    */
   Q_PROPERTY(TimeType timeType READ timeType WRITE setTimeType);
@@ -64,28 +65,28 @@ class PiiClock : public PiiDefaultOperation
    * Set a format of the output.
    * 
    * These expressions may be used for the date:
-   * @li d    - the day as number without a leading zero (1 to 31)
-   * @li dd   - the day as number with a leading zero (01 to 31)
-   * @li ddd  - the abbreviated localized day name (e.g. 'Mon' to 'Sun').
-   * @li dddd - the long localized day name (e.g. 'Qt::Monday' to 'Qt::Sunday').
-   * @li M    - the month as number without a leading zero (1-12)
-   * @li MM   - the month as number with a leading zero (01-12)
-   * @li MMM  - the abbreviated localized month name (e.g. 'Jan' to 'Dec').
-   * @li MMMM - the long localized month name (e.g. 'January' to 'December').
-   * @li yy   - the year as two digit number (00-99)
-   * @li yyyy - the year as four digit number (1752-8000)
+   * - d    - the day as number without a leading zero (1 to 31)
+   * - dd   - the day as number with a leading zero (01 to 31)
+   * - ddd  - the abbreviated localized day name (e.g. 'Mon' to 'Sun').
+   * - dddd - the long localized day name (e.g. 'Qt::Monday' to 'Qt::Sunday').
+   * - M    - the month as number without a leading zero (1-12)
+   * - MM   - the month as number with a leading zero (01-12)
+   * - MMM  - the abbreviated localized month name (e.g. 'Jan' to 'Dec').
+   * - MMMM - the long localized month name (e.g. 'January' to 'December').
+   * - yy   - the year as two digit number (00-99)
+   * - yyyy - the year as four digit number (1752-8000)
    *
    * These expressions may be used for the time:
-   * @li h    - the hour without a leading zero (0 to 23 or 1 to 12 if AM/PM display)
-   * @li hh   - the hour with a leading zero (00 to 23 or 01 to 12 if AM/PM display)
-   * @li m    - the minute without a leading zero (0 to 59)
-   * @li mm   - the minute with a leading zero (00 to 59)
-   * @li s    - the second whithout a leading zero (0 to 59)
-   * @li ss   - the second whith a leading zero (00 to 59)
-   * @li z    - the milliseconds without leading zeroes (0 to 999)
-   * @li zzz  - the milliseconds with leading zeroes (000 to 999)
-   * @li AP   - use AM/PM display. AP will be replaced by either "AM" or "PM".
-   * @li ap   - use am/pm display. ap will be replaced by either "am" or "pm".
+   * - h    - the hour without a leading zero (0 to 23 or 1 to 12 if AM/PM display)
+   * - hh   - the hour with a leading zero (00 to 23 or 01 to 12 if AM/PM display)
+   * - m    - the minute without a leading zero (0 to 59)
+   * - mm   - the minute with a leading zero (00 to 59)
+   * - s    - the second whithout a leading zero (0 to 59)
+   * - ss   - the second whith a leading zero (00 to 59)
+   * - z    - the milliseconds without leading zeroes (0 to 999)
+   * - zzz  - the milliseconds with leading zeroes (000 to 999)
+   * - AP   - use AM/PM display. AP will be replaced by either "AM" or "PM".
+   * - ap   - use am/pm display. ap will be replaced by either "am" or "pm".
    *
    *
    * Example format strings (assuming the date and time is 21 May 2001 14:13:09):
@@ -115,10 +116,10 @@ public:
   /**
    * Supported input types.
    *
-   * @li @p TriggerInput - Incoming objects trigger an emission of the
+   * - `TriggerInput` - Incoming objects trigger an emission of the
    * current time. The type of the incoming object is ignored.
    *
-   * @li @p TimeStampInput - The input is read as an unsigned int and
+   * - `TimeStampInput` - The input is read as an unsigned int and
    * interpreted as a Unix timestamp. The output will be a formatted
    * version of the time stamp.
    */
@@ -127,9 +128,9 @@ public:
   /**
    * Supported time types.
    *
-   * @li @p LocalTime - Locale dependent time (Timezones and Daylight Savings Time).
+   * - `LocalTime` - Locale dependent time (Timezones and Daylight Savings Time).
    *
-   * @li @p UTC - Coordinated Universal Time, replaces Greenwich Mean
+   * - `UTC` - Coordinated Universal Time, replaces Greenwich Mean
    * Time.
    */
   enum TimeType { LocalTime, UTC };

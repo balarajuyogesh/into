@@ -18,11 +18,10 @@
 
 /**
  * Gaussian kernel function. The Gaussian kernel is defined as
- * @f$k(x,y) = e^-\fraq{||x-y||^2}{2\sigma^2}@f$, where @e x and @e y
+ * \(k(x,y) = e^-\fraq{||x-y||^2}{2\sigma^2}\), where *x* and *y*
  * are vectors of any dimensionality. It is also known as the radial
  * basis function (RBF) kernel.
  *
- * @ingroup PiiClassificationPlugin
  */
 template <class FeatureIterator> class PiiGaussianKernel
 {
@@ -33,9 +32,9 @@ public:
   PiiGaussianKernel() : _dSigma(1), _dNormalizer(0.5) {}
 
   /**
-   * Sets the @f$\sigma@f$ of the Gaussian function to @a sigma. This
-   * value controls the "width" of the Gaussian bell curve. A large @a
-   * sigma means generates a wide, flat curve. As @a sigma approaches
+   * Sets the \(\sigma\) of the Gaussian function to *sigma*. This
+   * value controls the "width" of the Gaussian bell curve. A large 
+   * *sigma* means generates a wide, flat curve. As *sigma* approaches
    * zero, the curve will approach the delta function. The default
    * value is 1.
    */
@@ -46,7 +45,7 @@ public:
   }
   
   /**
-   * Returns the value of @f$\sigma@f$.
+   * Returns the value of \(\sigma\).
    */
   double sigma() const { return _dSigma; }
   

@@ -31,7 +31,7 @@
  * correct classifications. The example below shows a perfect
  * classification result:
  *
- * @code
+ * ~~~
  *        |    O           |
  *        |    r    A      |
  *        |    a    p      |
@@ -50,9 +50,8 @@
  * Correctly classified    : 18
  * Incorrectly classified  : 0
  * Total error             : 0 %
- * @endcode
+ * ~~~
  *
- * @ingroup PiiClassificationPlugin
  */
 class PiiConfusionMatrix : public PiiMatrix<int>
 // No PII_CLASSIFICATION_EXPORT here. MSVC fails if this class is exported.
@@ -69,7 +68,7 @@ public:
   PiiConfusionMatrix(const PiiConfusionMatrix& mat);
   
   /**
-   * Use an existing matrix as a confusion matrix. If @p mat is not
+   * Use an existing matrix as a confusion matrix. If `mat` is not
    * square, only a square portion of its top left corner will be
    * used.
    */
@@ -82,8 +81,8 @@ public:
   
   /**
    * Add a classification result to the confusion matrix. This
-   * function is equal to <code>mat(correctClass,
-   * classification)++</code>, but it ensures that the indices do not
+   * function is equal to `mat(correctClass,
+   * classification)++`, but it ensures that the indices do not
    * exceed matrix dimensions. If they do, the matrix will be
    * extended. If either index is negative, the function does nothing.
    */
@@ -112,7 +111,7 @@ public:
 
   /**
    * Print the confusion matrix to an output stream. The class names
-   * will be taken from @p classNames, and the indicated amount of
+   * will be taken from `classNames`, and the indicated amount of
    * space will be reserved for each matrix column.
    *
    * @param out the output stream
@@ -122,11 +121,11 @@ public:
    * @param space column width-1 (maximum length of a matrix entry
    * represented as a decimal number)
    *
-   * @code
+   * ~~~
    * PiiConfusionMatrix mat(2);
    * // ... fill data ...
    * mat.print(std::cout, QStringList() << "Good" << "Poor");
-   * @endcode
+   * ~~~
    */
   template <class Stream> void print(Stream& out, const QStringList& classNames = QStringList(), int space = 4) const;
 };

@@ -50,8 +50,8 @@ namespace PiiImage
    * zero, it will be automatically calculated.
    *
    * @param radius an optional input/output parameter that specifies
-   * the physical radius of the cylinder, in the same units as @p
-   * cameraDistance. If radius is a null pointer or zero, it will be
+   * the physical radius of the cylinder, in the same units as 
+   * `cameraDistance`. If radius is a null pointer or zero, it will be
    * automatically calculated. If both cameraDistance and radius are
    * zero, 100 will be used as the radius because both cannot be
    * solved simultaneously.
@@ -61,14 +61,14 @@ namespace PiiImage
    * used as the maximum sector angle (in radians). If the value is
    * smaller than the calculated angle of the visible sector, cylinder
    * boundaries will be cut off. Upon return, the value will store the
-   * angle of the visible sector, or @p sectorAngle, whichever is
+   * angle of the visible sector, or `sectorAngle`, whichever is
    * smaller.
    *
    * @param startAngle an optional output-value parameter. If this
    * value is non-zero, if the angle at which the left side of the
    * sector is seen will be stored into the pointed memory. If the
    * center of the cylinder is at optical axis, the minimum value is 0
-   * (full 180 degrees visible). This value grows as @a sectorAngle
+   * (full 180 degrees visible). This value grows as *sectorAngle*
    * decreases.
    *
    * @return the image that was wrapped around a cylinder, as if it

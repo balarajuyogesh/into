@@ -24,7 +24,6 @@
  * vectors. The Hamming distance is the number of different bits in
  * two numbers.
  *
- * @ingroup PiiClassificationPlugin
  */
 PII_DEFAULT_DISTANCE_MEASURE_DEF(PiiHammingDistance)
 {

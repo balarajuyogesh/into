@@ -23,10 +23,9 @@
  * A generic socket descriptor that can be used with many native
  * socket descriptor types. It supports at least network sockets
  * (UDP/TCP) and local sockets (unix domain sockets/pipes). More
- * socket descriptors can be added by using the @p pCustomDescriptor
+ * socket descriptors can be added by using the `pCustomDescriptor`
  * member.
  *
- * @ingroup Network
  */
 struct PII_NETWORK_EXPORT PiiGenericSocketDescriptor
 {

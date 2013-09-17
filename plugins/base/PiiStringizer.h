@@ -21,11 +21,13 @@
 /**
  * Convert (almost) any type to a string.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in input - any number or a matrix containing numbers
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out output - the input value as a string. Matrices are represented
  * as shown in the example below.
@@ -35,7 +37,6 @@
 3 4 5
 @endverbatim
  *
- * @ingroup PiiBasePlugin
  */
 class PiiStringizer : public PiiDefaultOperation
 {

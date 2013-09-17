@@ -32,13 +32,15 @@
  * the same time, the corresponding rows of all other input matrices
  * are removed as well. The truncated matrices are sent to the output.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in featureX - a feature vectors. X varies from 0 to N-1, where N
  * is the number of different feature vectors. Each input must contain
  * a matrix with the same amount of rows.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out count - the number of selected features
  *
@@ -47,7 +49,7 @@
  * In the following example it is assumed that the acceptance range is
  * set to 2-3 and that we have two inputs.
  *
- * @code
+ * ~~~
  * // First input:
  * PiiMatrix<int> feature0(3,1, 1, 2, 4); // three rows
  * // Second input:
@@ -60,9 +62,8 @@
  * PiiMatrix<int> feature0(1,1, 2); // only one row
  * // Second output:
  * PiiMatrix<float> feature1(1,2, 1.3, 1.4); // ditto
- * @endcode
+ * ~~~
  *
- * @ingroup PiiImagePlugin
  */
 class PiiFeatureRangeLimiter : public PiiDefaultOperation
 {

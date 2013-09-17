@@ -20,16 +20,15 @@
 
 /**
  * An object that can be used as a slot for any signal. 
- * %PiiUniversalSlot has no static moc-generated slots, but it can
+ * PiiUniversalSlot has no static moc-generated slots, but it can
  * create a matching a slot for any signal at run time. When the slot
- * is invoked, the call is passed to the protected #invokeSlot()
+ * is invoked, the call is passed to the protected [invokeSlot()]
  * function that must be implemented in a subclass.
  *
- * @note Since Qt's meta-object system relies on a static number of
- * signals/slots in a class, classes derived from %PiiUniversalSlot
+ * ! Since Qt's meta-object system relies on a static number of
+ * signals/slots in a class, classes derived from PiiUniversalSlot
  * cannot have ordinary signals and slots.
  *
- * @ingroup Core
  */
 class PII_CORE_EXPORT PiiUniversalSlot : public QObject
 {
@@ -41,17 +40,17 @@ public:
   int qt_metacall(QMetaObject::Call call, int id, void** arguments);
 
   /**
-   * Connects the given @a signal in the @a sender object to this
-   * object. If the @a slot already exists, the signal will be
+   * Connects the given *signal* in the *sender* object to this
+   * object. If the *slot* already exists, the signal will be
    * connected to it. Otherwise, a new slot will be created and
    * assigned a unique id.
    *
-   * @code
+   * ~~~
    * class MySlot : public PiiUniversalSlot { ... };
    * QObject obj;
    * MySlot mySlot;
    * mySlot.dynamicConnect(&obj, "destroyed()");
-   * @endcode
+   * ~~~
    *
    * @param sender the sender of the signal
    *
@@ -59,8 +58,8 @@ public:
    * use the SIGNAL macro to wrap the signal name, but it is not
    * necessary.
    *
-   * @param slot the signature of the dynamic slot to create. If @a
-   * slot is zero, @a signal will be used as the signature of the slot
+   * @param slot the signature of the dynamic slot to create. If 
+   * *slot* is zero, *signal* will be used as the signature of the slot
    * as well. You can use the SLOT macro to wrap the slot name, but it
    * is not necessary.
    *
@@ -75,14 +74,14 @@ public:
   /**
    * Disconnects a signal from a dynamic slot.
    *
-   * @return @p true on success, @p false on failure
+   * @return `true` on success, `false` on failure
    *
    * @see dynamicConnect()
    */
   bool dynamicDisconnect(QObject* sender, const char* signal, const char* slot = 0);
 
   /**
-   * Disconnects all of @a sender's signals from the slots of this
+   * Disconnects all of *sender*'s signals from the slots of this
    * object.
    */
   bool dynamicDisconnect(QObject* sender);
@@ -99,9 +98,9 @@ protected:
    * is the return value, and the rest of the values point to function
    * call parameters, whose types match those listed in the signature.
    *
-   * @return @p true if the call was successful and @p false otherwise.
+   * @return `true` if the call was successful and `false` otherwise.
    *
-   * @code
+   * ~~~
    * bool MySlot::invokeSlot(int id, void** args)
    * {
    *   if (signatureOf(id) == "valueChanged(int)")
@@ -111,21 +110,21 @@ protected:
    *     }
    *   return true;
    * }
-   * @endcode
+   * ~~~
    */
   virtual bool invokeSlot(int id, void** args) = 0;
 
   /**
    * Returns the normalized signature of the slot corresponding to
-   * @a id.
+   * *id*.
    */
   QByteArray signatureOf(int id) const;
 
   /**
-   * Converts the arguments of the slot identified by @a id to a
+   * Converts the arguments of the slot identified by *id* to a
    * QVariantList.
    *
-   * @code
+   * ~~~
    * bool MySlot::invokeSlot(int id, void** args)
    * {
    *   QVariantList lstArgs(argsToList(id, args));
@@ -133,12 +132,12 @@ protected:
    *     dealWithTwoArgs(); // ...
    *   return true;
    * }
-   * @endcode
+   * ~~~
    */
   QVariantList argsToList(int id, void** args) const;
 
   /**
-   * Returns the number of arguments for the slot identified by @a id.
+   * Returns the number of arguments for the slot identified by *id*.
    */
   int argumentCount(int id) const;
 

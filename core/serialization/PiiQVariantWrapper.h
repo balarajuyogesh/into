@@ -21,15 +21,15 @@
 #include "PiiVirtualMetaObject.h"
 
 /**
- * A serialization wrapper for user types in @ref QVariant
+ * A serialization wrapper for user types in [QVariant]
  * "QVariants". To enable serialization of a user type as a QVariant,
- * one needs to subclass %PiiQVariantWrapper. The subclass must be
+ * one needs to subclass PiiQVariantWrapper. The subclass must be
  * registered as a serializable object with the standard template
  * serializer naming syntax, e.g. "PiiQVariantWrapper<MyType>". The
  * serializer needs to store and retrieve "MyType" and store it as the
- * value of the internal #_variant member.
+ * value of the internal [_variant] member.
  *
- * @code
+ * ~~~
  * // In MyClass.h first declare the type as a Qt meta type:
  * extern int iMyClassTypeId;
  * Q_DECLARE_METATYPE(MyClass);
@@ -43,9 +43,8 @@
  * #define PII_SERIALIZABLE_CLASS_NAME "PiiQVariantWrapper<MyClass>"
  *
  * #include <PiiSerializableRegistration.h>
- * @endcode
+ * ~~~
  *
- * @ingroup Serialization
  */
 class PII_SERIALIZATION_EXPORT PiiQVariantWrapper
 {
@@ -61,7 +60,7 @@ public:
   virtual void moveTo(QVariant& variant) = 0;
 
   /**
-   * Set the variant to @p v, which stores a user type. Subclasses
+   * Set the variant to `v`, which stores a user type. Subclasses
    * reimplement this function to store the value inside the variant.
    */
   virtual void setVariant(QVariant& v) = 0;
@@ -76,17 +75,16 @@ public:
  * A template that is instantiated for all user types intended to be
  * serialized as QVariants. For each such user type, an instance of
  * this template must be compiled, and its serializer and factory must
- * be registered. To make @p MyType serializable as a QVariant, do
+ * be registered. To make `MyType` serializable as a QVariant, do
  * this in a .cc file:
  *
- * @code
+ * ~~~
  * #include <PiiQVariantWrapper.h>
  * #define PII_SERIALIZABLE_CLASS PiiQVariantWrapper::Template<MyType>
  * #define PII_SERIALIZABLE_CLASS_NAME "PiiQVariantWrapper<MyType>"
  * #include <PiiSerializableRegistration.h>
- * @endcode
+ * ~~~
  *
- * @ingroup Serialization
  */
 template <class T> class PiiQVariantWrapper::Template : public PiiQVariantWrapper
 {

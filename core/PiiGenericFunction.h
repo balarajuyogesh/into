@@ -34,8 +34,8 @@ public:
   virtual ~PiiGenericFunction();
 
   /**
-   * Invokes the function with the given @a params. The fist entry in
-   * @a params points to a space allocated for the function's return
+   * Invokes the function with the given *params*. The fist entry in
+   * *params* points to a space allocated for the function's return
    * value. The rest point to function parameters. Subclasses must
    * know the parameter types and cast the pointers to the correct
    * types.
@@ -44,7 +44,7 @@ public:
 
   /**
    * Calls the function with the given parameters. This function
-   * converts @a params to the types listed in #paramTypes(), calls
+   * converts *params* to the types listed in [paramTypes()], calls
    * the function and returns its result. If the function has no
    * return value, returns an invalid QVariant.
    *
@@ -55,15 +55,15 @@ public:
   QVariant call(QVariantList& params);
 
   /**
-   * Returns the number of elements in @a params whose type exactly
-   * matches the expected types, or -1 if @p params cannot be
+   * Returns the number of elements in *params* whose type exactly
+   * matches the expected types, or -1 if `params` cannot be
    * converted to the correct types at all. See Pii::scoreOverload().
    */
   int scoreOverload(const QVariantList& params);
 
   /**
    * Returns the function's signature. The signature consists of a
-   * return type (if the function has one), function @a name, and a
+   * return type (if the function has one), function *name*, and a
    * comma-separated list of parameter types in parentheses.
    */
   QString signature(const QString& name) const;

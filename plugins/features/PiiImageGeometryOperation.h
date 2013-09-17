@@ -23,17 +23,18 @@
 /**
  * Calculates simple features based on image geometry.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - input image. Any matrix.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out features - a feature vector (1x4 PiiMatrix<double>) containing
  * the width, height, area (width*height) and aspect ratio
  * (width/height) of the image.
  *
- * @ingroup PiiFeaturesPlugin
  */
 class PiiImageGeometryOperation : public PiiDefaultOperation
 {

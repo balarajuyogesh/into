@@ -32,15 +32,14 @@ class QRect;
  *
  * PiiMeasureBar supports an unlimited number of tick levels (major,
  * semi-major, minor, ...). It automatically selects the most suitable
- * set of ticks shown based on #minTickDistances, #tickScales, and
- * #tickNames. A tick can be used as a major tick only if it has a
+ * set of ticks shown based on [minTickDistances], [tickScales], and
+ * [tickNames]. A tick can be used as a major tick only if it has a
  * name (or there are no names whatsoever), and if the distance
  * between ticks on the display exceeds the limit imposed by
- * #minTickDistances. Semi-major, minor, sub-minor and other possible
+ * [minTickDistances]. Semi-major, minor, sub-minor and other possible
  * ticks will be drawn between major ticks if they wouldn't be placed
  * too close to each other.
  *
- * @ingroup Gui
  */
 class PII_GUI_EXPORT PiiMeasureBar : public QFrame
 {
@@ -57,8 +56,8 @@ class PII_GUI_EXPORT PiiMeasureBar : public QFrame
    * Pixel size in logical units. This property is used as a scale
    * factor from pixel size on the display to logical units shown on
    * the measure bar. For example, if the size of the measure bar is
-   * 100 px and it spans a physical width of 3.14159 meters, @p
-   * pixelSize should be set to 0.0314159.
+   * 100 px and it spans a physical width of 3.14159 meters, 
+   * `pixelSize` should be set to 0.0314159.
    */
   //Q_PROPERTY(double pixelSize READ pixelSize WRITE setPixelSize);
 
@@ -76,25 +75,25 @@ class PII_GUI_EXPORT PiiMeasureBar : public QFrame
    * pixels) between ticks at different levels. The length of this
    * list determines the number of tick levels.
    *
-   * @code
+   * ~~~
    * // Minor ticks must be at least 5 pixels apart.
    * // Semi-major ticks must be at least 20 pixels apart.
    * // Major ticks must be at least 100 pixels apart.
    * pBar->setMinTickDistances(QVariantList() << 5 << 20 << 100);
-   * @endcode
+   * ~~~
    */
   Q_PROPERTY(QVariantList minTickDistances READ minTickDistances WRITE setMinTickDistances);
 
   /**
    * Scales of possible ticks in logical units. The ticks that will
-   * actually be shown will be selected based on current #pixelSize.
+   * actually be shown will be selected based on current [pixelSize].
    *
-   * @code
+   * ~~~
    * // Assume our logical units are meters.
    * // Ticks can be placed on millimeters, centimeters, decimeters, meters
    * // decameters, hectometers, and kilometers.
    * pBar->setTickScales(QVariantList() << 1e-3 << 0.01 << 0.1 << 1 << 10 << 100 << 1e3);
-   * @endcode
+   * ~~~
    */
   Q_PROPERTY(QVariantList tickScales READ tickScales WRITE setTickScales);
 
@@ -104,22 +103,22 @@ class PII_GUI_EXPORT PiiMeasureBar : public QFrame
    * must match the number of scales. Otherwise, the names will be
    * cleared.
    *
-   * @code
+   * ~~~
    * // Only mm, cm, m, and km can be used as major ticks.
    * pBar->setTickNames(QStringList() << "mm" << "cm" << "" << "m" << "" << "" << "km");
-   * @endcode
+   * ~~~
    *
    * If the unit name is either - or +, the tick can work as major
    * tick, but the name and scale of the preceding (-) or following
    * (+) named unit will be used.
    *
-   * @code
+   * ~~~
    * // Only mm, m, and km can be used as major tick units.
    * // Decameters and hectometers can be major ticks, but will be shown in meters.
    * // Centimeters can be major ticks, but will be shown in millimeters.
    * // Decimeters can be major ticks, but will be shown in meters.
    * pBar->setTickNames(QStringList() << "mm" << "-" << "+" << "m" << "-" << "-" << "km");
-   * @endcode
+   * ~~~
    *
    * If the name of a tick is a single space (" "), the tick can work
    * as a major tick, but it will be shown without a unit name.
@@ -127,13 +126,13 @@ class PII_GUI_EXPORT PiiMeasureBar : public QFrame
   Q_PROPERTY(QStringList tickNames READ tickNames WRITE setTickNames);
 
   /**
-   * If this property is @p true (the default), unit names will be
+   * If this property is `true` (the default), unit names will be
    * shown with major ticks. Otherwise, only numbers will be shown.
    */
   Q_PROPERTY(bool drawUnitNames READ drawUnitNames WRITE setDrawUnitNames);
 
   /**
-   * If this property is @p true, we will show absolute values.
+   * If this property is `true`, we will show absolute values.
    * Default value of this property is false.
    */
   Q_PROPERTY(bool showAbsoluteValues READ showAbsoluteValues WRITE setShowAbsoluteValues);
@@ -146,15 +145,15 @@ class PII_GUI_EXPORT PiiMeasureBar : public QFrame
   
   /**
    * Enables or disables mouse location indicators. Use the
-   * #setMouseLocation() slot to change the location to which the
-   * indicator is drawn. The default value is @p false.
+   * [setMouseLocation()] slot to change the location to which the
+   * indicator is drawn. The default value is `false`.
    */
   Q_PROPERTY(bool drawMouseLocation READ drawMouseLocation WRITE setDrawMouseLocation);
 
   /**
    * Enables or disables text of the mouse location indicators. Use the
-   * #setMouseLocation() slot to change the location to which the
-   * indicator is drawn. The default value is @p false. This works
+   * [setMouseLocation()] slot to change the location to which the
+   * indicator is drawn. The default value is `false`. This works
    * only if drawMouseLocation is true.
    */
   Q_PROPERTY(bool drawMouseText READ drawMouseText WRITE setDrawMouseText);
@@ -171,17 +170,17 @@ public:
   public:
     virtual ~NumberFormatter();
     /**
-     * Converts @a value to a string that will be shown on the measure
+     * Converts *value* to a string that will be shown on the measure
      * bar.
      *
      * @param value the value to be shown
      *
-     * @param scale the scale of the value, as given by #tickScales. 
+     * @param scale the scale of the value, as given by [tickScales]. 
      * value*scale is the value in logical units.
      *
-     * @param unit the unit for the value, as given by #tickNames. If
+     * @param unit the unit for the value, as given by [tickNames]. If
      * no unit should be shown on this tick scale or units are
-     * disabled, @a unit will be an empty string.
+     * disabled, *unit* will be an empty string.
      */
     virtual QString formatNumber(double value, double scale, const QString& unit) const = 0;
   };
@@ -190,11 +189,11 @@ public:
    * Determines the side on which the ticks will be drawn. The
    * following values are possible:
    *
-   * @lip TicksTopOrRight - the ticks will be drawn either on the
+   * - `TicksTopOrRight` - the ticks will be drawn either on the
    * right or the top side of the measure bar, depenging on the
    * orientation.
    *
-   * @lip TicksBottomOrLeft - the scale will be drawn either on the
+   * - `TicksBottomOrLeft` - the scale will be drawn either on the
    * left or the bottom side of the measure bar, depenging on the
    * orientation.
    */
@@ -240,7 +239,7 @@ public:
   bool drawMouseText() const;
 
   /**
-   * Set a custom number formatter. If @a formatter is 0, a default
+   * Set a custom number formatter. If *formatter* is 0, a default
    * formatter will be used. The default formatter uses
    * QString::number() to convert the number to a string, and
    * optionally appends a space and the unit name to it.

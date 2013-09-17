@@ -20,20 +20,19 @@
 
 /**
  * Default implementation of PiiBoostClassifier::Factory. The type of
- * the classifier to be created by this factory is given by the @p
- * Classifier template parameter. @p Classifier must implement the
+ * the classifier to be created by this factory is given by the 
+ * `Classifier` template parameter. `Classifier` must implement the
  * PiiLearningAlgorithm and PiiClassifier interfaces and it must
  * support weighted learning.
  *
- * @code
+ * ~~~
  * // Creates decision stumps
  * PiiDefaultClassifierFactory<PiiDecisionStump<PiiMatrix<double> > > factory;
  * PiiBoostClassifier<PiiMatrix<double> > classifier(&factory);
- * @endcode
+ * ~~~
  *
  * @see PiiBoostClassifier
  *
- * @ingroup PiiClassificationPlugin
  */
 template <class Classifier> class PiiDefaultClassifierFactory :
   public PiiBoostClassifier<typename Classifier::SampleSetType>::Factory
@@ -42,9 +41,9 @@ public:
   typedef typename Classifier::SampleSetType SampleSet;
   
   /**
-   * Creates a new instance of @p Classifier (given as a template
+   * Creates a new instance of `Classifier` (given as a template
    * parameter) using its default constructor and trains it using the
-   * given @a samples, @a labels, and @a weights.
+   * given *samples*, *labels*, and *weights*.
    */
   Classifier* create(PiiBoostClassifier<SampleSet>* classifier,
                      const SampleSet& samples,

@@ -58,37 +58,11 @@ class PiiNetworkClient;
 #define PII_CREATE_REMOTE_CALL(N, PARAMS) PII_CREATE_REMOTE_CALL_IMPL(call, N, PARAMS)
 #define PII_CREATE_REMOTE_CALLBACK(N, PARAMS) PII_CREATE_REMOTE_CALL_IMPL(callBack, N, PARAMS)
 /// @endcond
-
-/**
- * @defgroup Network Networking
- *
- * The networking module contains classes for building client/server
- * applications.
- *
- * The most important features in this module is the remote object
- * framework implemented by PiiObjectServer and PiiRemoteObject. It
- * provides a simple and easy-to-use HTTP-based alternative to QtDBus. 
- * The framework doesn't try to be universal and support any
- * programming language (although JavaScript works). That said, the
- * HTTP-based protocol is easy to implement and provides a natural
- * interface to web applications, without the need for external
- * daemons/services. Furthermore, the "native" Qt implementation has
- * the advantage that no stub compilers or adaptors are needed.
- *
- * The networking module also provides PiiNetworkServer, a generic
- * multi-threaded server for network applications. It is used to
- * implement @ref PiiHttpServer "a multi-threaded web server". HTTP
- * clients and servers can be implemented easily with the aid of
- * PiiHttpDevice. PiiMultipartDecoder makes it easy to parse
- * multi-part MIME messages such as form submissions.
- */
-
 class PiiGenericFunction;
 
 /**
  * Definitions and functions used commonly by networking classes.
  *
- * @ingroup Network
  */
 namespace PiiNetwork
 {
@@ -100,10 +74,10 @@ namespace PiiNetwork
   /**
    * Encoding formats for data passed over network.
    *
-   * @lip TextFormat - data is encoded as UTF-8 text. See
+   * - `TextFormat` - data is encoded as UTF-8 text. See
    * PiiTextOutputArchive and PiiTextInputArchive.
    *
-   * @lip BinaryFormat - data is encoded in a raw binary format. See
+   * - `BinaryFormat` - data is encoded in a raw binary format. See
    * PiiBinaryOutputArchive and PiiBinaryInputArchive.
    */
   enum EncodingFormat { TextFormat, BinaryFormat };
@@ -122,12 +96,12 @@ namespace PiiNetwork
   PII_NETWORK_EXPORT QString toJson(const QVariant& values);
 
   /**
-   * Returns the contents of the file at the given @a uri.
+   * Returns the contents of the file at the given *uri*.
    *
    * @param uri the location of a file. A valid uri consists of a
    * scheme, host name, and part. It may optionally contain a port
    * number. This function uses PiiNetworkClient and thus supports all
-   * schemes supported by it. Additionally, @p file:// is recognized
+   * schemes supported by it. Additionally, `file:`// is recognized
    * as a scheme that refers to local files.
    *
    * @param maxSize the maximum number of bytes to read. If the file
@@ -141,12 +115,12 @@ namespace PiiNetwork
    * @param maxRedirects the maximum number of redirections to accept. 
    * -1 means any number.
    *
-   * @exception PiiInvalidArgumentException& if @a uri is incorrectly
+   * @exception PiiInvalidArgumentException& if *uri* is incorrectly
    * formatted.
    *
    * @exception PiiNetworkException& if the file cannot be retrieved.
    *
-   * @exception PiiIOException& if @a uri refers to a local file that
+   * @exception PiiIOException& if *uri* refers to a local file that
    * cannot be read.
    *
    * @exception PiiException& if the file is too big
@@ -160,7 +134,7 @@ namespace PiiNetwork
    * This version allows one to add custom values to the HTTP request
    * header.
    *
-   * @code
+   * ~~~
    * PiiHttpResponseHeader header;
    * // Read a remote file and store response header.
    * QByteArray aReply = PiiNetwork::readFile("http://intopii.com/into/", &header);
@@ -169,7 +143,7 @@ namespace PiiNetwork
    * PiiMimeHeader requestHeader;
    * requestHeader.setValue("If-Modified-Since", header.value("Last-Modified"));
    * aReply = PiiNetwork::readFile("http://intopii.com/into/", requestHeader);
-   * @endcode
+   * ~~~
    */
   PII_NETWORK_EXPORT QByteArray readFile(const QString& uri,
                                          const PiiMimeHeader& requestHeader,
@@ -178,7 +152,7 @@ namespace PiiNetwork
                                          int maxRedirects = 1);
 
   /**
-   * Reads the file at @a uri and writes it directly to @a device.
+   * Reads the file at *uri* and writes it directly to *device*.
    */
   PII_NETWORK_EXPORT void readFile(const QString& uri,
                                    QIODevice* device,
@@ -189,9 +163,9 @@ namespace PiiNetwork
                                    int maxRedirects = 1);
 
   /**
-   * Makes a HTTP HEAD request to @a uri and returns the result.
+   * Makes a HTTP HEAD request to *uri* and returns the result.
    *
-   * @exception PiiInvalidArgumentException& if @a uri is incorrectly
+   * @exception PiiInvalidArgumentException& if *uri* is incorrectly
    * formatted.
    *
    * @exception PiiNetworkException& if the header cannot be retrieved.
@@ -209,7 +183,7 @@ namespace PiiNetwork
                                                       int maxRedirects = 1);
 
   /**
-   * Uses the HTTP PUT method to write a file to the given @a uri.
+   * Uses the HTTP PUT method to write a file to the given *uri*.
    */
   PII_NETWORK_EXPORT void putFile(const QString& uri,
                                   const QByteArray& contents,

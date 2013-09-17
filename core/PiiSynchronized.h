@@ -50,10 +50,10 @@ struct PII_CORE_EXPORT PiiMutexLocker
 
 /**
  * Declares a critical section in which mutual exclusion is handled by
- * the given @a MUTEX. Critical sections protected by the same mutex
+ * the given *MUTEX*. Critical sections protected by the same mutex
  * won't be executed simultaneously.
  *
- * @code
+ * ~~~
  * void MyOperation::pause()
  * {
  *   synchronized (stateLock())
@@ -65,7 +65,7 @@ struct PII_CORE_EXPORT PiiMutexLocker
  *         }
  *     }
  * }
- * @endcode
+ * ~~~
  */
 #define synchronized(MUTEX) PII_SYNCHRONIZED(PII_JOIN(piiSyncronizedLock,__LINE__), MUTEX)
 

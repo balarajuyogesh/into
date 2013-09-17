@@ -59,17 +59,17 @@ public:
   /**
    * Implemented boosting algorithms.
    *
-   * @lip AdaBoost - the original (discrete) AdaBoost as introduced by
+   * - `AdaBoost` - the original (discrete) AdaBoost as introduced by
    * Schapire & Freund. This algorithm has mostly historical value,
    * use RealBoost instead.
    *
-   * @lip RealBoost - AdaBoost with confidence-rated predictions
+   * - `RealBoost` - AdaBoost with confidence-rated predictions
    * (a.k.a RealAdaBoost). Usually more accurate than AdaBoost.
    *
-   * @lip FloatBoost - RealBoost supplemented by ideas from
+   * - `FloatBoost` - RealBoost supplemented by ideas from
    * floating search methods (after Stan Z. Li et al.)
    *
-   * @lip SammeBoost - Stagewise Adaptive Modeling using a Multi-class
+   * - `SammeBoost` - Stagewise Adaptive Modeling using a Multi-class
    * Exponential loss function (after Ji Zhu et al.) A multi-class
    * generalization of AdaBoost.
    */
@@ -84,13 +84,13 @@ public:
   /**
    * Possible actions when a sample buffer is full.
    *
-   * @lip OverwriteRandomSample - the sample to be overwritten will be
+   * - `OverwriteRandomSample` - the sample to be overwritten will be
    * picked at random
    *
-   * @lip OverwriteOldestSample - the oldest sample currently in the
+   * - `OverwriteOldestSample` - the oldest sample currently in the
    * buffer will be overwritten.
    *
-   * @lip DiscardNewSample - perform no action. Once the buffer is
+   * - `DiscardNewSample` - perform no action. Once the buffer is
    * full, new samples will no longer be buffered.
    */
   enum FullBufferBehavior
@@ -104,14 +104,14 @@ public:
    * Different ways of combining sub-vector distances in
    * PiiMultiFeatureDistance.
    *
-   * @lip DistanceSum - sub-vector distances are summed up
+   * - `DistanceSum` - sub-vector distances are summed up
    *
-   * @lip DistanceProduct - sub-vector distances are multiplied by
+   * - `DistanceProduct` - sub-vector distances are multiplied by
    * each other
    *
-   * @lip DistanceMin - the minimum sub-vector distance is returned
+   * - `DistanceMin` - the minimum sub-vector distance is returned
    *
-   * @lip DistanceMax - the maximum sub-vector distance is returned
+   * - `DistanceMax` - the maximum sub-vector distance is returned
    */
   enum DistanceCombinationMode
     {
@@ -124,13 +124,13 @@ public:
   /**
    * Learning algorithm capabilities.
    *
-   * @lip NonSupervisedLearner - the algorithm can be trained with no
+   * - `NonSupervisedLearner` - the algorithm can be trained with no
    * a priori knowledge of sample labels.
    *
-   * @lip OnlineLearner - the classifier is capable of learning
+   * - `OnlineLearner` - the classifier is capable of learning
    * on-line, one sample at a time.
    *
-   * @lip WeightedLearner - the classifier is able to learn weighted
+   * - `WeightedLearner` - the classifier is able to learn weighted
    * samples.
    */
   enum LearnerCapability
@@ -147,16 +147,16 @@ public:
    * Different topologies types for the arrangement of neighboring
    * nodes in a SOM.
    *
-   * @lip SomHexagonal - with each node, six closest neighbors have a
+   * - `SomHexagonal` - with each node, six closest neighbors have a
    * distance of one
-   * @lip SomSquare - four neighbors have a distance of one
+   * - `SomSquare` - four neighbors have a distance of one
    *
    * The following picture illustrates the arrangement of neighbors
    * with different topologies. With hexagonal arrangement, distance
    * to the six closest neighbors is one. With squares, the corners
    * have a distance of sqrt(2).
    *
-   * @code
+   * ~~~
    *      ___        ___ ___ ___
    *  ___/   \___   |   |   |   |
    * /   \___/   \  |___|___|___|
@@ -165,15 +165,15 @@ public:
    * \___/   \___/  |   |   |   |
    *     \___/      |___|___|___|
    *     
-   * @endcode
+   * ~~~
    */
   enum SomTopology { SomHexagonal, SomSquare };
 
   /**
    * SOM learning rate functions.
    *
-   * @lip SomLinearAlpha - learning rate decreases linearly
-   * @lip SomInverseAlpha - learning rate is inversely proportional to
+   * - `SomLinearAlpha` - learning rate decreases linearly
+   * - `SomInverseAlpha` - learning rate is inversely proportional to
    * training interation index
    */
   enum SomRateFunction { SomLinearAlpha, SomInverseAlpha };
@@ -183,13 +183,13 @@ public:
    * SOM, the amount of vector movement is determined by the
    * neighborhood function.
    *
-   * @lip SomBubble - each node within the current radius is updated
+   * - `SomBubble` - each node within the current radius is updated
    * with a weight of one. Others are not updated.
    *
-   * @lip SomGaussian - the neighbors are weighted according to a
+   * - `SomGaussian` - the neighbors are weighted according to a
    * Gaussian function that decreases with distance.
    *
-   * @lip SomCutGaussian - the neighbors are weighted according to a
+   * - `SomCutGaussian` - the neighbors are weighted according to a
    * Gaussian function that decreases with distance, if they fall
    * within the radius. This is practically a combination of the two
    * other modes.
@@ -199,11 +199,11 @@ public:
   /**
    * Initialization modes for a SOM code book.
    *
-   * @lip SomRandomInit - initialize the code book randomly. The
+   * - `SomRandomInit` - initialize the code book randomly. The
    * limits of the random values are taken from the first incoming
    * feature vector.
    *
-   * @lip SomSampleInit - initialize the code book by selecting
+   * - `SomSampleInit` - initialize the code book by selecting
    * incoming samples as initial code vectors. In on-line learning,
    * the first w*h samples will be used (w and h denote SOM width and
    * height). In batch learning, initial code vectors will be randomly
@@ -214,17 +214,17 @@ public:
   /**
    * Learning algorithms for training a SOM.
    *
-   * @lip SomSequentialAlgorithm - the traditional sequential learning
+   * - `SomSequentialAlgorithm` - the traditional sequential learning
    * algorithm. Monotonically decreasing learning constant and
    * neighborhood size.
    *
-   * @lip SomBalancedAlgorithm - the balanced SOM algorithm. Each
+   * - `SomBalancedAlgorithm` - the balanced SOM algorithm. Each
    * input sample is weighted based on its disparity. This algorithm
    * better captures small clusters in the input space while
    * maintaining the topographic properties of the original SOM
    * algorithm.
    *
-   * @lip SomQErrAlgorithm - a modification of the "parameterless" SOM
+   * - `SomQErrAlgorithm` - a modification of the "parameterless" SOM
    * algorithm. Each input sample is weighted based on its
    * quantization error. This algorithm is the most "elastic" of the
    * three. It tries to cover the whole input space independent of

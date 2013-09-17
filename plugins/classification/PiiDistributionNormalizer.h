@@ -24,7 +24,8 @@
  * This allows one to use differently scaled distributions in
  * classifying statistical features.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in features - a feature vector. Any numeric matrix.
  *
@@ -34,13 +35,13 @@
  * input is connected, each part of the compound feature vector will
  * be separately normalized.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out features - a normalized feature vector. PiiMatrix<double> or
- * PiiMatrix<float>, depending on the @p doubleMode property. If the
+ * PiiMatrix<float>, depending on the `doubleMode` property. If the
  * sum of the input vector is zero, it will not be normalized.
  *
- * @ingroup PiiClassificationPlugin
  */
 class PiiDistributionNormalizer : public PiiDefaultOperation
 {

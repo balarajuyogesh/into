@@ -38,7 +38,6 @@ class QDialog;
  * them to the display. Floating point color channels are assumed to
  * be at the range [0,1] and scaled accordingly.
  *
- * @ingroup Gui
  */
 class PII_GUI_EXPORT PiiImageDisplay : public QFrame
 {
@@ -46,8 +45,8 @@ class PII_GUI_EXPORT PiiImageDisplay : public QFrame
 
   /**
    * The display type. Color and gray-scale images are correctly shown
-   * with the @p Normal type. To automatically scale images to the
-   * full gray-scale range, set the displayType to @p AutoScale.
+   * with the `Normal` type. To automatically scale images to the
+   * full gray-scale range, set the displayType to `AutoScale`.
    */
   Q_PROPERTY(DisplayType displayType READ displayType WRITE setDisplayType);
   Q_ENUMS(DisplayType);
@@ -62,9 +61,9 @@ public:
   /**
    * Display types.
    *
-   * @li @p Normal - images will be displayed without modification.
+   * - `Normal` - images will be displayed without modification.
    *
-   * @li @p AutoScale - gray-level images will be scaled to fill the
+   * - `AutoScale` - gray-level images will be scaled to fill the
    * full 8-bit dynamic range. This is handy if you need to display
    * binary images or floating-point images that are not in the
    * correct scale.
@@ -105,13 +104,13 @@ public:
 
   /**
    * Creates a dialog containing a PiiImageDisplay that shows the
-   * given @a image.
+   * given *image*.
    *
-   * @code
+   * ~~~
    * QDialog* pDialog = PiiImageDisplay::dialog(image); // image can be a matrix or a variant
    * pDialog->exec();
    * delete pDialog;
-   * @endcode
+   * ~~~
    */
   static QDialog* dialog(const PiiVariant& image);
   static QDialog* dialog(const PiiMatrix<uchar>& image);
@@ -132,7 +131,7 @@ signals:
   
 public slots:
   /**
-   * Sets the displayed image. If @p image is not of a recognized
+   * Sets the displayed image. If `image` is not of a recognized
    * type, this function does nothing.
    */
   void setImage(const PiiVariant& image, int layer = 0);

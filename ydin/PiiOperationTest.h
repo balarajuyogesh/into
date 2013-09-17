@@ -27,14 +27,14 @@ class PiiProbeInput;
 
 /**
  * A class that makes it easier to write unit tests for operations. 
- * %PiiOperationTest attaches @ref PiiProbeInput "probes" to the
+ * PiiOperationTest attaches [probes](PiiProbeInput) to the
  * outputs of an operation to be tested. A derived class can then
  * selectively connect inputs of the operation and send arbitrary data
  * to the input sockets.
  *
  * A typical unit test for an operation is as follows:
  *
- * @code
+ * ~~~
  * // In TestMyOperation.h
  * #include <PiiOperationTest.h>
  *
@@ -73,9 +73,8 @@ class PiiProbeInput;
  * }
  * 
  * QTEST_MAIN(TestMyOperation)
- * @endcode
+ * ~~~
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiOperationTest : public QObject
 {
@@ -94,7 +93,7 @@ protected slots:
 
 protected:
   /**
-   * Failure handling types in #start().
+   * Failure handling types in [start()].
    */
   enum FailMode { ExpectSuccess, ExpectFail };
 
@@ -108,8 +107,8 @@ protected:
    *
    * @param operation the name of the operation to test
    *
-   * @return @p true if the plug-in was successfully loaded and the
-   * operation was successfully created, @p false otherwise
+   * @return `true` if the plug-in was successfully loaded and the
+   * operation was successfully created, `false` otherwise
    */
   bool createOperation(const char* plugin, const char* operation);
 
@@ -125,17 +124,17 @@ protected:
   PiiOperation* operation() const;
 
   /**
-   * Starts the tester. If the @p mode flag is @p ExpectSuccess, this
-   * function ensures that the tester was successfully started. If @p
-   * mode is @p ExpectFail, it ensures that the startup fails. @p
-   * ExpectFail is useful when one needs to check that the operation
+   * Starts the tester. If the `mode` flag is `ExpectSuccess`, this
+   * function ensures that the tester was successfully started. If 
+   * `mode` is `ExpectFail`, it ensures that the startup fails. 
+   * `ExpectFail` is useful when one needs to check that the operation
    * correctly identifies unconnected inputs, missing configuration
    * etc. One needs to stop the tester (stop()) once the
    * test is finished.
    *
-   * @return @p true if the @p mode == ExpectSuccess and the operation
-   * was successfully started, or if @p mode == ExpectFail and the
-   * start-up fails, and @p false otherwise.
+   * @return `true` if the `mode` == ExpectSuccess and the operation
+   * was successfully started, or if `mode` == ExpectFail and the
+   * start-up fails, and `false` otherwise.
    */
   bool start(FailMode mode = ExpectSuccess);
   
@@ -169,7 +168,7 @@ protected:
    *
    * @param value the object to be sent
    *
-   * @return @p true if the object was successfully sent, @p false
+   * @return `true` if the object was successfully sent, `false`
    * otherwise
    */
   bool sendObject(const QString& name, const PiiVariant& value);
@@ -183,7 +182,7 @@ protected:
    *
    * @param value the value of the object
    *
-   * @return @p true if the object was successfully sent, @p false
+   * @return `true` if the object was successfully sent, `false`
    * otherwise
    */
   template <class T> bool sendObject(const QString& name, T value)
@@ -200,8 +199,8 @@ protected:
   
   /**
    * Stops the execution of the operation. This function calls @ref
-   * PiiOperation::interrupt() on the internal operation. Returns @p
-   * true if the operation finished within a second, @p false
+   * PiiOperation::interrupt() on the internal operation. Returns 
+   * `true` if the operation finished within a second, `false`
    * otherwise.
    */
   bool stop();
@@ -218,8 +217,8 @@ protected:
 
   /**
    * Checks that the named output has an object and that its type
-   * matches @p T. If both of these hold, return the value of the
-   * object. Otherwise return @p defaultValue.
+   * matches `T`. If both of these hold, return the value of the
+   * object. Otherwise return `defaultValue`.
    */
   template <class T> T outputValue(const QString& name, const T& defaultValue);
   
@@ -229,8 +228,8 @@ protected:
   bool hasOutputValue() const;
 
   /**
-   * Returns @p true if the named output contains a stored output
-   * value and @p false otherwise.
+   * Returns `true` if the named output contains a stored output
+   * value and `false` otherwise.
    */
   bool hasOutputValue(const QString& name) const;
 

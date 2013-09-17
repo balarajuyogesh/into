@@ -25,11 +25,13 @@
  * level or edges. Then, the geometric properties of the detection
  * area are calculated.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - input image. Any gray-level image.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out features - a 1-by-4 PiiMatrix<float> that stores the width,
  * height, area, and aspect ratio of the detected defect area, in this
@@ -39,20 +41,19 @@
  * defect area is marked with ones. The size of this image equals that
  * of the input image.
  *
- * @ingroup PiiFeaturesPlugin
  */
 class PiiDefectGeometryOperation : public PiiDefaultOperation
 {
   Q_OBJECT
 
   /**
-   * The type of defect to be detected. Default is @p DarkDefect.
+   * The type of defect to be detected. Default is `DarkDefect`.
    */
   Q_PROPERTY(DefectType defectType READ defectType WRITE setDefectType);
   Q_ENUMS(DefectType);
 
   /**
-   * The detection type. Default is @p GrayLevelDetection.
+   * The detection type. Default is `GrayLevelDetection`.
    */
   Q_PROPERTY(DetectionType detectionType READ detectionType WRITE setDetectionType);
   Q_ENUMS(DetectionType);
@@ -73,11 +74,11 @@ class PiiDefectGeometryOperation : public PiiDefaultOperation
   
   /**
    * A flag that controls the automatic finding of a suitable gray
-   * level threshold. If set to @p true (the default) pixels with the
+   * level threshold. If set to `true` (the default) pixels with the
    * maximum gray level (255 for integer types, 1.0 for floats) will
    * be ignored when looking for dark defects Similarly, pixels with
    * the minimum gray level (0 for all types) will be ignored when
-   * looking for bright defects. Set to @p false to disable this
+   * looking for bright defects. Set to `false` to disable this
    * behavior.
    */
   Q_PROPERTY(bool discardExtrema READ discardExtrema WRITE setDiscardExtrema);
@@ -95,9 +96,9 @@ public:
    * bright or dark defects to be able to reliably frame the defect
    * area.
    *
-   * @lip DarkDefect - detected defects are darker than the background
+   * - `DarkDefect` - detected defects are darker than the background
    *
-   * @lip BrightDefect - detected defects are brighter than the
+   * - `BrightDefect` - detected defects are brighter than the
    * background
    */
   enum DefectType { DarkDefect, BrightDefect };
@@ -106,26 +107,26 @@ public:
    * Detection types. The defect area can be framed based on its gray
    * level or edges.
    *
-   * @lip GrayLevelDetection - detect the defect area by its
+   * - `GrayLevelDetection` - detect the defect area by its
    * darkness/brightness relative to the surroundings.
    *
-   * @lip EdgeDetection - detect the defect area by its edges. The
+   * - `EdgeDetection` - detect the defect area by its edges. The
    * detection algorithm automatically decides which gradient
    * direction is more reliable and uses either horizontal or vertical
    * gradient to frame the defect area. If neither is a clear winner,
    * both gradient directions will be used.
    *
-   * @lip LevelAndEdgeDetection - detect defects using both absolute
+   * - `LevelAndEdgeDetection` - detect defects using both absolute
    * gray levels and edges. The detection algorithm is based on
    * heuristics that won't stand objective judgement, but here's the
-   * shameful truth: 1) Defect @e seeds are fist found by applying
-   * both the @p GrayLevelDetection and the @p EdgeDetection schemes
-   * and performing a logical @p AND operation on the results. 2)
+   * shameful truth: 1) Defect *seeds* are fist found by applying
+   * both the `GrayLevelDetection` and the `EdgeDetection` schemes
+   * and performing a logical `AND` operation on the results. 2)
    * Detections less than two pixel wide or high are removed from the
    * seeds. 3) The detection is repeated with looser thresholds to
-   * find a larger set of defect @e candidates. 4) If a @e candidate
-   * does not intersect with any of the @e seeds, it will be
-   * discarded. The remaining @e candidates are the detections for
+   * find a larger set of defect *candidates*. 4) If a *candidate*
+   * does not intersect with any of the *seeds*, it will be
+   * discarded. The remaining *candidates* are the detections for
    * which the geometry will be calculated.
    */
   enum DetectionType { GrayLevelDetection, EdgeDetection, LevelAndEdgeDetection };

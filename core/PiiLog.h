@@ -23,15 +23,15 @@
  * (qDebug(), qWarning() etc.) There are however a few notable
  * enhancements:
  *
- * @li Log messages are categorized not only by their severity but
+ * - Log messages are categorized not only by their severity but
  * also by their source. It is possible to enable/disable messages
  * from a named module such as a plug-in at run time.
  *
- * @li Message filters are separated from output handlers. This makes
+ * - Message filters are separated from output handlers. This makes
  * it possible to filter log messages independent of the handler that
  * actually writes the messages.
  *
- * @li Log messages can be forced to a uniform format by a global
+ * - Log messages can be forced to a uniform format by a global
  * message formatter.
  *
  * To start using Into logging one only needs to replace qDebug() with
@@ -41,17 +41,17 @@
  * easy way to do this is to put the following line into your qmake
  * project file:
  *
- * @code
+ * ~~~
  * DEFINES += PII_LOG_MODULE=MyModule
- * @endcode
+ * ~~~
  *
  * Another way is to define PII_LOG_MODULE before including any header
  * file from Into:
  *
- * @code
+ * ~~~
  * #define PII_LOG_MODULE MyModule
  * #include <PiiGlobal.h>
- * @endcode
+ * ~~~
  */
 
 #include <QString>
@@ -65,9 +65,9 @@
 #endif
 
 /**
- * Write a log message. This version of the function takes a @p
- * va_list argument instead of a variable number of arguments. This
- * function does not call @p va_end on @p argp; the caller is
+ * Write a log message. This version of the function takes a 
+ * `va_list` argument instead of a variable number of arguments. This
+ * function does not call `va_end` on `argp`; the caller is
  * responsible for it.
  *
  * @see piiLog()
@@ -103,7 +103,7 @@ inline void PII_PRINTF_ATTR(3,4) piiLog(const char* module, QtMsgType level, con
 }
 
 /**
- * Converts @a str to local 8-bit representation.
+ * Converts *str* to local 8-bit representation.
  */
 #define piiPrintable(STR) (STR).toLocal8Bit().constData()
 
@@ -127,16 +127,16 @@ namespace PiiLog
    * A function that writes messages to a log file. This function is
    * intended to be used with qInstallMsgHandler(). It writes messages
    * to the file set by setLogFile() and rotates log files when they
-   * become too big. Once the @ref setMaxFileSize() "size limit" of a
+   * become too big. Once the [size limit](setMaxFileSize()) of a
    * log file is exceeded, log files are rotated so that file.log
    * becomes file.log.1, file.log.1 becomes file.log.2 and so on. If
-   * the @ref setMaxArchivedFiles() "maximum number of archived files"
+   * the [maximum number of archived files](setMaxArchivedFiles())
    * has been reached, the oldest log file will be deleted.
    *
-   * @code
+   * ~~~
    * PiiLog::setLogFile("/var/log/my.log");
    * qInstallMsgHandler(PiiLog::writeToFile);
-   * @endcode
+   * ~~~
    */
   PII_CORE_EXPORT void writeToFile(QtMsgType type, const char* msg);
 
@@ -153,11 +153,11 @@ namespace PiiLog
    *
    * The message filter is used to select which messages are actually
    * logged. The filter will be called with the module name and
-   * message type as parameters. If it returns @p true, the message
+   * message type as parameters. If it returns `true`, the message
    * will be logged. Otherwise it will be discarded. Having no message
    * filter means everything will be logged.
    *
-   * @code
+   * ~~~
    * bool myMessageFilter(const char* module, QtMsgType level)
    * {
    *   // Discard everything from DisabledModule
@@ -171,15 +171,15 @@ namespace PiiLog
    * }
    *
    * PiiLog::setMessageFilter(myMessageFilter);
-   * @endcode
+   * ~~~
    */
   PII_CORE_EXPORT MessageFilter setMessageFilter(MessageFilter filter);
 
   /**
    * The default message filter. This filter inspects the @ref
    * PII_LOG_LEVEL environment variable. If the variable is not set or
-   * the @p level is higher than or equal to @p PII_LOG_LEVEL, @p true
-   * will be returned. Otherwise, @p false will be returned. The log
+   * the `level` is higher than or equal to `PII_LOG_LEVEL`, `true`
+   * will be returned. Otherwise, `false` will be returned. The log
    * level should be set to a numeric value that corresponds to
    * QtMsgType values. That is, 0 means everything will be logged, 1
    * means that debug messages will not be logged etc.
@@ -191,19 +191,19 @@ namespace PiiLog
    * which means that only the message itself will be logged. The
    * following variables are recognized in the format string:
    *
-   * @lip $time - the current time. The default format is "yyyy-MM-dd
+   * - `$time` - the current time. The default format is "yyyy-MM-dd
    * hh:mm" (see QDateTime). The format can be changed as in
-   * <tt>${time format}</tt>, e.g. <tt>${time dd.MM.yyyy}</tt>.
+   * `${time format}`, e.g. `${time dd.MM.yyyy}`.
    *
-   * @lip $type - the type of the message (Debug, Warning, Critical,
+   * - `$type` - the type of the message (Debug, Warning, Critical,
    * or Fatal). If only a fixed-length part of the type is wanted, the
-   * length can be given as in <tt>${type 1}</tt>, which takes the
+   * length can be given as in `${type 1}`, which takes the
    * first letter only.
    *
-   * @lip $module - the name of the module that issued the log
+   * - `$module` - the name of the module that issued the log
    * message.
    *
-   * @lip $message - the message string.
+   * - `$message` - the message string.
    */
   PII_CORE_EXPORT void setLogFormat(const QString& format);
 

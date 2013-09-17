@@ -24,7 +24,8 @@
  * must be grayscale image and output image has same type as input
  * image, but value of the output image can only be 0 or 1.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - an image to be thresholded. Any image type. Color
  * images will be converted to gray scale before applying the
@@ -32,23 +33,23 @@
  *
  * @in threshold - an optional threshold input. Any numeric type. The
  * final threshold will be calculated by multiplying the input value
- * by #relativeThreshold and adding #absoluteThreshold, except if @p
- * HysteresisThreshold is used. In this case the input will be used as
- * the upper threshold, #absoluteThreshold will be ignored and
- * #relativeThreshold will be added to the input to get the lower
+ * by [relativeThreshold] and adding [absoluteThreshold], except if 
+ * `HysteresisThreshold` is used. In this case the input will be used as
+ * the upper threshold, [absoluteThreshold] will be ignored and
+ * [relativeThreshold] will be added to the input to get the lower
  * threshold.
  *
- * @par Outputs
+ * Outputs
+ * -------
  *
  * @out image - the image output. Emits output image which has same
  * type as input image, but values can only be 0 or 1. However, if the
  * input is a color image, the output will be a gray-level image. If
- * @p HysteresisThreshold is in use, the output will always be a
+ * `HysteresisThreshold` is in use, the output will always be a
  * PiiMatrix<int>.
  *
- * @out threshold - the value of the threshold. (@p double)
+ * @out threshold - the value of the threshold. (`double`)
  *
- * @ingroup PiiImagePlugin
  */
 class PiiThresholdingOperation : public PiiDefaultOperation
 {
@@ -56,25 +57,25 @@ class PiiThresholdingOperation : public PiiDefaultOperation
 
   /**
    * Absolute threshold. The effect of this value is affected by
-   * #thresholdType. Default value is 0.
+   * [thresholdType]. Default value is 0.
    */
   Q_PROPERTY(double absoluteThreshold READ absoluteThreshold WRITE setAbsoluteThreshold);
   /**
    * Relative threshold. The effect of this value is affected by
-   * #thresholdType. Default value is 1.0.
+   * [thresholdType]. Default value is 1.0.
    */
   Q_PROPERTY(double relativeThreshold READ relativeThreshold WRITE setRelativeThreshold);
   
   /**
-   * How to determine the threshold. Default is @p StaticThreshold. 
+   * How to determine the threshold. Default is `StaticThreshold`. 
    * This value has no effect if the threshold input is connected.
    */
   Q_PROPERTY(ThresholdType thresholdType READ thresholdType WRITE setThresholdType);
   Q_ENUMS(ThresholdType);
 
   /**
-   * Inversion flag. If this value is set to @p true, the result will
-   * be inverted. In all cases but with @p HysteresisThreshold the
+   * Inversion flag. If this value is set to `true`, the result will
+   * be inverted. In all cases but with `HysteresisThreshold` the
    * "inverted" result will be same as the normal thresholding result
    * except that zeros and ones are exchanged. See @ref
    * PiiImage::inverseHysteresisThreshold() for details on hysteresis
@@ -94,80 +95,80 @@ public:
   /**
    * Supported threshold calculation techniques.
    *
-   * @lip StaticThreshold - the gray levels are thresholded using
-   * #absoluteThreshold as such. #relativeThreshold will be ignored.
+   * - `StaticThreshold` - the gray levels are thresholded using
+   * [absoluteThreshold] as such. [relativeThreshold] will be ignored.
    *
-   * @lip OtsuThreshold - initial threshold value is automatically
+   * - `OtsuThreshold` - initial threshold value is automatically
    * determined from histogram of the input image with the Otsu
    * method. The initial value will be multiplied by
-   * #relativeThreshold, and #absoluteThreshold will be added to the
+   * [relativeThreshold], and [absoluteThreshold] will be added to the
    * resulting value before applying the operation. This thresholding
    * technique works only if the gray levels are quantized. Floating
    * point input will be rounded to integers, and the result will most
    * likely be totally black.
    *
-   * @lip RelativeToMeanThreshold - the threshold is calculated by
+   * - `RelativeToMeanThreshold` - the threshold is calculated by
    * multiplying the mean gray level of the input image by
-   * #relativeThreshold and adding #absoluteThreshold to the result.
+   * [relativeThreshold] and adding [absoluteThreshold] to the result.
    *
-   * @lip RelativeToMaxThreshold - the threshold is calculated by
+   * - `RelativeToMaxThreshold` - the threshold is calculated by
    * multiplying the maximum gray level of the input image by
-   * #relativeThreshold and adding #absoluteThreshold to the result.
+   * [relativeThreshold] and adding [absoluteThreshold] to the result.
    
-   * @lip RelativeToMinThreshold - the threshold is calculated by
+   * - `RelativeToMinThreshold` - the threshold is calculated by
    * multiplying the minimum gray level of the input image by
-   * #relativeThreshold and adding #absoluteThreshold to the result.
+   * [relativeThreshold] and adding [absoluteThreshold] to the result.
    *
-   * @lip MeanStdThreshold - the threshold is calculated by adding
-   * #relativeThreshold times the standard deviation of the input gray
-   * levels to the mean gray level. #absoluteThreshold will be added to
+   * - `MeanStdThreshold` - the threshold is calculated by adding
+   * [relativeThreshold] times the standard deviation of the input gray
+   * levels to the mean gray level. [absoluteThreshold] will be added to
    * the result.
    *
-   * @lip PercentageThreshold - The image will be thresholded so that
+   * - `PercentageThreshold` - The image will be thresholded so that
    * a fixed fraction of pixels will always be ones. If
-   * #relativeThreshold is set to 0.7, 30 % of pixels will be ones
-   * etc. #absoluteThreshold will be added to the result. This
+   * [relativeThreshold] is set to 0.7, 30 % of pixels will be ones
+   * etc. [absoluteThreshold] will be added to the result. This
    * thresholding technique works only if the gray levels are
    * quantized. Floating point input will be rounded to integers, and
    * the result will most likely be totally black.
    *
-   * @lip TwoLevelThreshold - Everything between #absoluteThreshold
-   * and #absoluteThreshold + #relativeThreshold (inclusive) will be
-   * set to one. The @p threshold output will emit the value of
-   * #absoluteThreshold.
+   * - `TwoLevelThreshold` - Everything between [absoluteThreshold]
+   * and [absoluteThreshold] + [relativeThreshold] (inclusive) will be
+   * set to one. The `threshold` output will emit the value of
+   * [absoluteThreshold].
    *
-   * @lip HysteresisThreshold - #absoluteThreshold will be used as an
+   * - `HysteresisThreshold` - [absoluteThreshold] will be used as an
    * upper threshold. All pixels with a gray level higher than this
    * value will work as seeds. The result will contain all pixels with
-   * a gray level higher than #absoluteThreshold - #relativeThreshold
-   * that are connected to at least one seed pixel. The @p threshold
-   * output will emit the value of #absoluteThreshold. The @p
-   * threshold input will be ignored.
+   * a gray level higher than [absoluteThreshold] - [relativeThreshold]
+   * that are connected to at least one seed pixel. The `threshold`
+   * output will emit the value of [absoluteThreshold]. The 
+   * `threshold` input will be ignored.
    *
-   * @lip RelativeToMeanAdaptiveThreshold - same as @p
-   * RelativeToMeanThreshold, but the threshold is calculated
+   * - `RelativeToMeanAdaptiveThreshold` - same as 
+   * `RelativeToMeanThreshold`, but the threshold is calculated
    * separately for each pixel in a local window. The size of the
-   * local window is determined by #windowSize. The @p threshold
-   * output will emit the value of #absoluteThreshold. The @p
-   * threshold input will be ignored.
+   * local window is determined by [windowSize]. The `threshold`
+   * output will emit the value of [absoluteThreshold]. The 
+   * `threshold` input will be ignored.
    *
-   * @lip MeanStdAdaptiveThreshold - same as @p MeanStdThreshold, but
+   * - `MeanStdAdaptiveThreshold` - same as `MeanStdThreshold`, but
    * the threshold is calculated separately for each pixel in a local
    * window. The size of the local window is determined by
-   * #windowSize. The @p threshold output will emit the value of
-   * #absoluteThreshold. The @p threshold input will be ignored.
+   * [windowSize]. The `threshold` output will emit the value of
+   * [absoluteThreshold]. The `threshold` input will be ignored.
    *
-   * @lip SauvolaAdaptiveThreshold - and adaptive thresholding
+   * - `SauvolaAdaptiveThreshold` - and adaptive thresholding
    * technique that takes local variance into account. The local
-   * threshold @e t is calculated as @f$t = \mu (1 + r
-   * (\sigma/\sigma_{\mathrm max} - 1)) + a@f$, where @e r stands for
-   * #relativeThreshold, @e a for #absoluteThreshold, and
-   * @f$\sigma_{\mathrm max}@f$ for the maximum possible standard
+   * threshold *t* is calculated as @f$t = \mu (1 + r
+   * (\sigma/\sigma_{\mathrm max} - 1)) + a@f$, where *r* stands for
+   * [relativeThreshold], *a* for [absoluteThreshold], and
+   * \(\sigma_{\mathrm max}\) for the maximum possible standard
    * deviation, which is assumed to be 128 for integer-typed images
    * and 0.5 for floating-point types. In document image binarization,
-   * a good value for #relativeThreshold is 0.34. #absoluteThreshold
-   * is typically zero. The @p threshold output will emit the value of
-   * #absoluteThreshold. The @p threshold input will be ignored.
+   * a good value for [relativeThreshold] is 0.34. [absoluteThreshold]
+   * is typically zero. The `threshold` output will emit the value of
+   * [absoluteThreshold]. The `threshold` input will be ignored.
    */
   enum ThresholdType
   {

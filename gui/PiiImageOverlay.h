@@ -29,27 +29,26 @@
  * Image overlay is a layer that is drawn on PiiImageDisplay
  * Each overlay has a paint method that is called by display.
  *
- * @ingroup Gui
  */
 class PII_GUI_EXPORT PiiImageOverlay
 {
 public:
   virtual ~PiiImageOverlay();
   /**
-   * Paint the overlay to @p painter. If @p filled is @p true, the
+   * Paint the overlay to `painter`. If `filled` is `true`, the
    * overlay shape shall be filled with. Otherwise just its boundary
    * will be drawn.
    */
   virtual void paint(QPainter* painter, bool filled = true) = 0;
   /**
-   * Returns true if the overlay intersects @a r. This is used for
-   * paint optimization. The default implementation returns @p true.
+   * Returns true if the overlay intersects *r*. This is used for
+   * paint optimization. The default implementation returns `true`.
    */
   virtual bool intersects(const QRect& r);
 
   /**
-   * Returns true if the overlay contains the point @a p. The default
-   * implementation returns @p false.
+   * Returns true if the overlay contains the point *p*. The default
+   * implementation returns `false`.
    */
   virtual bool contains(const QPoint& p);
   
@@ -79,7 +78,6 @@ protected:
  * Geometric overlays are drawn with a pen and optionally filled with
  * a brush. They represent arbitrary geometric shapes.
  *
- * @ingroup Gui
  */
 class PII_GUI_EXPORT PiiGeometricOverlay : public PiiImageOverlay
 {

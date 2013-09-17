@@ -22,15 +22,16 @@
  * Histogram equalizer. Enhances the contrast of input images by
  * making their gray-level distributions as uniform as possible.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - The input image. Any integer-valued gray-level image.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out image - Equalized image. Type equals that of the input.
  *
- * @ingroup PiiImagePlugin
  */
 class PiiHistogramEqualizer : public PiiDefaultOperation
 {

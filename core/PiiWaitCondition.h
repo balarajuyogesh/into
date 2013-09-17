@@ -27,9 +27,9 @@
  * waiting, the wakeOne() call sets a flag that causes a subsequent
  * wait() call to terminate immediately.
  *
- * The PiiWaitCondition class works in two modes. In @p Queue mode
+ * The PiiWaitCondition class works in two modes. In `Queue` mode
  * (the default), wakeOne() calls are queued so that the same number
- * of subsequent wait() calls immediately terminate. In @p NoQueue
+ * of subsequent wait() calls immediately terminate. In `NoQueue`
  * mode, only the first wait() call after one or more wakeOne() calls
  * with no threads waiting will terminate immediately.
  *
@@ -39,7 +39,7 @@
  * causes the same number of subsequent wait() calls in thread 1 to
  * return immediately.
  *
- * @code
+ * ~~~
  * PiiWaitCondition keyPressed;
  *
  * //thread 1
@@ -59,9 +59,8 @@
  *     // that function and continue processing
  *     keyPressed.wakeOne();
  *   }
- * @endcode
+ * ~~~
  *
- * @ingroup Ydin
  */
 class PII_CORE_EXPORT PiiWaitCondition
 {
@@ -69,10 +68,10 @@ public:
   /**
    * Signalling modes.
    *
-   * @lip NoQueue - the first wait() call after many wakeOne() calls
+   * - `NoQueue` - the first wait() call after many wakeOne() calls
    * terminates immediately.
    *
-   * @lip Queue - wakeOne() signals are queued when no thread is
+   * - `Queue` - wakeOne() signals are queued when no thread is
    * waiting so that the same number of subsequent wait() calls
    * immediately terminate
    */

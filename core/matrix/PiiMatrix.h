@@ -157,13 +157,12 @@ private:
  * a type-agnostic manner. PiiMatrix provides type-specific functions
  * and usual matrix manipulation operations.
  *
- * %PiiTypelessMatrix holds a pointer to a data structure that may be
+ * PiiTypelessMatrix holds a pointer to a data structure that may be
  * shared among many matrices. The class implements the
- * @e copy-on-write paradigm; all copies are shallow until a modification
- * is going to happen. The data will be @ref PiiMatrix::detach() "detached"
+ * *copy*-on-write paradigm; all copies are shallow until a modification
+ * is going to happen. The data will be [detached](PiiMatrix::detach())
  * in the beginning of all non-const functions.
  *
- * @ingroup Matrix
  */
 class PII_CORE_EXPORT PiiTypelessMatrix
 {
@@ -185,11 +184,11 @@ public:
    * rows. The stride may be different from sizeof(datatype) *
    * columns() for two reasons:
    *
-   * @li Matrix rows are aligned to four-byte boundaries. For example,
-   * if the data type is @p char, and the matrix has three columns
-   * (three bytes per row), @e stride will be four.
+   * - Matrix rows are aligned to four-byte boundaries. For example,
+   * if the data type is `char`, and the matrix has three columns
+   * (three bytes per row), *stride* will be four.
    *
-   * @li The matrix references external data. In this case the stride
+   * - The matrix references external data. In this case the stride
    * may be anything, but always larger than or equal to the number of
    * columns.
    */
@@ -258,9 +257,9 @@ template <class T> struct PiiMatrixTraits<PiiSubmatrix<T> > :
 
 
 /**
- * A dynamic two-dimensional array that models the @e matrix concept.
+ * A dynamic two-dimensional array that models the *matrix* concept.
  *
- * %PiiMatrix only supports POD (plain old data) types as the content
+ * PiiMatrix only supports POD (plain old data) types as the content
  * type. It will call neither constructors nor destructors. The data of
  * a matrix is cleared by simply setting all bytes to zero, and
  * assignments may be performed with memcpy(). If matrix atrithmetic
@@ -269,7 +268,7 @@ template <class T> struct PiiMatrixTraits<PiiSubmatrix<T> > :
  * constructor for a single numeric argument. An example of a class
  * that can be used as the content type:
  *
- * @code
+ * ~~~
  * struct MyClass
  * {
  *   MyClass(int i=0, double d=0.0);
@@ -292,7 +291,7 @@ template <class T> struct PiiMatrixTraits<PiiSubmatrix<T> > :
  * MyClass mc(1, 2.0);
  * mat(0,0) = mc;
  * mat *= mc;
- * @endcode
+ * ~~~
  *
  * Row and column indices in PiiMatrix are always zero-based. The
  * convention in matrix math is to index rows first, and that is what
@@ -306,7 +305,7 @@ template <class T> struct PiiMatrixTraits<PiiSubmatrix<T> > :
  *
  * The data within a matrix is organized so that the items in a row
  * (scan line) always occupy adjacent memory locations. The pointer to
- * the beginning to each row is returned by #row(int). Each row is
+ * the beginning to each row is returned by [row(int)]. Each row is
  * aligned at a four-byte boundary (unless initialized with an
  * external non-aligned buffer). Therefore, if the data type is less
  * than four bytes wide, it may happen that rows are not stored
@@ -320,7 +319,7 @@ template <class T> struct PiiMatrixTraits<PiiSubmatrix<T> > :
  * will change the contents of the original matrix. Reference can be
  * chained; a reference to a reference modifies the original.
  *
- * @code
+ * ~~~
  * PiiMatrix<char> mat(8,8);
  * mat = '+';
  * mat(2,1,3,3) = 'a';
@@ -337,9 +336,8 @@ template <class T> struct PiiMatrixTraits<PiiSubmatrix<T> > :
  * + + + + + b c b
  * x + + + + b b b
  * x + + + + + + +
- * @endcode
+ * ~~~
  *
- * @ingroup Matrix
  */
 template <class T> class PiiMatrix<T,-1,-1> :
   public PiiTypelessMatrix,
@@ -359,20 +357,20 @@ public:
   PiiMatrix() {}
 
   /**
-   * Constucts a shallow copy of @a other. This constructor only
+   * Constucts a shallow copy of *other*. This constructor only
    * increases the reference count of the internal data structure.
    *
-   * @code
+   * ~~~
    * PiiMatrix<int> a(5,5);
    * PiiMatrix<int> b(a(1,1,2,2)); // 2-by-2 reference to a
    * PiiMatrix<int> c(a);
    * PiiMatrix<int> c(b);          // deep copy of b
-   * @endcode
+   * ~~~
    */
   PiiMatrix(const PiiMatrix& other) : PiiTypelessMatrix(other) {}
 
   /**
-   * Constructs a deep copy of @a other by copying and typecasting
+   * Constructs a deep copy of *other* by copying and typecasting
    * each individual element.
    */
   template <class Matrix> explicit PiiMatrix(const PiiConceptualMatrix<Matrix>& other) :
@@ -384,7 +382,7 @@ public:
   }
   
   /**
-   * Constucts a @a rows-by-@a columns matrix with all entries
+   * Constucts a *rows*-by-*columns* matrix with all entries
    * initialized to zero.
    */
   PiiMatrix(int rows, int columns) :
@@ -392,14 +390,14 @@ public:
   {}
 
   /**
-   * Constructs a @a rows-by-@a columns matrix whose initial contents
-   * are taken from the array pointed to by @a data. The array must
-   * hold at least @a rows * @a columns entries. If @a stride is set
-   * to a value larger than @p sizeof(T) * @a columns, row padding is
-   * assumed. The @a data pointer must remain valid throughout the
+   * Constructs a *rows*-by-*columns* matrix whose initial contents
+   * are taken from the array pointed to by *data*. The array must
+   * hold at least *rows* * *columns* entries. If *stride* is set
+   * to a value larger than `sizeof`(T) * *columns*, row padding is
+   * assumed. The *data* pointer must remain valid throughout the
    * lifetime of the matrix and any shallow copies of it.
    *
-   * @code
+   * ~~~
    * const double data[] = { 1, 2, 3, 4 };
    * PiiMatrix<double> mat(2, 2, data);
    * QCOMPARE(mat(1,1), 4);
@@ -407,9 +405,9 @@ public:
    * const char* padded = "ABCDEFGH";
    * PiiMatrix<char> mat(3, 3, padded, 4);
    * QCOMPARE(mat(1,0), 'E');
-   * @endcode
+   * ~~~
    *
-   * Note that @a stride is always in bytes.
+   * Note that *stride* is always in bytes.
    *
    * @see PiiTypelessMatrix::stride()
    */
@@ -420,15 +418,15 @@ public:
   {}
   
   /**
-   * Constructs a @a rows-by-@a columns matrix that uses @a data as
+   * Constructs a *rows*-by-*columns* matrix that uses *data* as
    * its data buffer. This is an overloaded constructor that behaves
    * essentially the same way as the one above. The difference is that
-   * accesses to this matrix will modify @a data. Furthermore, if you
-   * set the @a ownership flag to @p Pii::ReleaseOwnership, the data
-   * pointer will be deallocated with @p free() when the matrix is
+   * accesses to this matrix will modify *data*. Furthermore, if you
+   * set the *ownership* flag to `Pii::ReleaseOwnership`, the data
+   * pointer will be deallocated with `free`() when the matrix is
    * destroyed.
    *
-   * @code
+   * ~~~
    * double data[] = { 1, 2, 3, 4 };
    * PiiMatrix<double> mat(2, 2, data, Pii::RetainOwnership);
    * mat(1,1) = 3;
@@ -438,7 +436,7 @@ public:
    * // bfr will be deallocated with free() when the matrix is destroyed.
    * PiiMatrix<int> mat(2, 7, bfr, Pii::ReleaseOwnership, 8 * sizeof(int));
    * mat = 0; // sets all elements in bfr to zeros
-   * @endcode
+   * ~~~
    */
   PiiMatrix(int rows, int columns, void* data, Pii::PtrOwnership ownership, size_t stride = 0) :
     PiiTypelessMatrix(PiiMatrixData::createReferenceData(rows, columns,
@@ -450,8 +448,8 @@ public:
   }
   
   /**
-   * Constructs a matrix with the given number of @a rows and @a
-   * columns. Matrix contents are given as a variable-length parameter
+   * Constructs a matrix with the given number of *rows* and 
+   * *columns*. Matrix contents are given as a variable-length parameter
    * list in a horizontal raster-scan order. It is handy if you know
    * what you do, but proper care must be taken to ensure correct
    * functioning.
@@ -462,7 +460,7 @@ public:
    * @warning Take extreme care to ensure that the elements you give
    * in the parameter list are of correct type. Examples:
    *
-   * @code
+   * ~~~
    * PiiMatrix<char> a(3, 1, 'a', 'b', 'c');     //correct, chars are passed as ints
    * PiiMatrix<char> b(3, 1, 1, 2, 3);           //correct
    * PiiMatrix<float> c(3, 1, 1, 2, 3);          //WRONG! values are passed as ints
@@ -471,7 +469,7 @@ public:
    * PiiMatrix<double> f(3, 1, 1.0, 2.0, 3.0);   //correct
    * PiiMatrix<int> g(3, 1, 1, 2, 3);            //correct
    * PiiMatrix<int> g(3, 1, 1, 2);               //WRONG! too few parameters
-   * @endcode
+   * ~~~
    *
    * @param rows the number of rows
    *
@@ -485,7 +483,7 @@ public:
 
 #ifdef PII_CXX0X
   /**
-   * Moves the contents of @a other to @p this and leaves @a other
+   * Moves the contents of *other* to `this` and leaves *other*
    * with null data.
    */
   PiiMatrix(PiiMatrix&& other)
@@ -493,7 +491,7 @@ public:
     std::swap(d, other.d);
   }
   /**
-   * Moves the contents of @a other to @p this and leaves @a other
+   * Moves the contents of *other* to `this` and leaves *other*
    * with null data.
    */
   PiiMatrix(PiiSubmatrix<T>&& other)
@@ -503,8 +501,8 @@ public:
   }
 
   /**
-   * Moves the contents of @a other to @p this and leaves @a other
-   * with null data. Returns a reference to @p this.
+   * Moves the contents of *other* to `this` and leaves *other*
+   * with null data. Returns a reference to `this`.
    */
   PiiMatrix& operator= (PiiMatrix&& other)
   {
@@ -535,7 +533,7 @@ public:
   ~PiiMatrix() {}
 
   /**
-   * Assigns @a other to @p this and returns a reference to @p this.
+   * Assigns *other* to `this` and returns a reference to `this`.
    */
   PiiMatrix& operator= (const PiiMatrix& other)
   {
@@ -548,8 +546,8 @@ public:
   }
 
   /**
-   * Creates a deep copy of @a other and returns a reference to @p
-   * this.
+   * Creates a deep copy of *other* and returns a reference to 
+   * `this`.
    */
   template <class Matrix> PiiMatrix& operator= (const PiiConceptualMatrix<Matrix>& other);
 
@@ -570,9 +568,9 @@ public:
   }
 
   /**
-   * Allocates memory for at least @a rows matrix rows. If you know in
+   * Allocates memory for at least *rows* matrix rows. If you know in
    * advance how large the matrix will be, you can avoid unnecessary
-   * reallocations while adding new rows. Trying to set @a rows to a
+   * reallocations while adding new rows. Trying to set *rows* to a
    * value less than the current capacity has no effect.
    *
    * @see capacity()
@@ -593,37 +591,37 @@ public:
   typename Traits::const_iterator end() const { return typename Traits::const_iterator(*this, rows()); }
   
   /**
-   * Returns a random-access iterator to the start of the row at @a
-   * rowIndex.
+   * Returns a random-access iterator to the start of the row at 
+   * *rowIndex*.
    */
   typename Traits::row_iterator rowBegin(int rowIndex) { return row(rowIndex); }
   /// @overload
   typename Traits::const_row_iterator rowBegin(int rowIndex) const { return row(rowIndex); }
   /**
-   * Returns a random-access iterator to the end of the row at @a
-   * rowIndex.
+   * Returns a random-access iterator to the end of the row at 
+   * *rowIndex*.
    */
   typename Traits::row_iterator rowEnd(int rowIndex) { return row(rowIndex) + columns(); }
   /// @overload
   typename Traits::const_row_iterator rowEnd(int rowIndex) const { return row(rowIndex) + columns(); }
 
   /**
-   * Returns a random-access iterator to the start of the column at @a
-   * colIndex.
+   * Returns a random-access iterator to the start of the column at 
+   * *colIndex*.
    */
   typename Traits::column_iterator columnBegin(int colIndex) { return typename Traits::column_iterator(*this, colIndex); }
   /// @overload
   typename Traits::const_column_iterator columnBegin(int colIndex) const { return typename Traits::const_column_iterator(*this, colIndex); }
   /**
-   * Returns a random-access iterator to the end of the column at @a
-   * colIndex.
+   * Returns a random-access iterator to the end of the column at 
+   * *colIndex*.
    */
   typename Traits::column_iterator columnEnd(int colIndex) { return typename Traits::column_iterator(*this, rows(), colIndex); }
   /// @overload
   typename Traits::const_column_iterator columnEnd(int colIndex) const { return typename Traits::const_column_iterator(*this, rows(), colIndex); }
 
   /**
-   * Returns a pointer to the beginning of row at @a index.
+   * Returns a pointer to the beginning of row at *index*.
    */
   const T* row(int index) const { return static_cast<const T*>(d->row(index)); }
   /// @overload
@@ -633,22 +631,22 @@ public:
    * A utility function that returns a reference to the memory
    * location at the beginning of the given row as the specified type.
    * Use this function only if you are absolutely sure that the memory
-   * arrangement of the type @p T matches that of a matrix row.
+   * arrangement of the type `T` matches that of a matrix row.
    *
-   * @code
+   * ~~~
    * PiiMatrix<int> mat(1,3, 1,2,3);
    * PiiVector<int,3>& vec = mat.rowAs<PiiVector<int,3> >(0);
    * vec[0] = 2;
    * QCOMPARE(mat(0,0), 2);
-   * @endcode
+   * ~~~
    */
   template <class U> U& rowAs(int index) { detach(); return *static_cast<U*>(d->row(index)); }
   /// @overload
   template <class U> const U& rowAs(int index) const { return *static_cast<const U*>(d->row(index)); }
 
   /**
-   * Returns a reference to an item in the matrix. Equal to row(@p
-   * row)[@p column]. No bound checking will be done for performance
+   * Returns a reference to an item in the matrix. Equal to row(
+   * `row`)[`column`]. No bound checking will be done for performance
    * reasons.
    *
    * @param r the row index
@@ -677,7 +675,7 @@ public:
    * column vectors. If the matrix is not a vector, the first element
    * of the indexth row is returned.
    *
-   * @code
+   * ~~~
    * // Row vector
    * PiiMatrix<int> mat(1, 3, 0,1,2);
    * QCOMPARE(mat(2), 2);
@@ -689,7 +687,7 @@ public:
    *                     0, 1, 2,
    *                     3, 4, 5);
    * QCOMPARE(mat3(1), 3);
-   * @endcode
+   * ~~~
    */
   T& operator() (int index) { return (rows() > 1 ? row(index)[0] : row(0)[index]); }
   /// @overload
@@ -701,12 +699,12 @@ public:
    * row(r). The purpose of this function is to allow the use of a
    * matrix as a two-dimensional array:
    *
-   * @code
+   * ~~~
    * PiiMatrix<int> mat(2, 2,
    *                    1, 2,
    *                    3, 4);
    * QVERIFY(mat[0][1] == mat(0,1));
-   * @endcode
+   * ~~~
    */
   T* operator[] (int r) { return row(r); }
   /// @overload
@@ -731,7 +729,7 @@ public:
    * @param columns the number of columns to include. Negative value
    * means "up to the nth last column".
    *
-   * @code
+   * ~~~
    * PiiMatrix<int> a(3, 3,
    *                  1, 2, 3,
    *                  4, 5, 6,
@@ -743,7 +741,7 @@ public:
    * // a = 1, 8, 8,
    * //     4, 0, 6,
    * //     7, 0, 9);
-   * @endcode
+   * ~~~
    */
   PiiSubmatrix<T> operator() (int r, int c, int rows, int columns)
   {
@@ -778,14 +776,14 @@ public:
   }
 
   /**
-   * Returns a @b row vector that contains the elements of the row at
-   * @a index. If you need a column vector, use
-   * #operator()(int,int,int,int).
+   * Returns a **row** vector that contains the elements of the row at
+   * *index*. If you need a column vector, use
+   * [operator()](int,int,int,int).
    */
   PiiMatrix column(int index) const;
 
   /**
-   * Resizes the matrix to @a rows-by-@a columns. The function
+   * Resizes the matrix to *rows*-by-*columns*. The function
    * preserves as much data as possible and sets any new entries to
    * zero. If the currently reserved space is not large enough, matrix
    * data will be reallocated. No reallocation will occur if the size
@@ -797,7 +795,7 @@ public:
    * Appends a new row to the end of the matrix. The contents of the
    * new row will be set to zero. Returns a row iterator to the
    * beginning of the new row. New rows can be appended without
-   * reallocation until #capacity() is exceeded.
+   * reallocation until [capacity()] is exceeded.
    */
   typename Traits::row_iterator appendRow()
   {
@@ -810,8 +808,8 @@ public:
 
   /**
    * Appends the given vector to the end of this matrix. The size of
-   * the @a row matrix must be 1-by-columns(), unless this matrix is
-   * empty. In that case this matrix will be set equal to @a row.
+   * the *row* matrix must be 1-by-columns(), unless this matrix is
+   * empty. In that case this matrix will be set equal to *row*.
    *
    * @see insertRow(int, const PiiMatrix&)
    */
@@ -836,10 +834,10 @@ public:
   }
 
   /**
-   * Append all rows in @a other to the end of this matrix. The number
-   * of columns in @a other must equal to that of this matrix, unless
+   * Append all rows in *other* to the end of this matrix. The number
+   * of columns in *other* must equal to that of this matrix, unless
    * this matrix is empty. In that case this matrix will be set equal
-   * to @a other.
+   * to *other*.
    */
   void appendRows(const PiiMatrix& other);
 
@@ -853,7 +851,7 @@ public:
   typename Traits::row_iterator appendRow(VaArgType firstElement, ...);
   
   /**
-   * Inserts a new at position @a index and moves all following rows
+   * Inserts a new at position *index* and moves all following rows
    * forwards. The contents of the new row will be set to zero. 
    * Returns a row iterator to the beginning of the new row.
    *
@@ -864,7 +862,7 @@ public:
   typename Traits::row_iterator insertRow(int index);
 
   /**
-   * Inserts the given row at @a index. The input matrix can be either
+   * Inserts the given row at *index*. The input matrix can be either
    * a column or a row vector.
    *
    * @overload
@@ -873,8 +871,8 @@ public:
 
   /**
    * Inserts the given row at the given row index. The data of the new
-   * row will be copied from @a row, which must hold at least
-   * #columns() elements.
+   * row will be copied from *row*, which must hold at least
+   * [columns()] elements.
    *
    * @overload
    */
@@ -902,9 +900,9 @@ public:
   /**
    * Appends the given vector (N-by-1 matrix) as a new column to the
    * right of the last column. The number of rows in this matrix must
-   * be equal to the number of rows in @a column, unless this matrix
-   * is empty. In that case this matrix will be set equal to @a
-   * column.
+   * be equal to the number of rows in *column*, unless this matrix
+   * is empty. In that case this matrix will be set equal to 
+   * *column*.
    *
    * @see insertColumn(int, const PiiMatrix&)
    */
@@ -942,9 +940,9 @@ public:
    * columns will be shifted forwards. The elements on the new column
    * will be set to zeros.
    *
-   * @note New columns can be added without reallocation if the stride
+   * ! New columns can be added without reallocation if the stride
    * is large enough. If there is no more free space, the matrix data
-   * will be reallocated with #resize().
+   * will be reallocated with [resize()].
    *
    * @param index the row index of the new column. -1 means last.
    *
@@ -968,8 +966,8 @@ public:
 
   /**
    * Inserts the given column at the given column index. The data of
-   * the new column will be copied from @a column, which must hold at
-   * least #rows() elements.
+   * the new column will be copied from *column*, which must hold at
+   * least [rows()] elements.
    *
    * @overload
    */
@@ -986,20 +984,20 @@ public:
   typename Traits::column_iterator insertColumn(int index, VaArgType firstElement, ...);
 
   /**
-   * Removes the row at @a index. All rows below the removed one will
+   * Removes the row at *index*. All rows below the removed one will
    * be moved up.
    *
-   * @code
+   * ~~~
    * PiiMatrix<int> mat(3,3, 1,2,3, 4,5,6, 7,8,9);
    * mat.removeRow(1);
    * // mat = 1 2 3
    * //       7 8 9
-   * @endcode
+   * ~~~
    */
   void removeRow(int index) { detach(); PiiTypelessMatrix::removeRow(index, sizeof(T) * d->iColumns); }
 
   /**
-   * Removes @a count successive rows starting at @a index. All rows
+   * Removes *count* successive rows starting at *index*. All rows
    * below the last removed one will be moved up.
    */
   void removeRows(int index, int count)
@@ -1009,23 +1007,23 @@ public:
   }
   
   /**
-   * Removes a column from the matrix. All data right of @a index will
+   * Removes a column from the matrix. All data right of *index* will
    * be moved left. The stride of the matrix will not change. If you
    * later add a column to the matrix, the data will not be
    * reallocated.
    *
-   * @code
+   * ~~~
    * PiiMatrix<int> mat(3,3, 1,2,3, 4,5,6, 7,8,9);
    * mat.removeColumn(1);
    * // mat = 1  3
    * //       4  6
    * //       7  9
-   * @endcode
+   * ~~~
    */
   void removeColumn(int index) { detach(); PiiTypelessMatrix::removeColumn(index, sizeof(T)); }
 
   /**
-   * Removes @a count successive columns starting at @a index. All columns
+   * Removes *count* successive columns starting at *index*. All columns
    * right of the last removed one will be moved left.
    */
   void removeColumns(int index, int count)
@@ -1035,28 +1033,28 @@ public:
   }
   
   /**
-   * Assigns the elements of @a other to the corresponding elements of
+   * Assigns the elements of *other* to the corresponding elements of
    * this.
    *
-   * @exception PiiMathException& if @a other and @p this are not
+   * @exception PiiMathException& if *other* and `this` are not
    * equal in size.
    */
   template <class Matrix> PiiMatrix& assign(const PiiConceptualMatrix<Matrix>& other);
 
   /**
-   * Applies the <em>adaptable binary function</em> @p op to all
-   * elements of this matrix and the corresponding elements in @a
-   * other. The matrices must be of equal size. The result is returned
+   * Applies the *adaptable binary function* `op` to all
+   * elements of this matrix and the corresponding elements in 
+   * *other*. The matrices must be of equal size. The result is returned
    * in a new matrix. For example, to explicitly apply the addition
    * operation, do this:
    *
-   * @code
+   * ~~~
    * PiiMatrix<int> a, b;
    * PiiMatrix<int> c(a.mapped(std::plus<int>(), b));
-   * @endcode
+   * ~~~
    *
-   * @exception PiiMathException& if this matrix is not equal to @a
-   * other in size.
+   * @exception PiiMathException& if this matrix is not equal to 
+   * *other* in size.
    */
   template <class BinaryFunc, class Matrix> PiiMatrix<typename BinaryFunc::result_type>
   mapped(BinaryFunc op, const PiiConceptualMatrix<Matrix>& other) const
@@ -1069,19 +1067,19 @@ public:
   }
 
   /**
-   * Applies the <em>adaptable binary function</em> to all elements of
-   * this matrix and the correspondng element in @a other. The
+   * Applies the *adaptable binary function* to all elements of
+   * this matrix and the correspondng element in *other*. The
    * matrices must be of equal size. The result is stored in this
    * matrix. For example, to apply the operator-= the other way, do
    * this:
    *
-   * @code
+   * ~~~
    * PiiMatrix<int> a, b;
    * a.map(std::minus<int>(), b);
-   * @endcode
+   * ~~~
    *
-   * @exception PiiMathException& if this matrix is not equal to @a
-   * other in size.
+   * @exception PiiMathException& if this matrix is not equal to 
+   * *other* in size.
    */
   template <class BinaryFunc, class Matrix>
   PiiMatrix& map(BinaryFunc op, const PiiConceptualMatrix<Matrix>& other)
@@ -1093,13 +1091,13 @@ public:
   
   /**
    * Applies a binary function to all elements of this matrix and the
-   * scalar @a value. The result is returned in a new matrix. An
+   * scalar *value*. The result is returned in a new matrix. An
    * example:
    *
-   * @code
+   * ~~~
    * PiiMatrix<int> a;
    * PiiMatrix<int> c(a.mapped(std::plus<int>(), 5));
-   * @endcode
+   * ~~~
    */
   template <class BinaryFunc>
   PiiMatrix<typename BinaryFunc::result_type> mapped(BinaryFunc op, typename BinaryFunc::second_argument_type value) const
@@ -1112,15 +1110,15 @@ public:
 
   /**
    * Applies a binary function to all elements of this matrix and the
-   * scalar @a value. The result is stored in this matrix. An example:
+   * scalar *value*. The result is stored in this matrix. An example:
    *
-   * @code
+   * ~~~
    * PiiMatrix<int> a;
    * a.map(std::minus<int>(), 5);
    * // The same can be achieved with
    * a.map(std::bind2nd(std::minus<int>(), 5));
    * // ... but which one is more readable?
-   * @endcode
+   * ~~~
    */
   template <class BinaryFunc>
   PiiMatrix& map(BinaryFunc op, typename BinaryFunc::second_argument_type value)
@@ -1133,10 +1131,10 @@ public:
    * Applies a unary function to all elements in this matrix. For
    * example, to negate all elements in a matrix, do the following:
    *
-   * @code
+   * ~~~
    * PiiMatrix<int> a;
    * a.map(std::negate<int>());
-   * @endcode
+   * ~~~
    */
   template <class UnaryFunc> PiiMatrix& map(UnaryFunc op)
   {
@@ -1149,14 +1147,14 @@ public:
    * function to all elements in this matrix. For example, to create a
    * negation of a matrix, do the following:
    *
-   * @code
+   * ~~~
    * PiiMatrix<int> a;
    * PiiMatrix<int> b(a.mapped(std::negate<int>());
    *
    * // Different result type (convert complex numbers to real numbers)
    * PiiMatrix<std::complex<float> > a;
    * PiiMatrix<float> b(a.mapped(Pii::Abs<std::complex<float> >()));
-   * @endcode
+   * ~~~
    */
   template <class UnaryFunc> PiiMatrix<typename UnaryFunc::result_type> mapped(UnaryFunc op) const
   {
@@ -1167,32 +1165,32 @@ public:
   }
   
   /**
-   * Swaps the places of @a row1 and @a row2.
+   * Swaps the places of *row1* and *row2*.
    */
   void swapRows(int row1, int row2);
 
   /**
-   * Creates a @a size-by-@a size identity matrix.
+   * Creates a *size*-by-*size* identity matrix.
    *
-   * @code
+   * ~~~
    * PiiMatrix<int> mat(PiiMatrix<int>::identity(3));
    * // 1 0 0
    * // 0 1 0
    * // 0 0 1
-   * @endcode
+   * ~~~
    */
   static PiiMatrix identity(int size);
 
   /**
-   * Creates a @a rows-by-@a columns matrix whose initial contents are
-   * set to @a value. This is faster than first creating and clearing
+   * Creates a *rows*-by-*columns* matrix whose initial contents are
+   * set to *value*. This is faster than first creating and clearing
    * a matrix to zeros and then setting all entries.
    *
-   * @code
+   * ~~~
    * PiiMatrix<float> mat(PiiMatrix<float>::constant(2, 3, 1.0));
    * // 1.0 1.0 1.0
    * // 1.0 1.0 1.0
-   * @endcode
+   * ~~~
    */
   static PiiMatrix constant(int rows, int columns, T value)
   {
@@ -1202,12 +1200,12 @@ public:
   }
 
   /**
-   * Creates an uninitialized @a rows-by-@a columns matrix. This
+   * Creates an uninitialized *rows*-by-*columns* matrix. This
    * function leaves the contents of the matrix in an unspecified
    * state. It is useful as an optimization if you know you are going
-   * to set all matrix entries anyway. If @a stride is set to a value
-   * larger than <tt>sizeof(T)*columns</tt>, matrix rows will be
-   * padded to @a stride bytes.
+   * to set all matrix entries anyway. If *stride* is set to a value
+   * larger than `sizeof(T)*columns`, matrix rows will be
+   * padded to *stride* bytes.
    */
   static PiiMatrix uninitialized(int rows, int columns, size_t stride = 0)
   {
@@ -1217,7 +1215,7 @@ public:
   }
 
   /**
-   * Creates a @a rows-by-@a columns matrix that is filled with the
+   * Creates a *rows*-by-*columns* matrix that is filled with the
    * elements given as the rest of the parameters. This function
    * should be preferred over the corresponding constructor to avoid
    * ambiguities in overload resolution.
@@ -1233,10 +1231,10 @@ public:
   }
 
   /**
-   * Creates @a rows-by-@a columns matrix with initial contents set to
-   * zero. If @a stride is set to a value larger than
-   * <tt>sizeof(T)*columns</tt>, matrix rows will be padded to
-   * @a stride bytes.
+   * Creates *rows*-by-*columns* matrix with initial contents set to
+   * zero. If *stride* is set to a value larger than
+   * `sizeof(T)*columns`, matrix rows will be padded to
+   * *stride* bytes.
    */
   static PiiMatrix padded(int rows, int columns, size_t stride)
   {
@@ -1262,13 +1260,13 @@ private:
 /**
  * A matrix that provides a mutable reference to a PiiMatrix. 
  * Sub-matrices are temporary in nature; they only exist as return
- * values from @ref PiiMatrix::operator()(int,int,int,int). 
+ * values from [PiiMatrix::operator()](int,int,int,int). 
  * Sub-matrices cannot be copied. Unfortunately, there is no elegant
  * way of making a movable but non-copyable type in C++ prior to
  * C++0x. Therefore, this class uses a bit of hackery to implement
  * move semantics with the old C++ standard.
  *
- * @code
+ * ~~~
  * PiiMatrix<int> mat(5,5);
  * // Constructing a copy of a PiiSubmatrix is possible prior to
  * // C++0x. This is however strongly discouraged. The following
@@ -1281,9 +1279,8 @@ private:
  * PiiMatrix<int> sub(mat(1,1,2,2)); // immutable shallow copy
  * // Modifies the central portion of mat
  * mat(1,1,3,3) *= 5;
- * @endcode
+ * ~~~
  *
- * @ingroup Matrix
  */
 template <class T> class PiiSubmatrix :
   public PiiConceptualMatrix<PiiSubmatrix<T> >
@@ -1293,7 +1290,7 @@ public:
   
 #ifdef PII_CXX0X
   /**
-   * Moves the contents of @a other to this and leaves @a other with
+   * Moves the contents of *other* to this and leaves *other* with
    * null data.
    */
   PiiSubmatrix(PiiSubmatrix&& other)
@@ -1314,7 +1311,7 @@ private: PiiSubmatrix& operator= (const PiiSubmatrix& other);
 #endif
 public:
   /**
-   * Sets all elements to @a value and returns a reference to @p this.
+   * Sets all elements to *value* and returns a reference to `this`.
    */
   PiiSubmatrix& operator= (typename Traits::value_type value) { return PiiConceptualMatrix<PiiSubmatrix<T> >::operator=(value); }
   
@@ -1342,7 +1339,7 @@ public:
    * possible to pass a sub-matrix to a function that takes a
    * PiiMatrix as a parameter.
    *
-   * @code
+   * ~~~
    * template <class T> void modify(PiiMatrix<T>& mat);
    *
    * // ...
@@ -1350,7 +1347,7 @@ public:
    * // You need to explicitly specify the template parameter for
    * // overload resolution.
    * modify<float>(mat(1,0,1,-1));
-   * @endcode
+   * ~~~
    */
   operator PiiMatrix<T>& () { return _matrix; }
 
@@ -1366,17 +1363,17 @@ private:
 namespace Pii
 {
   /**
-   * Returns a deep copy of @p mat. This function is useful if you
+   * Returns a deep copy of `mat`. This function is useful if you
    * need a concrete copy of a matrix concept.
    *
-   * @code
+   * ~~~
    * template <class T> void func(const PiiMatrix<T>& mat);
    *
    * // ...
    * PiiMatrix<int> mat1, mat2;
    * func(mat1 + mat2); // Error, mat1 + mat2 is a PiiBinaryMatrixTransform
    * func(Pii::matrix(mat1 + mat2)); // calls func(const PiiMatrix<int>&)
-   * @endcode
+   * ~~~
    *
    * @relates PiiMatrix
    */
@@ -1390,13 +1387,13 @@ namespace Pii
   /**
    * @overload
    *
-   * This specialization just returns @p mat.
+   * This specialization just returns `mat`.
    */
   template <class T, int rows, int cols>
   inline PiiMatrix<T,rows,cols> matrix(const PiiMatrix<T,rows,cols>& mat) { return mat; }
   
   /**
-   * Returns a deep copy of @p mat allocated from the heap.
+   * Returns a deep copy of `mat` allocated from the heap.
    *
    * @see matrix()
    * @relates PiiMatrix

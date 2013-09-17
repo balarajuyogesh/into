@@ -22,15 +22,16 @@
 /**
  * Corrects lens distortion.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - distorted input image. Any image type.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out image - undistorted image. Same type as the input.
  *
- * @ingroup PiiCalibrationPlugin
  */
 class PiiUndistortOperation : public PiiDefaultOperation
 {
@@ -56,7 +57,7 @@ class PiiUndistortOperation : public PiiDefaultOperation
   Q_PROPERTY(double centerX READ centerX WRITE setCenterX);
 
   /**
-   * Same as @p centerX, but for the y coordinate.
+   * Same as `centerX`, but for the y coordinate.
    */
   Q_PROPERTY(double centerY READ centerY WRITE setCenterY);
 
@@ -89,9 +90,9 @@ class PiiUndistortOperation : public PiiDefaultOperation
   Q_PROPERTY(PiiVariant cameraParameters READ cameraParameters WRITE setCameraParameters STORED false);
 
   /**
-   * The type of interpolation. The default value is @p
-   * Pii::LinearInterpolation, which results in better image quality
-   * but slower operation. Set to @p Pii::NearestNeighborInterpolation
+   * The type of interpolation. The default value is 
+   * `Pii::LinearInterpolation`, which results in better image quality
+   * but slower operation. Set to `Pii::NearestNeighborInterpolation`
    * to speed up calculations at the expense of image quality.
    */
   Q_PROPERTY(Pii::Interpolation interpolation READ interpolation WRITE setInterpolation);

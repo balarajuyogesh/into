@@ -22,7 +22,6 @@
 
 /**
  * @namespace PiiOptimization
- * @ingroup PiiOptimizationPlugin
  *
  * @brief Functions and operations for optimization.
  *

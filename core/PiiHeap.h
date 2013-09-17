@@ -33,34 +33,34 @@ namespace Pii
  * A heap data structure. Heap is a complete binary tree with the
  * following properties:
  *
- * @li All leaf nodes reside in at most two adjacent levels.
- * @li It is filled from left.
- * @li No child node in the tree is greater than its parent. (Normal
+ * - All leaf nodes reside in at most two adjacent levels.
+ * - It is filled from left.
+ * - No child node in the tree is greater than its parent. (Normal
  * heap)
- * @li No child node in the three is smaller than its parent. (Inverse
+ * - No child node in the three is smaller than its parent. (Inverse
  * heap)
  *
  * As a consequence of the third property, the first element in a heap
  * (the one at index 0) is the largest one (normal heap) or the
  * smallest one (inverse heap). The other elements are not in any
- * particular order. Use #sort() to sort the values. Sorting a heap in
+ * particular order. Use [sort()] to sort the values. Sorting a heap in
  * place inverts it.
  *
- * Heap guarantees <tt>O(log(N))</tt> complexity for insertion and
- * deletion. The complexity for sorting N items is <tt>O(N
- * log(N))</tt>. It is most commonly used as a priority queue to
+ * Heap guarantees `O(log(N))` complexity for insertion and
+ * deletion. The complexity for sorting N items is `O(N
+ * log(N))`. It is most commonly used as a priority queue to
  * maintain the N most "important" entries during algorithm execution.
  *
- * %PiiHeap uses QVarLengthArray as storage. Please refer to its
+ * PiiHeap uses QVarLengthArray as storage. Please refer to its
  * documentation for details on memory arrangement.
  *
- * @note If you modify the heap data in place, it may not have the
+ * ! If you modify the heap data in place, it may not have the
  * heap property any more.
  *
- * %PiiHeap can be used as a priority queue. The following example
+ * PiiHeap can be used as a priority queue. The following example
  * finds the five smallest numbers in a random number set:
  *
- * @code
+ * ~~~
  * // Preallocate 5 elements on the stack.
  * PiiHeap<double, 5> heap;
  * // Initialize with the largest possible value.
@@ -70,22 +70,21 @@ namespace Pii
  * // Heap now contains the 5 smallest random numbers generated
  * heap.sort();
  * // The numbers are now in ascending order.
- * @endcode
+ * ~~~
  *
- * @ingroup Core
  */
 template <class T, int prealloc = 16> class PiiHeap
 {
 public:
   /**
-   * Constructs a heap with an initial size of @p size elements. The
-   * elements will not be initialized unless @p T has a default
+   * Constructs a heap with an initial size of `size` elements. The
+   * elements will not be initialized unless `T` has a default
    * constructor.
    *
    * @param size initial size for the heap
    *
-   * @param inverse inversion flag. Normal heap (@p inverse = @p
-   * false) always keeps the largest element at the top of the binary
+   * @param inverse inversion flag. Normal heap (`inverse` = 
+   * `false`) always keeps the largest element at the top of the binary
    * tree. Inverse heap keeps the smallest element.
    */
   PiiHeap(int size = 0, Pii::HeapType type = Pii::NormalHeap) :
@@ -93,15 +92,15 @@ public:
   {}
 
   /**
-   * Constructs a heap with an initial size of @p size elements. @p
-   * fillValue will be used to initialize the elements.
+   * Constructs a heap with an initial size of `size` elements. 
+   * `fillValue` will be used to initialize the elements.
    *
    * @param size initial size for the heap
    *
    * @param fillValue the initial value of the elements
    *
-   * @param inverse inversion flag. Normal heap (@p inverse = @p
-   * false) always keeps the largest element at the top of the binary
+   * @param inverse inversion flag. Normal heap (`inverse` = 
+   * `false`) always keeps the largest element at the top of the binary
    * tree. Inverse heap keeps the smallest element.
    */
   PiiHeap(int size, const T& fillValue, Pii::HeapType type) :
@@ -111,12 +110,12 @@ public:
   }
 
   /**
-   * Copies @a other.
+   * Copies *other*.
    */
   PiiHeap(const PiiHeap& other) : _array(other._array), _bInverse(other._bInverse) {}
 
   /**
-   * Assigns @a other to @p this and returns @p *this.
+   * Assigns *other* to `this` and returns @p *this.
    */
   PiiHeap& operator= (const PiiHeap& other)
   {
@@ -136,55 +135,55 @@ public:
   const T* data() const { return _array._d(); }
   
   /**
-   * Returns a reference to the item at @a index.
+   * Returns a reference to the item at *index*.
    *
-   * @note If you change the value, you may lose the heap property.
+   * ! If you change the value, you may lose the heap property.
    */
   T& operator[] (int index) { return _array[index]; }
   /**
-   * Returns a @p const reference to the item at @a index.
+   * Returns a `const` reference to the item at *index*.
    */
   const T& operator[] (int index) const { return _array[index]; }
 
   /**
-   * Adds @p element to the end of the heap and rearranges elements so
+   * Adds `element` to the end of the heap and rearranges elements so
    * that the heap property is retained.
    */
   void append(const T& element);
 
   /**
-   * Puts an element to the heap so that #size() smallest/largest
+   * Puts an element to the heap so that [size()] smallest/largest
    * elements are always retained. If the heap is a normal heap,
-   * @a element will be only placed into the list if it is smaller than
+   * *element* will be only placed into the list if it is smaller than
    * the first element (the topmost parent), which will be removed. If
-   * the heap is inverted, the @a element will only be accepted if it
+   * the heap is inverted, the *element* will only be accepted if it
    * is larger than the first one, which will be removed. This
    * technique always retains the N smallest elements for a normal
    * heap and N largest elements for an inverse heap. This function
-   * will not change the number of elements in the list. Use #fill()
+   * will not change the number of elements in the list. Use [fill()]
    * to initialize the heap.
    */
   void put(const T& element);
 
   /**
-   * Reserves space for @a n elements and initializes each to @a value.
+   * Reserves space for *n* elements and initializes each to *value*.
    */
   void fill(int n, const T& value);
   
   /**
-   * Removes the element at @a index and rearranges the heap to retain
+   * Removes the element at *index* and rearranges the heap to retain
    * the heap property.
    */
   void remove(int index);
 
   /**
-   * Replaces the element at @a index with @a element. The heap will
+   * Replaces the element at *index* with *element*. The heap will
    * be rearranged to retain the heap property.
    */
   void replace(int index, const T& element);
 
   /**
-   * Removes the element at @a index and returns it. The heap will be
+   * Removes the element at *index* and returns it. The heap will be
    * rearranged to retain the heap property.
    */
   T take(int index);
@@ -210,8 +209,8 @@ public:
   PiiHeap sorted() const;
 
   /**
-   * Returns @p true if the heap is inversed (smallest value at top)
-   * and @p false otherwise.
+   * Returns `true` if the heap is inversed (smallest value at top)
+   * and `false` otherwise.
    */
   bool isInverse() const { return _bInverse; }
 

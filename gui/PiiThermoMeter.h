@@ -23,7 +23,6 @@
 /**
  * A class provides a simple thermometer display.
  *
- * @ingroup Gui
  */
 class PII_GUI_EXPORT PiiThermoMeter : public QWidget
 {
@@ -96,24 +95,24 @@ public:
   /**
    * Possible orientation.
    *
-   * @li @p Horizontal -
+   * - `Horizontal` -
    *
-   * @li @p Vertical -
+   * - `Vertical` -
    */
   enum Orientation{Horizontal, Vertical};
 
   /**
    * Possible scale positions.
    *
-   * @li @p Top -
+   * - `Top` -
    *
-   * @li @p Bottom -
+   * - `Bottom` -
    *
-   * @li @p Left -
+   * - `Left` -
    *
-   * @li @p Right -
+   * - `Right` -
    *
-   * @li @p None -
+   * - `None` -
    */
   enum ScalePosition{Top, Bottom, Left, Right, None};
 

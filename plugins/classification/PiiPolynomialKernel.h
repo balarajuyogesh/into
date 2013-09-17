@@ -18,20 +18,19 @@
 
 /**
  * Polynomial kernel function. The polynomial kernel is defined as
- * @f$k(x,y) = (\alpha + \beta \langle x, y \rangle)^d@f$, where @e x
- * and @e y are vectors of any dimensionality. The user-specified
+ * \(k(x,y) = (\alpha + \beta \langle x, y \rangle)^d\), where *x*
+ * and *y* are vectors of any dimensionality. The user-specified
  * constants of the function can be interpreted as follows:
  *
- * @li @f$\alpha@f$ - an offset. Setting this value to 0 (the default)
+ * - \(\alpha\) - an offset. Setting this value to 0 (the default)
  * results in a homogeneous polynomial kernel. The offset must be a
  * non-negative value to satisfy Mercer's condition.
  *
- * @li @f$\beta@f$ - a scale. This is a convenient way of normalizing
+ * - \(\beta\) - a scale. This is a convenient way of normalizing
  * the input vectors without actually modifying them.
  *
- * @li @e d - the degree of the polynomial, a positive integer.
+ * - *d* - the degree of the polynomial, a positive integer.
  *
- * @ingroup PiiClassificationPlugin
  */
 template <class FeatureIterator> class PiiPolynomialKernel
 {
@@ -42,7 +41,7 @@ public:
   PiiPolynomialKernel() : _dAlpha(0), _dBeta(1), _iDegree(2) {}
 
   /**
-   * Sets the value of @f$\alpha@f$ to @a offset. The default value is
+   * Sets the value of \(\alpha\) to *offset*. The default value is
    * zero.
    */
   void setOffset(double offset) { _dOffset = offset; }
@@ -51,7 +50,7 @@ public:
    */
   double offset() const { return _dOffset; }
   /**
-   * Sets the value of @f$\beta@f$ to @a scale. The default value is
+   * Sets the value of \(\beta\) to *scale*. The default value is
    * one.
    */
   void setScale(double scale) { _dScale = scale; }
@@ -60,7 +59,7 @@ public:
    */
   double scale() const { return _dScale; }
   /**
-   * Sets the degree of the polynomial to @a degree. The default value
+   * Sets the degree of the polynomial to *degree*. The default value
    * is two.
    */
   void setDegree(int degree) { _iDegree = degree; }

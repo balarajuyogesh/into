@@ -23,14 +23,15 @@
  *
  * @children
  *
- * @child som - @ref PiiSomOperation "PiiSomOperation<double>".
+ * @child som - [PiiSomOperation<double>](PiiSomOperation).
  * Input features are connected to to this operation.
  *
- * @child trainer - PiiVisualTrainer. Use the trainer's @p
- * configurator UI to visually assign labels to the SOM map.
+ * @child trainer - PiiVisualTrainer. Use the trainer's 
+ * `configurator` UI to visually assign labels to the SOM map.
  *
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in features - feature vectors to be classified. An alias for
  * som.features.
@@ -44,38 +45,38 @@
  * @in subimage - a sub-image to be shown on the trainer's map. An
  * alias for trainer.subimage.
  *
- * @in location - the location of the sub-image within @p image. An
+ * @in location - the location of the sub-image within `image`. An
  * alias for trainer.location.
  *
  * @in filename - the name of the image. An alias for
  * trainer.filename (see PiiVisualTrainer).
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out labelX - classification results. Aliases for trainer.labelX.
  *
  * To set the properties of the internal operations do this:
  *
- * @code
+ * ~~~
  * PiiOperation* vs = engine.createOperation("PiiVisualSomClassifier");
  * vs->setProperty("som.iterationNumber", 0);
  * vs->setProperty("trainer.bufferSize", 100);
- * @endcode
+ * ~~~
  *
- * @ingroup PiiSmartClassifierPlugin
  */
 class PiiVisualSomClassifier : public PiiOperationCompound
 {
   Q_OBJECT
 
   /**
-   * Reflects the @p layers property of the internal PiiVisualTrainer.
+   * Reflects the `layers` property of the internal PiiVisualTrainer.
    */
   Q_PROPERTY(QVariantList layers READ layers WRITE setLayers STORED false);
 
   /**
-   * Reflects the @p size property of the internal PiiSomOperation and
-   * the @p gridSize property of the internal PiiVisualTrainer. 
+   * Reflects the `size` property of the internal PiiSomOperation and
+   * the `gridSize` property of the internal PiiVisualTrainer. 
    * Setting the map size automatically changes the learning
    * parameters of SOM using some rules of thumb.
    */

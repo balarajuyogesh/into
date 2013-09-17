@@ -28,9 +28,8 @@ class PiiProxySocket;
  * doesn't support virtual inheritance, all concrete implementations
  * of this interface also derive from PiiSocket. To avoid
  * dynamic_casts at run-time, this interfaces provides a virtual
- * function, #socket(), for performing a cross-cast.
+ * function, [socket()], for performing a cross-cast.
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiAbstractSocket
 {
@@ -39,13 +38,13 @@ public:
 
   /**
    * Returns a pointer to this socket as a PiiSocket. This is the
-   * preferred way of performing a cross-cast, even if @p dynamic_cast
+   * preferred way of performing a cross-cast, even if `dynamic_cast`
    * would work in most cases.
    */
   virtual PiiSocket* socket() = 0;
 
   /**
-   * Returns a pointer to this socket as a @p const PiiSocket. This
+   * Returns a pointer to this socket as a `const` PiiSocket. This
    * function calls the non-const version.
    */
   inline const PiiSocket* socket() const

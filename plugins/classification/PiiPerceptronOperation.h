@@ -30,7 +30,6 @@
  *
  * @see PiiClassifierOperation
  *
- * @ingroup PiiClassificationPlugin
  */
 class PiiPerceptronOperation : public PiiClassifierOperation
 {

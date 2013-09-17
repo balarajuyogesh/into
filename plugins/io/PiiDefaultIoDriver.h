@@ -26,7 +26,6 @@ class PiiDefaultIoChannel;
 /**
  * The default implementation of the PiiIoDriver-interface for input/output drivers.
  *
- * @ingroup PiiIoPlugin
  */
 class PII_IO_EXPORT PiiDefaultIoDriver : public PiiIoDriver
 {

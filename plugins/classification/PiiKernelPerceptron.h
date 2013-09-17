@@ -24,22 +24,22 @@
  * An implementation of the Kernel Perceptron algorithm. This class
  * implements a more general version of the Perceptron algorithm known
  * as the Kernel Perceptron. The Kernel Perceptron uses a dual form of
- * the @ref PiiPerceptron "Perceptron algorithm" to find the
+ * the [Perceptron algorithm](PiiPerceptron) to find the
  * separating hyperplane in a high-dimensional feature space. The
  * algorithm is computationally less efficient than the ordinary
  * Perceptron, but can solve problems that are not linearly separable
- * in the input space. See @ref classification_kernels for details on
+ * in the input space. See [classification_kernels] for details on
  * kernel functions.
  *
  * The dual form of the Perceptron algoritm is based on the fact that
  * (assuming zero initial weights) the weight vector is a linear
  * combination of the training vectors:
  *
- * @f[
+ * \[
  * \mathbf{w} = \sum_{i=1}^M \alpha_i \mathbf{x}_i
- * @f]
+ * \]
  *
- * Therefore, finding the coefficients @f$\alpha_i@f$ is equivalent to
+ * Therefore, finding the coefficients \(\alpha_i\) is equivalent to
  * finding the weight vector. One cannot just solve the weight vector
  * as in the normal case, because the solution must be found in the
  * feature space, not in the input space. Depending on the kernel
@@ -55,17 +55,17 @@
  * \Phi(\mathbf{x}))@f$. Thus, the decision function for the Kernel
  * Perceptron is
  *
- * @f[
+ * \[
  * f(\mathbf{x}) = \begin{cases}
  * 1 & \text{if }\sum_{i=1}^M \alpha_i k(\mathbf{x}_i, \mathbf{x}) > 0 \\
  * 0 & \text{otherwise}
  * \end{cases}
- * @f]
+ * \]
  *
- * Here, @e k() denotes the kernel function. The original perceptron
+ * Here, *k*() denotes the kernel function. The original perceptron
  * algorithm uses dot product as the kernel, resulting in a linear
  * hyperplane classifier. Thus, using PiiDotProductKernel as the
- * kernel function for %PiiKernelPerceptron is functionally equivalent
+ * kernel function for PiiKernelPerceptron is functionally equivalent
  * to (but less efficient than) using PiiPerceptron, except for the
  * bias term.
  *
@@ -74,10 +74,9 @@
  * number of retained support vectors varies widely depending on
  * application, but sometimes only very few samples need to be stored.
  *
- * @note The derivation above neglects the bias term. See @ref
+ * ! The derivation above neglects the bias term. See @ref
  * classification_kernels for a justification.
  *
- * @ingroup PiiClassificationPlugin
  */
 template <class SampleSet> class PiiKernelPerceptron :
   public PiiLearningAlgorithm<SampleSet>,
@@ -92,8 +91,8 @@ public:
   ~PiiKernelPerceptron();
 
   /**
-   * Runs the Kernel Perceptron algorithm with the given @a samples
-   * and class @a labels. Since the Kernel Perceptron is a binary
+   * Runs the Kernel Perceptron algorithm with the given *samples*
+   * and class *labels*. Since the Kernel Perceptron is a binary
    * classifier, the class labels must be either ones or zeros. The
    * weights will be ignored.
    */
@@ -102,17 +101,17 @@ public:
              const QVector<double>& weights = QVector<double>());
 
   /**
-   * Returns @p true if learn() was called, and the learning algorithm
-   * converged to a solution, @p false otherwise. The learning
+   * Returns `true` if learn() was called, and the learning algorithm
+   * converged to a solution, `false` otherwise. The learning
    * algorithm won't converge if the classes are not linearly
-   * separable in the feature space or if #maxIterations() is reached
+   * separable in the feature space or if [maxIterations()] is reached
    * before finding a solution.
    */
   bool converged() const throw();
 
   /**
-   * Returns the classification of @p featureVector (either 0 or 1),
-   * or @p NaN if the perceptron has not been trained yet.
+   * Returns the classification of `featureVector` (either 0 or 1),
+   * or `NaN` if the perceptron has not been trained yet.
    */
   double classify(ConstFeatureIterator featureVector) throw ();
 
@@ -129,7 +128,7 @@ public:
 
   /**
    * Sets the kernel function. This class will take the ownership of
-   * @a kernel. The old kernel function will be deleted. The default
+   * *kernel*. The old kernel function will be deleted. The default
    * kernel is a Gaussian kernel with unit variance.
    */
   void setKernelFunction(PiiKernelFunction<ConstFeatureIterator>* kernel);

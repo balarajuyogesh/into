@@ -28,7 +28,6 @@
  * PiiInputController for itself. It merely passes all incoming
  * objects to the output.
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiProxySocket :
   public PiiSocket,
@@ -43,7 +42,7 @@ public:
   ~PiiProxySocket();
 
   /**
-   * Returns @p Proxy.
+   * Returns `Proxy`.
    */
   Type type() const;
   

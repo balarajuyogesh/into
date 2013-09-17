@@ -27,16 +27,16 @@
 class QLibrary;
 
 /**
- * An execution engine. The task of %PiiEngine is to handle the
+ * An execution engine. The task of PiiEngine is to handle the
  * loading and unloading of plug-in modules. It inherits from
  * PiiOperationCompound and can thus be used as an executor for a set
- * of interconnected operations. %PiiEngine provides a convenience
- * function #execute() to check the configuration and to start
+ * of interconnected operations. PiiEngine provides a convenience
+ * function [execute()] to check the configuration and to start
  * execution.
  *
  * A typical, simple usage scenario for the engine is as follows:
  *
- * @code
+ * ~~~
  * //1. create a PiiEngine instance
  * PiiEngine engine;
  *
@@ -67,9 +67,8 @@ class QLibrary;
  *   {
  *     //handle possible start-up errors here
  *   }
- * @endcode
+ * ~~~
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiEngine : public PiiOperationCompound
 {
@@ -86,10 +85,10 @@ public:
   /**
    * File formats.
    *
-   * @lip TextFormat - data is saved as UTF-8 text. See
+   * - `TextFormat` - data is saved as UTF-8 text. See
    * PiiTextOutputArchive and PiiTextInputArchive.
    *
-   * @lip BinaryFormat - data is saved in a raw binary format. See
+   * - `BinaryFormat` - data is saved in a raw binary format. See
    * PiiBinaryOutputArchive and PiiBinaryInputArchive.
    */
   enum FileFormat { TextFormat, BinaryFormat };
@@ -108,23 +107,23 @@ public:
    * For example, to load the flow control plug-in
    * ({libpiiflowcontrol.so, piiflowcontrol.dll}), do this:
    *
-   * @code
+   * ~~~
    * PiiEngine::loadPlugin("piiflowcontrol");
-   * @endcode
+   * ~~~
    *
    * This will load the plug-in in the default plug-in location. In
-   * Unix, the plug-in library file @p libpiiflowcontrol.so will be
-   * searched in @p LD_LIBRARY_PATH. In Windows, @p piiflowcontrol.dll
-   * will be searched in @p PATH. If the plug-in is located in another
+   * Unix, the plug-in library file `libpiiflowcontrol`.so will be
+   * searched in `LD_LIBRARY_PATH`. In Windows, `piiflowcontrol`.dll
+   * will be searched in `PATH`. If the plug-in is located in another
    * directory, either relative or absolute path names can be used. 
    * Use slash as the path separator (backslash will also work on
    * Windows). Note that in this case you need to use the full file
    * name (preferably without the extension, though).
    *
-   * @code
+   * ~~~
    * PiiEngine::loadPlugin("relative/path/to/libmyplugin");
    * PiiEngine::loadPlugin("/absolute/path/to/libmyotherplugin");
-   * @endcode
+   * ~~~
    *
    * Plug-ins are always in process-wide use. It is not possible to
    * load a plug-in to a single PiiEngine instance. Each plug-in is
@@ -133,7 +132,7 @@ public:
    *
    * Successive calls to loadPlugin() with the same plug-in name are
    * OK. To really unload the plug-in one needs to issue the same
-   * number of #unloadPlugin() calls.
+   * number of [unloadPlugin()] calls.
    *
    * This function is thread-safe.
    *
@@ -146,9 +145,9 @@ public:
   /**
    * A convenience function that loads many plugins at once.
    *
-   * @code
+   * ~~~
    * PiiEngine::loadPlugins(QStringList() << "piiimage" << "piibase");
-   * @endcode
+   * ~~~
    *
    * @exception PiiLoadException& if any of the plug-ins cannot be
    * loaded
@@ -158,8 +157,8 @@ public:
   static void loadPlugins(const QStringList& plugins);
 
   /**
-   * Ensures that @a plugin is loaded. This function tries to load the
-   * plug-in is it is not yet loaded. Unlike #loadPlugin(), this
+   * Ensures that *plugin* is loaded. This function tries to load the
+   * plug-in is it is not yet loaded. Unlike [loadPlugin()], this
    * function doesn't increase the reference count of plug-ins that
    * are already loaded.
    *
@@ -168,9 +167,9 @@ public:
   static void ensurePlugin(const QString& plugin);
 
   /**
-   * Ensures that all plug-ins listed in @a plugins are loaded. This
+   * Ensures that all plug-ins listed in *plugins* are loaded. This
    * function tries to load all plug-ins that are not yet loaded.
-   * Unlike #loadPlugins(), this function doesn't increase the
+   * Unlike [loadPlugins()], this function doesn't increase the
    * reference count of plug-ins that are already loaded.
    *
    * @exception PiiLoadException& if any of the plug-ins cannot be
@@ -180,16 +179,16 @@ public:
 
   /**
    * Remove the named plugin. Either the full path or the base name
-   * will do as @a name.
+   * will do as *name*.
    *
-   * @param force if @p false, the plug-in will not be removed from
-   * the address space of the process until all #loadPlugin() calls
-   * have been abrogated. If @p true, a single call removes the
+   * @param force if `false`, the plug-in will not be removed from
+   * the address space of the process until all [loadPlugin()] calls
+   * have been abrogated. If `true`, a single call removes the
    * plug-in irrespective of the number of references.
    *
    * @return the number of references left
    *
-   * @b WARNING! Unloading plug-ins needs special attention. Make
+   * **WARNING**! Unloading plug-ins needs special attention. Make
    * extremely sure that no instances of classes created by the plugin
    * are in memory! Otherwise, all bets are off. If you have created
    * an operation with PiiOperationCompound::createOperation(), detach
@@ -201,8 +200,8 @@ public:
   static int unloadPlugin(const QString& name, bool force = false);
 
   /**
-   * Returns @p true if the the plugin called @p name is loaded and @p
-   * false otherwise.
+   * Returns `true` if the the plugin called `name` is loaded and 
+   * `false` otherwise.
    */
   static bool isLoaded(const QString& name);
 
@@ -223,11 +222,11 @@ public:
 
   /**
    * Checks and executes all child operations. This function first
-   * calls @ref PiiOperation::check() for all child operations. If
-   * none of them throws an exception, @ref PiiOperation::start() will
+   * calls [PiiOperation::check()] for all child operations. If
+   * none of them throws an exception, [PiiOperation::start()] will
    * be called. This is a convenience function that saves one from
-   * manually performing the sanity check. If the engine is neither @p
-   * Stopped nor @p Paused, this function does nothing.
+   * manually performing the sanity check. If the engine is neither 
+   * `Stopped` nor `Paused`, this function does nothing.
    */
   void execute();
 
@@ -237,31 +236,31 @@ public:
   Q_INVOKABLE PiiEngine* clone() const;
 
   /**
-   * Saves the engine to @a fileName. The @a format argument specifies
-   * the file format. The @a config map is used to add configuration
+   * Saves the engine to *fileName*. The *format* argument specifies
+   * the file format. The *config* map is used to add configuration
    * information to the file. The following keys are recognized:
    *
-   * @lip plugins - the names of plug-ins that need to be loaded to be
-   * able to run the engine. If the @a config map doesn't contain the
-   * @p plugins key, #pluginLibraryNames() will be used.
+   * - `plugins` - the names of plug-ins that need to be loaded to be
+   * able to run the engine. If the *config* map doesn't contain the
+   * `plugins` key, [pluginLibraryNames()] will be used.
    *
-   * @lip application - the name of the application that created the
+   * - `application` - the name of the application that created the
    * engine. If this value is not given, "Into" will be used.
    *
-   * @lip version - the version of the application that created the
-   * engine. If @p application is not given, the current Into version
+   * - `version` - the version of the application that created the
+   * engine. If `application` is not given, the current Into version
    * will be used.
    *
    * One may store any application-specific configuration values to
    * the map.
    *
-   * @exception PiiException& if @a fileName cannot be opened for
+   * @exception PiiException& if *fileName* cannot be opened for
    * writing
    *
    * @exception PiiSerializationException& if the serialization of the
    * engine fails for any reason.
    *
-   * @code
+   * ~~~
    * try
    *   {
    *     PiiEngine::loadPlugin("piibase");
@@ -273,18 +272,18 @@ public:
    *   {
    *     // handle errors here
    *   }
-   * @endcode
+   * ~~~
    */
   void save(const QString& fileName,
             const QVariantMap& config = QVariantMap(),
             FileFormat format = TextFormat) const;
 
   /**
-   * Loads a stored engine from @a fileName. The stored configuration
-   * values will be written to @a config. Archive file format will be
+   * Loads a stored engine from *fileName*. The stored configuration
+   * values will be written to *config*. Archive file format will be
    * automatically recognized.
    *
-   * @exception PiiException& if @a fileName cannot be opened for
+   * @exception PiiException& if *fileName* cannot be opened for
    * reading
    *
    * @exception PiiLoadException& if any of the required plug-ins
@@ -294,11 +293,11 @@ public:
    * be recognized or an error occurs when reading the engine
    * instance.
    *
-   * @code
+   * ~~~
    * PiiVariantMap mapConfig;
    * PiiEngine* pEngine = PiiEngine::load("counter_engine.cft", &mapConfig);
    * QCOMPARE(mapConfig["application"].toString(), QString("Into"));
-   * @endcode
+   * ~~~
    */
   static PiiEngine* load(const QString& fileName,
                          QVariantMap* config = 0);

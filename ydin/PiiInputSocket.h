@@ -29,7 +29,7 @@ class PiiOutputSocket;
 
 /**
  * A macro that throws a PiiExecutionException. The error message
- * states that an object of an unknown type was received in @p input.
+ * states that an object of an unknown type was received in `input`.
  *
  * @param input a pointer to the input that received an unrecognized
  * object.
@@ -39,9 +39,9 @@ class PiiOutputSocket;
 
 /**
  * A macro that throws a PiiExecutionException. The error message
- * states that the @p matrix received in @p input has a wrong size,
- * and it should actually have the specified number of @p rows and @p
- * columns.
+ * states that the `matrix` received in `input` has a wrong size,
+ * and it should actually have the specified number of `rows` and 
+ * `columns`.
  *
  * @param INPUT a pointer to the input that reveived the matrix.
  *
@@ -60,18 +60,17 @@ class PiiOutputSocket;
 /**
  * Default implementation of an input socket. This class maintains an
  * input queue whose capacity can be controlled with the
- * #queueCapacity property. A producer operation can send objects to
+ * [queueCapacity] property. A producer operation can send objects to
  * the input queue and continue working until the input queue is full. 
  * Once this happens, the sending thread must wait until the receiver
  * has processed one or more objects.
  *
  * At the start of each processing round, the parent operation takes
- * one object from the queue to processing by calling #shift(). This
+ * one object from the queue to processing by calling [shift()]. This
  * moves the head of the input queue so that the processable object
- * can be retrieved with #firstObject(). New objects may then appear
+ * can be retrieved with [firstObject()]. New objects may then appear
  * at any time until the queue is full again.
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiInputSocket : public PiiSocket, public PiiAbstractInputSocket
 {
@@ -89,7 +88,7 @@ class PII_YDIN_EXPORT PiiInputSocket : public PiiSocket, public PiiAbstractInput
 public:
   /**
    * Constructs a new input socket with the given name. This
-   * constructor sets @p name as the @p objectName property of this
+   * constructor sets `name` as the `objectName` property of this
    * class.
    */
   PiiInputSocket(const QString& name);
@@ -98,7 +97,7 @@ public:
   ~PiiInputSocket();
 
   /**
-   * Returns @p Input.
+   * Returns `Input`.
    */
   Type type() const;
   
@@ -120,8 +119,8 @@ public:
   Q_INVOKABLE int groupId() const;
 
   /**
-   * Returns @p true if the input is connected to a PiiOutputSocket
-   * either directly or through a PiiProxySocket, and @p false
+   * Returns `true` if the input is connected to a PiiOutputSocket
+   * either directly or through a PiiProxySocket, and `false`
    * otherwise.
    */
   Q_INVOKABLE bool isConnected() const;
@@ -131,20 +130,20 @@ public:
    * If an optional input socket is left unconnected, the receiving
    * operation ignores it in processing.
    *
-   * @return @p true if the socket can be left unconnected, @p false
+   * @return `true` if the socket can be left unconnected, `false`
    * otherwise
    */
   Q_INVOKABLE bool isOptional() const;
 
   /**
-   * Sets the @p optional flag.
+   * Sets the `optional` flag.
    */
   void setOptional(bool optional);
 
   /**
    * Moves the queue one step forwards. The current head of the queue
    * will be moved out of the queue so that it can be retrieved with
-   * #firstObject(). Once the queue is successfully shifted, the
+   * [firstObject()]. Once the queue is successfully shifted, the
    * socket signals inputReady().
    */
   void shift();
@@ -152,7 +151,7 @@ public:
   /**
    * Assigns the first object in the input queue to the specified
    * thread. If the input object is assigned to a thread,
-   * #firstObject() will return it to the specified thread only. There
+   * [firstObject()] will return it to the specified thread only. There
    * may be any number of threads with their own assigned objects.
    */
   void assignFirstObject(Qt::HANDLE activeThreadId);
@@ -162,14 +161,14 @@ public:
   void unassignFirstObject(Qt::HANDLE activeThreadId);
 
   /**
-   * Jumps the queue. This function moves the object at @p oldIndex to
-   * a new place, identified by @p newIndex, shifting intermediate
+   * Jumps the queue. This function moves the object at `oldIndex` to
+   * a new place, identified by `newIndex`, shifting intermediate
    * objects backwards.
    */
   void jump(int oldIndex, int newIndex);
 
   /**
-   * Searches the queue for an object whose type ID matches @p type.
+   * Searches the queue for an object whose type ID matches `type`.
    *
    * @param type the type ID to look for
    *
@@ -186,7 +185,7 @@ public:
   void reset();
   
   /**
-   * Puts @p obj into the incoming queue.
+   * Puts `obj` into the incoming queue.
    */
   void receive(const PiiVariant& obj);
 
@@ -212,27 +211,27 @@ public:
   int queueLength() const;
   
   /**
-   * Returns the object at @p index in the input queue. If there is no
+   * Returns the object at `index` in the input queue. If there is no
    * such object, an invalid variant will be returned.
    */
   PiiVariant queuedObject(int index) const;
   
   /**
-   * Returns the type ID of the object at @p index in the input queue.
+   * Returns the type ID of the object at `index` in the input queue.
    */
   unsigned int queuedType(int index) const;
 
   /**
    * Returns the object that was last shifted from the input queue. If
    * no objects have been shifted, an invalid variant will be
-   * returned. If #assignFirstObject() has been called, a different
+   * returned. If [assignFirstObject()] has been called, a different
    * object will be returned for each calling thread.
    *
-   * @code
+   * ~~~
    * PiiVariant obj(pInput->firstObject());
    * if (obj.isValid())
    *   cout << "We just received an object!" << endl;
-   * @endcode
+   * ~~~
    */
   PiiVariant firstObject() const;
 

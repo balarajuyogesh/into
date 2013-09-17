@@ -24,7 +24,6 @@
  * so the real output frequency is a little bit smaller than wanted max
  * frequency.
  *
- * @ingroup PiiSmartClassifierOperation.
  */
 
 class PiiFrequencyLimiter

@@ -28,7 +28,6 @@
  * a replacement to QBuffer in situations where the amount of incoming
  * data is unlimited.
  *
- * @ingroup Core
  */
 class PII_CORE_EXPORT PiiFifoBuffer : public QIODevice
 {
@@ -80,7 +79,7 @@ public:
   /**
    * Tell the buffer that everything has been written. This informs
    * possible readers that there is no more data to come, which helps
-   * in avoiding unnecessary waiting. Call #reset() to start writing
+   * in avoiding unnecessary waiting. Call [reset()] to start writing
    * again.
    */
   void finishWriting();
@@ -92,28 +91,28 @@ public:
 
 protected:
   /**
-   * Read at most @p maxSize bytes into @p data. In any case, the
+   * Read at most `maxSize` bytes into `data`. In any case, the
    * number of bytes that can be read is less than or equal to the
    * size of the memory buffer. If less data has been written to the
    * buffer, the number of bytes written so far limits the number of
    * readable bytes.
    *
    * If the buffer is empty, the calling thread will be halted for at
-   * most @p waitTime milliseconds. The wait will be interrupted
+   * most `waitTime` milliseconds. The wait will be interrupted
    * as soon as new data is available. The function returns the number
    * of bytes read.
    */
   qint64 readData(char * data, qint64 maxSize);
 
   /**
-   * Write at most @p maxSize bytes from @p data. The capacity of the
+   * Write at most `maxSize` bytes from `data`. The capacity of the
    * internal buffer limits the amount of data that can be written. 
    * Once the buffer is full, no data can be written before something
    * is read out.
    *
    * If the buffer is full, the calling thread will be blocked for at
-   * most @p waitTime milliseconds. The functioning is analogous to
-   * @ref readData().
+   * most `waitTime` milliseconds. The functioning is analogous to
+   * [readData()].
    */
   qint64 writeData(const char * data, qint64 maxSize);
 

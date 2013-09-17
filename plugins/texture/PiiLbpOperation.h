@@ -23,30 +23,31 @@
 /**
  * The LBP texture feature.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - an image the LBP texture feature is extracted from. 
  * The image may be of any type. Color images are automatically
  * converted to gray scale before processing.
  *
- * @in roi - region-of-interest. See @ref PiiImagePlugin for a
+ * @in roi - region-of-interest. See [PiiImagePlugin] for a
  * description. Optional.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out features - all extracted features as a concatenated feature
- * vector. In @p ImageOutput mode, this output will emit the same
- * feature image as @p features0.
+ * vector. In `ImageOutput` mode, this output will emit the same
+ * feature image as `features0`.
  *
  * @out featuresX - a feature vector that contains the extracted LBP
  * features or a feature image that contains the LBP feature code for
- * each pixel, depending on #outputType. X stands for the Xth
+ * each pixel, depending on [outputType]. X stands for the Xth
  * parameter set (zero-based index). The size of the output image is
  * smaller than the size of the input image. By default, one output is
  * created and named features0. It outputs the 256-bin feature vector
  * for LBP 8,1 in Standard mode with nearest neighbor interpolation.
  *
- * @ingroup PiiTexturePlugin
  */
 class PiiLbpOperation : public PiiDefaultOperation
 {
@@ -57,21 +58,22 @@ class PiiLbpOperation : public PiiDefaultOperation
    * multiple parameters are given, multiple feature vectors are
    * extracted for each input image. The parameters are represented
    * with
-   * <tt>samples,radius[,threshold][,mode][,interpolation][,smoothing]</tt>. 
+   * `samples,radius[,threshold][,mode][,interpolation][,smoothing]`. 
    * Samples is the number of samples taken around each pixel (int),
    * radius is the sampling radius (float), and threshold a "noise
-   * canceller threshold" (float). Valid values for mode are @p
-   * Uniform, @p RotationInvariant, @p UniformRotationInvariant, and
-   * @p Symmetric. Interpolation can be either @p LinearInterpolation
-   * or @p NearestNeighborInterpolation. Smoothing can be either @p
-   * Smoothed or @p NonSmoothed. Everything but samples and radius can
+   * canceller threshold" (float). Valid values for mode are 
+   * `Uniform`, `RotationInvariant`, `UniformRotationInvariant`, and
+   * `Symmetric`. Interpolation can be either `LinearInterpolation`
+   * or `NearestNeighborInterpolation`. Smoothing can be either 
+   * `Smoothed` or `NonSmoothed`. Everything but samples and radius can
    * be omitted. Default values are "Standard",
    * "NearestNeighborInterpolation", and "NonSmoothed". Threshold,
    * mode, interpolation, and smoothing can be given in any order.
    *
-   * @par Notes
+   * Notes
+   * -----
    *
-   * @li If mode is "Symmetric", a "symmetric" LBP is used instead of
+   * - If mode is "Symmetric", a "symmetric" LBP is used instead of
    * the traditional one. The symmetric version compares opposing
    * pairs of pixels in a neighborhood and doesn't consider the
    * center. See PiiLbp::genericSymmetricLbp() for details. The amount
@@ -79,16 +81,16 @@ class PiiLbpOperation : public PiiDefaultOperation
    * is given, samples-1 will be used. The symmetric version cannot
    * make use of the threshold parameter.
    *
-   * @li If smoothing is set to "Smoothed", the input image will be
+   * - If smoothing is set to "Smoothed", the input image will be
    * smoothed prior to applying the LBP operation. The smoothing is
    * performed with Pii::fastMovingAverage() using the distance
    * between neighborhood samples as the size of the smoothing window.
    * Formally, the window size is calculated as @f$s = \ceil{2 \pi R /
-   * N}@f$, where @e N is the number of samples and @e N is the
+   * N}@f$, where *N* is the number of samples and *N* is the
    * neighborhood radius. Multi-scale LBP with smoothing can be seen
    * as a pyramid description of image texture.
    *
-   * @li The standard LBP, albeit being largely invariant against
+   * - The standard LBP, albeit being largely invariant against
    * illumination changes, is quite sensitive to noise on uniformly
    * colored surfaces. LBP's noise tolerance can be increased by
    * adding a constant value ("noise canceller threshold") to each
@@ -100,29 +102,29 @@ class PiiLbpOperation : public PiiDefaultOperation
    *
    * Examples of valid parameters:
    *
-   * @li 8,1
-   * @li 8,1,RotationInvariant
-   * @li 16,2,4,UniformRotationInvariant,LinearInterpolation
-   * @li 12,1.5,Uniform,Smoothed
-   * @li 8,1,LinearInterpolation
-   * @li 10,1.7,LinearInterpolation,Symmetric
+   * - 8,1
+   * - 8,1,RotationInvariant
+   * - 16,2,4,UniformRotationInvariant,LinearInterpolation
+   * - 12,1.5,Uniform,Smoothed
+   * - 8,1,LinearInterpolation
+   * - 10,1.7,LinearInterpolation,Symmetric
    *
-   * @code
+   * ~~~
    * lbpOperation.setProperty("parameters", QStringList() << "8,1" << "16,2,Uniform");
-   * @endcode
+   * ~~~
    */
   Q_PROPERTY(QStringList parameters READ parameters WRITE setParameters);
 
   /**
    * A type that determines whether histograms or feature images will
-   * be produced. The default value is @p HistogramOutput.
+   * be produced. The default value is `HistogramOutput`.
    */
   Q_PROPERTY(OutputType outputType READ outputType WRITE setOutputType);
   Q_ENUMS(OutputType);
 
   /**
-   * The type or the @p roi input, if connected. The default value is
-   * @p AutoRoi.
+   * The type or the `roi` input, if connected. The default value is
+   * `AutoRoi`.
    */
   Q_PROPERTY(PiiImage::RoiType roiType READ roiType WRITE setRoiType);
 
@@ -132,15 +134,15 @@ public:
   /**
    * Output types.
    *
-   * @lip HistogramOutput - LBP codes are collected to a histogram and
-   * output as a row vector (PiiMatrix<int>). In @p HistogramOutput
+   * - `HistogramOutput` - LBP codes are collected to a histogram and
+   * output as a row vector (PiiMatrix<int>). In `HistogramOutput`
    * mode, a separate histogram operation is not needed.
    *
-   * @lip NormalizedHistogramOutput - same as @p HistogramOutput, but
+   * - `NormalizedHistogramOutput` - same as `HistogramOutput`, but
    * the histogram is normalized to sum up to unity. The output type
    * will be PiiMatrix<float>.
    *
-   * @lip ImageOutput - the output will be an image (PiiMatrix<int>)
+   * - `ImageOutput` - the output will be an image (PiiMatrix<int>)
    * in which each pixel is replaced with its LBP code.
    */
   enum OutputType { HistogramOutput, NormalizedHistogramOutput, ImageOutput };

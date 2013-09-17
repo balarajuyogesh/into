@@ -34,8 +34,8 @@
  * interface makes a distinction between on-line and batch algorithms. 
  * Algorithms that don't require all training samples to be present at
  * once as a batch (so-called on-line algorithms such as sequential
- * SOM) only need to implement the #learnOne() function. If the
- * algorithm is not capable of on-line training, the #learn() function
+ * SOM) only need to implement the [learnOne()] function. If the
+ * algorithm is not capable of on-line training, the [learn()] function
  * must be overridden instead.
  *
  * The learning functions take two optional parameters: label and
@@ -44,7 +44,6 @@
  * learning. Some algorithms such as PiiDecisionStump use both the
  * labels and the weights.
  *
- * @ingroup PiiClassificationPlugin
  */
 template <class SampleSet> class PiiLearningAlgorithm
 {
@@ -61,8 +60,8 @@ public:
 
   /**
    * Train the learning algorithm with a batch of samples. The default
-   * implementation sequentially sends each sample in @a samples to
-   * #learnOne() until #converged() returns @p true.
+   * implementation sequentially sends each sample in *samples* to
+   * [learnOne()] until [converged()] returns `true`.
    *
    * @param samples a set of feature vectors to train the algorithm
    * with.
@@ -70,12 +69,12 @@ public:
    * @param labels the labels of the samples. This value is not used
    * by non-supervised classifiers and can be set to an empty list. If
    * the value is given, the length of the list must be equal to the
-   * number of samples in @a samples.
+   * number of samples in *samples*.
    *
    * @param weights weights for individual samples. This value is used
    * only if the learning algorithm is capable of weighted learning. 
    * If this value is given, the length of the list must be equal to
-   * the number of samples in @a samples.
+   * the number of samples in *samples*.
    *
    * @exception PiiClassificationException& if something goes wrong.
    * An exception is thrown, for example, if the training is cancelled
@@ -104,8 +103,8 @@ public:
    * @return classification for the sample. Some classifiers are able
    * to classify samples during the learning process with no
    * additional computational effort. They return the current
-   * classification of the feture vector. Others should return @p NaN. 
-   * The default implementation returns @p NaN.
+   * classification of the feture vector. Others should return `NaN`. 
+   * The default implementation returns `NaN`.
    */
   virtual double learnOne(typename PiiSampleSet::Traits<SampleSet>::ConstFeatureIterator featureVector,
                           int length,
@@ -113,8 +112,8 @@ public:
                           double weight = 1.0) throw ();
 
   /**
-   * Returns @p true if the algorithm has converged (found an optimal
-   * solution) and @p false otherwise.
+   * Returns `true` if the algorithm has converged (found an optimal
+   * solution) and `false` otherwise.
    */
   virtual bool converged() const throw () = 0;
 

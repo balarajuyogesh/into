@@ -24,24 +24,25 @@
  * operation is somewhat similar to the Unix "find" command or "dir
  * /s" in Windows.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in trigger - an optional input that can be used to trigger one
  * file name. The incoming object is ignored as it only serves as a
  * trigger pulse.
  *
  * @in path - an optional input that can be used to put new paths to
- * the scanner. If this input is connected, the #paths property will
+ * the scanner. If this input is connected, the [paths] property will
  * be ignored. Whenever a new path is received, the given path is
  * scanned recursively, and every matching file will be emitted
- * through the @p filename output. The flow level of the output will
+ * through the `filename` output. The flow level of the output will
  * be one higher than that of the input.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out filename - a full path name of a matched file.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiFileSystemScanner : public PiiDefaultOperation
 {
@@ -63,13 +64,13 @@ class PiiFileSystemScanner : public PiiDefaultOperation
 
   /**
    * A combination of SortFlag flags that control sorting. The default
-   * is @p Unsorted.
+   * is `Unsorted`.
    */
   Q_PROPERTY(SortFlags sortFlags READ sortFlags WRITE setSortFlags);
 
   /**
    * A combination of Filter flags that control the types of files to
-   * be matched. The default is @p Readable | @p Files.
+   * be matched. The default is `Readable` | `Files`.
    */
   Q_PROPERTY(Filters filters READ filters WRITE setFilters);
 
@@ -77,9 +78,9 @@ class PiiFileSystemScanner : public PiiDefaultOperation
    * A list of wildcard patterns used to match files by name. If this
    * list is empty, everything will be matched.
    *
-   * @code
+   * ~~~
    * operation->setProperty("nameFilters", QStringList() << "*.avi" << "*.mpeg");
-   * @endcode
+   * ~~~
    */
   Q_PROPERTY(QStringList nameFilters READ nameFilters WRITE setNameFilters);
 
@@ -97,7 +98,7 @@ class PiiFileSystemScanner : public PiiDefaultOperation
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   /**
-   * Sort options available to %PiiFileSystemScanner. See
+   * Sort options available to PiiFileSystemScanner. See
    * QDir::SortFlag.
    */
   enum SortFlag
@@ -117,7 +118,7 @@ public:
   Q_DECLARE_FLAGS(SortFlags, SortFlag);
 
   /**
-   * Filtering options available to %PiiFileSystemScanner. See
+   * Filtering options available to PiiFileSystemScanner. See
    * QDir::Filter.
    */
   enum Filter

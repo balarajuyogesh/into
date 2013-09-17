@@ -22,14 +22,14 @@
  * An operation that emits an object each time a digital input channel
  * is activated.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out channel - the index of an activated input channel. This output
- * will emit an @p int each time an input channel becomes active.
+ * will emit an `int` each time an input channel becomes active.
  *
- * @out outputX - @p true, when digital input X is activated.
+ * @out outputX - `true`, when digital input X is activated.
  *
- * @ingroup PiiIoPlugin
  */
 class PiiIoInputOperation : public PiiIoOperation
 {

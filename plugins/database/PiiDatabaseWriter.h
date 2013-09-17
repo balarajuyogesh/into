@@ -28,17 +28,17 @@ class QSqlQuery;
  * primitive values and strings. Whenever all inputs have an incoming
  * object, a new row is created into a database table. The incoming
  * values are written to the table based on the names of the inputs as
- * specified by the @ref columnNames property.
+ * specified by the [columnNames] property.
  *
  * This operation adds "csv" as a supported connection scheme. See
  * PiiDatabaseOperation::databaseName for examples.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in inputX - input sockets. X is a zero-based index. Inputs can
- * also be accessed with the names given by the #columnNames property.
+ * also be accessed with the names given by the [columnNames] property.
  *
- * @ingroup PiiDatabasePlugin
  */
 class PiiDatabaseWriter : public PiiDatabaseOperation
 {
@@ -46,7 +46,7 @@ class PiiDatabaseWriter : public PiiDatabaseOperation
 
   /**
    * The name of the table data will be written into. The table
-   * description must match the column names set with #columnNames.
+   * description must match the column names set with [columnNames].
    */
   Q_PROPERTY(QString tableName READ tableName WRITE setTableName);
 
@@ -58,9 +58,9 @@ class PiiDatabaseWriter : public PiiDatabaseOperation
    *
    * To create two inputs, do this:
    *
-   * @code
+   * ~~~
    * writer->setProperty("columnNames", QStringList() << "filename" << "objects");
-   * @endcode
+   * ~~~
    */
   Q_PROPERTY(QStringList columnNames READ columnNames WRITE setColumnNames);
 
@@ -69,12 +69,12 @@ class PiiDatabaseWriter : public PiiDatabaseOperation
    * corresponding inputs will be flagged optional. If they are left
    * unconnected, the default values will always be substituted.
    *
-   * @code
+   * ~~~
    * QVariantMap values;
    * values["filename"] = "N/A";
    * values["objects"] = 0;
    * writer->setProperty("defaultValues", values);
-   * @endcode
+   * ~~~
    */
   Q_PROPERTY(QVariantMap defaultValues READ defaultValues WRITE setDefaultValues);
 

@@ -37,7 +37,7 @@ namespace Pii
   /**
    * Implements eigenvalue calculations and stores the results of the calculations
    * (eigenvalues and eigenvectors). Intended to be used through
-   * @ref Pii::eigensolve() "eigensolve".
+   * [eigensolve](Pii::eigensolve()).
    *
    * @tparam T Matrix elementtype
    * @tparam Real Real number type used in calculations.
@@ -79,10 +79,10 @@ namespace Pii
      * For real eigenvalues, returns diagonal matrix with eigenvalues on diagonal(1x1 blocks),
      * and for complex eigenvalues block on diagonal is of size 2x2. For example if the
      * complex eigenvalues are u+iv and u-iv, the block looks like 
-     * @code
+     * ~~~
      *  u     v
      * -v     u
-     * @endcode
+     * ~~~
      */
     //Corresponds to the "getD()" function in TNT.
     PiiMatrix<Real> blockDiagonalEigenvalMatrix();

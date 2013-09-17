@@ -34,16 +34,16 @@ class QImage;
  * visual trainer is in assigning labels to images whose feature
  * vectors are first vector-quantized with the SOM.
  *
- * The @p configurator UI of a visual trainer provides a view in which
+ * The `configurator` UI of a visual trainer provides a view in which
  * a large image is shown together with a set of small images
  * extracted from it. The small images are shown on a two-dimensional
  * map.
  *
  * @image html visualtrainer.png
  *
- * The PiiVisualTrainerOperation works by converting an incoming @p
- * class @p index into a user-assigned class label or many different
- * labels. The labels are configured with @p layers. A layer defines
+ * The PiiVisualTrainerOperation works by converting an incoming 
+ * `class` `index` into a user-assigned class label or many different
+ * labels. The labels are configured with `layers`. A layer defines
  * the labels a user is able to select for the data points in the
  * visualizer. Currently, there are three types of layers: floating
  * point, class labels, and boolean. With a floating point layer, the
@@ -58,7 +58,8 @@ class QImage;
  * defect detection and recognition applications. A boolean layer is
  * no more than a two-label class layer.
  *
- * @par Inputs
+ * Inputs
+ * ------
  *
  * @in image - a large image (any image type)
  *
@@ -70,7 +71,7 @@ class QImage;
  * image type)
  *
  * @in location - the location of the sub-image within the large image
- * (1-by-4 PiiMatrix<int> or @p PiiIntRectangle)
+ * (1-by-4 PiiMatrix<int> or `PiiIntRectangle`)
  *
  * @in class index - the index of the code vector (e.g. in a
  * SOM) of the sub-image's feature vector. This determines where on
@@ -80,42 +81,42 @@ class QImage;
  *
  * @in labelX - an optional label for the input sample. X is a
  * zero-based layer index. In supervised training, the labels of the
- * samples are known in advance. %PiiVisualTrainer can make use of
+ * samples are known in advance. PiiVisualTrainer can make use of
  * this information in automatically labeling the samples. For
  * class/boolean layers, the most likely class is selected by voting
  * among the input labels. For float layers, the average of input
  * values will be used.
  *
- * The @p class @p index input must always be connected while the
- * others are optional. If @p subimage and @p location are connected,
- * also @p image must be connected, but @p subimage and @p location
+ * The `class` `index` input must always be connected while the
+ * others are optional. If `subimage` and `location` are connected,
+ * also `image` must be connected, but `subimage` and `location`
  * can also be left unconnected.
  *
- * @p Image and @p filename are always grouped together. If @p
- * filename is connected, it must always have an object whenever @p
- * image does. @p Subimage and @p location are also grouped, but they
- * accept objects with a higher flow level. @p Class @p index is
- * grouped to @p subimage and @p location if they are connected,
- * otherwise it will be grouped to @p image.
+ * `Image` and `filename` are always grouped together. If 
+ * `filename` is connected, it must always have an object whenever 
+ * `image` does. `Subimage` and `location` are also grouped, but they
+ * accept objects with a higher flow level. `Class` `index` is
+ * grouped to `subimage` and `location` if they are connected,
+ * otherwise it will be grouped to `image`.
  *
- * If @p subimage and @p location are unconnected, no separate image
+ * If `subimage` and `location` are unconnected, no separate image
  * display for the a large image will be shown in the configurator. 
  * Instead, the input images all end up into the visual selector.
  *
- * @par Outputs
+ * Outputs
+ * -------
  *
  * @out labelX - an user-assigned label (double) for the incoming
  * class index. If the operation is not configured, zero (0) is
  * emitted for each incoming class index. X denotes the zero-based
- * index of the layer. For example, if there is only one layer, @p
- * label0 emits its label. The label can be any floating point value,
+ * index of the layer. For example, if there is only one layer, 
+ * `label0` emits its label. The label can be any floating point value,
  * but its value range and resolution are limited by the layer type. 
  * For class label layers, emitted values are cardinal numbers.
  *
- * All outputs are synchronized to the @p subimage input, if it is
- * connected. Otherwise, the outputs will be synchronized to @p image.
+ * All outputs are synchronized to the `subimage` input, if it is
+ * connected. Otherwise, the outputs will be synchronized to `image`.
  *
- * @ingroup PiiClassification
  */
 class PiiVisualTrainer : public PiiDefaultOperation
 {
@@ -123,11 +124,11 @@ class PiiVisualTrainer : public PiiDefaultOperation
 
   /**
    * This property determines the buffer mode for the visual trainer. 
-   * The enum type @p BufferMode determines two possible values: @p
-   * BufferTotal, which is the default value, and @p BufferPerCell. In
-   * the mode @p TotalBuffer there is one buffer per visual trainer.
+   * The enum type `BufferMode` determines two possible values: 
+   * `BufferTotal`, which is the default value, and `BufferPerCell`. In
+   * the mode `TotalBuffer` there is one buffer per visual trainer.
    * Once the buffer gets full, the image that came first to the visual
-   * trainer, will be destroyed. In the mode @p PerCell, there is own
+   * trainer, will be destroyed. In the mode `PerCell`, there is own
    * buffer for each cell in the grid. Once the buffer in a cell gets
    * full, the last image that has been assigned to the cell, will be
    * destroyed. The buffer size for both modes is determined with the
@@ -137,8 +138,8 @@ class PiiVisualTrainer : public PiiDefaultOperation
    * In this case it is recommened to use the buffer mode TotalBuffer,
    * because it works in a more efficient way.
    *
-   * This property also has an effect on how #bufferFrequency works. 
-   * Refer to the documentation of the #bufferFrequency property for
+   * This property also has an effect on how [bufferFrequency] works. 
+   * Refer to the documentation of the [bufferFrequency] property for
    * more information.
    */  
   Q_PROPERTY(BufferMode bufferMode READ bufferMode WRITE setBufferMode);
@@ -159,10 +160,10 @@ class PiiVisualTrainer : public PiiDefaultOperation
    * in a second are added into the buffer, and if the value is set to
    * 0.1, an image is added to the buffer at most every 10 seconds. 
    * The exact behavior of this property varies depending on the value
-   * of the #bufferMode property. In mode @p BufferTotal, there is a
+   * of the [bufferMode] property. In mode `BufferTotal`, there is a
    * single frequency counter for all cells, and the time when images
    * has been added in one cell, affects to the decision, whether
-   * images are added in to the other cells. In mode @p BufferPerCell
+   * images are added in to the other cells. In mode `BufferPerCell`
    * there is own frequency counter for each cell, and a desicion
    * whether an image is added into the buffer of a cell or not, is
    * done independently of the fact when images has been previously
@@ -185,44 +186,47 @@ class PiiVisualTrainer : public PiiDefaultOperation
    * QMap<QString, QVariant>. The configuration parameters depend on
    * the type of the layer:
    *
-   * @par All layers
+   * All layers
+   * ----------
    *
-   * @li @p type - layer type, currently either "float" or "class"
+   * - `type` - layer type, currently either "float" or "class"
    * (QString)
    *
-   * @li @p name - the user-visible name of the layer (QString)
+   * - `name` - the user-visible name of the layer (QString)
    *
-   * @li @p opacity - strength of overlay coloring (int, 0 =
+   * - `opacity` - strength of overlay coloring (int, 0 =
    * transparent, 255 = opaque)
    *
-   * @li @p disabled - is layer disabled? (bool, default: false)
+   * - `disabled` - is layer disabled? (bool, default: false)
    *
    *
-   * @par Floating point layers
+   * Floating point layers
+   * ---------------------
    *
-   * @li @p min - minimum value for a label (double, default: 0)
+   * - `min` - minimum value for a label (double, default: 0)
    *
-   * @li @p max - maximum value for a label (double, default: 1)
+   * - `max` - maximum value for a label (double, default: 1)
    *
-   * @li @p resolution - value resolution (double, default: 0.1)
+   * - `resolution` - value resolution (double, default: 0.1)
    *
-   * @li @p startColor - gradient start color (QColor, default:
+   * - `startColor` - gradient start color (QColor, default:
    * transparent red)
    *
-   * @li @p endColor - gradient end color (QColor, default: opaque
+   * - `endColor` - gradient end color (QColor, default: opaque
    * red)
    *
    *
-   * @par Class label layers
+   * Class label layers
+   * ------------------
    *
-   * @li @p classNames - class names (QStringList, default: "Good",
+   * - `classNames` - class names (QStringList, default: "Good",
    * "Defect")
    *
-   * @li @p classColors - color codes (QList<QVariant>, QVariants must
+   * - `classColors` - color codes (QList<QVariant>, QVariants must
    * be QColors, default: arbitrary colors)
    *
    *
-   * @code
+   * ~~~
    * QMap<QString, QVariant> firstLayer;
    * firstLayer["type"] = "float";
    * firstLayer["name"] = "Float layer";
@@ -236,16 +240,16 @@ class PiiVisualTrainer : public PiiDefaultOperation
    * secondLayer["classColors"] = QVariantList() << QColor(Qt::green) << QColor(Qt::yellow) << QColor(Qt::red);
    *
    * trainer->setProperty("layers", QList<QVariant>() << firstLayer << secondLayer);
-   * @endcode
+   * ~~~
    */
   Q_PROPERTY(QVariantList layers READ layers WRITE setLayers);
 
   /**
    * Enable or disable image display. If display is enabled (the
    * default), incoming images will be sent to all open UI components,
-   * if such exist. Setting this value to @p false causes the
+   * if such exist. Setting this value to `false` causes the
    * operation to stop sending images. This property is useful if one
-   * needs to keep the @p configurator UI open but there is no need to
+   * needs to keep the `configurator` UI open but there is no need to
    * fill it with images.
    */
   Q_PROPERTY(bool displayEnabled READ displayEnabled WRITE setDisplayEnabled);
@@ -282,7 +286,7 @@ class PiiVisualTrainer : public PiiDefaultOperation
    * meaningful only if the label inputs are connected and labels have
    * been assigned to incoming samples. The visual trainer tries to
    * find the most likely value for each label given the training
-   * labels. The format of the returned list is analogous to #labels.
+   * labels. The format of the returned list is analogous to [labels].
    */
   Q_PROPERTY(QVariantList suggestedLabels READ suggestedLabels);
 
@@ -292,12 +296,12 @@ public:
   /**
    * An enumeration used in determinining the buffer mode of the
    * PiiVisualTrainer operation. It is used as a parameter in the
-   * #bufferMode property.
+   * [bufferMode] property.
    *
-   * @lip BufferTotal - one buffer is used for the whole visual
+   * - `BufferTotal` - one buffer is used for the whole visual
    * trainer.
    *
-   * @lip BufferPerCell - each cell in the grid has its own buffer.
+   * - `BufferPerCell` - each cell in the grid has its own buffer.
    */
   enum BufferMode { BufferTotal, BufferPerCell };
 

@@ -23,10 +23,9 @@
 #include "PiiSocketDevice.h"
 
 /**
- * A generic client for network connections. %PiiNetworkClient tries
+ * A generic client for network connections. PiiNetworkClient tries
  * to keep a connection open to avoid unnecessary reconnection delays.
  *
- * @ingroup Network
  */
 class PII_NETWORK_EXPORT PiiNetworkClient : public QObject
 {
@@ -40,9 +39,9 @@ public:
    * port numbers. Note that there must be no slash at the end of the
    * address.
    *
-   * @code
+   * ~~~
    * PiiNetworkClient client("http://intopii.com");
-   * @endcode
+   * ~~~
    */
   PiiNetworkClient(const QString& serverAddress = "");
 
@@ -60,15 +59,15 @@ public:
    *
    * @return a pointer to the communication device, or zero if the
    * connection failed. The QIODevice pointer in the returned device
-   * is owned by %PiiNetworkClient and must not be deleted by the
+   * is owned by PiiNetworkClient and must not be deleted by the
    * caller.
    */
   PiiSocketDevice openConnection();
 
   /**
-   * Sets the maximum number of milliseconds the %PiiNetworkClient
+   * Sets the maximum number of milliseconds the PiiNetworkClient
    * will wait for a successful connection. Set this value before
-   * calling #openConnection(). The default value is 5000.
+   * calling [openConnection()]. The default value is 5000.
    */
   void setConnectionTimeout(int connectionTimeout);
   /**
@@ -78,16 +77,16 @@ public:
 
   /**
    * Sets the server address. The server at the new address will be
-   * first contacted when #openConnection() is called next time. See
+   * first contacted when [openConnection()] is called next time. See
    * PiiHttpServer for valid address formats. If the server address
-   * changes, the next #openConnection() call will delete the current
+   * changes, the next [openConnection()] call will delete the current
    * communication device and create a new one.
    *
-   * @code
+   * ~~~
    * client.setServerAddress("tcp://127.0.0.1:3142");
    * // http, https, ftp, and ftps are recognized
    * client.setServerAddress("ftps://127.0.0.1");
-   * @endcode
+   * ~~~
    */
   void setServerAddress(const QString& serverAddress);
   /**

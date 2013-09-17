@@ -28,19 +28,18 @@
  * The main use of PiiSmartPtr is in guarding heap-allocated pointers
  * in functions that may throw exceptions. Use like this:
  *
- * @code
+ * ~~~
  * PiiSmartPtr<int[]> ptr(new int[5]); // arrays
  * PiiSmartPtr<int> ptr(new int); // any other pointers
- * @endcode
+ * ~~~
  *
- * @ingroup Core
  */
 template <class T> class PiiSmartPtr
 {
 public:
   PiiSmartPtr() : _ptr(0) {}
   /**
-   * Creates a new PiiSmartPtr that takes the ownership of @a ptr.
+   * Creates a new PiiSmartPtr that takes the ownership of *ptr*.
    */
   PiiSmartPtr(T* ptr) : _ptr(ptr) {}
   

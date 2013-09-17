@@ -37,28 +37,29 @@
  *
  * Assume also that the maximum value for each channel is 3, i.e. 
  * there are 4 distinct values. The length of the resulting histogram
- * in @p JointDistribution would be 4 * 4 * 4 = 64. The indices of the
+ * in `JointDistribution` would be 4 * 4 * 4 = 64. The indices of the
  * three-dimensional colors in the resulting histogram would be (from
  * upper left corner) 0 + 4 * 1 + 4 * 4 * 3 = 52, 1 + 4 * 0 + 4 * 4 *
- * 2 = 32 etc. In @p MarginalDistributions mode the histograms are
+ * 2 = 32 etc. In `MarginalDistributions` mode the histograms are
  * calculated for each cannel separately, and concatenated together. 
  * In the example above, the length of the histogram would be 4 + 4 +
  * 4 = 12.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in matrixX - input matrices. X is a zero-based index, and its
  * maximum value depends on the number of levels. Any real-valued
  * matrix will be accepted. For maximum performance, input integer
  * matrices.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out histogram - a multi-dimensional histogram folded into a
  * one-dimensional row matrix, or multiple one-dimensional histograms
  * concatenated into a row matrix (PiiMatrix<int>).
  *
- * @ingroup PiiStatisticsPlugin
  */
 class PiiMultiVariableHistogram : public PiiDefaultOperation
 {
@@ -68,16 +69,16 @@ class PiiMultiVariableHistogram : public PiiDefaultOperation
    * A quantization level for each dimension. In the example above,
    * this list would have been created like this:
    *
-   * @code
+   * ~~~
    * histogram->setProperty("levels", QVariantList() << 4 << 4 << 4);
-   * @endcode
+   * ~~~
    *
    * The minimum number of levels is one. There can be at most eight
-   * levels. In @p JointDistribution mode, the product of the
+   * levels. In `JointDistribution` mode, the product of the
    * levels can be at most 2^24 (16M), which is already too much
    * for practical use. In theory, this allows one to create a
    * three-dimensional color histogram out of three 8-bit color
-   * channels. In @p MarginalDistributions mode, the same limit holds
+   * channels. In `MarginalDistributions` mode, the same limit holds
    * for the sum of levels.
    */
   Q_PROPERTY(QVariantList levels READ levels WRITE setLevels);
@@ -92,21 +93,21 @@ class PiiMultiVariableHistogram : public PiiDefaultOperation
    * If the RGB images in the example above had 256 levels, one should
    * scale the input channels down:
    *
-   * @code
+   * ~~~
    * histogram->setProperty("scales", QVariantList() << 4.0/256 << 4.0/256 << 4.0/256);
-   * @endcode
+   * ~~~
    */
   Q_PROPERTY(QVariantList scales READ scales WRITE setScales);
   
   /**
-   * The type of distribution to create. The default is @p
-   * JointDistribution.
+   * The type of distribution to create. The default is 
+   * `JointDistribution`.
    */
   Q_PROPERTY(DistributionType distributionType READ distributionType WRITE setDistributionType);
   Q_ENUMS(DistributionType);
 
   /**
-   * Output normalization. If set to @p true output histograms will be
+   * Output normalization. If set to `true` output histograms will be
    * normalized.
    */
   Q_PROPERTY(bool normalized READ normalized WRITE setNormalized);
@@ -116,15 +117,15 @@ public:
   /**
    * Output distribution types.
    *
-   * @lip JointDistribution - a joint distribution will be created.
-   * The length of the histogram will be @f$\prod_i l_i@f$, where
-   * @f$l_i@f$ represents the ith entry in the #levels list. Note that
+   * - `JointDistribution` - a joint distribution will be created.
+   * The length of the histogram will be \(\prod_i l_i\), where
+   * \(l_i\) represents the ith entry in the [levels] list. Note that
    * one should use a low number of levels to avoid exhaustive memory
    * usage and an mostly empty histograms.
    *
-   * @lip MarginalDistributions - marginal distributions will be
+   * - `MarginalDistributions` - marginal distributions will be
    * created for each input and concatenated together. The length of
-   * the histogram will be @f$\sum_i l_i@f$.
+   * the histogram will be \(\sum_i l_i\).
    */
   enum DistributionType { JointDistribution, MarginalDistributions };
   

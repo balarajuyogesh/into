@@ -20,14 +20,13 @@
 
 /**
  * A class that calculates 3D world coordinates for objects seen from
- * 2 to N viewpoints. See @ref calibration_stereo for an overview. 
- * %PiiStereoTriangulator is able to compute accurate 3D measurements
+ * 2 to N viewpoints. See [calibration_stereo] for an overview. 
+ * PiiStereoTriangulator is able to compute accurate 3D measurements
  * by combining information from many cameras. It enhances the
  * accuracy of stereo triangulation by averaging triangulation results
  * from all possible stereo pairs if more than two cameras are
  * available.
  *
- * @ingroup PiiCalibrationPlugin
  */
 class PII_CALIBRATION_EXPORT PiiStereoTriangulator
 {
@@ -66,7 +65,7 @@ public:
    * be set to NaN.
    *
    * @return 3-dimensional coordinates of the points in the reference
-   * frame of the camera first added with #addCamera() (a N-by-3
+   * frame of the camera first added with [addCamera()] (a N-by-3
    * matrix). If a point is not visible in a sufficient number of
    * views or if the estimation error is deemed too large, all of its
    * coordinates will be set to NaN.

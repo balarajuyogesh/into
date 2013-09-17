@@ -21,7 +21,6 @@
  *
  * Used to indicate errors in network connections.
  *
- * @ingroup Network
  */
 
 #include "PiiNetwork.h"

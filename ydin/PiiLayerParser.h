@@ -36,7 +36,6 @@ class QString;
  * This class provides an interface for handling a data structure
  * called a @layer.
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiLayerParser
 {
@@ -46,11 +45,11 @@ public:
   /**
    * The type of a layer  can assume following values:
    *
-   * @lip LayerTypeUndefined - undefined layer type
+   * - `LayerTypeUndefined` - undefined layer type
    *   
-   * @lip LayerTypeFloat - layer type "float"
+   * - `LayerTypeFloat` - layer type "float"
    *
-   * @lip LayerTypeClass - layer type "class"
+   * - `LayerTypeClass` - layer type "class"
    *
    */  
   enum LayerType
@@ -73,44 +72,47 @@ public:
    * QMap<QString, QVariant>. The configuration parameters depend on
    * the type of the layer:
    *
-   * @par All layers
+   * All layers
+   * ----------
    *
-   * @li @p type - layer type, currently either "float" or "class"
+   * - `type` - layer type, currently either "float" or "class"
    * (QString)
    *
-   * @li @p name - the user-visible name of the layer (QString)
+   * - `name` - the user-visible name of the layer (QString)
    *
-   * @li @p opacity - strength of overlay coloring (int, 0 =
+   * - `opacity` - strength of overlay coloring (int, 0 =
    * transparent, 255 = opaque)
    *
-   * @li @p disabled - is layer disabled? (bool, default: false)
+   * - `disabled` - is layer disabled? (bool, default: false)
    *
    *
-   * @par Floating point layers
+   * Floating point layers
+   * ---------------------
    *
-   * @li @p min - minimum value for a label (double, default: 0)
+   * - `min` - minimum value for a label (double, default: 0)
    *
-   * @li @p max - maximum value for a label (double, default: 1)
+   * - `max` - maximum value for a label (double, default: 1)
    *
-   * @li @p resolution - value resolution (double, default: 0.1)
+   * - `resolution` - value resolution (double, default: 0.1)
    *
-   * @li @p startColor - gradient start color (QColor, default:
+   * - `startColor` - gradient start color (QColor, default:
    * transparent red)
    *
-   * @li @p endColor - gradient end color (QColor, default: saturated
+   * - `endColor` - gradient end color (QColor, default: saturated
    * red)
    *
    *
-   * @par Class label layers
+   * Class label layers
+   * ------------------
    *
-   * @li @p classNames - class names (QStringList, default: "Good",
+   * - `classNames` - class names (QStringList, default: "Good",
    * "Defect")
    *
-   * @li @p classColors - color codes (QList<QVariant>, QVariants must
+   * - `classColors` - color codes (QList<QVariant>, QVariants must
    * be QColors, default: arbitrary colors)
    *
    *
-   * @code
+   * ~~~
    * QMap<QString, QVariant> firstLayer;
    * firstLayer["type"] = "float";
    * firstLayer["name"] = "Float layer";
@@ -125,7 +127,7 @@ public:
    *
    * PiiLayerParser layerParser;
    * layerParser.setLayers( QList<QVariant>() << firstLayer << secondLayer));
-   * @endcode
+   * ~~~
    */  
   void setLayers(const QList<QVariant>& lstLayers);
   QList<QVariant> layers() const { return _lstLayers; }
@@ -157,8 +159,8 @@ public:
    * Sets the default layer name for the layer parser. The default
    * default value is used in the situations where the layer name has
    * not been set for the layer, or invalid layer index is used, when
-   * attempting to get the layer name. See the function @p
-   * layerName() for the more information. If the default layer
+   * attempting to get the layer name. See the function 
+   * `layerName`() for the more information. If the default layer
    * name has not been set, the default layer name is an empty string
    * by default.
    */
@@ -167,9 +169,9 @@ public:
   
   /**
    * Returns the info text for the defect, whose numeric labels are given in
-   * the parameter @p measurements. The text is composed by looping
-   * through @p measurements, calling the the function inforTextForLabel() for
-   * each label in @p measurements, and combining the results of the
+   * the parameter `measurements`. The text is composed by looping
+   * through `measurements`, calling the the function inforTextForLabel() for
+   * each label in `measurements`, and combining the results of the
    * function calls by adding the line break character between them.
    * See the documentation of the function infoTextForLabel() for
    * more information.
@@ -180,16 +182,16 @@ public:
    * given as a parameter.  The rules for composing the info text
    * depend on the layer type. The rules are the following:
    *
-   * @li for the the <i>floating point type layers</i> the format is:
-   * <code>layerName + ": " + label</code>, where @p layerName is the
-   * layer name corresponding the parameter @p layer and @p label is
+   * - for the the *floating point type layers* the format is:
+   * `layerName + ": " + label`, where `layerName` is the
+   * layer name corresponding the parameter `layer` and `label` is
    * the second parameter of the function. For example the result can
    * be "Formation index: 1.8".
    *
-   * @li for the <i>class type layer</i> the format is:
-   * <code>layerName + ": " + class<code>, where @p layerName is the
-   * layer  name corresponding to the parameter @p layer and @p class
-   * is the class corresponding to the parameter @p label. For example
+   * - for the *class type layer* the format is:
+   * `layerName + ": " + class`, where `layerName` is the
+   * layer  name corresponding to the parameter `layer` and `class`
+   * is the class corresponding to the parameter `label`. For example
    * the result can be "Severity: Good".
    *
    * See more information about the layers in the documentation for
@@ -198,7 +200,7 @@ public:
   QString infoTextForLabel(int layer, double label) const;
 
   /**
-   * Returns the defect color corresponding the parameter @p label for
+   * Returns the defect color corresponding the parameter `label` for
    * the the layer given as a parameter. This function recognizes the
    * layer type and based on the result of the recognition it calls
    * the function classColor() or getFloatColor(). If the color
@@ -215,18 +217,18 @@ public:
   QColor defectColor(double label) const;
   
   /**
-   * Return the class color corresponding the numberic label value @p
-   * label for the layer @p layer given as a parameter. The type of
-   * the layer @p layer is expected to be "class". Otherwise the
+   * Return the class color corresponding the numberic label value 
+   * `label` for the layer `layer` given as a parameter. The type of
+   * the layer `layer` is expected to be "class". Otherwise the
    * behaviour of the function is undefined.  See more documentation
    * about the layers in the documentation of the class PiiVisualTrainer.
    */ 
   QColor classColor(int layer, float label) const;
   
   /**
-   * Return the color corresponding the float type label value @p
-   * label for the layer @p layer given as a parameter. The type of
-   * the layer @p layer is expected to be "float". Otherwise the
+   * Return the color corresponding the float type label value 
+   * `label` for the layer `layer` given as a parameter. The type of
+   * the layer `layer` is expected to be "float". Otherwise the
    * behaviour of the function is undefined.  See more documentation
    * about the layers in the documentation of the class PiiVisualTrainer.
    */   
@@ -249,8 +251,8 @@ public:
   QString layerName(int layer) const;
 
   /**
-   * Returns the layer type for the @p layer given as a parameter. If the
-   * layer index is invalid, #LayerTypeUndefined is returned.
+   * Returns the layer type for the `layer` given as a parameter. If the
+   * layer index is invalid, [LayerTypeUndefined] is returned.
    */  
   LayerType layerType(int layer) const;
   
@@ -280,7 +282,7 @@ public:
 
   /**
    * Works exactly in the same way, than the corresponding static
-   * function @p classNameStatic(), except the layer number is
+   * function `classNameStatic`(), except the layer number is
    * given as a parameter in stead of the layer itself. If the layer
    * number is out of bounds, an empty string is returned.
    */  
@@ -288,7 +290,7 @@ public:
   
   /**
    * Works exactly in the same way, than the corresponding static
-   * function @p realIndexStatic(), except the layer number is
+   * function `realIndexStatic`(), except the layer number is
    * given as a parameter in stead of the layer itself. If the layer
    * number is out of bounds, -1 is returned.
    */  
@@ -296,7 +298,7 @@ public:
 
   /**
    * Works exactly in the same way, than the corresponding static
-   * function @p classIndexStatic(), except the layer number is
+   * function `classIndexStatic`(), except the layer number is
    * given as a parameter in stead of the layer itself. If the layer
    * number is out of bounds, -1 is returned.
    */  
@@ -306,13 +308,13 @@ public:
    * Works exactly in the same way, than the corresponding static
    * function, except the layer number is
    * given as a parameter in stead of the layer itself. If the layer
-   * number is out of bounds, @p false is returned.
+   * number is out of bounds, `false` is returned.
    */  
   bool checkIndexExistence(int layer, int index) const;
   
   /**
    * This static function returns the name of the given layer, or the
-   * default layer name @p defaultName. The function does
+   * default layer name `defaultName`. The function does
    * all the necessary validity checks.
    */
   static QString layerName(const QVariant& layer, const QString& defaultName = "");
@@ -324,13 +326,13 @@ public:
   static LayerType layerType(const QVariant& layer);
 
   /**
-   * Set the layer type. The possible parameter can be @p
-   * LayerTypeFloat, @p LayerTypeClass, and @p LayerTypeUndefined.
+   * Set the layer type. The possible parameter can be 
+   * `LayerTypeFloat`, `LayerTypeClass`, and `LayerTypeUndefined`.
    */
   static void setLayerType(QVariant& layer, PiiLayerParser::LayerType layerType);
 
   /**
-   * Creates and returns the layer of type @p layerType
+   * Creates and returns the layer of type `layerType`
    */
   static QVariant createLayer(PiiLayerParser::LayerType layerType);
 
@@ -405,8 +407,8 @@ public:
    * class indices contains the index given as a parameter. Else the
    * function checks, if the value of the index is greater than zero
    * and less than amount of classes in the layer subtracted by one.
-   * If any of the conditions are met, @p true is returned. Else @p
-   * false is returned from the function.
+   * If any of the conditions are met, `true` is returned. Else 
+   * `false` is returned from the function.
    *
    * There is also corresponding non-static function.
    */
@@ -449,8 +451,8 @@ public:
 
   
   /**
-   * Return the list of the items of type @p T stored with the key @p
-   * itemName in the layer given as a parameter. It is assumed that
+   * Return the list of the items of type `T` stored with the key 
+   * `itemName` in the layer given as a parameter. It is assumed that
    * the items has been
    * stored in the layer as a QVariantList. The function makes the
    * conversion from the QVariants to the type T.
@@ -467,8 +469,8 @@ public:
   }
   
   /**
-   * Set the list containing the items of type @p T to the map item @p
-   * itemName into the layer given as a paramter. The 
+   * Set the list containing the items of type `T` to the map item 
+   * `itemName` into the layer given as a paramter. The 
    * items will be stored in the layer as a QVariantList. The function makes the
    * conversion from the type T to QVariants.
    */
@@ -527,8 +529,8 @@ public:
    * This static function returns the real index for the global class
    * index given as a parameter, provided that the layer contains the
    * item "classIndices". If for example the item "classIndices"
-   * contained the list {0,1,7,9}, and the value of the parameter @p
-   * classIndex were 7, 2 is returned. If the list of classIndices
+   * contained the list {0,1,7,9}, and the value of the parameter 
+   * `classIndex` were 7, 2 is returned. If the list of classIndices
    * doesn't contain the number given as a parameter, -1 is returned.
    *
    * If the layer doesn't contain the item "classIndices", the number
@@ -537,7 +539,7 @@ public:
    * It is assumed, that the type of the layer is "class". In other
    * case, the behavior of the function is undefined.
    *
-   * There is also a corresponding non-static function @p realIndex().
+   * There is also a corresponding non-static function `realIndex`().
    */  
   static int realIndexStatic(const QVariant& layer, int classIndex);
 
@@ -545,8 +547,8 @@ public:
    * This static function returns the global index for the real class
    * index given as a parameter, provided that the layer contains the
    * item "classIndices". If for example the item "classIndices"
-   * contained the list {0,1,7,9}, and the value of the parameter @p
-   * classIndex were 2, 7 is returned. If the index given as a
+   * contained the list {0,1,7,9}, and the value of the parameter 
+   * `classIndex` were 2, 7 is returned. If the index given as a
    * parameter is out of the bounds, -1 is returned.
    *
    * If the layer doesn't contain the item "classIndices", the number
@@ -555,7 +557,7 @@ public:
    * It is assumed, that the type of the layer is "class". In other
    * case, the behavior of the function is undefined.
    *
-   * There is also the corresponding non-static function @p classIndex().
+   * There is also the corresponding non-static function `classIndex`().
    */  
   static int classIndexStatic(const QVariant& layer, int index);
   
@@ -583,8 +585,8 @@ public:
    * global or real index given as a parameter. If the item
    * "classIndices" exists in the layer given as a parameter, the
    * global index is used. Else the real index is used. If a class
-   * with the given index doesn't exist, the value of the parameter @p
-   * defaultName is returned.
+   * with the given index doesn't exist, the value of the parameter 
+   * `defaultName` is returned.
    */
   static QString classNameStatic(const QVariant& layer, int globalIndex, const QString& defaultName);
 
@@ -593,14 +595,14 @@ public:
    * global or real index given as a parameter. If the item
    * "classIndices" exists in the layer given as a parameter, the
    * global index is used. Else the real index is used. If a class
-   * with the given index doesn't exist, the value of the parameter @p
-   * defaultColor is returned.
+   * with the given index doesn't exist, the value of the parameter 
+   * `defaultColor` is returned.
    */  
   static QColor classColorStatic(const QVariant& layer, int globalIndex, const QColor& defaultColor);
   
   /**
    * Returns the default label as double. If the layer is of type
-   * "float", the result of function  @p minValue(), with the
+   * "float", the result of function  `minValue`(), with the
    * default value 0.0  is returned.
    *
    * If the layer type is "class", the result depends whether the
@@ -615,33 +617,33 @@ public:
   
   /**
    * This function return the minimum value for the label
-   * in the given @p layer. If the @p layer data structure given as a
+   * in the given `layer`. If the `layer` data structure given as a
    * parameter has an invalid format (e.g. the minimum value has not
-   * been specified), @p defaulVal is returned.
+   * been specified), `defaulVal` is returned.
    */ 
   static double minValue(const QVariant& layer, double defaultVal = 0.0);
 
   /**
    * This function return the maximum value for the label
-   * in the given @p layer. If the @p layer data structure given as a
+   * in the given `layer`. If the `layer` data structure given as a
    * parameter has an invalid format (e.g. the maximum value has not
-   * been specified), @p defaulVal is returned.
+   * been specified), `defaulVal` is returned.
    */   
   static double maxValue(const QVariant& layer, double defaultVal = 1.0);
 
   /**
    * This function return the resolution for the label value
-   * in the given @p layer. If the @p layer data structure given as a
+   * in the given `layer`. If the `layer` data structure given as a
    * parameter has an invalid format (e.g. the resolution has not
-   * been specified), @p defaulVal is returned.
+   * been specified), `defaulVal` is returned.
    */ 
   static double resolution(const QVariant& layer, double defaultVal = 0.1);
 
   /** 
-   * This a helper function, which returns the value for @p key as
+   * This a helper function, which returns the value for `key` as
    * QVariant. The function also checks, if the layer given as a
-   * parameter is a valid @p QVarianMap, if the key given as a parameter
-   * exists and if the value for the key is of @p type. In case of error an
+   * parameter is a valid `QVarianMap`, if the key given as a parameter
+   * exists and if the value for the key is of `type`. In case of error an
    * invalid QVariant is returned.
    */
   static QVariant mapItem(const QVariant& layer, const QString& key, QVariant::Type type);
@@ -692,8 +694,8 @@ private:
   static double _getDoubleItemValue(const QVariant& layer, const QString& key, double defaultVal)  ;
 
   /**
-   * Set the layer type. The possible parameter can be @p
-   * LayerTypeFloat, @p LayerTypeClass, and @p LayerTypeUndefined.
+   * Set the layer type. The possible parameter can be 
+   * `LayerTypeFloat`, `LayerTypeClass`, and `LayerTypeUndefined`.
    */
   static void _setLayerType(QVariantMap& layerMap, PiiLayerParser::LayerType layerType);
 

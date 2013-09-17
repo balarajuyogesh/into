@@ -25,7 +25,6 @@
  * A special input socket that stores incoming labels. This class also
  * gives a suggestion for a class label if one is requested.
  *
- * @ingroup PiiClassification
  */
 class PiiVisualTrainerInputSocket : public PiiInputSocket
 {

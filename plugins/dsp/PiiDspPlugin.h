@@ -19,7 +19,6 @@
  * The dsp plug-in contains operations for digital signal processing.
  *
  * @namespace PiiDsp
- * @ingroup PiiDspPlugin
  *
  * @brief Routines for common digital signal processing tasks.
  */

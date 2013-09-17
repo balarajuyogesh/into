@@ -18,6 +18,6 @@
  *
  * Tools for calibrating cameras. Please refer to @ref
  * calibration_overview for an introduction to camera calibration.
- * @ref calibration_stereo describes how calibrated cameras can be
+ * [calibration_stereo] describes how calibrated cameras can be
  * used for 3D measurement.
  */

@@ -20,7 +20,7 @@ namespace Pii
 {
   /**
    * Reduces a rectangular matrix to a bidiagonal form. This algorithm
-   * decomposes an m-by-n matrix @a A into three matrices Q, B, and P
+   * decomposes an m-by-n matrix *A* into three matrices Q, B, and P
    * so that A = QBP. Q and P are orthogonal matrices and B is a
    * bidiagonal matrix. If m < n, B will be a lower bidiagonal matrix,
    * otherwise it will be an upper bidiagonal matrix.
@@ -30,7 +30,7 @@ namespace Pii
    * input matrix to a bidiagonal form. The generated elementary
    * reflectors will be stored in a compact form to A upon return. The
    * lower triangle will store the left-hand reflectors just as with
-   * @ref qrDecompose() "the QR decomposition". The upper triangle
+   * [the QR decomposition](qrDecompose()). The upper triangle
    * will store the right-hand reflectors as row vectors. In the
    * illustration below, column (left-hand) reflectors are denoted by
    * v, row (right-hand) reflectors by u, the main diagonal by d, and
@@ -47,7 +47,7 @@ m >= n                       m < n
 ( v1  v2  v3  v4  v5 )
 @endverbatim
    *
-   * @code
+   * ~~~
    * PiiMatrix<double> matA(10,10); // input matrix
    * PiiMatrix<double> matTauQ, matTauP;
    * Pii::bdDecompose(matA, matTauQ, matTauP);
@@ -58,7 +58,7 @@ m >= n                       m < n
    * // note that since Q and P are orthogonal,
    * // inverse(matQ) = transpose(matQ) and
    * // inverse(matP) = transpose(matP) and
-   * @endcode
+   * ~~~
    *
    * @param A the input matrix. This matrix will be modified to store
    * Q, B, and P in a compact form as described above.
@@ -320,7 +320,7 @@ m >= n                       m < n
 
   /**
    * Unpacks the result of bidiagonal decomposition. This function
-   * modifies @p A so that it contains the bidiagonal part of the
+   * modifies `A` so that it contains the bidiagonal part of the
    * decomposition result, B.
    *
    * @param A the result of bidiagonal decomposition in a compact
@@ -360,7 +360,7 @@ m >= n                       m < n
    *
    * @param e an array of at least min(m,n)-1 entries. This will be
    * filled with the values on the sub/superdiagonal, depending on the
-   * size of @a A.
+   * size of *A*.
    *
    * @see bdDecompose()
    */

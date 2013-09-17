@@ -29,7 +29,7 @@ template <class T> class PiiLockedPtr
 {
 public:
   /**
-   * Wraps @a ptr and locks @a mutex.
+   * Wraps *ptr* and locks *mutex*.
    */
   PiiLockedPtr(QMutex* mutex, T* ptr = 0);
   ~PiiLockedPtr();

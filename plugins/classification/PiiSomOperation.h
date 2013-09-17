@@ -33,13 +33,13 @@
  * instantiate the operation from an object registry, one must specify
  * the data type, e.g. "PiiSomOperation<double>".
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out x - the x coordinate of the closest node on the SOM map
  *
  * @out y - the y coordinate of the closest node on the SOM map
  *
- * @ingroup PiiClassificationPlugin
  */
 class PII_CLASSIFICATION_EXPORT PiiSomOperation : public PiiVectorQuantizerOperation
 {
@@ -47,8 +47,8 @@ class PII_CLASSIFICATION_EXPORT PiiSomOperation : public PiiVectorQuantizerOpera
 
   /**
    * The size of the SOM map. The code book will be deleted if the
-   * size changes. To build a new one, you need to set @p training to
-   * @p true. The default map size is 10-by-10.
+   * size changes. To build a new one, you need to set `training` to
+   * `true`. The default map size is 10-by-10.
    */
   Q_PROPERTY(QSize size READ size WRITE setSize);
   
@@ -75,12 +75,12 @@ class PII_CLASSIFICATION_EXPORT PiiSomOperation : public PiiVectorQuantizerOpera
   /**
    * The (zero-based) index of the current training iteration. This
    * property is useful when one needs to retrain a SOM map. Setting
-   * the @p iterationNumber property to zero (together with the @p
-   * training property set to @p true) makes the map strongly adapt to
+   * the `iterationNumber` property to zero (together with the 
+   * `training` property set to `true`) makes the map strongly adapt to
    * incoming data. The effect is that the map is trained again, but
    * the training is not started from a random state. If only
    * fine-tuning is needed, one can set the value to anything between
-   * 0 and @p learningLength.
+   * 0 and `learningLength`.
    */
   Q_PROPERTY(int iterationNumber READ iterationNumber WRITE setIterationNumber);
 
@@ -113,14 +113,14 @@ class PII_CLASSIFICATION_EXPORT PiiSomOperation : public PiiVectorQuantizerOpera
   Q_PROPERTY(double currentRadius READ currentRadius);
 
   /**
-   * Initialization mode. The default value is @p
-   * PiiClassification::SomSampleInit.
+   * Initialization mode. The default value is 
+   * `PiiClassification::SomSampleInit`.
    */
   Q_PROPERTY(PiiClassification::SomInitMode initMode READ initMode WRITE setInitMode);
 
   /**
-   * The learning algorithm. The default value is @p
-   * PiiClassification::SomSequentialAlgorithm.
+   * The learning algorithm. The default value is 
+   * `PiiClassification::SomSequentialAlgorithm`.
    */
   Q_PROPERTY(PiiClassification::SomLearningAlgorithm learningAlgorithm READ learningAlgorithm WRITE setLearningAlgorithm);
 

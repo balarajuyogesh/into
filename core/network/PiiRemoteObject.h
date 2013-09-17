@@ -42,7 +42,7 @@
  * the specified URI must implement the interface speficied by
  * PiiObjectServer.
  *
- * @code
+ * ~~~
  * struct MyHandler
  * {
  *   // Invoked from the server
@@ -55,9 +55,8 @@
  * QString strHello = obj.call<QString>("hello");
  * obj.call<void>("voidFunc");
  * obj.addCallback("callback", &h, &MyHandler::callback);
- * @endcode
+ * ~~~
  *
- * @ingroup PiiNetwork
  */
 class PII_NETWORK_EXPORT PiiRemoteObject :
   private PiiProgressController
@@ -65,16 +64,16 @@ class PII_NETWORK_EXPORT PiiRemoteObject :
 public:
   /**
    * Creates a new PiiRemoteObject. The remote object becomes
-   * functional only after #setServerUri() has been called.
+   * functional only after [setServerUri()] has been called.
    */
   PiiRemoteObject();
 
   /**
    * Creates a new PiiRemoteObject and sets the server URI at
-   * the same time. See #setServerUri().
+   * the same time. See [setServerUri()].
    *
    * @exception PiiNetworkException& if the server cannot be connected
-   * @exception PiiInvalidArgumentException& if @a serverUri is
+   * @exception PiiInvalidArgumentException& if *serverUri* is
    * incorrecly formatted
    */
   PiiRemoteObject(const QString& serverUri);
@@ -88,12 +87,12 @@ public:
    * open a connection to the server and update the local meta object
    * based on the server's response.
    *
-   * @code
+   * ~~~
    * PiiRemoteObject client;
    * client.setServerUri("tcp://intopii.com:3142/valuesetter/");
-   * @endcode
+   * ~~~
    *
-   * @note Reassigning signals and slots makes all previously
+   * ! Reassigning signals and slots makes all previously
    * requested meta objects invalid. You can no longer call the
    * functions or slots that were previously available, and no old
    * properties can be read or written to. If you had connected a
@@ -104,7 +103,7 @@ public:
    * makes it possible to move remote objects.
    *
    * @exception PiiNetworkException& if the server cannot be connected
-   * @exception PiiInvalidArgumentException& if @a uri is incorrecly formatted
+   * @exception PiiInvalidArgumentException& if *uri* is incorrecly formatted
    */
   void setServerUri(const QString& uri);
 
@@ -129,7 +128,7 @@ public:
   int retryDelay() const;
   
   /**
-   * Requests @a path relative to the server's root and returns the
+   * Requests *path* relative to the server's root and returns the
    * reply as a list of strings split at each newline character.
    *
    * @param path relative path of the directory (no leading slash)
@@ -143,9 +142,9 @@ public:
   }
 
   /**
-   * Adds @a function to the list of call-back functions. The given
+   * Adds *function* to the list of call-back functions. The given
    * function will be invoked when the call-back function identified
-   * by @a name is called from the server.
+   * by *name* is called from the server.
    *
    * PENDING ownership
    */
@@ -158,10 +157,10 @@ public:
   /**
    * @fn template <class R> R call(const QString& function, ...)
    *
-   * Calls the remote @a function with a variable number of parameters
-   * and returns its return value as an object of type @p R. The type
+   * Calls the remote *function* with a variable number of parameters
+   * and returns its return value as an object of type `R`. The type
    * of the return value is given as a template parameter, and may be
-   * @p void.
+   * `void`.
    *
    * @exception PiiNetworkException& or PiiHttpException& if the
    * remote function call failed.
@@ -206,8 +205,8 @@ public:
   void resetFailureCount();
 
   /**
-   * Sets the maximum number of failures accepted. Once @a
-   * maxFailureCount errors have occured, every remote call will fail
+   * Sets the maximum number of failures accepted. Once 
+   * *maxFailureCount* errors have occured, every remote call will fail
    * immediately with a PiiNetworkException. This value can be used to
    * speed up recovery. The default value is -1, which disables this
    * feature.
@@ -247,7 +246,7 @@ protected:
   typedef PiiLockedPtr<PiiHttpDevice> HttpDevicePtr;
   
   /**
-   * Adds the given @a sourceId to the resources pushed from the
+   * Adds the given *sourceId* to the resources pushed from the
    * server.
    *
    * @exception PiiNetworkException& or PiiHttpException& if the
@@ -256,7 +255,7 @@ protected:
   void connectToChannel(const QString& sourceId);
   
   /**
-   * Removes the given @a sourceId from the resources pushed from the
+   * Removes the given *sourceId* from the resources pushed from the
    * server.
    *
    * @exception PiiNetworkException& or PiiHttpException& if the
@@ -274,7 +273,7 @@ protected:
    *
    * @param data encoded data
    *
-   * @exception PiiException& if @a data could not be decoded or the
+   * @exception PiiException& if *data* could not be decoded or the
    * action taken due to it failed.
    *
    * @see PiiObjectServer::enqueuePushData()
@@ -282,7 +281,7 @@ protected:
   virtual void decodePushedData(const QString& sourceId, const QByteArray& data);
   
   /**
-   * Tries #retryCount() times to open a connection to #serverUri(). 
+   * Tries [retryCount()] times to open a connection to [serverUri()]. 
    * Returns an exclusive pointer to a connected HTTP device. 
    * PiiRemoteObject owns the returned pointer.
    *

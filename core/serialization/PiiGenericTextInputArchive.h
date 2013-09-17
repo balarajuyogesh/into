@@ -25,7 +25,6 @@
  * A shorthand for a text input archive derived from
  * PiiGenericInputArchive.
  *
- * @ingroup Serialization
  */
 typedef PiiGenericInputArchive::Impl<PiiTextInputArchive> PiiGenericTextInputArchive;
 

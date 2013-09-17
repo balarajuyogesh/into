@@ -28,7 +28,6 @@
  * described, and object specifies the value of the aspect. The value
  * may be either a string literal or a reference to another resource.
  *
- * @ingroup Core
  */
 class PII_CORE_EXPORT PiiResourceStatement
 {
@@ -36,11 +35,11 @@ public:
   /**
    * Possible types of the object of the statement.
    *
-   * @li InvalidType - the statement is invalid.
+   * - InvalidType - the statement is invalid.
    *
-   * @li LiteralType - the object is a string literal.
+   * - LiteralType - the object is a string literal.
    *
-   * @li ResourceType - the object is a resource id and references
+   * - ResourceType - the object is a resource id and references
    * another resource.
    */
   enum Type { InvalidType, LiteralType, ResourceType };
@@ -71,12 +70,12 @@ public:
   /**
    * Create a new statement. This constructor creates a statement that
    * refers another statement. The subject will be converted to
-   * "#subject". The following two statements are equal:
+   * "[subject]". The following two statements are equal:
    *
-   * @code
+   * ~~~
    * PiiResourceStatement s1("#123", "pii:connector", "MyConnector");
    * PiiResourceStatement s2(123, "pii:connector", "MyConnector");
-   * @endcode
+   * ~~~
    */
   PiiResourceStatement(int subject,
                        const QString& predicate,
@@ -92,14 +91,14 @@ public:
   PiiResourceStatement(const PiiResourceStatement& other);
 
   /**
-   * Assign the contents of @p other to this.
+   * Assign the contents of `other` to this.
    */
   PiiResourceStatement& operator= (const PiiResourceStatement& other);
     
   /**
    * See if this is a valid statement. A statement is valid if and
    * only if both subject and object are non-empty, and the type of
-   * the object is not @p InvalidType. The predicate may be an empty
+   * the object is not `InvalidType`. The predicate may be an empty
    * string.
    */
   bool isValid() const;
@@ -116,7 +115,7 @@ public:
   QString predicate() const;
   /**
    * Returns the object of the statement. The object is either a
-   * string literal or a resource identifier, depending on #type().
+   * string literal or a resource identifier, depending on [type()].
    */
   QString object() const;
   /**

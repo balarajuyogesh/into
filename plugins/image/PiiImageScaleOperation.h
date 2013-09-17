@@ -22,29 +22,30 @@
  * Scale images to arbitrary sizes. The operation supports linear and
  * nearest neighbor interpolation.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - Input image. Any image type.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out image - Scaled image. Same type as the input.
  *
- * @ingroup PiiImagePlugin
  */
 class PiiImageScaleOperation : public PiiDefaultOperation
 {
   Q_OBJECT
 
   /**
-   * Scaling mode. Default is @p ScaleAccordingToFactor.
+   * Scaling mode. Default is `ScaleAccordingToFactor`.
    */
   Q_PROPERTY(ScaleMode scaleMode READ scaleMode WRITE setScaleMode);
   Q_ENUMS(ScaleMode);
 
   /**
    * Scaling factor. Default is 1.0. The scale ratio also works as the
-   * target aspect ratio, depending on @ref scaleMode. The scale ratio
+   * target aspect ratio, depending on [scaleMode]. The scale ratio
    * is calculated as width/height. Thus, 2 means an image whose width
    * is two times its height.
    */
@@ -55,8 +56,8 @@ class PiiImageScaleOperation : public PiiDefaultOperation
   Q_PROPERTY(QSize scaledSize READ scaledSize WRITE setScaledSize);
 
   /**
-   * Interpolation mode. The default is @p LinearInterpolation. @p
-   * NearestNeighborInterpolation is faster, but less accurate.
+   * Interpolation mode. The default is `LinearInterpolation`. 
+   * `NearestNeighborInterpolation` is faster, but less accurate.
    */
   Q_PROPERTY(Interpolation interpolation READ interpolation WRITE setInterpolation);
   Q_ENUMS(Interpolation);
@@ -71,36 +72,36 @@ public:
   /**
    * Scaling modes:
    *
-   * @lip ScaleAccordingToFactor - scale both dimensions according to
-   * the specified scale ratio (@ref scaleRatio). Retains original
+   * - `ScaleAccordingToFactor` - scale both dimensions according to
+   * the specified scale ratio ([scaleRatio]). Retains original
    * aspect ratio.
    *
-   * @lip ScaleToSize - scales to the specified size (@ref
+   * - `ScaleToSize` - scales to the specified size (@ref
    * scaledSize), ignoring original aspect ratio.
    *
-   * @lip ScaleToAspectRatioX - scales to a specified aspect ratio
-   * (@ref scaleRatio). Stretches/shrinks the image horizontally to
+   * - `ScaleToAspectRatioX` - scales to a specified aspect ratio
+   * ([scaleRatio]). Stretches/shrinks the image horizontally to
    * obtain this aspect ratio.
    *
-   * @lip ScaleToAspectRatioY - same as above, but stretches image
+   * - `ScaleToAspectRatioY` - same as above, but stretches image
    * vertically.
    *
-   * @lip ScaleDownToAspectRatio - same as above, but scales the
+   * - `ScaleDownToAspectRatio` - same as above, but scales the
    * direction that results in a smaller output image.
    *
-   * @lip ScaleUpToAspectRatio - same as above, but scales the
+   * - `ScaleUpToAspectRatio` - same as above, but scales the
    * direction that results in a larger output image.
    *
-   * @lip ScaleToBox - scales either up or down so the the result fits
-   * to a box whose size is determined by #scaledSize. Retains aspect
+   * - `ScaleToBox` - scales either up or down so the the result fits
+   * to a box whose size is determined by [scaledSize]. Retains aspect
    * ratio.
    *
-   * @lip ScaleToFillBox - scales either up or down so the the result
-   * fills a box whose size is determined by #scaledSize. Retains
+   * - `ScaleToFillBox` - scales either up or down so the the result
+   * fills a box whose size is determined by [scaledSize]. Retains
    * aspect ratio.
    *
-   * @lip ScaleToPixelCount - scales the image so that it has about
-   * #scaledSize.width() * #scaledSize.height() pixels. Retains aspect
+   * - `ScaleToPixelCount` - scales the image so that it has about
+   * [scaledSize].width() * [scaledSize].height() pixels. Retains aspect
    * ratio, which may cause variations in resulting pixel count.
    *
    * Aspect ratio is always calculated as width/height.

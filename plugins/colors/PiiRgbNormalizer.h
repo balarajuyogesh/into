@@ -22,17 +22,18 @@
  * An operation that converts images to normalized RGB. See @ref
  * PiiColors::normalizedRgb() for details.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - any color image
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out channel0 - first normalized color channel (red, by default)
  *
  * @out channel1 - second normalized color channel (green, by default)
  *
- * @ingroup PiiColorsPlugin
  */
 class PiiRgbNormalizer : public PiiDefaultOperation
 {
@@ -46,8 +47,8 @@ class PiiRgbNormalizer : public PiiDefaultOperation
   Q_PROPERTY(double maxValue READ maxValue WRITE setMaxValue);
 
   /**
-   * The normalized color channels the operation will emit through @p
-   * channel0 and @p channel1.
+   * The normalized color channels the operation will emit through 
+   * `channel0` and `channel1`.
    */
   Q_PROPERTY(ChannelPair channels READ channels WRITE setChannels);
   Q_ENUMS(ChannelPair);
@@ -57,12 +58,12 @@ public:
   /**
    * Allowed channel pairs. 
    *
-   * @lip RedGreen - normalized RG. @p channel0 will emit the red
-   * channel and @p channel1 the green channel.
+   * - `RedGreen` - normalized RG. `channel0` will emit the red
+   * channel and `channel1` the green channel.
    *
-   * @lip RedBlue - normalized RB
+   * - `RedBlue` - normalized RB
    *
-   * @lip GreenBlue - normalized GB
+   * - `GreenBlue` - normalized GB
    */
   enum ChannelPair { RedGreen, RedBlue, GreenBlue };
   

@@ -21,19 +21,19 @@
 #include <QMutex>
 
 /**
- * A home-made event loop. %PiiEventProcessor is useful if the main
+ * A home-made event loop. PiiEventProcessor is useful if the main
  * thread of an application is not controlled by Qt. Since event
  * delivery depends on the existence of a QCoreApplication instance,
  * one needs to create a separate thread that plays the role of a main
  * thread and instantiates QCoreApplication.
  *
- * When started, %PiiEventProcessor creates a new instance of
+ * When started, PiiEventProcessor creates a new instance of
  * QCoreApplication if one does not already exist, and enters its
- * event loop. All subsequent instances of %PiiEventProcessor enter a
+ * event loop. All subsequent instances of PiiEventProcessor enter a
  * thread-specific event loop. The main thread must not be stopped
  * until all other threads have finished their execution.
  *
- * @code
+ * ~~~
  * // In a non-Qt thread
  * QObject* obj = new QObject;
  * PiiEventProcessor p;
@@ -43,14 +43,13 @@
  * // do whatever needed
  * p.stop();
  * delete obj;
- * @endcode
+ * ~~~
  *
- * Note that %PiiEventProcessor also works with ordinary Qt
+ * Note that PiiEventProcessor also works with ordinary Qt
  * applications. In such a case, QCoreApplication will not be
  * instantiated again, and run() always enters a thread-specific event
  * loop.
  *
- * @ingroup Core
  */
 class PII_CORE_EXPORT PiiEventProcessor : public QThread
 {
@@ -58,7 +57,7 @@ class PII_CORE_EXPORT PiiEventProcessor : public QThread
 
 public:
   /**
-   * Create a new %PiiEventProcessor instance.
+   * Create a new PiiEventProcessor instance.
    */
   PiiEventProcessor() : _bRunning(false) {}
 
@@ -86,7 +85,7 @@ public:
   void takeObject(QObject* obj);
 
   /**
-   * Move @p obj to @p thread. This is a work-around for a Qt bug that
+   * Move `obj` to `thread`. This is a work-around for a Qt bug that
    * causes a crash when trying to move an object away from a non-Qt
    * thread (fixed in 4.2). Use this function to enable event
    * processing for objects created in a non-Qt thread. The function
@@ -95,11 +94,11 @@ public:
    * QObject::moveToThread() apply. Otherwise, this function is only
    * ensured to work if
    *
-   * @li @p obj has no parent (it may have children, though).
+   * - `obj` has no parent (it may have children, though).
    *
-   * @li there are no pending events for @p obj
+   * - there are no pending events for `obj`
    *
-   * @li the target thread's event loop is not processing an event
+   * - the target thread's event loop is not processing an event
    * (the event loop is empty).
    *
    * This function is not thread-safe.
@@ -129,20 +128,19 @@ private:
  * A utility class that automatically starts the event processing
  * thread upon construction and stops it when destructed. An easy way
  * to create the main event loop in a non-Qt application is to create
- * a static instance of %PiiEventProcessorRunner.
+ * a static instance of PiiEventProcessorRunner.
  *
- * @code
+ * ~~~
  * class MyClass
  * {
  * public:
  *   static PiiEventProcessorRunner mainThread;
  * };
- * @endcode
+ * ~~~
  *
  * Now, event processing can be enabled by invoking
  * MyClass::mainThread.takeObject(obj).
  *
- * @ingroup Core
  */
 class PII_CORE_EXPORT PiiEventProcessorRunner : public PiiEventProcessor
 {

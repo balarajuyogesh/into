@@ -21,12 +21,11 @@
  *
  * Macros for dealing with virtual meta object functions.
  *
- * @ingroup Serialization
  */
 
 /**
- * Declare @p CLASS_NAME as a dynamic type. This overrides the default
- * isDynamicType() function to return @p true for @p CLASS_NAME and all
+ * Declare `CLASS_NAME` as a dynamic type. This overrides the default
+ * isDynamicType() function to return `true` for `CLASS_NAME` and all
  * derived types.
  */
 #define PII_SERIALIZATION_DYNAMIC(CLASS_NAME) \
@@ -35,9 +34,9 @@ namespace PiiSerialization { \
 }
 
 /**
- * Declare all instances of @p CLASS_NAME template as a dynamic types. 
- * This overrides the default isDynamicType() function to return @p
- * true for @p CLASS_NAME instances and all derived types.
+ * Declare all instances of `CLASS_NAME` template as a dynamic types. 
+ * This overrides the default isDynamicType() function to return 
+ * `true` for `CLASS_NAME` instances and all derived types.
  */
 #define PII_SERIALIZATION_DYNAMIC_TEMPLATE(CLASS_NAME) \
   namespace PiiSerialization { \
@@ -45,10 +44,10 @@ namespace PiiSerialization { \
 }
 
 /**
- * A macro that tells the serialization library that @p CLASS_NAME has
+ * A macro that tells the serialization library that `CLASS_NAME` has
  * a virtual piiMetaObject() function. This overrides the default
  * implementation of metaObjectPointer() for the given type. It also
- * overrides the isDynamicType() function to return @p true.
+ * overrides the isDynamicType() function to return `true`.
  */
 #define PII_SERIALIZATION_VIRTUAL_METAOBJECT(CLASS_NAME) \
 PII_SERIALIZATION_DYNAMIC(CLASS_NAME) \
@@ -60,10 +59,10 @@ namespace PiiSerialization {                            \
 
 /**
  * A macro that tells the serialization library that all instances of
- * the class template @p CLASS_NAME have a virtual piiMetaObject()
+ * the class template `CLASS_NAME` have a virtual piiMetaObject()
  * function. This overrides the default implementation of
  * metaObjectPointer() for instances of the given template type. It
- * also overrides the isDynamicType() function to return @p true.
+ * also overrides the isDynamicType() function to return `true`.
  */
 #define PII_SERIALIZATION_VIRTUAL_METAOBJECT_TEMPLATE(CLASS_NAME) \
 PII_SERIALIZATION_DYNAMIC_TEMPLATE(CLASS_NAME)                    \
@@ -75,7 +74,7 @@ namespace PiiSerialization {                                      \
 
 /**
  * Virtual meta object function declaration. Place this into the
- * @p private section of your class declaration.
+ * `private` section of your class declaration.
  */
 #define PII_DECLARE_VIRTUAL_METAOBJECT_FUNCTION virtual const PiiMetaObject* piiMetaObject() const
 
@@ -101,15 +100,15 @@ template <class T> const PiiMetaObject* CLASS_NAME<T>::piiMetaObject() const \
 
 /**
  * Declare a specialized piiMetaObject() function for
- * <tt>CLASS_NAME::Template<TYPE></tt>.
+ * `CLASS_NAME::Template<TYPE>`.
  */
 #define PII_DECLARE_SPECIALIZED_VIRTUAL_METAOBJECT_FUNCTION(CLASS_NAME, TYPE, EXPORT) \
 template <> EXPORT const PiiMetaObject* CLASS_NAME::Template<TYPE >::piiMetaObject() const
 
 /**
  * Define meta object function outside of a class template
- * declaration. This version defines a specialization <tt>template <>
- * CLASS_NAME::Template<TYPE>::piiMetaObject()</tt> so that it returns
+ * declaration. This version defines a specialization `template <>
+ * CLASS_NAME::Template<TYPE>::piiMetaObject()` so that it returns
  * "CLASS_NAME<TYPE_NAME>" as the class name.
  */
 #define PII_DEFINE_SPECIALIZED_VIRTUAL_METAOBJECT_FUNCTION_NAMED(CLASS_NAME, TYPE, TYPE_NAME) \
@@ -124,7 +123,7 @@ template <> const PiiMetaObject* CLASS_NAME::Template<TYPE >::piiMetaObject() co
 /**
  * Same as @ref
  * PII_DEFINE_SPECIALIZED_VIRTUAL_METAOBJECT_FUNCTION_NAMED, but uses
- * @p CLASS_NAME<TYPE> as the name of the type.
+ * `CLASS_NAME`<TYPE> as the name of the type.
  */
 #define PII_DEFINE_SPECIALIZED_VIRTUAL_METAOBJECT_FUNCTION(CLASS_NAME, TYPE) \
   PII_DEFINE_SPECIALIZED_VIRTUAL_METAOBJECT_FUNCTION_NAMED(CLASS_NAME, TYPE, TYPE)
@@ -135,14 +134,14 @@ template <> const PiiMetaObject* CLASS_NAME::Template<TYPE >::piiMetaObject() co
  * to an instance of PiiDefaultMetaObject instantiated for the type of
  * this object.
  *
- * @code
+ * ~~~
  * class MyClass
  * {
  *   PII_VIRTUAL_METAOBJECT_FUNCTION
  * };
  *
  * PII_SERIALIZATION_VIRTUAL_METAOBJECT(MyClass)
- * @endcode
+ * ~~~
  */
 #define PII_VIRTUAL_METAOBJECT_FUNCTION \
 PII_DECLARE_VIRTUAL_METAOBJECT_FUNCTION \

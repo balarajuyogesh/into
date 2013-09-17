@@ -30,33 +30,34 @@
  * annotations include text, points, lines, rectangles, ellipses, and
  * circles.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - the image to be annotated
  *
  * @in annotation - annotation to be drawn on the image. Different
  * annotations are defined with different data structures (see
- * #AnnotationType). This input is optional.
+ * [AnnotationType]). This input is optional.
  *
  * @in type - the type of the annotation as an integer. This input can
- * be used if the type may change at run time. See #AnnotationType for
+ * be used if the type may change at run time. See [AnnotationType] for
  * valid values. This input is optional and can only be connected if
- * @p annotation is connected.
+ * `annotation` is connected.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out image - the annotated image output
  *
- * @ingroup PiiImagePlugin
  */
 class PiiImageAnnotator : public PiiDefaultOperation
 {
   Q_OBJECT
 
   /**
-   * Annotation type. If the @p type input is not connected, all items
-   * received from the @p annotation input are assumed to be of this
-   * type. The default is @p Auto.
+   * Annotation type. If the `type` input is not connected, all items
+   * received from the `annotation` input are assumed to be of this
+   * type. The default is `Auto`.
    */
   Q_PROPERTY(AnnotationType annotationType READ annotationType WRITE setAnnotationType);
   Q_ENUMS(AnnotationType);
@@ -77,8 +78,8 @@ class PiiImageAnnotator : public PiiDefaultOperation
   Q_PROPERTY(QPen pen READ pen WRITE setPen);
 
   /**
-   * Text position. This property has an effect only with @p Text type
-   * annotations. The string read from the @p annotation input will be
+   * Text position. This property has an effect only with `Text` type
+   * annotations. The string read from the `annotation` input will be
    * placed on the given coordinates. The default is (0,0).
    */
   Q_PROPERTY(QPoint textPosition READ textPosition WRITE setTextPosition);
@@ -105,26 +106,26 @@ public:
   /**
    * Supported annotation types.
    *
-   * @lip Text - the input is read as a QString. Primitive types will
-   * be automatically converted to strings. See #textPosition.
+   * - `Text` - the input is read as a QString. Primitive types will
+   * be automatically converted to strings. See [textPosition].
    *
-   * @lip Point - the input is a N-by-2 matrix in which each row stores
+   * - `Point` - the input is a N-by-2 matrix in which each row stores
    * point coordinates (x,y).
    *
-   * @lip Line - the input is a N-by-4 matrix in which each row stores
+   * - `Line` - the input is a N-by-4 matrix in which each row stores
    * the start and end coordinates of the line (x1,y1,x2,y2).
    *
-   * @lip Rectangle - the input is a N-by-4 matrix in which each row
+   * - `Rectangle` - the input is a N-by-4 matrix in which each row
    * stores the upper left corner coordinates, width, and height
    * (x,y,w,h).
    *
-   * @lip Ellipse - the input is a N-by-4 matrix in which each row
+   * - `Ellipse` - the input is a N-by-4 matrix in which each row
    * stores a rectangle framing the ellipse (x,y,w,h)
    *
-   * @lip Circle - the input is a N-by-3 matrix in which each row
+   * - `Circle` - the input is a N-by-3 matrix in which each row
    * stores the center point and radius of a circle (x,y,r).
    *
-   * @lip Auto - the number of columns in the input determines the
+   * - `Auto` - the number of columns in the input determines the
    * type. 2 columns is a point, 3 columns a circle, and 4 columns a
    * rectangle.
    *

@@ -23,17 +23,16 @@
  * A QObject that uses PiiRemoteMetaObject as its meta-object
  * implementation. The signals, slots and properties of this class
  * implemented by a PiiQObjectServer, which makes them completely
- * network-transparent to the programmer. The @p Base template
+ * network-transparent to the programmer. The `Base` template
  * parameter makes it possible to derive the class not only from
  * QObject but any QObject-derived class.
  *
- * @code
+ * ~~~
  * PiiRemoteQObject<QObject> client("tcp://intopii.com:3142/valuesetter/");
  * connect(pSlider, SIGNAL(valueChanged(int)), &client, SLOT(setValue(int)));
  * connect(&client, SIGNAL(valueChanged(int)), pSlider2, SLOT(setValue(int)));
- * @endcode
+ * ~~~
  *
- * @ingroup Network
  */
 template <class Base> class PiiRemoteQObject :
   public Base,

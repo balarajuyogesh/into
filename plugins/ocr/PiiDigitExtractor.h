@@ -28,14 +28,16 @@
  * coefficients are used as the feature vector, which is classified
  * using a k-NN classifier.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - a gray-level input image. There can be multiple digits
  * in one image, but they are assumed to be on the same row. All
  * digits should be written in dark (i.e. black) pen on lighter
  * background (i.e. white paper).
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out number - the recognized number as an integer
  *
@@ -46,7 +48,6 @@
  * @out boundingboxes - an Nx4 PiiMatrix<int> storing locations of
  * each found digit in bounding box format (x, y, width, height)
  *
- * @ingroup PiiOcrPlugin
  */
 class PiiDigitExtractor: public PiiDefaultOperation
 {

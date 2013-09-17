@@ -24,39 +24,40 @@
  * Extracts a configurable set of simple gray-level features from
  * images.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - input image. Any gray-level image.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out features - extracted features. (1xN PiiMatrix<float>)
  *
- * @ingroup PiiFeaturesPlugin
  */
 class PiiGrayFeatureOperation : public PiiDefaultOperation
 {
   Q_OBJECT
 
   /**
-   * Enabled features. List here all features you want to enable. @p
-   * Average, @p Minimum, and @p Maximum are enabled by default. If
-   * the list is empty, @p Minimum will be used.
+   * Enabled features. List here all features you want to enable. 
+   * `Average`, `Minimum`, and `Maximum` are enabled by default. If
+   * the list is empty, `Minimum` will be used.
    *
-   * @lip Minimum - minimum gray level
-   * @lip Maximum - maximum gray level
-   * @lip Average - average gray level
-   * @lip Contrast - difference between maximum and minimum
-   * @lip MaxDiff - maximum absolute difference to the reference value
-   * (#reference).
-   * @lip Variance - variance
-   * @lip Deviation - standard deviation
-   * @lip HighAverage - average of gray levels over the mean
-   * @lip LowAverage - average of gray levels below the mean
+   * - `Minimum` - minimum gray level
+   * - `Maximum` - maximum gray level
+   * - `Average` - average gray level
+   * - `Contrast` - difference between maximum and minimum
+   * - `MaxDiff` - maximum absolute difference to the reference value
+   * ([reference]).
+   * - `Variance` - variance
+   * - `Deviation` - standard deviation
+   * - `HighAverage` - average of gray levels over the mean
+   * - `LowAverage` - average of gray levels below the mean
    *
-   * @code
+   * ~~~
    * pGrayFeatures->setProperty("features", QStringList() << "Average" << "Contrast");
-   * @endcode
+   * ~~~
    *
    * Independent of the order of feature names in this list, the order
    * of features in the feature vector will be that listed above. If

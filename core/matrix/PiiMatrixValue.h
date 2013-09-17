@@ -19,7 +19,6 @@
 /**
  * A structure that stores a value and its location in a matrix.
  *
- * @ingroup Matrix
  */
 template <class T> struct PiiMatrixValue
 {

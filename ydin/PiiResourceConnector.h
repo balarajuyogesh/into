@@ -27,7 +27,6 @@
  * Then, pointers to the two resources are passed to the connector to
  * bind the instances together.
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiResourceConnector
 {
@@ -39,18 +38,18 @@ public:
    * "connection" including, for example, Qt's signal-slot connections
    * and socket connections between PiiOperations. Each connector is
    * specific to a pair of resources. Thus, it knows how to cast the
-   * provided @p void pointers to the correct type.
+   * provided `void` pointers to the correct type.
    *
-   * @return @p true if the resources were successfully connected, @p
-   * false otherwise.
+   * @return `true` if the resources were successfully connected, 
+   * `false` otherwise.
    */
   virtual bool connectResources(void* resource1, void* resource2, const QString& role) const = 0;
   /**
    * Disconnect resources. If the resources are not connected, this
    * function does nothing.
    *
-   * @return @p true if the resources were successfully disconnected,
-   * @p false otherwise.
+   * @return `true` if the resources were successfully disconnected,
+   * `false` otherwise.
    */
   virtual bool disconnectResources(void* resource1, void* resource2, const QString& role) const = 0;
 };

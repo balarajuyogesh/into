@@ -26,12 +26,12 @@
  * Demultiplexer is useful in many different situations. For example,
  * it can be used to perform different processing for different
  * objects. In such a scenario the operation works as an analogue to
- * the @p switch clause in programming languages. The picture below
+ * the `switch` clause in programming languages. The picture below
  * shows a scenario in which PiiDemuxOperation is used as a load
- * balancer. Let us assume thet both of the @p HeavyProcessing
- * operations are run in separate threads and that @p Control emits an
+ * balancer. Let us assume thet both of the `HeavyProcessing`
+ * operations are run in separate threads and that `Control` emits an
  * alternating sequence of ones and zeros. If the machine had two
- * processors, the @p HeavyProcessing operations would be executed
+ * processors, the `HeavyProcessing` operations would be executed
  * simultaneously.
  *
  * @image html demuxoperation.png
@@ -44,21 +44,22 @@
  * advisable to always couple PiiDemuxOperation with a PiiMuxOperation
  * that is controlled by the same control signal.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in control - selects the output channel. Accepts any numeric type
- * in the range [0, @p outputCount - 1]. All numeric values are
+ * in the range [0, `outputCount` - 1]. All numeric values are
  * automatically converted to integers.
  *
- * @in input - any object. Passed to the output selected by the @p
- * control input.
+ * @in input - any object. Passed to the output selected by the 
+ * `control` input.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
- * @out outputX - the output channels. X ranges from 0 to @p
- * dynamicOutputCount - 1.
+ * @out outputX - the output channels. X ranges from 0 to 
+ * `dynamicOutputCount` - 1.
  *
- * @ingroup PiiFlowControlPlugin
  */
 class PiiDemuxOperation : public PiiDefaultOperation
 {

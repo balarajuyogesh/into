@@ -21,20 +21,21 @@
 /**
  * Calculates the difference between two successive input objects.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in input - the input object. Any numeric or complex type, or a
  * matrix containing such types. Note that the difference between
  * unsigned integers may easily underflow.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out difference - the difference between current object and the
  * last one. The type is equal to the input type. If there is no
  * previous object, the difference is calculated with the input object
  * itself. Thus, the first difference is always zero.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiDiffOperation : public PiiDefaultOperation
 {

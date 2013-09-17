@@ -27,16 +27,15 @@ class PiiHttpDevice;
 /**
  * An implementation of the HTTP protocol.
  *
- * The role of @p %PiiHttpProtocol is to map server URIs into <em>URI
- * handlers</em>. When a request comes in, the server looks at the
+ * The role of @p PiiHttpProtocol is to map server URIs into *URI
+ * handlers*. When a request comes in, the server looks at the
  * request URI and sequentially matches its beginning to registered
  * handlers. The handler with the most specific match will be given
- * the task to encode the request body and to reply to the client. @p
- * %PiiHttpProtocol uses PiiHttpDevice as the communication channel.
+ * the task to encode the request body and to reply to the client. 
+ * PiiHttpProtocol uses PiiHttpDevice as the communication channel.
  *
  * All functions in this class are thread-safe.
  *
- * @ingroup Network
  */
 class PII_NETWORK_EXPORT PiiHttpProtocol : public PiiNetworkProtocol
 {
@@ -134,20 +133,20 @@ public:
      * Handles a request. This function must be thread-safe.
      *
      * @param uri the URI the handler was registered at. Use the
-     * @ref PiiHttpDevice::requestUri() function to fetch the full
+     * [PiiHttpDevice::requestUri()] function to fetch the full
      * request URI.
      *
-     * @param dev the communication device. @p %PiiHttpProtocol has
+     * @param dev the communication device. @p PiiHttpProtocol has
      * already fetched request headers, and the device is positioned
      * at the beginning of request data.
      *
      * @param controller a progress controller. Call the
-     * @ref PiiProgressController::canContinue() with no parameters time to
+     * [PiiProgressController::canContinue()] with no parameters time to
      * time to ensure you are still allowed to continue communication.
      * Returning from this function will automatically flush the
-     * output pending in @p dev.
+     * output pending in `dev`.
      *
-     * @code
+     * ~~~
      * void MyHandler::handleRequest(const QString& uri, PiiHttpDevice* dev, TimeLimiter*)
      * {
      *   // Find the path of the request wrt to the "root" of this handler
@@ -155,10 +154,10 @@ public:
      *   if (strRequestPath == "index.html" && dev->requestMethod() == "GET")
      *     dev->print("<html><head><title>Hello world!</title></head><body><!-- Secret message --></body></html>");
      * }
-     * @endcode
+     * ~~~
      *
      * @exception The function may throw a PiiHttpException on error. 
-     * %PiiHttpProtocol sets the response header correspondingly and
+     * PiiHttpProtocol sets the response header correspondingly and
      * writes message to the response body.
      */
     virtual void handleRequest(const QString& uri, PiiHttpDevice* dev, TimeLimiter* controller) = 0;
@@ -172,7 +171,7 @@ public:
   /**
    * Register a URI handler. He caller retains the ownership of the
    * handler. The same handler can be register many times in different
-   * places. The @p uri parameter to the @ref
+   * places. The `uri` parameter to the @ref
    * PiiHttpProtocol::UriHandler::handleRequest() "handleRequest()"
    * function tells the handler the URI it was registered at.
    *
@@ -191,7 +190,7 @@ public:
    * @param handler the handler. When a request to the registered URI
    * is received, the handler will be invoked.
    *
-   * @code
+   * ~~~
    * PiiHttpProtocol protocol;
    * // A handler that fetches files from the file system
    * PiiHttpFileSystemHandler* files = new PiiHttpFileSystemHandler("/var/www/html");
@@ -201,35 +200,35 @@ public:
    * MyHttpDavHandler* dav = new MyHttpDavHandler("/home/dav/files");
    * protocol.registerHandler("/dav/", dav);
    * protocol.registerHandler("/repository/", dav);
-   * @endcode
+   * ~~~
    *
-   * Now, if a client requests "/dav/foobar", the handler named @p dav
-   * will be invoked with "/dav/" as the @p uri parameter.
+   * Now, if a client requests "/dav/foobar", the handler named `dav`
+   * will be invoked with "/dav/" as the `uri` parameter.
    */
   void registerUriHandler(const QString& uri, UriHandler* handler);
 
   /**
-   * Get the handler (if any) that handles requests to @p uri. If @p
-   * exactMatch is @p true, require an exact match. Otherwise find the
+   * Get the handler (if any) that handles requests to `uri`. If 
+   * `exactMatch` is `true`, require an exact match. Otherwise find the
    * most specific match, even if not exact.
    *
-   * @return the URI handler that serves requests to @p uri, or 0 if
+   * @return the URI handler that serves requests to `uri`, or 0 if
    * no such handler exists.
    */
   UriHandler* uriHandler(const QString& uri, bool exactMatch=false);
   
   /**
-   * Unregister a handler at @p uri.
+   * Unregister a handler at `uri`.
    */
   UriHandler* unregisterUriHandler(const QString& uri);
 
   /**
-   * Unregister all occurrences of @p handler.
+   * Unregister all occurrences of `handler`.
    */
   void unregisterUriHandler(UriHandler* handler);
 
   /**
-   * Unregister all occurrences of @p handler. Note that it may not be
+   * Unregister all occurrences of `handler`. Note that it may not be
    * safe to delete the handler even if it has been unregistered. One
    * must first ensure that all connections have been terminated. It
    * is usually a good idea to shut down the server running the
@@ -251,12 +250,12 @@ public:
   static QString statusMessage(int code);
 
   /**
-   * Converts the given @a date to a string according to the HTTP 1.1
+   * Converts the given *date* to a string according to the HTTP 1.1
    * time format specification. The date must be given in UTC.
    */
   static QString timeToString(const QDateTime& dateTime);
   /**
-   * Converts the given textual @a date to a QDateTime. This function
+   * Converts the given textual *date* to a QDateTime. This function
    * recognizes all date formats required by the HTTP 1.1
    * specification. If the string cannot be converted, returns an
    * invalid QDateTime.

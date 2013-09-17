@@ -35,7 +35,6 @@ PII_MAP_METATYPE(PiiOperation::State, int);
  * the server. A request to these URIs returns a list of input and
  * output names, respectively.
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiOperationServer : public PiiQObjectServer
 {

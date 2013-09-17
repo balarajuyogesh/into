@@ -36,14 +36,14 @@ public:
   int rowCount(const QModelIndex& parent = QModelIndex()) const;
 
   /**
-   * Returns the data stored under the given @a role for the item
-   * referred to by @a index.
+   * Returns the data stored under the given *role* for the item
+   * referred to by *index*.
    */
   QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
   /**
-   * Sets the @a data stored under the given @a role for the item
-   * referred to by @p index.
+   * Sets the *data* stored under the given *role* for the item
+   * referred to by `index`.
    */
   void setData(const QModelIndex& index, int role, const QVariant& data);
 
@@ -82,7 +82,7 @@ public:
   QStringList fileNames() const;
 
   /**
-   * Returns the data associated with @a role for each item in the
+   * Returns the data associated with *role* for each item in the
    * model.
    */
   QVariantList dataList(int role) const;
@@ -99,7 +99,7 @@ public:
 
   using QAbstractListModel::index;
   /**
-   * Returns a model index associated with @a fileName. If no such
+   * Returns a model index associated with *fileName*. If no such
    * file name exists, returns an invalid model index.
    */
   QModelIndex index(const QString& fileName) const;

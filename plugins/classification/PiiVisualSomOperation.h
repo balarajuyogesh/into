@@ -28,7 +28,8 @@
  * enough images on the map.
  *
  *
- * @par Inputs
+ * Inputs
+ * ------
  *
  * @in image - an image (any image type)
  *

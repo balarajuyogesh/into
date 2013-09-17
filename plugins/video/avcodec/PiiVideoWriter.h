@@ -31,7 +31,6 @@ extern "C"
 /**
  * An interface for writing video files with avcodec.
  *
- * @ingroup PiiVideoPlugin 
  */
 class PII_VIDEO_EXPORT PiiVideoWriter
 {

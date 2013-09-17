@@ -28,7 +28,8 @@ class PiiMimeHeader;
  * this class work as end points to network connections and make it
  * possible to send/receive data to and from remote computers.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in body - the body of a request or a response. Any data written to
  * this input will be sent as the request/response body to the HTTP
@@ -37,19 +38,20 @@ class PiiMimeHeader;
  *
  * @in content type - the MIME type of the message body as a QString. 
  * This input is optional and cannot be connected alone. If the input
- * is not connected, the #contentType property will be used.
+ * is not connected, the [contentType] property will be used.
  *
  * @in inputX - a configurable number of optional input sockets. If
- * these inputs are connected, @p body and <tt>content type</tt> must
+ * these inputs are connected, `body` and `content type` must
  * be left disconnected. The operation will encode the objects as
- * defined by the #messageEncoding property. Use the #inputNames
+ * defined by the [messageEncoding] property. Use the [inputNames]
  * property to change the number of inputs and their names.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out outputX - a configurable number of outputs. X is a zero-based
  * output index. You can assign arbitrary alias names to outputs with
- * the #outputNames property.
+ * the [outputNames] property.
  *
  * In PiiNetworkInputOperation, inputs should be connected as a
  * feed-back loop. Incoming network requests will be decoded and sent
@@ -60,7 +62,6 @@ class PiiMimeHeader;
  * server, whose response will be decoded and sent to the output
  * sockets. If no response is received, no output will be produced.
  *
- * @ingroup PiiNetworkPlugin
  */
 class PII_NETWORKPLUGIN_EXPORT PiiNetworkOperation : public PiiDefaultOperation
 {
@@ -84,16 +85,16 @@ class PII_NETWORKPLUGIN_EXPORT PiiNetworkOperation : public PiiDefaultOperation
   Q_PROPERTY(QStringList inputNames READ inputNames WRITE setInputNames);
 
   /**
-   * The MIME type of the request/response body. Used only if the @p
-   * body input is connected. If the <tt>content type</tt> input is
-   * connected, it overrides this value. The default value is @p
-   * text/plain.
+   * The MIME type of the request/response body. Used only if the 
+   * `body` input is connected. If the `content type` input is
+   * connected, it overrides this value. The default value is 
+   * `text`/plain.
    */
   Q_PROPERTY(QString contentType READ contentType WRITE setContentType);
 
   /**
    * Control the behavior of the operation in error conditions. If the
-   * flag is @p false (the default) the operation will signal an error
+   * flag is `false` (the default) the operation will signal an error
    * and stop if the network connection is lost or the server/client
    * sends invalid data.
    */
@@ -141,8 +142,8 @@ protected:
   /// Emit collected output values to named output sockets.
   void emitOutputValues();
   /**
-   * Read and decode an object from @p device and add it to the output
-   * value map with @p name.
+   * Read and decode an object from `device` and add it to the output
+   * value map with `name`.
    */
   void addToOutputMap(const QString& name, QIODevice& device);
   /**
@@ -151,12 +152,12 @@ protected:
   void addToOutputMap(const QVariantMap& variables);
   /**
    * Add a variable to the output map. This function tries to convert
-   * @p value into a PiiVariant. It recognizes integers, doubles and
+   * `value` into a PiiVariant. It recognizes integers, doubles and
    * strings.
    */
   void addToOutputMap(const QString& name, const QVariant& value);
   /**
-   * Read and decode objects from @p h and add them to the output
+   * Read and decode objects from `h` and add them to the output
    * value map.
    */
   bool decodeObjects(PiiHttpDevice& h, const PiiMimeHeader& header);

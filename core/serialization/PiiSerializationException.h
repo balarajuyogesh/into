@@ -24,16 +24,15 @@
  *
  * Macros and declarations for handling serialization errors.
  *
- * @ingroup Serialization
  */
 
 /**
  * Throw a PiiSerializationException with the given error code. This
  * macro is useful mostly in archive implementations.
  *
- * @code
+ * ~~~
  * PII_SERIALIZATION_ERROR(StreamError);
- * @endcode
+ * ~~~
  */
 #define PII_SERIALIZATION_ERROR(code) throw PiiSerializationException(PiiSerializationException::code, QString(__FILE__ ":%1").arg(__LINE__))
 
@@ -42,9 +41,9 @@
  * extra information. This macro is useful mostly in archive
  * implementations.
  *
- * @code
+ * ~~~
  * PII_SERIALIZATION_ERROR_INFO(SerializerNotFound, className);
- * @endcode
+ * ~~~
  */
 #define PII_SERIALIZATION_ERROR_INFO(code, info) throw PiiSerializationException(PiiSerializationException::code, info, QString(__FILE__ ":%1").arg(__LINE__))
 
@@ -56,7 +55,6 @@
 /**
  * Thrown when an error occurs in (de)serializing data.
  *
- * @ingroup Serialization
  */
 class PII_SERIALIZATION_EXPORT PiiSerializationException : public PiiException
 {
@@ -64,29 +62,29 @@ public:
   /**
    * Error codes for serialization failures.
    *
-   * @lip Unknown An unknow error.
+   * - `Unknown` An unknow error.
    *
-   * @lip InvalidDataFormat The data read from an archive is
+   * - `InvalidDataFormat` The data read from an archive is
    * corrupted. This error happens only when the archive notices it is
    * reading something it did not except.
    *
-   * @lip UnregisteredClass An input archive does not find a factory
+   * - `UnregisteredClass` An input archive does not find a factory
    * for a class name read from an archive.
    *
-   * @lip SerializerNotFound An output archive cannot find a
+   * - `SerializerNotFound` An output archive cannot find a
    * serializer for the object to be serialized.
    *
-   * @lip ClassVersionMismatch The class version number read from an
+   * - `ClassVersionMismatch` The class version number read from an
    * archive is greater than the current class version number.
    *
-   * @lip StreamError The underlying input stream cannot be accessed.
+   * - `StreamError` The underlying input stream cannot be accessed.
    *
-   * @lip StreamNotOpen The underlying input stream is not open.
+   * - `StreamNotOpen` The underlying input stream is not open.
    *
-   * @lip UnrecognizedArchiveFormat The magic key in the beginning of
+   * - `UnrecognizedArchiveFormat` The magic key in the beginning of
    * an archive does not match the key of the reading archive.
    *
-   * @lip ArchiveVersionMismatch The input archive version is greater
+   * - `ArchiveVersionMismatch` The input archive version is greater
    * than the current version of the archive implementation.
    */
   enum Code
@@ -110,15 +108,15 @@ public:
   PiiSerializationException(Code code, const QString& location = "");
 
   /**
-   * Construct an @p Unknown exception with the given error message.
+   * Construct an `Unknown` exception with the given error message.
    */
   PiiSerializationException(const QString& message, const QString& location = "");
 
   /**
    * Construct a new PiiSerializationException with the given error
    * code. The exception message will be automatically generated with
-   * messageForCode(). The @p info parameter gives extra
-   * information such as a class name with @p UnregisteredClass.
+   * messageForCode(). The `info` parameter gives extra
+   * information such as a class name with `UnregisteredClass`.
    */
   PiiSerializationException(Code code, const QString& info, const QString& location);
 
@@ -147,7 +145,7 @@ public:
 
   /**
    * Get additional information. This can be used for any purpose.
-   * Currently, @p SerializerNotFound and @p UnregisteredClass store
+   * Currently, `SerializerNotFound` and `UnregisteredClass` store
    * the class name as additional information.
    */
   QString info() const;

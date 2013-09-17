@@ -22,16 +22,17 @@
  * An operation that calculates the maximum vertical and horizontal
  * gradient in a gray-level image.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - input image. Any gray-level image.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out features - a 1-by-2 PiiMatrix<float> that contains the maximum
  * absolute value of vertical and horizontal gradient, in this order.
  *
- * @ingroup PiiFeaturesPlugin
  */
 class PiiGradientFeatureOperation : public PiiDefaultOperation
 {

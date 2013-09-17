@@ -36,7 +36,7 @@ namespace PiiImage
   /**
    * Default region-of-interest function object for feature extraction
    * and image analysis methods that support ROI processing. This
-   * function returns @p true for all pixels, and reduces to a no-op
+   * function returns `true` for all pixels, and reduces to a no-op
    * with compiler optimizations turned on.
    */
   struct DefaultRoi
@@ -44,7 +44,7 @@ namespace PiiImage
     /**
      * Check if a pixel is within a region-of-interest. Each ROI
      * functor must implement a function with this signature
-     * (inline/const are optional). This function returns @p true.
+     * (inline/const are optional). This function returns `true`.
      *
      * @param r the row coordinate of a pixel
      *
@@ -54,10 +54,10 @@ namespace PiiImage
   };
 
   /**
-   * A region-of-interest function object that returns @p true if the
-   * alpha channel has a non-zero value at (r,c) and @p false
-   * otherwise. If there is no alpha channel in the color type @p T,
-   * returns always @p true.
+   * A region-of-interest function object that returns `true` if the
+   * alpha channel has a non-zero value at (r,c) and `false`
+   * otherwise. If there is no alpha channel in the color type `T`,
+   * returns always `true`.
    */
   template <class T> struct AlphaRoi : DefaultRoi
   {
@@ -75,7 +75,7 @@ namespace PiiImage
   };
 
   /**
-   * Converts any integer matrix to a boolean matrix. If @p obj is an
+   * Converts any integer matrix to a boolean matrix. If `obj` is an
    * invalid variant, an empty matrix will be returned.
    *
    * @exception PiiExecutionException& if the type of the object is
@@ -94,16 +94,16 @@ namespace PiiImage
    * rectangle (x, y, width, height). If a rectangle exceeds the
    * boundaries of the result image, it will be ignored.
    *
-   * @return a @a rows -by- @a columns binary image in which all
-   * pixels that are in any of the @a rectangles will be set to @p
-   * true.
+   * @return a *rows* -by- *columns* binary image in which all
+   * pixels that are in any of the *rectangles* will be set to 
+   * `true`.
    */
   PII_IMAGE_EXPORT PiiMatrix<bool> createRoiMask(int rows, int columns,
                                                  const PiiMatrix<int>& rectangles);
 
   /**
-   * Returns @p true if any two of the given @a rectangles overlap
-   * each other and @p false otherwise.
+   * Returns `true` if any two of the given *rectangles* overlap
+   * each other and `false` otherwise.
    */
   PII_IMAGE_EXPORT bool overlapping(const PiiMatrix<int>& rectangles);
 
@@ -113,8 +113,8 @@ namespace PiiImage
   PII_IMAGE_EXPORT extern const char* roiMaskSizeError;
 
   /**
-   * Returns the alpha channel of @p image as a boolean mask. Non-zero
-   * entries in the alpha channel will be @p true in the returned
+   * Returns the alpha channel of `image` as a boolean mask. Non-zero
+   * entries in the alpha channel will be `true` in the returned
    * mask.
    */
   template <class T> PiiMatrix<bool> alphaToMask(const PiiMatrix<PiiColor4<T> >& image);
@@ -122,8 +122,8 @@ namespace PiiImage
   /**
    * @internal
    *
-   * Reads a ROI object from @a input and handles @a image based on it
-   * and @a roiType. Uses @a process to actually perform the image
+   * Reads a ROI object from *input* and handles *image* based on it
+   * and *roiType*. Uses *process* to actually perform the image
    * processing operation.
    */
   template <class T, class Processor> void handleRoiInput(PiiInputSocket* input,

@@ -24,29 +24,28 @@
 
 /**
  * A class used by PiiTableModel to store item data for table cells
- * and the header. %PiiModelItem uses a map of variants to store data
- * associated with different roles. See @ref Qt::ItemDataRole for
+ * and the header. PiiModelItem uses a map of variants to store data
+ * associated with different roles. See [Qt::ItemDataRole] for
  * roles supported by most Qt view classes.
  *
- * @ingroup Gui
  */
 class PII_GUI_EXPORT PiiModelItem : public QObject
 {
   Q_OBJECT
 
   /**
-   * The text of the item. Stored as @p Qt::DisplayRole data into the
+   * The text of the item. Stored as `Qt::DisplayRole` data into the
    * data map.
    */
   Q_PROPERTY(QString text READ text WRITE setText);
   /**
-   * The icon of the item. Stored as @p Qt::DecorationRole data into
+   * The icon of the item. Stored as `Qt::DecorationRole` data into
    * the data map.
    */
   Q_PROPERTY(QIcon icon READ icon WRITE setIcon);
   /**
-   * Item flags. The default value is <tt>Qt::ItemIsSelectable |
-   * Qt::ItemIsEditable | Qt::ItemIsEnabled</tt>.
+   * Item flags. The default value is `Qt::ItemIsSelectable |
+   * Qt::ItemIsEditable | Qt::ItemIsEnabled`.
    */
   Q_PROPERTY(Qt::ItemFlags flags READ flags WRITE setFlags);
 
@@ -61,18 +60,18 @@ public:
   ~PiiModelItem();
 
   /**
-   * Set data associated with @p role to @p value.
+   * Set data associated with `role` to `value`.
    *
-   * @code
+   * ~~~
    * // Show "10 %" to the user ...
    * PiiModelItem* pItem = new PiiModelItem("10 %");
    * // ... but store the percentage as a number
    * pItem->setData(Qt::UserRole, 10);
-   * @endcode
+   * ~~~
    */
   void setData(int role, const QVariant& value);
   /**
-   * Get data associated with @p role.
+   * Get data associated with `role`.
    */
   QVariant data(int role) const;
 
@@ -83,23 +82,23 @@ public:
   QMap<int,QVariant> dataMap() const;
 
   /**
-   * A utility function for setting the data associated with the @p
-   * Qt::DisplayRole.
+   * A utility function for setting the data associated with the 
+   * `Qt::DisplayRole`.
    */
   void setText(const QString& text);
   /**
-   * A utility function for getting the data associated with the @p
-   * Qt::DisplayRole.
+   * A utility function for getting the data associated with the 
+   * `Qt::DisplayRole`.
    */
   QString text() const;
   /**
-   * A utility function for setting the data associated with the @p
-   * Qt::DecorationRole.
+   * A utility function for setting the data associated with the 
+   * `Qt::DecorationRole`.
    */
   void setIcon(const QIcon& icon);
   /**
-   * A utility function for getting the data associated with the @p
-   * Qt::DecorationRole.
+   * A utility function for getting the data associated with the 
+   * `Qt::DecorationRole`.
    */
   QIcon icon() const;
   /**

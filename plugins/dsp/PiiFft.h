@@ -27,7 +27,6 @@
  * pieces for which an optimized radix-N implementation exists. The
  * class has implementations for radix 2, 3, 4, 5, 8, and 10.
  *
- * @ingroup PiiDspPlugin
  */
 template <class T> class PiiFft
 {
@@ -92,11 +91,11 @@ namespace PiiDsp
    * Calculates the correlation of two signals using the Fourier
    * transform. The fast correlation is defined as
    *
-   * @f[
+   * \[
    * \mathrm{corr}(a,b) = F^{-1}(F(a)F(b)^*),
-   * @f]
+   * \]
    *
-   * where @e F stands for the Fourier transform, and @e * marks
+   * where *F* stands for the Fourier transform, and @e * marks
    * complex conjugation. The input matrices must be equal in size.
    *
    * @exception PiiMathException& if input matrices are different in
@@ -127,13 +126,13 @@ namespace PiiDsp
   }
   
   /**
-   * Find the translation of signal @p a with respect to signal @p b. 
-   * This function uses #fastCorrelation() to find the maximum
+   * Find the translation of signal `a` with respect to signal `b`. 
+   * This function uses [fastCorrelation()] to find the maximum
    * correlation.
    *
-   * @return A PiiMatrixValue structure whose @p row and @p column
+   * @return A PiiMatrixValue structure whose `row` and `column`
    * members store the vertical and horizontal translation,
-   * respectively. The @p value member stores the correlation at that
+   * respectively. The `value` member stores the correlation at that
    * translation.
    */
   template <class T> inline PiiMatrixValue<T> findTranslation(const PiiMatrix<T>& a,

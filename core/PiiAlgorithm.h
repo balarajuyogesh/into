@@ -26,8 +26,8 @@
 namespace Pii
 {
   /**
-   * Sets all values in the range [@a begin, @a end) to @a value. 
-   * Returns @a end.
+   * Sets all values in the range [*begin*, *end*) to *value*. 
+   * Returns *end*.
    */
   template <class Iterator>
   Iterator fill(Iterator begin, Iterator end, typename std::iterator_traits<Iterator>::value_type value)
@@ -38,8 +38,8 @@ namespace Pii
   }
 
   /**
-   * Sets all values in the range [@a begin, @a begin + @a b) to @a
-   * value. Returns @a begin + @a n.
+   * Sets all values in the range [*begin*, *begin* + *b*) to 
+   * *value*. Returns *begin* + *n*.
    */
   template <class Iterator>
   Iterator fillN(Iterator begin, size_t n, typename std::iterator_traits<Iterator>::value_type value)
@@ -50,9 +50,9 @@ namespace Pii
   }
 
   /**
-   * Sets all values in the range [@a
-   * begin, @a end) for which @a predicate returns a non-zero value to
-   * @p value. Returns @a end.
+   * Sets all values in the range [
+   * *begin*, *end*) for which *predicate* returns a non-zero value to
+   * `value`. Returns *end*.
    */
   template <class Iterator, class UnaryPredicate>
   Iterator fillIf(Iterator begin, Iterator end,
@@ -66,8 +66,8 @@ namespace Pii
   }
 
   /**
-   * Sets all values in the range [@a begin, @a end) to the value
-   * returned by @a generator. Returns @a end.
+   * Sets all values in the range [*begin*, *end*) to the value
+   * returned by *generator*. Returns *end*.
    */
   template <class Iterator, class Generator>
   Iterator generate(Iterator begin, Iterator end, Generator generator)
@@ -78,8 +78,8 @@ namespace Pii
   }
 
   /**
-   * Sets all values in the range [@a begin, @a begin + @a n) to the
-   * value returned by @a generatore. Returns @a begin + @a n.
+   * Sets all values in the range [*begin*, *begin* + *n*) to the
+   * value returned by *generatore*. Returns *begin* + *n*.
    */
   template <class Iterator, class Generator>
   Iterator generateN(Iterator begin, size_t n, Generator generator)
@@ -91,9 +91,9 @@ namespace Pii
 
   /**
    * Assigns sequentially increasing or decreasing values to the range
-   * [@a begin, @a end). The first value will be set to @a
-   * initialValue, which will then increase @a step units on each
-   * iteration. Returns @a end.
+   * [*begin*, *end*). The first value will be set to 
+   * *initialValue*, which will then increase *step* units on each
+   * iteration. Returns *end*.
    */
   template <class Iterator>
   Iterator sequence(Iterator begin, Iterator end,
@@ -106,9 +106,9 @@ namespace Pii
   }
 
   /**
-   * Assigns sequentially increasing values to the range [@a begin, @a
-   * end). The first value will be set to @a initialValue, which will
-   * then be incremented by one on each iteration. Returns @a end.
+   * Assigns sequentially increasing values to the range [*begin*, 
+   * *end*). The first value will be set to *initialValue*, which will
+   * then be incremented by one on each iteration. Returns *end*.
    */
   template <class Iterator>
   inline Iterator sequence(Iterator begin, Iterator end,
@@ -119,9 +119,9 @@ namespace Pii
 
   /**
    * Assigns sequentially increasing or decreasing values to the range
-   * [@a begin, @a begin + @a n). The first value will be set to @a
-   * initialValue, which will then increase @a step units on each
-   * iteration. Returns @a begin + @a n.
+   * [*begin*, *begin* + *n*). The first value will be set to 
+   * *initialValue*, which will then increase *step* units on each
+   * iteration. Returns *begin* + *n*.
    */
   template <class Iterator>
   Iterator sequenceN(Iterator begin, size_t n,
@@ -134,10 +134,10 @@ namespace Pii
   }
 
   /**
-   * Assigns sequentially increasing values to the range [@a begin, @a
-   * end + @a n). The first value will be set to @a initialValue,
+   * Assigns sequentially increasing values to the range [*begin*, 
+   * *end* + *n*). The first value will be set to *initialValue*,
    * which will then be incremented by one on each iteration. Returns
-   * @a begin + @a end.
+   * *begin* + *end*.
    */
   template <class Iterator>
   inline Iterator sequenceN(Iterator begin, size_t n,
@@ -147,16 +147,16 @@ namespace Pii
   }
   
   /**
-   * Applies a unary function @a func to all elements in the range [@a
-   * begin, @a end), and stores the result in place. The @p map
-   * algorithm is equal to @p std::transform except that it always
-   * modifies the elements in place. Returns @a end.
+   * Applies a unary function *func* to all elements in the range [
+   * *begin*, *end*), and stores the result in place. The `map`
+   * algorithm is equal to `std::transform` except that it always
+   * modifies the elements in place. Returns *end*.
    *
-   * @code
+   * ~~~
    * // Subtract one from all elements of a QVector
    * QVector<double> vec(6);
    * Pii::map(vec.begin(), vec.end(), std::bind2nd(std::minus<double>(), 1));
-   * @endcode
+   * ~~~
    */
   template <class Iterator, class UnaryFunction>
   Iterator map(Iterator begin, Iterator end, UnaryFunction func)
@@ -167,9 +167,9 @@ namespace Pii
   }
 
   /**
-   * Applies a unary function @a func to all elements in the range [@a
-   * begin, @a begin + @a n), and stores the result in place. Returns
-   * @a begin + @a n.
+   * Applies a unary function *func* to all elements in the range [
+   * *begin*, *begin* + *n*), and stores the result in place. Returns
+   * *begin* + *n*.
    */
   template <class Iterator, class UnaryFunction>
   Iterator mapN(Iterator begin, size_t n, UnaryFunction func)
@@ -180,9 +180,9 @@ namespace Pii
   }
 
   /**
-   * Applies a unary function @a func to all elements in the range [@a
-   * begin, @a end) for which @a predicate returns a non-zero value. 
-   * The returned value will be stored in place. Returns @a end.
+   * Applies a unary function *func* to all elements in the range [
+   * *begin*, *end*) for which *predicate* returns a non-zero value. 
+   * The returned value will be stored in place. Returns *end*.
    */
   template <class Iterator, class UnaryPredicate, class UnaryFunction>
   Iterator mapIf(Iterator begin, Iterator end,
@@ -196,20 +196,20 @@ namespace Pii
   }
 
   /**
-   * Applies a binary function @a func to all elements in the range
-   * [@a begin1, @a end1), and stores the result in place. The second
-   * argument to the binary function is taken from @a begin2. The @p
-   * map algorithm is equal to @ref transform() except that it always
+   * Applies a binary function *func* to all elements in the range
+   * [*begin1*, *end1*), and stores the result in place. The second
+   * argument to the binary function is taken from *begin2*. The 
+   * `map` algorithm is equal to [transform()] except that it always
    * modifies the elements in place and works slightly faster.
    *
-   * @code
+   * ~~~
    * // Add the elements of lst2 to lst1
    * QList<int> lst1, lst2;
    * lst1 << 1 << 2;
    * lst2 << -1 << -2;
    * Pii::map(lst1.begin(), lst2.end(), lst2.begin(), std::plus<int>());
    * // lst1 is now (0, 0)
-   * @endcode
+   * ~~~
    */
   template <class Iterator1, class Iterator2, class BinaryFunction>
   void map(Iterator1 begin1, Iterator1 end1, Iterator2 begin2, BinaryFunction func)
@@ -223,10 +223,10 @@ namespace Pii
   }
 
   /**
-   * Applies a binary function @a func to all elements in the range
-   * [@a begin1, @a begin1 + @a n), and stores the result in place. The second
-   * argument to the binary function is taken from @a begin2. The @p
-   * map algorithm is equal to @ref transform() except that it always
+   * Applies a binary function *func* to all elements in the range
+   * [*begin1*, *begin1* + *n*), and stores the result in place. The second
+   * argument to the binary function is taken from *begin2*. The 
+   * `map` algorithm is equal to [transform()] except that it always
    * modifies the elements in place and works slightly faster.
    */
   template <class Iterator1, class Iterator2, class BinaryFunction>
@@ -263,8 +263,8 @@ namespace Pii
   }
 
   /**
-   * Copies all elements in the range [@a begin, @a end) to @a output. 
-   * Returns @a output + (@a end - @a begin).
+   * Copies all elements in the range [*begin*, *end*) to *output*. 
+   * Returns *output* + (*end* - *begin*).
    */
   template <class InputIterator, class OutputIterator>
   OutputIterator copy(InputIterator begin, InputIterator end, OutputIterator output)
@@ -275,8 +275,8 @@ namespace Pii
   }
 
   /**
-   * Copies @a n elements starting at @a begin to @a output.
-   * Returns @a output + @a n.
+   * Copies *n* elements starting at *begin* to *output*.
+   * Returns *output* + *n*.
    */
   template <class InputIterator, class OutputIterator>
   OutputIterator copyN(InputIterator begin, size_t n, OutputIterator output)
@@ -288,8 +288,8 @@ namespace Pii
 
   /**
    * Copies a variable argument list to a range of elements. This
-   * function is for #copyVaArgs() what vprintf() is for printf(). The
-   * caller is responsible for invoking va_end() on @a rest.
+   * function is for [copyVaArgs()] what vprintf() is for printf(). The
+   * caller is responsible for invoking va_end() on *rest*.
    *
    * @see copyVaArgs
    */
@@ -310,13 +310,13 @@ namespace Pii
 
   /**
    * Copies a variable number of arguments to a range of elements
-   * bounded by the iterators @a begin and @a end.
+   * bounded by the iterators *begin* and *end*.
    *
-   * @code
+   * ~~~
    * QVector<int> vec(5);
    * // Set vector contents to [ 1, 2, 3, 4, 5 ]
    * Pii::copyVaArgs(vec.begin(), vec.end(), 1, 2, 3, 4, 5);
-   * @endcode
+   * ~~~
    */
   template <class Iterator> void copyVaArgs(Iterator begin, Iterator end,
                                             typename Pii::VaArg<typename std::iterator_traits<Iterator>::value_type>::Type first,
@@ -329,7 +329,7 @@ namespace Pii
   }
 
   /**
-   * Returns the inner product of two vectors @p v1 and @p v2.
+   * Returns the inner product of two vectors `v1` and `v2`.
    *
    * @param begin1 an interator the beginning of v1
    *
@@ -340,16 +340,16 @@ namespace Pii
    * @param initialValue initial value for the inner product, usually
    * 0. Used to determine the return type.
    *
-   * @return @f$v1 \cdot v2@f$
+   * @return \(v1 \cdot v2\)
    *
-   * @code
+   * ~~~
    * PiiMatrix<double> m(2, 1, 1.0, -1.0);
    * double dot = Pii::innerProduct(m.columnBegin(0),
    *                                m.columnEnd(0),
    *                                m.columnBegin(0),
    *                                0.0);
    * QCOMPARE(dot, 2.0);
-   * @endcode
+   * ~~~
    */
   template <class InputIterator1, class InputIterator2, class T>
   T innerProduct(InputIterator1 begin1, InputIterator1 end1, InputIterator2 begin2, T initialValue)
@@ -362,7 +362,7 @@ namespace Pii
   /**
    * @overload
    *
-   * Returns the inner product of two @a n-dimensional vectors.
+   * Returns the inner product of two *n*-dimensional vectors.
    */
   template <class InputIterator1, class InputIterator2, class T>
   T innerProductN(InputIterator1 begin1, size_t n, InputIterator2 begin2, T initialValue)
@@ -373,9 +373,9 @@ namespace Pii
   }
 
   /**
-   * Applies a unary function @a func to all elements in the range [@a
-   * begin, @a end), and stores the returned value to @a output. 
-   * Returns @a output + (@a end - @a begin).
+   * Applies a unary function *func* to all elements in the range [
+   * *begin*, *end*), and stores the returned value to *output*. 
+   * Returns *output* + (*end* - *begin*).
    */
   template <class InputIterator, class OutputIterator, class UnaryFunction>
   OutputIterator transform(InputIterator begin, InputIterator end,
@@ -387,9 +387,9 @@ namespace Pii
   }
 
   /**
-   * Applies a unary function @a func to all elements in the range [@a
-   * begin, @a begin + @a n), and stores the returned value to @a
-   * output. Returns @a output + @a n.
+   * Applies a unary function *func* to all elements in the range [
+   * *begin*, *begin* + *n*), and stores the returned value to 
+   * *output*. Returns *output* + *n*.
    */
   template <class InputIterator, class OutputIterator, class UnaryFunction>
   OutputIterator transformN(InputIterator begin, size_t n,
@@ -402,11 +402,11 @@ namespace Pii
 
 
   /**
-   * Applies a binary function @a func to all elements in the range
-   * [@a begin1, @a end1), using the corresponding element in the
-   * range starting at @a begin2 as the second argument to the
-   * function. The return value of the function will be stored to @a
-   * output. Returns @a output + (@a end1 - @a begin1).
+   * Applies a binary function *func* to all elements in the range
+   * [*begin1*, *end1*), using the corresponding element in the
+   * range starting at *begin2* as the second argument to the
+   * function. The return value of the function will be stored to 
+   * *output*. Returns *output* + (*end1* - *begin1*).
    */
   template <class InputIterator1, class InputIterator2, class OutputIterator, class BinaryFunction>
   OutputIterator transform(InputIterator1 begin1, InputIterator1 end1,
@@ -419,11 +419,11 @@ namespace Pii
   }
 
   /**
-   * Applies a binary function @a func to all elements in the range
-   * [@a begin1, @a begin1 + @a n), using the corresponding element in
-   * the range starting at @a begin2 as the second argument to the
-   * function. The return value of the function will be stored to @a
-   * output. Returns @a output + @a n.
+   * Applies a binary function *func* to all elements in the range
+   * [*begin1*, *begin1* + *n*), using the corresponding element in
+   * the range starting at *begin2* as the second argument to the
+   * function. The return value of the function will be stored to 
+   * *output*. Returns *output* + *n*.
    */
   template <class InputIterator1, class InputIterator2, class OutputIterator, class BinaryFunction>
   OutputIterator transformN(InputIterator1 begin1, size_t n,
@@ -436,17 +436,17 @@ namespace Pii
   }
 
   /**
-   * Loops through all values in the range [@a begin, @a end) and
-   * applies @a func to each element and the current value of @a
-   * initialValue. Returns the final value of @a initialValue.
+   * Loops through all values in the range [*begin*, *end*) and
+   * applies *func* to each element and the current value of 
+   * *initialValue*. Returns the final value of *initialValue*.
    *
-   * @code
+   * ~~~
    * // Sum up all entries in a matrix
    * PiiMatrix<int> mat(1,2, -1, 2);
    * std::cout << Pii::accumulate(mat.begin(), mat.end(),
    *                              std::plus<int>(), 0);
    * // Outputs 1
-   * @endcode
+   * ~~~
    */
   template <class InputIterator, class BinaryFunction, class T>
   T accumulate(InputIterator begin, InputIterator end,
@@ -460,7 +460,7 @@ namespace Pii
   /**
    * @overload
    *
-   * This fuction works in the range [@a begin, @a begin + @a n).
+   * This fuction works in the range [*begin*, *begin* + *n*).
    */
   template <class InputIterator, class BinaryFunction, class T>
   T accumulateN(InputIterator begin, size_t n,
@@ -472,12 +472,12 @@ namespace Pii
   }
 
   /**
-   * Loops through all values in the range [@a begin, @a end) and
-   * applies @a func to each element and the current value of @a
-   * initialValue, if @a predicate returns a non-zero value for the
-   * element. Returns the final value of @a initialValue.
+   * Loops through all values in the range [*begin*, *end*) and
+   * applies *func* to each element and the current value of 
+   * *initialValue*, if *predicate* returns a non-zero value for the
+   * element. Returns the final value of *initialValue*.
    *
-   * @code
+   * ~~~
    * // Sum up all positive entries in a matrix
    * PiiMatrix<int> mat(1,3, -1, 2);
    * std::cout << Pii::accumulate(mat.begin(), mat.end(),
@@ -485,7 +485,7 @@ namespace Pii
    *                              std::plus<int>(),
    *                              0);
    * // Outputs 3
-   * @endcode
+   * ~~~
    */
   template <class InputIterator, class BinaryFunction, class UnaryPredicate, class T>
   T accumulateIf(InputIterator begin, InputIterator end,
@@ -500,18 +500,18 @@ namespace Pii
 
   /**
    * Find a special value such as maximum or minimum in the range
-   * specified by @a begin and @a end. The "speciality" is defined by
+   * specified by *begin* and *end*. The "speciality" is defined by
    * the given function objects. Specifically, the algorithm increases
-   * @a begin until it equals @a end, and sets @e x to <tt>*begin</tt>
-   * whenever <tt>op(f(*begin), f(*x))</tt> returns a non-zero value. 
-   * Returns @p *x on success, or @a end if the range is empty.
+   * *begin* until it equals *end*, and sets *x* to `*begin`
+   * whenever `op(f(*begin), f(*x))` returns a non-zero value. 
+   * Returns @p *x on success, or *end* if the range is empty.
    *
-   * @code
+   * ~~~
    * double* values[] = { 1, 2.0, -5.3, 4.2 };
    * // Find the maximum absolute value
    * using namespace Pii;
    * double dMaxAbs = abs(*findSpecialValue(values, values + 4, std::greater<double>(), Abs<double>()));
-   * @endcode
+   * ~~~
    */
   template<class InputIterator, class UnaryFunction, class BinaryPredicate>
   InputIterator findSpecialValue(InputIterator begin,
@@ -539,16 +539,16 @@ namespace Pii
   }
 
   /**
-   * Applies @a func to each element in the range [@a begin, @a end). 
-   * The return value of the unary function @a func (if any) is
-   * ignored. Returns @a func.
+   * Applies *func* to each element in the range [*begin*, *end*). 
+   * The return value of the unary function *func* (if any) is
+   * ignored. Returns *func*.
    *
-   * @code
+   * ~~~
    * // Calculate the mean of all entries
    * PiiMatrix<float> matrix(3,3);
    * std::cout << Pii::forEach(matrix.begin(), matrix.end(),
    *                           Pii::Mean<float>()).mean();
-   * @endcode
+   * ~~~
    */
   template<class InputIterator, class UnaryFunction>
   UnaryFunction forEach(InputIterator begin, InputIterator end, UnaryFunction func)
@@ -558,18 +558,18 @@ namespace Pii
   }
 
   /**
-   * Applies @a func to each element in the range [@a begin, @a end)
-   * for which @a predicate returns a non-zero value. The return value
-   * of the unary function @a func (if any) is ignored. Returns @a
-   * func.
+   * Applies *func* to each element in the range [*begin*, *end*)
+   * for which *predicate* returns a non-zero value. The return value
+   * of the unary function *func* (if any) is ignored. Returns 
+   * *func*.
    *
-   * @code
+   * ~~~
    * // Calculate the mean of non-zero entries
    * PiiMatrix<float> matrix(3,3);
    * std::cout << Pii::forEachIf(matrix.begin(), matrix.end(),
    *                             std::bind2nd(std::not_equal_to<float>(), 0.0),
    *                             Pii::Mean<float>()).mean();
-   * @endcode
+   * ~~~
    */
   template<class InputIterator, class UnaryPredicate, class UnaryFunction>
   UnaryFunction forEachIf(InputIterator begin, InputIterator end, UnaryPredicate predicate, UnaryFunction func)
@@ -601,7 +601,7 @@ namespace Pii
   }
 
   /**
-   * Randomize the order of elements in [@a begin, @a end).
+   * Randomize the order of elements in [*begin*, *end*).
    */
   template <class Iterator> inline void shuffle(Iterator begin, Iterator end)
   {

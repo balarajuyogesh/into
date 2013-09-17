@@ -27,7 +27,6 @@
  * a matrix in which each row stores the (x,y) coordinates of a pixel
  * on the boundary.
  *
- * @ingroup PiiImagePlugin
  */
 class PII_IMAGE_EXPORT PiiBoundaryFinder
 {
@@ -52,8 +51,8 @@ public:
    * Finds the next unhandled boundary and returns its coordinates as
    * a N-by-2 matrix. Boundaries are searched from bottom to top.
    *
-   * @param objects the detected objects. Each pixel to which @p rule
-   * returns @p true when compared to @p value will be treated as an
+   * @param objects the detected objects. Each pixel to which `rule`
+   * returns `true` when compared to `value` will be treated as an
    * object. Other pixels are treated as non-objects.
    *
    * @param rule the decision rule to match object pixels.
@@ -70,15 +69,15 @@ public:
 
   /**
    * Finds the next unhandled boundary and stores its coordinates to
-   * @a points. Returns the number of boundary points appended to @a
-   * points, or zero if no more boundaries can be found.
+   * *points*. Returns the number of boundary points appended to 
+   * *points*, or zero if no more boundaries can be found.
    */
   template <class T, class UnaryOp>
   int findNextBoundary(const PiiMatrix<T>& objects, UnaryOp rule, PiiMatrix<int>& points);
 
   /**
    * Returns the boundary mask. After each iteration
-   * (#findNextBoundary()), all detected boundaries are marked into
+   * ([findNextBoundary()]), all detected boundaries are marked into
    * this mask. Right and bottom edges are be marked with ones, left
    * and top edges with twos and double edges with three.
    */
@@ -89,8 +88,8 @@ public:
    * clockwise, and the coordinates of found boundary points will be
    * stored in the returned matrix.
    *
-   * @param objects the detected objects. Each pixel to which @p rule
-   * returns @p true when compared to @p value will be treated as an
+   * @param objects the detected objects. Each pixel to which `rule`
+   * returns `true` when compared to `value` will be treated as an
    * object. Other pixels are treated as non-objects.
    *
    * @param rule the decision rule to match object pixels.
@@ -135,19 +134,19 @@ public:
 
   /**
    * Extracts all outer and inner boundaries of connected pixels that
-   * match @p Rule with @p value.
+   * match `Rule` with `value`.
    *
-   * @param objects the detected objects. Each pixel to which @p Rule
-   * returns @p true when compared to @p value will be treated as an
+   * @param objects the detected objects. Each pixel to which `Rule`
+   * returns `true` when compared to `value` will be treated as an
    * object. Other pixels are treated as non-objects.
    *
    * @param rule the decision rule to match object pixels.
    *
-   * @param value use this value as the second argument to @p Rule.
+   * @param value use this value as the second argument to `Rule`.
    *
    * @param boundaryMask draw boundaries to this mask as they are
    * traversed. The size of the mask matrix will be adjusted to match
-   * @p objects.
+   * `objects`.
    *
    * @return a list of boundary coordinate matrices. One matrix will
    * be returned for each outer or inner boundary. Each row of a
@@ -155,7 +154,7 @@ public:
    * boundary point, in this order. The last point will be equal to
    * the first one.
    *
-   * @code
+   * ~~~
    * PiiMatrix<int> objects(8,8,
    *                        0,1,2,0,1,1,0,0,
    *                        0,2,2,0,1,1,0,0,
@@ -172,7 +171,7 @@ public:
    * // The list now has 3 entries, one for the large L-shaped object
    * // with a hole, another for the hole, and one for the small
    * // square of ones.
-   * @endcode
+   * ~~~
    */
   template <class T, class UnaryOp>
   static QList<PiiMatrix<int> > findBoundaries(const PiiMatrix<T>& objects,
@@ -193,7 +192,7 @@ private:
   /**
    * Find the last object boundary that has not been processed yet.
    * The boundary of an object is detected when two neighboring
-   * pixels return different truth values when @a rule is applied.
+   * pixels return different truth values when *rule* is applied.
    *
    * @param objects an image that contains the objects to be detected.
    *

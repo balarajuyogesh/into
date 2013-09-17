@@ -27,18 +27,17 @@ class PiiAbstractOutputSocket;
  * either as an input, an output, or a proxy. Sockets within an
  * operation are named uniquely so that inputs and outputs can be
  * retrieved with identifier strings. Examples of such strings include
- * "features", "class label", and "image". Usually, @p objectName is
+ * "features", "class label", and "image". Usually, `objectName` is
  * used to store the name of the socket. The name may, however, be
- * different in different contexts. @ref PiiOperationCompound
+ * different in different contexts. [PiiOperationCompound]
  * "Operation compounds" may expose their internal sockets with
  * different names. To get the name of a socket in the context of an
- * operation, use the @ref PiiOperation::socketName() function.
+ * operation, use the [PiiOperation::socketName()] function.
  *
  * Due to the fact that QObject doesn't support virtual inheritance,
  * all concrete implementations of this interface also derive from
  * PiiAbstractSocket.
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiSocket : public QObject
 {
@@ -61,14 +60,14 @@ public:
 
   /**
    * Returns a pointer to this socket as PiiAbstractInputSocket, if this
-   * socket is either an @p Input or a @p Proxy. Otherwise returns
+   * socket is either an `Input` or a `Proxy`. Otherwise returns
    * zero.
    */
   virtual PiiAbstractInputSocket* asInput() = 0;
 
   /**
    * Returns a pointer to this socket as PiiAbstractOutputSocket, if this
-   * socket is either an @p Output or a @p Proxy. Otherwise returns
+   * socket is either an `Output` or a `Proxy`. Otherwise returns
    * zero.
    */
   virtual PiiAbstractOutputSocket* asOutput() = 0;

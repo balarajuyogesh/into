@@ -29,7 +29,6 @@
  * finally killed by PiiNetworkServer. An idle thread can be assigned
  * to a new client once the old one has been handled.
  *
- * @ingroup Network
  */
 class PII_NETWORK_EXPORT PiiNetworkServerThread : public QThread, public PiiProgressController
 {
@@ -53,7 +52,7 @@ public:
     /**
      * Called by the thread when it is about to finish. The thread
      * finishes if it has not been assigned new clients for a while,
-     * or #stop() has been called. Use the #setTimeOut() function to
+     * or [stop()] has been called. Use the [setTimeOut()] function to
      * change the maximum wait time.
      */
     virtual void threadFinished(PiiNetworkServerThread* thread) = 0;
@@ -62,7 +61,7 @@ public:
      * Create a new socket device for communicating through the given
      * socket. It is advisable to use a PiiWaitingIoDevice to ensure
      * that the protocol doesn't need to cope with slow connections
-     * and buffering. @p %PiiNetworkServerThread calls this function
+     * and buffering. @p PiiNetworkServerThread calls this function
      * to create a socket device and passes the returned pointer to
      * the protocol implementation. Once the protocol is done, the
      * device will be closed and deleted.
@@ -72,23 +71,23 @@ public:
 
   
   /**
-   * Create a new worker thread that uses @p protocol to communicate
-   * with clients. If @p protocol is stateful (@ref
-   * PiiNetworkProtocol::hasState() return @p true), the thread
+   * Create a new worker thread that uses `protocol` to communicate
+   * with clients. If `protocol` is stateful (@ref
+   * PiiNetworkProtocol::hasState() return `true`), the thread
    * assumes the ownership of the pointer. Otherwise, the pointer must
    * remain valid during the lifetime of the thread.
    */
   PiiNetworkServerThread(PiiNetworkProtocol* protocol);
 
   /**
-   * Calls #stop() and waits for the thread to exit, if it is still
+   * Calls [stop()] and waits for the thread to exit, if it is still
    * running. Then deletes the protocol if it is stateful.
    */
   ~PiiNetworkServerThread();
 
   /**
    * Set the controller. The controller must be set before
-   * #startRequest() is called.
+   * [startRequest()] is called.
    */
   void setController(Controller* controller);
 
@@ -111,15 +110,15 @@ public:
    * Sends a stop signal to the thread. The thread will later exit
    * asynchronously.
    *
-   * @param mode @p InterruptClients, the protocol will be interrupted
-   * even if it is not done with the client yet. If @p WaitClients,
+   * @param mode `InterruptClients`, the protocol will be interrupted
+   * even if it is not done with the client yet. If `WaitClients`,
    * the thread will wait until the client finishes cleanly.
    */
   void stop(PiiNetwork::StopMode mode = PiiNetwork::WaitClients);
 
   /**
-   * Returns @p false if the thread has been stopped with the @p
-   * interrupt flag set to @p true. Otherwise returns @p true.
+   * Returns `false` if the thread has been stopped with the 
+   * `interrupt` flag set to `true`. Otherwise returns `true`.
    */
   bool canContinue(double percentage) const;
 

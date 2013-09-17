@@ -27,25 +27,24 @@
 /**
  * Functions for transforming colors.
  *
- * @note Unless stated otherwise, color transform functions assume
- * <em>linear RGB</em>. Almost all digitally stored image data are
+ * ! Unless stated otherwise, color transform functions assume
+ * *linear RGB*. Almost all digitally stored image data are
  * however gamma-adjusted and therefore non-linear. For example, JPEG
  * and MPEG store colors in a non-linear form, and almost all consumer
  * digital cameras apply gamma adjustment to the colors. Therefore,
- * @ref correctGamma() "gamma correction" needs to be applied to the
+ * [gamma correction](correctGamma()) needs to be applied to the
  * input images. Otherwise, color transformation results will not be
  * theoretically correct. It is up to the user if this matters in
  * practice, but you have been warned. It can be assumed that digital
  * cameras typically apply a gamma of 1/2.2. To linearize the colors,
  * one needs to invert the gamma compression:
  *
- * @code
+ * ~~~
  * using namespace PiiColors;
  * PiiColor<> nonlinearRgbColor;
  * PiiColor<> linearRgbColor = correctGamma(nonlinearRgbColor, 2.2);
- * @endcode
+ * ~~~
  *
- * @ingroup PiiColorsPlugin
  */
 namespace PiiColors
 {
@@ -54,7 +53,7 @@ namespace PiiColors
    * the normalized color layers. Normalized RGB is obtained by
    * dividing each channel by the sum of all channels. (@f$ r = R/(R +
    * G + B)@f$ etc.) Note that only two channels are extracted because
-   * the third one is reduntant (@f$ r+g+b = 1@f$).
+   * the third one is reduntant (\( r+g+b = 1\)).
    *
    * @param image The input image. Any color will do as the content
    * type (PiiColor or PiiColor4).
@@ -73,7 +72,7 @@ namespace PiiColors
    *
    * @param ch2Index same for the second channel
    *
-   * @code
+   * ~~~
    * PiiMatrix<PiiColor<> > img(100,100);
    * PiiMatrix<unsigned char> red, green, blue;
    * // Extract normalized RG with 8 bit resolution
@@ -81,7 +80,7 @@ namespace PiiColors
    *
    * // Extract normalized RB with 5 bit resolution
    * PiiColors::normalizedRgb(img, red, blue, 32, 0, 2);
-   * @endcode
+   * ~~~
    */
   template <class T> void normalizedRgb(const PiiMatrix<T>& image,
                                         PiiMatrix<typename T::Type>& ch1,
@@ -126,7 +125,7 @@ namespace PiiColors
    * @see normalizeColorDistribution()
    * @see matchColors()
    *
-   * @note This function is temporarily broken.
+   * ! This function is temporarily broken.
    */
   template <class ColorType> void measureColorDistribution(const PiiMatrix<ColorType>& clrImage,
                                                            PiiMatrix<double>& baseVectors,
@@ -136,11 +135,11 @@ namespace PiiColors
   /**
    * Project colors into a new base and translate to a new center. In
    * the result image, the color distribution will have approximately
-   * zero mean and unit variance. Each color @e c in the input image
+   * zero mean and unit variance. Each color *c* in the input image
    * will be treated as a row vector. The normalized color is given by
-   * @f$c_n = (c-t)A@f$, where @e t is the translation vector (@p
-   * center) @e A is the matrix representing the new base (@p
-   * baseVectors).
+   * \(c_n = (c-t)A\), where *t* is the translation vector (
+   * `center`) *A* is the matrix representing the new base (
+   * `baseVectors`).
    *
    * @param clrImage the input image
    *
@@ -159,13 +158,13 @@ namespace PiiColors
 
   /**
    * Match colors in an image to a precalculated model. This function
-   * compares colors in an image to a color model represented by @p
-   * baseVectors and @p center. The function tries to find the
+   * compares colors in an image to a color model represented by 
+   * `baseVectors` and `center`. The function tries to find the
    * likelihood of a color belonging to the model. A value of one is
-   * given to a pixel whose color that is exactly at @p center. The
-   * value decreases by distance according to the formula @f$f(d^)@f$,
-   * where @e d is the geometric distance of the color to the center
-   * of the distribution in normalized coordinates and @e f() is a
+   * given to a pixel whose color that is exactly at `center`. The
+   * value decreases by distance according to the formula \(f(d^)\),
+   * where *d* is the geometric distance of the color to the center
+   * of the distribution in normalized coordinates and *f*() is a
    * user-specified function.
    *
    * @param clrImage the input image
@@ -176,7 +175,7 @@ namespace PiiColors
    * @param center a 1-by-3 translation vector
    *
    * @param func an adaptable unary function that converts the
-   * distance @e d (a @p float) to the output value. See
+   * distance *d* (a `float`) to the output value. See
    * LikelihoodFunction for an example.
    *
    * @return an image in which each value represents the "likelihood"
@@ -197,11 +196,11 @@ namespace PiiColors
   /**
    * Convert a color image into indexed colors. This function
    * quantizes each color channel to the specified number of levels.
-   * The color index is calculated as @f$I = R*l_r*l_g + G*l_b + B@f$,
+   * The color index is calculated as \(I = R*l_r*l_g + G*l_b + B\),
    * where R, G, and B represent the quantized color channel values,
-   * and @f$l_X@f$ is the number of quantization levels for channel X.
+   * and \(l_X\) is the number of quantization levels for channel X.
    *
-   * @param clrImage the input image. @p ColorType must be either
+   * @param clrImage the input image. `ColorType` must be either
    * PiiColor or PiiColor4. If color channels are floats, the maximum
    * value is assumed to be 1.0. Otherwise, 255 will be used as max.
    *
@@ -209,12 +208,12 @@ namespace PiiColors
    * color channel.
    *
    * @param greenLevels the number of quantization levels for the red
-   * color channel. 0 means same as @p redLevels.
+   * color channel. 0 means same as `redLevels`.
    *
    * @param blueLevels the number of quantization levels for the blue
-   * color channel. 0 means same as @p redLevels.
+   * color channel. 0 means same as `redLevels`.
    *
-   * @note Despite the color channel names used here, the function
+   * ! Despite the color channel names used here, the function
    * also works with color spaces other than RGB.
    */
   template <class ColorType> PiiMatrix<int> toIndexed(const PiiMatrix<ColorType>& clrImage,
@@ -227,23 +226,23 @@ namespace PiiColors
    * probability that a pair of pixels, whose distance is d, both have
    * color c. In practice, the correlogram is built as a histogram and
    * must be normalized to obtain propabilities. The technique is
-   * described in detail in <i>Jing Huang; Kumar, S.R.; Mitra, M.;
+   * described in detail in *Jing Huang; Kumar, S.R.; Mitra, M.;
    * Wei-Jing Zhu; Zabih, R.: "Image indexing using color
    * correlograms", Computer Vision and Pattern Recognition, 1997. 
    * Proceedings., 1997 IEEE Computer Society Conference on, 1997,
-   * Pages: 762 -768</i>. This implementation does not use the bogus
+   * Pages: 762 -768*. This implementation does not use the bogus
    * "optimization" technique reported in the paper.
    *
    * @param image an indexed color image
    *
    * @param maxDistance measure correlation between colors separated
    * up to this many pixels. The autocorrelogram will be calculated
-   * for distances {1, ..., @p maxDistance}.
+   * for distances {1, ..., `maxDistance`}.
    *
-   * @param levels the number of indexed colors in @p image. A
+   * @param levels the number of indexed colors in `image`. A
    * non-positive number means auto-detect.
    *
-   * @return a 1 by @p levels * @p maxDistance matrix representing the
+   * @return a 1 by `levels` * `maxDistance` matrix representing the
    * autocorrelogram (folded into a row matrix). Note that if the
    * number of quantization levels is auto-detected, the size of the
    * output may change in successive calls.
@@ -262,10 +261,10 @@ namespace PiiColors
    * @param distances a list of distances for which the
    * autocorrelogram will be calculated.
    *
-   * @param levels the number of indexed colors in @p image. A
+   * @param levels the number of indexed colors in `image`. A
    * non-positive number means auto-detect.
    *
-   * @return a 1 by @p levels * @p maxDistance matrix representing the
+   * @return a 1 by `levels` * `maxDistance` matrix representing the
    * autocorrelogram (folded into a row matrix). Note that if the
    * number of quantization levels is auto-detected, the size of the
    * output may change in successive calls.
@@ -276,17 +275,17 @@ namespace PiiColors
   
   /**
    * Apply gamma correction to a color channel. Gamma correction is
-   * defined as @f$v_o = v_i^\gamma@f$, where @p o and @p i stand for
+   * defined as \(v_o = v_i^\gamma\), where `o` and `i` stand for
    * output and input. Contemporary display devices are usually
    * assumed to have a gamma of about 2.2. (This is in fact a rough
    * approximation: LG flat panels, for example, measure closer to
    * 1.97.) Linear colors must thus be compressed with a gamma of
-   * @f$1/2.2 \approx 0.45@f$ to get linear @e intensity response on
-   * screen. Linear intensity response does not however mean linear @p
-   * lightness (perceptual luminance) response; the human vision is
+   * \(1/2.2 \approx 0.45\) to get linear *intensity* response on
+   * screen. Linear intensity response does not however mean linear 
+   * `lightness` (perceptual luminance) response; the human vision is
    * more sensitive to lower luminance.
    *
-   * @note This function can be used only with floating-point color
+   * ! This function can be used only with floating-point color
    * channels.
    *
    * @param value the value of a color channel, in [0, 1]. Usually,
@@ -315,7 +314,7 @@ namespace PiiColors
    * @param maximum the maximum value of a color channel
    *
    * @return gamma-adjusted value of the color channel, rescaled to
-   * original range. If @p T is an integer type, the result will be
+   * original range. If `T` is an integer type, the result will be
    * rounded to closest integer.
    */
   template <class T> inline T correctGamma(T value, double gamma, double maximum)
@@ -325,7 +324,7 @@ namespace PiiColors
   }
 
   /**
-   * Apply gamma correction to all color channels of @p clr. Color
+   * Apply gamma correction to all color channels of `clr`. Color
    * channels are assumed to be in [0, 1].
    */
   template <class T> inline PiiColor<T> correctGamma(const PiiColor<T>& clr, double gamma)
@@ -336,8 +335,8 @@ namespace PiiColors
   }
 
   /**
-   * Apply gamma correction to the first three color channels of @p
-   * clr. Note that the fourth color channel (e.g. alpha) will not be
+   * Apply gamma correction to the first three color channels of 
+   * `clr`. Note that the fourth color channel (e.g. alpha) will not be
    * touched. Color channels are assumed to be in [0, 1].
    */
   template <class T> inline PiiColor4<T> correctGamma(const PiiColor4<T>& clr, double gamma)
@@ -348,8 +347,8 @@ namespace PiiColors
   }
 
   /**
-   * Apply gamma correction to all channels of @p clr. Color
-   * channels are assumed to be in [0, @p maximum].
+   * Apply gamma correction to all channels of `clr`. Color
+   * channels are assumed to be in [0, `maximum`].
    */
   template <class T> inline PiiColor<T> correctGamma(const PiiColor<T>& clr, double gamma, double maximum)
   {
@@ -359,9 +358,9 @@ namespace PiiColors
   }
 
   /**
-   * Apply gamma correction to the first three color channels of @p
-   * clr. Note that the fourth color channel (e.g. alpha) will not be
-   * touched. Color channels are assumed to be in [0, @p maximum].
+   * Apply gamma correction to the first three color channels of 
+   * `clr`. Note that the fourth color channel (e.g. alpha) will not be
+   * touched. Color channels are assumed to be in [0, `maximum`].
    */
   template <class T> PiiColor4<T> correctGamma(const PiiColor4<T>& clr, double gamma, double maximum)
   {
@@ -397,7 +396,7 @@ namespace PiiColors
   };
 
   /**
-   * Apply gamma correction to all pixels in @p image. The function
+   * Apply gamma correction to all pixels in `image`. The function
    * works with both gray-level and color images. Color channels are
    * assumed to be in [0, 1].
    *
@@ -409,9 +408,9 @@ namespace PiiColors
   }
   
   /**
-   * Apply gamma correction to all pixels in @p image. The function
+   * Apply gamma correction to all pixels in `image`. The function
    * works with both gray-level and color images. Color channels are
-   * assumed to be in [0, @p maximum].
+   * assumed to be in [0, `maximum`].
    *
    * @see correctGamma(T, double, double)
    */
@@ -422,7 +421,7 @@ namespace PiiColors
 
   /**
    * A unary function for converting color distances to "likelihoods". 
-   * The function is defined as @f$f(x) = e^{-x}@f$. As a result, zero
+   * The function is defined as \(f(x) = e^{-x}\). As a result, zero
    * distance to the center of a color model maps to one, and infinity
    * distance to zero.
    */
@@ -435,7 +434,7 @@ namespace PiiColors
    * Convert a color in an RGB color space into the HSV color space. 
    * HSV (hue, saturation, value) is a color space in which a
    * piecewise linear function is used as an approximation to the
-   * (non-linear) hue channel value. See @ref QColor for a detailed
+   * (non-linear) hue channel value. See [QColor] for a detailed
    * description of the HSV space.
    *
    * This implementation deviates from the conventional way of scaling
@@ -444,27 +443,27 @@ namespace PiiColors
    * channel is often scaled into [0,100]. This convention has a
    * couple of problems:
    *
-   * @li @p unsigned @p char can only store values up to 255.
+   * - `unsigned` `char` can only store values up to 255.
    *
-   * @li Scaling @e value down from 255 to 100 degrades accuracy.
+   * - Scaling *value* down from 255 to 100 degrades accuracy.
    *
-   * @li With floating-point types, angles are conventionally
+   * - With floating-point types, angles are conventionally
    * represented as radians, not degrees.
    *
    * For these reasons, this function scales the color channels
    * depending on the input type as follows:
    *
-   * @li @p unsigned @p char - H, S, and V are all in [0,255]
+   * - `unsigned` `char` - H, S, and V are all in [0,255]
    *
-   * @li Other integer types - H is [0,359], S and V in [0,255]
+   * - Other integer types - H is [0,359], S and V in [0,255]
    *
-   * @li Floating-point types - H is in [0,2*pi), S and V in [0,1].
+   * - Floating-point types - H is in [0,2*pi), S and V in [0,1].
    *
-   * @note Due to numerical inaccuracies, converting from RGB to HSV
+   * ! Due to numerical inaccuracies, converting from RGB to HSV
    * and back doesn't necessarily result into the color you started
    * with. The back-and-forth conversion of floating-point types is
-   * accurate to at least 1e-6. The conversion error with @p unsigned
-   * @p char is at most three levels on any color channel. The
+   * accurate to at least 1e-6. The conversion error with `unsigned`
+   * `char` is at most three levels on any color channel. The
    * conversion error with other integer types it at most two levels.
    *
    * @param rgbColor a color in an RGB color space. Floating-point
@@ -474,16 +473,16 @@ namespace PiiColors
    * @return the color in an HSV color space. The type of the
    * returned color matches that of the input color.
    *
-   * @code
+   * ~~~
    * PiiColor<> rgb(1,2,3);
    * PiiColor<> hsv = PiiColors::rgbToHsv(rgb);
-   * @endcode
+   * ~~~
    */
   template <class Clr> Clr rgbToHsv(const Clr& rgbColor);
 
   /**
    * Convert a color in an HSV color space into an RGB color space. 
-   * This function works inversely to #rgbToHsv() and assumes the same
+   * This function works inversely to [rgbToHsv()] and assumes the same
    * conventions on scaling color channels. The output color channels
    * will be in [0,1] with floating-point types and in [0,255] with
    * integer types.
@@ -570,7 +569,7 @@ namespace PiiColors
    * imaging equipment. Make sure the white point has no zero color
    * channels.
    *
-   * @note The conversion only works with floating-point color
+   * ! The conversion only works with floating-point color
    * values.
    */
   template <class Clr> Clr xyzToLab(const Clr& xyzColor,
@@ -586,7 +585,7 @@ namespace PiiColors
    * imaging equipment. Make sure the white point has no zero color
    * channels.
    *
-   * @note The conversion only works with floating-point color
+   * ! The conversion only works with floating-point color
    * values.
    */
   template <class Clr> Clr labToXyz(const Clr& labColor,
@@ -633,7 +632,7 @@ namespace PiiColors
   }
 
   /**
-   * Convert a color in a @e non-linear RGB color space to luminance
+   * Convert a color in a *non*-linear RGB color space to luminance
    * as defined in ITU-R BT.709: @f$Y_{709} = 0.2126R' + 0.7152G' +
    * 0.0722B'@f$.
    */
@@ -643,7 +642,7 @@ namespace PiiColors
   }
   
   /**
-   * An adaptable binary function that converts a @e non-linear RGB
+   * An adaptable binary function that converts a *non*-linear RGB
    * color to Y709 luminance.
    *
    * @see rgbToY709(Clr)
@@ -654,7 +653,7 @@ namespace PiiColors
   };
 
   /**
-   * Convert a color image from a @e non-linear RGB color space to
+   * Convert a color image from a *non*-linear RGB color space to
    * Y709 luminance.
    */
   template <class Clr> inline PiiMatrix<float> rgbToY709(const PiiMatrix<Clr>& clrImage)
@@ -663,13 +662,13 @@ namespace PiiColors
   }
 
   /**
-   * Convert a @e non-linear (gamma-adjusted) RGB color into Y'PbPr. 
+   * Convert a *non*-linear (gamma-adjusted) RGB color into Y'PbPr. 
    * Y'PbPr is the analog counterpart of Y'CbCr. The color channels in
    * Y'PbPr are not quantized and thus not suitable for digital
    * representation. Different encodings use different offsets and
    * scaling factors for the color channels.
    *
-   * @note This function does not use the conventional BT.601
+   * ! This function does not use the conventional BT.601
    * primaries. Instead, the more contemporary BT.709 (HDTV) primaries
    * are used.
    *
@@ -690,9 +689,9 @@ namespace PiiColors
   }
 
   /**
-   * Convert a Y'PbPr color into @e non-linear RGB.
+   * Convert a Y'PbPr color into *non*-linear RGB.
    *
-   * @note This function does not use the conventional BT.601
+   * ! This function does not use the conventional BT.601
    * primaries. Instead, the more contemporary BT.709 (HDTV) primaries
    * are used.
    *
@@ -749,11 +748,11 @@ namespace PiiColors
   }
 
   /**
-   * Convert a @e non-linear (gamma-adjusted) RGB color into Y'CbCr. 
+   * Convert a *non*-linear (gamma-adjusted) RGB color into Y'CbCr. 
    * Y'CbCr is the same as Y'PbPr, but the chroma components are
    * offset to non-negative values.
    *
-   * @note This function does not use the conventional BT.601
+   * ! This function does not use the conventional BT.601
    * primaries. Instead, the more contemporary BT.709 (HDTV) primaries
    * are used.
    *
@@ -763,7 +762,7 @@ namespace PiiColors
    *
    * @return a Y'CbCr color. Y' (luma), Cb (difference between blue
    * and luma) and Cr (difference between red and luma) are all in [0,
-   * @p maximum]. All color channels will be rounded to nearest
+   * `maximum`]. All color channels will be rounded to nearest
    * integers.
    */
   template <class Clr> inline Clr rgbToYcbcr(const Clr& clr,
@@ -780,9 +779,9 @@ namespace PiiColors
   }
 
   /**
-   * Convert a Y'CbCr color into @e non-linear RGB.
+   * Convert a Y'CbCr color into *non*-linear RGB.
    *
-   * @note This function does not use the conventional BT.601
+   * ! This function does not use the conventional BT.601
    * primaries. Instead, the more contemporary BT.709 (HDTV) primaries
    * are used.
    *
@@ -855,7 +854,7 @@ namespace PiiColors
   /**
    * An adaptable binary function that multiplies a color with a
    * 3-by-3 matrix. The type of the color channels in the result will
-   * always be @p float. The function makes no checks. The caller must
+   * always be `float`. The function makes no checks. The caller must
    * ensure the size of the conversion matrix.
    */
   template <class Clr> struct GenericConversion : Pii::BinaryFunction<PiiMatrix<float>, Clr, PiiColor<float> >
@@ -876,11 +875,11 @@ namespace PiiColors
    * PiiColor<float>. The function makes no checks. The caller must
    * ensure the size of the conversion matrix.
    *
-   * @code
+   * ~~~
    * using namespace PiiColors;
    * PiiMatrix<PiiColor4<> > clrImage;
    * PiiMatrix<PiiColor<float> > converted = genericConversion(clrImage, ohtaKanadeMatrix);
-   * @endcode
+   * ~~~
    */
   template <class Clr> inline PiiMatrix<PiiColor<float> > genericConversion(const PiiMatrix<Clr>& colorImage,
                                                                             const PiiMatrix<float>& conversionMatrix)

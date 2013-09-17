@@ -21,7 +21,6 @@
 
 /**
  * @file
- * @ingroup PiiDspPlugin
  *
  * Methods for creating wavelets and performing the wavelet
  * decomposition for 1-D and 2-D signals.
@@ -30,7 +29,7 @@
 namespace PiiDsp
 {
   /**
-   * Get the <i>index</i>th Daubechies scaling wavelet. The first
+   * Get the *index*th Daubechies scaling wavelet. The first
    * filter (index 1) is a two-tap filter and equals to the Haar
    * wavelet. Filter 2 is a four-tap filter, filter 3 a six-tap
    * filter and so on.
@@ -44,10 +43,10 @@ namespace PiiDsp
   /**
    * Known wavelet families. Families currently known are:
    *
-   * @li Haar - the Haar wavelet. Not actually a family, but equal to
+   * - Haar - the Haar wavelet. Not actually a family, but equal to
    * the first Daubechies wavelet.
    *
-   * @li Daubechies - Daubechies wavelet family
+   * - Daubechies - Daubechies wavelet family
    */
   enum WaveletFamily { Haar, Daubechies };
   

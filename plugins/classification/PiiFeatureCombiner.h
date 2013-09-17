@@ -31,7 +31,7 @@
  *
  * Feature combiner has the capability of learning scaling factors for
  * otherwise incompatible distance measures. Given a list of distance
- * measures and a batch of samples, %PiiFeatureCombiner estimates the
+ * measures and a batch of samples, PiiFeatureCombiner estimates the
  * variances of distance measure outcomes by calculating pairwise
  * distances between samples in the batch. It provides the inverse
  * values of the variances as scaling factors that can be used as
@@ -39,26 +39,28 @@
  * PiiVectorQuantizerOperation::distanceWeights).
  *
  * To use the learning facilities one needs to set the
- * #distanceMeasures property so that each incoming feature vector has
- * a distance measure. The #learningBatchSize property must be set to a value
+ * [distanceMeasures] property so that each incoming feature vector has
+ * a distance measure. The [learningBatchSize] property must be set to a value
  * larger than one, or to -1 to start buffering samples. Once enough
  * samples have been buffered, learning is started by calling
- * #startLearningThread(). While learning, the operation regularly
- * emits the #progressed() signal. When the learning thread quits, the
- * #distanceWeights property contains scaling factors that should make
+ * [startLearningThread()]. While learning, the operation regularly
+ * emits the [progressed()] signal. When the learning thread quits, the
+ * [distanceWeights] property contains scaling factors that should make
  * the individual distance measures commensurable.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in featuresX - a feature vector. X varies from 0 to N, where N is
  * the number of different feature vectors to combine. Any primitive
  * matrix type. Only row matrices are accepted.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out features - a concatenated feature vector. If any input is
  * double, the result is double, then float, then int. If AAAA is read
- * from @p input0 and BBBBB from @p input1, @p features will emit
+ * from `input0` and BBBBB from `input1`, `features` will emit
  * AAAABBBBB.
  *
  * @out boundaries - the indices of vector ends (PiiMatrix<int>). The
@@ -66,20 +68,20 @@
  * the index of the start of the second one. In the previous example,
  * the boundaries would contain two values: 4 and 9.
  *
- * @par An example
+ * An example
+ * ----------
  *
- * Let us assume that #dynamicInputCount is set to three, and the
+ * Let us assume that [dynamicInputCount] is set to three, and the
  * following inputs are received:
  *
- * @li features0: PiiMatrix<double> [ 0.1, 0.2, 0.3 ]
- * @li features1: PiiMatrix<int> [ 4, 5, 6, 7 ]
- * @li features2: a @p float 80.0
+ * - features0: PiiMatrix<double> [ 0.1, 0.2, 0.3 ]
+ * - features1: PiiMatrix<int> [ 4, 5, 6, 7 ]
+ * - features2: a `float` 80.0
  *
  * The compound feature vector will be a PiiMatrix<double> [ 0.1, 0.2,
- * 0.3, 4, 5, 6, 7, 80.0 ]. The @p boundaries output will emit a
+ * 0.3, 4, 5, 6, 7, 80.0 ]. The `boundaries` output will emit a
  * PiiMatrix<int> [ 3, 7, 8 ].
  *
- * @ingroup PiiClassificationPlugin
  */
 class PiiFeatureCombiner : public PiiDefaultOperation
 {
@@ -94,24 +96,24 @@ class PiiFeatureCombiner : public PiiDefaultOperation
   /**
    * The maximum number of training samples collected for learning. 
    * Zero means that no training samples will be collected, and the
-   * operation will only join incoming feature vectors. If @p
-   * learningBatchSize is set to N (N > 1), at most N samples will be kept in
-   * memory. If @p learningBatchSize is -1, all incoming samples will be
+   * operation will only join incoming feature vectors. If 
+   * `learningBatchSize` is set to N (N > 1), at most N samples will be kept in
+   * memory. If `learningBatchSize` is -1, all incoming samples will be
    * buffered without limit. The buffered samples will be used to
    * estimate the variance of inter-sample distances. The default
    * value is 0.
    *
    * Note that the time it takes to learn distance distributions is
-   * proportional to #learningBatchSize squared. The total number of distance
-   * measure evaluations is equal to @f$\fraq{N}{2}(M^2 - M)@f$, where
+   * proportional to [learningBatchSize] squared. The total number of distance
+   * measure evaluations is equal to \(\fraq{N}{2}(M^2 - M)\), where
    * N is the number of feature vectors and M is the number of
    * samples.
    */
   Q_PROPERTY(int learningBatchSize READ learningBatchSize WRITE setLearningBatchSize);
 
   /**
-   * The action to perform with new samples when #learningBatchSize has been
-   * exceeded. The default is @p OverwriteRandomSample.
+   * The action to perform with new samples when [learningBatchSize] has been
+   * exceeded. The default is `OverwriteRandomSample`.
    */
   Q_PROPERTY(FullBufferBehavior fullBufferBehavior READ fullBufferBehavior WRITE setFullBufferBehavior);
   Q_ENUMS(FullBufferBehavior);
@@ -120,7 +122,7 @@ class PiiFeatureCombiner : public PiiDefaultOperation
    * The names of distance measures used in measuring inter-sample
    * distances in classification. See
    * PiiVectorQuantizerOperation::distanceMeasures. In this list is
-   * non-empty, its length must match #dynamicInputCount.
+   * non-empty, its length must match [dynamicInputCount].
    */
   Q_PROPERTY(QStringList distanceMeasures READ distanceMeasures WRITE setDistanceMeasures);
 
@@ -128,8 +130,8 @@ class PiiFeatureCombiner : public PiiDefaultOperation
    * Calculated scaling factors for the distance measures. Once this
    * operation is trained, the scaling factors can be copied to
    * PiiVectorQuantizerOperation to make distance measures
-   * commensurable. The list contains @p doubles, and its length
-   * equals #featureCount. If the operation has not been trained, the
+   * commensurable. The list contains `doubles`, and its length
+   * equals [featureCount]. If the operation has not been trained, the
    * list is empty.
    */
   Q_PROPERTY(QVariantList distanceWeights READ distanceWeights WRITE setDistanceWeights);
@@ -142,8 +144,8 @@ class PiiFeatureCombiner : public PiiDefaultOperation
   Q_PROPERTY(int featureCount READ featureCount);
 
   /**
-   * A read-only property whose value is @p true when the learning
-   * thread is running, and @p false otherwise.
+   * A read-only property whose value is `true` when the learning
+   * thread is running, and `false` otherwise.
    */
   Q_PROPERTY(bool learningThreadRunning READ learningThreadRunning);
 
@@ -189,15 +191,15 @@ public slots:
    * less than two or the learning thread is already running, this
    * function does nothing. Otherwise, it starts a thread that
    * calculates the variances of distances between buffered samples. 
-   * The thread can be interrupted by calling #stopLearningThread().
-   * The #progressed() signal will be emitted every once in a while
+   * The thread can be interrupted by calling [stopLearningThread()].
+   * The [progressed()] signal will be emitted every once in a while
    * during the calculation.
    */
   void startLearningThread();
 
   /**
    * Stop the learning thread. After this function has been called,
-   * #canContinue() will return @p false, which interrupts the
+   * [canContinue()] will return `false`, which interrupts the
    * learning algorithm.
    */
   void stopLearningThread();

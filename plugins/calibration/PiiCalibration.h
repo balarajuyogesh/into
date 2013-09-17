@@ -26,10 +26,9 @@
 /**
  * Functions for camera calibration.
  *
- * @see @ref calibration_overview
- * @see @ref calibration_stereo
+ * @see [calibration_overview]
+ * @see [calibration_stereo]
  *
- * @ingroup PiiCalibrationPlugin
  */
 namespace PiiCalibration
 {
@@ -87,7 +86,7 @@ namespace PiiCalibration
   /**
    * A structure that stores the extrinsic parameters related to a
    * scene viewed. These parameterers are specific to a certain view. 
-   * Please refer to @ref calibration_extrinsic_parameters for an
+   * Please refer to [calibration_extrinsic_parameters] for an
    * explanation.
    */
   struct PII_CALIBRATION_EXPORT RelativePosition
@@ -144,23 +143,23 @@ namespace PiiCalibration
   /**
    * Options for calibration functions.
    *
-   * @lip NoCalibrationOptions - none of the options applies.
+   * - `NoCalibrationOptions` - none of the options applies.
    *
-   * @lip EstimateIntrinsic - derive an initial guess of the intrinsic
+   * - `EstimateIntrinsic` - derive an initial guess of the intrinsic
    * parameters based on the assumption that the calibration rig is
    * planar. If this is not the case, you must provide an initial
    * guess for intrinsic parameters. An estimate of the principal
    * point (the image center) must always be provided.
    *
-   * @lip FixPrincipalPoint - the principal point will be fixed to the
+   * - `FixPrincipalPoint` - the principal point will be fixed to the
    * initial value and not changed during optimization.
    *
-   * @lip FixAspectRatio - the focal ratio between focal length
-   * components will be fixed. If @p EstimateIntrinsic is used, the
+   * - `FixAspectRatio` - the focal ratio between focal length
+   * components will be fixed. If `EstimateIntrinsic` is used, the
    * focal lengths will be set to arbitrary values. Only the ratio is
    * meaningful.
    *
-   * @lip NoTangentialDistortion - do not estimate the tangetial
+   * - `NoTangentialDistortion` - do not estimate the tangetial
    * distortion factors. The factors are set to zero and won't change
    * in optimization.
    */
@@ -198,11 +197,11 @@ namespace PiiCalibration
    * Each matrix in this list corresponds to one view of the
    * calibration rig and holds an N-by-2 matrix in which each row
    * represents the 2-dimensional image coordinates of a calibration
-   * point. The number of rows in each matrix must match @p
-   * worldPoints.
+   * point. The number of rows in each matrix must match 
+   * `worldPoints`.
    *
    * @param intrinsic store the calculated intrinsic parameters to
-   * this structure. If the @p EstimateIntrinsic option is not set,
+   * this structure. If the `EstimateIntrinsic` option is not set,
    * this structure must contain valid initial values for the
    * intrinsic parameters. In any case, an initial estimate of the
    * principal point must be provided. Therefore, always initialize
@@ -211,8 +210,8 @@ namespace PiiCalibration
    * @param extrinsic store the extrinsic parameters to this list (if
    * non-zero). The extrinsic parameters are calculated for each view.
    *
-   * @param options a logical OR of calibration options, e.g. @p
-   * EstimateIntrinsic | @p NoTangentialDistortion.
+   * @param options a logical OR of calibration options, e.g. 
+   * `EstimateIntrinsic` | `NoTangentialDistortion`.
    *
    * @exception PiiCalibrationException& if the calibration cannot be
    * performed with the given data.
@@ -226,7 +225,7 @@ namespace PiiCalibration
   /**
    * Calculate the position of the camera reference frame with respect
    * to the world coordinate system. This function can be used once
-   * the intrinsic camera parameters are known. See #calibrateCamera()
+   * the intrinsic camera parameters are known. See [calibrateCamera()]
    * for a detailed description of the parameters.
    *
    * @param worldPoints the real-world coordinates of calibration
@@ -251,8 +250,8 @@ namespace PiiCalibration
 #endif //PII_NO_OPENCV
 
   /**
-   * Calculate the relative position of @p camera2 with respect to @p
-   * camera1. When the positions of the cameras have been calculated
+   * Calculate the relative position of `camera2` with respect to 
+   * `camera1`. When the positions of the cameras have been calculated
    * with respect to the world coordinate system, this function can be
    * used to find the transformation between the camera reference
    * frames. As parameters, this function expects the relative
@@ -260,7 +259,7 @@ namespace PiiCalibration
    * coordinate system. The returned rotation matrix and translation
    * vector are calculated as follows:
    *
-   * @f[
+   * \[
    * \begin{array}{rcl}
    * X_1 & = & R_1 X + T_1 \\
    * X_2 & = & R_2 X + T_2 \\
@@ -269,23 +268,23 @@ namespace PiiCalibration
    *     & = & R_2 R_1^{-1} X_1 + (T_2 - R_2 R_1^{-1} T_1) \\
    *     & = & R_S X_1 + T_S
    * \end{array},
-   * @f]
+   * \]
    *
-   * where X is a point in world coordinates. @f$R_S@f$ and @f$T_S@f$
-   * are the rotation matrix and translation vector from @f$X_1@f$ to
-   * @f$X_2@f$. @f$R_S@f$ will be converted to the more compact
+   * where X is a point in world coordinates. \(R_S\) and \(T_S\)
+   * are the rotation matrix and translation vector from \(X_1\) to
+   * \(X_2\). \(R_S\) will be converted to the more compact
    * rotation vector representation before returning.
    *
    * @param camera1 the relative position of the first camera with
    * respect to the world coordinate system. Let us denote the
-   * rotation and translation matrices with @f$R_1@f$ and @f$T_1@f$.
+   * rotation and translation matrices with \(R_1\) and \(T_1\).
    *
    * @param camera2 the relative position of the second camera with
    * respect to the world coordinate system. Let us denote the
-   * rotation and translation matrices with @f$R_2@f$ and @f$T_2@f$.
+   * rotation and translation matrices with \(R_2\) and \(T_2\).
    *
-   * @return the relative position of @p camera2 with respect to @p
-   * camera1.
+   * @return the relative position of `camera2` with respect to 
+   * `camera1`.
    */
   PII_CALIBRATION_EXPORT RelativePosition calculateRelativePosition(const RelativePosition& camera1,
                                                                     const RelativePosition& camera2);
@@ -434,7 +433,7 @@ namespace PiiCalibration
                                                                    const CameraParameters& intrinsic);
 
   /**
-   * Perform perspective projection on @p points.
+   * Perform perspective projection on `points`.
    *
    * @param points a N-by-3 matrix, (x,y,z) on each row
    *
@@ -451,26 +450,26 @@ namespace PiiCalibration
                                                                  double zValue = NAN);
 
   /**
-   * Convert a rotation vector @p rotation to a rotation matrix. This
+   * Convert a rotation vector `rotation` to a rotation matrix. This
    * function converts the three-dimensional column vector @f$V =
-   * [v_x,v_y,v_z]^T@f$ to a rotation matrix @f$R@f$ as follows:
+   * [v_x,v_y,v_z]^T\( to a rotation matrix \)R@f$ as follows:
    *
-   * @f[
+   * \[
    * R = e^{M\theta} = I + M \sin(\theta) +
    * M^2(1-\cos(\theta)),
-   * @f]
+   * \]
    *
    * where M is an antisymmetric matrix:
    *
-   * @f[
+   * \[
    * M = \left[ \begin{array}{ccc}
    *   0       & -v_{nz} & v_{ny}  \\
    *   v_{nz}  & 0       & -v_{nx} \\
    *   -v_{ny} & v_{nx}  & 0
    * \end{array} \right],
-   * @f]
+   * \]
    *
-   * where @f$\theta = ||V||@f$ and @f$V_n = V/\theta = [v_{nx},
+   * where \(\theta = ||V||\) and @f$V_n = V/\theta = [v_{nx},
    * v_{ny}, v_{nz}]^T@f$.
    *
    * The norm of V (its geometric length) is used as the rotation
@@ -484,28 +483,28 @@ namespace PiiCalibration
    * the rotation vector tells the rotation axis, and its length is
    * equal to the rotation angle. Given a rotation matrix R, the
    * rotation vector V is derived as follows (see
-   * #rotationVectorToMatrix() for definitions):
+   * [rotationVectorToMatrix()] for definitions):
    *
-   * @f[
+   * \[
    * R^T = I - M\sin(\theta) + M^2(1-\cos(\theta))
-   * @f]
+   * \]
    * 
    * This equation makes use of the fact that M is an antisymmetric
-   * matrix. Thus, @f$M^T = -M@f$ and @f$(M^2)^T = M^2@f$.
+   * matrix. Thus, \(M^T = -M\) and \((M^2)^T = M^2\).
    *
-   * @f[
+   * \[
    * (R - R^T) / 2 = M \sin(\theta)
-   * @f]
+   * \]
    *
    * Since the vector represented by M is a unit vector, we obtain
-   * both @f$M@f$ and @f$\sin(\theta)@f$ from this equation. This
+   * both \(M\) and \(\sin(\theta)\) from this equation. This
    * doesn't fully resolve the rotation angle yet.
    *
-   * @f[
+   * \[
    * (R + R^T) / 2 = I + M^2(1-\cos(\theta))
-   * @f]
+   * \]
    * 
-   * The only unknown here is @f$\cos(\theta)@f$, which is trivial to
+   * The only unknown here is \(\cos(\theta)\), which is trivial to
    * solve.
    */
   PII_CALIBRATION_EXPORT PiiVector<double,3> rotationMatrixToVector(const PiiMatrix<double>& matrix);
@@ -531,7 +530,7 @@ namespace PiiCalibration
                                                                     const CameraParameters& intrinsic);
 
   /**
-   * Removes lens distortions from @a sourceImage. This function first
+   * Removes lens distortions from *sourceImage*. This function first
    * creates an undistortion map with undistortMap() and then applies
    * PiiImage::remap(). If you need to repeat the process for many
    * images, it is more efficient to calculate the undistortion map

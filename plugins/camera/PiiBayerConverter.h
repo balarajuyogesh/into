@@ -54,11 +54,11 @@ GBGBGBGB
    * (v,c,h),(d,s,c),(v,c,h),(d,s,c) ...
    * (c,s,d),(h,c,v),(c,s,d),(h,c,v) ...
    *
-   * @li c = no interpolation, take the center of the neighborhood (CenterInterpolator)
-   * @li s = interpolate points at four main directions (StraightInterpolator)
-   * @li d = interpolate points at four diagonals (DiagonalInterpolator)
-   * @li v = interpolate two points vertically (VerticalInterpolator)
-   * @li h = interpolate two points horizontally (HorizontalInterpolator)
+   * - c = no interpolation, take the center of the neighborhood (CenterInterpolator)
+   * - s = interpolate points at four main directions (StraightInterpolator)
+   * - d = interpolate points at four diagonals (DiagonalInterpolator)
+   * - v = interpolate two points vertically (VerticalInterpolator)
+   * - h = interpolate two points horizontally (HorizontalInterpolator)
    *
    * The encoder structure is composed of interpolators for three
    * color channels in a 2-by-2 neighborhood. Thus, there must be
@@ -138,7 +138,7 @@ GBGBGBGB
    * An interpolation functor that calculates the value of a color
    * channel by averaging the four straight neighbors of a pixel.
    * Each of the funtions performs the interpolation at some special
-   * point of the image (corners, borders). The #center() function
+   * point of the image (corners, borders). The [center()] function
    * is used elsewhere.
    */
   template <class T> struct StraightInterpolator
@@ -158,7 +158,7 @@ GBGBGBGB
    * An interpolation functor that calculates the value of a color
    * channel by averaging the four diagonal neighbors of a pixel. Each
    * of the funtions performs the interpolation at some special point
-   * of the image (corners, borders). The #center() function is used
+   * of the image (corners, borders). The [center()] function is used
    * elsewhere.
    */
   template <class T> struct DiagonalInterpolator
@@ -178,7 +178,7 @@ GBGBGBGB
    * An interpolation functor that calculates the value of a color
    * channel by averaging the two vertical neighbors of a pixel.
    * Each of the funtions performs the interpolation at some special
-   * point of the image (corners, borders). The #center() function
+   * point of the image (corners, borders). The [center()] function
    * is used elsewhere.
    */
   template <class T> struct VerticalInterpolator
@@ -198,7 +198,7 @@ GBGBGBGB
    * An interpolation functor that calculates the value of a color
    * channel by averaging the two horizontal neighbors of a pixel. 
    * Each of the funtions performs the interpolation at some special
-   * point of the image (corners, borders). The #center() function is
+   * point of the image (corners, borders). The [center()] function is
    * used elsewhere.
    */
   template <class T> struct HorizontalInterpolator
@@ -287,8 +287,8 @@ GBGBGBGB
   template <class T = unsigned char> struct RgbPixel
   {
     /**
-     * The output type. Each pixel type must have a typedef for @p
-     * Type. This functor uses PiiColor<T>.
+     * The output type. Each pixel type must have a typedef for 
+     * `Type`. This functor uses PiiColor<T>.
      */
     typedef PiiColor<T> Type;
     /**
@@ -343,7 +343,7 @@ GBGBGBGB
    * A Bayer decoding functor that directly converts the image to gray
    * levels by averaging RGB channels. T is the output type.
    *
-   * @note Using %GrayPixel as the pixel type in Bayer decoding is
+   * ! Using %GrayPixel as the pixel type in Bayer decoding is
    * faster than first converting to RGB and then to gray, but it is
    * still far from optimal. If you really need fast direct conversion
    * to gray, you need to a) create four custom interpolators that
@@ -375,10 +375,10 @@ GBGBGBGB
    * Rgb4Pixel, RedPixel, GreenPixel, and BluePixel are provided.
    *
    * @return decoded color image. The size of this image equals that
-   * of @p encoded. If the input matrix is smaller than 2x2, no
+   * of `encoded`. If the input matrix is smaller than 2x2, no
    * conversion will be done.
    *
-   * @code
+   * ~~~
    * PiiMatrix<unsigned char> encoded;
    *
    * // Convert to four-channel RGB
@@ -398,7 +398,7 @@ GBGBGBGB
    *   PiiCamera::bayerToRgb(encoded,
    *                         PiiCamera::RggbDecoder<>(),
    *                         PiiCamera::GrayPixel<int>());
-   * @endcode
+   * ~~~
    *
    * See the documentation of RgbPixel on how to create your own pixel
    * types.

@@ -30,7 +30,7 @@ namespace PiiImage
   /**
    * Calculate the histogram of a one-channel image. The result will
    * be a row matrix containing the frequencies of all values in the
-   * input image. The return type is determined by the @p T template
+   * input image. The return type is determined by the `T` template
    * parameter.
    *
    * @param image the input image. All integer types are supported. If
@@ -49,7 +49,7 @@ namespace PiiImage
 
   /**
    * Calculate the histogram of a one-channel image. This is a
-   * shorthand for <tt>histogram<int>(image, roi, levels)</tt>.
+   * shorthand for `histogram<int>(image, roi, levels)`.
    */
   template <class T, class Roi> inline PiiMatrix<int> histogram(const PiiMatrix<T>& image, const Roi& roi, unsigned int levels)
   {
@@ -58,8 +58,8 @@ namespace PiiImage
 
   /**
    * Calculate the histogram of a one-channel image. This is a
-   * shorthand for <tt>histogram<int>(image, PiiImage::DefaultRoi(),
-   * levels)</tt>.
+   * shorthand for `histogram<int>(image, PiiImage::DefaultRoi(),
+   * levels)`.
    */
   template <class T> inline PiiMatrix<int> histogram(const PiiMatrix<T>& image, unsigned int levels=0)
   {
@@ -70,7 +70,7 @@ namespace PiiImage
   /**
    * Calculate the histogram of a one-channel image. The result will
    * be a row matrix containing the frequencies of all values in the
-   * input image. The return type is determined by the @p T template
+   * input image. The return type is determined by the `T` template
    * parameter.
    *
    * @param image the input image. All integer types are supported. If
@@ -86,7 +86,7 @@ namespace PiiImage
 
   /**
    * Calculate the histogram of a one-channel image. This is a
-   * shorthand for <tt>histogram<int>(image, quantizer)</tt>.
+   * shorthand for `histogram<int>(image, quantizer)`.
    */
   template <class T, class Roi> inline PiiMatrix<int> histogram(const PiiMatrix<T>& image, const Roi& roi, const PiiQuantizer<T>& quantizer)
   {
@@ -95,8 +95,8 @@ namespace PiiImage
 
   /**
    * Calculate the histogram of a one-channel image. This is a
-   * shorthand for <tt>histogram<int>(image, quantizer,
-   * PiiImage::DefaultRoi())</tt>.
+   * shorthand for `histogram<int>(image, quantizer,
+   * PiiImage::DefaultRoi())`.
    */
   template <class T> inline PiiMatrix<int> histogram(const PiiMatrix<T>& image, const PiiQuantizer<T>& quantizer)
   {
@@ -109,11 +109,11 @@ namespace PiiImage
    * represented as a row vector. If the input matrix has many rows,
    * the cumulative histogram for each row is calculated.
    *
-   * @code
+   * ~~~
    * PiiMatrix<int> histogram(1,5, 1,2,3,4,5);
    * PiiMatrix<int> cum(PiiImage::cumulative(histogram)); // sic!
    * // cum = (1,3,6,10,15)
-   * @endcode
+   * ~~~
    *
    * @see Pii::cumulativeSum()
    */
@@ -129,40 +129,40 @@ namespace PiiImage
    * double is used as the return type. If all values in a row equal
    * to zero, they are left as such.
    *
-   * @code
+   * ~~~
    * PiiMatrix<int> histogram(1,4, 1,2,3,4);
    * PiiMatrix<double> normalized(PiiImage::normalize<double>(histogram));
    * //normalized = (0.1, 0.2, 0.3, 0.4)
-   * @endcode
+   * ~~~
    */
   template <class T, class U> PiiMatrix<T> normalize(const PiiMatrix<U>& histogram);
 
   /**
    * Find the index of the first entry in a cumulative frequency
    * distribution that exceeds or equals to the given value. For
-   * normalized cumulative distributions, @p value should be between 0
+   * normalized cumulative distributions, `value` should be between 0
    * and 1.
    *
-   * @code
+   * ~~~
    * PiiMatrix<double> cumulative(1,4, 0.1, 0.3, 0.6, 1.0);
    * int p = percentile(cumulative, 0.5);
    * //p = 2
-   * @endcode
+   * ~~~
    *
    * @param cumulative a cumulative frequency distribution. A row
    * matrix with monotonically increasing values.
    *
    * @param value the percentile value, which should be smaller than
-   * or equal to the maximum value in @p cumulative.
+   * or equal to the maximum value in `cumulative`.
    *
-   * @return the index of the first element exceeding or equal to @p
-   * value, or -1 if no such element was found
+   * @return the index of the first element exceeding or equal to 
+   * `value`, or -1 if no such element was found
    */
   template <class T> int percentile(const PiiMatrix<T>& cumulative, T value);
 
   /**
-   * Histogram backprojection. In backprojection, each pixel in @p img
-   * is replaced by the corresponding value in @p histogram. Despite
+   * Histogram backprojection. In backprojection, each pixel in `img`
+   * is replaced by the corresponding value in `histogram`. Despite
    * histogram backprojection this function can be used to convert
    * indexed images to color images.
    *
@@ -171,15 +171,15 @@ namespace PiiImage
    * @param histogram the histogram. A 1-by-N matrix.
    *
    * The function makes no boundary checks for performance reasons. If
-   * you aren't sure about your data, you must check that @p
-   * histogram.columns() is larger than the maximum value in @p img
-   * and that there are no negative values in @p img.
+   * you aren't sure about your data, you must check that 
+   * `histogram`.columns() is larger than the maximum value in `img`
+   * and that there are no negative values in `img`.
    *
-   * Since pixels in @p img are used as indices in @p histogram, they
+   * Since pixels in `img` are used as indices in `histogram`, they
    * will be converted to integers. Using floating-point types in the
-   * @p img parameter is not suggested.
+   * `img` parameter is not suggested.
    *
-   * @code
+   * ~~~
    * // Normal backprojection
    * PiiMatrix<int> histogram(1,256);
    * PiiMatrix<unsigned char> img(100,100);
@@ -189,7 +189,7 @@ namespace PiiImage
    * PiiMatrix<PiiColor<> > colorMap(1,256);
    * PiiMatrix<unsigned char> indexedImg(100,100);
    * PiiMatrix<PiiColor<> > colorImg(PiiImage::backProject(indexedImg, colorMap);
-   * @endcode
+   * ~~~
    */
   template <class T, class U> PiiMatrix<U> backProject(const PiiMatrix<T>& img, const PiiMatrix<U>& histogram);
 
@@ -200,36 +200,36 @@ namespace PiiImage
    * as two-dimensional distributions can be converted to one
    * dimension.
    *
-   * @param ch1 first channel (indexes rows in @p histogram, maximum
+   * @param ch1 first channel (indexes rows in `histogram`, maximum
    * value N-1)
    *
-   * @param ch2 second channel (indexes columns in @p histogram,
+   * @param ch2 second channel (indexes columns in `histogram`,
    * maximum value M-1)
    *
    * @param histogram two-dimensional histogram (N-by-M)
    *
-   * The sizes of @p ch1 and @p ch2 must be equal.
+   * The sizes of `ch1` and `ch2` must be equal.
    *
-   * @code
+   * ~~~
    * // Backproject a two-dimensional RG histogram
    * PiiMatrix<int> histogram(256,256);
    * PiiMatrix<unsigned char> redChannel(100,100);
    * PiiMatrix<unsigned char> greenChannel(100,100);
    * PiiMatrix<int> backProjected(PiiImage::backProject(redChannel, greenChannel, histogram));
-   * @endcode
+   * ~~~
    */
   template <class T, class U> PiiMatrix<U> backProject(const PiiMatrix<T>& ch1, const PiiMatrix<T>& ch2,
                                                        const PiiMatrix<U>& histogram);
 
   /**
-   * Histogram equalization. Enhances the contrast of @p img by making
+   * Histogram equalization. Enhances the contrast of `img` by making
    * its gray levels as uniformly distributed as possible.
    *
    * @param img the input image
    *
    * @param levels the number of quantization levels. If this value is
-   * omitted, the maximum value found in @p image will be used. If @p
-   * levels is smaller than the maximum value, the latter will be used.
+   * omitted, the maximum value found in `image` will be used. If 
+   * `levels` is smaller than the maximum value, the latter will be used.
    *
    * @return an image with enhanced contrast
    */

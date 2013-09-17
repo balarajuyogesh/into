@@ -82,16 +82,16 @@ namespace PiiOptimization
     virtual int functionCount() const = 0;
 
     /**
-     * Calculates residuals and stores them into @a residuals. Let us
-     * denote the function to be optimized by @e f(x). We want to find
-     * the parameters @e x such that @e f(x) = @e b. Suppose we are
-     * given an approximation of @e x, denoted by @f$ x_0 @f$. Since
-     * we don't know @e x, there is not way to calculate the real
-     * error @f$x_0 - x@f$, but we can calculate @f$b-f(x_0)@f$,
+     * Calculates residuals and stores them into *residuals*. Let us
+     * denote the function to be optimized by *f*(x). We want to find
+     * the parameters *x* such that *f*(x) = *b*. Suppose we are
+     * given an approximation of *x*, denoted by \( x_0 \). Since
+     * we don't know *x*, there is not way to calculate the real
+     * error \(x_0 - x\), but we can calculate \(b-f(x_0)\),
      * which is called the residual. This function calculates the
      * residual value for all the functions to be optimized.
      *
-     * @param params an N-element vector (@f$x_0@f$)
+     * @param params an N-element vector (\(x_0\))
      *
      * @param residuals an M-element vector of residual values
      * calculated by the derived class as described above. M equals to
@@ -107,18 +107,18 @@ namespace PiiOptimization
      * Jacobian themselves. If the number of parameters is N and the
      * number of optimized functions M, the size of the Jacobian
      * matrix is N-by-M. If we denote the optimized functions by
-     * @f$f_i(x)@f$, where @e x is a N-dimensional parameter vector,
+     * \(f_i(x)\), where *x* is a N-dimensional parameter vector,
      * then the Jacobian is defined as:
      *
-     * @f[
+     * \[
      * J = - \left[ \begin{array}{ccc}
      * \frac{\partial f_1}{\partial x_1} & \cdots & \frac{\partial f_m}{\partial x_1} \\
      * \vdots & \ddots & \vdots \\
      * \frac{\partial f_1}{\partial x_n} & \cdots & \frac{\partial f_m}{\partial x_n}
      * \end{array} \right]
-     * @f]
+     * \]
      *
-     * @note The function must return a negated version of the
+     * ! The function must return a negated version of the
      * Jacobian for optimization purposes.
      *
      * @param params an N-element parameter vector
@@ -131,9 +131,9 @@ namespace PiiOptimization
     virtual void jacobian(const T* params, PiiMatrix<T>& jacobian) const;
 
     /**
-     * Returns @p true if the function is capable of calculating the
-     * Jacobian, otherwise returns @p false. The default
-     * implementation returns @p false.
+     * Returns `true` if the function is capable of calculating the
+     * Jacobian, otherwise returns `false`. The default
+     * implementation returns `false`.
      */
     virtual bool hasJacobian() const { return false; }
   };
@@ -159,9 +159,9 @@ namespace PiiOptimization
    * 1-by-N matrix.
    *
    * @param epsG iteration break rule 1: @f$||G(X_t)|| <
-   * \epsilon_G@f$, where @f$X_t@f$ is the value of the parameter
+   * \epsilon_G\(, where \)X_t@f$ is the value of the parameter
    * estimate at time instant t. The iteration will end once the norm
-   * of the gradient vector goes below @p epsG.
+   * of the gradient vector goes below `epsG`.
    *
    * @param epsF iteration break rule 2: @f$|F(X_t) - F(X_{t-1})| \le
    * \epsilon_F \max(|F(X_t)|, |F(X_{t-1})|, 1)@f$.
@@ -174,7 +174,7 @@ namespace PiiOptimization
    * if none of the first three rules breaks it.
    *
    * @return the parameter values that result in the minimum value for
-   * @p function.
+   * `function`.
    */
   PII_OPTIMIZATION_EXPORT PiiMatrix<double> bfgsMinimize(const GradientFunction<double>* function,
                                                          const PiiMatrix<double>& initialParams,
@@ -265,8 +265,8 @@ namespace PiiOptimization
    * the solution, and the second column the indices of rows assigned
    * to columns. In other words, solution(0,0) determines the task to
    * which agent 0 should be assigned, and solution(1,0) the agent to
-   * which task 0 should be assigned. It follows that <tt>solution(0,
-   * solution(1,N)) = N</tt>.
+   * which task 0 should be assigned. It follows that `solution(0,
+   * solution(1,N)) = N`.
    *
    * @param duals an optional output value argument that will store
    * the dual variables of the solution (2-by-N). The first row stores
@@ -275,7 +275,7 @@ namespace PiiOptimization
    *
    * @return the minimum possible total assignment cost.
    *
-   * @exception PiiInvalidArgumentException& if @a cost is not square.
+   * @exception PiiInvalidArgumentException& if *cost* is not square.
    */
   template <class Matrix>
   typename Matrix::value_type assign(const Matrix& cost,

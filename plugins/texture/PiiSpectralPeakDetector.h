@@ -26,11 +26,13 @@
  * locations of the peaks and the wavelengths and orientations of the
  * corresponding waves in the image.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - Any gray-level image.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out peaks - detected peaks. A N-by-5 (possibly empty) matrix in
  * which each row represents a detected peak. The stored values are
@@ -43,35 +45,34 @@
  * image illustrates the main frequency components present in the
  * image. (PiiMatrix<float>)
  *
- * @ingroup PiiTexturePlugin
  */
 class PiiSpectralPeakDetector : public PiiDefaultOperation
 {
   Q_OBJECT
 
   /**
-   * Detection threshold. Assume @f$P(\omega)@f$ is the power spectrum
-   * of the input image whose size is @f$w \times h@f$. The threshold
-   * @f$t@f$ is compared to the normalized square root of the power
+   * Detection threshold. Assume \(P(\omega)\) is the power spectrum
+   * of the input image whose size is \(w \times h\). The threshold
+   * \(t\) is compared to the normalized square root of the power
    * spectrum, and a peaks must match the following rule:
    *
-   * @f[
+   * \[
    * \frac{\sqrt{P(\omega)}}{w h} \ge t
-   * @f]
+   * \]
    *
    * The default value is 0.4.
    */
   Q_PROPERTY(double peakThreshold READ peakThreshold WRITE setPeakThreshold);
   /**
    * The minimum wavelength accepted (in pixels). Use this and the
-   * #maxWaveLength property to control the range of accepted
+   * [maxWaveLength] property to control the range of accepted
    * wavelengths. Frequency components outside of the accepted range
    * will be ignored. The default value is 0.
    */
   Q_PROPERTY(double minWaveLength READ minWaveLength WRITE setMinWaveLength);
   /**
    * The maximum wavelength accepted (in pixels). Use this and the
-   * #minWaveLength property to control the range of accepted
+   * [minWaveLength] property to control the range of accepted
    * wavelengths. Frequency components outside of the accepted range
    * will be ignored. The default value is infinity.
    */

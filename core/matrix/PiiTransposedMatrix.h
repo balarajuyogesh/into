@@ -110,16 +110,15 @@ template <class Matrix> struct PiiMatrixTraits<PiiTransposedMatrix<Matrix> >
 
 /**
  * Transposed matrix. This class is a wrapper that exchanges the roles
- * of rows and columns of another matrix. %PiiTransposedMatrix makes
+ * of rows and columns of another matrix. PiiTransposedMatrix makes
  * it possible to use matrix transposes in calculations without
  * actually creating a transposed matrix in memory.
  *
- * @code
+ * ~~~
  * PiiMatrix<int> mat(5,4);
  * mat = Pii::transpose(mat) * mat;
- * @endcode
+ * ~~~
  *
- * @ingroup Matrix
  */
 template <class Matrix> class PiiTransposedMatrix :
   public PiiConceptualMatrix<PiiTransposedMatrix<Matrix> >
@@ -164,10 +163,10 @@ private:
 namespace Pii
 {
   /**
-   * Returns the transpose of @a mat. This function will neither
+   * Returns the transpose of *mat*. This function will neither
    * reserve memory for a transposed matrix nor copy the values.
    * Instead, it creates a wrapper that exchanges the roles of rows
-   * and columns in @a mat.
+   * and columns in *mat*.
    *
    * @relates PiiTransposedMatrix
    */

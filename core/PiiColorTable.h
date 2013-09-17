@@ -23,7 +23,6 @@
 /**
  * @file Functions for creating color tables.
  *
- * @ingroup Core
  */
 namespace Pii
 {

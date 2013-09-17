@@ -28,7 +28,6 @@
  * simple raw image format that is mainly intended for dumping raw
  * camera data to the hard drive.
  *
- * @ingroup Image
  */
 class PII_IMAGE_EXPORT PiiRawImageHandler : public QImageIOHandler
 {
@@ -50,8 +49,8 @@ public:
   QVariant option(ImageOption option) const;
   
   /**
-   * Writes a frame into the device. @p data points to the beginning
-   * of raw image data. <tt>width*height*bytesPerPixel</tt> bytes will
+   * Writes a frame into the device. `data` points to the beginning
+   * of raw image data. `width*height*bytesPerPixel` bytes will
    * be written into the file.
    *
    * @param data a pointer to the beginning of image data
@@ -68,7 +67,7 @@ public:
    * Reads a frame from the device.
    *
    * @param buffer a preallocated image buffer. Must be able to store
-   * at least <tt>width*height*bytesPerPixel</tt> bytes.
+   * at least `width*height*bytesPerPixel` bytes.
    *
    * @param stride the number of bytes in each row. If this value is
    * less than the width of the image, the width will be used as the
@@ -80,14 +79,14 @@ public:
 
   /**
    * Reads raw image header from the stream. If the header has already
-   * been read, returns @p true.
+   * been read, returns `true`.
    */
   bool readHeader() const;
   /**
    * Starts writing a sequence of frames. This function writes an
    * initial image header to the stream. If you know the number of
-   * frames in advance, you can use the #setFrameCount() function to
-   * put it to the header. Otherwise, you need to use #endWriting() to
+   * frames in advance, you can use the [setFrameCount()] function to
+   * put it to the header. Otherwise, you need to use [endWriting()] to
    * finish the header. If no explicit call is made, this function
    * will be called automatically when the first frame is written.
    */
@@ -99,7 +98,7 @@ public:
    * is not necessary to call this function if you knew and set the
    * parameters before the first frame was written.
    *
-   * @note The underlying IO device must be random-access
+   * ! The underlying IO device must be random-access
    * (non-sequential) device.
    */
   bool endWriting();
@@ -147,7 +146,7 @@ public:
   /**
    * Sets the number of frames in the rawImage. This function may be
    * used to set the frame count beforehand to avoid a call to
-   * #endWriting().
+   * [endWriting()].
    */
   void setFrameCount(int frameCount);
 
@@ -158,7 +157,7 @@ public:
 
   /**
    * Returns the number of bytes each frame occupies. The buffers used
-   * with #readFrame() and #writeFrame() must have a capacity of at
+   * with [readFrame()] and [writeFrame()] must have a capacity of at
    * least this many bytes.
    */
   int bytesPerFrame() const;

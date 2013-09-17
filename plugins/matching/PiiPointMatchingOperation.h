@@ -41,16 +41,17 @@
  * are matched against the collected database, and the most likely
  * matching models will be found.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in features - a N-by-M matrix in which each row stores a feature
  * point descriptor. All numeric matrix types will be accepted, but
- * the operation internally uses @p float for calculations. Inherited
- * from PiiClassifierOperation. Note that %PiiFeaturePointMatcher uses
+ * the operation internally uses `float` for calculations. Inherited
+ * from PiiClassifierOperation. Note that PiiFeaturePointMatcher uses
  * matrices instead of row vectors as the feature type.
  *
  * @in label - an optional input that gives a label to the model
- * described by @p points and @p features. This makes it possible to
+ * described by `points` and `features`. This makes it possible to
  * have many models for a single class. Any numeric type will be
  * accepted. This input is used only in when collecting the model
  * samples. Inherited from PiiClassifierOperation.
@@ -58,7 +59,7 @@
  * @in points - the locations of feature points in image coordinates. 
  * A N-by-D matrix in which each row contains D-dimensional point
  * coordinates. All numeric matrix types will be accepted, but the
- * operation internally uses @p float for calculations. Each point
+ * operation internally uses `float` for calculations. Each point
  * must have a corresponding feature vector. Otherwise, a run-time
  * error will be generated.
  *
@@ -68,7 +69,7 @@
  * case, the hypercube is a rectangle whose parameters are stored into
  * a 1-by-4 matrix as (x,y,width,height). In three-dimensional case,
  * the matrix must be 1-by-6 (x,y,z,width,height,depth) etc. Any
- * numeric matrix type will be accepted, but @p float is used
+ * numeric matrix type will be accepted, but `float` is used
  * internally. This input is optional. If it is not connected, the
  * operation will use the minimum bounding hypercube of the feature
  * points as the model location. Note that it is not necessary that
@@ -76,30 +77,31 @@
  * any area of the point space with respect to the feature points. 
  * This input is used only when collecting model samples.
  *
- * @outputs
+ * Outputs
+ * -------
  *
- * @note The number of objects emitted through the outputs depends on
- * #matchingMode. In @p MatchOneModel mode, only the best matching
+ * ! The number of objects emitted through the outputs depends on
+ * [matchingMode]. In `MatchOneModel` mode, only the best matching
  * model will be emitted. If no model matches, -1 will be emitted as
- * the model index. In @p MatchAllModels and @p MatchDifferentModels
+ * the model index. In `MatchAllModels` and `MatchDifferentModels`
  * modes, 0-N matching models will be emitted for each input.
  *
  * @out classification - the label associated with the matched model
- * (@p double). If no model matches in @p MatchOneModel mode, @p NaN
+ * (`double`). If no model matches in `MatchOneModel` mode, `NaN`
  * will be emitted. Inherited from PiiClassifierOperation.
  *
  * @out model index - the index of the model that matches the query
- * (@p int). If no model matches in @p MatchOneModel mode, -1 will be
+ * (`int`). If no model matches in `MatchOneModel` mode, -1 will be
  * emitted. In training, this output will always emit the current size
  * of the database minus one; the first training sample has a model
  * index of 0 etc.
  *
  * @out location - the location of the best matching model in model
  * coordinates, represented as a hypercube. The matrix emitted from
- * the @p transform output can be used to map the corners of the
+ * the `transform` output can be used to map the corners of the
  * hypercube back to the input space. In training, the received or
  * automatically created location will be passed here. If no model
- * matches in @p MatchOneModel mode, a 1-by-2*D zero matrix will be
+ * matches in `MatchOneModel` mode, a 1-by-2*D zero matrix will be
  * emitted. PiiMatrix<float>.
  *
  * @out transform - the transform that relates the matched model
@@ -110,7 +112,7 @@
  * point m in the model can be found in the image by applying the
  * transform and reading the pixel at x. If the input space is
  * D-dimensional, the size of the transformation matrix will be D+1 by
- * D+1. In training, and if no model matches in @p MatchOneModel mode,
+ * D+1. In training, and if no model matches in `MatchOneModel` mode,
  * this output will emit a D+1 by D+1 identity matrix. 
  * PiiMatrix<double>.
  *
@@ -119,28 +121,27 @@
  * matrix.
  *
  * @out model points - the corresponding model points. This output
- * together with <tt>query points</tt> specifies the pairs of points
- * that were successfully matched. Applying the @p transform matrix to
+ * together with `query points` specifies the pairs of points
+ * that were successfully matched. Applying the `transform` matrix to
  * these points should place them pretty close to the query points in
  * their own coordinate system.
  *
  * @see PiiImageCropper
  *
- * @ingroup PiiMatchingPlugin
  */
 class PII_MATCHING_EXPORT PiiPointMatchingOperation : public PiiClassifierOperation
 {
   Q_OBJECT
 
   /**
-   * Matching mode. The default is @p MatchAllModels: every query may
+   * Matching mode. The default is `MatchAllModels:` every query may
    * result in 0-N matching results, which may include multiple
    * matches to the same model. This mode is suitable if objects may
    * overlap and many similar objects may be present. If the operation
-   * is used for database retrieval rather than object detection, @p
-   * MatchDifferentModels is usually used. In this mode, only one
+   * is used for database retrieval rather than object detection, 
+   * `MatchDifferentModels` is usually used. In this mode, only one
    * match is allowed for each individual model, but the query may
-   * still be matched by many different models. In @p MatchOneModel
+   * still be matched by many different models. In `MatchOneModel`
    * mode each query will be matched to exactly one model.
    */
   Q_PROPERTY(PiiMatching::ModelMatchingMode matchingMode READ matchingMode WRITE setMatchingMode);
@@ -192,7 +193,7 @@ public slots:
    * that frames the model as (x,y,width,height). The number of rows
    * in this matrix must be max(modelIndices)+1.
    *
-   * @return @p true if the thread was successfully started, @p false
+   * @return `true` if the thread was successfully started, `false`
    * otherwise.
    */
   bool startLearningThread(const PiiVariant& features,
@@ -232,7 +233,7 @@ protected:
   PiiPointMatchingOperation(Data* data);
 
   /**
-   * Constructs a new %PiiPointMatchingOperation.
+   * Constructs a new PiiPointMatchingOperation.
    *
    * @param pointDimensions the number of dimensions in the feature
    * point locations. In images, the number of dimensions is two.
@@ -252,8 +253,8 @@ protected:
   void collectSample(double label, double weight);
   
   /**
-   * Matches the given @a points to the database stored in @a matcher
-   * using @a features as the feature descriptors. Subclasses override
+   * Matches the given *points* to the database stored in *matcher*
+   * using *features* as the feature descriptors. Subclasses override
    * this function to implement the actual matching strategy.
    *
    * @return a (possibly empty) list of matching models
@@ -271,8 +272,8 @@ protected:
   virtual PiiMatrix<double> toTransformMatrix(const PiiMatrix<double>& transformParams) = 0;
 
   /**
-   * Removes duplicate matches to the same model from @a
-   * matchedModels. This function is called if there are more than one
+   * Removes duplicate matches to the same model from 
+   * *matchedModels*. This function is called if there are more than one
    * matched model. Subclasses may implement any strategy for pruning
    * duplicates. The default implementation does nothing.
    */

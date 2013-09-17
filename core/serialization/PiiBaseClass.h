@@ -23,7 +23,6 @@
  *
  * Base class serialization stuff.
  *
- * @ingroup Serialization
  */
 
 /**
@@ -37,24 +36,23 @@
  * @param base the name of the direct base class of the serializable
  * class
  *
- * Assume @p MyDerivedClass is derived from @p MyClass. Then:
+ * Assume `MyDerivedClass` is derived from `MyClass`. Then:
  *
- * @code
+ * ~~~
  * template <class Archive>
  * void MyDerivedClass::serialize(Archive& archive, const unsigned int version)
  * {
  *   PII_SERIALIZE_BASE(archive, MyClass);
  *   archive & member;
  * }
- * @endcode
+ * ~~~
  */
 #define PII_SERIALIZE_BASE(archive, Base) archive & PiiBaseClass<Base >(*this)
 
 
 /**
- * A wrapper for serializing a base class. See @ref PII_SERIALIZE_BASE.
+ * A wrapper for serializing a base class. See [PII_SERIALIZE_BASE].
  *
- * @ingroup Serialization
  */
 template <class T> struct PiiBaseClass
 {
@@ -62,13 +60,13 @@ template <class T> struct PiiBaseClass
    * Create an instance of base class serializer with a reference to
    * the derived class.
    *
-   * @code
+   * ~~~
    * template <class Archive>
    * void Derived::serialize(Archive& archive, const unsigned int)
    * {
    *   archive & PiiBaseClass<Base>(*this);
    * }
-   * @endcode
+   * ~~~
    */
   PiiBaseClass(T& child) : derived(&child) {}
 

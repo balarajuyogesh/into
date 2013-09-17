@@ -23,22 +23,22 @@
  * An operation that prints all objects passing through it to the
  * debug console. It is useful in debugging connections.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in input - any object
  *
  * @input
  *
- * @out output - the object read from @p input
+ * @out output - the object read from `input`
  *
- * @ingroup PiiBasePlugin
  */
 class PiiDebugOperation : public PiiDefaultOperation
 {
   Q_OBJECT
 
   /**
-   * Where to write the debug output? The default is @p StdOut.
+   * Where to write the debug output? The default is `StdOut`.
    */
   Q_PROPERTY(OutputStream outputStream READ outputStream WRITE setOutputStream);
   Q_ENUMS(OutputStream);
@@ -47,12 +47,12 @@ class PiiDebugOperation : public PiiDefaultOperation
    * Output format. The format may contain one or more variables. 
    * Recognized variables are:
    *
-   * @li $count - the number of objects received since reset
-   * @li $type - the type ID of the object in hexadecimal
-   * @li $objectName - the objectName of the operation
-   * @li $value - the value of the object. The operation recognizes
+   * - $count - the number of objects received since reset
+   * - $type - the type ID of the object in hexadecimal
+   * - $objectName - the objectName of the operation
+   * - $value - the value of the object. The operation recognizes
    * primitive types, strings and matrices.
-   * @li $symbol - a one-character symbol for the object. Normal,
+   * - $symbol - a one-character symbol for the object. Normal,
    * processable objects are denoted with a dot (.), and
    * synchronization primitives with the following symbols: < = start,
    * > = end, S = stop, P = pause, R = resume.
@@ -63,8 +63,8 @@ class PiiDebugOperation : public PiiDefaultOperation
   Q_PROPERTY(QString format READ format WRITE setFormat);
 
   /**
-   * Enables/disables printing of control objects. The default is @p
-   * false.
+   * Enables/disables printing of control objects. The default is 
+   * `false`.
    */
   Q_PROPERTY(bool showControlObjects READ showControlObjects WRITE setShowControlObjects);
   
@@ -73,10 +73,10 @@ public:
   /**
    * Output streams.
    *
-   * @lip StdOut - standard output
-   * @lip StdErr - standard error
-   * @lip Debug - piiDebug() output. Note that in this mode newlines
-   * will be automatically appended and you may need to change #format
+   * - `StdOut` - standard output
+   * - `StdErr` - standard error
+   * - `Debug` - piiDebug() output. Note that in this mode newlines
+   * will be automatically appended and you may need to change [format]
    * accordingly.
    */
   enum OutputStream { StdOut, StdErr, Debug };

@@ -22,7 +22,6 @@
  * An exception for situations in which invalid arguments were used in
  * a function or constructor call.
  *
- * @ingroup Core
  */
 #include "PiiGlobal.h"
 

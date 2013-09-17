@@ -24,7 +24,6 @@ class PiiEmulatorIoDriver;
 /**
  * I/O channel accessed through the emulator I/O-driver.
  *
- * @ingroup PiiIoPlugin
  */
 class PII_EMULATORIODRIVER_EXPORT PiiEmulatorIoChannel : public PiiDefaultIoChannel
 {

@@ -33,7 +33,7 @@ namespace Pii
    * @param sort sort order
    *
    * @return all matching file names with full paths, sorted according
-   * to @p sort.
+   * to `sort`.
    */
   PII_CORE_EXPORT QStringList fileList(const QString& pattern,
                                        QDir::Filters filters = QDir::Files | QDir::Readable | QDir::CaseSensitive,
@@ -54,8 +54,8 @@ namespace Pii
   
   /**
    * Deletes all files in the given directory and its sub-directories. 
-   * Returns @p true on success and @p false on failure. If the
-   * directory doesn't exists, return @p false. The function will try
+   * Returns `true` on success and `false` on failure. If the
+   * directory doesn't exists, return `false`. The function will try
    * to delete everything even when some files cannot be removed.
    */
   PII_CORE_EXPORT bool deleteDirectory(const QString& dirName);

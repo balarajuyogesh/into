@@ -27,7 +27,6 @@
  * around compiler differences in generating uniformly distributed
  * random numbers.
  *
- * @ingroup Core
  */
 namespace Pii
 {
@@ -44,14 +43,14 @@ namespace Pii
   }
 
   /**
-   * Returns a @a rows x @a columns matrix filled with uniformly
+   * Returns a *rows* x *columns* matrix filled with uniformly
    * distributed random numbers in [0,1].
    */
   PII_CORE_EXPORT PiiMatrix<double> uniformRandomMatrix(int rows, int columns);
 
   /**
-   * Returns a uniformly distributed random number in [@a min, @a
-   * max].
+   * Returns a uniformly distributed random number in [*min*, 
+   * *max*].
    */
   inline double uniformRandom(double min, double max)
   {
@@ -59,8 +58,8 @@ namespace Pii
   }
 
   /**
-   * Returns a @a rows x @a columns matrix filled with uniformly
-   * distributed random numbers in [@a min, @a max].
+   * Returns a *rows* x *columns* matrix filled with uniformly
+   * distributed random numbers in [*min*, *max*].
    */
   PII_CORE_EXPORT PiiMatrix<double> uniformRandomMatrix(int rows, int columns,
                                                         double min, double max);
@@ -74,7 +73,7 @@ namespace Pii
   PII_CORE_EXPORT double normalRandom();
 
   /**
-   * Returns a @a rows x @a columns matrix filled with normally
+   * Returns a *rows* x *columns* matrix filled with normally
    * distributed random numbers.
    */
   PII_CORE_EXPORT PiiMatrix<double> normalRandomMatrix(int rows, int columns);

@@ -26,7 +26,8 @@
  * from PiiVectorQuantizer. This class adds support for run-time
  * changeable distance measures to the classifier operation.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in boundaries - an optional input that marks the boundaries of
  * multiple feature vectors in a compound feature vector. This input
@@ -34,14 +35,14 @@
  * input is connected, a multi-feature distance measure can used in
  * classification (PiiMatrix<int>).
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out model index - the index of the closest code vector (int). 
- * This value equals @p classification if #classLabels are not set.
+ * This value equals `classification` if [classLabels] are not set.
  *
  * @out distance - distance to the closest code vector. (double)
  *
- * @ingroup PiiClassificationPlugin
  */
 class PII_CLASSIFICATION_EXPORT PiiVectorQuantizerOperation : public PiiClassifierOperation
 {
@@ -49,7 +50,7 @@ class PII_CLASSIFICATION_EXPORT PiiVectorQuantizerOperation : public PiiClassifi
 
   /**
    * The class name of a distance measure. Use the resource name in
-   * the @ref PiiYdin::resourceDatabase() "resource database" as a
+   * the [resource database](PiiYdin::resourceDatabase()) as a
    * key. Note that distance measures are registered to the resource
    * database as template instances, but template arguments should not
    * be explicitly given here. If no resource matching the given name
@@ -57,13 +58,13 @@ class PII_CLASSIFICATION_EXPORT PiiVectorQuantizerOperation : public PiiClassifi
    * nothing. The default distance measure is
    * PiiSquaredGeometricDistance.
    *
-   * @code
+   * ~~~
    * PiiOperation* pClassifier = engine.createOperation("PiiKnnClassifier<float>");
    * // This will create an instance of PiiHistogramIntersection<float>
    * classifier->setProperty("distanceMeasure", "PiiHistogramIntersection");
    * // Explicitly creating a one-element list has the same same effect
    * classifier->setProperty("distanceMeasures", QStringList() << "PiiHistogramIntersection");
-   * @endcode
+   * ~~~
    */
   Q_PROPERTY(QString distanceMeasure READ distanceMeasure WRITE setDistanceMeasure STORED false);
 
@@ -75,12 +76,12 @@ class PII_CLASSIFICATION_EXPORT PiiVectorQuantizerOperation : public PiiClassifi
    * histogram intersection for the first and log-likelihood for the
    * other. Here's how:
    *
-   * @code
+   * ~~~
    * classifier->setProperty("distanceMeasures",
    *                         QStringList() << "PiiHistogramIntersection" << "PiiLogLikelihood");
-   * @endcode
+   * ~~~
    *
-   * If multiple distance measures are given, #distanceMeasure will be
+   * If multiple distance measures are given, [distanceMeasure] will be
    * set to "PiiMultiFeatureDistance".
    */
   Q_PROPERTY(QStringList distanceMeasures READ distanceMeasures WRITE setDistanceMeasures);
@@ -117,10 +118,10 @@ class PII_CLASSIFICATION_EXPORT PiiVectorQuantizerOperation : public PiiClassifi
   Q_PROPERTY(PiiVariant models READ models WRITE setModels);
 
   /**
-   * Class labels for code vectors. If this list is non-empty, the @p
-   * classification output will emit the label corresponding to the
+   * Class labels for code vectors. If this list is non-empty, the 
+   * `classification` output will emit the label corresponding to the
    * closest code vector instead of the index of the code vector. 
-   * Otherwise the @p classification and @p vector @p index outputs
+   * Otherwise the `classification` and `vector` `index` outputs
    * will both emit the index of the closest code vector.
    */
   Q_PROPERTY(QVariantList classLabels READ classLabels WRITE setClassLabels);
@@ -175,23 +176,23 @@ protected:
   QVariantList classLabels() const;
 
   /**
-   * Returns a pointer to the @p boundary input.
+   * Returns a pointer to the `boundary` input.
    */
   PiiInputSocket* boundaryInput();
   /**
-   * Returns a pointer to the @p vector @p index output.
+   * Returns a pointer to the `vector` `index` output.
    */
   PiiOutputSocket* vectorIndexOutput();
   /**
-   * Returns a pointer to the @p distance output.
+   * Returns a pointer to the `distance` output.
    */
   PiiOutputSocket* distanceOutput();
 
   /**
-   * Configures @a classifier for running. This function must be
+   * Configures *classifier* for running. This function must be
    * called by a subclass' implementation of the check() function. 
-   * This function configures @a classifier with the samples given as
-   * the #models property, and creates an instance of the requested
+   * This function configures *classifier* with the samples given as
+   * the [models] property, and creates an instance of the requested
    * distance measure.
    *
    * @exception PiiExecutionException& if setting the model samples or
@@ -199,16 +200,16 @@ protected:
    */
   template <class SampleSet> void check(PiiVectorQuantizer<SampleSet>& classifier, bool reset);
   /**
-   * Creates an instance of @a name as @p Measure.
+   * Creates an instance of *name* as `Measure`.
    *
    * @exception PiiExecutionException& if the resource database
    * doesn't contain the named resource, or it is not instantiable as
-   * @p Measure.
+   * `Measure`.
    */
   template <class Measure> Measure* createDistanceMeasure(const QString& name);
   /**
    * Creates an instance of a distance measure as specified by the
-   * #distanceMeasure property. If there are many distance measures,
+   * [distanceMeasure] property. If there are many distance measures,
    * creates a PiiMultiFeatureDistance and appends all requrested
    * distance measures to it.
    *
@@ -217,9 +218,9 @@ protected:
    */
   template <class SampleSet> void setDistanceMeasure(PiiVectorQuantizer<SampleSet>& classifier);
   /**
-   * Configures @a classifier so that its distance measure is aware of
+   * Configures *classifier* so that its distance measure is aware of
    * multi-feature boundaries. Does nothing if the distance measure is
-   * not a PiiMultiFeatureDistance or the @p boundaries input is not
+   * not a PiiMultiFeatureDistance or the `boundaries` input is not
    * connected.
    *
    * @exception PiiExecutionException& if the boundary input doesn't
@@ -227,10 +228,10 @@ protected:
    */
   template <class SampleSet> void setFeatureBoundaries(PiiVectorQuantizer<SampleSet>& classifier);
   /**
-   * Reads features from the @p features input, configures
+   * Reads features from the `features` input, configures
    * multi-feature boundaries if needed, finds the closest match for
    * the features just read, and returns the index of the closest
-   * vector in the model sample set. If #classLabels is non-empty,
+   * vector in the model sample set. If [classLabels] is non-empty,
    * returns the class label corresponding to the index of the closest
    * sample. This function also sends the distance to the closest
    * sample and its index.
@@ -242,15 +243,15 @@ protected:
                                              int* vectorIndex = 0, double* distance = 0);
 
   /**
-   * Returns the class label corresponding to the sample at @a index. 
-   * If the label list is empty, returns @a index (or @p NaN if @a
-   * index is -1). If there is no label for @a index, returns @a NAN.
+   * Returns the class label corresponding to the sample at *index*. 
+   * If the label list is empty, returns *index* (or `NaN` if 
+   * *index* is -1). If there is no label for *index*, returns *NAN*.
    */
   double labelForIndex(int index) const;
 
   /**
-   * Checks that the #models variant is of correct type, and
-   * reconfigures @a classifier with them.
+   * Checks that the [models] variant is of correct type, and
+   * reconfigures *classifier* with them.
    *
    * @exception PiiExecutionException& if the type of the variant is incorrect
    */

@@ -25,13 +25,15 @@
 /**
  * PiiMultiPointTracker description
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in coordinates - PiiMatrix<int>
  * @in labels      - PiiMatrix<int> (optional)
  * @in image       - image (for test)
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out area id         - Description
  * @out dwell histogram - Description
@@ -47,7 +49,6 @@
  * @out line end time   - Description
  * @out image           - Description
  *
- * @ingroup OtosTrackerPlugin
  */
 class PiiMultiPointTracker : public PiiDefaultOperation
 {

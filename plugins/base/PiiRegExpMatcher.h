@@ -23,31 +23,32 @@
  * An operation that splits strings into pieces based on a regular
  * expression.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in input - input text (QString)
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out outputX - matched texts. X is a zero-based index. The first
- * output, @p output0 will emit the full matched text. The other
+ * output, `output0` will emit the full matched text. The other
  * outputs will emit the matched subexpressions, if any. The number of
- * outputs matches the number of subexpressions in #pattern, plus one.
+ * outputs matches the number of subexpressions in [pattern], plus one.
  *
- * @code
+ * ~~~
  * PiiOperation* pRe = engine.createOperation("PiiRegExpMatcher");
  * // Separate path from file name. Output1 will emit the path
  * // without a trailing slash, and output2 the file name part.
  * pRe->setProperty("pattern", "(^.*)/([^/]+$)
- * @endcode
+ * ~~~
  *
- * @ingroup PiiBasePlugin
  */
 class PiiRegExpMatcher : public PiiDefaultOperation
 {
   Q_OBJECT
   /**
-   * The regular expression to be matched against @p input. See
+   * The regular expression to be matched against `input`. See
    * QRegExp for syntax of valid patterns. Setting this property
    * changes the number of outputs to match the number of
    * subexpressions (plus one).

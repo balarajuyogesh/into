@@ -25,7 +25,6 @@
  * A shorthand for a binary output archive derived from
  * PiiGenericOutputArchive.
  *
- * @ingroup Serialization
  */
 typedef PiiGenericOutputArchive::Impl<PiiBinaryOutputArchive> PiiGenericBinaryOutputArchive;
 

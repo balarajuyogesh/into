@@ -25,7 +25,6 @@
  *
  * Utility functions for combining QImage with PiiVariant.
  *
- * @ingroup Ydin
  */
 namespace PiiYdin
 {

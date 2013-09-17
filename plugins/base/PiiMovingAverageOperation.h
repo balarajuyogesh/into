@@ -24,19 +24,20 @@
  * The output will be the average over the last N input values, which
  * must be of the same type (and size, if matrices are averaged).
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in input - the input value. Any numeric or complex type or a
  * matrix containing such types.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out average - the average over the last N entries (see
- * #windowSize). The output type is floating point numbers. Double and
+ * [windowSize]). The output type is floating point numbers. Double and
  * long int in input result in double output, others result in float
  * output.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiMovingAverageOperation : public PiiDefaultOperation
 {
@@ -49,7 +50,7 @@ class PiiMovingAverageOperation : public PiiDefaultOperation
    */
   Q_PROPERTY(int windowSize READ windowSize WRITE setWindowSize);
   /**
-   * The minimum acceptable value. If @p rangeMin and #rangeMax are
+   * The minimum acceptable value. If `rangeMin` and [rangeMax] are
    * not equal, they define the range of acceptable values, and the
    * values are handled circularly. This is especially useful for
    * angles, because the mean of 359 and 1 should be 0, not 180. The
@@ -58,7 +59,7 @@ class PiiMovingAverageOperation : public PiiDefaultOperation
    */
   Q_PROPERTY(double rangeMin READ rangeMin WRITE setRangeMin);  
   /**
-   * The maximum acceptable value. See #rangeMin for a detailed
+   * The maximum acceptable value. See [rangeMin] for a detailed
    * description. The default value is 0. Use 360 or 2*M_PI for
    * angles.
    */

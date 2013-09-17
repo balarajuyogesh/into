@@ -53,7 +53,7 @@ namespace PiiMatching
     ~Match();
 
     /**
-     * Assigns @a other to @p this and returns @p *this.
+     * Assigns *other* to `this` and returns @p *this.
      */
     Match& operator= (const Match& other);
 
@@ -109,16 +109,16 @@ namespace PiiMatching
    * @param merge a binary function object that merges two matches,
    * if possible. The function takes two matches as parameters and
    * checks if they are close enough to be merged. If the matches can
-   * be merged, the merged match is stored to @a match2 and the
-   * function returns @p true. Otherwise, it returns @p false.
+   * be merged, the merged match is stored to *match2* and the
+   * function returns `true`. Otherwise, it returns `false`.
    *
-   * @code
+   * ~~~
    * struct MyMerger
    * {
    *   bool operator() (const PiiMatching::Match& match1,
    *                    PiiMatching::Match& match2);
    * };
-   * @endcode
+   * ~~~
    */
   template <class Merger> void removeDuplicates(MatchList& matchedModels, Merger& merge);
 }
@@ -132,12 +132,12 @@ namespace PiiMatching
  * tries to find the models in the database that match the query.
  *
  * @tparam T the type used to store point coordinates. In images,
- * pixel coordinates are usually @p ints.
+ * pixel coordinates are usually `ints`.
  *
  * @tparam SampleSet the type used to store the features related to
  * the points, for example PiiMatrix<float>.
  *
- * @code
+ * ~~~
  * // 2D pixel coordinates.
  * // Let's assume we have two models with 10 points each.
  * PiiMatrix<int> matModelPoints(20,2);
@@ -173,9 +173,8 @@ namespace PiiMatching
  *   pointMatcher.findMatchingModels(matQueryPoints,
  *                                   matQueryFeatures,
  *                                   ransac);
- * @endcode
+ * ~~~
  *
- * @ingroup PiiMatchingPlugin
  */
 template <class T, class SampleSet> class PiiFeaturePointMatcher
 {
@@ -202,8 +201,8 @@ public:
   PiiFeaturePointMatcher& operator= (const PiiFeaturePointMatcher& other);
   
   /**
-   * Builds the model database. This function either stores the @a
-   * features for linear search or builds a @ref PiiKdtree "K-d tree",
+   * Builds the model database. This function either stores the 
+   * *features* for linear search or builds a [K-d tree](PiiKdtree),
    * which will be later used for quick queries. The most suitable
    * search technique is determined by the number of points and
    * features.
@@ -228,7 +227,7 @@ public:
    * @param measure an optional distance measure that can be used if
    * the feature space is non-Euclidean. Note that the K-d tree will
    * not be used for queries if a custom distance measure is
-   * provided. %PiiFeaturePointMatcher takes the ownership of the
+   * provided. PiiFeaturePointMatcher takes the ownership of the
    * measure.
    *
    * @exception PiiClassificationException& if the tree building
@@ -242,13 +241,13 @@ public:
                      PiiDistanceMeasure<ConstFeatureIterator>* measure = 0);
   
   /**
-   * Matches a set of @a points with their corresponding feature
-   * vectors in @a features to the database of models using @a matcher
+   * Matches a set of *points* with their corresponding feature
+   * vectors in *features* to the database of models using *matcher*
    * to find the transformation between the query and the model.
    *
    * The matching algorithm:
    *
-   * - Find the M closest matches of each key point (@a points) in the
+   * - Find the M closest matches of each key point (*points*) in the
    * key point database. Matches whose distance ratio to the closest
    * one is less than 0.8 will be discarded.
    *
@@ -300,8 +299,8 @@ public:
                                             Matcher& matcher) const;
 
   /**
-   * Sets the matching mode. If the matching mode is set to @p
-   * MatchOneModel, the search for matching models will be finished
+   * Sets the matching mode. If the matching mode is set to 
+   * `MatchOneModel`, the search for matching models will be finished
    * immediately after the best match (if any) has been found.
    */
   void setMatchingMode(PiiMatching::ModelMatchingMode matchingMode)
@@ -313,7 +312,7 @@ public:
       }
   }
   /**
-   * Returns the matching mode. The default is @p MatchAllModels.
+   * Returns the matching mode. The default is `MatchAllModels`.
    */
   PiiMatching::ModelMatchingMode matchingMode() const { return d->matchingMode; }
 
@@ -340,8 +339,8 @@ public:
   /**
    * Sets the maximum number of evaluations when searching a k-d tree. 
    * This makes it possible to return correct matches for the majority
-   * of feature points while making the search much faster. Setting @a
-   * maxEvaluations value to a non-positive value disables the
+   * of feature points while making the search much faster. Setting 
+   * *maxEvaluations* value to a non-positive value disables the
    * approximate nearest neighbor search optimization.
    */
   void setMaxEvaluations(int maxEvaluations)

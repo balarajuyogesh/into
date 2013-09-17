@@ -25,7 +25,6 @@ class PiiAbstractInputSocket;
  * Instances of this interface are used in communications between
  * connected socket pairs.
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiInputListener
 {
@@ -33,7 +32,7 @@ public:
   virtual ~PiiInputListener();
   
   /**
-   * Indicates this output socket that @p input is ready to receive
+   * Indicates this output socket that `input` is ready to receive
    * new objects.
    */
   virtual void inputReady(PiiAbstractInputSocket* input) = 0;

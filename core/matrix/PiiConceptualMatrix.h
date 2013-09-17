@@ -32,13 +32,13 @@
 #define PII_MATRIX_SIZE_MISMATCH PII_THROW(PiiInvalidArgumentException, Pii::sizeMismatchErrorMessage())
 
 /**
- * Checks that the matrices (references) @p a and @p b are of equal
+ * Checks that the matrices (references) `a` and `b` are of equal
  * size. If they aren't, throws a PiiInvalidArgumentException.
  */
 #define PII_MATRIX_CHECK_EQUAL_SIZE(a,b) if ((a).rows() != (b).rows() || (a).columns() != (b).columns()) PII_MATRIX_SIZE_MISMATCH
 
 /**
- * Checks that matrix @p a is square. If it isn't, throws a
+ * Checks that matrix `a` is square. If it isn't, throws a
  * PiiInvalidArgumentException.
  */
 #define PII_MATRIX_CHECK_SQUARE(a) if ((a).rows() != (a).columns()) PII_THROW(PiiInvalidArgumentException, Pii::notSquareErrorMessage())
@@ -77,20 +77,20 @@ Derived& operator OPERATOR ## = (const PiiConceptualMatrix<Matrix>& other) \
 /// @endcond
 
 /**
- * A superclass for classes that implement the @e matrix concept. A
+ * A superclass for classes that implement the *matrix* concept. A
  * model of the matrix concept
  *
- * @li must define functions called #rows() and #columns(), for
+ * - must define functions called [rows()] and [columns()], for
  * getting the number of rows and columns, respectively.
  *
- * @li must provide at least input iterators for accessing the data of
- * the matrix as a whole. The class must have #begin() and #end()
+ * - must provide at least input iterators for accessing the data of
+ * the matrix as a whole. The class must have [begin()] and [end()]
  * functions for getting the iterators. The iterators must be randomly
- * accessible. At least @p const versions of the iterators must be
+ * accessible. At least `const` versions of the iterators must be
  * provided. The iterators must scan the matrix in row-major order:
  * the end of row N is immediately followed by the start of row N+1.
  *
- * @li may optionally provide iterators for accessing individual rows
+ * - may optionally provide iterators for accessing individual rows
  * and columns. If no such iterators are provided, default
  * implementations will be provided.
  *
@@ -98,21 +98,21 @@ Derived& operator OPERATOR ## = (const PiiConceptualMatrix<Matrix>& other) \
  * specialization of the PiiMatrixTraits structure. The specialization
  * must define types related to the matrix model:
  *
- * @lip value_type for the content type.
- * @lip reference for a reference to the content type.
- * @lip const_iterator for read-only access.
- * @lip iterator for read-write access.
+ * - `value_type` for the content type.
+ * - `reference` for a reference to the content type.
+ * - `const_iterator` for read-only access.
+ * - `iterator` for read-write access.
  *
- * @lip column_iterator for read-write column-wise iterators.
- * @lip const_column_iterator for read-only column-wise iterators.
- * @lip row_iterator for read-write row-wise iterators.
- * @lip const_row_iterator for read-only row-wise iterators.
+ * - `column_iterator` for read-write column-wise iterators.
+ * - `const_column_iterator` for read-only column-wise iterators.
+ * - `row_iterator` for read-write row-wise iterators.
+ * - `const_row_iterator` for read-only row-wise iterators.
  *
  * If you create a class that models the matrix concept, you can mark
  * it as such as using the curiously recurring template pattern (CRTP)
  * as follows:
  *
- * @code
+ * ~~~
  * // First declare types related to your matrix implementation. This
  * // needs to come first because PiiConceptualMatrix matrix needs it
  * // when instantiated. Since My3x3Matrix is not declared yet, a
@@ -140,20 +140,19 @@ Derived& operator OPERATOR ## = (const PiiConceptualMatrix<Matrix>& other) \
  * private:
  *   int _data[9];
  * };
- * @endcode
+ * ~~~
  *
  * Once you have done this, your matrix class can be used with other
  * matrix classes in arithmetic operations. For example, you can do
  * the following:
  *
- * @code
+ * ~~~
  * PiiMatrix<int> mat(3,3);
  * My3x3Matrix mat2;
  * mat += mat2 / 4 + 5;
  * mat -= mat2 + mat;
- * @endcode
+ * ~~~
  *
- * @ingroup Matrix
  */
 template <class Derived> class PiiConceptualMatrix
 {
@@ -181,7 +180,7 @@ public:
   int columns() const { return self()->columns(); }
 
   /**
-   * Returns @p true if the matrix is empty, and @p false otherwise. 
+   * Returns `true` if the matrix is empty, and `false` otherwise. 
    * An empty matrix cannot hold a single element, i.e. there are
    * either zero rows or zero columns. Any access to an element within
    * an empty matrix will reference illegal memory.
@@ -229,7 +228,7 @@ public:
   PII_MATRIX_SCALAR_ASSIGNMENT_OPERATOR(/, std::divides)
 
   /**
-   * Sets all elements to @a value and returns a reference to self().
+   * Sets all elements to *value* and returns a reference to self().
    */
   Derived& operator= (value_type value)
   {
@@ -265,16 +264,15 @@ struct PiiMatrixTraits<PiiUnaryMatrixTransform<Matrix, UnaryFunction> >
 };
 
 /**
- * A matrix that models the @e matrix concept by applying a unary
- * function to another matrix. Given a model of the matrix concept, @p
- * mat, and a function @p func, this matrix works as if it was the
- * result of calculating <tt>func(mat)</tt>. Note that
- * %PiiUnaryMatrixTransform is immutable. It provides no way of
+ * A matrix that models the *matrix* concept by applying a unary
+ * function to another matrix. Given a model of the matrix concept, 
+ * `mat`, and a function `func`, this matrix works as if it was the
+ * result of calculating `func(mat)`. Note that
+ * PiiUnaryMatrixTransform is immutable. It provides no way of
  * modifying the source data.
  *
  * @see PiiConceptualMatrix
  *
- * @ingroup Matrix
  */
 template <class Matrix, class UnaryFunction> class PiiUnaryMatrixTransform :
   public PiiConceptualMatrix<PiiUnaryMatrixTransform<Matrix, UnaryFunction> >
@@ -353,16 +351,15 @@ struct PiiMatrixTraits<PiiBinaryMatrixTransform<Matrix1, Matrix2, BinaryFunction
 };
 
 /**
- * A matrix that models the @e matrix concept by using a binary
+ * A matrix that models the *matrix* concept by using a binary
  * function that operates on two other matrices. Given two models of
- * the matrix concept, @p mat1 and @p mat2, and a binary function @p
- * func, this matrix works as if it was the result of calculating
- * <tt>func(mat1, mat2)</tt>. Note that %PiiBinaryMatrixTransform is
+ * the matrix concept, `mat1` and `mat2`, and a binary function 
+ * `func`, this matrix works as if it was the result of calculating
+ * `func(mat1, mat2)`. Note that PiiBinaryMatrixTransform is
  * immutable. It provides no way of modifying the source data.
  *
  * @see PiiConceptualMatrix
  *
- * @ingroup Matrix
  */
 template <class Matrix1, class Matrix2, class BinaryFunction> class PiiBinaryMatrixTransform :
 public PiiConceptualMatrix<PiiBinaryMatrixTransform<Matrix1, Matrix2, BinaryFunction> >
@@ -424,7 +421,7 @@ private:
 namespace Pii
 {
   /**
-   * Creates a PiiUnaryMatrixTransform that returns @a func(@a mat).
+   * Creates a PiiUnaryMatrixTransform that returns *func*(*mat*).
    *
    * @relates PiiUnaryMatrixTransform
    */
@@ -436,9 +433,9 @@ namespace Pii
   }
   
   /**
-   * Creates a PiiBinaryMatrixTransform that returns @a func(@a mat1,
-   * @a mat2). Note that this function does not check that @a matrix
-   * and @a filter are equal in size.
+   * Creates a PiiBinaryMatrixTransform that returns *func*(*mat1*,
+   * *mat2*). Note that this function does not check that *matrix*
+   * and *filter* are equal in size.
    *
    * @relates PiiBinaryMatrixTransform
    */

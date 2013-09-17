@@ -26,12 +26,11 @@
  * Serialization functions and a couple of macros for separating the
  * template functions into save/load pairs.
  *
- * @ingroup Serialization
  */
 
 /**
  * A macro that separates the serialize() member function template for
- * type @p T into a save/load member function pair.
+ * type `T` into a save/load member function pair.
  */
 #define PII_SEPARATE_SAVE_LOAD_MEMBERS                                  \
 template <class Archive> void serialize(Archive& archive, const unsigned int version) \
@@ -50,7 +49,7 @@ template <class Archive> void load(Archive& archive, const unsigned int version)
 
 /**
  * A macro that separates the serialize() function template for type
- * @p T into a save/load function pair.
+ * `T` into a save/load function pair.
  */
 #define PII_SEPARATE_SAVE_LOAD_FUNCTIONS(T)                             \
 namespace PiiSerialization {                                            \
@@ -61,10 +60,10 @@ template <class Archive> inline void serialize(Archive& archive, T& value, const
 
 /**
  * A macro that wraps an enumerated value into an EnumWrapper
- * structure, which stores the value as an @p int. Use this to avoid
+ * structure, which stores the value as an `int`. Use this to avoid
  * writing serializers for each enumerated type.
  *
- * @code
+ * ~~~
  * struct MyStruct
  * {
  *   enum MyEnum { ValueOne, ValueTwo };
@@ -75,7 +74,7 @@ template <class Archive> inline void serialize(Archive& archive, T& value, const
  *     archive & PII_ENUM(member);
  *   }
  * };
- * @endcode
+ * ~~~
  */
 #define PII_ENUM(VALUE) PiiSerialization::enumWrapper(VALUE)
 
@@ -83,7 +82,6 @@ template <class Archive> inline void serialize(Archive& archive, T& value, const
  * A namespace that wraps global serialization functions and
  * serialization-related global symbols.
  *
- * @ingroup Serialization
  */
 namespace PiiSerialization
 {
@@ -100,13 +98,13 @@ namespace PiiSerialization
    * them private. The serialization system can access these members
    * if you also make this struct a friend of your class.
    *
-   * @code
+   * ~~~
    * class MyClass
    * {
    *   friend struct PiiSerialization::Accessor;
    *   //... private serialization function(s) here ...
    * };
-   * @endcode
+   * ~~~
    */
   struct Accessor
   {
@@ -179,7 +177,7 @@ namespace PiiSerialization
   };
   
   /**
-   * Separates the @p serialize member function template into a
+   * Separates the `serialize` member function template into a
    * save/load pair.
    */
   template <class Archive, class T> inline void separateMembers(Archive& archive, T& value, const unsigned int version)
@@ -188,7 +186,7 @@ namespace PiiSerialization
   }
 
   /**
-   * Separates the @p serialize function template (non-member) into a
+   * Separates the `serialize` function template (non-member) into a
    * save/load pair.
    */
   template <class Archive, class T> inline void separateFunctions(Archive& archive, T& value, const unsigned int version)
@@ -197,7 +195,7 @@ namespace PiiSerialization
   }  
 
   /**
-   * Wraps enum types. See @ref PII_ENUM.
+   * Wraps enum types. See [PII_ENUM].
    */
   template <class T> struct EnumWrapper
   {
@@ -229,8 +227,8 @@ namespace PiiSerialization
 
   /**
    * A structure whose specializations determine how a specific type
-   * is converted from void*. The default implementation uses @p
-   * reinterpret_cast. This structure may need to be specialized if a
+   * is converted from void*. The default implementation uses 
+   * `reinterpret_cast`. This structure may need to be specialized if a
    * class is serialized through a base class pointer, and the base
    * class is not the first one in inheritance order.
    */

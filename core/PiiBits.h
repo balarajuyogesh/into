@@ -30,13 +30,12 @@
  * namespace come with inline assembly versions for maximum
  * performance.
  *
- * @ingroup Core
  */
 
 namespace Pii
 {
   /**
-   * Rotate a binary code right by @p n positions.
+   * Rotate a binary code right by `n` positions.
    *
    * @param c the number to be rotated
    * @param n the number of positions to rotate
@@ -60,7 +59,7 @@ namespace Pii
   }
     
   /**
-   * Rotate a binary code left by @p n positions.
+   * Rotate a binary code left by `n` positions.
    *
    * @param c the number to be rotated
    * @param n the number of positions to rotate
@@ -235,10 +234,10 @@ namespace Pii
    * Get a binary mask for the sign bit of any integer type. To get
    * the sign bit, do the following:
    *
-   * @code
+   * ~~~
    * int i = -1;
    * int sign = i & signMask<int>();
-   * @endcode
+   * ~~~
    */
   template <class T> inline T signMask();
 
@@ -300,7 +299,7 @@ namespace Pii
    * processor architecture.
    *
    * @return a new memory address rounded up to the next address
-   * divisible by @p bitMask + 1. If @p address is already aligned,
+   * divisible by `bitMask` + 1. If `address` is already aligned,
    * it'll be returned unmodified.
    */
   template <class T> inline T alignAddress(T address, size_t bitMask)
@@ -319,7 +318,7 @@ namespace Pii
 #endif
 
   /**
-   * Returns the sign bit of @a value1 - @a value2.
+   * Returns the sign bit of *value1* - *value2*.
    */
   template <class T> inline unsigned int signBit(T value1, T value2)
   {
@@ -328,7 +327,7 @@ namespace Pii
   }
 
   /**
-   * Returns the sign bit of @a value1 - @a value2.
+   * Returns the sign bit of *value1* - *value2*.
    */
   inline unsigned int signBit(float value1, float value2)
   {
@@ -338,7 +337,7 @@ namespace Pii
   }
   
   /**
-   * Returns the sign bit of @a value1 - @a value2.
+   * Returns the sign bit of *value1* - *value2*.
    */
   inline unsigned int signBit(double value1, double value2)
   {
@@ -356,7 +355,7 @@ namespace Pii
   }
 
   /**
-   * Returns the sign bit of @a value1 - @a value2. This function
+   * Returns the sign bit of *value1* - *value2*. This function
    * always uses the floating point version of signBit().
    */
   template <class T> inline unsigned int floatSignBit(T value1, float value2)
@@ -365,7 +364,7 @@ namespace Pii
   }
 
   /**
-   * Returns the sign bit of @a value1 - @a value2. This function
+   * Returns the sign bit of *value1* - *value2*. This function
    * always uses the floating point version of signBit().
    */
   template <> inline unsigned int floatSignBit(double value1, float value2)

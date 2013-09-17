@@ -21,7 +21,6 @@
 /**
  * Thrown when a HTTP request handler cannot complete a request.
  *
- * @ingroup Network
  */
 class PII_NETWORK_EXPORT PiiHttpException : public PiiNetworkException
 {
@@ -34,14 +33,14 @@ class PII_NETWORK_EXPORT PiiHttpException : public PiiNetworkException
   PII_VIRTUAL_METAOBJECT_FUNCTION;
 public:
   /**
-   * Constructs a new %PiiHttpException with the given @a statusCode
-   * and @a location.
+   * Constructs a new PiiHttpException with the given *statusCode*
+   * and *location*.
    */
   PiiHttpException(int statusCode = 200, const QString& location = "");
 
   /**
-   * Constructs a new %PiiHttpException with the given @a statusCode
-   * and @a location.
+   * Constructs a new PiiHttpException with the given *statusCode*
+   * and *location*.
    */
   PiiHttpException(int statusCode, const QString& message, const QString& location);
   PiiHttpException(const PiiHttpException& other);

@@ -31,7 +31,7 @@
  * must be included after all the types involved in the function calls
  * have been declared.
  *
- * @code
+ * ~~~
  * #include <PiiYdinResources.h>
  * #include "MyInterface.h" // defines MyInterface
  *
@@ -39,16 +39,16 @@
  * // This will NOT work because the functions in PiiYdinResources.h
  * // do not see the declarations related to MyInterface.
  * MyInterface* pIface = PiiYdin::createResource<MyInterface>("MyInterfaceImpl");
- * @endcode
+ * ~~~
  *
- * @code
+ * ~~~
  * #include "MyInterface.h" // defines MyInterface
  * #include <PiiYdinResources.h>
  *
  * //...
  * // This works because MyInterface is fully defined before createResource().
  * MyInterface* pIface = PiiYdin::createResource<MyInterface>("MyInterfaceImpl");
- * @endcode
+ * ~~~
  */
 template <class T, class U> T resource_cast(U* resource);
 
@@ -68,13 +68,13 @@ namespace PiiYdin
    * Get the resource name of a type. This function uses
    * PiiSerializationTraits to find the name for the type.
    *
-   * @code
+   * ~~~
    * class MyClass {};
    * PII_SERIALIZATION_NAME(MyClass);
    *
    * // Returns "MyClass"
    * const char* name = PiiYdin::resourceName<MyClass>();
-   * @endcode
+   * ~~~
    */
   template <class T> inline const char* resourceName()
   {
@@ -85,24 +85,24 @@ namespace PiiYdin
   PII_YDIN_EXPORT int pointerOffset(const char* superClass, const char* subClass);
   
   /**
-   * Create an instance of the object identified by @a resourceName. 
+   * Create an instance of the object identified by *resourceName*. 
    * This function uses PiiSerializationFactory to create the object,
-   * and returns a pointer to the new instance. The @p ParentType
+   * and returns a pointer to the new instance. The `ParentType`
    * template parameter is used in checking that the resource really
-   * is an instantiable entity. If @p ParentType is not a superclass
-   * of the resource identified by @a name, the function will return a
-   * null pointer. Consequently, @p ParentType must have the @ref
+   * is an instantiable entity. If `ParentType` is not a superclass
+   * of the resource identified by *name*, the function will return a
+   * null pointer. Consequently, `ParentType` must have the @ref
    * PiiSerializationTraits::ClassName "class name trait" defined. A
    * null pointer will be returned also if the named resource does not
    * exist.
    *
    * The code below creates an instance of PiiImageFileReader, but
-   * only if such a resource exists in the resource database with a @p
-   * pii:class attribute that equals "PiiOperation". It is not needed
+   * only if such a resource exists in the resource database with a 
+   * `pii:class` attribute that equals "PiiOperation". It is not needed
    * to specify all possible superclasses for a class; superclasses of
    * superclasses will be recursively resolved.
    *
-   * @code
+   * ~~~
    * PiiOperation* pOperation = PiiYdin::createResource<PiiOperation>("PiiImageFileReader");
    *
    * class MyInterface
@@ -132,7 +132,7 @@ namespace PiiYdin
    *
    * // Returns 0 because MyClass is not a QObject
    * QObject* obj = PiiYdin::createResource<QObject>("MyClass");
-   * @endcode
+   * ~~~
    *
    * @see resourceName()
    * @see resourceDatabase()
@@ -166,7 +166,7 @@ namespace PiiYdin
 
   /**
    * Returns the name of a PiiResourceConnector resource that can bind
-   * the two named resources together as @a role. If no such connector
+   * the two named resources together as *role*. If no such connector
    * exists, returns an empty string.
    *
    * @relates PiiResourceConnector
@@ -177,12 +177,12 @@ namespace PiiYdin
 
   /**
    * Creates a resource connector that can bind the two resources
-   * together as @a role. If the resources have not been assigned a
-   * connection named @a role or the connection has no associated
+   * together as *role*. If the resources have not been assigned a
+   * connection named *role* or the connection has no associated
    * connector, 0 will be returned. The function may return either a
-   * newly allocated connector object (in which case @a mustDelete
-   * flag will be set to @p true) or either of the two resources (@a
-   * mustDelete will be @p false).
+   * newly allocated connector object (in which case *mustDelete*
+   * flag will be set to `true`) or either of the two resources (
+   * *mustDelete* will be `false`).
    *
    * @relates PiiResourceConnector
    */
@@ -205,30 +205,30 @@ namespace PiiYdin
   }
   
   /**
-   * Connect @a resource1 and @a resource2 as specified by @a role.
+   * Connect *resource1* and *resource2* as specified by *role*.
    *
    * @param resource1 a pointer to a class instance, such as
-   * PiiOperation. The resource name of type @p T must be resolvable
-   * with #resourceName().
+   * PiiOperation. The resource name of type `T` must be resolvable
+   * with [resourceName()].
    *
    * @param resource2 a pointer to a class instance, such as QWidget. 
-   * The resource name of type @p U must be resolvable with
-   * #resourceName().
+   * The resource name of type `U` must be resolvable with
+   * [resourceName()].
    *
    * @param role the type of connection between the resources, such as
    * "pii:display".
    *
-   * @return @p true if the resources were successfully connected, @p
-   * false otherwise. The connection will fail if the name of one of
+   * @return `true` if the resources were successfully connected, 
+   * `false` otherwise. The connection will fail if the name of one of
    * the resources cannot be determined or if there is no connector
    * (see PiiYdin::resourceDatabase()) associated with the two
-   * resources in the specified @a role.
+   * resources in the specified *role*.
    *
-   * @code
+   * ~~~
    * PiiOperation* pOperation = PiiYdin::createResource<PiiOperation>("PiiVisualTrainer");
    * QWidget* pDisplay = PiiYdin::createResource<QWidget>("PiiVisualTrainerWidget");
    * PiiYdin::connectResources(pOperation, pDisplay, "pii:configurator");
-   * @endcode
+   * ~~~
    *
    * @relates PiiResourceConnector
    */
@@ -246,7 +246,7 @@ namespace PiiYdin
 
   /**
    * Disconnect two resources. The behavior is similar to
-   * #connectResources(), except that an existing connection (if any)
+   * [connectResources()], except that an existing connection (if any)
    * between the two resources will be broken.
    *
    * @relates PiiResourceConnector
@@ -265,19 +265,19 @@ namespace PiiYdin
 }
 
 /**
- * Cast @a resource to the type specified by @p T. This function uses
- * the resource database to find out if @p T is a superclass of @a
- * resource. It returns the address of @a resource as @p T on success
- * and zero on failure. The behaviour is similar to @p qobject_cast,
+ * Cast *resource* to the type specified by `T`. This function uses
+ * the resource database to find out if `T` is a superclass of 
+ * *resource*. It returns the address of *resource* as `T` on success
+ * and zero on failure. The behaviour is similar to `qobject_cast`,
  * but it doesn't use Qt's meta-object system and works with classes
  * that are not derived from QObject.
  *
- * @code
+ * ~~~
  * QWidget* pWidget = PiiYdin::createResource<QWidget>("PiiVisualTrainerWidget");
  * PiiResourceConnector* pConnector = resource_cast<PiiResourceConnector*>(pWidget);
  * if (pConnector != 0)
  *   cout << "PiiVisualTrainerWidget derives from PiiResourceConnector.\n";
- * @endcode
+ * ~~~
  *
  * @see resourceDatabase()
  */

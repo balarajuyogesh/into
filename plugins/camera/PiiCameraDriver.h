@@ -27,19 +27,20 @@
 
 /**
  * A common interface for cameras that read images into a frame
- * buffer. Images are stored as @e frames containing at least one @e
- * scan @e line. Valid frame sizes are determined by the type of
+ * buffer. Images are stored as *frames* containing at least one 
+ * *scan* *line*. Valid frame sizes are determined by the type of
  * camera and the driver.
  *
  * Frames are captured by initiating a capture sequence by
- * #startCapture(). Whenever a new frame is ready, the driver invokes
- * the @ref PiiCameraDriver::Listener::frameCaptured()
+ * [startCapture()]. Whenever a new frame is ready, the driver invokes
+ * the [PiiCameraDriver::Listener::frameCaptured()]
  * "frameCaptured()" function of a registered listener.
  *
  * PiiCameraDriver is designed to suit the needs detailed in the
  * paragraphs below (and hopefully others).
  *
- * @par On-line video via DMA
+ * On-line video via DMA
+ * ---------------------
  *
  * This type of capture is used by IEEE 1394 (FireWire) cameras and
  * many frame grabbers. The interface card works as a bus master and
@@ -51,7 +52,8 @@
  * new frames are written into the frame buffer all the time. The
  * receiving program is signalled after each completed frame.
  *
- * @par High-speed cameras
+ * High-speed cameras
+ * ------------------
  *
  * The speed of a camera is said to be high if image data cannot be
  * processed or stored into a hard drive at the original frame rate. 
@@ -60,7 +62,8 @@
  * in a circular fashion: once it is full, the next frame will be
  * stored at the beginning again.
  *
- * @par Line-scan cameras
+ * Line-scan cameras
+ * -----------------
  *
  * Line-scan capture is a combination of high-speed and ordinary DMA
  * capture. The driver allocates a circularly accessed frame buffer
@@ -69,23 +72,24 @@
  * drivers can also be used in high-speed mode to capture just a
  * predefined number of frames.
  *
- * @par Non-DMA devices
+ * Non-DMA devices
+ * ---------------
  *
  * Some devices, such as web cameras and some analog frame grabbers,
  * are not capable of DMA transfers. It is up to the camera driver
  * implementation to allocate space for storage and to keep it
  * sufficiently large not to drop frames.
  *
- * @par Accessing frame buffers
+ * Accessing frame buffers
+ * -----------------------
  *
  * By default, the memory for image storage is managed by the driver. 
  * With DMA devices, this is often (but not necessarily) the only
  * option. The frame buffer can be accessed either directly or by
  * copying its contents. Direct access is faster, but care must be
  * taken to ensure proper mutual exclusion. To directly access the
- * frame buffer memory, use the #frameBuffer() function.
+ * frame buffer memory, use the [frameBuffer()] function.
  *
- * @ingroup PiiCameraPlugin
  */
 class PII_CAMERA_EXPORT PiiCameraDriver : public QObject, public PiiConfigurable
 {
@@ -117,8 +121,8 @@ public:
   /**
    * Returns a list of the cameras that can be automatically detected
    * by the driver. Note that this is not necessarily a complete list
-   * of accessible cameras. The IDs on the list can be used as the @a
-   * cameraId parameter to the #initialize().
+   * of accessible cameras. The IDs on the list can be used as the 
+   * *cameraId* parameter to the [initialize()].
    */
   virtual QStringList cameraList() const = 0;
 
@@ -131,7 +135,7 @@ public:
    * selected by a generic camera id. With frame grabbers, the camera
    * id is typically just a zero-based numerical unit index. Other
    * possibilities include, for example, network addresses. The
-   * #cameraList() function returns a list of automatically found
+   * [cameraList()] function returns a list of automatically found
    * camera IDs.
    *   
    * You can configure camera driver via properties, but
@@ -144,10 +148,10 @@ public:
   virtual void initialize(const QString& cameraId) = 0;
 
   /**
-   * Closes an initialized driver. After @p close(), #initialize()
+   * Closes an initialized driver. After `close`(), [initialize()]
    * must be called again before the driver is functional.
    *
-   * @return @p true on success, @p false otherwise
+   * @return `true` on success, `false` otherwise
    */
   virtual bool close() = 0;
 
@@ -158,7 +162,7 @@ public:
    * value is less than one, frames will be captured until explicitly
    * interrupted.
    *
-   * @return @p true if the capture was successfully started, @p false
+   * @return `true` if the capture was successfully started, `false`
    * otherwise
    */
   virtual bool startCapture(int frames = 0) = 0;
@@ -166,19 +170,19 @@ public:
   /**
    * Stops capturing frames.
    *
-   * @return @p true if the capture was successfully stopped, @p false
+   * @return `true` if the capture was successfully stopped, `false`
    * otherwise.
    */
   virtual bool stopCapture() = 0;
 
   /**
-   * Returns @p true if the driver is open and @p false otherwise.
+   * Returns `true` if the driver is open and `false` otherwise.
    */
   virtual bool isOpen() const = 0;
 
   /**
-   * Returns @p true if frames are currently being captured and @p
-   * false otherwise.
+   * Returns `true` if frames are currently being captured and 
+   * `false` otherwise.
    */
   virtual bool isCapturing() const = 0;
 
@@ -298,9 +302,9 @@ public:
    * index is a linear counter that can be used to fetch the frame
    * data from the driver using PiiCameraDriver::frameBuffer().
    *
-   * @param frameBuffer a pointer to the captured buffer. If @p
-   * frameBuffer is non-zero, a new frame was allocated inside the
-   * driver and must be deallocated with @p free() by the caller.
+   * @param frameBuffer a pointer to the captured buffer. If 
+   * `frameBuffer` is non-zero, a new frame was allocated inside the
+   * driver and must be deallocated with `free`() by the caller.
    *
    * @param elapsedTime a time in micro seconds measured from the
    * previous frame. Zero (the default value) means that the driver
@@ -313,14 +317,14 @@ public:
    * all frames. Depending on the size of the frame buffer the driver
    * may allow the processing lag behind for a while. When it decides
    * the processing will never catch up capture, it'll inform the
-   * listener. The next frame sent to #frameCaptured() will be after
-   * @p endIndex.
+   * listener. The next frame sent to [frameCaptured()] will be after
+   * `endIndex`.
    *
    * @param startIndex the first missed frame
    *
    * @param endIndex the last missed frame
    *
-   * @note Missed frames are not necessarily accessible in the driver. 
+   * ! Missed frames are not necessarily accessible in the driver. 
    * Therefore, it is not allowed to call
    * PiiCameraDriver::frameBuffer() for missed frames. Doing so may
    * crash your application, cause a deadlock or anything else. To

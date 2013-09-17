@@ -24,15 +24,15 @@
 /**
  * An operation for reading videos from files.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in filename - an optional input for reading in the video file
  * name. If this input is connected, the operation will send the
  * output frames on a flow level one higher than that of the input. If
- * both @p trigger and @p filename are connected, each frame within
+ * both `trigger` and `filename` are connected, each frame within
  * the video file must be separately triggered.
  *
- * @ingroup PiiVideoPlugin
  */
 class PII_VIDEO_EXPORT PiiVideoFileReader : public PiiImageReaderOperation
 {

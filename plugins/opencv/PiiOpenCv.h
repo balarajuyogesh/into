@@ -97,10 +97,10 @@ protected:
 /**
  * A class that makes it possible to reuse the data in a PiiMatrix in
  * an IplImage. Once created, the wrapper can be substituted to CvArr*
- * or IplImage* in OpenCV function calls. The @p isConst template
+ * or IplImage* in OpenCV function calls. The `isConst` template
  * parameter determines if the shared data can be modified.
  *
- * @code
+ * ~~~
  * PiiMatrix<int> threshold(const PiiMatrix<int>& input)
  * {
  *   PiiMatrix<int> matResult(50,50);
@@ -109,21 +109,20 @@ protected:
  *                       15.0);
  *   return matResult;
  * }
- * @endcode
+ * ~~~
  *
- * @note This class is intended to be used only as a temporary object
+ * ! This class is intended to be used only as a temporary object
  * and should not be copied. Unless C++11 support is enabled, the
- * compiler allows you to create a copy of an %PiiIplImage object, but
+ * compiler allows you to create a copy of an PiiIplImage object, but
  * the CvArr pointer of the copied object will be zero after copying.
  *
- * @code
+ * ~~~
  * PiiMatrix<int> matTest(10,10);
  * PiiIplImage<int> iplImage(matTest);
  * PiiIplImage<int> iplImage2(iplImage); // moves data from iplImage to iplImage2
  * cvFunction(iplImage); // Crash, the data is null.
- * @endcode
+ * ~~~
  *
- * @ingroup PiiOpenCvPlugin
  */
 template <class T, bool isConst=false> class PiiIplImage :
   public PiiMatrix<T>,
@@ -132,11 +131,11 @@ template <class T, bool isConst=false> class PiiIplImage :
   typedef typename Pii::If<isConst, PiiConstCvArr<PiiIplImage<T>,IplImage>, PiiCvArr<PiiIplImage<T>,IplImage> >::Type BaseType;
 public:
   /**
-   * Creates a new IplImage wrapper that shares the pixel data with @a
-   * matrix. If the @p isConst template parameter is @p false, the
+   * Creates a new IplImage wrapper that shares the pixel data with 
+   * *matrix*. If the `isConst` template parameter is `false`, the
    * shared data can be modified by OpenCV function calls. That is,
-   * the class can be casted to a non-const CvArr pointer. If @p
-   * isConst is @p true, a copy of the data will be created if it is
+   * the class can be casted to a non-const CvArr pointer. If 
+   * `isConst` is `true`, a copy of the data will be created if it is
    * still shared when a pointer to a CvArr is requested.
    */
   PiiIplImage(const PiiMatrix<T>& matrix) :
@@ -179,7 +178,6 @@ private: PiiIplImage& operator= (const PiiIplImage& other);
  * an CvMat. Works similarly to PiiIplImage, but stores the data in a
  * CvMat.
  *
- * @ingroup PiiOpenCvPlugin
  */
 template <class T, bool isConst=false> class PiiCvMat :
   public PiiMatrix<T>,
@@ -189,7 +187,7 @@ template <class T, bool isConst=false> class PiiCvMat :
 public:
   /**
    * Creates a new CvMat wrapper that shares the pixel data with
-   * @a matrix.
+   * *matrix*.
    */
   PiiCvMat(const PiiMatrix<T>& matrix) :
     PiiMatrix<T>(matrix),
@@ -223,8 +221,8 @@ private: PiiCvMat& operator= (const PiiCvMat& other);
 namespace PiiOpenCv
 {
   /**
-   * Allocates a new CvMat object with the given data type @p T. This
-   * is the same as <tt>cvCreateMat(rows, columns, type)</tt>, but
+   * Allocates a new CvMat object with the given data type `T`. This
+   * is the same as `cvCreateMat(rows, columns, type)`, but
    * saves you from using cumbersome OpenCV type constants.
    *
    * @param rows the number of rows in the matrix
@@ -240,7 +238,7 @@ namespace PiiOpenCv
   }
 
   /**
-   * Creates a modifiable wrapper for @p mat that can be used as an
+   * Creates a modifiable wrapper for `mat` that can be used as an
    * IplImage in OpenCV function calls.
    *
    * @relates PiiIplImage
@@ -251,7 +249,7 @@ namespace PiiOpenCv
   }
   
   /**
-   * Creates a const wrapper for @p mat that can be used as an
+   * Creates a const wrapper for `mat` that can be used as an
    * IplImage in OpenCV function calls.
    *
    * @relates PiiIplImage
@@ -262,7 +260,7 @@ namespace PiiOpenCv
   }
   
   /**
-   * Creates a modifiable wrapper for @p mat that can be used as a
+   * Creates a modifiable wrapper for `mat` that can be used as a
    * CvMat in OpenCV function calls.
    *
    * @relates PiiCvMat
@@ -273,7 +271,7 @@ namespace PiiOpenCv
   }
   
   /**
-   * Creates a const wrapper for @p mat that can be used as an
+   * Creates a const wrapper for `mat` that can be used as an
    * CvMat in OpenCV function calls.
    *
    * @relates PiiCvMat

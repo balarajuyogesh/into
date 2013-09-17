@@ -34,14 +34,14 @@
  *
  * The kd-tree can be used to quickly look up nearest neighbors in
  * large databases. For randomly distributed data, the complexity of
- * the algorithm is <code>O(log N)</code>, which is much better than
- * the <code>O(N)</code> of exhaustive search. The advantage however
+ * the algorithm is `O(log N)`, which is much better than
+ * the `O(N)` of exhaustive search. The advantage however
  * quickly diminishes with growing feature space dimensionality. As a
- * general rule, @e exact NN search using the kd-tree is advantageous
- * if and only if @f$N >> 2^k@f$, where N is the number of samples and
+ * general rule, *exact* NN search using the kd-tree is advantageous
+ * if and only if \(N >> 2^k\), where N is the number of samples and
  * k is the feature space dimensionality.
  *
- * %PiiKdTree includes a variant of the basic NN look-up algorithm
+ * PiiKdTree includes a variant of the basic NN look-up algorithm
  * that performs approximate NN search. (k-NN search is also
  * supported.) Instead of recursively checking all possible branches
  * of the tree the approximate algorithm orders the look-ups so that
@@ -51,12 +51,11 @@
  * upper bound for the search time while still returning the nearest
  * neighbor(s) with a high probability.
  *
- * %PiiKdTree only works with geometric distances. Thus, there is no
+ * PiiKdTree only works with geometric distances. Thus, there is no
  * option to use user-defined distance measures. If you need a special
  * distance measure, exhaustive search is currently the only viable
  * option.
  *
- * @ingroup PiiClassificationPlugin
  */
 template <class SampleSet> class PiiKdTree
 {
@@ -90,7 +89,7 @@ public:
   ~PiiKdTree();
 
   /**
-   * Assigns @a other to @p this.
+   * Assigns *other* to `this`.
    */
   PiiKdTree& operator= (const PiiKdTree& other);
   
@@ -114,8 +113,8 @@ public:
    * @param sample input feature vector
    *
    * @param distance an optional output-value argument that will store
-   * the @e squared geometric distance to the closest neighbor of @a
-   * sample.
+   * the *squared* geometric distance to the closest neighbor of 
+   * *sample*.
    *
    * @return the index of the closest sample in the model set, or -1
    * if the set is empty.
@@ -133,15 +132,15 @@ public:
    * @param sample input feature vector
    *
    * @param maxEvaluations the maximum number of node look-ups to be
-   * done. If you set this value to @p log(N), the algorithm will do a
+   * done. If you set this value to `log`(N), the algorithm will do a
    * simple best first search to the first leaf node. Usually, it is a
    * good idea to give the algorithm a bit more time to find a good
    * match. If you set this value to the size of the model set, the
    * exact nearest neighbor will be returned.
    *
    * @param distance an optional output-value argument that will store
-   * the @e squared geometric distance to the closest neighbor of @a
-   * sample.
+   * the *squared* geometric distance to the closest neighbor of 
+   * *sample*.
    *
    * @return the index of the closest sample in the model set, or -1
    * if the set is empty.
@@ -151,20 +150,20 @@ public:
                        double* distance = 0) const;
 
   /**
-   * Returns the @a n closest matches of @a sample. This function is
+   * Returns the *n* closest matches of *sample*. This function is
    * equivalent to PiiClassification::findClosestMatches(). It returns
    * an exact answer and may not perform well in high-dimensional
    * spaces.
    *
-   * @return the @a n closest matches. Note that if the model data set
-   * is smaller than @a n, less than @a n matches may be returned.
+   * @return the *n* closest matches. Note that if the model data set
+   * is smaller than *n*, less than *n* matches may be returned.
    */
   PiiClassification::MatchList findClosestMatches(Sample sample,
                                                   int n) const;
   
   /**
-   * Returns @a n matches that are probably the closest of @a sample. 
-   * This function stops after @a maxEvaluations most probable nodes
+   * Returns *n* matches that are probably the closest of *sample*. 
+   * This function stops after *maxEvaluations* most probable nodes
    * have been checked and may not return the exact nearest neighbors.
    *
    * @param sample input feature vector
@@ -172,12 +171,12 @@ public:
    * @param n the number of closest matches to return.
    *
    * @param maxEvaluations the maximum number of node look-ups to be
-   * done. A suitable value is about @a n * @p log(N), where N is the
+   * done. A suitable value is about *n* * `log`(N), where N is the
    * number of samples in the model set.
    *
-   * @return the @a n closest matches. Note that if either the model
-   * data set or @a maxEvaluations is smaller than @a n, less than @a
-   * n matches may be returned.
+   * @return the *n* closest matches. Note that if either the model
+   * data set or *maxEvaluations* is smaller than *n*, less than 
+   * *n* matches may be returned.
    */
   PiiClassification::MatchList findClosestMatches(Sample sample,
                                                   int n,
@@ -189,7 +188,7 @@ public:
   SampleSet modelSet() const { return d->modelSet; }
 
   /**
-   * Prints the structure of the k-d tree to @a stream. This function
+   * Prints the structure of the k-d tree to *stream*. This function
    * is mainly for informational and debugging purposes.
    */
   template <class Stream> void print(Stream& stream) { d->pRoot->print(stream); }

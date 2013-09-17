@@ -22,15 +22,14 @@
  * This namespace contains useful functions for typical tracking
  * tasks.
  *
- * @ingroup PiiTrackingPlugin
  */
 namespace PiiTracking
 {
   /**
-   * Predict the location of a measurement at time instant @p t given
+   * Predict the location of a measurement at time instant `t` given
    * a trajectory. This function calculates the velocity of an object
    * based on two previous measurements. It then scales this vector to
-   * time instant @p t and returns a new measurement at the predicted
+   * time instant `t` and returns a new measurement at the predicted
    * position.
    *
    * @param trajectory the last node in the trajectory
@@ -82,8 +81,8 @@ namespace PiiTracking
   }
 
   /**
-   * An evaluation function that returns the minimum fitness of @p
-   * trajectory and the next node in chain. Using this function as an
+   * An evaluation function that returns the minimum fitness of 
+   * `trajectory` and the next node in chain. Using this function as an
    * evaluator for trajectories sets the trajectory fitness to the
    * minimum of individual measurement fitnesses.
    */
@@ -103,7 +102,7 @@ namespace PiiTracking
 
   /**
    * An evaluation function that returns the average measurement
-   * fitness of @p trajectory. The average is calculated iteratively
+   * fitness of `trajectory`. The average is calculated iteratively
    * by using the fitness value of the next node in chain only.
    */
   template <class T, int D> double evaluateAverageFitness(PiiCoordinateTrackerNode<T,D>* trajectory)

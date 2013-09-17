@@ -19,13 +19,12 @@
 #include "PiiDistanceMeasure.h"
 
 /**
- * Log-likelihood dissimilarity. Measures difference between two @p
- * distributions as a log-likelihood ratio: @f$ d = -\sum S_i
- * \log(M_i) @f$, where @e S and @e M represent the sample and model
+ * Log-likelihood dissimilarity. Measures difference between two 
+ * `distributions` as a log-likelihood ratio: @f$ d = -\sum S_i
+ * \log(M_i) @f$, where *S* and *M* represent the sample and model
  * distributions, respectively. Input features are assumed to be
  * distributions that sum up to unity.
  *
- * @ingroup PiiClassificationPlugin
  */
 PII_DEFAULT_DISTANCE_MEASURE_DEF(PiiLogLikelihood)
 {

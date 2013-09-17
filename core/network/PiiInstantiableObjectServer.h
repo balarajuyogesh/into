@@ -31,7 +31,7 @@
  * creates new server instances or passes requests to existing ones. 
  * There will be no "default" server object, but each client must
  * create a instance by requesting /new. The server uses
- * #createServer() function to create a new secondary server and
+ * [createServer()] function to create a new secondary server and
  * assigns a unique ID to it. The ID is then returned to the client.
  *
 @verbatim
@@ -55,7 +55,7 @@ GET /243F6A8-885A-308D-3131-98A2E0370734/properties/ HTTP/1.1
  *
  * Inactive object instances will be kept alive only for a limited
  * amount of time. If no accesses have been made to the object for a
- * specified maximum number of milliseconds (see #instanceTimeout()),
+ * specified maximum number of milliseconds (see [instanceTimeout()]),
  * the object will be automatically deleted. If no other requests are
  * made, the instance can be kept alive by requesting /ping.
  *
@@ -88,7 +88,6 @@ GET /243F6A8-885A-308D-3131-98A2E0370734/delete HTTP/1.1
 GET /new?className=QTimer HTTP/1.1
 @endverbatim
  *
- * @ingroup Network
  */   
 class PII_NETWORK_EXPORT PiiInstantiableObjectServer:
   public QObject,
@@ -152,11 +151,11 @@ protected:
   } *d;
   
   /**
-   * Returns a new server instance given the @a parameters passed in
+   * Returns a new server instance given the *parameters* passed in
    * the HTTP request. This function must be overridden to create a
    * new server object for each client.
    *
-   * @note If the returned handler is a PiiObjectServer that has its
+   * ! If the returned handler is a PiiObjectServer that has its
    * thread safety level set to AccessFromMainThread, the returned
    * PiiObjectServer and the object to be served must be moved to the
    * main thread before returning. Otherwise, calls to the object will

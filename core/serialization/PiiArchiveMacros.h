@@ -23,7 +23,6 @@
  * input/output operators for archive classes. Mostly for internal
  * use.
  *
- * @ingroup Serialization
  */
 
 #define PII_PRIMITIVE_OPERATOR(Archive, T, Stream, dir, ref) Archive& operator dir (T ref value) { startDelim(); Stream::operator dir (value); endDelim(); return *this; }

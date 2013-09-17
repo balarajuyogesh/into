@@ -28,22 +28,23 @@ class QString;
 /**
  * An operation that calculates percentiles from color histograms.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - a color image the percentiles are extracted from. 
  * Accepts all image types. For gray-scale images, the color channels
  * are ignored. For example, the 90% percentile for any color channel
  * (R:90, B:90, G:90) is the same.
  *
- * @in roi - region-of-interest. See @ref PiiRoi for a description. 
+ * @in roi - region-of-interest. See [PiiRoi] for a description. 
  * Optional.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out features - a feature vector that contains the extracted
  * percentiles in the defined order. (PiiMatrix<int>)
  *
- * @ingroup PiiColorsPlugin
  */
 class PiiColorPercentiles : public PiiDefaultOperation
 {
@@ -92,8 +93,8 @@ class PiiColorPercentiles : public PiiDefaultOperation
   Q_PROPERTY(int levels READ levels WRITE setLevels);
 
   /**
-   * The type or the @p roi input, if connected. The default value is
-   * @p AutoRoi.
+   * The type or the `roi` input, if connected. The default value is
+   * `AutoRoi`.
    */
   Q_PROPERTY(PiiImage::RoiType roiType READ roiType WRITE setRoiType);
   
@@ -103,22 +104,22 @@ public:
   /**
    * Possible choices for a feature set.
    *
-   * @lip Universal - uniformly sampled percentiles, either absolute
+   * - `Universal` - uniformly sampled percentiles, either absolute
    * or differential.
    *
-   * @lip Prebuilt - prebuilt application-specific sets.
+   * - `Prebuilt` - prebuilt application-specific sets.
    *
-   * @lip Custom - user-defined custom percentiles (see #percentiles).
+   * - `Custom` - user-defined custom percentiles (see [percentiles]).
    */
   enum FeatureSetType { Universal, Prebuilt, Custom };
 
   /**
    * An enumeration for prebuilt sets of RGB percentiles.
    *
-   * @li @p WoodDefectDetection - 13 percentiles for defect detection
+   * - `WoodDefectDetection` - 13 percentiles for defect detection
    * in wood inspection.
    *
-   * @li @p WoodDefectRecognition - 15 percentiles for defect recognition
+   * - `WoodDefectRecognition` - 15 percentiles for defect recognition
    * (classification) in wood inspection
    */
   enum PrebuiltFeatureSet { WoodDefectDetection, WoodDefectRecognition };
@@ -128,31 +129,31 @@ public:
   /**
    * Universal sets percentiles.
    *
-   * @li @p Absolute10 - absolute differences from each color channels
+   * - `Absolute10` - absolute differences from each color channels
    * in 10 percentage unit steps (10, 20, ..., 90). 27 percentiles in
    * total.
    *
-   * @li @p Absolute20 - absolute differences from each color channels
+   * - `Absolute20` - absolute differences from each color channels
    * in 20 percentage unit steps (20, 40, 60, 80). 12 percentiles in
    * total.
    *
-   * @li @p Absolute30 - absolute differences from each color channels
+   * - `Absolute30` - absolute differences from each color channels
    * in 30 percentage unit steps (30, 60, 90). 9 percentiles in total.
    *
-   * @li @p Difference10 - intra-channel percentile differences for
+   * - `Difference10` - intra-channel percentile differences for
    * each color channel in 10 percentage unit steps. (10-1, 20-1, ...,
    * 90-1). 27 percentiles in total.
    *
-   * @li @p Difference20 - intra-channel percentile differences for
+   * - `Difference20` - intra-channel percentile differences for
    * each color channel in 20 percentage unit steps. (20-10, 40-10,
    * 60-10, 80-10). 12 percentiles in total.
    *
-   * @li @p Difference30 - intra-channel percentile differences for
+   * - `Difference30` - intra-channel percentile differences for
    * each color channel in 30 percentage unit steps. (30-10, 60-10,
    * 90-10). 9 percentiles in total.
    *
-   * @li {Absolute,Difference}[123]0[RGB] (e.g. @p Absolute10G or @p
-   * Difference30B) - one-channel versions of the above. Percentiles
+   * - {Absolute,Difference}[123]0[RGB] (e.g. `Absolute10G` or 
+   * `Difference30B`) - one-channel versions of the above. Percentiles
    * are calculated from the specified color channel only. The length
    * of the feature vector is one third of the corresponding
    * three-channel version. These features are useful for gray-scale

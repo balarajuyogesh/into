@@ -23,7 +23,6 @@
  * infinitely long fibers (such as nylon) seen in transmitted light
  * (back-lighting).
  *
- * @ingroup PiiCameraEmulatorPlugin
  */
 class PII_CAMERAEMULATOR_EXPORT PiiFiberBundleGenerator : public PiiTextureGenerator
 {
@@ -70,7 +69,7 @@ class PII_CAMERAEMULATOR_EXPORT PiiFiberBundleGenerator : public PiiTextureGener
   Q_PROPERTY(int maxThickness READ getMaxThickness WRITE setMaxThickness);
   
   /**
-   * Smoothing flag. If set to @p true (the default), the generated
+   * Smoothing flag. If set to `true` (the default), the generated
    * texture will be run through a low-pass filter.
    */
   Q_PROPERTY(bool smooth READ getSmooth WRITE setSmooth);

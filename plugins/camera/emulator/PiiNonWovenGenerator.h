@@ -23,7 +23,6 @@
  * A texture generator that produces non-woven-like background
  * texture.
  *
- * @ingroup PiiCameraPlugin
  */
 class PII_CAMERAEMULATOR_EXPORT PiiNonWovenGenerator : public PiiTextureGenerator
 {
@@ -31,7 +30,7 @@ class PII_CAMERAEMULATOR_EXPORT PiiNonWovenGenerator : public PiiTextureGenerato
 
   /**
    * The mean gray level the generator will try to produce. This value
-   * is automatically set when #productQuality is changed, but you may
+   * is automatically set when [productQuality] is changed, but you may
    * also set it manually.
    */
   Q_PROPERTY(int meanGrayLevel READ getMeanGrayLevel WRITE setMeanGrayLevel);
@@ -53,11 +52,11 @@ public:
   /**
    * The quality of the non-woven product overall.
    *
-   * @lip HighQuality - smooth, white surface
+   * - `HighQuality` - smooth, white surface
    *
-   * @lip MediumQuality - somewhat cloudy surface
+   * - `MediumQuality` - somewhat cloudy surface
    *
-   * @lip LowQuality - ragged, very cloudy surface
+   * - `LowQuality` - ragged, very cloudy surface
    */
   enum ProductQuality { HighQuality, MediumQuality, LowQuality };
   

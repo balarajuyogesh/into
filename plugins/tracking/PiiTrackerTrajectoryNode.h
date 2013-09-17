@@ -17,20 +17,19 @@
 #define _PIITRACKERTRAJECTORYNODE_H
 
 /**
- * A utility class that can be used as the @p Trajectory type with
+ * A utility class that can be used as the `Trajectory` type with
  * PiiMultiHypothesisTracker. With this structure, trajectories are
  * built as (singly) linked lists that support branching. This class
  * is intended to be derived with the CRTP (curiously recurring
  * template pattern):
  *
- * @code
+ * ~~~
  * class MyNode : public PiiTrackerTrajectoryNode<int,MyNode>
  * {
  *   // ... your stuff here ...
  * };
- * @endcode
+ * ~~~
  *
- * @ingroup PiiTrackingPlugin
  */
 template <class Measurement, class Node> class PiiTrackerTrajectoryNode
 {
@@ -66,7 +65,7 @@ public:
   /**
    * Get the length of the linked list from this point to the first
    * branch. If the list is not branched, the return value will be
-   * equal to #length().
+   * equal to [length()].
    */
   int lengthToBranch() const;
 
@@ -106,7 +105,7 @@ protected:
    *
    * @param next the next node in chain
    *
-   * The constructor will increase the reference count on @p next.
+   * The constructor will increase the reference count on `next`.
    */
   PiiTrackerTrajectoryNode(const MeasurementType& measurement, int t, Node* next) :
     _measurement(measurement), _iTime(t), _pNext(next), _iRefCount(0),
@@ -119,7 +118,7 @@ protected:
   /**
    * Destroy a node. This destroys the whole linked list up to the
    * first branch or to the very end, whichever comes first. This is
-   * done by decrementing the reference count of @p next and by
+   * done by decrementing the reference count of `next` and by
    * deleting it when the count hits zero.
    */
   virtual ~PiiTrackerTrajectoryNode()

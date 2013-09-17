@@ -26,35 +26,36 @@
  * An operation that creates binary mask images. The masks can be
  * used, for example, for ROI processing.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in trigger - mask matrix is emitted whenever any object is
  * received in this input. The input value is ignored. Either this or
- * @p size needs to be connected.
+ * `size` needs to be connected.
  *
  * @in size - the size of the mask matrix as a PiiMatrix<int>. If the
  * size of the matrix is 1-by-4, the input is treated as a rectangle
  * (x,y,w,h) whose width and height are used as the mask size. If the
  * size is 1-by-2, the input is treated as a size (w,h). Either this
- * or @p trigger needs to be connected.
+ * or `trigger` needs to be connected.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out mask - a binary mask (PiiMatrix<unsigned char>)
  *
- * @ingroup PiiImagePlugin
  */
 class PiiMaskGenerator : public PiiDefaultOperation
 {
   Q_OBJECT
 
   /**
-   * The type of mask to generate. Default is @p EllipticalMask.
+   * The type of mask to generate. Default is `EllipticalMask`.
    */
   Q_PROPERTY(PiiImage::MaskType maskType READ maskType WRITE setMaskType);
 
   /**
-   * The size of the mask to be generated. If the @p size input is
+   * The size of the mask to be generated. If the `size` input is
    * connected, this value will be ignored. If the size is set to
    * (0,0) (the default), the size of the mask image will be
    * automatically determined. With polygons, a mask will be generated

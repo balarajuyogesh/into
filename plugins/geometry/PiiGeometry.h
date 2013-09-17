@@ -24,7 +24,6 @@
  * Definitions for geometrical calculations and different algorithms
  * for handling geometric objects.
  *
- * @ingroup PiiGeometryPlugin
  */
 namespace PiiGeometry
 {
@@ -112,7 +111,7 @@ namespace PiiGeometry
 
   /**
    * Simplifies a polyline. This function uses a two-step algorithm
-   * that first prunes all vertices that are within @p tolerance from
+   * that first prunes all vertices that are within `tolerance` from
    * each other and then uses the Douglas-Peucker recursive algorithm
    * to further optimize the polyline.
    *
@@ -125,7 +124,7 @@ namespace PiiGeometry
    * give 25 as the tolerance.
    *
    * @return a matrix containing the retained vertices. The first and
-   * last point in @p vertices will always be the last and first
+   * last point in `vertices` will always be the last and first
    * points in the result matrix.
    */
   template <class T> PiiMatrix<T> reduceVertices(const PiiMatrix<T>& vertices, double tolerance)
@@ -166,7 +165,7 @@ namespace PiiGeometry
   /**
    * Calculate the shortest distance between two 3D lines.
    *
-   * @code
+   * ~~~
    * // Two 3D lines.
    * PiiMatrix<double> first(2, 3,
    *                         0.0, 0.0, 0.0,
@@ -178,7 +177,7 @@ namespace PiiGeometry
    * double distance = PiiGeometry::lineToLineDistance(first, second);
    *
    * // distance is now 4.0
-   * @endcode 
+   * ~~~ 
    *
    * @param first a 2-by-3 matrix whose first row is the direction of
    * the line and the second row any point on the line.
@@ -324,7 +323,7 @@ namespace PiiGeometry
    *
    * @param y the y coordinate of the point to check
    *
-   * @return @p true if @a polygon contains (@a x, @a y), @p false
+   * @return `true` if *polygon* contains (*x*, *y*), `false`
    * otherwise
    */
   template <class T> bool contains(const PiiMatrix<T>& polygon, int x, int y)

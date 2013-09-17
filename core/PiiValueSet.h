@@ -27,13 +27,13 @@
  * a value is a member of a set. With compiler optimizations turned
  * on, this technique is equally fast as direct comparison.
  *
- * @code
+ * ~~~
  * if (rand() % 5 member_of (1, 2, 3))
  *   cout << "You had luck.\n";
  * const char* fruit = "Apple";
  * if (fruit member_of ("Apple", "Orange", "Pear"))
  *   cout << "Yes, this works too.\n";
- * @endcode
+ * ~~~
  *
  * @see not_member_of
  */
@@ -41,16 +41,16 @@
 
 /**
  * A macro that allows one to use a convenient syntax for checking if
- * a value is @e not a member of a set. With compiler optimizations
+ * a value is *not* a member of a set. With compiler optimizations
  * turned on, this technique is equally fast as direct comparison.
  *
- * @code
+ * ~~~
  * if (1 not_member_of (1, 2, 3))
  *   cout << "Now, this is weird.\n";
  * const char* fruit = "Apple";
  * if (fruit not_member_of ("Banana", "Orange", "Pear"))
  *   cout << "Comparing apples to oranges is not fair.\n";
- * @endcode
+ * ~~~
  *
  * @see member_of
  */
