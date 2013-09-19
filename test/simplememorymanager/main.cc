@@ -18,6 +18,7 @@
 #include <PiiSimpleMemoryManager.h>
 #include <PiiBits.h>
 #include <QtTest>
+#include <cstdlib>
 
 void TestPiiSimpleMemoryManager::allocation()
 {
@@ -26,8 +27,9 @@ void TestPiiSimpleMemoryManager::allocation()
   QVERIFY(manager.blockCount() <= 8);
   // Seven blocks is possible if the memory buffer is oddly aligned
   QVERIFY(manager.blockCount() >= 7);
+  QVERIFY(!manager.allocate(0));
   // Reserve all blocks.
-  for (int i=0; i<manager.blockCount(); ++i)
+  for (unsigned i=0; i<manager.blockCount(); ++i)
     {
       buffers[i] = manager.allocate(100);
       QVERIFY(buffers[i] != 0);
@@ -51,16 +53,27 @@ void TestPiiSimpleMemoryManager::allocation()
   QCOMPARE(manager.allocate(128-sizeof(void*)), static_cast<void*>(0));
 
   // Deallocate all
-  for (int i=0; i<manager.blockCount(); ++i)
+  for (unsigned i=0; i<manager.blockCount(); ++i)
     QVERIFY(manager.deallocate(buffers[i]));
 
   // All should be free...
-  for (int i=0; i<manager.blockCount(); ++i)
+  for (unsigned i=0; i<manager.blockCount(); ++i)
     {
       buffers[i] = manager.allocate(10);
       QVERIFY(buffers[i] != 0);
       QCOMPARE(long(buffers[i]) & 0xf, 0l);
     }
+}
+
+void TestPiiSimpleMemoryManager::externalBuffer()
+{
+  void* bfr = malloc(200); // Will not be freed if a test fails, but who cares?
+  PiiSimpleMemoryManager manager(bfr, 200, 50);
+  QCOMPARE(manager.blockSize(), ulong(64 - sizeof(void*)));
+  for (unsigned i=0; i<manager.blockCount(); ++i)
+    QVERIFY(manager.allocate(50));
+  QVERIFY(!manager.allocate(50));
+  free(bfr);
 }
 
 class A

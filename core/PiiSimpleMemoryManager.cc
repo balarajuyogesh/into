@@ -15,6 +15,7 @@
 
 #include "PiiSimpleMemoryManager.h"
 #include <PiiBits.h>
+#include <QMutexLocker>
 #include <cstdlib>
 
 /* Memory arrangement
@@ -36,66 +37,91 @@
  * first free memory block.
  */
 
-PiiSimpleMemoryManager::Data::Data(size_t memorySize, size_t blockSize) :
-  // Align blocks to 16-byte boundaries
-  blockSize(Pii::alignAddress(static_cast<size_t>(blockSize + sizeof(void*)), 0xf)),
-  pMemory(malloc(memorySize)), // Allocate memory block from heap
-  pHead(0) // Initialize the manager as fully allocated
+#define PII_NEXT_POINTER(buffer) \
+  reinterpret_cast<void**>(static_cast<char*>(buffer) + stBlockSize)
+
+class PiiSimpleMemoryManager::Data
 {
-}
+public:
+  Data(void* memory, bool own, size_t memorySize, size_t blockSize) :
+    // Align blocks to 16-byte boundaries
+    stBlockSize(Pii::alignAddress(blockSize + sizeof(void*), 0xf)),
+    bOwn(own),
+    pMemory(memory),
+    pHead(0) // Initialize the manager as fully allocated
+  {
+    // Align first block
+    size_t stStartAddress = reinterpret_cast<size_t>(Pii::alignAddress(pMemory, 0xf));
+    // Bytes available after alignment
+    size_t stBytesAvailable = reinterpret_cast<size_t>(pMemory) + memorySize - stStartAddress;
+    // Total number of blocks
+    ulBlockCount = ulong(stBytesAvailable/stBlockSize);
+    // Start of last block
+    pLastAddress = reinterpret_cast<void*>(stStartAddress + (ulBlockCount-1) * stBlockSize);
+
+    size_t stFullBlockSize = stBlockSize;
+    // This is the number of bytes available to the user
+    stBlockSize -= sizeof(void*);
+    
+    // Optimization...
+    stLastAddress = size_t(pLastAddress) - size_t(pMemory);
+
+    // Since head is now zero, the buffer is full. We need to release
+    // all memory blocks.
+    char* pBuffer = static_cast<char*>(pLastAddress);
+    for (ulong i=0; i<ulBlockCount; ++i, pBuffer -= stFullBlockSize)
+      deallocate(pBuffer);
+  }
+
+  ~Data()
+  {
+    if (bOwn) free(pMemory);
+  }
+
+  void* allocate(size_t bytes);
+  bool deallocate(void* ptr);
+    
+  size_t stBlockSize;
+  bool bOwn;
+  void *pMemory, *pLastAddress, *pHead;
+  ulong ulBlockCount;
+  size_t stLastAddress;
+  QMutex mutex;
+};
 
 PiiSimpleMemoryManager::PiiSimpleMemoryManager(size_t memorySize, size_t blockSize) :
-  d(new Data(memorySize, blockSize))
-{
-  // Align first block
-  size_t startAddress = reinterpret_cast<size_t>(Pii::alignAddress(d->pMemory, 0xf));
-  // Bytes available after alignment
-  size_t bytesAvailable = reinterpret_cast<size_t>(d->pMemory) + memorySize - startAddress;
-  // Total number of blocks
-  d->lBlockCount = long(bytesAvailable/d->blockSize);
-  // Start of last block
-  d->pLastAddress = reinterpret_cast<void*>(startAddress + (d->lBlockCount-1) * d->blockSize);
+  d(new Data(malloc(memorySize), true, memorySize, blockSize)) // Allocate memory block from heap
+{}
 
-  size_t fullBlockSize = d->blockSize;
-  // This is the number of bytes available to the user
-  d->blockSize -= sizeof(void*);
-  
-  // Optimization...
-  d->lLastAddress = (unsigned long)d->pLastAddress - (unsigned long)d->pMemory;
-
-  // Since head is now zero, the buffer is full. We need to release
-  // all memory blocks.
-  char* pBuffer = static_cast<char*>(d->pLastAddress);
-  for (long i=0; i<d->lBlockCount; ++i, pBuffer -= fullBlockSize)
-    deallocate(pBuffer);
-}
+PiiSimpleMemoryManager::PiiSimpleMemoryManager(void* memory, size_t memorySize, size_t blockSize) :
+  d(new Data(memory, false, memorySize, blockSize))
+{}
 
 PiiSimpleMemoryManager::~PiiSimpleMemoryManager()
 {
-  free(d->pMemory);
   delete d;
 }
-
-#define PII_NEXT_POINTER(buffer) \
-  reinterpret_cast<void**>(static_cast<char*>(buffer) + d->blockSize)
 
 void* PiiSimpleMemoryManager::allocate(size_t bytes)
 {
   // No need to allocate anything.
   if (bytes == 0)
     return 0;
-  
-  d->mutex.lock();
+
+  QMutexLocker lock(&d->mutex);
+  return d->allocate(bytes);
+}
+
+void* PiiSimpleMemoryManager::Data::allocate(size_t bytes)
+{
   // Do we have free blocks? Can we allocate this many bytes?
-  if (d->pHead != 0 && bytes <= d->blockSize)
+  if (pHead != 0 && bytes <= stBlockSize)
     {
-      void* pBuffer = d->pHead;
+      void* pBuffer = pHead;
       // Move the head pointer to the next free block
-      d->pHead = *PII_NEXT_POINTER(d->pHead);
-      d->mutex.unlock();
+      pHead = *PII_NEXT_POINTER(pHead);
       return pBuffer;
     }
-  d->mutex.unlock();
   return 0;
 }
 
@@ -103,24 +129,31 @@ bool PiiSimpleMemoryManager::deallocate(void* buffer)
 {
   if (buffer == 0)
     return true;
-  
-  d->mutex.lock();
-  //if (buffer >= d->pMemory && buffer <= d->pLastAddress)
-  if ((unsigned long)buffer - (unsigned long)d->pMemory <= d->lLastAddress)
+  QMutexLocker lock(&d->mutex);
+  return d->deallocate(buffer);
+}
+
+bool PiiSimpleMemoryManager::Data::deallocate(void* buffer)
+{
+  //if (buffer >= pMemory && buffer <= pLastAddress)
+  if (size_t(buffer) - size_t(pMemory) <= stLastAddress)
     {
       // Make the pointer at the end of the released buffer to point
       // to the old head.
-      *PII_NEXT_POINTER(buffer) = d->pHead;
+      *PII_NEXT_POINTER(buffer) = pHead;
       // Mark the just released buffer as the new head.
-      d->pHead = buffer;
-      d->mutex.unlock();
+      pHead = buffer;
       return true;
     }
-  d->mutex.unlock();
   return false;
 }
 
-long PiiSimpleMemoryManager::blockCount() const
+ulong PiiSimpleMemoryManager::blockCount() const
 {
-  return d->lBlockCount;
+  return d->ulBlockCount;
+}
+
+size_t PiiSimpleMemoryManager::blockSize() const
+{
+  return d->stBlockSize;
 }

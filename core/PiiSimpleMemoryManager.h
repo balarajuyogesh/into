@@ -21,11 +21,11 @@
 
 /**
  * A simple segregated storage. This class reserves a fixed amount of
- * memory in heap when constructed. It divides this area into blocks
- * of user-specified size. Each of these memory blocks forms one
- * allocation unit, the size of which cannot be exceeded. If a larger
- * amount of memory is requested or the fixed buffer is full, no
- * memory will be allocated.
+ * memory in the heap when constructed. It divides this area into
+ * blocks of user-specified size. Each of these memory blocks forms
+ * one allocation unit, the size of which cannot be exceeded. If a
+ * larger amount of memory is requested or the fixed buffer is full,
+ * no memory will be allocated.
  *
  * The advantage of this inflexibility is that %PiiSimpleMemoryManager
  * is very fast. Memory allocation and deallocation are both O(1)
@@ -89,8 +89,9 @@ class PII_CORE_EXPORT PiiSimpleMemoryManager
 {
 public:
   /**
-   * Create a new memory manager that allocates at least @a blockSize
-   * bytes for each memory block.
+   * Creates a new memory manager that allocates at least @a blockSize
+   * bytes for each memory block. The memory will be allocated from
+   * the heap.
    *
    * @param memorySize the maximum amount of bytes to reserve for the
    * whole memory manager. The memory manager will not ensure that the
@@ -111,6 +112,13 @@ public:
    * manager has been constructed.
    */
   PiiSimpleMemoryManager(size_t memorySize, size_t blockSize);
+
+  /**
+   * Creates a new memory manager that uses a preallocated block of
+   * memory.
+   */
+  PiiSimpleMemoryManager(void* buffer, size_t memorySize, size_t blockSize);
+  
   /**
    * Deallocate the memory buffer.
    */
@@ -145,20 +153,19 @@ public:
    * allocated. The size of address type (@p void*) also affects the
    * number of blocks that fit into the memory buffer.
    */
-  long blockCount() const;
+  ulong blockCount() const;
+
+  /**
+   * Returns the size of one memory block. Note that this value may be
+   * larger than what was initially requested due to memory alignment.
+   */
+  size_t blockSize() const;
 
 private:
-  class Data
-  {
-  public:
-    Data(size_t memorySize, size_t blockSize);
-    
-    size_t blockSize;
-    void *pMemory, *pLastAddress, *pHead;
-    long lBlockCount;
-    unsigned long lLastAddress;
-    QMutex mutex;
-  } *d;
+  class Data;
+  Data* d;
+
+  PII_DISABLE_COPY(PiiSimpleMemoryManager);
 };
 
 #endif //_PIISIMPLEMEMORYMANAGER_H

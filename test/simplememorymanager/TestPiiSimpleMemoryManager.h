@@ -24,6 +24,7 @@ class TestPiiSimpleMemoryManager : public QObject
 
 private slots:
   void allocation();
+  void externalBuffer();
   void overriddenNewDelete();
 };
 
