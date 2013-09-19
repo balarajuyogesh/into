@@ -19,7 +19,7 @@ Type the following at the command prompt:
 
     export QTDIR=~/Qt/5.1.0/gcc_64
     export INTODIR=~/into
-    export LD_LIBRARY_PATH=$QTDIR/lib:$INTODIR/lib:${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+    export LD_LIBRARY_PATH=$QTDIR/lib$INTODIR/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
     export PATH=$QTDIR/bin:$PATH
 
 Change the paths to match your installation of Qt and Into.
