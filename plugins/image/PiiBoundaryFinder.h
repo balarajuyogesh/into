@@ -154,7 +154,7 @@ public:
    * boundary point, in this order. The last point will be equal to
    * the first one.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> objects(8,8,
    *                        0,1,2,0,1,1,0,0,
    *                        0,2,2,0,1,1,0,0,

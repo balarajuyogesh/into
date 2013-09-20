@@ -25,7 +25,7 @@
  * PiiLearningAlgorithm and PiiClassifier interfaces and it must
  * support weighted learning.
  *
- * ~~~
+ * ~~~(c++)
  * // Creates decision stumps
  * PiiDefaultClassifierFactory<PiiDecisionStump<PiiMatrix<double> > > factory;
  * PiiBoostClassifier<PiiMatrix<double> > classifier(&factory);

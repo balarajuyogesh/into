@@ -38,7 +38,7 @@
  *
  * Assume `MyDerivedClass` is derived from `MyClass`. Then:
  *
- * ~~~
+ * ~~~(c++)
  * template <class Archive>
  * void MyDerivedClass::serialize(Archive& archive, const unsigned int version)
  * {
@@ -60,7 +60,7 @@ template <class T> struct PiiBaseClass
    * Create an instance of base class serializer with a reference to
    * the derived class.
    *
-   * ~~~
+   * ~~~(c++)
    * template <class Archive>
    * void Derived::serialize(Archive& archive, const unsigned int)
    * {

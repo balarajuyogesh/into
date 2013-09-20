@@ -79,7 +79,7 @@ public:
    * ensures that no overlapping ids will be used by independent
    * components.
    *
-   * ~~~
+   * ~~~(c++)
    * // MyCommand.h
    * class MyCommand : public QUndoCommand
    * {

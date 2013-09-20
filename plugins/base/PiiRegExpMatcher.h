@@ -36,7 +36,7 @@
  * outputs will emit the matched subexpressions, if any. The number of
  * outputs matches the number of subexpressions in [pattern], plus one.
  *
- * ~~~
+ * ~~~(c++)
  * PiiOperation* pRe = engine.createOperation("PiiRegExpMatcher");
  * // Separate path from file name. Output1 will emit the path
  * // without a trailing slash, and output2 the file name part.

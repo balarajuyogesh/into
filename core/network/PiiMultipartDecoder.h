@@ -32,36 +32,36 @@
  * Consider the following multipart MIME message (example from
  * http://www.w3.org/TR/html401/interact/forms.html):
  *
-@verbatim
-Content-Type: multipart/form-data; boundary=AaB03x
-
---AaB03x
-Content-Disposition: form-data; name="submit-name"
-
-Larry
---AaB03x
-Content-Disposition: form-data; name="files"
-Content-Type: multipart/mixed; boundary=BbC04y
-
---BbC04y
-Content-Disposition: file; filename="text.txt"
-Content-Type: text/plain
-
-... contents of text.txt ...
---BbC04y
-Content-Disposition: file; filename="image.png"
-Content-Type: image/png
-Content-Transfer-Encoding: binary
-
-...contents of image.png...
---BbC04y--
---AaB03x--
-
-@endverbatim
+ * ~~~
+ * Content-Type: multipart/form-data; boundary=AaB03x
+ * 
+ * --AaB03x
+ * Content-Disposition: form-data; name="submit-name"
+ * 
+ * Larry
+ * --AaB03x
+ * Content-Disposition: form-data; name="files"
+ * Content-Type: multipart/mixed; boundary=BbC04y
+ * 
+ * --BbC04y
+ * Content-Disposition: file; filename="text.txt"
+ * Content-Type: text/plain
+ * 
+ * ... contents of text.txt ...
+ * --BbC04y
+ * Content-Disposition: file; filename="image.png"
+ * Content-Type: image/png
+ * Content-Transfer-Encoding: binary
+ * 
+ * ...contents of image.png...
+ * --BbC04y--
+ * --AaB03x--
+ * 
+ * ~~~
  *
  * The code to read the message is as follows:
  *
- * ~~~
+ * ~~~(c++)
  * // Assume you have a tcp connection through "socket"
  * PiiMultipartDecoder decoder(socket);
  * while (decoder.nextMessage())
@@ -98,7 +98,7 @@ public:
    * Create a new multipart message decoder with a header that has
    * already been read from the input device.
    *
-   * ~~~
+   * ~~~(c++)
    * void MyHandler::handleRequest(const QString& uri,
    *                               PiiHttpDevice* h,
    *                               PiiProgressController* controller)

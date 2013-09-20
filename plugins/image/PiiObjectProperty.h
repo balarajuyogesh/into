@@ -88,7 +88,7 @@ namespace PiiImage
   /**
    * This function takes a decision function as a parameter.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> matInput;
    * // All pixels with a gray level higher than 3 are foreground
    * PiiMatrix<double> matDir(Pii::calculateDirection(matInput,

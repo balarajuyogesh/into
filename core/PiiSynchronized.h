@@ -20,7 +20,6 @@
 #include "PiiPreprocessor.h"
 #include <QMutex>
 
-/// @file
 
 /// @internal
 struct PII_CORE_EXPORT PiiMutexLocker
@@ -53,7 +52,7 @@ struct PII_CORE_EXPORT PiiMutexLocker
  * the given *MUTEX*. Critical sections protected by the same mutex
  * won't be executed simultaneously.
  *
- * ~~~
+ * ~~~(c++)
  * void MyOperation::pause()
  * {
  *   synchronized (stateLock())

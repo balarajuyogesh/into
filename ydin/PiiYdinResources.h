@@ -31,7 +31,7 @@
  * must be included after all the types involved in the function calls
  * have been declared.
  *
- * ~~~
+ * ~~~(c++)
  * #include <PiiYdinResources.h>
  * #include "MyInterface.h" // defines MyInterface
  *
@@ -41,7 +41,7 @@
  * MyInterface* pIface = PiiYdin::createResource<MyInterface>("MyInterfaceImpl");
  * ~~~
  *
- * ~~~
+ * ~~~(c++)
  * #include "MyInterface.h" // defines MyInterface
  * #include <PiiYdinResources.h>
  *
@@ -68,7 +68,7 @@ namespace PiiYdin
    * Get the resource name of a type. This function uses
    * PiiSerializationTraits to find the name for the type.
    *
-   * ~~~
+   * ~~~(c++)
    * class MyClass {};
    * PII_SERIALIZATION_NAME(MyClass);
    *
@@ -102,7 +102,7 @@ namespace PiiYdin
    * to specify all possible superclasses for a class; superclasses of
    * superclasses will be recursively resolved.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiOperation* pOperation = PiiYdin::createResource<PiiOperation>("PiiImageFileReader");
    *
    * class MyInterface
@@ -157,7 +157,6 @@ namespace PiiYdin
   }
 
   /**
-   * @overload
    */
   template <class ParentType> inline ParentType* createResource(const QString& name)
   {
@@ -224,7 +223,7 @@ namespace PiiYdin
    * (see PiiYdin::resourceDatabase()) associated with the two
    * resources in the specified *role*.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiOperation* pOperation = PiiYdin::createResource<PiiOperation>("PiiVisualTrainer");
    * QWidget* pDisplay = PiiYdin::createResource<QWidget>("PiiVisualTrainerWidget");
    * PiiYdin::connectResources(pOperation, pDisplay, "pii:configurator");
@@ -272,7 +271,7 @@ namespace PiiYdin
  * but it doesn't use Qt's meta-object system and works with classes
  * that are not derived from QObject.
  *
- * ~~~
+ * ~~~(c++)
  * QWidget* pWidget = PiiYdin::createResource<QWidget>("PiiVisualTrainerWidget");
  * PiiResourceConnector* pConnector = resource_cast<PiiResourceConnector*>(pWidget);
  * if (pConnector != 0)

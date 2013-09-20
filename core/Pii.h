@@ -16,7 +16,6 @@
 #ifndef _PII_H
 #define _PII_H
 
-/** @file */
 
 #include <QObject>
 #include "PiiGlobal.h"
@@ -74,7 +73,7 @@ public:
   
 }; // namespace Pii
 
-/// @cond null
+/// @hide
 Q_DECLARE_OPERATORS_FOR_FLAGS(Pii::MatrixDirections);
 
 #endif //_PII_H

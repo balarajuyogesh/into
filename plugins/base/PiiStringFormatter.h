@@ -47,7 +47,7 @@ class PiiStringFormatter : public PiiDefaultOperation
    * inputs to the operation. If the number of argument places is
    * zero, one input will still be retained.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiOperation* op = engine.createOperation("PiiStringFormatter");
    * // This will add two inputs to the operation.
    * op->setProperty("format", "%0 (%1)");

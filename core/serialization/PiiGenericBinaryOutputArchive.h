@@ -16,7 +16,6 @@
 #ifndef _PIIGENERICBINARYOUTPUTARCHIVE_H
 #define _PIIGENERICBINARYOUTPUTARCHIVE_H
 
-/** @file */
 
 #include "PiiBinaryOutputArchive.h"
 #include "PiiGenericOutputArchive.h"

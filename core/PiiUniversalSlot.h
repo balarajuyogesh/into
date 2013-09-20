@@ -45,7 +45,7 @@ public:
    * connected to it. Otherwise, a new slot will be created and
    * assigned a unique id.
    *
-   * ~~~
+   * ~~~(c++)
    * class MySlot : public PiiUniversalSlot { ... };
    * QObject obj;
    * MySlot mySlot;
@@ -100,7 +100,7 @@ protected:
    *
    * @return `true` if the call was successful and `false` otherwise.
    *
-   * ~~~
+   * ~~~(c++)
    * bool MySlot::invokeSlot(int id, void** args)
    * {
    *   if (signatureOf(id) == "valueChanged(int)")
@@ -124,7 +124,7 @@ protected:
    * Converts the arguments of the slot identified by *id* to a
    * QVariantList.
    *
-   * ~~~
+   * ~~~(c++)
    * bool MySlot::invokeSlot(int id, void** args)
    * {
    *   QVariantList lstArgs(argsToList(id, args));

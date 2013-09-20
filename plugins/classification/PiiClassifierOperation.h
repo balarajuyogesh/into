@@ -269,7 +269,7 @@ public slots:
    * `false` otherwise. The call will fail if the learning thread is
    * already running or there are no buffered samples to learn.
    *
-   * ~~~
+   * ~~~(c++)
    * // To call this function from C++ code:
    * QMetaObject::invokeMethod(pClassifier, "startLearningThread", Qt::DirectConnection);
    * ~~~

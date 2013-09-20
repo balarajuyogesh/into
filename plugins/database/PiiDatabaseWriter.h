@@ -58,7 +58,7 @@ class PiiDatabaseWriter : public PiiDatabaseOperation
    *
    * To create two inputs, do this:
    *
-   * ~~~
+   * ~~~(c++)
    * writer->setProperty("columnNames", QStringList() << "filename" << "objects");
    * ~~~
    */
@@ -69,7 +69,7 @@ class PiiDatabaseWriter : public PiiDatabaseOperation
    * corresponding inputs will be flagged optional. If they are left
    * unconnected, the default values will always be substituted.
    *
-   * ~~~
+   * ~~~(c++)
    * QVariantMap values;
    * values["filename"] = "N/A";
    * values["objects"] = 0;

@@ -16,26 +16,23 @@
 #ifndef _PIIMETATEMPLATE_H
 #define _PIIMETATEMPLATE_H
 
-/// @file
 
 namespace Pii
 {
   /**
-   * @name Template meta-programming
+   * @group pii_template_metaprogramming Template meta-programming
    *
-   * Template meta-programs are structures the compiler evaluates. 
+   * Template meta-programs are structures the compiler evaluates.
    * They can be used in creating efficient code, for example control
    * structures that are evaluated at compile time.
    */
 
-  //@{
-  
   /**
    * A conditional template. If `condition` is true, If::Type is
    * equal to `Then`. The template specialization for condition ==
    * false makes `Type` equal to `Else`.
    *
-   * ~~~
+   * ~~~(c++)
    * template <class T> void myFunc()
    * {
    *   // if T is four bytes, MyType is int, otherwise char
@@ -61,7 +58,7 @@ namespace Pii
    * parameter. There condition class must declare a static constant
    * called `boolValue`. Otherwise, functions like If.
    *
-   * ~~~
+   * ~~~(c++)
    * template <class T, class U> void myFunc()
    * {
    *   // if T is four bytes and U is two bytes, MyType is int, otherwise long
@@ -98,7 +95,7 @@ namespace Pii
    * Logical not operation. The template parameter must be a boolean
    * value.
    *
-   * ~~~
+   * ~~~(c++)
    * ASSERT(Not<false>::boolValue == true);
    * ~~~
    */
@@ -111,7 +108,7 @@ namespace Pii
    * Logical not operation. The template parameter must be a valid
    * static logical operator.
    *
-   * ~~~
+   * ~~~(c++)
    * ASSERT(NotClass<False>::boolValue == true);
    * ASSERT(NotClass<True>::boolValue == false);
    * ~~~
@@ -154,7 +151,7 @@ namespace Pii
   template <int a, int b> struct MaxInt : If<(a >= b), IntIdentity<a>, IntIdentity<b> >::Type
   {};
 
-  //@}
+  /// @endgroup
 }
 
 #endif //_PIIMETATEMPLATE_H

@@ -34,24 +34,24 @@
  * [createServer()] function to create a new secondary server and
  * assigns a unique ID to it. The ID is then returned to the client.
  *
-@verbatim
-GET /new HTTP/1.1
-@endverbatim
+ * ~~~
+ * GET /new HTTP/1.1
+ * ~~~
  *
  * Response:
  *
-@verbatim
-HTTP/1.1 200 OK
-Content-Length: 35
-
-243F6A8-885A-308D-3131-98A2E0370734
-@endverbatim
+ * ~~~
+ * HTTP/1.1 200 OK
+ * Content-Length: 35
+ * 
+ * 243F6A8-885A-308D-3131-98A2E0370734
+ * ~~~
  *
  * The returned ID can now be used as the URI of the new instance:
  *
-@verbatim
-GET /243F6A8-885A-308D-3131-98A2E0370734/properties/ HTTP/1.1
-@endverbatim
+ * ~~~
+ * GET /243F6A8-885A-308D-3131-98A2E0370734/properties/ HTTP/1.1
+ * ~~~
  *
  * Inactive object instances will be kept alive only for a limited
  * amount of time. If no accesses have been made to the object for a
@@ -59,23 +59,23 @@ GET /243F6A8-885A-308D-3131-98A2E0370734/properties/ HTTP/1.1
  * the object will be automatically deleted. If no other requests are
  * made, the instance can be kept alive by requesting /ping.
  *
-@verbatim
-GET /243F6A8-885A-308D-3131-98A2E0370734/ping HTTP/1.1
-@endverbatim
+ * ~~~
+ * GET /243F6A8-885A-308D-3131-98A2E0370734/ping HTTP/1.1
+ * ~~~
  *
  * Response:
  *
-@verbatim
-HTTP/1.1 200 OK
-Content-Length: 0
-@endverbatim
+ * ~~~
+ * HTTP/1.1 200 OK
+ * Content-Length: 0
+ * ~~~
  *
  * The remote object instance can be explicitly destroyed by
  * requesting /delete:
  *
-@verbatim
-GET /243F6A8-885A-308D-3131-98A2E0370734/delete HTTP/1.1
-@endverbatim
+ * ~~~
+ * GET /243F6A8-885A-308D-3131-98A2E0370734/delete HTTP/1.1
+ * ~~~
  *
  * It is possible to pass parameters to the new object instance by
  * encoding them into the request (GET or POST). This makes it
@@ -84,10 +84,9 @@ GET /243F6A8-885A-308D-3131-98A2E0370734/delete HTTP/1.1
  * class name. Then, the following request would create an instance of
  * a QTimer.
  *
-@verbatim
-GET /new?className=QTimer HTTP/1.1
-@endverbatim
- *
+ * ~~~
+ * GET /new?className=QTimer HTTP/1.1
+ * ~~~
  */   
 class PII_NETWORK_EXPORT PiiInstantiableObjectServer:
   public QObject,

@@ -78,7 +78,7 @@ class PiiSampleBalancer : public PiiDefaultOperation
    * three-dimensional feature vectors, the default can be changed as
    * follows:
    *
-   * ~~~
+   * ~~~(c++)
    * balancer->setProperty("levels", QVariantList() << 128 << 256 << 64);
    * ~~~
    *

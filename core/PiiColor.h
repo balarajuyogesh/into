@@ -74,7 +74,7 @@ template <class T> struct PiiColor4Traits : public PiiColorBaseTraits<T>
  * In your code, you can utilized the [channel(int)] function or
  * color space specific names:
  *
- * ~~~
+ * ~~~(c++)
  * PiiColor<> clr(255, 127, 0);
  * QCOMPARE(clr.channel(1), clr.rgbG);
  * QCOMPARE(clr.rgbG, static_cast<unsigned char>(127));
@@ -134,7 +134,7 @@ public:
    * When you initialize a PiiColor with RGB values, B will be the
    * first channel.
    *
-   * ~~~
+   * ~~~(c++)
    * // Parameters:       R, G, B
    * PiiColorBase<> pureRed(255, 0, 0);
    * QVERIFY(pureRed.rgbR == 255);
@@ -243,7 +243,7 @@ public:
   /**
    * Create a new color with the given values for color channels.
    *
-   * ~~~
+   * ~~~(c++)
    * // Parameters:  R, G,  B
    * PiiColor<> blue(0, 0, 255);
    * ~~~
@@ -318,7 +318,7 @@ public:
    * Create a new color with the given values for each color channel. 
    * To create an RGBA color, do this:
    *
-   * ~~~
+   * ~~~(c++)
    * // Parameters:              R, G,  B,   A
    * PiiColor4<> transparentBlue(0, 0, 255, 127);
    * ~~~

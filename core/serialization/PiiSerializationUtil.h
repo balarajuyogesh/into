@@ -57,7 +57,7 @@
  * class declaration either by providing the function body or by
  * defining the function elsewhere.
  *
- * ~~~
+ * ~~~(c++)
  * class MyClass
  * {
  *   PII_DECLARE_SERIALIZATION_FUNCTION;
@@ -81,7 +81,7 @@ private: \
  * function just passes serialization to the base object denoted by 
  * *BASE*.
  *
- * ~~~
+ * ~~~(c++)
  * class MyDerived : public MyClass
  * {
  *   PII_DEFAULT_SERIALIZATION_FUNCTION(MyClass)
@@ -101,7 +101,7 @@ private: \
  * properties, this is the macro you need. Note that all properties,
  * including those defined in subclasses will be serialized.
  *
- * ~~~
+ * ~~~(c++)
  * class MyClass : public QObject
  * {
  *   Q_OBJECT
@@ -141,7 +141,7 @@ namespace PiiSerialization
    * default. This can be changed by adding a "version" tag to the
    * class:
    *
-   * ~~~
+   * ~~~(c++)
    * class MyClass : public QObject
    * {
    *   Q_OBJECT
@@ -417,7 +417,7 @@ namespace PiiSerialization
    * objects need to be transferred through the clipboard, for
    * example.
    *
-   * ~~~
+   * ~~~(c++)
    * MyClass c;
    * QByteArray marshalled = PiiSerialization::toByteArray<PiiTextOutputArchive>(c);
    * ~~~
@@ -429,7 +429,7 @@ namespace PiiSerialization
   /**
    * Deserializes an object stored into a byte array.
    *
-   * ~~~
+   * ~~~(c++)
    * MyClass c;
    * PiiSerialization::fromByteArray<PiiTextInputArchive>(marshalled, c);
    * ~~~

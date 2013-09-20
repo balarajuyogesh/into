@@ -17,7 +17,7 @@
 #define _PIIIOEXCEPTION_H
 
 /**
- * @class PiiIOException
+ * @decl class PiiIOException
  *
  * An exception for input/output related errors.
  */

@@ -39,7 +39,7 @@ public:
    * port numbers. Note that there must be no slash at the end of the
    * address.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiNetworkClient client("http://intopii.com");
    * ~~~
    */
@@ -82,7 +82,7 @@ public:
    * changes, the next [openConnection()] call will delete the current
    * communication device and create a new one.
    *
-   * ~~~
+   * ~~~(c++)
    * client.setServerAddress("tcp://127.0.0.1:3142");
    * // http, https, ftp, and ftps are recognized
    * client.setServerAddress("ftps://127.0.0.1");

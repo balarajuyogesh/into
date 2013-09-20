@@ -50,7 +50,7 @@ template <class Matrix, class Filter> struct PiiMatrixTraits<PiiFilteredMatrix<M
  * filter. An element is a match if the corresponding element in the
  * filter is non-zero.
  *
- * ~~~
+ * ~~~(c++)
  * PiiMatrix<int> mat(3, 3,
  *                    -3, -2, -1,
  *                    -4,  0,  1,
@@ -69,7 +69,7 @@ template <class Matrix, class Filter> struct PiiMatrixTraits<PiiFilteredMatrix<M
  * instead. PiiMatrix also has an `operator`() that takes another
  * matrix as a parameter and returns a filtered matrix.
  *
- * ~~~
+ * ~~~(c++)
  * PiiMatrix<int> filtered(Pii::filteredMatrix(mat, filter));
  * // Even simpler
  * PiiMatrix<int> filtered2(mat(filter));

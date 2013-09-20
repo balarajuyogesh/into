@@ -39,7 +39,7 @@
  * causes the same number of subsequent wait() calls in thread 1 to
  * return immediately.
  *
- * ~~~
+ * ~~~(c++)
  * PiiWaitCondition keyPressed;
  *
  * //thread 1

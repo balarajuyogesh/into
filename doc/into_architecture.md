@@ -23,9 +23,7 @@ plug-ins (PiiPlugin), and a resource database (PiiResourceDatabase).
 
 With no plug-ins loaded, Ydin is unable to perform any useful
 tasks. In addition to the plug-ins, a configuration that describes the
-operations, their configuration and connections, is needed. The
-configuration can be created either programmatically or with a
-graphical Development Environment.
+operations, their configuration and connections, is needed.
 
 Operations are software components that receive some input data and
 produce some results after processing. An operation may also have no
@@ -59,12 +57,10 @@ of the SOM.
 
 @image html architecture_lbp_som.png
 
-A [plug-in](PiiPlugin) is a bundle of operations dynamically
-loadable into PiiEngine. When loaded, a plug-in registers its
-operations to the resource database so that each operation can be
-dynamically created at run time. Plug-ins can also provide
-extensions to the Development Environment and register custom data
-types and classes.
+A [plug-in](PiiPlugin) is a bundle of operations dynamically loadable
+into PiiEngine. When loaded, a plug-in registers its operations to the
+resource database so that each operation can be dynamically created at
+run time. Plug-ins can also register custom data types and classes.
 
 Design Principles {#design_principles}
 -----------------
@@ -72,8 +68,8 @@ Design Principles {#design_principles}
 The most important design guidelines in Into are:
 
 - **Performance**. Application software created with Into is ready to
-  be used in demanding applications such as industrial visual
-  inspection. Processing data happens asynchronously, and in
+  be used in demanding applications such as robotics and industrial
+  computer vision. Processing data happens asynchronously, and in
   parallel. The platform can automatically utilize all the processors
   of a computer without additional programming effort. Even in a
   single-processor machine, the multi-threaded architecture allows the

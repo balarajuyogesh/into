@@ -39,7 +39,6 @@ public:
   virtual qint64 filterData(const char* data, qint64 maxSize) = 0;
 
   /**
-   * @overload
    *
    * Writes `data` to the filter and returns the number of bytes
    * written.

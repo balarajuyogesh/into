@@ -179,7 +179,7 @@ protected:
    * this socket, one needs to explicitly disconnect or delete the
    * socket:
    *
-   * ~~~
+   * ~~~(c++)
    * delete operation.removeInput(0);
    * ~~~
    *
@@ -194,7 +194,7 @@ protected:
    * this socket, one needs to explicitly disconnect or delete the
    * socket:
    *
-   * ~~~
+   * ~~~(c++)
    * delete operation.removeOutput(0);
    * ~~~
    *
@@ -325,7 +325,7 @@ protected:
    *
    * @param firstIndex the index of the first numbered input
    *
-   * ~~~
+   * ~~~(c++)
    * // Add one static socket in the beginning of the input list
    * addSocket(new PiiInputSocket("first"));
    * // Add three inputs (input0, input1, input2) after the first one.

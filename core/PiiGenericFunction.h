@@ -92,7 +92,7 @@ protected:
   PiiGenericFunction(Data*);
 };
 
-/// @cond null
+/// @hide
 namespace Pii
 {
   template <class T> struct ToPlainMetaType { typedef T Type; };
@@ -184,6 +184,6 @@ PII_CREATE_GENERIC_FUNCTION(6, (P1,P2,P3,P4,P5,P6));
 PII_CREATE_GENERIC_FUNCTION(7, (P1,P2,P3,P4,P5,P6,P7));
 PII_CREATE_GENERIC_FUNCTION(8, (P1,P2,P3,P4,P5,P6,P7,P8));
 
-/// @endcond
+/// @endhide
 
 #endif //_PIIGENERICFUNCTION_H

@@ -68,7 +68,7 @@ class PiiImageFilterOperation : public PiiDefaultOperation
    * The filter as a matrix. This value is used only if [filterName] is
    * set to "custom".
    *
-   * ~~~
+   * ~~~(c++)
    * PiiOperation* op = engine.createOperation("PiiImageFilter");
    * op->setProperty("filter",
    *                 PiiVariant(new PiiMatrix<int>(3, 3,

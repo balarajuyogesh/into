@@ -198,7 +198,7 @@ namespace Pii
    * function the argument of another. If function 1 is f(x) and
    * function 2 is g(x), the composition returns f(g(x)).
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<double> mat(1,5, 1.0, 2.0, 3.0, 4.0, 5.0);
    * // Calculate -sin(x)
    * mat.map(Pii::unaryCompose(std::negate(), std::ptr_fun(sin)));
@@ -257,7 +257,7 @@ namespace Pii
    * the unary composition returns f(g(x),h(x)). If the object is used
    * as a binary function, the composition returns f(g(x), h(y)).
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<double> mat(1,5, 1.0, 2.0, 3.0, 4.0, 5.0);
    * // Calculate sin(mat) + cos(mat)
    * mat.map(Pii::binaryCompose(std::plus<double>(), std::ptr_fun(sin), std::ptr_fun(cos)));
@@ -339,7 +339,7 @@ namespace Pii
    * A unary function that increments/decrements its internal counter
    * by a predefined value each time the function is called.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<float> matrix(1,3);
    * // Fill matrix
    * Pii::fill(matrix.begin(), matrix.end(), Pii::CountFunction<float>(0,2));

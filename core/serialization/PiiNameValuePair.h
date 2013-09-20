@@ -34,7 +34,7 @@
  *
  * @param the value, typically a class member
  *
- * ~~~
+ * ~~~(c++)
  * archive & PII_NVP("member", member);
  * ~~~
  */

@@ -82,7 +82,7 @@ public:
   /**
    * Add a statement to the database. Returns the id of the statement.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiResourceDatabase db;
    * db.addStatement("PiiResourceDatabase", "creator", "Intopii", PiiResourceStatement::LiteralType);
    * ~~~
@@ -91,7 +91,6 @@ public:
                    const char* predicate,
                    const char* object,
                    PiiResourceStatement::Type type = PiiResourceStatement::LiteralType);
-  /// @overload
   int addStatement(const QString& subject,
                    const QString& predicate,
                    const QString& object,
@@ -101,7 +100,7 @@ public:
    * Add a statement to the database. This function takes a statement
    * id as the subject, and can be used in reifying statements.
    *
-   * ~~~
+   * ~~~(c++)
    * // I think statement #123 is vague
    * db.addStatement(123, "my:evaluation", "bullshit");
    * ~~~
@@ -122,7 +121,7 @@ public:
    * id of the previous statement. Note that all successive
    * reifications refer to the same (non-reified) statement.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiResourceDatabase db;
    * // In my opinion, PiiResourceDatabase is flexible
    * // The truth value of the previous statement is true.
@@ -155,7 +154,7 @@ public:
   /**
    * Returns a list of statements matching the given *filter*.
    *
-   * ~~~
+   * ~~~(c++)
    * QList<PiiResourceStatement> lstResult;
    * // Fetch all statements that specify a parent-child relationship
    * lstResult = db->select(Pii::predicate == "pii:parent");
@@ -201,7 +200,7 @@ public:
    * - `resourceType` - the type of the object,
    * PiiResourceStatement::Type.
    *
-   * ~~~
+   * ~~~(c++)
    * QList<QString> lstResult;
    * // Find all child resources of PiiImagePlugin
    * lstResult = db->select(Pii::subject, Pii::attribute("pii:parent") == "PiiImagePlugin");
@@ -239,7 +238,7 @@ public:
    * -1 will be returned, and any subsequent comparison will return 
    * `false`.
    *
-   * ~~~
+   * ~~~(c++)
    * using namespace Pii;
    * // Find the names of relations between MyClass and YourClass
    * db->select(predicate, subject == "MyClass" && object == "YourClass");
@@ -318,7 +317,7 @@ template <class Filter> int PiiResourceDatabase::findFirst(Filter filter) const
   return -1;
 }
 
-/// @cond null
+/// @hide
 namespace Pii
 {
   // Forward declaration
@@ -615,6 +614,6 @@ namespace Pii
   extern PII_CORE_EXPORT ResourceType resourceType;
   extern PII_CORE_EXPORT StatementId statementId;
 }
-/// @endcond
+/// @endhide
 
 #endif //_PIIRESOURCEDATABASE_H

@@ -57,7 +57,7 @@ namespace PiiDsp
    *
    * @param mode filtering mode
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> a(1,5, 1,2,3,4,5);
    * PiiMatrix<int> b(1,3, -1, 0, 1);
    * PiiMatrix<int> result = PiiDsp::convolution<int>(a, b);
@@ -214,13 +214,13 @@ namespace PiiDsp
    * shifting back. The figure below shows the matrix quadrants before
    * (left) and after (right) shifting.
    *
-@verbatim
-+---+---+      +---+---+
-| 1 | 2 |      | 4 | 3 |
-+---+---+  ->  +---+---+
-| 3 | 4 |      | 2 | 1 |
-+---+---+      +---+---+
-@endverbatim
+   * ~~~
+   * +---+---+      +---+---+
+   * | 1 | 2 |      | 4 | 3 |
+   * +---+---+  ->  +---+---+
+   * | 3 | 4 |      | 2 | 1 |
+   * +---+---+      +---+---+
+   * ~~~
    *
    * @param matrix the matrix to be shifted
    *

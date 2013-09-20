@@ -72,7 +72,7 @@ class PiiGenericInputArchive;
  * register all custom type ids for non-primitive types before using
  * them. If you don't, the sofware will crash.
  *
- * ~~~
+ * ~~~(c++)
  * // This is a static initializer; use in the global scope
  * PII_MAP_VARIANT_ID_TO_TYPE(0x55378008, QString);
  *
@@ -86,7 +86,7 @@ class PiiGenericInputArchive;
   template struct PiiVariant::TypeIdMapper<ID>; \
   template <> PiiVariant::TypeIdMapper<ID> PiiVariant::TypeIdMapper<ID>::instance(Pii::typeId<TYPE>())
 
-/// @cond null
+/// @hide
 #define PII_MAP_PUT_NTH(N,TYPE) PII_MAP_PUT_SELF(TYPE);
 
 
@@ -100,7 +100,7 @@ PII_TYPEMAP(PiiVariantValueMap)
              unsigned char, unsigned short, unsigned int, quint64,
              float, double, bool, void*));
 };
-/// @endcond
+/// @endhide
 
 /**
  * An extensible variant class that can store any data type.
@@ -108,7 +108,7 @@ PII_TYPEMAP(PiiVariantValueMap)
  * A type ID is used in determining the type of the stored object. To
  * check the type of a variant, do the following:
  *
- * ~~~
+ * ~~~(c++)
  * PiiVariant variant(3);
  * if (variant.type() == PiiVariant::IntType)
  *   int i = variant.valueAs<int>();
@@ -118,12 +118,12 @@ PII_TYPEMAP(PiiVariantValueMap)
  * needs to first choose a unique variant type ID for the type. The
  * mechanism differs from QVariant's type registration technique 1)
  * for run-time performance reasons and 2) to ensure a static type id
- * across all computing environments. Use the @ref
- * PII_DECLARE_VARIANT_TYPE macro to assign a type ID to a type. The
- * new type must then be registered by the @ref
- * PII_REGISTER_VARIANT_TYPE macro.
+ * across all computing environments. Use the
+ * [PII_DECLARE_VARIANT_TYPE] macro to assign a type ID to a type. The
+ * new type must then be registered by the [PII_REGISTER_VARIANT_TYPE]
+ * macro.
  *
- * ~~~
+ * ~~~(c++)
  * // MyClass.h
  * class MyClass {};
  *
@@ -278,7 +278,7 @@ public:
    * a special meaning to a variant while still storing its actual
    * value as, say, an `int`, you can do this:
    *
-   * ~~~
+   * ~~~(c++)
    * const int MyCustomTypeId = 0x31415927;
    * PiiVariant var(3, MyCustomTypeId);
    * ~~~
@@ -323,7 +323,7 @@ public:
    * template type. To check whether the variant is a "primitive
    * integer", use
    *
-   * ~~~
+   * ~~~(c++)
    * if (variant.isPrimitive() && variant.isInteger())
    *   dealWithAnIntegerType(variant);
    * ~~~
@@ -372,7 +372,7 @@ public:
    * Get the type of the variant. To compare for a certain type, you
    * may do the following:
    *
-   * ~~~
+   * ~~~(c++)
    * if (variant.type() == PiiVariant::DoubleType)
    *   calculateAccurately(variant.valueAs<double>());
    * else if (variant.type() == MyOwnTypeId)
@@ -504,7 +504,7 @@ namespace Pii
   template <class T> unsigned int typeId();
 }
 
-/// @cond null
+/// @hide
 
 template <class T> PiiVariant::PiiVariant(const T& value) :
   _pVTable(&VTableImpl<T>::instance),
@@ -664,7 +664,7 @@ Q_DECLARE_METATYPE(PiiVariantList);
 #define PII_USED_AS_QVARIANT
 #include "PiiSerializableRegistration.h"
 
-/// @endcond
+/// @endhide
 
 namespace Pii
 {
@@ -674,7 +674,7 @@ namespace Pii
    * QVariant::fromValue(PiiVariant(value)). This function is useful in
    * setting properties whose type is PiiVariant.
    *
-   * ~~~
+   * ~~~(c++)
    * classifier->setProperty("codeBook", Pii::createQVariant(PiiMatrix<int>(2, 2,
    *                                                                        1, 2,
    *                                                                        3, 4)));

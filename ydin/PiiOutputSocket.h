@@ -59,7 +59,7 @@ namespace PiiYdin
    * conceptual matrices are converted into concrete PiiMatrix
    * instances before creating a variant out of them.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> a, b;
    * PiiVariant v1(a+b); //Won't work, because a+b is not a concrete matrix
    * PiiVariant v2(PiiYdin::createVariant(a+b)); // works
@@ -134,7 +134,7 @@ public:
    * objects for each input, do something like this in the process()
    * function of your operation:
    *
-   * ~~~
+   * ~~~(c++)
    * PiiVariant obj = readObject();
    * output->startMany();
    * output->emitObject(1);
@@ -166,7 +166,7 @@ public:
    * value for each large image, but it needs both the large image and
    * the values from sub-images for it.
    *
-   * ~~~
+   * ~~~(c++)
    * void MyOperation::process()
    * {
    *   if (activeInputGroup() == _pImageInput->groupId())
@@ -260,7 +260,7 @@ public:
    * following code emits a PiiVariant whose type() function returns
    * PiiVariant::IntType.
    *
-   * ~~~
+   * ~~~(c++)
    * output->emitObject(5);
    * ~~~
    */
@@ -306,7 +306,7 @@ public:
    * this feature to buffer all objects emitted between startEmit()
    * and [endEmit()].
    *
-   * ~~~
+   * ~~~(c++)
    * // Only thread id 0 is allowed to emit objects, others will be buffered.
    * // This effectively blocks all threads.
    * pOutput->startEmit(0);
@@ -355,7 +355,7 @@ public:
   PiiAbstractOutputSocket* asOutput();
 
 protected:
-  /// @cond null
+  /// @hide
   struct ThreadInfo
   {
     ThreadInfo(Qt::HANDLE i=0, bool f = false) : id(i), bFinished(f) {}
@@ -400,7 +400,7 @@ protected:
   PII_UNSAFE_D_FUNC;
 
   PiiOutputSocket(Data* data, const QString& name);
-  /// @endcond
+  /// @endhide
 
   void inputConnected(PiiAbstractInputSocket* input);
   void inputDisconnected(PiiAbstractInputSocket* input);

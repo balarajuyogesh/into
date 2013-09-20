@@ -109,7 +109,7 @@ class PiiLbpOperation : public PiiDefaultOperation
    * - 8,1,LinearInterpolation
    * - 10,1.7,LinearInterpolation,Symmetric
    *
-   * ~~~
+   * ~~~(c++)
    * lbpOperation.setProperty("parameters", QStringList() << "8,1" << "16,2,Uniform");
    * ~~~
    */

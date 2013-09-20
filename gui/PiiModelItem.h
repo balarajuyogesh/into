@@ -62,7 +62,7 @@ public:
   /**
    * Set data associated with `role` to `value`.
    *
-   * ~~~
+   * ~~~(c++)
    * // Show "10 %" to the user ...
    * PiiModelItem* pItem = new PiiModelItem("10 %");
    * // ... but store the percentage as a number

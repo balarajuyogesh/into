@@ -29,7 +29,7 @@
  * serializer needs to store and retrieve "MyType" and store it as the
  * value of the internal [_variant] member.
  *
- * ~~~
+ * ~~~(c++)
  * // In MyClass.h first declare the type as a Qt meta type:
  * extern int iMyClassTypeId;
  * Q_DECLARE_METATYPE(MyClass);
@@ -78,7 +78,7 @@ public:
  * be registered. To make `MyType` serializable as a QVariant, do
  * this in a .cc file:
  *
- * ~~~
+ * ~~~(c++)
  * #include <PiiQVariantWrapper.h>
  * #define PII_SERIALIZABLE_CLASS PiiQVariantWrapper::Template<MyType>
  * #define PII_SERIALIZABLE_CLASS_NAME "PiiQVariantWrapper<MyType>"

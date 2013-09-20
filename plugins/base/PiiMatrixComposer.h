@@ -85,7 +85,7 @@ class PiiMatrixComposer : public PiiDefaultOperation
    * [dynamicInputCount], extra zeroes will be automatically added at
    * the end of the list when the operation is started.
    *
-   * ~~~
+   * ~~~(c++)
    * composer->setProperty("dynamicInputCount", 4);
    * composer->setProperty("defaultValues", QVariantList() << 1.0 << 2.0);
    * // ...

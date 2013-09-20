@@ -39,9 +39,9 @@ namespace PiiSerialization
    * known at compile time or not. If a class can be serialized
    * through a base class pointer, its type cannot be known at compile
    * time. Thus, its type is *dynamic*. For such, types an overloaded
-   * version of this function that returns `true` must be provided. 
-   * Typically, such a type will also have an overload for @ref
-   * PiiSerialization::metaObjectPointer(). The default
+   * version of this function that returns `true` must be provided.
+   * Typically, such a type will also have an overload for
+   * [PiiSerialization::metaObjectPointer()]. The default
    * implementation returns `false`.
    *
    * @see serialization_serializers

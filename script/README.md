@@ -29,7 +29,7 @@ QCoreApplication::addLibraryPath().
 Once the plug-in library is in place, accessing the Into JavaScript
 API from a C++ program is easy:
 
-~~~
+~~~(c++)
 QScriptEngine engine;
 engine.importExtension("Into");
 // strScript is the JavaScript code to be evaluated
@@ -70,7 +70,7 @@ available in JavaScript applications. This means, that you can
 - connect signals defined in C++ code to functions defined in script
   code or to slots defined in C++ classes.
 
-~~~
+~~~(javascript)
 // Slot function
 var showState = function(state)
 {
@@ -91,7 +91,7 @@ operation.stateChanged.connect(showState);
 after at least one instance of the operation has been created.  The
 values can always be given as strings however.
 
-~~~
+~~~(javascript)
 var threshold = new PiiThresholdingOperation();
 // MeanStdThreshold cannot be given as a constructor parameter
 // because it only exists after the instance has been created.
@@ -108,7 +108,7 @@ functions that are `static` class members in C++ code appear as
 properties of the constructor function in JavaScript code, but not as
 members of the object instance.
 
-~~~
+~~~(javascript)
 var engine = new PiiEngine();
 engine.loadPlugin('piibase');     // won't work
 PiiEngine.loadPlugin('piibase');  // works, loadPlugin is static
@@ -154,7 +154,7 @@ array, the output will be connected to all specified by the elements
 of the array. Each input can be either a string (name of an input) or
 an instance of PiiSocket.
 
-~~~
+~~~(javascript)
 engine.connect
 ({
    // Connect named output to named input
@@ -279,7 +279,7 @@ Qt Types Used as Properties
 QSize, QSizeF, QRect, and QRectF have a global constructor function,
 and their properties are mapped to script objects.
 
-~~~
+~~~(javascript)
 var size = new QSize(100, 100);
 size.width = 50;
 size.height = 150;
@@ -327,7 +327,7 @@ will be used as the objectName of the new operation. If the parameters
 are JavaScript objects, their properties are copied to the newly
 created operation instance. Thus, instead of doing this:
 
-~~~
+~~~(javascript)
 var reader = engine.addOperation('PiiImageFileReader', 'reader');
 reader.fileNamePattern = '*.jpg*;
 reader.imageType = 'GrayScale';
@@ -335,7 +335,7 @@ reader.imageType = 'GrayScale';
 
 One can also do this:
 
-~~~
+~~~(javascript)
 var reader = new PiiImageFileReader
   ({
     objectName: 'reader',
@@ -359,7 +359,7 @@ Whenever a C++ function throws an exception, the exception will be
 converted to an `Error` object, which is then thrown to the caller in
 the script code. Consider the following C++ code:
 
-~~~
+~~~(javascript)
 try
   {
     PiiEngine engine;
@@ -374,7 +374,7 @@ catch (PiiExecutionException& ex)
 
 The corresponding code in JavaScript would look like this:
 
-~~~
+~~~(javascript)
 try
   {
     var engine = new PiiEngine();
@@ -416,4 +416,3 @@ A Simple Example
 ----------------
 
 @include threshold.js
-

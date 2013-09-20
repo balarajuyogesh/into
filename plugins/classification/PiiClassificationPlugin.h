@@ -107,7 +107,7 @@
  * number of features to consider. The following two declarations are
  * valid distance measures:
  *
- * ~~~
+ * ~~~(c++)
  * double myDistance(double* sample, double* model, int len);
  *
  * struct MyDistance

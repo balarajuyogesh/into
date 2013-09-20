@@ -20,7 +20,7 @@
 
 namespace PiiOpenCv
 {
-  /// @cond null
+  /// @hide
   template <class T> struct IplImageDepthTrait;
   template <> struct IplImageDepthTrait<char> { enum { intValue = IPL_DEPTH_8S }; };
   template <> struct IplImageDepthTrait<unsigned char> { enum { intValue = IPL_DEPTH_8U }; };
@@ -49,7 +49,7 @@ namespace PiiOpenCv
 
   inline bool hasData(IplImage* ptr) { return ptr->imageData != 0; }
   inline bool hasData(CvMat* ptr) { return ptr->data.ptr != 0; }
-  /// @endcond
+  /// @endhide
 }
 
 /// @internal
@@ -100,7 +100,7 @@ protected:
  * or IplImage* in OpenCV function calls. The `isConst` template
  * parameter determines if the shared data can be modified.
  *
- * ~~~
+ * ~~~(c++)
  * PiiMatrix<int> threshold(const PiiMatrix<int>& input)
  * {
  *   PiiMatrix<int> matResult(50,50);
@@ -116,7 +116,7 @@ protected:
  * compiler allows you to create a copy of an PiiIplImage object, but
  * the CvArr pointer of the copied object will be zero after copying.
  *
- * ~~~
+ * ~~~(c++)
  * PiiMatrix<int> matTest(10,10);
  * PiiIplImage<int> iplImage(matTest);
  * PiiIplImage<int> iplImage2(iplImage); // moves data from iplImage to iplImage2

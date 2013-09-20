@@ -46,7 +46,7 @@ class PiiSampleRandomizer : public PiiDefaultOperation
    * belong to the class at that index. Class names are stored as a
    * QStringList.
    *
-   * ~~~
+   * ~~~(c++)
    * randomizer->setProperty("sampleNames", QVariantList()
    *                         << (QStringList() << "Orange1" << "Orange2" << "Orange3")
    *                         << (QStringList() << "Apple1" << "Apple2"));
@@ -59,7 +59,7 @@ class PiiSampleRandomizer : public PiiDefaultOperation
    * each class will be weighted according to its relative weight in
    * this list. To set class 1 twice as likely as class 0, do this:
    *
-   * ~~~
+   * ~~~(c++)
    * randomizer->setProperty("classWeights", QVariantList() << 1.0 << 2.0);
    * ~~~
    *

@@ -48,7 +48,7 @@ namespace PiiSerialization
    * implementation does nothing. Override this function to perform
    * any action required to restore reference counts.
    *
-   * ~~~
+   * ~~~(c++)
    * namespace PiiSerialization
    * {
    *   inline void rereferencePointer(MyRefCountedObj* ptr)
@@ -112,17 +112,16 @@ public:
    * operator>>.
    */
   template <class T> Archive& operator& (T& value) { return *self() >> value; }
-  /// @overload
   template <class T> Archive& operator& (const T& value) { return *self() >> value; }
 
   /**
-   * Reads an array of `size` elements to the memory location pointed
-   * to by @2 ptr.
+   * Reads an array of *size* elements to the memory location pointed
+   * to by *ptr*.
    */
   template <class T> void readArray(T*& ptr, unsigned int& size)
   {
     *self() >> size;
-    //PENDING This may eat up all memory. Should we have a limit?
+    // TODO: This may eat up all memory. Should we have a limit?
     // Allocate memory and restore data
     if (size != 0)
       {
@@ -160,7 +159,7 @@ public:
    * Tell the archive that you changed the location of an object after
    * saving it.
    *
-   * ~~~
+   * ~~~(c++)
    * QList<MyObj> lst; // filled somehow
    *
    * // In your load() function:

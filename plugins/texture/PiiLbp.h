@@ -178,7 +178,7 @@ public:
    * @param centerFunc the "center function" is applied to each pixel
    * before comparing it to the neighbors. See [basicLbp()].
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> image;
    * PiiLbp lbp;
    * lbp.genericLbp<PiiLbp::Histogram>(image, PiiRoi::DefaultRoi(), Pii::Identity<int>()); // Outputs histogram
@@ -221,7 +221,7 @@ public:
    * to increase LBP's noise tolerance is to add a constant value to
    * the center pixel before comparing it to neighbors:
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<unsigned char> image;
    * PiiLbp::basicLbp<PiiLbp::Histogram>(image, PiiRoi::DefaultRoi(),
    *                                     std::bind2nd(std::plus<unsigned>(), 4));

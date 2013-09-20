@@ -91,7 +91,7 @@ private:
   int _iCurrentColumn;
 };
 
-/// @cond null
+/// @hide
 template <class Matrix> class PiiTransposedMatrix;
 template <class Matrix> struct PiiMatrixTraits<PiiTransposedMatrix<Matrix> >
 {
@@ -106,7 +106,7 @@ template <class Matrix> struct PiiMatrixTraits<PiiTransposedMatrix<Matrix> >
   typedef typename Matrix::column_iterator row_iterator;
   typedef typename Matrix::row_iterator column_iterator;
 };
-/// @endcond
+/// @endhide
 
 /**
  * Transposed matrix. This class is a wrapper that exchanges the roles
@@ -114,7 +114,7 @@ template <class Matrix> struct PiiMatrixTraits<PiiTransposedMatrix<Matrix> >
  * it possible to use matrix transposes in calculations without
  * actually creating a transposed matrix in memory.
  *
- * ~~~
+ * ~~~(c++)
  * PiiMatrix<int> mat(5,4);
  * mat = Pii::transpose(mat) * mat;
  * ~~~

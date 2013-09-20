@@ -31,7 +31,7 @@
  * correct classifications. The example below shows a perfect
  * classification result:
  *
- * ~~~
+ * ~~~(c++)
  *        |    O           |
  *        |    r    A      |
  *        |    a    p      |
@@ -121,7 +121,7 @@ public:
    * @param space column width-1 (maximum length of a matrix entry
    * represented as a decimal number)
    *
-   * ~~~
+   * ~~~(c++)
    * PiiConfusionMatrix mat(2);
    * // ... fill data ...
    * mat.print(std::cout, QStringList() << "Good" << "Poor");

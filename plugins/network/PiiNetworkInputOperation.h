@@ -38,7 +38,7 @@ class PiiHttpServer;
  * @in status - an optional input for HTTP status code (int). The
  * default status code is 200.
  *
- * ~~~
+ * ~~~(c++)
  * // This code implements a complete HTTP/1.1 server that calculates
  * // the sum of two numerical query arguments. The server supports
  * // both GET and POST queries.
@@ -113,7 +113,7 @@ class PiiNetworkInputOperation : public PiiNetworkOperation,
    * this operation only, use a URI here. See
    * PiiHttpServer::addServer() for URI syntax.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiOperation* pReceiver = engine.createOperation("PiiNetworkInputOperation");
    * pReceiver->setProperty("httpServer", "tcp://0.0.0.0:8080/");
    * ~~~

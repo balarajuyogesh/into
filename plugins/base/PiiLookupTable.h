@@ -48,7 +48,7 @@ class PiiLookupTable : public PiiDefaultOperation
    * list elements are QVariantLists, `table[0][index]` will be
    * emitted through `output0` etc.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiOperation* lut = engine.createOperation("PiiLookupTable");
    * // Map 0 to true and 1 to false. Emit the boolean value through all outputs.
    * lut->setProperty("table", QVariantList() << Pii::createQVariant(true) << Pii::createQVariant(false));

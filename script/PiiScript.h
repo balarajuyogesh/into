@@ -41,7 +41,7 @@
  * Creates conversion functions to/from a sequence type LIST_TYPE and
  * uses NAME as the human-readable name. An example:
  *
- * ~~~
+ * ~~~(c++)
  * typedef QList<PiiSocket*> PiiSocketList;
  * Q_DECLARE_METATYPE(PiiSocketList);
  * PII_SEQUENCE_CONVERSION_FUNCTIONS(PiiSocketList)
@@ -160,7 +160,7 @@ namespace PiiScript
    * function is used in building class hierarchies. The preferred
    * pattern of creating a new script class is as follows:
    *
-   * ~~~
+   * ~~~(c++)
    * // Create a prototype object
    * QScriptValue prototype = engine->newObject();
    * // MyOperation drives from piiOperation

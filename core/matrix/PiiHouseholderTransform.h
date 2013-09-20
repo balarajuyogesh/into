@@ -136,9 +136,9 @@ namespace Pii
   /**
    * Applies a reflection transform to a rectangular matrix from the
    * left. This function uses the vector representation of a
-   * reflection matrix (see householderTransform()) to speed up
-   * calculations. The algorithm is functionally equivalent to @f$A
-   * \gets HA@f$, but the full reflection matrix H is never
+   * reflection matrix (see [householderTransform()]) to speed up
+   * calculations. The algorithm is functionally equivalent to \(A
+   * \gets HA\), but the full reflection matrix H is never
    * calculated. Instead, since \(H = I - \tau v v^T\), we get
    *
    * \[
@@ -187,7 +187,6 @@ namespace Pii
   }
 
   /**
-   * @overload This version does not require an externally allocated
    * temporary buffer.
    */
   template <class Matrix, class InputIterator>
@@ -203,8 +202,8 @@ namespace Pii
 
   /**
    * Applies a reflection transform to a rectangular matrix from the
-   * right. The algorithm is functionally equivalent to @f$A \gets
-   * AH^T@f$, where H is the reflection transform uniquely identified
+   * right. The algorithm is functionally equivalent to \(A \gets
+   * AH^T\), where H is the reflection transform uniquely identified
    * by *v* and `tau`.
    *
    * @param A the input matrix storing the vectors to be reflected as
@@ -246,36 +245,36 @@ namespace Pii
 
   /**
    * Unpacks a matrix in which a series of elementary reflections are
-   * represented as row or column vectors. Algorithms such as the @ref
-   * qrDecompose() "QR decomposition" and [bdDecomponse()]
-   * "bidiagonal decomposition" represent the decomposition result in
-   * a compact form by storing the elementary reflector vectors only. 
-   * Given a set of such elementary reflectors in V, this function
-   * calculates the components of the left-hand reflector matrix Q in
-   * the form \(Q = I + V T V^T\) (*direction* = `Vertically`), or
-   * the components of the right-hand reflector matrix P in the form
-   * \(P = I + V^T T^T V\) (*direction* = `Horizontally`). This
-   * function requires preallocated temporary storage and is intended
-   * to be used in nested loops.
+   * represented as row or column vectors. Algorithms such as the [QR
+   * decomposition](qrDecompose) and [bidiagonal
+   * decomposition](bdDecomponse()) represent the decomposition result
+   * in a compact form by storing the elementary reflector vectors
+   * only.  Given a set of such elementary reflectors in V, this
+   * function calculates the components of the left-hand reflector
+   * matrix Q in the form \(Q = I + V T V^T\) (*direction* =
+   * `Vertically`), or the components of the right-hand reflector
+   * matrix P in the form \(P = I + V^T T^T V\) (*direction* =
+   * `Horizontally`). This function requires preallocated temporary
+   * storage and is intended to be used in nested loops.
    *
-@verbatim
-direction = Vertically
-Main diagonal        Subdiagonal
-diagonal = 0         diagonal = 1
-Nr = min(m, n)       Nr = min(m-1, n)
-( 1   x   x   x  )   ( x   x   x   x )
-( v1  1   x   x  )   ( 1   x   x   x )
-( v1  v2  1   x  )   ( v1  1   x   x )
-( v1  v2  v3  1  )   ( v1  v2  1   x )
-
-direction = Horizontally
-Main diagonal        Superdiagonal
-diagonal = 0         diagonal = 1
-Nr = min(m, n)       Nr = min(m, n-1)
-( 1   v1  v1  v1 )   ( x   1   v1  v1 )
-( x   1   v2  v2 )   ( x   x   1   v2 )
-( x   x   1   v3 )   ( x   x   x   1  )
-@endverbatim
+   * ~~~
+   * direction = Vertically
+   * Main diagonal        Subdiagonal
+   * diagonal = 0         diagonal = 1
+   * Nr = min(m, n)       Nr = min(m-1, n)
+   * ( 1   x   x   x  )   ( x   x   x   x )
+   * ( v1  1   x   x  )   ( 1   x   x   x )
+   * ( v1  v2  1   x  )   ( v1  1   x   x )
+   * ( v1  v2  v3  1  )   ( v1  v2  1   x )
+   *
+   * direction = Horizontally
+   * Main diagonal        Superdiagonal
+   * diagonal = 0         diagonal = 1
+   * Nr = min(m, n)       Nr = min(m, n-1)
+   * ( 1   v1  v1  v1 )   ( x   1   v1  v1 )
+   * ( x   1   v2  v2 )   ( x   x   1   v2 )
+   * ( x   x   1   v3 )   ( x   x   x   1  )
+   * ~~~
    *
    * Note that the number of reflector vectors (Nr) may be smaller
    * than the number of rows/columns as shown in the top right

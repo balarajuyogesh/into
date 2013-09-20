@@ -92,7 +92,7 @@ public:
   static const char* errorName(Code code);
 
 protected:
-  /// @cond null
+  /// @hide
   class Data : public PiiException::Data
   {
   public:
@@ -105,7 +105,7 @@ protected:
 
   PiiExecutionException(Data* d);
   void throwThis();
-  /// @endcond
+  /// @endhide
 };
 
 #define PII_SERIALIZABLE_CLASS PiiExecutionException

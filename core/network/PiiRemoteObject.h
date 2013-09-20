@@ -42,7 +42,7 @@
  * the specified URI must implement the interface speficied by
  * PiiObjectServer.
  *
- * ~~~
+ * ~~~(c++)
  * struct MyHandler
  * {
  *   // Invoked from the server
@@ -87,7 +87,7 @@ public:
    * open a connection to the server and update the local meta object
    * based on the server's response.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiRemoteObject client;
    * client.setServerUri("tcp://intopii.com:3142/valuesetter/");
    * ~~~
@@ -176,7 +176,7 @@ public:
    * a PiiMathException on the client side.
    */
 
-  /// @cond null
+  /// @hide
   template <class R> R call(const QString& function)
   {
     return PiiNetwork::returnValue<R>(callList(function, QVariantList()));
@@ -189,7 +189,7 @@ public:
   PII_CREATE_REMOTE_CALL(6, (P1,P2,P3,P4,P5,P6))
   PII_CREATE_REMOTE_CALL(7, (P1,P2,P3,P4,P5,P6,P7))
   PII_CREATE_REMOTE_CALL(8, (P1,P2,P3,P4,P5,P6,P7,P8))
-  /// @endcond
+  /// @endhide
 
   QVariant callList(const QString& function, const QVariantList& params);
 

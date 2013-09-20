@@ -52,7 +52,7 @@
  * default value will be marked optional. Default values have no
  * effect if [groupSize] is one.
  *
- * ~~~
+ * ~~~(c++)
  * PiiOperation* op = engine.createOperation("PiiPisoOperation");
  * op->setProperty("groupSize", 2);
  * op->setProperty("inputCount", 4);
@@ -70,7 +70,7 @@
  * - `defaultValue` - a PiiVariant object that will be used if the
  * corresponding input is not connected.
  *
- * ~~~
+ * ~~~(c++)
  * // Create a new piso
  * PiiOperation* piso = engine.createOperation("PiiPisoOperation");
  * piso->setProperty("groupSize", 2);
@@ -144,7 +144,7 @@ class PiiPisoOperation : public PiiDefaultOperation
    * default value will be marked optional. Default values have no
    * effect if [groupSize] is one.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiOperation* op = engine.createOperation("PiiPisoOperation");
    * op->setProperty("groupSize", 2);
    * op->setProperty("dynamicInputCount", 4);
@@ -159,7 +159,7 @@ class PiiPisoOperation : public PiiDefaultOperation
    * Configure a single input. The `index` property in the 
    * `defaultValue` map specifies the input to configure.
    *
-   * ~~~
+   * ~~~(c++)
    * QVariantMap props;
    * props["defaultValue"] = Pii::createQVariant("name");
    * props["index"] = 0;

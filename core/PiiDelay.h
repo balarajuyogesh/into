@@ -23,7 +23,7 @@
  * A utility class that reveals the protected msleep() member of
  * QThread so that program flow can be delayed anywhere.
  *
- * ~~~
+ * ~~~(c++)
  * PiiDelay::msleep(1000); // stops for one second
  * ~~~
  *

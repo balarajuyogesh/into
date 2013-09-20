@@ -174,7 +174,6 @@ public:
    */
   static PiiMatrix<double> transform(const PiiMatrix<T>& points, const double* model);
   /**
-   * @overload
    *
    * This function uses the first row of *model* as the model
    * parameter vector.
@@ -189,7 +188,6 @@ public:
    * matrix for homogeneous coordinates.
    */
   static PiiMatrix<double> toTransformMatrix(const double* model);
-  /// @overload
   static PiiMatrix<double> toTransformMatrix(const PiiMatrix<double>& model)
   {
     return toTransformMatrix(model[0]);

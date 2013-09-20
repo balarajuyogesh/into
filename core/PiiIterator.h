@@ -24,7 +24,7 @@
  * function. Given a function `func` and an iterator `it`, this
  * iterator returns `func(*it)`.
  *
- * ~~~
+ * ~~~(c++)
  * // Add two to all elements of vec1 and store the result to vec2
  * QVector<int> vec1(5), vec2(5);
  * Pii::copyN(Pii::unaryFunctionIterator(vec1.begin(), std::bind2nd(std::plus<int>(), 2)),
@@ -42,9 +42,9 @@ public:
   typedef value_type& reference;
 
   /**
-   * Constructs an iterator that transforms *iterator* with *func*. 
-   * This constructor is seldom used explicitly; use the @ref
-   * Pii::unaryFunctionIterator() function instead.
+   * Constructs an iterator that transforms *iterator* with *func*.
+   * This constructor is seldom used explicitly; use the
+   * [Pii::unaryFunctionIterator()] function instead.
    */
   PiiUnaryFunctionIterator(Iterator iterator, const UnaryFunction& func) :
     _iterator(iterator), _func(func)
@@ -149,7 +149,7 @@ private:
  * and `it2`, and a function `func`, this iterator returns
  * `func(*it1, *it2)`.
  *
- * ~~~
+ * ~~~(c++)
  * // Store the difference of vec1 and vec2 to vec1
  * QVector<int> vec1(5), vec2(5), vec3(5);
  * Pii::copyN(Pii::binaryFunctionIterator(vec1.begin(), vec2.begin(), std::minus<int>()),
@@ -350,7 +350,6 @@ public:
    * Returns the current value of `iterator`.
    */
   value_type operator* () const { return *_current; }
-  /// @overload
   reference operator* () { return *_current; }
 
   /**
@@ -370,7 +369,7 @@ public:
   bool operator>= (const PiiFilteredIterator& other) const { return _current >= other._current; }
 
   /**
-   * Increments `iterator` and `filter` until @p *filter is
+   * Increments `iterator` and `filter` until `*filter` is
    * non-zero. Returns a reference to `this`.
    */
   PiiFilteredIterator& operator++ ()
@@ -383,7 +382,7 @@ public:
     return *this;
   }
   /**
-   * Decrements `iterator` and `filter` until @p *filter is
+   * Decrements `iterator` and `filter` until `*filter` is
    * non-zero. Returns a reference to `this`.
    */
   PiiFilteredIterator& operator-- ()

@@ -309,7 +309,7 @@ protected:
    * If you need data from the inputs in syncEvent(), you need to
    * store the objects in process().
    *
-   * ~~~
+   * ~~~(c++)
    * void MyOperation::syncEvent(SyncEvent* event)
    * {
    *   if (event->type() == SyncEvent::EndInput &&

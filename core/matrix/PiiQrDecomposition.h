@@ -25,11 +25,11 @@ namespace Pii
    * is m-by-n.
    *
    * - `UnpackEconomyQR` - Either Q or R is m-by-n, and the other one
-   * is a o-by-o matrix, where o = min(m,n). If m >= n: Q will be
-   * m-by-n, R n-by-n. If m <= n: Q will be m-by-m, R m-by-n.
+   *   is a o-by-o matrix, where o = min(m,n). If m >= n: Q will be
+   *   m-by-n, R n-by-n. If m <= n: Q will be m-by-m, R m-by-n.
    *
    * - `UnpackFullQR` - Q will be m-by-m, R m-by-n. If m is large,
-   * this style easily eats up all memory. Use with care.
+   *   this style easily eats up all memory. Use with care.
    */
   enum QrUnpackStyle
     {
@@ -247,16 +247,16 @@ namespace Pii
    * column represents one of the vectors, excluding the first
    * dimension, which is always one.
    *
-@verbatim
-m >= n                          m < n
-
-(  r   r   r   r   r  )         (  r   r   r   r   r   r  )
-(  v1  r   r   r   r  )         (  v1  r   r   r   r   r  )
-(  v1  v2  r   r   r  )         (  v1  v2  r   r   r   r  )
-(  v1  v2  v3  r   r  )         (  v1  v2  v3  r   r   r  )
-(  v1  v2  v3  v4  r  )         (  v1  v2  v3  v4  r   r  )
-(  v1  v2  v3  v4  v5 )
-@endverbatim
+   * ~~~
+   * m >= n                          m < n
+   * 
+   * (  r   r   r   r   r  )         (  r   r   r   r   r   r  )
+   * (  v1  r   r   r   r  )         (  v1  r   r   r   r   r  )
+   * (  v1  v2  r   r   r  )         (  v1  v2  r   r   r   r  )
+   * (  v1  v2  v3  r   r  )         (  v1  v2  v3  r   r   r  )
+   * (  v1  v2  v3  v4  r  )         (  v1  v2  v3  v4  r   r  )
+   * (  v1  v2  v3  v4  v5 )
+   * ~~~
    *
    * @see qrUnpack()
    */
@@ -388,7 +388,6 @@ m >= n                          m < n
   }
 
   /**
-   * @overload
    *
    * This version does not modify the input *A*, and returns the Q
    * matrix unpacked. Optionally, the R matrix will also be filled.

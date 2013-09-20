@@ -24,7 +24,7 @@
 #include <functional>
 #include <algorithm>
 
-/// @cond null
+/// @hide
 template <class T> class PiiMatrixIterator;
 template <class T> class PiiMatrixColumnIterator;
 
@@ -43,7 +43,7 @@ struct PiiMatrixTraits<PiiMatrix<T, rowCount, columnCount> >
   typedef T* row_iterator;
   typedef const T* const_row_iterator;
 };
-/// @endcond
+/// @endhide
 
 template <class T, int rowCount = -1, int columnCount = -1> class PiiMatrix :
   public PiiConceptualMatrix<PiiMatrix<T, rowCount, columnCount> >
@@ -208,7 +208,7 @@ public:
   void clear();
 
 protected:
-  /// @cond null
+  /// @hide
   PiiTypelessMatrix() : d(PiiMatrixData::sharedNull()) { d->reserve(); }
 
   PiiTypelessMatrix(const PiiTypelessMatrix& other) : d(other.d) { d->reserve(); }
@@ -230,10 +230,10 @@ protected:
   void resize(int rows, int columns, size_t bytesPerItem);
 
   PiiMatrixData* d;
-  /// @endcond
+  /// @endhide
 };
 
-/// @cond null
+/// @hide
 template <class T> struct PiiMatrixTraits<PiiMatrix<T,-1,-1> >
 {
   enum { staticRows = -1, staticColumns = -1 };
@@ -253,7 +253,7 @@ template <class T> struct PiiMatrixTraits<PiiSubmatrix<T> > :
   PiiMatrixTraits<PiiMatrix<T,-1,-1> >
 {
 };
-/// @endcond
+/// @endhide
 
 
 /**
@@ -268,7 +268,7 @@ template <class T> struct PiiMatrixTraits<PiiSubmatrix<T> > :
  * constructor for a single numeric argument. An example of a class
  * that can be used as the content type:
  *
- * ~~~
+ * ~~~(c++)
  * struct MyClass
  * {
  *   MyClass(int i=0, double d=0.0);
@@ -319,7 +319,7 @@ template <class T> struct PiiMatrixTraits<PiiSubmatrix<T> > :
  * will change the contents of the original matrix. Reference can be
  * chained; a reference to a reference modifies the original.
  *
- * ~~~
+ * ~~~(c++)
  * PiiMatrix<char> mat(8,8);
  * mat = '+';
  * mat(2,1,3,3) = 'a';
@@ -360,7 +360,7 @@ public:
    * Constucts a shallow copy of *other*. This constructor only
    * increases the reference count of the internal data structure.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> a(5,5);
    * PiiMatrix<int> b(a(1,1,2,2)); // 2-by-2 reference to a
    * PiiMatrix<int> c(a);
@@ -397,7 +397,7 @@ public:
    * assumed. The *data* pointer must remain valid throughout the
    * lifetime of the matrix and any shallow copies of it.
    *
-   * ~~~
+   * ~~~(c++)
    * const double data[] = { 1, 2, 3, 4 };
    * PiiMatrix<double> mat(2, 2, data);
    * QCOMPARE(mat(1,1), 4);
@@ -426,7 +426,7 @@ public:
    * pointer will be deallocated with `free`() when the matrix is
    * destroyed.
    *
-   * ~~~
+   * ~~~(c++)
    * double data[] = { 1, 2, 3, 4 };
    * PiiMatrix<double> mat(2, 2, data, Pii::RetainOwnership);
    * mat(1,1) = 3;
@@ -460,7 +460,7 @@ public:
    * @warning Take extreme care to ensure that the elements you give
    * in the parameter list are of correct type. Examples:
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<char> a(3, 1, 'a', 'b', 'c');     //correct, chars are passed as ints
    * PiiMatrix<char> b(3, 1, 1, 2, 3);           //correct
    * PiiMatrix<float> c(3, 1, 1, 2, 3);          //WRONG! values are passed as ints
@@ -581,13 +581,11 @@ public:
    * Returns a random-access iterator to the start of the matrix data.
    */
   typename Traits::iterator begin() { return typename Traits::iterator(*this); }
-  /// @overload
   typename Traits::const_iterator begin() const { return typename Traits::const_iterator(*this); }
   /**
    * Returns a random-access iterator to the end of the matrix data.
    */
   typename Traits::iterator end() { return typename Traits::iterator(*this, rows()); }
-  /// @overload
   typename Traits::const_iterator end() const { return typename Traits::const_iterator(*this, rows()); }
   
   /**
@@ -595,14 +593,12 @@ public:
    * *rowIndex*.
    */
   typename Traits::row_iterator rowBegin(int rowIndex) { return row(rowIndex); }
-  /// @overload
   typename Traits::const_row_iterator rowBegin(int rowIndex) const { return row(rowIndex); }
   /**
    * Returns a random-access iterator to the end of the row at 
    * *rowIndex*.
    */
   typename Traits::row_iterator rowEnd(int rowIndex) { return row(rowIndex) + columns(); }
-  /// @overload
   typename Traits::const_row_iterator rowEnd(int rowIndex) const { return row(rowIndex) + columns(); }
 
   /**
@@ -610,21 +606,18 @@ public:
    * *colIndex*.
    */
   typename Traits::column_iterator columnBegin(int colIndex) { return typename Traits::column_iterator(*this, colIndex); }
-  /// @overload
   typename Traits::const_column_iterator columnBegin(int colIndex) const { return typename Traits::const_column_iterator(*this, colIndex); }
   /**
    * Returns a random-access iterator to the end of the column at 
    * *colIndex*.
    */
   typename Traits::column_iterator columnEnd(int colIndex) { return typename Traits::column_iterator(*this, rows(), colIndex); }
-  /// @overload
   typename Traits::const_column_iterator columnEnd(int colIndex) const { return typename Traits::const_column_iterator(*this, rows(), colIndex); }
 
   /**
    * Returns a pointer to the beginning of row at *index*.
    */
   const T* row(int index) const { return static_cast<const T*>(d->row(index)); }
-  /// @overload
   T* row(int index) { detach(); return static_cast<T*>(d->row(index)); }
 
   /**
@@ -633,7 +626,7 @@ public:
    * Use this function only if you are absolutely sure that the memory
    * arrangement of the type `T` matches that of a matrix row.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(1,3, 1,2,3);
    * PiiVector<int,3>& vec = mat.rowAs<PiiVector<int,3> >(0);
    * vec[0] = 2;
@@ -641,7 +634,6 @@ public:
    * ~~~
    */
   template <class U> U& rowAs(int index) { detach(); return *static_cast<U*>(d->row(index)); }
-  /// @overload
   template <class U> const U& rowAs(int index) const { return *static_cast<const U*>(d->row(index)); }
 
   /**
@@ -675,7 +667,7 @@ public:
    * column vectors. If the matrix is not a vector, the first element
    * of the indexth row is returned.
    *
-   * ~~~
+   * ~~~(c++)
    * // Row vector
    * PiiMatrix<int> mat(1, 3, 0,1,2);
    * QCOMPARE(mat(2), 2);
@@ -690,7 +682,6 @@ public:
    * ~~~
    */
   T& operator() (int index) { return (rows() > 1 ? row(index)[0] : row(0)[index]); }
-  /// @overload
   T operator() (int index) const { return (rows() > 1 ? row(index)[0] : row(0)[index]); }
 
 
@@ -699,7 +690,7 @@ public:
    * row(r). The purpose of this function is to allow the use of a
    * matrix as a two-dimensional array:
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(2, 2,
    *                    1, 2,
    *                    3, 4);
@@ -707,7 +698,6 @@ public:
    * ~~~
    */
   T* operator[] (int r) { return row(r); }
-  /// @overload
   const T* operator[] (int r) const { return row(r); }
   
   /**
@@ -729,7 +719,7 @@ public:
    * @param columns the number of columns to include. Negative value
    * means "up to the nth last column".
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> a(3, 3,
    *                  1, 2, 3,
    *                  4, 5, 6,
@@ -749,7 +739,6 @@ public:
     return PiiSubmatrix<T>(this->createReference(rows, columns, row(r) + c));
   }
 
-  /// @overload
   PiiMatrix operator() (int r, int c, int rows, int columns) const
   {
     fixIndices(r, c, rows, columns);
@@ -865,7 +854,6 @@ public:
    * Inserts the given row at *index*. The input matrix can be either
    * a column or a row vector.
    *
-   * @overload
    */
   typename Traits::row_iterator insertRow(int index, const PiiMatrix& row);
 
@@ -874,7 +862,6 @@ public:
    * row will be copied from *row*, which must hold at least
    * [columns()] elements.
    *
-   * @overload
    */
   typename Traits::row_iterator insertRow(int index, const T* row);
 
@@ -883,7 +870,6 @@ public:
    * The number of element arguments must be equal to the number of
    * columns in the matrix.
    *
-   * @overload
    */
   typename Traits::row_iterator insertRow(int index, VaArgType firstElement, ...);
 
@@ -969,7 +955,6 @@ public:
    * the new column will be copied from *column*, which must hold at
    * least [rows()] elements.
    *
-   * @overload
    */
   typename Traits::column_iterator insertColumn(int index, const T* column);
   
@@ -979,7 +964,6 @@ public:
    * number of elements must be equal to the number of rows in the
    * matrix.
    *
-   * @overload
    */
   typename Traits::column_iterator insertColumn(int index, VaArgType firstElement, ...);
 
@@ -987,7 +971,7 @@ public:
    * Removes the row at *index*. All rows below the removed one will
    * be moved up.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(3,3, 1,2,3, 4,5,6, 7,8,9);
    * mat.removeRow(1);
    * // mat = 1 2 3
@@ -1012,7 +996,7 @@ public:
    * later add a column to the matrix, the data will not be
    * reallocated.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(3,3, 1,2,3, 4,5,6, 7,8,9);
    * mat.removeColumn(1);
    * // mat = 1  3
@@ -1048,7 +1032,7 @@ public:
    * in a new matrix. For example, to explicitly apply the addition
    * operation, do this:
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> a, b;
    * PiiMatrix<int> c(a.mapped(std::plus<int>(), b));
    * ~~~
@@ -1073,7 +1057,7 @@ public:
    * matrix. For example, to apply the operator-= the other way, do
    * this:
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> a, b;
    * a.map(std::minus<int>(), b);
    * ~~~
@@ -1094,7 +1078,7 @@ public:
    * scalar *value*. The result is returned in a new matrix. An
    * example:
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> a;
    * PiiMatrix<int> c(a.mapped(std::plus<int>(), 5));
    * ~~~
@@ -1112,7 +1096,7 @@ public:
    * Applies a binary function to all elements of this matrix and the
    * scalar *value*. The result is stored in this matrix. An example:
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> a;
    * a.map(std::minus<int>(), 5);
    * // The same can be achieved with
@@ -1131,7 +1115,7 @@ public:
    * Applies a unary function to all elements in this matrix. For
    * example, to negate all elements in a matrix, do the following:
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> a;
    * a.map(std::negate<int>());
    * ~~~
@@ -1147,7 +1131,7 @@ public:
    * function to all elements in this matrix. For example, to create a
    * negation of a matrix, do the following:
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> a;
    * PiiMatrix<int> b(a.mapped(std::negate<int>());
    *
@@ -1172,7 +1156,7 @@ public:
   /**
    * Creates a *size*-by-*size* identity matrix.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(PiiMatrix<int>::identity(3));
    * // 1 0 0
    * // 0 1 0
@@ -1186,7 +1170,7 @@ public:
    * set to *value*. This is faster than first creating and clearing
    * a matrix to zeros and then setting all entries.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<float> mat(PiiMatrix<float>::constant(2, 3, 1.0));
    * // 1.0 1.0 1.0
    * // 1.0 1.0 1.0
@@ -1266,7 +1250,7 @@ private:
  * C++0x. Therefore, this class uses a bit of hackery to implement
  * move semantics with the old C++ standard.
  *
- * ~~~
+ * ~~~(c++)
  * PiiMatrix<int> mat(5,5);
  * // Constructing a copy of a PiiSubmatrix is possible prior to
  * // C++0x. This is however strongly discouraged. The following
@@ -1339,7 +1323,7 @@ public:
    * possible to pass a sub-matrix to a function that takes a
    * PiiMatrix as a parameter.
    *
-   * ~~~
+   * ~~~(c++)
    * template <class T> void modify(PiiMatrix<T>& mat);
    *
    * // ...
@@ -1366,7 +1350,7 @@ namespace Pii
    * Returns a deep copy of `mat`. This function is useful if you
    * need a concrete copy of a matrix concept.
    *
-   * ~~~
+   * ~~~(c++)
    * template <class T> void func(const PiiMatrix<T>& mat);
    *
    * // ...
@@ -1385,7 +1369,6 @@ namespace Pii
   }
 
   /**
-   * @overload
    *
    * This specialization just returns `mat`.
    */

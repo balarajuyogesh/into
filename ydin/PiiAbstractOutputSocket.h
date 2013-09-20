@@ -97,7 +97,7 @@ public:
   PiiAbstractOutputSocket* rootOutput() const;
   
 protected:
-  /// @cond null
+  /// @hide
   typedef QVector<QPair<PiiAbstractInputSocket*,PiiInputController*> > InputListParent;
 
   class InputList : public InputListParent
@@ -150,7 +150,7 @@ protected:
   friend class Data;
 
   PiiAbstractOutputSocket(Data* data);
-  /// @endcond
+  /// @endhide
   
   /**
    * Called by [connectInput()] when an input has been connected.

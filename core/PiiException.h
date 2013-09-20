@@ -19,20 +19,15 @@
 #include <QString>
 #include <QCoreApplication>
 #include "PiiGlobal.h"
-
-/** @file
- *
- */
-
-/**
- * Construct an instance of `EXCEPTION` with the given `MESSAGE`.
- * This macro automatically fills in file and line number information
- * in debug builds. Error location will be omitted in release builds.
- */
 #ifndef _DEBUG
 // Release builds save memory by not storing error location.
 #  define PII_MAKE_EXCEPTION(EXCEPTION, MESSAGE) EXCEPTION(MESSAGE)
 #else
+/**
+ * Constructs an instance of `EXCEPTION` with the given `MESSAGE`.
+ * This macro automatically fills in file and line number information
+ * in debug builds. Error location will be omitted in release builds.
+ */
 #  define PII_MAKE_EXCEPTION(EXCEPTION, MESSAGE) EXCEPTION(MESSAGE, QString(__FILE__ ":%1").arg(__LINE__))
 #endif
 
@@ -40,11 +35,11 @@
  * A macro for throwing an exception with error location information. 
  * With this macro, the file name and line number of the current code
  * line are automatically stored as the error location. If you don't
- * need the location information, just throw the exception as in throw
- * PiiException("Everything just went kablooie.");. An example:
+ * need the location information, just throw the exception as in `throw
+ * PiiException("Everything just went kablooie.")`. An example:
  *
- * ~~~
- * PII_THROW(PiiException, tr("On synti‰ k‰‰nt‰‰ suomea englanniksi."));
+ * ~~~(c++)
+ * PII_THROW(PiiException, tr("The software just failed spectacularly."));
  * ~~~
  *
  * @param EXCEPTION the class name of the exception to be thrown, e.g. 
@@ -68,7 +63,6 @@ class PiiMetaObject;
  *
  * To support exceptions in remote function calls, all exception
  * classes should be made serializable.
- *
  */
 class PII_CORE_EXPORT PiiException
 {
@@ -160,7 +154,7 @@ public:
   void throwIt();
 
 protected:
-  /// @cond null
+  /// @hide
   class PII_CORE_EXPORT Data
   {
   public:
@@ -174,7 +168,7 @@ protected:
   PiiException(Data* data);
   // Throws *this (as a value).
   virtual void throwThis();
-  /// @endcond
+  /// @endhide
 };
 
 #include <PiiVirtualMetaObject.h>

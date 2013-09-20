@@ -55,7 +55,7 @@ class PiiGrayFeatureOperation : public PiiDefaultOperation
    * - `HighAverage` - average of gray levels over the mean
    * - `LowAverage` - average of gray levels below the mean
    *
-   * ~~~
+   * ~~~(c++)
    * pGrayFeatures->setProperty("features", QStringList() << "Average" << "Contrast");
    * ~~~
    *

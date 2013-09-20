@@ -75,7 +75,7 @@ class PII_GUI_EXPORT PiiMeasureBar : public QFrame
    * pixels) between ticks at different levels. The length of this
    * list determines the number of tick levels.
    *
-   * ~~~
+   * ~~~(c++)
    * // Minor ticks must be at least 5 pixels apart.
    * // Semi-major ticks must be at least 20 pixels apart.
    * // Major ticks must be at least 100 pixels apart.
@@ -88,7 +88,7 @@ class PII_GUI_EXPORT PiiMeasureBar : public QFrame
    * Scales of possible ticks in logical units. The ticks that will
    * actually be shown will be selected based on current [pixelSize].
    *
-   * ~~~
+   * ~~~(c++)
    * // Assume our logical units are meters.
    * // Ticks can be placed on millimeters, centimeters, decimeters, meters
    * // decameters, hectometers, and kilometers.
@@ -103,7 +103,7 @@ class PII_GUI_EXPORT PiiMeasureBar : public QFrame
    * must match the number of scales. Otherwise, the names will be
    * cleared.
    *
-   * ~~~
+   * ~~~(c++)
    * // Only mm, cm, m, and km can be used as major ticks.
    * pBar->setTickNames(QStringList() << "mm" << "cm" << "" << "m" << "" << "" << "km");
    * ~~~
@@ -112,7 +112,7 @@ class PII_GUI_EXPORT PiiMeasureBar : public QFrame
    * tick, but the name and scale of the preceding (-) or following
    * (+) named unit will be used.
    *
-   * ~~~
+   * ~~~(c++)
    * // Only mm, m, and km can be used as major tick units.
    * // Decameters and hectometers can be major ticks, but will be shown in meters.
    * // Centimeters can be major ticks, but will be shown in millimeters.

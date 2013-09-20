@@ -29,6 +29,7 @@
  * finally killed by PiiNetworkServer. An idle thread can be assigned
  * to a new client once the old one has been handled.
  *
+ * @internal
  */
 class PII_NETWORK_EXPORT PiiNetworkServerThread : public QThread, public PiiProgressController
 {
@@ -36,7 +37,7 @@ class PII_NETWORK_EXPORT PiiNetworkServerThread : public QThread, public PiiProg
 
 public:
   /**
-   * An intereface for thread controllers. A controller listens to
+   * An interface for thread controllers. A controller listens to
    * thread status changes and creates sockets on request.
    */
   class Controller
@@ -61,10 +62,10 @@ public:
      * Create a new socket device for communicating through the given
      * socket. It is advisable to use a PiiWaitingIoDevice to ensure
      * that the protocol doesn't need to cope with slow connections
-     * and buffering. @p PiiNetworkServerThread calls this function
-     * to create a socket device and passes the returned pointer to
-     * the protocol implementation. Once the protocol is done, the
-     * device will be closed and deleted.
+     * and buffering. PiiNetworkServerThread calls this function to
+     * create a socket device and passes the returned pointer to the
+     * protocol implementation. Once the protocol is done, the device
+     * will be closed and deleted.
      */
     virtual QIODevice* createSocket(PiiGenericSocketDescriptor socketDescriptor) = 0;
   };
@@ -72,9 +73,9 @@ public:
   
   /**
    * Create a new worker thread that uses `protocol` to communicate
-   * with clients. If `protocol` is stateful (@ref
-   * PiiNetworkProtocol::hasState() return `true`), the thread
-   * assumes the ownership of the pointer. Otherwise, the pointer must
+   * with clients. If `protocol` is stateful (
+   * [PiiNetworkProtocol::hasState()] returns `true`), the thread
+   * takes the ownership of the pointer. Otherwise, the pointer must
    * remain valid during the lifetime of the thread.
    */
   PiiNetworkServerThread(PiiNetworkProtocol* protocol);

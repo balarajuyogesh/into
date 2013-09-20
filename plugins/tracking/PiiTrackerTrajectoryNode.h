@@ -23,7 +23,7 @@
  * is intended to be derived with the CRTP (curiously recurring
  * template pattern):
  *
- * ~~~
+ * ~~~(c++)
  * class MyNode : public PiiTrackerTrajectoryNode<int,MyNode>
  * {
  *   // ... your stuff here ...

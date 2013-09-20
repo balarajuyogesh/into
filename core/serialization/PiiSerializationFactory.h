@@ -35,7 +35,7 @@
  *
  */
 
-/// @cond null
+/// @hide
 #define PII_FACTORY_TEMPLATE_CLASS(T, ARCHIVE) PiiSerializationFactory::Template<T,ARCHIVE>
 #define PII_FACTORY_TEMPLATE_FUNC(T, ARCHIVE) PiiSerializationFactory::create<T,ARCHIVE>
 #define PII_DECLARE_FACTORY_MAP(ARCHIVE) \
@@ -45,7 +45,7 @@
 #define PII_DEFINE_FACTORY_MAP(ARCHIVE) \
   PII_DEFINE_EXPORTED_FUNCTION_TEMPLATE(PiiSerializationFactory::MapType*, \
                                         PiiSerializationFactory::map<ARCHIVE >, ())
-/// @endcond
+/// @endhide
 
 
 #define PII_INSTANTIATE_ARCHIVE_FACTORY(T, ARCHIVE) \
@@ -77,7 +77,7 @@
  * type `T`. This is needed if a serializable object is exported from
  * a dll.
  *
- * ~~~
+ * ~~~(c++)
  * #ifdef BUILD_MYLIB
  * #  define MY_EXPORT __declspec(dllexport)
  * #  define BUILDING_MYLIB 1
@@ -135,7 +135,7 @@ namespace PiiSerialization
     }
   };
 
-  /// @cond null
+  /// @hide
   template <class T, class Archive> struct ConstructorVoid
   {
     static T* create(Archive&)
@@ -193,7 +193,7 @@ namespace PiiSerialization
 #define PII_MAKE_TYPE_LIST(CNT, TYPES) \
   PII_FOR_N(PII_ADD_COMMA_BEFORE, CNT, TYPES)
 
-/// @endcond
+/// @endhide
 
 /**
  * Creates a constructor class for *CLASS*. The constructor created
@@ -208,7 +208,7 @@ namespace PiiSerialization
  *
  * @param TYPES the types of constructor parameters
  *
- * ~~~
+ * ~~~(c++)
  * // No default constructor but
  * // MyClass::MyClass(int, double)
  * PII_SERIALIZATION_CONSTRUCTOR(MyClass, 2, (int, double));
@@ -218,7 +218,7 @@ namespace PiiSerialization
  * constructor that passes PiiSerialization::Void as a constructor
  * parameter.
  *
- * ~~~
+ * ~~~(c++)
  * // Use MyClass::MyClass(PiiSerialization::Void)
  * PII_SERIALIZATION_CONSTRUCTOR(MyClass, Void, ());
  * ~~~
@@ -236,7 +236,7 @@ namespace PiiSerialization
  * factory is used directly and not through the deserialization
  * mechanism.
  *
- * ~~~
+ * ~~~(c++)
  * // Use MyClass::MyClass() when an instance is created using
  * // PiiSerializationFactory::create() directly.
  * PII_SERIALIZATION_NORMAL_CONSTRUCTOR(MyClass, 0, ());
@@ -270,7 +270,6 @@ public:
   }
   
   /**
-   * @overload
    *
    * This function returns a factory object from the default factory
    * map.

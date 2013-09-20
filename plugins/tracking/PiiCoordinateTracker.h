@@ -55,7 +55,7 @@ public:
    * a prediction for each active trajectory and then runs the
    * tracking algorithm.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiCoordinateTracker<int,2> tracker;
    * typedef PiiTrackerPoint<int,2> Point;
    * tracker.addMeasurements(QList<Point>() << Point(1,2) << Point(-1, 3), 0);
@@ -68,7 +68,7 @@ public:
    * A utility function that makes it possible to use a matrix to set
    * the measurements at once.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiCoordinateTracker<int,2> tracker;
    * tracker.addMeasurements(PiiMatrix<int>(2, 2,
    *                                        1, 2,
@@ -86,7 +86,7 @@ public:
    * the measurements at once and set labels or block some
    * measurements depends on given labels.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiCoordinateTracker<int,2> tracker;
    * tracker.addMeasurements(PiiMatrix<int>(2, 2,
    *                                        1, 2,
@@ -137,7 +137,7 @@ public:
    * based on the trajectory fitness. If you want to reverse the
    * order, do something like the following:
    *
-   * ~~~
+   * ~~~(c++)
    * typedef PiiCoordinateTrackerNode<double,2> TrajectoryType;
    * PiiCoordinateTracker<double,2> tracker;
    * QList<TrajectoryType> trajectories = tracker.trajectories();

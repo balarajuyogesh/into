@@ -28,7 +28,7 @@
  * is provided through the helper type `Traits`. The required type
  * definitions are shown in the example below.
  *
- * ~~~
+ * ~~~(c++)
  * // Forward declaration for the rebinder in MyTraits.
  * template <class T> class MyClass;
  *
@@ -86,7 +86,7 @@ public:
    * A typedef for the traits template parameter. Can be used to
    * access the rebinder and other parts of the traits directly.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiColor<> clr;
    * PiiColor<double> clr2 = PiiColor<>::TraitsType::Rebind<double>::Type();
    * ~~~

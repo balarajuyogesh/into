@@ -152,7 +152,7 @@ namespace Pii
    * algorithm is equal to `std::transform` except that it always
    * modifies the elements in place. Returns *end*.
    *
-   * ~~~
+   * ~~~(c++)
    * // Subtract one from all elements of a QVector
    * QVector<double> vec(6);
    * Pii::map(vec.begin(), vec.end(), std::bind2nd(std::minus<double>(), 1));
@@ -202,7 +202,7 @@ namespace Pii
    * `map` algorithm is equal to [transform()] except that it always
    * modifies the elements in place and works slightly faster.
    *
-   * ~~~
+   * ~~~(c++)
    * // Add the elements of lst2 to lst1
    * QList<int> lst1, lst2;
    * lst1 << 1 << 2;
@@ -312,7 +312,7 @@ namespace Pii
    * Copies a variable number of arguments to a range of elements
    * bounded by the iterators *begin* and *end*.
    *
-   * ~~~
+   * ~~~(c++)
    * QVector<int> vec(5);
    * // Set vector contents to [ 1, 2, 3, 4, 5 ]
    * Pii::copyVaArgs(vec.begin(), vec.end(), 1, 2, 3, 4, 5);
@@ -342,7 +342,7 @@ namespace Pii
    *
    * @return \(v1 \cdot v2\)
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<double> m(2, 1, 1.0, -1.0);
    * double dot = Pii::innerProduct(m.columnBegin(0),
    *                                m.columnEnd(0),
@@ -360,7 +360,6 @@ namespace Pii
   }
 
   /**
-   * @overload
    *
    * Returns the inner product of two *n*-dimensional vectors.
    */
@@ -440,7 +439,7 @@ namespace Pii
    * applies *func* to each element and the current value of 
    * *initialValue*. Returns the final value of *initialValue*.
    *
-   * ~~~
+   * ~~~(c++)
    * // Sum up all entries in a matrix
    * PiiMatrix<int> mat(1,2, -1, 2);
    * std::cout << Pii::accumulate(mat.begin(), mat.end(),
@@ -458,7 +457,6 @@ namespace Pii
   }
 
   /**
-   * @overload
    *
    * This fuction works in the range [*begin*, *begin* + *n*).
    */
@@ -477,7 +475,7 @@ namespace Pii
    * *initialValue*, if *predicate* returns a non-zero value for the
    * element. Returns the final value of *initialValue*.
    *
-   * ~~~
+   * ~~~(c++)
    * // Sum up all positive entries in a matrix
    * PiiMatrix<int> mat(1,3, -1, 2);
    * std::cout << Pii::accumulate(mat.begin(), mat.end(),
@@ -502,11 +500,11 @@ namespace Pii
    * Find a special value such as maximum or minimum in the range
    * specified by *begin* and *end*. The "speciality" is defined by
    * the given function objects. Specifically, the algorithm increases
-   * *begin* until it equals *end*, and sets *x* to `*begin`
-   * whenever `op(f(*begin), f(*x))` returns a non-zero value. 
-   * Returns @p *x on success, or *end* if the range is empty.
+   * *begin* until it equals *end*, and sets *x* to `*begin` whenever
+   * `op(f(*begin), f(*x))` returns a non-zero value.  Returns *x* on
+   * success, or *end* if the range is empty.
    *
-   * ~~~
+   * ~~~(c++)
    * double* values[] = { 1, 2.0, -5.3, 4.2 };
    * // Find the maximum absolute value
    * using namespace Pii;
@@ -543,7 +541,7 @@ namespace Pii
    * The return value of the unary function *func* (if any) is
    * ignored. Returns *func*.
    *
-   * ~~~
+   * ~~~(c++)
    * // Calculate the mean of all entries
    * PiiMatrix<float> matrix(3,3);
    * std::cout << Pii::forEach(matrix.begin(), matrix.end(),
@@ -563,7 +561,7 @@ namespace Pii
    * of the unary function *func* (if any) is ignored. Returns 
    * *func*.
    *
-   * ~~~
+   * ~~~(c++)
    * // Calculate the mean of non-zero entries
    * PiiMatrix<float> matrix(3,3);
    * std::cout << Pii::forEachIf(matrix.begin(), matrix.end(),

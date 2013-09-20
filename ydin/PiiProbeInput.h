@@ -50,7 +50,7 @@ public:
    * threads, and Qt's event loop doesn't guarantee chronological
    * ordering in such a case.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiOperation* reader = engine.createOperation("PiiImageFileReader");
    * PiiImageDisplay* display = new PiiImageDisplay;
    * PiiProbeInput* probe = new PiiProbeInput(reader->output("image"),

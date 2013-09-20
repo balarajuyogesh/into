@@ -47,7 +47,6 @@ public:
    */
   void setData(const QModelIndex& index, int role, const QVariant& data);
 
-  /// @overload
   void setData(const QString& fileName, int role, const QVariant& data);
   
   /**

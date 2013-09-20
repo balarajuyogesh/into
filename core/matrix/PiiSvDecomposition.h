@@ -61,7 +61,6 @@ namespace Pii
   }
 
   /**
-   * @overload
    *
    * This version requires a preallocated temporary storage *tmp*, a
    * k-by-k square matrix in which k is the minimum of A's dimensions.

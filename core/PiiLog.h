@@ -41,14 +41,14 @@
  * easy way to do this is to put the following line into your qmake
  * project file:
  *
- * ~~~
+ * ~~~(c++)
  * DEFINES += PII_LOG_MODULE=MyModule
  * ~~~
  *
  * Another way is to define PII_LOG_MODULE before including any header
  * file from Into:
  *
- * ~~~
+ * ~~~(c++)
  * #define PII_LOG_MODULE MyModule
  * #include <PiiGlobal.h>
  * ~~~
@@ -108,7 +108,6 @@ inline void PII_PRINTF_ATTR(3,4) piiLog(const char* module, QtMsgType level, con
 #define piiPrintable(STR) (STR).toLocal8Bit().constData()
 
 /**
- * @overload
  */
 inline void piiLog(const char* module, QtMsgType level, const QString& msg)
 {
@@ -133,7 +132,7 @@ namespace PiiLog
    * the [maximum number of archived files](setMaxArchivedFiles())
    * has been reached, the oldest log file will be deleted.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiLog::setLogFile("/var/log/my.log");
    * qInstallMsgHandler(PiiLog::writeToFile);
    * ~~~
@@ -157,7 +156,7 @@ namespace PiiLog
    * will be logged. Otherwise it will be discarded. Having no message
    * filter means everything will be logged.
    *
-   * ~~~
+   * ~~~(c++)
    * bool myMessageFilter(const char* module, QtMsgType level)
    * {
    *   // Discard everything from DisabledModule
@@ -244,7 +243,7 @@ namespace PiiLog
   PII_CORE_EXPORT int maxArchivedFiles();
 }
 
-/// @cond null
+/// @hide
 static const char* piiLogModuleName = PII_STRINGIZE(PII_LOG_MODULE);
 
 #define PII_LOG_FUNCTION(NAME) \
@@ -289,6 +288,6 @@ PII_LOG_FUNCTION(Fatal)
 PII_LOG_FUNCTION_NOOP(Fatal)
 #endif
 
-/// @endcond
+/// @endhide
   
 #endif //_PIILOG_H

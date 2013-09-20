@@ -27,7 +27,7 @@ class PiiProgressController;
 class PiiHttpDevice;
 class PiiNetworkClient;
 
-/// @cond null
+/// @hide
 #define PII_THROW_IF_NOT_CONNECTED if (!pDev->isReadable()) PII_THROW(PiiNetworkException, tr(PiiNetwork::pDeviceIsNotConnectedMessage))
 #define PII_CHECK_SERVER_RESPONSE                                       \
   do {                                                                  \
@@ -57,7 +57,7 @@ class PiiNetworkClient;
   }
 #define PII_CREATE_REMOTE_CALL(N, PARAMS) PII_CREATE_REMOTE_CALL_IMPL(call, N, PARAMS)
 #define PII_CREATE_REMOTE_CALLBACK(N, PARAMS) PII_CREATE_REMOTE_CALL_IMPL(callBack, N, PARAMS)
-/// @endcond
+/// @endhide
 class PiiGenericFunction;
 
 /**
@@ -134,7 +134,7 @@ namespace PiiNetwork
    * This version allows one to add custom values to the HTTP request
    * header.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiHttpResponseHeader header;
    * // Read a remote file and store response header.
    * QByteArray aReply = PiiNetwork::readFile("http://intopii.com/into/", &header);
@@ -207,7 +207,7 @@ namespace PiiNetwork
                                         PiiHttpResponseHeader* header = 0);
   PII_NETWORK_EXPORT void makeDirectory(const QString& uri);
   
-  /// @cond null
+  /// @hide
   extern PII_NETWORK_EXPORT const char* pFormContentType;  
   extern PII_NETWORK_EXPORT const char* pDeviceIsNotConnectedMessage;
   extern PII_NETWORK_EXPORT const char* pErrorReadingResponseHeader;
@@ -226,7 +226,7 @@ namespace PiiNetwork
                                                        const QString& method,
                                                        const QString& uri,
                                                        const PiiMimeHeader& requestHeaders = PiiMimeHeader());
-  /// @endcond
+  /// @endhide
 }
 
 #endif //_PIINETWORK_H

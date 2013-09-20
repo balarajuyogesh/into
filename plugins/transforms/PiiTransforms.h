@@ -134,7 +134,7 @@ namespace PiiTransforms
    * circle with the given *radius* is centered at that pixel with a
    * high likelihood.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<unsigned char> matInput; // input image
    * PiiMatrix<GradType> matGradX(PiiImage::filter<int>(matInput, PiiImage::SobelXFilter));
    * PiiMatrix<GradType> matGradY(PiiImage::filter<int>(matInput, PiiImage::SobelYFilter));
@@ -160,7 +160,7 @@ namespace PiiTransforms
    *
    * @return a transformation domain for each inspected radius
    *
-   * ~~~
+   * ~~~(c++)
    * using namespace PiiTransforms;
    * QList<PiiMatrix<int> > lstMatrices(circularHough(matInput,
    *                                                  RandomSelector(1.0, 0.1), // Selects one tenth of pixels

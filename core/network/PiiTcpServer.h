@@ -25,7 +25,7 @@
  * over local sockets/pipes. To create a minimalistic HTTP server, do
  * this:
  *
- * ~~~
+ * ~~~(c++)
  * #include <QCoreApplication>
  * #include <PiiHttpProtocol.h>
  * #include <PiiTcpServer.h>

@@ -146,7 +146,7 @@ public:
      * Returning from this function will automatically flush the
      * output pending in `dev`.
      *
-     * ~~~
+     * ~~~(c++)
      * void MyHandler::handleRequest(const QString& uri, PiiHttpDevice* dev, TimeLimiter*)
      * {
      *   // Find the path of the request wrt to the "root" of this handler
@@ -190,7 +190,7 @@ public:
    * @param handler the handler. When a request to the registered URI
    * is received, the handler will be invoked.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiHttpProtocol protocol;
    * // A handler that fetches files from the file system
    * PiiHttpFileSystemHandler* files = new PiiHttpFileSystemHandler("/var/www/html");

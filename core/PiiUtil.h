@@ -187,12 +187,12 @@ namespace Pii
                                                                int propertyOffset = 0,
                                                                PropertyFlags flags = DynamicProperties);
 
-  /// @cond null
+  /// @hide
   inline QString propertyNameFrom(QVariantMap::const_iterator i) { return i.key(); }
   inline QVariant propertyValueFrom(QVariantMap::const_iterator i) { return i.value(); }
   template <class Iterator> inline QString propertyNameFrom(Iterator i) { return i->first; }
   template <class Iterator> inline QVariant propertyValueFrom(Iterator i) { return i->second; }
-  /// @endcond
+  /// @endhide
   
   /**
    * Sets many properties in a bunch. Properties will be set in
@@ -220,7 +220,7 @@ namespace Pii
   /**
    * Converts a list of QVariant objects into a QList of type `T`.
    *
-   * ~~~
+   * ~~~(c++)
    * QVariantList lst;
    * lst << 1.0 << 2.3;
    * QList<double> dLst = Pii::variantsToList<double>(lst);
@@ -267,7 +267,7 @@ namespace Pii
   /**
    * Convert a list of QVariant objects into a QVector of type `T`.
    *
-   * ~~~
+   * ~~~(c++)
    * QVariantList lst;
    * lst << 1.0 << 2.3;
    * QVector<double> dLst = Pii::variantsToVector<double>(lst);
@@ -284,7 +284,7 @@ namespace Pii
   /**
    * Randomize the order of elements in a collection.
    *
-   * ~~~
+   * ~~~(c++)
    * QList<int> lst;
    * lst << 1 << 2 << 3;
    * Pii::shuffle(lst);
@@ -301,7 +301,7 @@ namespace Pii
    * *max*. This function can be used to take a random sample of a
    * collection.
    *
-   * ~~~
+   * ~~~(c++)
    * QStringList lstNames;
    * lstNames << "foo" << "bar" << "etc";
    * QVector<int> indices = Pii::selectRandomly(2, lstNames.size());
@@ -317,7 +317,6 @@ namespace Pii
   QVector<int> PII_CORE_EXPORT selectRandomly(int n, int max);
 
   /**
-   * @overload
    *
    * Randomly selects *n* distinct integers in [0, max-1] and stores
    * them to *indices*. This version is better suited for selecting a
@@ -330,7 +329,7 @@ namespace Pii
    * *target*. The `Collection` type must have size() and append()
    * member functions defined.
    *
-   * ~~~
+   * ~~~(c++)
    * QStringList lstNames;
    * lstNames << "foo" << "bar" << "etc";
    * QStringList selected;
@@ -351,7 +350,7 @@ namespace Pii
    * parameter is specified, only parents matching the given type are
    * returned.
    *
-   * ~~~
+   * ~~~(c++)
    * QList<MyObj*> parents = Pii::findAllParents<MyObj*>(obj);
    * // Returns all parents of obj whose type is MyObj*
    * ~~~
@@ -374,7 +373,7 @@ namespace Pii
   /**
    * Returns `true` if *obj* is an instance of *className*.
    *
-   * ~~~
+   * ~~~(c++)
    * QObject* pWidget = new QWidget;
    * Pii::isA("QWidget", pWidget); // true
    * Pii::isA("QFrame", pWidget); // false
@@ -455,7 +454,7 @@ namespace Pii
    * all of its fields match. A set of rules matches if any of its
    * rules matches.
    *
-   * ~~~
+   * ~~~(c++)
    * // Returns true during the first minute after midnight every day and
    * // 4:00-6:00 on the first day of every month
    * matchCrontab(QStringList() <<
@@ -512,7 +511,7 @@ namespace Pii
    * that are preceded by an odd number of *escape* characters. If
    * the separator is not found, returns -1.
    *
-   * ~~~
+   * ~~~(c++)
    * Pii::findSeparator("\"Test \\"string\"", '"', 1); // returns 14
    * ~~~
    */
@@ -521,7 +520,7 @@ namespace Pii
   /**
    * Splits a string in which each part may be quoted.
    *
-   * ~~~
+   * ~~~(c++)
    * Pii::splitQuoted("\"a,b,c\",d,e"); // returns ("a,b,c", "d", "e")
    * ~~~
    */
@@ -548,7 +547,7 @@ namespace Pii
    *
    * @return a map of name-value pairs
    *
-   * ~~~
+   * ~~~(c++)
    * QVariantMap props = Pii::decodeProperties("color: #fff;font-size: 5pt", ';', ':');
    * // props now has two values:
    * // "color" -> "#fff"
@@ -571,7 +570,7 @@ namespace Pii
    * @param variables a map of variable values. This can be any type
    * that defines `QString operator[] (const QString&)`.
    *
-   * ~~~
+   * ~~~(c++)
    * QMap<QString,QString> mapVariables;
    * mapVariables["foo"] = "bar";
    * mapVariables["bar"] = "foo";
@@ -604,7 +603,7 @@ namespace Pii
    *
    * @return the real name of the property or 0 if no such property exists
    *
-   * ~~~
+   * ~~~(c++)
    * QObject obj;
    * const char* objName = Pii::propertyName(obj, "objectname");
    * // returns "objectName"
@@ -627,13 +626,13 @@ namespace Pii
    *
    * @param commentMark ignore values starting with this string
    *
-   * ~~~
+   * ~~~(c++)
    * // Read properties from an ini file (case-sensitive)
    * QSettings settings(configFile, QSettings::IniFormat);
    * Pii::setProperties(obj, settings.childKeys(), settings);
    * ~~~
    *
-   * ~~~
+   * ~~~(c++)
    * // Read string-encoded properties (case-insensitive)
    * QVariantMap properties = Pii::decodeProperties("objectname=foobar\n"
    *                                                "//comment, ignored");
@@ -689,7 +688,7 @@ namespace Pii
    * QString::toDouble() and friends in that it recognizes magnitude
    * suffices.
    *
-   * ~~~
+   * ~~~(c++)
    * Pii::toDouble("10k"); // returns 10000
    * Pii::toDouble("-2M"); // returns -2000000
    * Pii::toDouble("1.2m"); // returns 0.0012
@@ -778,7 +777,7 @@ namespace Pii
    * each entry contains a list of indices that were chained. Each
    * list is sorted in ascending order.
    *
-   * ~~~
+   * ~~~(c++)
    * QLinkedList<QPair<int,int> > lstPairs;
    * lstPairs << qMakePair(0,1) << qMakePair(0,3) << qMakePair(0,4) << qMakePair(3,4) << qMakePair(3,5);
    * lstPairs << qMakePair(2,6) << qMakePair(6,8) << qMakePair(7,8);

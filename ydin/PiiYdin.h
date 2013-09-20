@@ -100,7 +100,7 @@ namespace PiiYdin
    * to plug-ins, operations, and their interconnections. A couple of
    * useful searches are shown in the example below:
    *
-   * ~~~
+   * ~~~(c++)
    * PiiResourceDatabase* db = PiiYdin::resourceDatabase();
    * using namespace Pii;
    * // Find all operations

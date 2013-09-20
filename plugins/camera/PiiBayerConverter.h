@@ -28,12 +28,12 @@ namespace PiiCamera
    *
    * Normally, the Bayer pattern is like this (RGGB):
    *
-@verbatim
-RGRGRGRG
-GBGBGBGB
-RGRGRGRG
-GBGBGBGB
-@endverbatim
+   * ~~~
+   * RGRGRGRG
+   * GBGBGBGB
+   * RGRGRGRG
+   * GBGBGBGB
+   * ~~~
    *
    * The name of the pattern is composed of the names of color
    * channels forming a 2-by-2 square of pixels. For example, GRBG
@@ -378,7 +378,7 @@ GBGBGBGB
    * of `encoded`. If the input matrix is smaller than 2x2, no
    * conversion will be done.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<unsigned char> encoded;
    *
    * // Convert to four-channel RGB

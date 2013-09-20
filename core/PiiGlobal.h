@@ -24,7 +24,7 @@
  */
 
 // Disable documentation
-/// @cond null
+/// @hide
 
 #define INTO_VERSION_STR "2.0.0-beta-3"
 #define INTO_VERSION 0x02000003
@@ -158,7 +158,7 @@ template <class Derived> struct PiiSharedD
 #include "PiiValueSet.h"
 #include "PiiLog.h"
 #include "PiiSynchronized.h"
-/// @endcond
+/// @endhide
 
 namespace Pii
 {

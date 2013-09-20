@@ -41,7 +41,7 @@
  * http://localhost:3142/myClass/functions/hello would return "Hello,
  * Finland!".
  *
- * ~~~
+ * ~~~(c++)
  * class MyClass
  * {
  * public:
@@ -76,69 +76,69 @@
  * "/", "/functions/", "/channels/", or "/callbacks/" returns a list
  * of sub-URIs available at the requested location.
  *
-@verbatim
-GET /myClass/ HTTP/1.1
-@endverbatim
+ * ~~~
+ * GET /myClass/ HTTP/1.1
+ * ~~~
  *
  * Response:
  *
-@verbatim
-HTTP/1.1 200 OK
-Content-Type: text/plain
-Content-Length: 25
-
-functions/
-channels/
-ping
-@endverbatim
+ * ~~~
+ * HTTP/1.1 200 OK
+ * Content-Type: text/plain
+ * Content-Length: 25
+ * 
+ * functions/
+ * channels/
+ * ping
+ * ~~~
  *
  *
  * A GET request to "/functions/" lists all callable functions:
  *
-@verbatim
-GET /myClass/functions/ HTTP/1.1
-@endverbatim
+ * ~~~
+ * GET /myClass/functions/ HTTP/1.1
+ * ~~~
  *
  * Response:
  *
-@verbatim
-HTTP/1.1 200 OK
-Content-Type: text/plain
-Content-Length: 44
-
-QString hello()
-int plus(int,int)
-voidFunc()
-@endverbatim
+ * ~~~
+ * HTTP/1.1 200 OK
+ * Content-Type: text/plain
+ * Content-Length: 44
+ * 
+ * QString hello()
+ * int plus(int,int)
+ * voidFunc()
+ * ~~~
  *
  * A call to a function with no parameters is a simple GET request:
  *
-@verbatim
-GET /myClass/functions/voidFunc HTTP/1.1
-@endverbatim
+ * ~~~
+ * GET /myClass/functions/voidFunc HTTP/1.1
+ * ~~~
  *
  * Note that the Host header is not necessary, although HTTP 1.1
  * dictates one. The response is equally simple (no return value):
  *
-@verbatim
-HTTP/1.1 200 OK
-Content-Length: 0
-@endverbatim
+ * ~~~
+ * HTTP/1.1 200 OK
+ * Content-Length: 0
+ * ~~~
  *
  * If the function has parameters, they can be specified in the URI:
  *
-@value
-GET /myClass/functions/plus?a=1&b=2 HTTP/1.1
-@endverbatim
+ * ~~~
+ * GET /myClass/functions/plus?a=1&b=2 HTTP/1.1
+ * ~~~
  *
  * The server requires that parameters are given in the order they are
  * declared in the function signature. It ignores the parameter name,
  * which can therefore be omitted. Therefore, the example above is
  * equivalent to:
  *
-@verbatim
-GET /myClass/functions/plus?1&2 HTTP/1.1
-@endverbatim
+ * ~~~
+ * GET /myClass/functions/plus?1&2 HTTP/1.1
+ * ~~~
  *
  * Parameters are automatically decoded using @ref
  * PiiHttpDevice::decodeVariant(). If the function has a return value,
@@ -166,33 +166,33 @@ GET /myClass/functions/plus?1&2 HTTP/1.1
  * requesting socket will be left open, and the server pushes new data
  * to it when needed.
  *
-@verbatim
-GET /myClass/channels/new HTTP/1.1
-@endverbatim
+ * ~~~
+ * GET /myClass/channels/new HTTP/1.1
+ * ~~~
  *
  * Response:
  *
-@verbatim
-HTTP/1.1 200 OK
-Content-Type: multipart/mixed-replace; boundary="ural"
-
-4A40938-2229-9F31-D008-2EFA98EC4E6C
---ural
-X-ID: callbacks/callback(QString)
-Content-Length: 17
-
-Callback invoked.
---ural
-...
-@endverbatim
+ * ~~~
+ * HTTP/1.1 200 OK
+ * Content-Type: multipart/mixed-replace; boundary="ural"
+ * 
+ * 4A40938-2229-9F31-D008-2EFA98EC4E6C
+ * --ural
+ * X-ID: callbacks/callback(QString)
+ * Content-Length: 17
+ * 
+ * Callback invoked.
+ * --ural
+ * ...
+ * ~~~
  *
  * Now that the channel has been set up, one can add pushable sources
  * to the channel. To request the server to push a source called
  * "callback" to the channel, the following request must be made:
  *
-@verbatim
-GET /channels/4A40938-2229-9F31-D008-2EFA98EC4E6C/connect?callbacks/callback(QString) HTTP/1.1
-@endverbatim
+ * ~~~
+ * GET /channels/4A40938-2229-9F31-D008-2EFA98EC4E6C/connect?callbacks/callback(QString) HTTP/1.1
+ * ~~~
  *
  * The request must have one paratemer that identifies the pushable
  * source. Usually, a URI relative to the server's root is used. A
@@ -285,7 +285,7 @@ public:
    * because different overloads of the same function may have
    * different safety levels.
    *
-   * ~~~
+   * ~~~(c++)
    * pObjectServer->setFunctionSafetyLevel("plus(int,int)", PiiObjectServer::AccessFromMainThread);
    * ~~~
    */
@@ -316,7 +316,7 @@ public:
    * @param func the function to be called. Passed as a function
    * pointer.
    *
-   * ~~~
+   * ~~~(c++)
    * pObjectServer->addFunction("func", &myClass, &MyClass::func);
    * ~~~
    */
@@ -419,7 +419,7 @@ public:
    * could not be encoded.
    */
   
-  /// @cond null
+  /// @hide
   template <class R> R callBack(const QString& function)
   {
     QVariantList lstParams;
@@ -433,7 +433,7 @@ public:
   PII_CREATE_REMOTE_CALLBACK(6, (P1,P2,P3,P4,P5,P6))
   PII_CREATE_REMOTE_CALLBACK(7, (P1,P2,P3,P4,P5,P6,P7))
   PII_CREATE_REMOTE_CALLBACK(8, (P1,P2,P3,P4,P5,P6,P7,P8))
-  /// @endcond
+  /// @endhide
 
   QVariant callBackList(const QString& function, QVariantList& params);
 
@@ -457,11 +457,11 @@ protected:
     bool enqueuePushData(const QString& sourceId, const QByteArray& data);
 
   protected:
-    /// @cond null
+    /// @hide
     mutable QMutex _queueMutex;
     QWaitCondition _queueCondition, _pushEndCondition;
     QQueue<QPair<QString,QByteArray> > _dataQueue;
-    /// @endcond
+    /// @endhide
   };
 
   /// @internal

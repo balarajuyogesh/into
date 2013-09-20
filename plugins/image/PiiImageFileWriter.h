@@ -144,7 +144,7 @@ class PII_IMAGE_EXPORT PiiImageFileWriter : public PiiDefaultOperation
    * To safely read the images written by PiiImageFileWriter, do the
    * following (the C way):
    *
-   * ~~~
+   * ~~~(c++)
    * int handle = open("image.jpg", O_RDONLY);
    * // Acquire a shared (read) lock for the file.
    * // This call blocks until the file is available.
@@ -158,7 +158,7 @@ class PII_IMAGE_EXPORT PiiImageFileWriter : public PiiDefaultOperation
    *
    * The %Qt way:
    *
-   * ~~~
+   * ~~~(c++)
    * QFile f("image.jpg");
    * f.open(QIODevice::ReadOnly);
    * flock(f.handle(), LOCK_SH);

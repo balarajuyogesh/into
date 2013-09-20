@@ -49,7 +49,7 @@ public:
 
   ~PiiRemoteMetaObject();
   
-  /// @cond null
+  /// @hide
   void connectSignal(const char* signal);
   void disconnectSignal(const char* signal);
 
@@ -88,7 +88,7 @@ protected:
 
   class Data;
   PII_UNSAFE_D_FUNC;
-  /// @endcond
+  /// @endhide
 
   void decodePushedData(const QString& sourceId, const QByteArray& data);
   void serverUriChanged(const QString& serverUri);

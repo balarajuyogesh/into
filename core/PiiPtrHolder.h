@@ -19,7 +19,7 @@
 #include "Pii.h"
 #include "PiiSharedObject.h"
 
-/// @cond null
+/// @hide
 
 /**
  * A reference counting wrapper for any pointer type. The PiiPtrHolder
@@ -62,6 +62,6 @@ private:
   PII_DISABLE_COPY(PiiPtrHolder);
 };
 
-/// @endcond
+/// @endhide
 
 #endif //_PIIPTRHOLDER_H

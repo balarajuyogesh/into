@@ -77,7 +77,7 @@ public:
    * address is not valid. The pointer is still owned by
    * PiiHttpServer; you must not delete it yourself.
    *
-   * ~~~
+   * ~~~(c++)
    * // Create a HTTPS server (0.0.0.0 binds to all network interfaces)
    * PiiFileSystemUriHandler handler("/var/www/securehtml");
    * PiiHttpServer* server = PiiHttpServer::addServer("secure", "ssl://0.0.0.0:443/");
@@ -94,7 +94,6 @@ public:
   static PiiHttpServer* addServer(const QString& serverName, const QString& address);
 
   /**
-   * @overload
    *
    * Same as addServer("", address).
    */

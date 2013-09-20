@@ -121,9 +121,8 @@ template <> const PiiMetaObject* CLASS_NAME::Template<TYPE >::piiMetaObject() co
 } namespace PiiDummy {}
 
 /**
- * Same as @ref
- * PII_DEFINE_SPECIALIZED_VIRTUAL_METAOBJECT_FUNCTION_NAMED, but uses
- * `CLASS_NAME`<TYPE> as the name of the type.
+ * Same as [PII_DEFINE_SPECIALIZED_VIRTUAL_METAOBJECT_FUNCTION_NAMED],
+ * but uses `CLASS_NAME<TYPE>` as the name of the type.
  */
 #define PII_DEFINE_SPECIALIZED_VIRTUAL_METAOBJECT_FUNCTION(CLASS_NAME, TYPE) \
   PII_DEFINE_SPECIALIZED_VIRTUAL_METAOBJECT_FUNCTION_NAMED(CLASS_NAME, TYPE, TYPE)
@@ -134,7 +133,7 @@ template <> const PiiMetaObject* CLASS_NAME::Template<TYPE >::piiMetaObject() co
  * to an instance of PiiDefaultMetaObject instantiated for the type of
  * this object.
  *
- * ~~~
+ * ~~~(c++)
  * class MyClass
  * {
  *   PII_VIRTUAL_METAOBJECT_FUNCTION

@@ -27,13 +27,13 @@
  * integers. Assume you have separated the color channels of a 2-by-2
  * RGB image like this:
  *
-@verbatim
-  R     G     B
-+---+ +---+ +---+
-|0 1| |1 0| |3 2|
-|2 3| |2 3| |0 1|
-+---+ +---+ +---+
-@endverbatim
+ * ~~~
+ *   R     G     B
+ * +---+ +---+ +---+
+ * |0 1| |1 0| |3 2|
+ * |2 3| |2 3| |0 1|
+ * +---+ +---+ +---+
+ * ~~~
  *
  * Assume also that the maximum value for each channel is 3, i.e. 
  * there are 4 distinct values. The length of the resulting histogram
@@ -69,7 +69,7 @@ class PiiMultiVariableHistogram : public PiiDefaultOperation
    * A quantization level for each dimension. In the example above,
    * this list would have been created like this:
    *
-   * ~~~
+   * ~~~(c++)
    * histogram->setProperty("levels", QVariantList() << 4 << 4 << 4);
    * ~~~
    *
@@ -93,7 +93,7 @@ class PiiMultiVariableHistogram : public PiiDefaultOperation
    * If the RGB images in the example above had 256 levels, one should
    * scale the input channels down:
    *
-   * ~~~
+   * ~~~(c++)
    * histogram->setProperty("scales", QVariantList() << 4.0/256 << 4.0/256 << 4.0/256);
    * ~~~
    */

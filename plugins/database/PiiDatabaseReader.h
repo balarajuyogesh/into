@@ -59,7 +59,7 @@ class PiiDatabaseReader : public PiiDatabaseOperation
    *
    * To create two outputs, do this:
    *
-   * ~~~
+   * ~~~(c++)
    * reader->setProperty("columnNames", QStringList() << "filename" << "objects");
    * ~~~
    */
@@ -71,7 +71,7 @@ class PiiDatabaseReader : public PiiDatabaseOperation
    * input, the `defaultValues` map will also be used to determine
    * the type of the data field.
    *
-   * ~~~
+   * ~~~(c++)
    * QVariantMap values;
    * values["filename"] = "N/A";
    * values["objects"] = 0;

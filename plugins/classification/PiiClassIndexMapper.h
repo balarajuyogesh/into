@@ -32,7 +32,7 @@
  * we need to map 1 and 2 to 2 and 3 to retain the old indices. Here's
  * how:
  *
- * ~~~
+ * ~~~(c++)
  * PiiOperation* mapper = engine.createOperation("PiiClassIndexMapper");
  * mapper->setProperty("classIndexMap", QVariantList() << 0 << 2 << 3);
  * ~~~
@@ -41,7 +41,7 @@
  * classes. Let us assume that we later changed the order of classes 0
  * and 2. Here's what we need to do:
  *
- * ~~~
+ * ~~~(c++)
  * // The normal stuff for converting class indices
  * mapper->setProperty("classIndexMap", QVariantList() << 2 << 0 << 3);
  *
@@ -58,7 +58,7 @@
  * It is also possible to map multiple indices into one but still
  * include the class information only once. Here's how:
  *
- * ~~~
+ * ~~~(c++)
  * // Mapping table:
  * // 0-2 -> 1
  * // 3   -> 5
@@ -138,7 +138,7 @@ class PiiClassIndexMapper : public PiiDefaultOperation
    * input index is below zero or exceeds the size of the class index
    * map, zero will be emitted.
    *
-   * ~~~
+   * ~~~(c++)
    * // Map zero to one and one to zero
    * mapper->setProperty("classIndexMap", QVariantList() << 1 << 0);
    * ~~~

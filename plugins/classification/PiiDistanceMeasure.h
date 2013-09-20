@@ -43,7 +43,7 @@ template <class FeatureIterator> double NAME<FeatureIterator>::operator() (Featu
  * Type definition for a polymorphic implementation of the function
  * object *MEASURE*.
  *
- * ~~~
+ * ~~~(c++)
  * PiiDistanceMeasure<ConstFeatureIterator>* pMeasure = new PII_POLYMORPHIC_MEASURE(PiiHistogramIntersection);
  * ~~~
  */

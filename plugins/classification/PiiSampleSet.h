@@ -104,7 +104,6 @@ namespace PiiSampleSet
    * Returns the sample at *index*.
    */
   template <class T> inline const T* sampleAt(const PiiMatrix<T>& samples, int index) { return samples[index]; }
-  /// @overload
   template <class T> inline T* sampleAt(PiiMatrix<T>& samples, int index) { return samples[index]; }
 
   /**

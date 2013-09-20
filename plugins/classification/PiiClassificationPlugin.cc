@@ -22,9 +22,6 @@
 #include "PiiConfusionMatrixBuilder.h"
 #include "PiiSampleRandomizer.h"
 #include "PiiSomOperation.h"
-#include "PiiVisualTrainer.h"
-#include "PiiVisualSomOperation.h"
-#include "PiiVisualSomClassifier.h"
 #include "PiiBoostClassifierOperation.h"
 
 // Distance measures

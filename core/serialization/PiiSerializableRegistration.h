@@ -20,7 +20,7 @@
  * this file. The most straightforward way of making your class
  * serializable is as follows:
  *
- * ~~~
+ * ~~~(c++)
  * class MyClass
  * {
  *   friend class Piiserialization::Accessor;
@@ -115,7 +115,7 @@
  * The following example shows how to register an abstract class that
  * will be linked to an application from a dynamic library.
  *
- * ~~~
+ * ~~~(c++)
  * // In PiiOperation.h
  * #define PII_SERIALIZABLE_CLASS PiiOperation
  * #define PII_SERIALIZABLE_IS_ABSTRACT
@@ -139,7 +139,7 @@
  *
  * An example of registering a template instance:
  *
- * ~~~
+ * ~~~(c++)
  * template <class T1, class T2> class MyClass
  * {
  *   friend class Piiserialization::Accessor;

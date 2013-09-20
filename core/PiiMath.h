@@ -74,7 +74,7 @@ namespace Pii
    * tolerance. This function is useful if one needs to compare
    * matrices with floating-point values.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<double> mat1(1,1, 1.0), mat2(1,1, 1.01);
    * Pii::almostEqual(mat1, mat2, 0.1); //returns true
    * ~~~
@@ -118,9 +118,6 @@ namespace Pii
    *
    * @param vector a random-access iterator to the beginning of the
    * diagonal values. Must be valid for at least min(m,n) entries.
-   *
-   * ~~~
-   * ~~~
    */
   template <class Matrix, class Iterator>
   void setDiagonal(Matrix& matrix,
@@ -314,7 +311,7 @@ namespace Pii
    * ! This function retains the input type and its signedness. 
    * Behavior is different from `std::abs` for some types.
    *
-   * ~~~
+   * ~~~(c++)
    * char a = -128;
    * // char(128) = char(-128)
    * int b = Pii::abs(a); //b == -128
@@ -499,7 +496,6 @@ namespace Pii
     return (std::sqrt(static_cast<double>(value)));
   }
 
-  /// @overload
   inline float sqrt(float value)
   {
 #ifdef __USE_ISOC99
@@ -517,7 +513,6 @@ namespace Pii
     return ::sin(static_cast<double>(value));
   }
 
-  /// @overload
   inline float sin(float value)
   {
 #ifdef __USE_ISOC99
@@ -527,13 +522,11 @@ namespace Pii
 #endif
   }
 
-  /// @overload
   template <class T> inline double asin(T value)
   {
     return ::asin(static_cast<double>(value));
   }
 
-  /// @overload
   inline float asin(float value)
   {
 #ifdef __USE_ISOC99
@@ -551,7 +544,6 @@ namespace Pii
     return ::cos(static_cast<double>(value));
   }
 
-  /// @overload
   inline float cos(float value)
   {
 #ifdef __USE_ISOC99
@@ -561,13 +553,11 @@ namespace Pii
 #endif
   }
 
-  /// @overload
   template <class T> inline double acos(T value)
   {
     return ::acos(static_cast<double>(value));
   }
 
-  /// @overload
   inline float acos(float value)
   {
 #ifdef __USE_ISOC99
@@ -585,7 +575,6 @@ namespace Pii
     return ::tan(static_cast<double>(value));
   }
 
-  /// @overload
   inline float tan(float value)
   {
 #ifdef __USE_ISOC99
@@ -595,13 +584,11 @@ namespace Pii
 #endif
   }
 
-  /// @overload
   template <class T> inline double atan(T value)
   {
     return ::atan(static_cast<double>(value));
   }
 
-  /// @overload
   inline float atan(float value)
   {
 #ifdef __USE_ISOC99
@@ -628,7 +615,7 @@ namespace Pii
    * Rounds *value* (of type `T`) to the closest integer and returns
    * the result as another type (`U`).
    *
-   * ~~~
+   * ~~~(c++)
    * int i = Pii::round<int>(1.5); // returns 2
    * ~~~
    */
@@ -645,7 +632,6 @@ namespace Pii
     return ::ceil(value);
   }
 
-  /// @overload
   inline float ceil(float value)
   {
 #ifdef __USE_ISOC99
@@ -663,7 +649,6 @@ namespace Pii
     return ::floor(value);
   }
 
-  /// @overload
   inline float floor(float value)
   {
 #ifdef __USE_ISOC99
@@ -678,7 +663,7 @@ namespace Pii
    * can be used in folding a floating point number to a predefined
    * range. Its most typical use is in handling angles.
    *
-   * ~~~
+   * ~~~(c++)
    * double dAngle = Pii::mod(M_PI*3, M_PI*2); // returns M_PI
    * ~~~
    */
@@ -693,7 +678,7 @@ namespace Pii
    * the sum over unsigned char matrices may require an integer output
    * type.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> A(2 , 2,
    *                  1 , 2,
    *                  -1,-2);
@@ -742,7 +727,7 @@ namespace Pii
    *
    * @param mode calculation mode
    *
-   * ~~~
+   * ~~~(c++)
    * using namespace Pii;
    *
    * PiiMatrix<int> mat;
@@ -786,7 +771,7 @@ namespace Pii
    *
    * @param mode calculation mode
    *
-   * ~~~
+   * ~~~(c++)
    * using namespace Pii;
    *
    * PiiMatrix<int> matrix(3,3,
@@ -824,7 +809,7 @@ namespace Pii
    * be different from the input type. For example, the sum over
    * unsigned char matrices may require an integer output type.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> A(2 , 2,
    *                  1 , 2,
    *                  -1,-2);
@@ -851,19 +836,19 @@ namespace Pii
    * example below, three is used as the window size in both
    * directions.
    *
-@verbatim
-Original   Cumulative sum (input)
-
-           0  0  0  0
-1 2 3      0  1  3  6 
-2 3 4  ->  0  3  8  15  
-3 4 5      0  6  15 27
-
-Upper left:
-(8 + 0 - 0 - 0) / 4 = 2
-Lower right:
-(27 + 1 - 6 - 6) / 4 = 4
-@endverbatim
+   * ~~~
+   * Original   Cumulative sum (input)
+   * 
+   *            0  0  0  0
+   * 1 2 3      0  1  3  6 
+   * 2 3 4  ->  0  3  8  15  
+   * 3 4 5      0  6  15 27
+   * 
+   * Upper left:
+   * (8 + 0 - 0 - 0) / 4 = 2
+   * Lower right:
+   * (27 + 1 - 6 - 6) / 4 = 4
+   * ~~~
    *
    * The calculation time is independent of the size of the averaging
    * window.
@@ -877,7 +862,7 @@ Lower right:
    * @param windowColumns the horizontal size of the averaging window.
    * If this value is non-positive, `windowRows` will be used.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> matSum = cumulativeSum<int>(matInput, ZeroBorderCumulativeSum);
    * // Calculate mean as float
    * PiiMatrix<float> matSmooth = fastMovingAverage<float>(matSum, 7);
@@ -901,7 +886,7 @@ Lower right:
    *
    * @param windowSize the size of the averaging window.
    *
-   * ~~~
+   * ~~~(c++)
    * int aInput[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
    * double aOutput[8];
    * Pii::fastMovingAverage(aInput, iCnt, aOutput, 5);
@@ -929,7 +914,7 @@ Lower right:
    * `U`. The type U must be capable of storing the sum of all entries
    * in *mat*.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(1,2, 1, 0);
    * double mean = Pii::mean<double>(mat); //returns 0.5
    * ~~~
@@ -1015,7 +1000,7 @@ Lower right:
   /**
    * Find `cnt` largest values in `mat`.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(5,5); // Assume this is non-zero
    * PiiHeap<PiiMatrixValue<int> > maxima = Pii::findMaxima(mat, 5);
    * // maxima now contains the five largest values in mat
@@ -1092,7 +1077,7 @@ Lower right:
    * @param k is ordinal number. ! now k = 0 means smallest, k = 1
    * second smallest etc. 
    *
-   * ~~~
+   * ~~~(c++)
    * int array[8] = {0,2,3,9,4,5,6,8};
    * int element = Pii::kthSmallest<int>(array, 8, 2);
    * //now element is 3. 
@@ -1117,7 +1102,7 @@ Lower right:
    * 
    * @returns index to pivot value
    *
-   * ~~~
+   * ~~~(c++)
    * int array[10] = {1,4,0,5,2,3,7,6,8,9};
    * int value = 3;
    * int k = Pii::partition<int>(array, 10, 5);
@@ -1137,7 +1122,7 @@ Lower right:
    *
    * @param size is length of array.
    *
-   * ~~~
+   * ~~~(c++)
    * int array[10] = {1,3,2,0,4,5,7,6,9,8};
    * Pii::insertionSort<int>(array, 10);
    * //Now array elements are order :  0,1,2,3,4,5,6,7,8,9
@@ -1154,10 +1139,9 @@ Lower right:
    *
    * @param mu is distribution expected value.
    *
-   * @param sigma is variance of distribution. ! sigma is @f$
-   * \sigma \( not a \) \sigma^2 @f$.
+   * @param sigma is variance of distribution. Note that sigma is
+   * \(\sigma\), not \(\sigma^2\).
    */
-  
   template <class T> T gaussian(T x, double mu, double sigma);
 
   /**
@@ -1255,7 +1239,7 @@ Lower right:
    * Specifically, the size will be decreased `step`*order elements
    * in the calculation direction.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> a(2,4,
    *                  1,   2,  4,   8,
    *                  16, 32, 64, 128);
@@ -1286,7 +1270,7 @@ Lower right:
    *
    * Remember to provide the result type as a template parameter.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> input(3,5,
    *                      1,2,3,2,0,
    *                      1,3,2,2,1,
@@ -1310,10 +1294,10 @@ Lower right:
    * @param mat the input matrix.
    *
    * @param cnt the maximum number of indices returned. Zero means
-   * all, a negative value means "all but the @p -cnt last ones". That
+   * all, a negative value means "all but the *-cnt* last ones". That
    * is, a negative value omits the last non-zero entries.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(3,3,
    *                    1,2,3
    *                    4,5,6,
@@ -1338,10 +1322,10 @@ Lower right:
    * result of a comparison operator as in find(mat > 1).
    *
    * @param cnt the maximum number of indices returned. Zero means
-   * all, a negative value means "all but the @p -cnt last ones". That
+   * all, a negative value means "all but the *-cnt* last ones". That
    * is, a negative value omits the last non-zero entries.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(3,3,
    *                    1,2,3
    *                    4,5,6,
@@ -1477,7 +1461,7 @@ Lower right:
    * @param output an output iterator that must be able to hold at
    * least matrix.rows() elements.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(4,3,
    *                    1,2,3,
    *                    4,5,6,
@@ -1518,7 +1502,7 @@ Lower right:
    * @param output an output iterator that must be able to hold at
    * least matrix.columns() elements.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(4,3,
    *                    1,2,3,
    *                    4,5,6,
@@ -1559,7 +1543,7 @@ Lower right:
    *
    * @param func the binary function to apply
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(3,3,
    *                    1,2,3,
    *                    4,5,6,
@@ -1589,7 +1573,6 @@ Lower right:
   }
 
   /**
-   * @overload
    * Returns a new matrix.
    */
   template <class Matrix, class InputIterator, class BinaryFunction>
@@ -1613,7 +1596,7 @@ Lower right:
    *
    * @param func the binary function to apply
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(3,3,
    *                    1,2,3,
    *                    4,5,6,
@@ -1643,7 +1626,6 @@ Lower right:
   }
 
   /**
-   * @overload
    * Returns a new matrix.
    */
   template <class Matrix, class InputIterator, class BinaryFunction>
@@ -1683,7 +1665,7 @@ Lower right:
    * Applies the unary function *func* to all elements of *matrix*. 
    * Returns *matrix*.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> matInput(1, 3, -1, 2, 3);
    * // Negate all numbers
    * Pii::mapMatrixIf(matInput, std::negate<int>());
@@ -1724,7 +1706,7 @@ Lower right:
    *
    * @param func the operation to apply to matched elements
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> matInput(1, 3, -1, 2, 3);
    * // Negate all positive numbers
    * Pii::mapMatrixIf(matInput,
@@ -1781,7 +1763,6 @@ Lower right:
                                MatrixDirection direction = Horizontally);
 
   /**
-   * @overload
    *
    * @param storage an array/vector of `ints` with space for at least
    * `k` elements to store the current combination. The algorithm
@@ -1798,7 +1779,7 @@ Lower right:
    * input. The current combination is stored in the `k` first
    * elements in the array.
    *
-   * ~~~
+   * ~~~(c++)
    * void function(const int* c)
    * {
    *   cout << "[" << c[0] << " " << c[1] << " " << c[2] << "]\n";
@@ -1815,7 +1796,7 @@ Lower right:
    * // [ 0 1 ]
    * ~~~
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> combinations(0,2);
    * // Find all combinations of 2 elements among 5 elements. Store
    * // the combinations as rows into the combinations matrix.
@@ -1838,7 +1819,7 @@ Lower right:
    * ! Be sure not to pass arguments as copy if you intend to use
    * a reference:
    *
-   * ~~~
+   * ~~~(c++)
    * struct Combinator
    * {
    *   Combinator() : counter(0) {}
@@ -1863,7 +1844,6 @@ Lower right:
   }
 
   /**
-   * @overload
    *
    * @param storage an array/vector with space for at least `k`
    * elements to store the current permutation. The algorithm will use
@@ -1877,7 +1857,7 @@ Lower right:
    * different permutations for `n` elements is n!. Works analogously
    * to combinations().
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> permutations(0,3);
    * Pii::permutations(3, Pii::RowAdder<int>(permutations));
    *
@@ -1949,7 +1929,7 @@ Lower right:
    * ! The data type used in calculating the local sum is the 
    * `argument_type` of the given unary function object.
    *
-   * ~~~
+   * ~~~(c++)
    * float data[5] = { 1, 2, 3, 4, 5 };
    *
    * // Calculate moving average over three neighbors
@@ -1983,7 +1963,7 @@ Lower right:
    * The `CalculationType` template parameter determines the
    * intermediate type used to calculate the sum.
    *
-   * ~~~
+   * ~~~(c++)
    * unsigned char data[2] = { 128, 128 };
    * Pii::movingAverage<unsigned int>(data, data+2, 2);
    * // data = 126, 64
@@ -2014,7 +1994,7 @@ Lower right:
    * matrix with the same number of columns. If `width` is too large,
    * an empty matrix will be returned.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> input(4,4,
    *                      1,2,3,4,
    *                      3,4,5,6,
@@ -2238,7 +2218,7 @@ Lower right:
    * @exception PiiInvalidArgumentException& input arguments are
    * illegally formed.
    *
-   * ~~~
+   * ~~~(c++)
    * // y = -2x^2 + 3.5x - 1
    * // y2 = -1.75x^2 + 3.25x - 1
    * PiiMatrix<double> coeffs = Pii::fitPolynomial(2,
@@ -2265,7 +2245,7 @@ Lower right:
    * ! The numerical accuracy of the algorithm can be improved by
    * normalizing x coordinates before calling this function:
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<double> x(1,100);
    * // ... fill x somehow ...
    * x = (x - Pii::mean<double>(x)) / Pii::std<double>(x);
@@ -2280,8 +2260,8 @@ Lower right:
   /**
    * Returns the value of the inverse normal cumulative distribution
    * function (a.k.a the error function, erf) at *p*. The absolute
-   * value of the relative error is less than @f$1.15 \times
-   * 10^{-9}@f$ in the entire region.
+   * value of the relative error is less than \(1.15 \times 10^{-9}\)
+   * in the entire region.
    *
    * @param p a probability, in the range [0,1]
    *
@@ -2318,7 +2298,7 @@ Lower right:
   /**
    * Returns the squared geometric distance between two vectors.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(2, 2,
    *                    1, 2,
    *                    2, 3);
@@ -2412,12 +2392,12 @@ template <class T> inline PiiMatrix<T>& operator/= (PiiMatrix<T>& mat1, const Pi
 #include "PiiMath-templates.h"
 #include "PiiMathFunctional.h"
 
-/// @cond null
+/// @hide
 #define PII_MATH_MATRIX_TRANSFORM(FUNCTION, CLASS) \
   template <class Matrix> inline PiiUnaryMatrixTransform<Matrix, CLASS<typename Matrix::value_type> > \
   FUNCTION(const PiiConceptualMatrix<Matrix>& mat) \
   { return unaryMatrixTransform(mat.selfRef(), CLASS<typename Matrix::value_type>()); } namespace PiiDummy {}
-/// @endcond
+/// @endhide
 
 // Functions that depend on math functionals
 namespace Pii
@@ -2516,7 +2496,7 @@ namespace Pii
    * Rounds all values in a matrix to the closest integer. Returns a
    * new matrix that has the same type as the input.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<double> a(2, 2,
    *                     1.1, 2.1,
    *                     3.5, 4.9);
@@ -2531,7 +2511,7 @@ namespace Pii
    * Rounds all values in a matrix to the closest integer. Returns a
    * new matrix with a type given as the first template parameter.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<double> a(2, 2,
    *                     1.1, 2.1,
    *                     3.5, 4.9);
@@ -2760,21 +2740,21 @@ namespace Pii
 
   /**
    * Calculates the nth norm of all elements in the matrix. The nth
-   * norm of \( \{a_i|i=1 \ldots N\} \) is defined as @f$ L_n =
-   * (\sum_{i=1}^N |a_i|^n)^{1/n} @f$.
+   * norm of \(\{a_i|i=1 \ldots N\}\) is defined as \(L_n =
+   * (\sum_{i=1}^N |a_i|^n)^{1/n}\).
    *
-   * ! Remember possibility of overflows. Powers are calculated
-   * with the datatype of the input matrix, not with `double`, so an
+   * ! Remember possibility of overflows. Powers are calculated with
+   * the datatype of the input matrix, not with `double`, so an
    * overflow may occur with relatively small values; for example
-   * 1500^3 already overflows an `int`. Usually, it is not a good
-   * idea to calculate the norm with integer types if you cannot
-   * ensure a proper range of input values.
+   * 1500^3 already overflows an `int` on most hardware. Usually, it
+   * is not a good idea to calculate the norm with integer types if
+   * you cannot ensure a proper range of input values.
    *
    * @param mat the input matrix
    *
    * @param n the norm order. Norms -1 and 2 get special treatment. If
-   * `n` == -1, the \( L_\infty \) norm will be returned. If `n`
-   * == 2, the function returns the largest singular value of `mat`.
+   * *n* == -1, the \(L_\infty\) norm will be returned. If *n* == 2,
+   * the function returns the largest singular value of *mat*.
    *
    * @return the `nth` norm of the elements in `mat`
    */
@@ -2890,7 +2870,7 @@ namespace Pii
    * `points1` and `points2` do not match, an empty matrix will be
    * returned.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat1(2,2), mat2(2,2);
    * PiiMatrix<double> matDist = Pii::squaredDistance(mat1, mat2, Pii::Horizontally);
    * ~~~
@@ -2914,8 +2894,8 @@ namespace Pii
   }
   
   /**
-   * Returns the geometric distance between two vectors. Uses @ref
-   * squaredDistance().
+   * Returns the geometric distance between two vectors. Uses
+   * [squaredDistance()].
    */
   template <class InputIterator1, class InputIterator2, class T>
   inline typename Sqrt<T>::result_type distance(InputIterator1 begin1, InputIterator1 end1,
@@ -2925,7 +2905,6 @@ namespace Pii
   }
 
   /**
-   * @overload
    *
    * Returns the geometric distance between two *n*-dimensional
    * vectors.
@@ -3013,7 +2992,7 @@ namespace Pii
    * @param colIndex a pointer to an `int` where the column index of
    * the special value will placed. Can be zero.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat; // initialize as you wish
    * // Find the maximum absolute value
    * int iMaxAbs = findSpecialValue(mat, std::greater<int>(), Abs<int>(), 0);
@@ -3039,7 +3018,7 @@ namespace Pii
     return defaultValue;
   }
 
-  /// @cond null
+  /// @hide
   template <class Matrix> struct ComplexAdjoint
   {
     typedef typename Matrix::value_type T;
@@ -3078,7 +3057,7 @@ namespace Pii
     IfClass<IsComplex<typename Matrix::value_type>,
             ComplexAdjoint<Matrix>, RealAdjoint<Matrix> >::Type {};
 
-  /// @endcond
+  /// @endhide
   
   /**
    * Returns the conjugate transpose of *mat*. The conjugate

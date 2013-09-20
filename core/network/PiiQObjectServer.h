@@ -27,7 +27,7 @@
  *
  * If you just need to start quick, do this:
  *
- * ~~~
+ * ~~~(c++)
  * QTimer t; // ... or any other class derived from QObject
  * PiiHttpServer* pHttpServer = PiiHttpServer::addServer("My server", "tcp://0.0.0.0:3142");
  * PiiQObjectServer* pQObjectServer = new PiiQObjectServer(&t);
@@ -65,15 +65,15 @@
  *
  * A call to slot is as simple as a GET request:
  *
-@verbatim
-GET /timer/functions/start HTTP/1.1
-@endverbatim
+ * ~~~
+ * GET /timer/functions/start HTTP/1.1
+ * ~~~
  *
  * With parameters:
  *
-@verbatim
-GET /timer/functions/start?1000 HTTP/1.1
-@endverbatim
+ * ~~~
+ * GET /timer/functions/start?1000 HTTP/1.1
+ * ~~~
  *
  * Properties
  * ----------
@@ -84,73 +84,73 @@ GET /timer/functions/start?1000 HTTP/1.1
  * Property definitions can be queried with a GET request to
  * /properties/:
  *
-@verbatim
-GET /timer/properties/ HTTP/1.1
-@endverbatim
+ * ~~~
+ * GET /timer/properties/ HTTP/1.1
+ * ~~~
  *
  * Response:
  * 
-@verbatim
-HTTP/1.1 200 OK
-Content-Type: text/plain
-Content-Length: 41
-
-bool active
-int interval
-bool singleShot
-@endverbatim
+ * ~~~
+ * HTTP/1.1 200 OK
+ * Content-Type: text/plain
+ * Content-Length: 41
+ * 
+ * bool active
+ * int interval
+ * bool singleShot
+ * ~~~
  *
  * The output format can be altered by adding a "format" parameter to
  * the request. If you are writing an Ajax application, you may want
  * to try this:
  *
-@verbatim
-GET /timer/properties/?format=json&fields=type,name,value HTTP/1.1
-@endverbatim
+ * ~~~
+ * GET /timer/properties/?format=json&fields=type,name,value HTTP/1.1
+ * ~~~
  *
  * Individual property values can be retrieved with a GET request to
  * the property URI:
  *
-@verbatim
-GET /timer/properties/active HTTP/1.1
-@endverbatim
+ * ~~~
+ * GET /timer/properties/active HTTP/1.1
+ * ~~~
  *
  * Response:
  * 
-@verbatim
-HTTP/1.1 200 OK
-Content-Type: text/plain
-Content-Length: 4
-
-true
-@endverbatim
+ * ~~~
+ * HTTP/1.1 200 OK
+ * Content-Type: text/plain
+ * Content-Length: 4
+ * 
+ * true
+ * ~~~
  *
  * Setting property values may or may not be allowed by the server. 
  * The value of an individual property can be set either with a GET or
  * a POST request:
  *
-@verbatim
-GET /timer/properties/interval?12345 HTTP/1.1
-
-POST /timer/properties/interval HTTP/1.1
-Content-Type: application/x-www-form-urlencoded
-Content-Length: 15
-
-interval=12345
-@endverbatim
+ * ~~~
+ * GET /timer/properties/interval?12345 HTTP/1.1
+ * 
+ * POST /timer/properties/interval HTTP/1.1
+ * Content-Type: application/x-www-form-urlencoded
+ * Content-Length: 15
+ * 
+ * interval=12345
+ * ~~~
  *
  * Many properties can be set at once with either a GET request or a
  * POST (x-www-form-urlencoded) request.
  *
-@verbatim
-GET /timer/properties?interval=1000&singleShot=false HTTP/1.1
-
-POST /timer/properties HTTP/1.1
-Content-Type: application/x-www-form-urlencoded
-Content-Length: 30
-
-interval=1000&singleShot=false
-@endverbatim
+ * ~~~
+ * GET /timer/properties?interval=1000&singleShot=false HTTP/1.1
+ * 
+ * POST /timer/properties HTTP/1.1
+ * Content-Type: application/x-www-form-urlencoded
+ * Content-Length: 30
+ * 
+ * interval=1000&singleShot=false
+ * ~~~
  *
  * Signals
  * -------
@@ -164,9 +164,9 @@ interval=1000&singleShot=false
  * function signature. Connecting the timeout signal to a newly
  * created channel goes like so:
  *
-@verbatim
-GET /channels/4A40938-2229-9F31-D008-2EFA98EC4E6C/connect?signals/timeout() HTTP/1.1
-@endverbatim
+ * ~~~
+ * GET /channels/4A40938-2229-9F31-D008-2EFA98EC4E6C/connect?signals/timeout() HTTP/1.1
+ * ~~~
  *
  * When a signal is emitted, its function parameters will be encoded
  * as a QVariantList using Into's [Serialization] mechanism.
@@ -185,7 +185,7 @@ GET /channels/4A40938-2229-9F31-D008-2EFA98EC4E6C/connect?signals/timeout() HTTP
  * provides a way of marking unsafe properties and functions with
  * class info fields:
  *
- * ~~~
+ * ~~~(c++)
  * class MyClass : public QObject
  * {
  *   Q_OBJECT
@@ -210,7 +210,7 @@ GET /channels/4A40938-2229-9F31-D008-2EFA98EC4E6C/connect?signals/timeout() HTTP
  * PiiObjectServer::setSafetyLevel() "default safety level" using
  * Q_CLASSINFO:
  *
- * ~~~
+ * ~~~(c++)
  * class MyClass : public QObject
  * {
  *   Q_OBJECT
@@ -302,7 +302,7 @@ protected:
   void disconnectFromChannel(Channel* channel, const QString& sourceId);
   void channelDeleted(Channel* channel);
   
-  /// @cond null
+  /// @hide
   class MetaFunction : public PiiGenericFunction
   {
   public:
@@ -356,7 +356,7 @@ protected:
   PiiQObjectServer(Data*);
 
   void moveToMainThread();
-  /// @endcond
+  /// @endhide
 
 private slots:
   bool setPropertiesFromMainThread(const QVariantMap& props);

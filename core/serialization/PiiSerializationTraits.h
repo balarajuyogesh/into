@@ -35,7 +35,7 @@ class QString;
  * Mark `CLASS_NAME` as an abstract type. This prevents the
  * serialization library from trying to instantiate the class.
  *
- * ~~~
+ * ~~~(c++)
  * class MyClass;
  * PII_SERIALIZATION_ABSTRACT(MyClass);
  * ~~~
@@ -47,7 +47,7 @@ class QString;
  * Mark all instances of the class template `CLASS_NAME` as abstract
  * classes.
  *
- * ~~~
+ * ~~~(c++)
  * template <class T> class MyClass;
  * PII_SERIALIZATION_ABSTRACT_TEMPLATE(MyClass);
  * ~~~
@@ -62,7 +62,7 @@ class QString;
  * [PII_SERIALIZATION_TRACKING_TEMPLATE()] if `CLASS_NAME` is a
  * template class.
  *
- * ~~~
+ * ~~~(c++)
  * class MyClass;
  * // Disable tracking of MyClass
  * PII_SERIALIZATION_TRACKING(MyClass, false);
@@ -75,7 +75,7 @@ class QString;
  * Set object tracking for the given class template to `on`
  * (true/false).
  *
- * ~~~
+ * ~~~(c++)
  * template <class T> class MyClass;
  * // Disable tracking of all MyClass template instances
  * PII_SERIALIZATION_TRACKING_TEMPLATE(MyClass, false);
@@ -89,7 +89,7 @@ class QString;
  * [PII_SERIALIZATION_CLASSINFO_TEMPLATE()] if `CLASS_NAME` is a
  * template class.
  *
- * ~~~
+ * ~~~(c++)
  * class MyClass;
  * // Do not save class info with MyClass
  * PII_SERIALIZATION_CLASSINFO(MyClass, false);
@@ -102,7 +102,7 @@ class QString;
  * Enable/disable storing of class information for all instances of
  * the given template type.
  *
- * ~~~
+ * ~~~(c++)
  * template <class T> class MyClass;
  * // Do not save class info with any MyClass template instance
  * PII_SERIALIZATION_CLASSINFO_TEMPLATE(MyClass, false);
@@ -116,7 +116,7 @@ class QString;
  * [PII_SERIALIZATION_VERSION_TEMPLATE()] if `CLASS_NAME` is a template
  * class.
  *
- * ~~~
+ * ~~~(c++)
  * class MyClass;
  * // Set the current version number of MyClass to 2
  * PII_SERIALIZATION_VERSION(MyClass, 2);
@@ -129,7 +129,7 @@ class QString;
  * Set object version for all instances of the given class template
  * (int).
  *
- * ~~~
+ * ~~~(c++)
  * template <class T> class MyClass;
  * // Set the current version number of all MyClass template instances to 2
  * PII_SERIALIZATION_VERSION_TEMPLATE(MyClass, 2);
@@ -144,7 +144,7 @@ class QString;
  * of a type name or you just want a custom name for the class. Commas
  * in type names confuse cpp. Here's how to work around:
  *
- * ~~~
+ * ~~~(c++)
  * template <class T, class U> class MyClass;
  * typedef MyClass<int,int> MyIntIntClass;
  * PII_SERIALIZATION_NAME_CUSTOM(MyIntIntClass, "MyClass<int,int>");
@@ -159,7 +159,7 @@ class QString;
  * must be handled with [PII_SERIALIZATION_NAME_CUSTOM] because the
  * preprocessor cannot handle commas in macro arguments.
  *
- * ~~~
+ * ~~~(c++)
  * class MyClass;
  * PII_SERIALIZATION_NAME(MyClass);
  * ~~~
@@ -217,11 +217,11 @@ namespace PiiSerializationTraits
   
   /**
    * Pointer tracking trait. Tracking is enabled by default for all
-   * complex types. Pointers to primitive types will also be tracked. 
+   * complex types. Pointers to primitive types will also be tracked.
    * If tracking is disabled, memory addresses will not be tracked and
-   * the same object may be serialized many times. Use the @ref
-   * PII_SERIALIZATION_TRACKING macro to conveniently set the tracking
-   * trait.
+   * the same object may be serialized many times. Use the
+   * [PII_SERIALIZATION_TRACKING] macro to conveniently set the
+   * tracking trait.
    */
   template <class T> struct Tracking : Pii::True {};
   template <class T> struct Tracking<const T> { enum { boolValue = Tracking<T>::boolValue }; };

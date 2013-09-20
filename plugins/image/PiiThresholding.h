@@ -38,7 +38,7 @@ namespace PiiImage
    *
    * @return optimal threshold for separating the two modes
    *
-   * ~~~
+   * ~~~(c++)
    * using namespace PiiImage;
    * int iThreshold = otsuThreshold(normalize<float>(histogram(image)));
    * ~~~
@@ -50,7 +50,7 @@ namespace PiiImage
    * based on the comparison result. You can use this struct for
    * example with PiiMatrix<T>::map():
    *
-   * ~~~
+   * ~~~(c++)
    * int threshold = 5;
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
    * mat.map<PiiImage::ThresholdFunction<int> >(threshold);
@@ -79,7 +79,7 @@ namespace PiiImage
    * equal to `threshold`. You can use this struct for
    * example with PiiMatrix<T>::binaryOp():
    *
-   * ~~~
+   * ~~~(c++)
    * int threshold = 5;
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
    * mat.binaryOp(PiiImage::InverseThresholdFunction<int>(), threshold);
@@ -101,7 +101,7 @@ namespace PiiImage
    * thresholds and returns one if the argument is in between them
    * (inclusive).
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
    * mat.unaryOp(PiiImage::TwoLevelThresholdFunction<int>(5, 7));
    *
@@ -129,7 +129,7 @@ namespace PiiImage
    * %InverseTwoLevelThresholdFunction works analogously to
    * TwoLevelThresholdFunction, but inverses the result.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
    * mat.unaryOp(PiiImage::InverseTwoLevelThresholdFunction<int>(5, 7));
    *
@@ -158,7 +158,7 @@ namespace PiiImage
    * `value` or `threshold` based on the comparison result. You can
    * use this struct for example with PiiMatrix<T>::binaryOp():
    *
-   * ~~~
+   * ~~~(c++)
    * int threshold = 5;
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
    * mat.binaryOp(PiiImage::CutFunction<int>(), threshold);
@@ -177,7 +177,7 @@ namespace PiiImage
    * result. You can use this struct for example with
    * PiiMatrix<T>::binaryOp():
    *
-   * ~~~
+   * ~~~(c++)
    * int threshold = 5;
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
    * mat.binaryOp(PiiImage::InverseCutFunction<int>(), threshold);
@@ -195,7 +195,7 @@ namespace PiiImage
    * either `value` or 0 based on the comparison result. You can use
    * this struct for example with PiiMatrix<T>::binaryOp():
    *
-   * ~~~
+   * ~~~(c++)
    * int threshold = 5;
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
    * mat.binaryOp(PiiImage::ZeroBelowFunction<int>(), threshold);
@@ -212,7 +212,7 @@ namespace PiiImage
    * ZeroAboveFunction works analogously to ZeroBelowFunction, but
    * outputs zero for values that are above or equal to the threshold.
    *
-   * ~~~
+   * ~~~(c++)
    * int threshold = 5;
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
    * mat.binaryOp(PiiImage::ZeroAboveFunction<int>(), threshold);
@@ -232,7 +232,7 @@ namespace PiiImage
    * zero. You can use this struct for example with
    * PiiMatrix<T>::binaryOp():
    *
-   * ~~~
+   * ~~~(c++)
    * int threshold = 5;
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
    * mat.binaryOp(PiiImage::DropFunction<int>(), threshold);
@@ -447,7 +447,7 @@ namespace PiiImage
    *
    * ! Window size has no effect on processing time.
    *
-   * ~~~
+   * ~~~(c++)
    * using namespace PiiImage;
    * PiiMatrix<float> img;
    * // Threshold at 0.8 times the local mean. Using
@@ -469,7 +469,6 @@ namespace PiiImage
                                                                     int windowRows, int windowColumns);
 
   /**
-   * @overload This version calls *func* using the pixel value and
    * the local mean as parameters.
    */
   template <class Matrix, class BinaryFunction>
@@ -477,7 +476,6 @@ namespace PiiImage
                                                                     BinaryFunction func,
                                                                     int windowRows, int windowColumns);
   /**
-   * @overload This version only considers pixels whose corresponding
    * entry in *roiMask* evaluates to `true`. The *image* and 
    * *roiMask* matrices must match in size.
    */
@@ -636,7 +634,7 @@ namespace PiiImage
    * window. If this value is non-positive, a `windowRows` - by - 
    * `windowRows` square window will be used.
    *
-   * ~~~
+   * ~~~(c++)
    * // Document binarization
    * using namespace PiiImage;
    * PiiMatrix<int> image;

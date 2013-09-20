@@ -287,7 +287,7 @@ public:
    * a few special properties recognized by PiiTableModel, the given
    * properties will be directly transferred to the editor widget.
    *
-   * ~~~
+   * ~~~(c++)
    * pModel->setHeaderTitles(QStringList() << "Combo" << "IntSpin"
    *                                       << "DoubleSpin" << "Text");
    * // Combo box for column 0

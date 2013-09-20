@@ -30,7 +30,7 @@
  * Throw a PiiSerializationException with the given error code. This
  * macro is useful mostly in archive implementations.
  *
- * ~~~
+ * ~~~(c++)
  * PII_SERIALIZATION_ERROR(StreamError);
  * ~~~
  */
@@ -41,7 +41,7 @@
  * extra information. This macro is useful mostly in archive
  * implementations.
  *
- * ~~~
+ * ~~~(c++)
  * PII_SERIALIZATION_ERROR_INFO(SerializerNotFound, className);
  * ~~~
  */
@@ -120,7 +120,7 @@ public:
    */
   PiiSerializationException(Code code, const QString& info, const QString& location);
 
-  /// Creates a copy of @a other.
+  /// Creates a copy of *other*.
   PiiSerializationException(const PiiSerializationException& other);
 
   PiiSerializationException& operator= (const PiiSerializationException& other);

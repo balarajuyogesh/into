@@ -22,7 +22,7 @@
  * An output filter that buffers data into itself until [flush()] is
  * called. It sends a MIME header before the actual data.
  *
- * ~~~
+ * ~~~(c++)
  * void MyHandler::handleRequest(const QString& uri,
  *                               PiiHttpDevice* h,
  *                               PiiProgressController* controller)

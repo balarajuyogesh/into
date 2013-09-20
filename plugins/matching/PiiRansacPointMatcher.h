@@ -77,7 +77,6 @@ protected:
    */
   PiiRansac& ransac();
   /**
-   * @overload
    */
   const PiiRansac& ransac() const;
 };

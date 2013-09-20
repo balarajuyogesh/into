@@ -20,7 +20,6 @@
 #include <PiiMatrix.h>
 #include "PiiOptimizationGlobal.h"
 
-/// @file
 
 namespace PiiOptimization
 {

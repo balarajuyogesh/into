@@ -117,7 +117,7 @@ namespace PiiImage
    *
    * @return the binary image which is result of erosion 
    *
-   * ~~~
+   * ~~~(c++)
    *
    * PiiMatrix<int> source(8,8,
    *                        0,0,0,0,0,0,0,0,
@@ -189,7 +189,7 @@ namespace PiiImage
    *
    * @return the binary image which is result of dilation.
    * 
-   * ~~~
+   * ~~~(c++)
    *    
    * PiiMatrix<int> source(8,8,
    *                       0,0,0,0,0,0,0,0,
@@ -247,7 +247,7 @@ namespace PiiImage
    *
    * @return bottom-hat transform
    * 
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> source(8,8,
    *                       0,0,0,0,0,0,0,0,
    *                       1,1,1,1,1,1,1,0,
@@ -306,7 +306,7 @@ namespace PiiImage
    *
    * Locate north-east pointing corners in the image:
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> image(5,5,
    *                      0,0,0,0,0,
    *                      0,1,1,1,0,

@@ -143,7 +143,7 @@ namespace PiiImage
    * @param labelCount an optional output-value parameter that stores
    * the number of labels found
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<float> img;
    * int iLabelCount = 0;
    * // Every pixel with an intensity greater than 0.5 is an object.
@@ -351,7 +351,7 @@ namespace PiiImage
   }
 
 
-  /// @cond null
+  /// @hide
   
   // A linked list node for runs of consequtive object pixels on one
   // row.
@@ -441,7 +441,7 @@ namespace PiiImage
   PII_IMAGE_EXPORT void connectRunsRecursively(LabelInfo& info, int rowIndex, int start, int end);
   PII_IMAGE_EXPORT void markToBuffer(LabelInfo& info, int rowIndex, int start, int end);
 
-  /// @endcond
+  /// @endhide
 
   /**
    * Label connected components. This function uses a recursive
@@ -471,7 +471,7 @@ namespace PiiImage
    * the maximum label. If `labelIncrement` is one, this value equals
    * to the number of objects labeled.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<bool> binaryImg;
    * PiiMatrix<int> labels;
    * // Label all 8-connected non-zero pixels

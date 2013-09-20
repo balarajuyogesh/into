@@ -67,7 +67,7 @@ typedef const char* (*pii_plugin_function)();
  * @param PLUGIN_NAME a unique identifier (resource name) for the
  * plug-in.
  *
- * ~~~
+ * ~~~(c++)
  * PII_IMPLEMENT_PLUGIN(PiiImagePlugin);
  * ~~~
  */
@@ -91,7 +91,7 @@ typedef const char* (*pii_plugin_function)();
  *
  * @param CLASS_NAME the name of the class to register.
  *
- * ~~~
+ * ~~~(c++)
  * PII_IMPLEMENT_PLUGIN(PiiImagePlugin);
  *
  * PII_REGISTER_OPERATION(PiiImageFileReader);
@@ -136,7 +136,7 @@ typedef const char* (*pii_plugin_function)();
  * functions. This macro exports an implementation of such a template.
  * Do this:
  *
- * ~~~
+ * ~~~(c++)
  * class MyClass : public QObject
  * {
  *   Q_OBJECT
@@ -202,7 +202,7 @@ typedef const char* (*pii_plugin_function)();
  * will fail at compile time. If you use a custom interface as the 
  * *SUPERCLASS*, make sure it has the class name trait defined.
  *
- * ~~~
+ * ~~~(c++)
  * class MyInterface {};
  * class MyClass : public MyInterface {};
  *
@@ -277,7 +277,7 @@ QList<PiiResourceStatement> STATEMENTS_CLASS::statements() \
  * clashes. It is however allowed to have many registration sections
  * if each of them has a globally unique name.
  *
- * ~~~
+ * ~~~(c++)
  * PII_BEGIN_STATEMENTS(PiiImagePlugin)
  *   PII_REGISTER_LITERAL_STATEMENT(PiiImageViewer, "my:opinion", "crap")
  *   PII_REGISTER_RESOURCE_STATEMENT(PiiImageViewer, "my:recursion", PiiImageViewer)
@@ -322,7 +322,7 @@ QList<PiiResourceStatement> STATEMENTS_CLASS::statements() \
  * between two resources. This macro must be used between @ref
  * PII_BEGIN_STATEMENTS and [PII_END_STATEMENTS].
  *
- * ~~~
+ * ~~~(c++)
  * PII_BEGIN_STATEMENTS(MyPlugin)
  *   // MyConfiguratorWidget can work as a configurator UI for MyOperation.
  *   // When connected together in this role, MyConfiguratorWidget
@@ -344,7 +344,7 @@ QList<PiiResourceStatement> STATEMENTS_CLASS::statements() \
  * multiple inheritance as the usual [PII_REGISTER_CLASS] macro
  * only takes one superclass as an argument.
  *
- * ~~~
+ * ~~~(c++)
  * class MyClass : public QObject, public MyInterface {};
  *
  * // MyClass is instantiable as a QObject

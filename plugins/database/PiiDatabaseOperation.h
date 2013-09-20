@@ -74,7 +74,7 @@ class PII_DATABASE_EXPORT PiiDatabaseOperation : public PiiDefaultOperation
    * either a DSN, a DSN file name (must end with .dsn), or a
    * connection string.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiOperation* pDb = engine.createOperation("PiiDatabaseWriter");
    *
    * // Open a Microsoft Access database

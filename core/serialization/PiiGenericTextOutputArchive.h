@@ -16,7 +16,6 @@
 #ifndef _PIIGENERICTEXTOUTPUTARCHIVE_H
 #define _PIIGENERICTEXTOUTPUTARCHIVE_H
 
-/** @file */
 
 #include "PiiTextOutputArchive.h"
 #include "PiiGenericOutputArchive.h"

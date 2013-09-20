@@ -82,16 +82,16 @@ public:
    * of a pixel are treated as connected pixels.
    *
    *
-@verbatim
-4-connected     8-connected
-+---+---+---+   +---+---+---+
-|   | X |   |   | X | X | X |
-+---+---+---+   +---+---+---+
-| X | o | X |   | X | o | X |
-+---+---+---+   +---+---+---+
-|   | X |   |   | X | X | X |
-+---+---+---+   +---+---+---+
-@endverbatim
+   * ~~~
+   * 4-connected     8-connected
+   * +---+---+---+   +---+---+---+
+   * |   | X |   |   | X | X | X |
+   * +---+---+---+   +---+---+---+
+   * | X | o | X |   | X | o | X |
+   * +---+---+---+   +---+---+---+
+   * |   | X |   |   | X | X | X |
+   * +---+---+---+   +---+---+---+
+   * ~~~
    */
   enum Connectivity { Connect4, Connect8 };
 

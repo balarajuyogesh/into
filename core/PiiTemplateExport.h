@@ -41,7 +41,7 @@
  * required template instance may not be available yet, and the
  * template must be instantiated later.
  *
- * ~~~
+ * ~~~(c++)
  * // In MyStruct.h
  * #include <PiiTemplateExport.h>
  *
@@ -63,7 +63,7 @@
  * PII_DECLARE_EXPORTED_FUNCTION_TEMPLATE(void, identityFunc<int>, (int), BUILDING_MYLIB);
  * ~~~
  *
- * ~~~
+ * ~~~(c++)
  * // In MyStruct.cc, create explicit instances:
  * #include "MyStruct.h"
  * PII_DEFINE_EXPORTED_CLASS_TEMPLATE(struct, MyStruct<double>);

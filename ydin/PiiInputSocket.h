@@ -25,7 +25,6 @@
 
 class PiiOutputSocket;
 
-/** @file */
 
 /**
  * A macro that throws a PiiExecutionException. The error message
@@ -227,7 +226,7 @@ public:
    * returned. If [assignFirstObject()] has been called, a different
    * object will be returned for each calling thread.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiVariant obj(pInput->firstObject());
    * if (obj.isValid())
    *   cout << "We just received an object!" << endl;

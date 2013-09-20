@@ -17,10 +17,9 @@
 #define _PIINETWORKEXCEPTION_H
 
 /**
- * @class PiiNetworkException
+ * @decl class PiiNetworkException
  *
  * Used to indicate errors in network connections.
- *
  */
 
 #include "PiiNetwork.h"

@@ -16,7 +16,6 @@
 #ifndef _PIIGENERICBINARYINPUTARCHIVE_H
 #define _PIIGENERICBINARYINPUTARCHIVE_H
 
-/** @file */
 
 #include "PiiBinaryInputArchive.h"
 #include "PiiGenericInputArchive.h"

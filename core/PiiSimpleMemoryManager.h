@@ -41,7 +41,7 @@
  * The following example shows how to override `new` and `delete` to
  * use a custom memory manager.
  *
- * ~~~
+ * ~~~(c++)
  * class MyClass
  * {
  * public:
@@ -97,14 +97,15 @@ public:
    * value to low, chances are that [allocate()] returns 0.
    *
    * @param blockSize the desired size of memory blocks. The actual
-   * size may be somewhat larger because PiiSimpleMemoryManager
-   * always aligns the memory blocks at 16-byte boundaries. In
-   * addition, `sizeof`(void*) bytes will be reserved for book
-   * keeping information for each block. Thus, the actual block size
-   * will be at least `blockSize` + `sizeof`(void*). Using @f$16N -
-   * \mathrm{sizeof(void*)}@f$ bytes as a block size wastes no memory
-   * for alignment, except possibly at the beginning, if your 
-   * `malloc`() implementation returns an unaligned pointer (unlikely).
+   * size may be somewhat larger because PiiSimpleMemoryManager always
+   * aligns the memory blocks at 16-byte boundaries. In addition,
+   * `sizeof`(void*) bytes will be reserved for book keeping
+   * information for each block. Thus, the actual block size will be
+   * at least `blockSize` + `sizeof`(void*). Using 16*N -
+   * `sizeof(void*)` (N is an integer) bytes as a block size wastes no
+   * memory for alignment, except possibly at the beginning, if your
+   * `malloc`() implementation returns an unaligned pointer
+   * (which is highly unlikely).
    *
    * Note that the initial values cannot be changed once the memory
    * manager has been constructed.

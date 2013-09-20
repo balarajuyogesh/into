@@ -49,7 +49,7 @@ class PiiFileSystemWatcher : public PiiDefaultOperation
    * the one of the filters. If the filter list is empty, all changed
    * files will be reported. An example:
    *
-   * ~~~
+   * ~~~(c++)
    * QStringList lstNameFilters = QStringList() << "*.jpg" << "*.png";
    * pFileSystemWatcher->setProperty("nameFilters", lstNameFilters);
    * ~~~

@@ -156,7 +156,7 @@ public:
    * to the six closest neighbors is one. With squares, the corners
    * have a distance of sqrt(2).
    *
-   * ~~~
+   * ~~~(c++)
    *      ___        ___ ___ ___
    *  ___/   \___   |   |   |   |
    * /   \___/   \  |___|___|___|

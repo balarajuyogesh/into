@@ -33,7 +33,7 @@
  * thread-specific event loop. The main thread must not be stopped
  * until all other threads have finished their execution.
  *
- * ~~~
+ * ~~~(c++)
  * // In a non-Qt thread
  * QObject* obj = new QObject;
  * PiiEventProcessor p;
@@ -130,7 +130,7 @@ private:
  * to create the main event loop in a non-Qt application is to create
  * a static instance of PiiEventProcessorRunner.
  *
- * ~~~
+ * ~~~(c++)
  * class MyClass
  * {
  * public:

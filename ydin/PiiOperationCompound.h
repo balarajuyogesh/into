@@ -21,7 +21,6 @@
 
 #include <QMap>
 
-/// @file
 
 /**
  * Declares a virtual piiMetaObject() function and implements a
@@ -86,7 +85,7 @@
  * `objectName` is "imageviewer". The `image` input of this object
  * can be read as follows:
  *
- * ~~~
+ * ~~~(c++)
  * // PiiOperationCompound *compound;
  * PiiInputSocket* input = compound->input("imageviewer.image");
  * ~~~
@@ -121,7 +120,7 @@
  * can create an alias, i.e. *expose* any socket within the compound
  * as follows:
  *
- * ~~~
+ * ~~~(c++)
  * //PiiOperation* op0, *op1;
  * op0->exposeInput("Op1.in1", "input", PiiOperationCompound::AliasConnection);
  * // Analogously:
@@ -145,7 +144,7 @@
  *
  * @image html operationcompoundproxy.png
  *
- * ~~~
+ * ~~~(c++)
  * // We assume that the objectName of PiiThresholdingOperation is
  * // "threshold" and that of PiiArithmeticOperation is "multiplier".
  * masker->exposeInputs(QStringList() << "threshold.image" << "multiplier.input0",
@@ -165,7 +164,7 @@
  * usually provided, and the serialization system is told to use a
  * special "Void" function when deserializing.
  *
- * ~~~
+ * ~~~(c++)
  * class MyOperation : public PiiOperationCompound
  * {
  *   // Called by the serialization library. Doesn't create child operations.
@@ -290,7 +289,7 @@ public:
    * @return `true` if the state was reached before the call timed
    * out, `false` otherwise.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiEngine engine;
    * engine.interrupt();
    * engine.wait(PiiOperation::Stopped);
@@ -309,7 +308,7 @@ public:
    * with well-behaved operations, but a better convention is to
    * always specify a reasonable timeout and inspect the return value.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiEngine engine;
    * engine.pause();
    * // Wait for 2 seconds
@@ -671,7 +670,7 @@ public:
   Q_INVOKABLE PiiOperationCompound* clone() const;
 
 protected:
-  /// @cond null
+  /// @hide
   class PII_YDIN_EXPORT Data;
   PII_UNSAFE_D_FUNC;
   PiiOperationCompound(Data* data);
@@ -691,7 +690,7 @@ protected:
    * to specify the action to be taken. This function loops through
    * the list of child operation and applies the action to each.
    *
-   * ~~~
+   * ~~~(c++)
    * commandChildren(Start());
    * ~~~
    */
@@ -707,7 +706,7 @@ protected:
     for (int i=0; i<lstOperations.size(); ++i)
       action.perform(lstOperations[i], param);
   }
-  /// @endcond
+  /// @endhide
 
   /**
    * Sets the state of the operation. If the state changes, the

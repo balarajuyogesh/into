@@ -85,7 +85,6 @@ public:
    * operator<<.
    */
   template <class T> Archive& operator& (const T& obj) { return *self() << obj; }
-  /// @overload
   template <class T> Archive& operator& (T& obj) { return *self() << const_cast<const T&>(obj); }
 
   Archive& operator<< (QString& value) { return self()->operator<< (const_cast<const QString&>(value)); }

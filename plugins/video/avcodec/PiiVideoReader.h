@@ -30,7 +30,7 @@ extern "C"
 /**
  * An interface for reading videos with avcodec.
  *
- * ~~~
+ * ~~~(c++)
  * // Typical use with gray-scale videos
  *
  * PiiVideoReader reader("video.avi");

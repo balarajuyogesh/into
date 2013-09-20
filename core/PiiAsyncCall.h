@@ -62,7 +62,7 @@ protected:
   Function _pFunction;
 };
 
-/// @cond null
+/// @hide
 #define PII_ASYNC_TPL_PARAM(N, PARAM) , class PARAM
 #define PII_ASYNC_TPL_IMPL(N, PARAM) , PARAM
 #define PII_ASYNC_CTR_PARAM(N, PARAM) , PARAM PII_JOIN(__, PARAM)
@@ -113,10 +113,10 @@ PII_CREATE_ASYNCCALL(6, (P1, P2, P3, P4, P5, P6));
 PII_CREATE_ASYNCCALL(7, (P1, P2, P3, P4, P5, P6, P7));
 PII_CREATE_ASYNCCALL(8, (P1, P2, P3, P4, P5, P6, P7, P8));
 
-/// @endcond
+/// @endhide
 
 /**
- * @fn template <class Object, class Function> QThread* Pii::asyncCall(Object object, Function function, ...)
+ * @decl template <class Object, class Function> QThread* Pii::asyncCall(Object object, Function function, ...)
  *
  * Calls a function asynchronously from another thread.
  *
@@ -130,7 +130,7 @@ PII_CREATE_ASYNCCALL(8, (P1, P2, P3, P4, P5, P6, P7, P8));
  * automatically deleted once it is finished and control returns to
  * the event loop of the calling thread.
  *
- * ~~~
+ * ~~~(c++)
  * struct MyStruct
  * {
  *   void func() { std::cout << "Moi!" << std::endl; }
@@ -161,11 +161,11 @@ PII_CREATE_ASYNCCALL(8, (P1, P2, P3, P4, P5, P6, P7, P8));
 
  
 /**
- * @fn template <class Object, class Function> QThread* Pii::createAsyncCall(Object object, Function function, ...)
+ * @decl template <class Object, class Function> QThread* Pii::createAsyncCall(Object object, Function function, ...)
  *
  * Creates a thread that will call a function asynchronously.
  *
- * ~~~
+ * ~~~(c++)
  * struct MyStruct
  * {
  *   void func() { std::cout << "Moi!" << std::endl; }

@@ -20,14 +20,13 @@
 #include <cstring>
 #include "PiiTypeTraits.h"
 
-/// @file
 
 /**
  * A macro that allows one to use a convenient syntax for checking if
  * a value is a member of a set. With compiler optimizations turned
  * on, this technique is equally fast as direct comparison.
  *
- * ~~~
+ * ~~~(c++)
  * if (rand() % 5 member_of (1, 2, 3))
  *   cout << "You had luck.\n";
  * const char* fruit = "Apple";
@@ -44,7 +43,7 @@
  * a value is *not* a member of a set. With compiler optimizations
  * turned on, this technique is equally fast as direct comparison.
  *
- * ~~~
+ * ~~~(c++)
  * if (1 not_member_of (1, 2, 3))
  *   cout << "Now, this is weird.\n";
  * const char* fruit = "Apple";
@@ -57,7 +56,7 @@
 #define not_member_of != Pii::valueSet
 
 // No docs
-/// @cond null
+/// @hide
 
 namespace Pii
 {
@@ -214,6 +213,6 @@ namespace Pii
   { return PiiValueSet<T,10>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10); }
 }
 
-/// @endcond
+/// @endhide
 
 #endif //_PIIVALUESET_H

@@ -57,7 +57,7 @@
  * Case clauses for signed integer types. This code converts any
  * signed integer value to an `int:`
  *
- * ~~~
+ * ~~~(c++)
  * void MyOperation::process()
  * {
  *   PiiVariant obj = readInput();
@@ -84,7 +84,7 @@
  * template function takes more than one parameter, you may want to
  * use this macro instead.
  *
- * ~~~
+ * ~~~(c++)
  * void MyOperation::process()
  * {
  *   PiiVariant obj = readInput();
@@ -378,7 +378,7 @@
  * You only need to create a template function that works for all
  * types. Typically, a PiiVariant is passed as its only argument.
  *
- * ~~~
+ * ~~~(c++)
  * template <class T> void myFunction(const PiiVariant& obj)
  * {
  *   PiiMatrix<T> value = obj.valueAs<PiiMatrix<T> >();
@@ -418,7 +418,7 @@
  * Analogous to [PII_ALL_MATRIX_CASES], but this version accepts
  * many function parameters at once.
  *
- * ~~~
+ * ~~~(c++)
  * template <class T> void myFunction(const PiiVariant& obj, const char* str)
  * {
  *   PiiMatrix<T> value = obj.valueAs<PiiMatrix<T> >();
@@ -711,7 +711,7 @@ public:
    * by `obj` as a type compatible with QVariant. The function
    * returns a primitive value that can be directly set to a QVariant.
    *
-   * ~~~
+   * ~~~(c++)
    * QVariant value;
    * switch (obj.type())
    *   {
@@ -730,7 +730,7 @@ public:
    * the `PII_XXX_MATRIX_CASES` macros as the function argument. This
    * code converts any integer matrix to PiiMatrix<int>:
    *
-   * ~~~
+   * ~~~(c++)
    * PiiVariant obj = readInput();
    * PiiMatrix<int> mat;
    * switch (obj.type())
@@ -901,7 +901,7 @@ public:
   /**
    * Convert the object in `input` into the type specified by `T`.
    *
-   * ~~~
+   * ~~~(c++)
    * double dValue = PiiYdin::convertPrimitiveTo<double>(input(0));
    * ~~~
    *   
@@ -938,7 +938,7 @@ public:
    * Converts the object in `input` into a matrix whose element type
    * is specified by `T`.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<double> m = PiiYdin::convertMatrixTo<double>(input(0));
    * ~~~
    *   

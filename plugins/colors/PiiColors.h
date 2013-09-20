@@ -39,7 +39,7 @@
  * cameras typically apply a gamma of 1/2.2. To linearize the colors,
  * one needs to invert the gamma compression:
  *
- * ~~~
+ * ~~~(c++)
  * using namespace PiiColors;
  * PiiColor<> nonlinearRgbColor;
  * PiiColor<> linearRgbColor = correctGamma(nonlinearRgbColor, 2.2);
@@ -72,7 +72,7 @@ namespace PiiColors
    *
    * @param ch2Index same for the second channel
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<PiiColor<> > img(100,100);
    * PiiMatrix<unsigned char> red, green, blue;
    * // Extract normalized RG with 8 bit resolution
@@ -473,7 +473,7 @@ namespace PiiColors
    * @return the color in an HSV color space. The type of the
    * returned color matches that of the input color.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiColor<> rgb(1,2,3);
    * PiiColor<> hsv = PiiColors::rgbToHsv(rgb);
    * ~~~
@@ -875,7 +875,7 @@ namespace PiiColors
    * PiiColor<float>. The function makes no checks. The caller must
    * ensure the size of the conversion matrix.
    *
-   * ~~~
+   * ~~~(c++)
    * using namespace PiiColors;
    * PiiMatrix<PiiColor4<> > clrImage;
    * PiiMatrix<PiiColor<float> > converted = genericConversion(clrImage, ohtaKanadeMatrix);

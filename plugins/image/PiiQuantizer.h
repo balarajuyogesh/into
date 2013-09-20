@@ -57,7 +57,7 @@ public:
    * Set quantization limits. Quantization limits are represented as a
    * row matrix of monotonically increasing numbers.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiQuantizer<float> q;
    * PiiMatrix<float> limits(1,4, 0.0, 0.1, 0.5, 0.7);
    * q.setLimits(limits);
@@ -76,7 +76,7 @@ public:
    * boundaries are derived from the training data so that each
    * quantization range has an equal number of entries.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> data(1,9, 5, 2, 1, 1, 3, 4, 1, 5, 5);
    * PiiMatrix<int> levels(PiiQuantizer<int>::divideEqually(data, levels));
    * // returns (2, 5)

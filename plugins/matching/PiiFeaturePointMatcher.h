@@ -112,7 +112,7 @@ namespace PiiMatching
    * be merged, the merged match is stored to *match2* and the
    * function returns `true`. Otherwise, it returns `false`.
    *
-   * ~~~
+   * ~~~(c++)
    * struct MyMerger
    * {
    *   bool operator() (const PiiMatching::Match& match1,
@@ -137,7 +137,7 @@ namespace PiiMatching
  * @tparam SampleSet the type used to store the features related to
  * the points, for example PiiMatrix<float>.
  *
- * ~~~
+ * ~~~(c++)
  * // 2D pixel coordinates.
  * // Let's assume we have two models with 10 points each.
  * PiiMatrix<int> matModelPoints(20,2);

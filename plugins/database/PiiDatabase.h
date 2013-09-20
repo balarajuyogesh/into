@@ -33,7 +33,7 @@ namespace PiiDatabase
    * given name. If this parameter is omitted, the new database
    * connection becomes the default connection.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiDatabase::createDb("mysql://localhost/test", "myConnection");
    * QSqlDatabase db = QSqlDatabase::database("myConnection");
    * if (db.isValid())

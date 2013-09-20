@@ -85,13 +85,13 @@ class PiiImagePieceJoiner : public PiiDefaultOperation
    * with a question mark. If transparency is not in use, the missing
    * slot is filled with original image data.
    *
-@verbatim
-+---+---+
-|   |   |
-+---+---+
-  ? |   |
-    +---+
-@endverbatim
+   * ~~~
+   * +---+---+
+   * |   |   |
+   * +---+---+
+   *   ? |   |
+   *     +---+
+   * ~~~
    *
    * Note that transparent mode is not as efficient as the
    * non-transparent one because original image data cannot be shared.

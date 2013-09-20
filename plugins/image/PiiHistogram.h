@@ -109,7 +109,7 @@ namespace PiiImage
    * represented as a row vector. If the input matrix has many rows,
    * the cumulative histogram for each row is calculated.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> histogram(1,5, 1,2,3,4,5);
    * PiiMatrix<int> cum(PiiImage::cumulative(histogram)); // sic!
    * // cum = (1,3,6,10,15)
@@ -129,7 +129,7 @@ namespace PiiImage
    * double is used as the return type. If all values in a row equal
    * to zero, they are left as such.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> histogram(1,4, 1,2,3,4);
    * PiiMatrix<double> normalized(PiiImage::normalize<double>(histogram));
    * //normalized = (0.1, 0.2, 0.3, 0.4)
@@ -143,7 +143,7 @@ namespace PiiImage
    * normalized cumulative distributions, `value` should be between 0
    * and 1.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<double> cumulative(1,4, 0.1, 0.3, 0.6, 1.0);
    * int p = percentile(cumulative, 0.5);
    * //p = 2
@@ -179,7 +179,7 @@ namespace PiiImage
    * will be converted to integers. Using floating-point types in the
    * `img` parameter is not suggested.
    *
-   * ~~~
+   * ~~~(c++)
    * // Normal backprojection
    * PiiMatrix<int> histogram(1,256);
    * PiiMatrix<unsigned char> img(100,100);
@@ -210,7 +210,7 @@ namespace PiiImage
    *
    * The sizes of `ch1` and `ch2` must be equal.
    *
-   * ~~~
+   * ~~~(c++)
    * // Backproject a two-dimensional RG histogram
    * PiiMatrix<int> histogram(256,256);
    * PiiMatrix<unsigned char> redChannel(100,100);
@@ -235,7 +235,7 @@ namespace PiiImage
    */
   template <class T> PiiMatrix<T> equalize(const PiiMatrix<T>& img, unsigned int levels = 0);
 
-  /// @cond null
+  /// @hide
   struct HistogramHandler
   {
     HistogramHandler() :
@@ -294,7 +294,7 @@ namespace PiiImage
     PiiMatrix<typename Clr::Type> channelImages[3];
     bool baCalculate[3];
   };
-  /// @endcond
+  /// @endhide
 };
 
 #include "PiiHistogram-templates.h"

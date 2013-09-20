@@ -49,7 +49,7 @@
  * In the following example it is assumed that the acceptance range is
  * set to 2-3 and that we have two inputs.
  *
- * ~~~
+ * ~~~(c++)
  * // First input:
  * PiiMatrix<int> feature0(3,1, 1, 2, 4); // three rows
  * // Second input:

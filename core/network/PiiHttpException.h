@@ -20,7 +20,6 @@
 
 /**
  * Thrown when a HTTP request handler cannot complete a request.
- *
  */
 class PII_NETWORK_EXPORT PiiHttpException : public PiiNetworkException
 {

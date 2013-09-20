@@ -20,12 +20,10 @@
 
 namespace std { template <class T> class complex; }
 
-/// @file
-
 namespace Pii
 {
   /**
-   * @name Static type checking
+   * @group pii_static_type_checking Static type checking
    *
    * This group contains structures that can be used for static type
    * checking in template meta-programming. The structures can be used
@@ -34,7 +32,7 @@ namespace Pii
    *
    * All `IsXXXX` structs implement a similar design pattern:
    *
-   * ~~~
+   * ~~~(c++)
    * ASSERT(Pii::IsPointer<int>::boolValue == false);
    * ASSERT(Pii::IsPointer<int*>::boolValue == true);
    * ASSERT(Pii::IsArray<char[]>::boolValue == true);
@@ -43,7 +41,7 @@ namespace Pii
    *
    * Static type checking is very useful in template meta-programs.
    *
-   * ~~~
+   * ~~~(c++)
    * // Divide by two by shifting an integer one position to the right.
    * struct IntOp { static inline int divide(int value) { return value >> 1; } };
    * // Divide by two by multiplying by 0.5
@@ -58,7 +56,6 @@ namespace Pii
    * };
    * ~~~
    */
-  //@{
   
   /**
    * An empty structure.
@@ -161,7 +158,7 @@ namespace Pii
    * failure is not an error* (SFINAE) trick to guide overload
    * resolution.
    *
-   * ~~~
+   * ~~~(c++)
    * // I want this function to be called for primitive types only
    * template <class T> void func(T value, typename Pii::OnlyPrimitive<T>::Type = 0)
    * {}
@@ -279,7 +276,7 @@ namespace Pii
    */
   template <class Base, class Derived> struct IsBaseOf
   {
-    /// @cond null
+    /// @hide
     typedef char (&Yes)[1];
     typedef char (&No)[2];
     
@@ -299,7 +296,7 @@ namespace Pii
     // http://stackoverflow.com/questions/2910979/how-is-base-of-works
     enum { boolValue = sizeof(isBaseOf(Converter(), int(0))) == sizeof(Yes) ||
            IsSame<Base,Derived>::boolValue };
-    /// @endcond
+    /// @endhide
   };
 
   /**
@@ -313,7 +310,7 @@ namespace Pii
    * A static functor that converts pointers to references and keeps
    * references as such.
    *
-   * ~~~
+   * ~~~(c++)
    * int i = 1, j;
    * // Both of these set j to 1
    * j = ToReference<int>::apply(i);
@@ -397,7 +394,7 @@ namespace Pii
    * will be made. Composed types such as PiiMatrix should specialize
    * this structure:
    *
-   * ~~~
+   * ~~~(c++)
    * namespace Pii
    * {
    *   template <class T> struct ToFloatingPoint<PiiMatrix<T> >
@@ -467,7 +464,7 @@ namespace Pii
    * argument. The structure is specialized for pointers to return the
    * type pointed to.
    *
-   * ~~~
+   * ~~~(c++)
    * using namespace Pii;
    * typedef ValueType<PiiMatrix<double>::column_iterator>::Type DoubleType1;
    * typedef ValueType<PiiMatrix<double>::row_iterator>::Type DoubleType2; 
@@ -585,7 +582,7 @@ namespace Pii
    * with larger number of bits. For example (`unsigned` `int`, 
    * `unsigned` `char`) maps to `unsigned` `int`.
    *
-   * ~~~
+   * ~~~(c++)
    * template <class T, class U> void calculate(T a, U b)
    * {
    *   typedef typename Pii::Combine<T,U>::Type R;
@@ -614,7 +611,7 @@ namespace Pii
                              typename CombineFloats<T,U>::Type >::Type Type;
   };
 
-  //@}
+  /// @endgroup
 }
 
 #endif //_PIITYPETRAITS_H

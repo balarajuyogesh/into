@@ -165,7 +165,7 @@ namespace PiiGeometry
   /**
    * Calculate the shortest distance between two 3D lines.
    *
-   * ~~~
+   * ~~~(c++)
    * // Two 3D lines.
    * PiiMatrix<double> first(2, 3,
    *                         0.0, 0.0, 0.0,

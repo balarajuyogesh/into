@@ -27,7 +27,7 @@
  * This handler can be used with PiiHttpProtocol to serve static
  * files.
  *
- * ~~~
+ * ~~~(c++)
  * PiiFileSystemUriHandler* pFileServer = new PiiFileSystemUriHandler("/var/www/");
  * _pFileServer->setIndexFile("index.html");
  * _pHttpServer = PiiHttpServer::addServer("KideServer", address);
@@ -108,7 +108,7 @@ class PII_NETWORK_EXPORT PiiFileSystemUriHandler :
    * allowed. PiiFileSystemUriHandler also supports PUT, MKCOL and
    * DELETE requests.
    *
-   * ~~~
+   * ~~~(c++)
    * handler->setProperty("allowedMethods",
    *                      QStringList() << "GET" << "HEAD" << "PUT");
    * ~~~

@@ -473,7 +473,7 @@ protected:
   void showEvent(QShowEvent* event);
   void hideEvent(QHideEvent* event);
 
-  /// @cond null
+  /// @hide
   struct Layer
   {
     Layer() : pImage(&image), dOpacity(1), bVisible(true) {}
@@ -597,7 +597,7 @@ protected:
   PiiImageViewport(Data *d, QImage* pImage, QWidget *parent = 0);
   PiiImageViewport(Data *d, const QImage& image, QWidget *parent = 0);
   PiiImageViewport(Data *d, QWidget *parent = 0);
-  /// @endcond
+  /// @endhide
   
 private:
   void init();

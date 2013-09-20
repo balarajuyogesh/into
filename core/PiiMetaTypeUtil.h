@@ -27,7 +27,7 @@ namespace Pii
    * of the types is invalid, or if *types* is empty, returns an
    * empty list.
    *
-   * ~~~
+   * ~~~(c++)
    * QList<int> lstTypes = Pii::parseTypes("QString,int");
    * // lstTypes = (QMetaType::String, QMetaType::Int)
    * ~~~
@@ -42,7 +42,7 @@ namespace Pii
    * different from that of *types*, or any of the parameters cannot
    * be converted to the expected type, returns -1.
    *
-   * ~~~
+   * ~~~(c++)
    * QList<int> lstTypes;
    * lstTypes << QMetaType::Int << QMetaType::String;
    * QVariantList lstParams;
@@ -64,7 +64,7 @@ namespace Pii
    *
    * @param target the target object
    *
-   * ~~~
+   * ~~~(c++)
    * int iSource = 1, iTarget = 0;
    * Pii::copyMetaType(QVariant::Int, &iSource, &iTarget);
    * // iTarget == 1
@@ -81,7 +81,7 @@ namespace Pii
    * Converts *args* to to a QVariantList, assuming that each
    * argument is a valid pointer of the type specified by *types*.
    *
-   * ~~~
+   * ~~~(c++)
    * int i;
    * double d;
    * void* args[2] = { &i, &d };

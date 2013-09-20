@@ -46,13 +46,11 @@ namespace Pii
     return ((c >> n) | (c << (bits - n))) & ((1 << bits) - 1);
   }
 
-  /// @overload
   template <unsigned char bits> inline unsigned int ror(unsigned int c, const unsigned char n)
   {
     return ((c >> n) | (c << (bits - n))) & ((1 << bits) - 1);
   }
 
-  /// @overload
   template <> inline unsigned int ror<INTBITS>(unsigned int c, const unsigned char n)
   {
     return ((c >> n) | (c << (INTBITS - n)));
@@ -69,12 +67,10 @@ namespace Pii
   {
     return ((c << n) | (c >> (bits-n))) & ((1 << bits) - 1);
   }
-  /// @overload
   template <unsigned char bits> inline unsigned int rol(unsigned int c, const unsigned char n)
   {
     return ((c << n) | (c >> (bits-n))) & ((1 << bits) - 1);
   }
-  /// @overload
   template <> inline unsigned int rol<INTBITS>(unsigned int c, const unsigned char n)
   {
     return ((c << n) | (c >> (INTBITS-n)));
@@ -151,7 +147,6 @@ namespace Pii
    */
   PII_CORE_EXPORT int countOnes(unsigned int c, const unsigned char bits = INTBITS);
   
-  /// @overload
   template <unsigned char bits> int countOnes(unsigned int c)
   {
     int count = 0;
@@ -175,7 +170,6 @@ namespace Pii
    */
   PII_CORE_EXPORT int countTransitions(unsigned int c, const unsigned char bits = INTBITS);
 
-  /// @overload
   template <unsigned char bits> int countTransitions(unsigned int c)
   {
     return countOnes<bits>(c ^ ror<bits>(c, 1));
@@ -190,7 +184,6 @@ namespace Pii
    */
   PII_CORE_EXPORT unsigned int rotateToMinimum(unsigned int n, const unsigned char bits = INTBITS);
 
-  /// @overload
   template <unsigned char bits> unsigned int rotateToMinimum(unsigned int n)
   {
     unsigned int tmp = n << sizeof(int)*4;
@@ -224,7 +217,6 @@ namespace Pii
    */
   PII_CORE_EXPORT int hammingDistance(unsigned int a, unsigned int b, const unsigned char bits = INTBITS);
 
-  /// @overload
   template <unsigned char bits> int hammingDistance(unsigned int a, unsigned int b)
   {
     return countOnes<bits>(a^b); //find differing bits
@@ -234,18 +226,15 @@ namespace Pii
    * Get a binary mask for the sign bit of any integer type. To get
    * the sign bit, do the following:
    *
-   * ~~~
+   * ~~~(c++)
    * int i = -1;
    * int sign = i & signMask<int>();
    * ~~~
    */
   template <class T> inline T signMask();
 
-  /// @overload
   template <> inline short signMask() { return SHRT_MIN; }
-  /// @overload
   template <> inline int signMask() { return INT_MIN; }
-  /// @overload
   template <> inline long signMask() { return LONG_MIN; }
 
   /**

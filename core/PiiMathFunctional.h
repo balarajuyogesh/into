@@ -70,7 +70,7 @@ namespace Pii
    * An adaptable binary function that raises the absolute value of its
    * first argument to the power of the second argument.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<double> mat(...); // Initialize as you want
    *
    * // For each element, set m(i,j) = |m(i,j)|^n
@@ -389,7 +389,7 @@ namespace Pii
    * function has been called. As such, the function can be used to
    * calculate the mean value of data.
    *
-   * ~~~
+   * ~~~(c++)
    * // Calculate the mean value of a matrix:
    * PiiMatrix<float> matrix(3,3);
    * Pii::Mean<float> mean;

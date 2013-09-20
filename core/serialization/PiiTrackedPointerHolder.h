@@ -36,7 +36,7 @@
  * during serialization.
  *
  *
- * ~~~
+ * ~~~(c++)
  * class MyRefCountedObjHolder : public PiiTrackedPointerHolder
  * {
  *   public:

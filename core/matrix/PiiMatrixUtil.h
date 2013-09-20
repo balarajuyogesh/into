@@ -51,7 +51,7 @@ namespace Pii
    *
    * @param rowSeparator separate each row with this
    *
-   * ~~~
+   * ~~~(c++)
    *
    * PiiMatrix<double> mat(4,4,
    *                       1.0, 2.3, 5.4, 8.0,
@@ -94,7 +94,7 @@ namespace Pii
    * optional. Separate elements with commas or spaces and rows with
    * semicolons.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<double> mat1 = matlabParse("[1 2 3; 4 5 6; 7 8 9]");
    * PiiMatrix<double> mat2 = matlabParse("1.0, 2.0, 3.5; ...\n 4 5 6.8");
    * ~~~
@@ -183,7 +183,7 @@ namespace Pii
    *
    * @param dc double precision column coordinate
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(3,3,
    *                    1,1,2,
    *                    2,1,3,
@@ -218,7 +218,6 @@ namespace Pii
   }
 
   /**
-   * @overload
    *
    * Returns *img*(r,c). This function is provided for convenience
    * to allow %valueAt() to be easily used in template code.
@@ -258,7 +257,7 @@ namespace Pii
    *
    * @return a row matrix with lst.size() columns.
    *
-   * ~~~
+   * ~~~(c++)
    * QList<double> lst = QList<double>() << 1.0 << 2.0;
    * PiiMatrix<double> mat = Pii::listToMatrix<double>(lst);
    * // mat = [ 1.0 2.0 ]
@@ -274,7 +273,7 @@ namespace Pii
    *
    * @param row row index (positive value)
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(2,2, 1,2, 3,4);
    * QList<int> lst = Pii::rowToList<QList<int> >(mat, 1);
    * // lst = { 3, 4 }
@@ -289,7 +288,7 @@ namespace Pii
    *
    * @param column column index (positive value)
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(2,2, 1,2, 3,4);
    * QList<int> lst = Pii::columnToList<QList<int> >(mat, 0);
    * // lst = { 1, 3 }
@@ -302,7 +301,7 @@ namespace Pii
    * Stores the row and column coordinates to `r` and `c`. If no
    * such value is not found, both coordinates will be set to -1.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(2,2,
    *                    1,2,
    *                    3,4);
@@ -318,7 +317,7 @@ namespace Pii
    * Stores the row and column coordinates to `r` and `c`. If no
    * such value is not found, both coordinates will be set to -1.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(2,2,
    *                    1,2,
    *                    3,4);
@@ -373,7 +372,7 @@ namespace Pii
    * Replicate a matrix `vertical` times vertically and `horizontal`
    * times horizontally.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(2,2,
    *                    1,0,
    *                    0,1);
@@ -410,7 +409,7 @@ namespace Pii
    * Sort matrix rows into ascending order based on the value on the
    * specified column. Use `predicate` as the comparison function.
    * 
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(3,3,
    *                    -1,2,3,
    *                    -2,1,3,
@@ -434,7 +433,7 @@ namespace Pii
    * Sort matrix rows into ascending order based on the value on the
    * specified column.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(3,3,
    *                    -1,2,3,
    *                    -2,1,3,
@@ -500,7 +499,7 @@ namespace Pii
   /**
    * Flip *matrix* in place either horizontally, vertically or both.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> mat(3, 3,
    *                    1, 2, 3,
    *                    4, 5, 6,
@@ -516,7 +515,6 @@ namespace Pii
   template <class T> void flip(PiiMatrix<T>& matrix, Pii::MatrixDirections directions);
 
   /**
-   * @overload
    *
    * This function doesn't modify the source matrix, but returns a
    * copy.

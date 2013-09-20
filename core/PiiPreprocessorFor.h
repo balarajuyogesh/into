@@ -16,7 +16,7 @@
 #ifndef _PIIPREPROCESSORFOR_H
 #define _PIIPREPROCESSORFOR_H
 
-/// @cond null
+/// @hide
 #define PII_REMOVE_PARENS_0()
 #define PII_REMOVE_PARENS_1(P0) P0
 #define PII_REMOVE_PARENS_2(P0, P1) P0, P1
@@ -2781,6 +2781,6 @@
 #define PII_FOREACH_256(MACRO, CAR, CDR) MACRO(CAR) \
   PII_NEXT_LOOP(257, CDR)(MACRO, PII_CAR(CDR), PII_CDR(CDR))
 
-/// @endcond
+/// @endhide
 
 #endif //_PIIPREPROCESSORFOR_H

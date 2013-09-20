@@ -16,7 +16,6 @@
 #ifndef _PIIGENERICTEXTINPUTARCHIVE_H
 #define _PIIGENERICTEXTINPUTARCHIVE_H
 
-/** @file */
 
 #include "PiiTextInputArchive.h"
 #include "PiiGenericInputArchive.h"

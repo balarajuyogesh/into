@@ -34,7 +34,7 @@ class PiiProbeInput;
  *
  * A typical unit test for an operation is as follows:
  *
- * ~~~
+ * ~~~(c++)
  * // In TestMyOperation.h
  * #include <PiiOperationTest.h>
  *
@@ -191,7 +191,6 @@ protected:
   }
 
   /**
-   * @overload
    *
    * Automatically converts const char* to QString.
    */

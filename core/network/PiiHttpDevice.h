@@ -54,7 +54,7 @@ class PiiProgressController;
  * In `Server` mode, @p PiiHttpDevice is typically used in the 
  * `handleRequest`() function of PiiHttpProtocol::UriHandler:
  *
- * ~~~
+ * ~~~(c++)
  * void MyHandler::handleRequest(const QString& uri,
  *                               PiiHttpDevice* h,
  *                               PiiProgressController* controller)
@@ -80,7 +80,7 @@ class PiiProgressController;
  * PiiNetworkClient can be used to easily create a suitable I/O
  * device:
  *
- * ~~~
+ * ~~~(c++)
  * PiiNetworkClient client("tcp://127.0.0.1:80");
  * PiiHttpDevice dev(client.openConnection(), PiiHttpDevice::Client);
  * dev.setRequest("GET", "/");
@@ -164,7 +164,7 @@ public:
    * @return the query string. Percent-encoded characters will be
    * automatically converted. May be empty.
    *
-   * ~~~
+   * ~~~(c++)
    * // request URI: /foo/bar/baz?a=2
    * QString str = h->queryString();
    * // str = "a=2"
@@ -193,7 +193,7 @@ public:
    * values will be returned. Values are automatically decoded (see
    * [decodeVariant()]).
    *
-   * ~~~
+   * ~~~(c++)
    * // request URI: /path/?var1=a&var2=b&var2=c
    *
    * QString a = h->queryValue("var1").toString();
@@ -227,7 +227,7 @@ public:
    * [encode()]). Multiple items with the same name may exists. If the
    * value is invalid, it (and the equal sign) will be omitted.
    *
-   * ~~~
+   * ~~~(c++)
    * dev.addQueryValue("v1", 1);
    * dev.addQueryValue("v2", "Hello");
    * dev.addQueryValue("v2", 3.14);
@@ -254,7 +254,7 @@ public:
    * This is useful if you want to find the relative path of a URI
    * handler.
    *
-   * ~~~
+   * ~~~(c++)
    * // request URI: /foo/bar/baz?a=2
    * QString str = h->requestPath("/foo/");
    * // str = "bar/baz"
@@ -408,7 +408,7 @@ public:
    * @param filter the output filter. PiiHttpDevice takes the
    * ownership of the pointer.
    *
-   * ~~~
+   * ~~~(c++)
    * // Buffer all data into memory until finish() or endOutputFiltering() is called.
    * dev.startOutputFiltering(new PiiStreamBuffer);
    * ~~~
@@ -456,7 +456,7 @@ public:
    * @param replace indicates whether the header should replace a
    * previous similar header, or add a second header of the same type.
    *
-   * ~~~
+   * ~~~(c++)
    * // An example for setHeader() usage on server side.
    *
    * // Set content type
@@ -672,7 +672,6 @@ public:
    * variant will be returned.
    */
   QVariant decodeVariant(const QByteArray& data) const;
-  /// @overload
   QVariant decodeVariant(const QString& data) const;
 
   /**

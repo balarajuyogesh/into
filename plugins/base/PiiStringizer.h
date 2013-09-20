@@ -30,13 +30,12 @@
  * -------
  *
  * @out output - the input value as a string. Matrices are represented
- * as shown in the example below.
+ * without any punctuation, as shown in the example below.
  *
-@verbatim
-0 1 2
-3 4 5
-@endverbatim
- *
+ * ~~~
+ * 0 1 2
+ * 3 4 5
+ * ~~~
  */
 class PiiStringizer : public PiiDefaultOperation
 {

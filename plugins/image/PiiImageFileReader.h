@@ -66,7 +66,7 @@ class PII_IMAGE_EXPORT PiiImageFileReader : public PiiImageReaderOperation
    * A list of file names to open. The names may be either absolute or
    * relative. Setting this value clears [fileNamePattern].
    *
-   * ~~~
+   * ~~~(c++)
    * pReader->setProperty("fileNames", QStringList() << "image1.bmp" << "image2.png" << "/tmp/image3.ppm");
    * ~~~
    */
@@ -120,7 +120,7 @@ class PII_IMAGE_EXPORT PiiImageFileReader : public PiiImageReaderOperation
    * QString). The meta field will be automatically converted to the
    * type of the default value.
    *
-   * ~~~
+   * ~~~(c++)
    * // Extracts the "Software" meta field from input images
    * QVariantMap meta;
    * meta["name"] = "Software";

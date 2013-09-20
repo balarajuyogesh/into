@@ -26,7 +26,6 @@
 
 #include <QMutex>
 
-/// @file
 
 /**
  * Declares a virtual piiMetaObject() function and implements a
@@ -136,19 +135,19 @@ public:
    * Protection levels for setting properties.
    *
    * - `WriteAlways` - setting the value of a property is always
-   * allowed. This is the default value for all properties.
+   *   allowed. This is the default value for all properties.
    *
-   * - `WriteWhenStoppedOrPaused` - setting the value of a property
-   * is allowed only if the state of the operation is either 
-   * `Stopped` or `Paused`.
+   * - `WriteWhenStoppedOrPaused` - setting the value of a property is
+   *   allowed only if the state of the operation is either `Stopped`
+   *   or `Paused`.
    *
-   * - `WriteWhenStopped` - setting the value of a property is
-   * allowed only if the state of the operation is `Stopped`.
+   * - `WriteWhenStopped` - setting the value of a property is allowed
+   *   only if the state of the operation is `Stopped`.
    *
    * - `WriteNotAllowed` - setting the value of a property is not
-   * allowed at all. This value makes it possible for subclasses to
-   * make the properties of a superclass read-only even if they had a
-   * setter function.
+   *   allowed at all. This value makes it possible for subclasses to
+   *   make the properties of a superclass read-only even if they had
+   *   a setter function.
    */
   enum ProtectionLevel
     {
@@ -370,7 +369,7 @@ public:
    * named input socket in another operation. This is (almost)
    * analogous to:
    *
-   * ~~~
+   * ~~~(c++)
    * output("output")->connectInput(other->input(input));
    * ~~~
    *
@@ -458,7 +457,7 @@ public:
    * A convenience function that automatically creates a QVariant out
    * of a PiiVariant.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiOperation* op = ...;
    * op->setProperty("property", Pii::createVariant(PiiMatrix<int>(4,4)));
    * ~~~
@@ -519,7 +518,7 @@ signals:
   void stateChanged(int state);
   
 protected:
-  /// @cond null
+  /// @hide
   typedef QList<QPair<const char*, ProtectionLevel> > ProtectionList;
   typedef QList<QPair<QString,QVariant> > PropertyList;
 
@@ -538,7 +537,7 @@ protected:
   } *d;
   
   PiiOperation(Data* d);
-  /// @endcond
+  /// @endhide
 
   /**
    * Constructs a new PiiOperation.
@@ -555,7 +554,7 @@ protected:
    * changed on the fly without careful handling of the internal
    * synchronization mechanism.
    *
-   * ~~~
+   * ~~~(c++)
    * MyOperation::MyOperation()
    * {
    *   // Disallow changing of the processing mode
@@ -589,7 +588,7 @@ protected:
    * Returns a pointer to the mutex that prevents concurrent access to
    * the state of this operation.
    *
-   * ~~~
+   * ~~~(c++)
    * void MyOperation::stop()
    * {
    *   synchronized (stateLock())

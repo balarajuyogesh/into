@@ -72,7 +72,7 @@ public:
    * refers another statement. The subject will be converted to
    * "[subject]". The following two statements are equal:
    *
-   * ~~~
+   * ~~~(c++)
    * PiiResourceStatement s1("#123", "pii:connector", "MyConnector");
    * PiiResourceStatement s2(123, "pii:connector", "MyConnector");
    * ~~~

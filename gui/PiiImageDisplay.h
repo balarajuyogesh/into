@@ -106,7 +106,7 @@ public:
    * Creates a dialog containing a PiiImageDisplay that shows the
    * given *image*.
    *
-   * ~~~
+   * ~~~(c++)
    * QDialog* pDialog = PiiImageDisplay::dialog(image); // image can be a matrix or a variant
    * pDialog->exec();
    * delete pDialog;

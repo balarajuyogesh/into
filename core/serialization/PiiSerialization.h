@@ -63,7 +63,7 @@ template <class Archive> inline void serialize(Archive& archive, T& value, const
  * structure, which stores the value as an `int`. Use this to avoid
  * writing serializers for each enumerated type.
  *
- * ~~~
+ * ~~~(c++)
  * struct MyStruct
  * {
  *   enum MyEnum { ValueOne, ValueTwo };
@@ -98,7 +98,7 @@ namespace PiiSerialization
    * them private. The serialization system can access these members
    * if you also make this struct a friend of your class.
    *
-   * ~~~
+   * ~~~(c++)
    * class MyClass
    * {
    *   friend struct PiiSerialization::Accessor;

@@ -22,7 +22,6 @@
 #include <QMetaType>
 #include <QImage>
 
-/** @file */
 
 namespace Pii
 {
@@ -116,7 +115,7 @@ namespace Pii
  * things a bit make sure that PiiQImages are always passed as
  * pointers.
  *
- * ~~~
+ * ~~~(c++)
  * QImage img;
  * PiiColorQImage* pMatrix = PiiColorQImage::create(img); // takes img's data
  * // pMatrix->row(0) and pMatrix->scanLine(0) point to the same memory location
@@ -129,7 +128,7 @@ namespace Pii
  * that the original goes out of scope or gets modified before you
  * modify the result.
  * 
- * ~~~
+ * ~~~(c++)
  * PiiMatrix<unsigned char> mat;
  * PiiGrayQImage* pImg = PiiGrayQImage::create(mat);
  * pImg->row(0); // WRONG, non-const function detaches matrix data
@@ -189,7 +188,7 @@ public:
    * and shared the same data with QImage. This function automatically
    * converts the data type of *matrix* to a QImage-compatible type.
    *
-   * ~~~
+   * ~~~(c++)
    * // QImage doesn't support 24-bit RGB
    * PiiMatrix<PiiColor<unsigned char> > mat;
    * // The result is 32-bit RGB
@@ -208,7 +207,7 @@ public:
    * a PiiMatrix, you risk leaking memory because PiiMatrix doesn't
    * have a virtual destructor.
    *
-   * ~~~
+   * ~~~(c++)
    * template <class T> void destroy(PiiMatrix<T>* mat)
    * {
    *   delete mat;
@@ -229,11 +228,10 @@ public:
   }
   
   /**
-   * @overload
    * Returns a new matrix in the stack. This function can be used to
    * move the data from a QImage to a PiiMatrix in the stack:
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<PiiColor4<> > func()
    * {
    *   QImage img(10, 10, QImage::Format_RGB32);

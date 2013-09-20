@@ -24,7 +24,7 @@
 #include <PiiSerializationException.h>
 #include <PiiSerialization.h>
 
-/// @cond null
+/// @hide
 
 namespace PiiSerialization
 {
@@ -62,6 +62,6 @@ namespace PiiSerialization
 
 PII_SERIALIZATION_TRACKING_TEMPLATE(PiiMatrix, false);
 
-/// @endcond
+/// @endhide
 
 #endif //_PIIMATRIXSERIALIZATION_H

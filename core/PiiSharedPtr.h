@@ -26,7 +26,7 @@
  * need to care about deleting the memory. Typical usage (compare this
  * to the explicit sharing example in [PiiSharedObject]):
  *
- * ~~~
+ * ~~~(c++)
  * class MyObject : public PiiSharedObject;
  * typedef PiiSharedPtr<MyObject> MyPtr;
  *
@@ -51,19 +51,19 @@
  * PiiSharedObject, a reference-counted wrapper will be automatically
  * created.
  *
- * ~~~
+ * ~~~(c++)
  * PiiSharedPtr<string> ptr(new string("this is"));
  * *ptr += " a test";
  * cout << ptr->c_str() << endl; //outputs "this is a test"
  * ~~~
  *
- * ~~~
+ * ~~~(c++)
  * PiiSharedPtr<int> ptr(new int);
  * ptr = new int; //releases the old one
  * *ptr = 3; //use the class just like an int pointer
  * ~~~
  *
- * ~~~
+ * ~~~(c++)
  * PiiSharedPtr<int[]> ptr(new int[5]);
  * ptr = new int[6]; //releases the old array
  * ptr[0] = 3; //use the class just like an int array
@@ -84,7 +84,7 @@
  * directly if you ensure that the PiiSharedPtr instance stays in
  * memory.
  *
- * ~~~
+ * ~~~(c++)
  * MyPtr ptr(new MyObject);
  * MyObject* ptr2 = ptr;
  * // You may now safely use ptr2 as long as ptr is in memory
@@ -168,7 +168,7 @@ public:
   /**
    * Assigns a new value to this pointer and releases the old pointer.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiSharedPtr<MyObject> ptr1(new MyObject), ptr2(new MyObject);
    * ptr1 = ptr2; //releases the old pointer in ptr1, increases refcount in ptr2
    * ~~~

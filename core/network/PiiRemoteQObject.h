@@ -27,7 +27,7 @@
  * parameter makes it possible to derive the class not only from
  * QObject but any QObject-derived class.
  *
- * ~~~
+ * ~~~(c++)
  * PiiRemoteQObject<QObject> client("tcp://intopii.com:3142/valuesetter/");
  * connect(pSlider, SIGNAL(valueChanged(int)), &client, SLOT(setValue(int)));
  * connect(&client, SIGNAL(valueChanged(int)), pSlider2, SLOT(setValue(int)));

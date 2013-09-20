@@ -74,7 +74,7 @@ Derived& operator OPERATOR ## = (const PiiConceptualMatrix<Matrix>& other) \
 #define PII_BOTH_MATRIX_ASSIGNMENT_OPERATORS(OPERATOR, FUNCTION) \
   PII_MATRIX_MATRIX_ASSIGNMENT_OPERATOR(OPERATOR, FUNCTION) \
   PII_MATRIX_SCALAR_ASSIGNMENT_OPERATOR(OPERATOR, FUNCTION)
-/// @endcond
+/// @endhide
 
 /**
  * A superclass for classes that implement the *matrix* concept. A
@@ -112,7 +112,7 @@ Derived& operator OPERATOR ## = (const PiiConceptualMatrix<Matrix>& other) \
  * it as such as using the curiously recurring template pattern (CRTP)
  * as follows:
  *
- * ~~~
+ * ~~~(c++)
  * // First declare types related to your matrix implementation. This
  * // needs to come first because PiiConceptualMatrix matrix needs it
  * // when instantiated. Since My3x3Matrix is not declared yet, a
@@ -146,7 +146,7 @@ Derived& operator OPERATOR ## = (const PiiConceptualMatrix<Matrix>& other) \
  * matrix classes in arithmetic operations. For example, you can do
  * the following:
  *
- * ~~~
+ * ~~~(c++)
  * PiiMatrix<int> mat(3,3);
  * My3x3Matrix mat2;
  * mat += mat2 / 4 + 5;
@@ -449,7 +449,7 @@ namespace Pii
 
 }
 
-/// @cond null
+/// @hide
 #define PII_COMBINE_TYPES(T,U) typename Pii::Combine<T,U>::Type
 
 // For operators like operator- () and operator! ()
@@ -537,7 +537,7 @@ operator* (typename Matrix::value_type value, const PiiConceptualMatrix<Matrix>&
   return Pii::unaryMatrixTransform(matrix.selfRef(), std::bind2nd(std::multiplies<typename Matrix::value_type>(), value));
 }
 
-/// @endcond
+/// @endhide
 
 namespace Pii
 {

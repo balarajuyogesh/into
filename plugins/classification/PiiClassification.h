@@ -25,7 +25,6 @@
 #include "PiiSampleSet.h"
 #include "PiiClassificationException.h"
 
-/// @file
 
 /**
  * Training algorithms that take a long time to run must occassionally
@@ -161,7 +160,7 @@ namespace PiiClassification
    * @return the index of the closest code model sample, or -1 if 
    * `modelSet` is empty.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiSquaredGeometricDistance<const float*> dist;
    * PiiMatrix<float> matSamples(50,2); // each row is a feature vector
    * PiiMatrix<float> matObserved(1,2); // observed sample
@@ -201,7 +200,7 @@ namespace PiiClassification
    * according to the distance. The length of the list is the minimum
    * of *n* and the number of samples in *modelSet*.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiSquaredGeometricDistance<const float*> dist;
    * PiiMatrix<float> matSamples(50,2); // each row is a feature vector
    * PiiMatrix<float> matObserved(1,2); // observed sample
@@ -337,7 +336,7 @@ namespace PiiClassification
    *
    * @param maximum largest possible feature value
    *
-   * ~~~
+   * ~~~(c++)
    * using namespace PiiClassification;
    * PiiMatrix<double> matSamples = createRandomSampleSet<PiiMatrix<double> >(10, 16, -1, 1);
    * ~~~
@@ -352,7 +351,7 @@ namespace PiiClassification
    * found labels as a list of pairs storing the class label
    * (pair.first) and the number of entries (pair.second).
    *
-   * ~~~
+   * ~~~(c++)
    * QVector<double> labels = QVector<double>() << 0 << 1 << 2 << 1 << 4 << 0;
    * QList<QPair<double,int> > counts = PiiClassification::countLabels(labels);
    * // counts = ((0.0, 2), (1.0, 2), (2.0, 1), (4.0, 1))
@@ -368,7 +367,7 @@ namespace PiiClassification
    * value (truncated to an integer) equals n. All negative labels
    * will be collected to the zero bin in the returned histogram.
    *
-   * ~~~
+   * ~~~(c++)
    * QVector<double> labels = QVector<double>() << 0.9 << 1.1 << 2.5 << 1.3 << 4.05 << 0.01;
    * QVector<int> counts = PiiClassification::countLabelsInt(labels);
    * // counts = (2, 2, 1, 0, 1)

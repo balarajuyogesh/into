@@ -28,7 +28,7 @@
  * The main use of PiiSmartPtr is in guarding heap-allocated pointers
  * in functions that may throw exceptions. Use like this:
  *
- * ~~~
+ * ~~~(c++)
  * PiiSmartPtr<int[]> ptr(new int[5]); // arrays
  * PiiSmartPtr<int> ptr(new int); // any other pointers
  * ~~~

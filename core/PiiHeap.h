@@ -60,7 +60,7 @@ namespace Pii
  * PiiHeap can be used as a priority queue. The following example
  * finds the five smallest numbers in a random number set:
  *
- * ~~~
+ * ~~~(c++)
  * // Preallocate 5 elements on the stack.
  * PiiHeap<double, 5> heap;
  * // Initialize with the largest possible value.

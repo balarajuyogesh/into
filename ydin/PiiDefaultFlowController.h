@@ -89,7 +89,7 @@ public:
    * group has been processed by the child groups. Once this happens,
    * another sync event will be sent with the parent's group id.
    *
-   * ~~~
+   * ~~~(c++)
    * MyOperation::MyOperation()
    * {
    *   // Receives large images

@@ -31,7 +31,7 @@
  * major, minor and patch, but the class does not prevent you from
  * using any number of parts.
  *
- * ~~~
+ * ~~~(c++)
  * PiiVersionNumber v1("1.0.0");
  * PiiVersionNumber v2("1.1-custom");
  * PiiVersionNumber v3(0, 9);

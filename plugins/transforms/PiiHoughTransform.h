@@ -90,7 +90,7 @@
  * used.
  *
  *
- * ~~~
+ * ~~~(c++)
  * PiiMatrix<int> img; // fill somehow...
  * // Make the Hough transform. The result will be a PiiMatrix<int>,
  * // and each pixel with a value higher than or equal to three will
@@ -163,7 +163,7 @@ public:
    * line segment (x1, y1, x2, y2). The returned value is suitable for
    * use with PiiImageAnnotator's `property` input.
    *
-   * ~~~
+   * ~~~(c++)
    * // Transform an image
    * PiiHoughTransform hough;
    * PiiMatrix<int> matTransformed(hough.transform(img));

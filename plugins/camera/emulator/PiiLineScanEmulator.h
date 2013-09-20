@@ -52,7 +52,7 @@ class PII_CAMERAEMULATOR_EXPORT PiiLineScanEmulator : public PiiCameraDriver
    * [backgroundColor]. The generator must be registered to the object
    * registry.
    *
-   * ~~~
+   * ~~~(c++)
    * emulator->setProperty("textureGeneratorName", "PiiNonWovenGenerator");
    * ~~~
    */

@@ -23,7 +23,7 @@
  * objects are represented as row vectors. The geometric object
  * structures are provided to conveniently handle such matrices.
  *
- * ~~~
+ * ~~~(c++)
  * // A matrix that stores two points
  * PiiMatrix<int> mat(2,  2,
  *                    1,  1,

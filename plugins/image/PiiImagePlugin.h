@@ -39,7 +39,7 @@
  * ROIs are used with many image processing and analysis operations.
  * Some examples:
  *
- * ~~~
+ * ~~~(c++)
  * // Calculate histogram over an elliptical area that just fits into an image
  * PiiMatrix<int> histogram =
  *   PiiHistogram::histogram(image,

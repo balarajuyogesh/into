@@ -140,7 +140,7 @@ public:
    * entity. If the header does not contain such information, an empty
    * string will be returned.
    *
-   * ~~~
+   * ~~~(c++)
    * // Content-Disposition: form-data; name=control
    * QString name = header.controlName(); // returns "control"
    * ~~~
@@ -183,7 +183,7 @@ public:
    * Returns the value of the `Content`-Disposition header, without
    * parameters.
    *
-   * ~~~
+   * ~~~(c++)
    * // Content-Disposition: form-data; name=control
    * QString disposition = header.contentDisposition(); // returns "form-data"
    * ~~~

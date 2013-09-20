@@ -34,7 +34,7 @@
  * minimum computational overhead but may not be the most convenient
  * way to the programmer. A typical usage scenario is as follows:
  *
- * ~~~
+ * ~~~(c++)
  * class MyObject : public PiiSharedObject { ... };
  *
  * // Sender creates the pointer and passes it.
@@ -112,7 +112,7 @@ private:
   mutable QAtomicInt _ref;
 };
 
-/// @cond null
+/// @hide
 class PiiSharedObjectHolder : public PiiTrackedPointerHolder
 {
 public:
@@ -140,6 +140,6 @@ namespace PiiSerialization
     ptr->reserve();
   }
 }
-/// @endcond
+/// @endhide
 
 #endif //_PIISHAREDOBJECT_H

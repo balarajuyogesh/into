@@ -48,7 +48,7 @@ template <class T, int D> struct PiiVectorTraits
  * Matrices and vectors are distinct entities, but a row of a matrix
  * can be treated as a vector:
  *
- * ~~~
+ * ~~~(c++)
  * typedef PiiVector<int,3> Vec3;
  * PiiMatrix<int> matData(1,3, 1,2,3);
  * Vec3& vec = *reinterpret_cast<Vec3*>(matData[0]);
@@ -96,7 +96,7 @@ public:
   /**
    * Create a new measumerent point.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiVector<int,3>* p = new PiiVector<int,3>(1, 2, 3);
    * PiiVector<double,4>* d = new PiiVector<double,4>(1.0, 2.0, 3.0, 4.0);
    *
@@ -257,21 +257,18 @@ public:
 namespace Pii
 {
   /**
-   * @overload
    */
   template <class T, int D> inline T innerProduct(const PiiVector<T,D>& v1, const PiiVector<T,D>& v2)
   {
     return innerProductN(v1.begin(), D, v2.begin());
   }
   /**
-   * @overload
    */
   template <class T> inline T innerProduct(const PiiVector<T,2>& v1, const PiiVector<T,2>& v2)
   {
     return v1[0]*v2[0] + v1[1]*v2[1];
   }
   /**
-   * @overload
    */
   template <class T> inline T innerProduct(const PiiVector<T,3>& v1, const PiiVector<T,3>& v2)
   {

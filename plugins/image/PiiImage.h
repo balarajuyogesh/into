@@ -93,7 +93,6 @@ namespace PiiImage
     return PiiMatrix<unsigned char>(image);
   }
 
-  /// @overload
   inline PiiMatrix<unsigned char> to8Bit(const PiiMatrix<unsigned char>& image)
   {
     return image;
@@ -112,7 +111,7 @@ namespace PiiImage
    * Extract a channel from a color image. This is a generic template
    * function that works with any color type.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<PiiColor4<> > image(5,5);
    * PiiMatrix<unsigned char> ch1(PiiImage::colorChannel(image, 1)); // Green channel
    *
@@ -135,7 +134,7 @@ namespace PiiImage
    * any color type. If the sizes of `image` and `value` do not
    * match, the function does nothing.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<PiiColor4<> > image(5,5);
    * PiiMatrix<unsigned char> red(5,5);
    * red = 255;
@@ -156,7 +155,7 @@ namespace PiiImage
    * Set a color channel to a constant value. Works analogously to the
    * above function but uses the same value for each pixel.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<PiiColor4<> > image(5,5);
    * PiiImage::setColorChannel(image, 0, unsigned char(255));
    * ~~~
@@ -228,7 +227,7 @@ namespace PiiImage
    * cannot be represented as integers. Use `float` or `double` as
    * the data type.
    *
-   * ~~~
+   * ~~~(c++)
    * // Create a 5-by-5 gaussian filter
    * PiiMatrix<double> filter = PiiImage::makeFilter<double>(PiiImage::GaussianFilter, 5);
    * ~~~
@@ -261,7 +260,7 @@ namespace PiiImage
    * @return `true` if the decomposition was successful, `false`
    * otherwise.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> filter = PiiImage::makeFilter<int>(PiiImage::SobelXFilter);
    * PiiMatrix<int> h, v;
    * PiiImage::separateFilter(filter, h, v);
@@ -272,7 +271,7 @@ namespace PiiImage
    * separable if it is not stored accurately enough. This applies
    * especially to the Gaussian filter.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<float> h, v;
    * // Returns false, must use double as the data type
    * PiiImage::separateFilter(PiiImage::makeFilter<float>(PiiImage::GaussianFilter), h, v);
@@ -292,7 +291,7 @@ namespace PiiImage
    * @return gradient angle for each pixel (\([-\pi,\pi]\)), or an
    * empty matrix if `gradX` and `gradY` are of different size.
    *
-   * ~~~
+   * ~~~(c++)
    * using namespace PiiImage;
    * PiiMatrix<float> directions = gradientDirection(filter(image, SobelXFilter),
    *                                                 filter(image, SobelYFilter));
@@ -319,7 +318,7 @@ namespace PiiImage
    * @return gradient magnitude for each pixel, or an
    * empty matrix if `gradX` and `gradY` are of different size.
    *
-   * ~~~
+   * ~~~(c++)
    * using namespace PiiImage;
    * PiiMatrix<int> image; // construct somewhere
    * // Use built-in filter masks directly
@@ -360,7 +359,7 @@ namespace PiiImage
    * in `direction` into points of the compass (0-7, 0 = east, 1 =
    * north-east, ..., 7 = south-east).
    *
-   * ~~~
+   * ~~~(c++)
    * // Typical case: thin edges using a gradient direction image (in radians)
    * PiiMatrix<int> gradientX, gradientY, edges;
    * edges =
@@ -415,7 +414,7 @@ namespace PiiImage
    * @param mode "extension" mode, i.e. the way of handling border
    * effects.
    *
-   * ~~~
+   * ~~~(c++)
    * // Gaussian low-pass filtering assuming zeros outside of the image.
    * PiiMatrix<float> filtered = PiiImage::filter<float>(image,
    *                                                     PiiImage::makeFilter<float>(PiiImage::GaussianFilter),
@@ -458,7 +457,7 @@ namespace PiiImage
    * vector or `verticalFilter` is not a column vector, a clone of
    * the input image will be returned.
    *
-   * ~~~
+   * ~~~(c++)
    * // Convolution with a 23-by-23 filter is (informally) O(N * 23^2)
    * // Convolution with two 23-by-1 filters is O(N * 23*2)
    * // In theory, the processing time can go down to one 11th
@@ -495,7 +494,7 @@ namespace PiiImage
    *
    * @see makeFilter()
    *
-   * ~~~
+   * ~~~(c++)
    * // First template parameter is the type of the result
    * PiiMatrix<int> smoothed = PiiImage::filter<int>(image,
    *                                                 PiiImage::GaussianFilter,
@@ -524,7 +523,7 @@ namespace PiiImage
    * @param scale a scaling factor for the filter. If `scale` is
    * zero, the function uses 256/max(abs(filter)).
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> filtered = PiiImage::intFilter(image, PiiImage::makeGaussian(5));
    * ~~~
    *
@@ -695,7 +694,7 @@ namespace PiiImage
    * Creates a transform that rotates a coordinate system `theta`
    * radians around the specified center point.
    *
-   * ~~~
+   * ~~~(c++)
    * // Rotate 45 degrees around image center
    * PiiMatrix<int> img(100,100);
    * PiiMatrix<float> matRotation = createRotationTransform(M_PI/4,
@@ -827,7 +826,7 @@ namespace PiiImage
    * the coordinates of the result r to the image i: Ar = i. The
    * function uses homogeneous coordinates.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiMatrix<int> image(5, 5,
    *                      0, 0, 1, 0, 0,
    *                      0, 0, 2, 0, 0,

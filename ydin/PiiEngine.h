@@ -36,7 +36,7 @@ class QLibrary;
  *
  * A typical, simple usage scenario for the engine is as follows:
  *
- * ~~~
+ * ~~~(c++)
  * //1. create a PiiEngine instance
  * PiiEngine engine;
  *
@@ -107,7 +107,7 @@ public:
    * For example, to load the flow control plug-in
    * ({libpiiflowcontrol.so, piiflowcontrol.dll}), do this:
    *
-   * ~~~
+   * ~~~(c++)
    * PiiEngine::loadPlugin("piiflowcontrol");
    * ~~~
    *
@@ -120,7 +120,7 @@ public:
    * Windows). Note that in this case you need to use the full file
    * name (preferably without the extension, though).
    *
-   * ~~~
+   * ~~~(c++)
    * PiiEngine::loadPlugin("relative/path/to/libmyplugin");
    * PiiEngine::loadPlugin("/absolute/path/to/libmyotherplugin");
    * ~~~
@@ -145,7 +145,7 @@ public:
   /**
    * A convenience function that loads many plugins at once.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiEngine::loadPlugins(QStringList() << "piiimage" << "piibase");
    * ~~~
    *
@@ -260,7 +260,7 @@ public:
    * @exception PiiSerializationException& if the serialization of the
    * engine fails for any reason.
    *
-   * ~~~
+   * ~~~(c++)
    * try
    *   {
    *     PiiEngine::loadPlugin("piibase");
@@ -293,7 +293,7 @@ public:
    * be recognized or an error occurs when reading the engine
    * instance.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiVariantMap mapConfig;
    * PiiEngine* pEngine = PiiEngine::load("counter_engine.cft", &mapConfig);
    * QCOMPARE(mapConfig["application"].toString(), QString("Into"));

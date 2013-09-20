@@ -78,7 +78,7 @@ class PiiFileSystemScanner : public PiiDefaultOperation
    * A list of wildcard patterns used to match files by name. If this
    * list is empty, everything will be matched.
    *
-   * ~~~
+   * ~~~(c++)
    * operation->setProperty("nameFilters", QStringList() << "*.avi" << "*.mpeg");
    * ~~~
    */

@@ -58,7 +58,7 @@ class PiiIoOperation : public PiiDefaultOperation
    * question. Other propertis vary depending on channel type
    * (input/output) and the I/O driver.
    *
-   * ~~~
+   * ~~~(c++)
    * // Create a new output signal operation
    * PiiOperation* pOutput = engine.createOperation("PiiIoOutputOperation");
    *

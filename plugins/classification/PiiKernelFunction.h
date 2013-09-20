@@ -32,7 +32,7 @@ template <class SampleSet> using PiiKernelFunction = PiiDistanceMeasure<SampleSe
  * Type definition for a polymorphic implementation of the function
  * object *KERNEL*.
  *
- * ~~~
+ * ~~~(c++)
  * PiiKernelFunction<ConstFeatureIterator>* pKernel = new PII_POLYMORPHIC_KERNEL(PiiGaussianKernel);
  * ~~~
  */

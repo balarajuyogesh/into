@@ -58,7 +58,7 @@ class PII_CLASSIFICATION_EXPORT PiiVectorQuantizerOperation : public PiiClassifi
    * nothing. The default distance measure is
    * PiiSquaredGeometricDistance.
    *
-   * ~~~
+   * ~~~(c++)
    * PiiOperation* pClassifier = engine.createOperation("PiiKnnClassifier<float>");
    * // This will create an instance of PiiHistogramIntersection<float>
    * classifier->setProperty("distanceMeasure", "PiiHistogramIntersection");
@@ -76,7 +76,7 @@ class PII_CLASSIFICATION_EXPORT PiiVectorQuantizerOperation : public PiiClassifi
    * histogram intersection for the first and log-likelihood for the
    * other. Here's how:
    *
-   * ~~~
+   * ~~~(c++)
    * classifier->setProperty("distanceMeasures",
    *                         QStringList() << "PiiHistogramIntersection" << "PiiLogLikelihood");
    * ~~~
