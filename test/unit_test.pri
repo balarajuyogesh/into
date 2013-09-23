@@ -15,4 +15,10 @@ qt5 {
 SOURCES += *.cc
 HEADERS += *.h
 
+TARGET = $$PRO_FILE_BASENAME
+defined(TEST_INSTALL_PATH, var): {
+  target.path = $$TEST_INSTALL_PATH
+  INSTALLS += target
+}
+
 LIBS += -lpiiydin$$LIBVER -lpiicore$$LIBVER

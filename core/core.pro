@@ -10,8 +10,9 @@ SOURCES         = *.cc serialization/*.cc matrix/*.cc
   SOURCES += network/*.cc
 }
 
-INTODIR          = ..
+INTODIR         = ..
 include($$INTODIR/base.pri)
+include($$INTODIR/libinstall.pri)
 VERSION         = $$INTO_LIB_VERSION
 
 DEFINES += PII_BUILD_CORE

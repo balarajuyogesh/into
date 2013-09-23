@@ -20,6 +20,13 @@ SOURCES   = *.cc
 
 LIBS += -lpiiydin$$LIBVER -lpiicore$$LIBVER -L$$INTODIR/demos/utils/$$MODE -ldemoutils
 
-qt5: QT += widgets
+TARGET = $$PRO_FILE_BASENAME
+defined(DEMO_INSTALL_PATH, var): {
+  THIS_DEMO_INSTALL_PATH = $$DEMO_INSTALL_PATH/$$replace(_PRO_FILE_PWD_, $$PWD, "")
+  target.path = $$THIS_DEMO_INSTALL_PATH
+  resources.path = $$THIS_DEMO_INSTALL_PATH
+  resources.files = image.png README
+  INSTALLS += target resources
+}
 
-#win32:CONFIG -= embed_manifest_exe
+qt5: QT += widgets

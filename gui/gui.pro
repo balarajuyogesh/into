@@ -5,6 +5,7 @@ SOURCES         = *.cc
 
 INTODIR = ..
 include($$INTODIR/base.pri)
+include($$INTODIR/libinstall.pri)
 VERSION         = $$INTO_LIB_VERSION
 
 qt5: QT += widgets

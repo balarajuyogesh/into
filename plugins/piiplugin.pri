@@ -32,6 +32,17 @@ isEmpty(INTODIR) {
 TARGET = pii$$lower($$basename(PLUGIN))
 
 include(../base.pri)
+defined(PLUGIN_INSTALL_PATH, var) {
+  INSTALL_PATH = $$PLUGIN_INSTALL_PATH
+} else {
+  !defined(INSTALL_PATH, var) {
+    INSTALL_PATH = /usr/lib/into/plugins
+  } else {
+    INSTALL_PATH = $$INSTALL_PATH/plugins
+  }
+}
+
+include(../libinstall.pri)
 
 TEMPLATE        = lib
 unix:VERSION    = $$INTO_LIB_VERSION

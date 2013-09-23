@@ -76,5 +76,8 @@ defineReplace(forcedLink) {
   !linux:return(-l$$ARGS)
 }
 
+PRO_FILE_BASENAME = $$basename(_PRO_FILE_)
+PRO_FILE_BASENAME = $$replace(PRO_FILE_BASENAME, .pro, "")
+
 include(qt5.pri)
 include(extensions.pri)
