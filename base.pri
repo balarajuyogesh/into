@@ -17,7 +17,7 @@ MODE = $$lower($$MODE)
 CONFIG += qt thread warn_on exceptions $$MODE
 
 isEmpty(INTODIR) { INTODIR = $$PWD }
-!contains(DISABLE,network) QT += network
+QT += network
 
 DESTDIR = $$MODE
 OBJECTS_DIR = $$MODE
@@ -32,9 +32,6 @@ INCLUDEPATH += . \
   $$INTODIR/ydin/network \
   $$INTODIR/gui
 LIBS += -L$$INTODIR/core/$$MODE -L$$INTODIR/ydin/$$MODE -L$$INTODIR/gui/$$MODE
-
-# Windows installation directory
-win32:exists(../lib/piiydin.lib): LIBS += -L$$INTODIR/../lib
 
 win32-msvc2008 {
 # Disable checked iterators for VC2008 because they cause compilation errors.
@@ -61,7 +58,7 @@ unix {
     QMAKE_RPATH = -L
   }
 }
-linux:QMAKE_CXXFLAGS += -fvisibility=hidden
+linux: QMAKE_CXXFLAGS += -fvisibility=hidden
 macx*: CONFIG += x86
 
 equals(MODE, release) {

@@ -32,17 +32,6 @@ isEmpty(INTODIR) {
 TARGET = pii$$lower($$basename(PLUGIN))
 
 include(../base.pri)
-defined(PLUGIN_INSTALL_PATH, var) {
-  INSTALL_PATH = $$PLUGIN_INSTALL_PATH
-} else {
-  !defined(INSTALL_PATH, var) {
-    INSTALL_PATH = /usr/lib/into/plugins
-  } else {
-    INSTALL_PATH = $$INSTALL_PATH/plugins
-  }
-}
-
-include(../libinstall.pri)
 
 TEMPLATE        = lib
 unix:VERSION    = $$INTO_LIB_VERSION
@@ -54,5 +43,16 @@ DEFINES         += PII_LOG_MODULE=$$basename(PLUGIN)
 win32-msvc*: QMAKE_LFLAGS_WINDOWS_DLL += /OPT:NOREF
 
 include(../plugindeps.pri)
+
+defined(PLUGIN_INSTALL_PATH, var) {
+  INSTALL_PATH = $$PLUGIN_INSTALL_PATH
+} else {
+  !defined(INSTALL_PATH, var) {
+    INSTALL_PATH = /usr/lib/into/plugins
+  } else {
+    INSTALL_PATH = $$INSTALL_PATH/plugins
+  }
+}
+include(../libinstall.pri)
 
 LIBS += -lpiiydin$$LIBVER -lpiicore$$LIBVER
