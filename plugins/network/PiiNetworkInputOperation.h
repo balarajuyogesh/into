@@ -27,7 +27,7 @@ class PiiHttpServer;
 
 /**
  * An operation that receives objects through a network connection
- * with the HTTP protol. @p PiiNetworkInputOperation registers itself
+ * with the HTTP protol. PiiNetworkInputOperation registers itself
  * as a handler into a PiiHttpServer's protocol. It accepts many
  * different input formats and is able to automatically decode data in
  * various formats.
@@ -123,7 +123,7 @@ class PiiNetworkInputOperation : public PiiNetworkOperation,
   /**
    * The URI of the operation within the server. Note that each
    * operation must have a unique URI in the context of a HTTP server. 
-   * If `uri` is empty, @p /objectName will be used as the URI.
+   * If `uri` is empty, `/objectName` will be used as the URI.
    */
   Q_PROPERTY(QString uri READ uri WRITE setUri);
 

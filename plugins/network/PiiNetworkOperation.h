@@ -173,21 +173,21 @@ protected:
     /// Names of dynamic input sockets.
     QStringList lstInputNames;
     
-    /// @p true iff the @p body input is connected.
+    /// `true` iff the `body` input is connected.
     bool bBodyConnected;
-    /// @p true iff the @p content @p type input is connected.
+    /// `true` iff the `content type` input is connected.
     bool bTypeConnected;
-    /// @p false iff errors should cause termination of the operation
+    /// `false` iff errors should cause termination of the operation
     bool bIgnoreErrors;
-    /// Default content type if @p content @p type is not connected
+    /// Default content type if `content type` is not connected
     QString strContentType;
     /// The number of static inputs (not configured with #inputNames)
     int iStaticInputCount;
     /// The number of static outputs (not configured with #outputNames)
     int iStaticOutputCount;
-    /// A pointer to the @p body input.
+    /// A pointer to the `body` input.
     PiiInputSocket* pBodyInput;
-    /// A pointer to the @p content @p type input.
+    /// A pointer to the `content type` input.
     PiiInputSocket* pTypeInput;
     /// Map of decoded output values.
     QMap<QString,PiiVariant> mapOutputValues;

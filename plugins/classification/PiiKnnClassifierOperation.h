@@ -44,7 +44,7 @@ public:
   int k() const;
 
 protected:
-  /// Returns @p false.
+  /// Returns `false.`
   virtual bool needsThread() const;
   
   /// @internal

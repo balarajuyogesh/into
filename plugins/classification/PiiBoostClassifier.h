@@ -22,7 +22,7 @@
 /**
  * An generic implementation of a boosted classifier. "Boosting" is
  * actually not a classification method but rather a meta-algorithm
- * that can be used to @i boost the performance of another classifier. 
+ * that can be used to *boost* the performance of another classifier.
  * It is required that the classifier to be boosted is able to learn
  * weighted samples.
  *

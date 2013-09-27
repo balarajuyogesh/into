@@ -48,7 +48,7 @@
  * Outputs
  * -------
  *
- * @out image - the large image. @p PiiImageSplitter will pass the
+ * @out image - the large image. PiiImageSplitter will pass the
  * input image to this output before it sends the pieces.
  *
  * @out subimage - pieces of the large image. The type of the

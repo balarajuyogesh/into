@@ -16,7 +16,7 @@
 /**
  * @defgroup PiiNetworkPlugin
  *
- * @p PiiNetworkPlugin contains operations for sending and receiving
+ * PiiNetworkPlugin contains operations for sending and receiving
  * objects through the network.
  */
 
