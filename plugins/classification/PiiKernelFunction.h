@@ -18,10 +18,6 @@
 
 #include "PiiDistanceMeasure.h"
 
-/**
- * @file
- */
-
 #ifdef PII_CXX0X
 template <class SampleSet> using PiiKernelFunction = PiiDistanceMeasure<SampleSet>
 #else

@@ -17,7 +17,7 @@
 #define _PIILOG_H
 
 /**
- * @file Application-wide logging facilities.
+ * @group logging Application-wide logging facilities.
  *
  * The logging system in Into is built on Qt's debug message system
  * (qDebug(), qWarning() etc.) There are however a few notable
@@ -107,8 +107,6 @@ inline void PII_PRINTF_ATTR(3,4) piiLog(const char* module, QtMsgType level, con
  */
 #define piiPrintable(STR) (STR).toLocal8Bit().constData()
 
-/**
- */
 inline void piiLog(const char* module, QtMsgType level, const QString& msg)
 {
   piiLog(module, level, "%s", piiPrintable(msg));
@@ -242,6 +240,8 @@ namespace PiiLog
    */
   PII_CORE_EXPORT int maxArchivedFiles();
 }
+
+/// @endgroup
 
 /// @hide
 static const char* piiLogModuleName = PII_STRINGIZE(PII_LOG_MODULE);

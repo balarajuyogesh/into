@@ -20,13 +20,6 @@
 #include "PiiSerializationGlobal.h"
 
 /**
- * @file
- *
- * Macros and declarations for handling serialization errors.
- *
- */
-
-/**
  * Throw a PiiSerializationException with the given error code. This
  * macro is useful mostly in archive implementations.
  *

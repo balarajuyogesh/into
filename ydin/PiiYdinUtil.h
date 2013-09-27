@@ -20,12 +20,6 @@
 #include "PiiOperationCompound.h"
 #include <QString>
 
-/**
- * @file
- *
- * Utility functions for mainly debugging purposes.
- */
-
 namespace PiiYdin
 {
   enum IllustrationFlag

@@ -13,13 +13,6 @@
  * refer to LICENSE.AGPL3 for details.
  */
 
-/**
- * @file
- *
- * Helpful definitions for mathematical routines. Defines mathematical
- * constants missing from some compilers.
- */
-
 #ifndef _PIIMATHDEFS_H
 #define _PIIMATHDEFS_H
 

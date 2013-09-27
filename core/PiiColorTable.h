@@ -20,10 +20,6 @@
 #include <QRgb>
 #include "PiiGlobal.h"
 
-/**
- * @file Functions for creating color tables.
- *
- */
 namespace Pii
 {
   /**

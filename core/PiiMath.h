@@ -25,25 +25,24 @@
 #include <cstdlib>
 #include <complex>
 
-/**
- * @file
- *
- * Miscellaneous mathematical routines. This file contains functions
- * for many typical matrix calculations. Some functions come in two
- * versions, one for const and the other for non-const parameters. The
- * non-const versions are faster and more memory efficient because
- * they modify the matrix in place. The const versions return a new
- * matrix.
- *
- * The PiiMath namespace also contains template replacements for many
- * standard math functions such as `log`(), `sqrt`(), `sin`(), 
- * `atan2`() etc. The functions accept both scalar and matrix arguments
- * and use C99 functions specific to a type if possible.
- *
- */
-
 namespace Pii
 {
+  /**
+   * @group math Mathematics
+   *
+   * Miscellaneous mathematical routines. This file contains functions
+   * for many typical matrix calculations. Some functions come in two
+   * versions, one for const and the other for non-const
+   * parameters. The non-const versions are faster and more memory
+   * efficient because they modify the matrix in place. The const
+   * versions return a new matrix.
+   *
+   * The PiiMath namespace also contains template replacements for
+   * many standard math functions such as `log`(), `sqrt`(), `sin`(),
+   * `atan2`() etc. The functions accept both scalar and matrix
+   * arguments and use C99 functions specific to a type if possible.
+   */
+
   /**
    * A trait structure that converts any input type to a real output
    * type. Many mathematical functions accept any input but return a
@@ -3106,6 +3105,7 @@ namespace Pii
           Traits::swap(row[j], column[j]);
       }
   }
-} //End namespace Pii
+  /// @endgroup
+} // namespace Pii
 
 #endif //_PIIMATH_H

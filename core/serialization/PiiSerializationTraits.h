@@ -16,13 +16,6 @@
 #ifndef _PIISERIALIZATIONTRAITS_H
 #define _PIISERIALIZATIONTRAITS_H
 
-/**
- * @file
- *
- * Traits for serializable classes and macros for altering them.
- *
- */
-
 #include <PiiPreprocessor.h>
 #include <PiiMetaTemplate.h>
 #include <PiiTypeTraits.h>

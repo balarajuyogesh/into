@@ -18,6 +18,9 @@
 
 #include <cv.h>
 
+/**
+ * Definitions for OpenCV-related routines.
+ */
 namespace PiiOpenCv
 {
   /// @hide

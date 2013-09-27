@@ -16,14 +16,6 @@
 #if !defined(_PIISERIALIZATIONUTIL_H) && !defined(Q_MOC_RUN) // as of Qt 5, moc chokes on this file
 #define _PIISERIALIZATIONUTIL_H
 
-/**
- * @file
- *
- * Convenience macros and utility functions for serializing many Qt
- * types.
- *
- */
-
 #include <QObject>
 #include <QMetaObject>
 #include <QMetaProperty>

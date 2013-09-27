@@ -279,7 +279,7 @@ Making a Class Serializable the Easy Way {#serialization_making_easy}
 Now that we are familiar with the concepts or registering serializable
 types we can just forget the manual way of doing things. All one
 really needs to do is to define some configuration values and include
-a single file called [PiiSerializableRegistration.h]. `Car` could be
+a single file called PiiSerializableRegistration.h. `Car` could be
 registered simply this way:
 
 ~~~
@@ -288,9 +288,10 @@ registered simply this way:
 #include <PiiSerializableRegistration.h>
 ~~~
 
-
 PiiSerializableRegistration.h can be included as many times as
-necessary.
+necessary. See the [complete reference](serializableregistration_h)
+for details.
+
 
 Versioning {#serialization_making_version}
 ----------

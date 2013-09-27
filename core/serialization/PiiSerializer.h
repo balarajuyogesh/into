@@ -23,15 +23,8 @@
 #include "PiiTemplateExport.h"
 #include <PiiGlobal.h>
 
-/**
- * @file
- *
- * Macros and class declarations for serializers.
- *
- */
-
 /*
- * Instantiate a PiiSerializerTemplate for the given archive and data
+ * Instantiates a PiiSerializerTemplate for the given archive and data
  * type. This registers the serializer to the global serializer map of
  * the given archive type.
  */

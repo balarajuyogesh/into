@@ -17,14 +17,14 @@
 #define _PIITEMPLATEEXPORT_H
 
 /**
- * @file
+ * @page piitemplateexport_h Exporting Templates
  *
- * Contains macros for exporting explicit template instances from
- * shared libraries. Different compilers need different (non-standard)
- * tricks to export template instantiations. The standard-compliant 
- * `export` keyword, which was intended approximately for the purpose
- * falls miles short of its target and is actually not supported by
- * most of the compilers.
+ * PiiTemplateExport.h contains macros for exporting explicit template
+ * instances from shared libraries. Different compilers need different
+ * (non-standard) tricks to export template instantiations. The
+ * standard-compliant `export` keyword, which was intended
+ * approximately for the purpose falls miles short of its target and
+ * is actually not supported by most compilers.
  *
  * - GCC, MinGW: The `DECLARE` macros declare an `extern` explicit
  * instance of a template as per C++0x. The `DEFINE` macros create an
@@ -69,8 +69,6 @@
  * PII_DEFINE_EXPORTED_CLASS_TEMPLATE(struct, MyStruct<double>);
  * PII_DEFINE_EXPORTED_FUNCTION_TEMPLATE(void, identityFunc<int>, (int));
  * ~~~
- *
- * @see PiiGlobal.h
  */
 
 #include "PiiPreprocessor.h"

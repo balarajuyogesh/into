@@ -44,7 +44,7 @@
  * neighbors are compared to each other. In [PiiRandomLbp] "random
  * LBP", the compared pixels are chosen at random.
  *
- * @image html lbp_neighborhoods.png
+ * ![LBP neighborhoods](lbp_neighborhoods.png)
  *
  */
 class PII_TEXTURE_EXPORT PiiLbp

@@ -34,7 +34,7 @@
  * processors, the `HeavyProcessing` operations would be executed
  * simultaneously.
  *
- * @image html demuxoperation.png
+ * ![Demultiplexer](demuxoperation.png)
  *
  * Since the outputs of a demultiplexer are active in a
  * non-deterministic manner, there is no way to synchronize their

@@ -22,14 +22,7 @@
 #include "PiiGenericOutputArchive.h"
 
 /**
- * @file
- *
- * Macros for exporting serializable classes from dlls.
- *
- */
-
-/**
- * Make a class known to the serialization system. This macro must be
+ * Makes a class known to the serialization system. This macro must be
  * included in library class definitions (in a .cc file) that may be
  * serialized via a base class pointer. The macro instantiates a
  * serializer for type *CLASS_NAME* to PiiGenericInputArchive and

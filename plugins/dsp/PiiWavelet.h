@@ -19,13 +19,6 @@
 #include <PiiMath.h>
 #include "PiiDspGlobal.h"
 
-/**
- * @file
- *
- * Methods for creating wavelets and performing the wavelet
- * decomposition for 1-D and 2-D signals.
- */
-
 namespace PiiDsp
 {
   /**

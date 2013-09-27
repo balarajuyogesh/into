@@ -26,7 +26,7 @@
  * image below. The images emitted through `output` will be at the
  * flow level of PiiImageFileReader's `image`.
  *
- * @image html flowlevelchanger.png
+ * ![Flow level changer](flowlevelchanger.png)
  *
  * Inputs
  * ------

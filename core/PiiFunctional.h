@@ -16,17 +16,18 @@
 #ifndef _PIIFUNCTIONAL_H
 #define _PIIFUNCTIONAL_H
 
-/**
- * @file
- *
- * This file contains useful function objects missing from the
- * standard library. The `typedefs` required in adaptable functions
- * are provided both in STL and in Intopii/Qt style. The function
- * adaptors are modeled after SGI extensions to STL.
- */
 
 namespace Pii
 {
+  /**
+   * @group functional Function Objects
+   *
+   * Useful function objects missing from the standard library. The
+   * `typedefs` required in adaptable functions are provided both in
+   * STL and in Intopii/Qt style. The function adaptors are modeled
+   * after SGI extensions to STL.
+   */
+
   /**
    * An stl-compatible model for a generator function that takes no
    * arguments.
@@ -429,6 +430,8 @@ namespace Pii
   {
     bool operator()(const T&) const { return false; }
   };
+
+  /// @endgroup
 };
 
 #endif //_PIIFUNCTIONAL_H

@@ -26,11 +26,6 @@
 #include "PiiImageGlobal.h"
 
 
-/**
- * @file
- * Utilities for ROI (region-of-interest) processing
- */
-
 namespace PiiImage
 {
   /**

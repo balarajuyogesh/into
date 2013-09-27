@@ -20,16 +20,14 @@
 #include <cstdlib>
 #include <PiiMatrix.h>
 
-/**
- * @file
- *
- * Functions for generating different types of random numbers. It works
- * around compiler differences in generating uniformly distributed
- * random numbers.
- *
- */
 namespace Pii
 {
+  /**
+   * @group random Random Number Generation
+   *
+   * Functions for generating different types of random numbers.
+   */
+
   /**
    * Returns a uniformly distributed random number in [0,1].
    */
@@ -98,6 +96,7 @@ namespace Pii
     srand48(value);
 #endif
   }
+  /// @endgroup
 }
 
 #endif //_PIIRANDOM_H

@@ -23,17 +23,16 @@
 #  define INTBITS (sizeof(int)*8)
 #endif
 
-/**
- * @file
- * 
- * Functions for tweaking single bits. Some functions in this
- * namespace come with inline assembly versions for maximum
- * performance.
- *
- */
-
 namespace Pii
 {
+  /**
+   * @group bits Bit Fiddling
+   * 
+   * Functions for tweaking single bits. Some functions in this
+   * group come with inline assembly versions for maximum
+   * performance.
+   */
+
   /**
    * Rotate a binary code right by `n` positions.
    *
@@ -360,6 +359,8 @@ namespace Pii
   {
     return signBit(value1, (double)value2);
   }
+
+  /// @endgroup
 }
 
 #endif //_PIIBITS_H

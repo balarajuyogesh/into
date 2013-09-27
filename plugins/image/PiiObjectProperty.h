@@ -22,13 +22,6 @@
 #include <PiiMatrixUtil.h>
 #include <QDebug>
 
-/**
- * @file
- *
- * Functions for calculating the properties (features) of objects in
- * binary images.
- */
-
 namespace PiiImage
 {
   /**

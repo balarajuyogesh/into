@@ -16,12 +16,7 @@
 #ifndef _PIIPREPROCESSOR_H
 #define _PIIPREPROCESSOR_H
 
-/**
- * @file
- *
- * Useful preprocessor tricks.
- *
- */
+/// @group preprocessor Preprocessor tricks
 
 /// @internal
 #define PII_DO_STRINGIZE(arg) #arg
@@ -284,6 +279,8 @@
  */
 #define PII_FOREACH(MACRO, LIST) \
   PII_NEXT_LOOP(0, LIST)(MACRO, PII_CAR(LIST), PII_CDR(LIST))
+
+/// @endgroup
 
 #include "PiiPreprocessorFor.h"
 

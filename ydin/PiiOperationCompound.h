@@ -102,7 +102,7 @@
  * "Op0.Op1.in1", "Op0.Op1.out", and "Op2.in2". In the context of 
  * `Op0`, `in2` is "parent.Op2.in2".
  *
- * @image html operationcompound.png
+ * ![Compound example](operationcompound.png)
  *
  * Inputs and Outputs
  * ------------------
@@ -142,7 +142,7 @@
  * do is to create a proxy input that is connected to two inputs
  * within the compound. From the outside, the input appears as one:
  *
- * @image html operationcompoundproxy.png
+ * ![Proxy socket example](operationcompoundproxy.png)
  *
  * ~~~(c++)
  * // We assume that the objectName of PiiThresholdingOperation is

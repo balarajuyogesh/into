@@ -18,14 +18,6 @@
 
 #include "PiiSerializationGlobal.h"
 
-/**
- * @file
- *
- * This file contains types and constants used by both input and
- * output archives.
- *
- */
-
 /// Major archive version number.
 #define PII_ARCHIVE_VERSION 1
 

@@ -21,12 +21,6 @@
 #include <QVector>
 #include <functional>
 
-/**
- * @file
- *
- * Functions for labeling images.
- */
-
 namespace PiiImage
 {
   /**

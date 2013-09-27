@@ -30,7 +30,9 @@
 #include "PiiSocketState.h"
 #include <complex>
 
-/** @file
+/** 
+ * @group piiydintypes_h Common Types
+ *
  * Contains a number of preprocessor macros to facilitate handling of
  * multiple object types in operations. Also contains specializations
  * of the typeId function template for the most common types passed
@@ -1022,5 +1024,6 @@ PII_DECLARE_SHARED_VARIANT_TYPE(QImage, PiiYdin::QImageType, PII_BUILDING_YDIN);
 
 PII_DECLARE_SHARED_VARIANT_TYPE(PiiSocketState, PiiYdin::ResumeTagType, PII_BUILDING_YDIN);
 
+/// @endgroup
 
 #endif //_PIIYDINTYPES_H

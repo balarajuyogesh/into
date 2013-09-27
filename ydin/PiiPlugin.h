@@ -25,13 +25,6 @@
 #include "PiiYdinResources.h"
 #include <QtGlobal>
 
-/**
- * @file
- *
- * This file contains useful macros for easily creating Into plug-ins
- * and registering classes from them.
- *
- */
 
 #define PII_PLUGIN_RETURN_SPEC PII_DECL_EXPORT const char*
 

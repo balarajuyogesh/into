@@ -18,9 +18,10 @@
  *
  * The texture plug-in contains texture analysis operations.
  *
- * @dependencies PiiTexturePlugin
+ * Dependencies
+ * ------------
  *
- * @runtime PiiImagePlugin
+ * - [PiiImagePlugin]
  * Provides some basic image analysis operations needed in texture
  * analysis.
  */

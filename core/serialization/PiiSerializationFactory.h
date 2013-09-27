@@ -28,13 +28,6 @@
 #include <PiiGlobal.h>
 #include <cstring>
 
-/**
- * @file
- *
- * Object factory stuff for serializable classes.
- *
- */
-
 /// @hide
 #define PII_FACTORY_TEMPLATE_CLASS(T, ARCHIVE) PiiSerializationFactory::Template<T,ARCHIVE>
 #define PII_FACTORY_TEMPLATE_FUNC(T, ARCHIVE) PiiSerializationFactory::create<T,ARCHIVE>

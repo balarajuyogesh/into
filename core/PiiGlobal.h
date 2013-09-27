@@ -16,14 +16,6 @@
 #ifndef _PIIGLOBAL_H
 #define _PIIGLOBAL_H
 
-/**
- * @file
- *
- * Export/import macros and other global definitions such as d-pointer
- * stuff.
- */
-
-// Disable documentation
 /// @hide
 
 #define INTO_VERSION_STR "2.0.0-beta-3"

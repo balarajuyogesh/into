@@ -19,12 +19,6 @@
 #include "PiiSerialization.h"
 
 /**
- * @file
- *
- * Declaration of a binary data pair wrapper and a convenience macro.
- */
-
-/**
  * A serialization wrapper for binary data. Note that this wrapper
  * only works with primitive data types.
  *

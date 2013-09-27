@@ -14,7 +14,7 @@
  */
 
 /**
- * @file
+ * @page serializableregistration_h PiiSerializableRegistration.h
  *
  * Serializable objects are most conveniently registered by including
  * this file. The most straightforward way of making your class
@@ -26,7 +26,7 @@
  *   friend class Piiserialization::Accessor;
  *   template <class Archive> void serialize(Archive& ar, const unsigned int version)
  *   {
- *      ar & i;
+ *     ar & i;
  *   }
  *   int i;
  * };

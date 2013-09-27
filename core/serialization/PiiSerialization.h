@@ -21,14 +21,6 @@
 #include "PiiMetaObject.h"
 
 /**
- * @file
- *
- * Serialization functions and a couple of macros for separating the
- * template functions into save/load pairs.
- *
- */
-
-/**
  * A macro that separates the serialize() member function template for
  * type `T` into a save/load member function pair.
  */

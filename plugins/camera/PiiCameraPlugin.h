@@ -19,7 +19,8 @@
  * The camera plug-in contains different camera interfaces
  * and some operations for using cameras.
  *
- * @dependencies PiiCameraPlugin
+ * Dependencies
+ * ------------
  *
- * @runtime PiiImagePlugin
+ * - [PiiImagePlugin]
  */

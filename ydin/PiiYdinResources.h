@@ -23,41 +23,45 @@
 #include "PiiEngine.h" 
 #include <PiiDynamicTypeFunctions.h>
 
-/**
- * @file
- *
- * Functions for creating resources described in the 
- * [resource database](PiiYdin::resourceDatabase()). This header file
- * must be included after all the types involved in the function calls
- * have been declared.
- *
- * ~~~(c++)
- * #include <PiiYdinResources.h>
- * #include "MyInterface.h" // defines MyInterface
- *
- * //...
- * // This will NOT work because the functions in PiiYdinResources.h
- * // do not see the declarations related to MyInterface.
- * MyInterface* pIface = PiiYdin::createResource<MyInterface>("MyInterfaceImpl");
- * ~~~
- *
- * ~~~(c++)
- * #include "MyInterface.h" // defines MyInterface
- * #include <PiiYdinResources.h>
- *
- * //...
- * // This works because MyInterface is fully defined before createResource().
- * MyInterface* pIface = PiiYdin::createResource<MyInterface>("MyInterfaceImpl");
- * ~~~
- */
 template <class T, class U> T resource_cast(U* resource);
 
 namespace PiiYdin
 {
   /**
-   * Get the resource name of an object given a pointer to it. This
-   * function uses the serialization meta object system to find the
-   * class name of the most derived class, given a base class pointer.
+   * @group piiydinresources_h Resource Management
+   *
+   * Functions for creating resources described in the [resource
+   * database](PiiYdin::resourceDatabase()). This header file must be
+   * included after all the types involved in the function calls have
+   * been declared.
+   *
+   * ~~~(c++)
+   * #include <PiiYdinResources.h>
+   * #include "MyInterface.h" // defines MyInterface
+   *
+   * //...
+   * // This will NOT work because the functions in PiiYdinResources.h
+   * // do not see the declarations related to MyInterface.
+   * MyInterface* pIface = PiiYdin::createResource<MyInterface>("MyInterfaceImpl");
+   * ~~~
+   *
+   * ~~~(c++)
+   * #include "MyInterface.h" // defines MyInterface
+   * #include <PiiYdinResources.h>
+   *
+   * //...
+   * // This works because MyInterface is fully defined before createResource().
+   * MyInterface* pIface = PiiYdin::createResource<MyInterface>("MyInterfaceImpl");
+   * ~~~
+   *
+   * @see resource_cast
+   */
+
+  /**
+   * Returns the resource name of an object given a pointer to
+   * it. This function uses the serialization meta object system to
+   * find the class name of the most derived class, given a base class
+   * pointer.
    */
   template <class T> inline const char* resourceName(const T* resource)
   {
@@ -65,7 +69,7 @@ namespace PiiYdin
   }
 
   /**
-   * Get the resource name of a type. This function uses
+   * Returns the resource name of a type. This function uses
    * PiiSerializationTraits to find the name for the type.
    *
    * ~~~(c++)
@@ -85,22 +89,22 @@ namespace PiiYdin
   PII_YDIN_EXPORT int pointerOffset(const char* superClass, const char* subClass);
   
   /**
-   * Create an instance of the object identified by *resourceName*. 
+   * Creates an instance of the object identified by *resourceName*.
    * This function uses PiiSerializationFactory to create the object,
    * and returns a pointer to the new instance. The `ParentType`
    * template parameter is used in checking that the resource really
-   * is an instantiable entity. If `ParentType` is not a superclass
-   * of the resource identified by *name*, the function will return a
-   * null pointer. Consequently, `ParentType` must have the 
-   * [class name trait](PiiSerializationTraits::ClassName) defined. A
-   * null pointer will be returned also if the named resource does not
+   * is an instantiable entity. If `ParentType` is not a superclass of
+   * the resource identified by *name*, the function will return a
+   * null pointer. Consequently, `ParentType` must have the [class
+   * name trait](PiiSerializationTraits::ClassName) defined. A null
+   * pointer will be returned also if the named resource does not
    * exist.
    *
    * The code below creates an instance of PiiImageFileReader, but
-   * only if such a resource exists in the resource database with a 
-   * `pii:class` attribute that equals "PiiOperation". It is not needed
-   * to specify all possible superclasses for a class; superclasses of
-   * superclasses will be recursively resolved.
+   * only if such a resource exists in the resource database with a
+   * `pii:class` attribute that equals "PiiOperation". It is not
+   * needed to specify all possible superclasses for a class;
+   * superclasses of superclasses will be recursively resolved.
    *
    * ~~~(c++)
    * PiiOperation* pOperation = PiiYdin::createResource<PiiOperation>("PiiImageFileReader");
@@ -156,8 +160,6 @@ namespace PiiYdin
                                          iOffset);
   }
 
-  /**
-   */
   template <class ParentType> inline ParentType* createResource(const QString& name)
   {
     return createResource<ParentType>(qPrintable(name));
@@ -261,15 +263,17 @@ namespace PiiYdin
       delete pConnector;
     return bResult;
   }
+
+  /// @endgroup
 }
 
 /**
- * Cast *resource* to the type specified by `T`. This function uses
- * the resource database to find out if `T` is a superclass of 
+ * Casts *resource* to the type specified by `T`. This function uses
+ * the resource database to find out if `T` is a superclass of
  * *resource*. It returns the address of *resource* as `T` on success
  * and zero on failure. The behaviour is similar to `qobject_cast`,
- * but it doesn't use Qt's meta-object system and works with classes
- * that are not derived from QObject.
+ * but the technique doesn't use Qt's meta-object system and works
+ * with classes that are not derived from QObject.
  *
  * ~~~(c++)
  * QWidget* pWidget = PiiYdin::createResource<QWidget>("PiiVisualTrainerWidget");

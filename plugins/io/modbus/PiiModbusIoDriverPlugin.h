@@ -18,7 +18,8 @@
  *
  * I/O driver plug-in for Modbus io-modules.
  *
- * @dependencies PiiModbusIoDriverPlugin
+ * Dependencies
+ * ------------
  *
- * @runtime PiiIoPlugin
+ * - [PiiIoPlugin]
  */

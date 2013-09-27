@@ -19,14 +19,7 @@
 #include "PiiSerializationTraits.h"
 
 /**
- * @file
- *
- * Base class serialization stuff.
- *
- */
-
-/**
- * Invoke the serialization of the base class of your class. This
+ * Invokes the serialization of the base class of your class. This
  * macro is used within a serialization function to store the state of
  * a parent class. It works both in member functions and in separate
  * serialization functions.

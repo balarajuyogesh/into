@@ -18,7 +18,8 @@
  *
  * I/O driver plug-in for Emulator io-modules.
  *
- * @dependencies PiiEmulatorIoDriverPlugin
+ * Dependencies
+ * ------------
  *
- * @runtime PiiIoPlugin
+ * - [PiiIoPlugin]
  */

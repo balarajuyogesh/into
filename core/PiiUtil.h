@@ -39,14 +39,6 @@
 #include "PiiAlgorithm.h"
 #include "PiiTemplateExport.h"
 
-/**
- * @file
- *
- * Miscellaneous useful functions, mainly for dealing with Qt classes.
- *
- */
-
-
 namespace Pii
 {
   /**

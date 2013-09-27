@@ -21,13 +21,6 @@
 #include "PiiImageGlobal.h"
 #include <PiiTemplateExport.h>
 
-/**
- * @file
- *
- * Morphological operations such as erosion, dilation, opening,
- * closing, top-hat and bottom-hat.
- */
-
 namespace PiiImage
 { 
   /**

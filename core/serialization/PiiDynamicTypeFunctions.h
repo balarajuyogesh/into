@@ -20,16 +20,12 @@
 #include "PiiSerializationFactory.h"
 #include "PiiSerializer.h"
 
-/**
- * @file
- *
- * This file contains functions for getting meta information,
+/* This file contains functions for getting meta information,
  * serializers, and class factories for serializable types. The
  * functions are separated from context to ensure correct declaration
  * order of overloaded functions. If you include this file directly,
  * please ensure that all metaObjectPointer() and isDynamicType()
  * overloads have been declared beforehand.
- *
  */
 
 namespace PiiSerialization

@@ -16,13 +16,6 @@
 #ifndef _PIIMETAOBJECT_H
 #define _PIIMETAOBJECT_H
 
-/**
- * @file
- *
- * Declarations, macros and functions for dealing with meta objects.
- *
- */
-
 #include "PiiSerializationTraits.h"
 #include "PiiSerializationGlobal.h"
 

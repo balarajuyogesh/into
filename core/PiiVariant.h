@@ -30,14 +30,6 @@ class PiiGenericOutputArchive;
 class PiiGenericInputArchive;
 
 /**
- * @file
- *
- * Declares the PiiVariant class and provides macros for making custom
- * variant types serializable.
- *
- */
-
-/**
  * Declares a new custom variant type. Use this macro in a .h file.
  *
  * @relates PiiVariant

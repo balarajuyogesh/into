@@ -383,7 +383,7 @@ namespace PiiClassification
    * *samplesPerSet* = 2000 and *rounds* = 3.0. Samples with label 0
    * are shown in red, and the samples with label 1 in blue.
    *
-   * @image html double_spiral.png
+   * ![Double spiral](double_spiral.png)
    *
    * @param samplesPerSet the number of samples in each of the two
    * sets
@@ -409,7 +409,7 @@ namespace PiiClassification
    * the picture below, *samples1* = *samples2* = 200. Samples with
    * label 0 are shown in red, and the samples with label 1 in blue.
    *
-   * @image html dartboard.png
+   * ![Dartboard](dartboard.png)
    *
    * @param samples1 the number of samples in the set at the center.
    *

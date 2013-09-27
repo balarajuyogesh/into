@@ -20,11 +20,6 @@
 #include <PiiRoi.h>
 #include <PiiMath.h>
 
-/**
- * @file
- * Histogram handling functions.
- */
-
 namespace PiiImage
 {
   /**

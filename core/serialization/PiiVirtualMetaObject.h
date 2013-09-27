@@ -17,13 +17,6 @@
 #define _PIIVIRTUALMETAOBJECT_H
 
 /**
- * @file
- *
- * Macros for dealing with virtual meta object functions.
- *
- */
-
-/**
  * Declare `CLASS_NAME` as a dynamic type. This overrides the default
  * isDynamicType() function to return `true` for `CLASS_NAME` and all
  * derived types.

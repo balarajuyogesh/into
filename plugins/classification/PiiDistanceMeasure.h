@@ -34,12 +34,6 @@ template <class FeatureIterator> double NAME<FeatureIterator>::operator() (Featu
                                                                            int length) const throw()
 
 /**
- * @file
- *
- * Definitions for distance measure classes.
- */
-
-/**
  * Type definition for a polymorphic implementation of the function
  * object *MEASURE*.
  *

@@ -19,13 +19,6 @@
 #include "PiiSerializationTraits.h"
 
 /**
- * @file
- *
- * Declaration of a name-value pair wrapper and a few convenience
- * macros.
- */
-
-/**
  * Generate a name-value pair for serialization. Data stored into any
  * archive must be wrapped into name/value pairs because the XML data
  * format expects named values.

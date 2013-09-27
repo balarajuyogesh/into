@@ -33,7 +33,7 @@
  * shown in blue. Its inverse (green) is used as a weight. The red
  * curve illustrates the effect of setting [emphasis] to three.
  *
- * @image html samplebalancer.png
+ * ![Sample balancer](samplebalancer.png)
  *
  * For multi-dimensional features, PiiSampleBalancer uses marginal
  * distributions, based on the assumption that all features are
