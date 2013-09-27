@@ -53,8 +53,8 @@ public:
    *
    * Note that the function may not throw exceptions. If your
    * implementation passes the incoming objects right away, you must
-   * catch the exceptions thrown by @ref
-   * PiiOutputSocket::emitObject(), for example.
+   * catch the exceptions thrown by 
+   * [PiiOutputSocket::emitObject()], for example.
    */
   virtual bool tryToReceive(PiiAbstractInputSocket* sender, const PiiVariant& object) throw () = 0;
 };

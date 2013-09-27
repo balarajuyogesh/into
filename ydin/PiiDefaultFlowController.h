@@ -24,7 +24,7 @@
  * by grouping synchronous sockets and injecting special
  * synchronization tags into the sockets. It handles hierarchical
  * relations between synchronized socket groups. Due to the extra
- * checking needed for this, @p PiiDefaultFlowController is used by
+ * checking needed for this, PiiDefaultFlowController is used by
  * PiiDefaultOperation only if there is no more efficient
  * specialization available.
  *
@@ -70,7 +70,7 @@ public:
    * two group ids.
    *
    * The `relations` parameter is used to assign parent-child
-   * relations between input groups. @p PiiDefaultFlowController can
+   * relations between input groups. PiiDefaultFlowController can
    * handle many independent groups of synchronized sockets. This
    * parameter makes it possible to place restrictions to inter-group
    * synchronization.

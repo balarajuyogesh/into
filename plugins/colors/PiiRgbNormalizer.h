@@ -19,8 +19,8 @@
 #include <PiiDefaultOperation.h>
 
 /**
- * An operation that converts images to normalized RGB. See @ref
- * PiiColors::normalizedRgb() for details.
+ * An operation that converts images to normalized RGB. See 
+ * [PiiColors::normalizedRgb()] for details.
  *
  * Inputs
  * ------

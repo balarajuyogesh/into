@@ -167,8 +167,8 @@ typedef const char* (*pii_plugin_function)();
  * instantiable resource to the object registry, and uses
  * CLASS_NAME<PRIMITIVE> as the resource name. The resource will be
  * placed as a child to the current plug-in. The plug-in must have
- * been implemented in the same translation unit (see @ref
- * PII_IMPLEMENT_PLUGIN).
+ * been implemented in the same translation unit (see 
+ * [PII_IMPLEMENT_PLUGIN]).
  */
 #define PII_REGISTER_OPERATION_TEMPLATE(CLASS_NAME, PRIMITIVE) \
   PII_DEFINE_SPECIALIZED_VIRTUAL_METAOBJECT_FUNCTION(CLASS_NAME, PRIMITIVE); \
@@ -319,8 +319,8 @@ QList<PiiResourceStatement> STATEMENTS_CLASS::statements() \
  * unnecessary to instantiate a separate connector object. The special
  * resources `pii:subject` and `pii:object` are reserved for this
  * purpose. *ROLE* is a string literal that names the connection
- * between two resources. This macro must be used between @ref
- * PII_BEGIN_STATEMENTS and [PII_END_STATEMENTS].
+ * between two resources. This macro must be used between 
+ * [PII_BEGIN_STATEMENTS] and [PII_END_STATEMENTS].
  *
  * ~~~(c++)
  * PII_BEGIN_STATEMENTS(MyPlugin)

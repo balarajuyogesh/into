@@ -51,8 +51,8 @@ namespace PiiColors
   /**
    * Convert an RGB color image to normalized RGB and separate two of
    * the normalized color layers. Normalized RGB is obtained by
-   * dividing each channel by the sum of all channels. (@f$ r = R/(R +
-   * G + B)@f$ etc.) Note that only two channels are extracted because
+   * dividing each channel by the sum of all channels. (\( r = R/(R +
+   * G + B)\) etc.) Note that only two channels are extracted because
    * the third one is reduntant (\( r+g+b = 1\)).
    *
    * @param image The input image. Any color will do as the content
@@ -633,8 +633,8 @@ namespace PiiColors
 
   /**
    * Convert a color in a *non*-linear RGB color space to luminance
-   * as defined in ITU-R BT.709: @f$Y_{709} = 0.2126R' + 0.7152G' +
-   * 0.0722B'@f$.
+   * as defined in ITU-R BT.709: \(Y_{709} = 0.2126R' + 0.7152G' +
+   * 0.0722B'\).
    */
   template <class Clr> inline float rgbToY709(const Clr& clr)
   {

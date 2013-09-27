@@ -74,8 +74,8 @@
  * number of retained support vectors varies widely depending on
  * application, but sometimes only very few samples need to be stored.
  *
- * ! The derivation above neglects the bias term. See @ref
- * classification_kernels for a justification.
+ * ! The derivation above neglects the bias term. See 
+ * [classification_kernels] for a justification.
  *
  */
 template <class SampleSet> class PiiKernelPerceptron :

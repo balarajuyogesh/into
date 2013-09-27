@@ -39,12 +39,12 @@
  *
  * @out magnitude - non-thresholded gradient image. If the input is
  * integer-valued, a PiiMatrix<int> will be emitted. Otherwise,
- * PiiMatrix<float> will be emitted. See @ref
- * PiiImage::gradientMagnitude().
+ * PiiMatrix<float> will be emitted. See 
+ * [PiiImage::gradientMagnitude()].
  *
  * @out direction - a PiiMatrix<float> that contains local gradient
- * direction for each pixel in radians. See @ref
- * PiiImage::gradientDirection().
+ * direction for each pixel in radians. See 
+ * [PiiImage::gradientDirection()].
  *
  */
 class PiiEdgeDetector : public PiiDefaultOperation
@@ -89,8 +89,8 @@ public:
    *
    * - `CannyDetector` - The three-step procedure is used to detect
    * edges: 1) Sobel masks are used to measure the gradient 2) the
-   * image is processed to contain only local maxima (@ref
-   * PiiImage::suppressNonMaxima()) 3) hysteresis thresholding is
+   * image is processed to contain only local maxima (
+   * [PiiImage::suppressNonMaxima()]) 3) hysteresis thresholding is
    * performed ([PiiImage::hysteresisThreshold()]). This technique
    * requires two thresholds ([lowThreshold] and [threshold]).
    *

@@ -21,16 +21,16 @@
 
 /**
  * On operation for generating running IDs. The operation can be used
- * for example for generating file names. The generated id has a format 
- * [PREFIX]INDEX[SUFFIX], where [PREFIX] is a string set by the
+ * for example for generating file names. The generated id has a
+ * format [PREFIX]INDEX[SUFFIX], where [PREFIX] is a string set by the
  * property [prefix], INDEX is a running index converted to string
  * generated internally in the operation and [SUFFIX] is a string set
- * by the property [suffix]. `INDEX` has at least the width set by the
- * property @p [indexWidth]. The extra zeroes are added to fullfill this
+ * by the property [suffix]. `INDEX` has at least the width set by
+ * [indexWidth]. The extra zeroes are added to fullfill this
  * requirement. The default value for the width is 6. For example if
- * the value of the property [prefix] were "image",  value of the
- * property [suffix] ".jpg" and the current value of the internal index
- * is 11, the generated id will be "image000011.jpg"
+ * the value of the property [prefix] were "image", value of the
+ * property [suffix] ".jpg" and the current value of the internal
+ * index is 11, the generated id will be "image000011.jpg"
  * 
  *
  * Inputs

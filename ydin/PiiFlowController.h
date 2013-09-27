@@ -286,8 +286,8 @@ public:
    * incoming to outgoing slots with PiiInputSocket::shift() and
    * return `ProcessableState`. Only one group can be processed
    * at once. The caller is responsible for re-invoking this function
-   * to make sure all processable groups will be handled. Set the @ref
-   * setActiveInputGroup() "active group" to the group id of the
+   * to make sure all processable groups will be handled. Set the 
+   * [active group](setActiveInputGroup()) to the group id of the
    * active group.
    *
    * - If a group of synchronized inputs contains mixed inputs (e.g. 

@@ -155,7 +155,7 @@ public:
   void removeCallbacks();
 
   /**
-   * @fn template <class R> R call(const QString& function, ...)
+   * @decl template <class R> R call(const QString& function, ...)
    *
    * Calls the remote *function* with a variable number of parameters
    * and returns its return value as an object of type `R`. The type
@@ -165,7 +165,7 @@ public:
    * @exception PiiNetworkException& or PiiHttpException& if the
    * remote function call failed.
    *
-   * @exception PiiSerializationException& if function parameters
+   * @exception PiiSerializationException& if function parameters
    * could not be encoded or if the server's response could not be
    * decoded.
    *

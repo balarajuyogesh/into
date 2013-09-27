@@ -24,16 +24,6 @@
 #else
 #  define PII_OCR_EXPORT PII_DECL_IMPORT
 #  define PII_BUILDING_OCR 0
-#endif/**
- * @defgroup PiiOcrPlugin
- *
- * Description here.
- *
- * @dependencies PiiOcrPlugin
- *
- * @runtime PiiOtherPlugin Optional reason.
- * @compile PiiYetAnotherPlugin Optional reason
- */
-
+#endif
 
 #endif //_PIIOCRPLUGIN_H

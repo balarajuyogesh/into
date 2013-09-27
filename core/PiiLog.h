@@ -147,8 +147,8 @@ namespace PiiLog
   /**
    * Sets the global log message filter and return a pointer to the
    * previous filter (which may be 0). Set the filter to 0 to disable
-   * filtering. By default, the message filter is set to @ref
-   * defaultMessageFilter() "defaultMessageFilter".
+   * filtering. By default, the message filter is set to 
+   * [defaultMessageFilter](defaultMessageFilter()).
    *
    * The message filter is used to select which messages are actually
    * logged. The filter will be called with the module name and
@@ -175,8 +175,8 @@ namespace PiiLog
   PII_CORE_EXPORT MessageFilter setMessageFilter(MessageFilter filter);
 
   /**
-   * The default message filter. This filter inspects the @ref
-   * PII_LOG_LEVEL environment variable. If the variable is not set or
+   * The default message filter. This filter inspects the 
+   * [PII_LOG_LEVEL] environment variable. If the variable is not set or
    * the `level` is higher than or equal to `PII_LOG_LEVEL`, `true`
    * will be returned. Otherwise, `false` will be returned. The log
    * level should be set to a numeric value that corresponds to

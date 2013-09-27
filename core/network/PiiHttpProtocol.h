@@ -27,11 +27,11 @@ class PiiHttpDevice;
 /**
  * An implementation of the HTTP protocol.
  *
- * The role of @p PiiHttpProtocol is to map server URIs into *URI
- * handlers*. When a request comes in, the server looks at the
- * request URI and sequentially matches its beginning to registered
+ * The role of PiiHttpProtocol is to map server URIs into *URI
+ * handlers*. When a request comes in, the server looks at the request
+ * URI and sequentially matches its beginning to registered
  * handlers. The handler with the most specific match will be given
- * the task to encode the request body and to reply to the client. 
+ * the task to encode the request body and to reply to the client.
  * PiiHttpProtocol uses PiiHttpDevice as the communication channel.
  *
  * All functions in this class are thread-safe.
@@ -136,7 +136,7 @@ public:
      * [PiiHttpDevice::requestUri()] function to fetch the full
      * request URI.
      *
-     * @param dev the communication device. @p PiiHttpProtocol has
+     * @param dev the communication device. PiiHttpProtocol has
      * already fetched request headers, and the device is positioned
      * at the beginning of request data.
      *
@@ -171,8 +171,8 @@ public:
   /**
    * Register a URI handler. He caller retains the ownership of the
    * handler. The same handler can be register many times in different
-   * places. The `uri` parameter to the @ref
-   * PiiHttpProtocol::UriHandler::handleRequest() "handleRequest()"
+   * places. The `uri` parameter to the 
+   * [handleRequest()](PiiHttpProtocol::UriHandler::handleRequest())
    * function tells the handler the URI it was registered at.
    *
    * The server will always look for the most specific handler. That

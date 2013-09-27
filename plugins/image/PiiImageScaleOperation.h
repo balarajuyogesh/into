@@ -76,8 +76,8 @@ public:
    * the specified scale ratio ([scaleRatio]). Retains original
    * aspect ratio.
    *
-   * - `ScaleToSize` - scales to the specified size (@ref
-   * scaledSize), ignoring original aspect ratio.
+   * - `ScaleToSize` - scales to the specified size (
+   * [scaledSize]), ignoring original aspect ratio.
    *
    * - `ScaleToAspectRatioX` - scales to a specified aspect ratio
    * ([scaleRatio]). Stretches/shrinks the image horizontally to

@@ -20,7 +20,9 @@
 #include <PiiMatrix.h>
 #include "PiiOptimizationGlobal.h"
 
-
+/**
+ * Functions for optimizing linear and non-linear functions.
+ */
 namespace PiiOptimization
 {
   /**
@@ -157,16 +159,16 @@ namespace PiiOptimization
    * @param intialParams an initial guess for the minimum point. A
    * 1-by-N matrix.
    *
-   * @param epsG iteration break rule 1: @f$||G(X_t)|| <
-   * \epsilon_G\(, where \)X_t@f$ is the value of the parameter
-   * estimate at time instant t. The iteration will end once the norm
-   * of the gradient vector goes below `epsG`.
+   * @param epsG iteration break rule 1: \(||G(X_t)|| < \epsilon_G\),
+   * where \(X_t\) is the value of the parameter estimate at time
+   * instant t. The iteration will end once the norm of the gradient
+   * vector goes below `epsG`.
    *
-   * @param epsF iteration break rule 2: @f$|F(X_t) - F(X_{t-1})| \le
-   * \epsilon_F \max(|F(X_t)|, |F(X_{t-1})|, 1)@f$.
+   * @param epsF iteration break rule 2: \(|F(X_t) - F(X_{t-1})| \le
+   * \epsilon_F \max(|F(X_t)|, |F(X_{t-1})|, 1)\).
    *
-   * @param epsX iteration break rule 3: @f$|X_{t}-X_{t-1}| \le
-   * \epsilon_X@f$.
+   * @param epsX iteration break rule 3: \)|X_{t}-X_{t-1}| \le
+   * \epsilon_X\).
    *
    * @param maxIterations iteration break rule 4: t > maxIterations.
    * This is the maximum number of iterations the algorithm will run
@@ -191,8 +193,8 @@ namespace PiiOptimization
    * approximation.
    *
    * Such a minimization problem could be solved as a general
-   * non-linear optimization problem (for example, using the @ref
-   * lbfgsMinimize() "LBFGS" algorithm), but it is reasonable to use
+   * non-linear optimization problem (for example, using the 
+   * [LBFGS](lbfgsMinimize()) algorithm), but it is reasonable to use
    * the information about the function F structure to solve the
    * problem more effectively.
    *

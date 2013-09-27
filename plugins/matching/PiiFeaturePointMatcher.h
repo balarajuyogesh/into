@@ -52,9 +52,6 @@ namespace PiiMatching
     Match(const Match& other);
     ~Match();
 
-    /**
-     * Assigns *other* to `this` and returns @p *this.
-     */
     Match& operator= (const Match& other);
 
     /**
@@ -131,11 +128,12 @@ namespace PiiMatching
  * point set and a feature vector for each. The matching algorithm
  * tries to find the models in the database that match the query.
  *
- * @tparam T the type used to store point coordinates. In images,
- * pixel coordinates are usually `ints`.
+ * **Template parameters**
  *
- * @tparam SampleSet the type used to store the features related to
- * the points, for example PiiMatrix<float>.
+ * - `T` - the type used to store point coordinates. In images, pixel
+ * coordinate type is usually `int`.
+ * - `SampleSet` - the type used to store the features related to the
+ * points, for example PiiMatrix<float>.
  *
  * ~~~(c++)
  * // 2D pixel coordinates.

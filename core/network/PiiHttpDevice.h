@@ -38,20 +38,20 @@ class PiiProgressController;
  *
  * The class automates the handling of HTTP headers as much as
  * possible. If you request information that is not available without
- * reading the request header, @p PiiHttpDevice will read the header
+ * reading the request header, PiiHttpDevice will read the header
  * automatically. It also builds the request or response header, and
  * has reasonable defaults for most header fields. The header will be
  * automatically sent if data is written to the device.
  *
- * @p PiiHttpDevice supports output filtering. All data written to
- * the client/server can be passed through an unlimited number of
- * filters which may buffer the data. If no filters are installed,
- * data will be written directly to the low-level socket. Headers will
- * be sent just before the first byte of the message body is going to
- * be written to the client. It is not possible to change the headers
+ * PiiHttpDevice supports output filtering. All data written to the
+ * client/server can be passed through an unlimited number of filters
+ * which may buffer the data. If no filters are installed, data will
+ * be written directly to the low-level socket. Headers will be sent
+ * just before the first byte of the message body is going to be
+ * written to the client. It is not possible to change the headers
  * afterwards.
  *
- * In `Server` mode, @p PiiHttpDevice is typically used in the 
+ * In `Server` mode, PiiHttpDevice is typically used in the
  * `handleRequest`() function of PiiHttpProtocol::UriHandler:
  *
  * ~~~(c++)

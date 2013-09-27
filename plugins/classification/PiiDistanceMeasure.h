@@ -50,8 +50,8 @@ template <class FeatureIterator> double NAME<FeatureIterator>::operator() (Featu
 #define PII_POLYMORPHIC_MEASURE(MEASURE) typename PiiDistanceMeasure<ConstFeatureIterator>::template Impl<MEASURE<ConstFeatureIterator> >
 
 /**
- * A polymorphic implementation of the @ref
- * classification_distance_measures "distance measure" concept.
+ * A polymorphic implementation of the 
+ * [distance measure](classification_distance_measures) concept.
  *
  */
 template <class FeatureIterator> class PiiDistanceMeasure

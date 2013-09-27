@@ -26,8 +26,8 @@
 /**
  * An implementation of a threaded network server. This class provides
  * a framework for server processes that handle incoming connections
- * by creating a worker thread for each. @p PiiNetworkServer is
- * designed to work with any native socket type. Subclasses provide
+ * by creating a worker thread for each. PiiNetworkServer is designed
+ * to work with any native socket type. Subclasses provide
  * implementations for TCP servers and local socket servers.
  *
  * PiiNetworkServer is intended to be used with an event loop. The
@@ -61,7 +61,7 @@ class PII_NETWORK_EXPORT PiiNetworkServer :
    * connections. The upper bound for this value is 1000. The default
    * value is 10.
    *
-   * @see [maxPendingConnections]
+   * @see maxPendingConnections
    */
   Q_PROPERTY(int maxWorkers READ maxWorkers WRITE setMaxWorkers);
 
@@ -257,12 +257,12 @@ protected:
    * a new PiiNetworkServerThread.
    *
    * @param protocol the protocol used for communication. If the
-   * protocol is stateless, @p PiiNetworkServer retains its
-   * ownership. If it is stateful, the passed pointer is a clone that
-   * must be deleted by whoever will finally take the pointer. 
-   * Usually, the pointer is just passed to the constructor of
-   * PiiNetworkServerThread, which automatically takes care of deleting
-   * the pointer.
+   * protocol is stateless, PiiNetworkServer retains its ownership. If
+   * it is stateful, the passed pointer is a clone that must be
+   * deleted by whoever will finally take the pointer.  Usually, the
+   * pointer is just passed to the constructor of
+   * PiiNetworkServerThread, which automatically takes care of
+   * deleting the pointer.
    */
   virtual PiiNetworkServerThread* createWorker(PiiNetworkProtocol* protocol);
 

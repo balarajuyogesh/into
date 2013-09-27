@@ -144,8 +144,8 @@ public:
    * Set the mean level the fractal generator will try to achieve.
    * This value is useful in large non-rectangular fractals. The
    * generator will always drive the random variations slightly
-   * towards the target mean. If the value is less than @ref
-   * setMinimum() "minimum", it will not be used.
+   * towards the target mean. If the value is less than 
+   * [minimum](setMinimum()), it will not be used.
    */
   void setTargetMean(int targetMean)
   {

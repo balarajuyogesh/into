@@ -36,8 +36,8 @@ namespace PiiCalibration
    * A structure that stores all intrinsic camera parameters estimated
    * by the calibration functions. These parameters are related to the
    * camera and its lens and do not change depending on the scene
-   * viewed. Please refer to the documentation at @ref
-   * calibration_intrinsic_parameters for an explanation.
+   * viewed. Please refer to the documentation at 
+   * [calibration_intrinsic_parameters] for an explanation.
    */
   struct PII_CALIBRATION_EXPORT CameraParameters
   {
@@ -128,8 +128,8 @@ namespace PiiCalibration
     
     /**
      * The rotation vector. Defines the rotation between the world
-     * coordinate system and the camera reference frame. Use the @ref
-     * rotationVectorToMatrix() function to convert this vector to a
+     * coordinate system and the camera reference frame. Use the 
+     * [rotationVectorToMatrix()] function to convert this vector to a
      * rotation matrix.
      */
     PiiVector<double,3> rotation;

@@ -197,8 +197,8 @@ protected:
   bool sendObject(const QString& name, const char* value);
   
   /**
-   * Stops the execution of the operation. This function calls @ref
-   * PiiOperation::interrupt() on the internal operation. Returns 
+   * Stops the execution of the operation. This function calls 
+   * [PiiOperation::interrupt()] on the internal operation. Returns 
    * `true` if the operation finished within a second, `false`
    * otherwise.
    */

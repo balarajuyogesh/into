@@ -206,8 +206,8 @@
  * Property names and function signatures are both separated with a
  * single space. Use the normalized function signature for functions.
  * The listed properties and functions will be accessed through the
- * event loop of the main thread. QObjects can also set the @ref
- * PiiObjectServer::setSafetyLevel() "default safety level" using
+ * event loop of the main thread. QObjects can also set the 
+ * [default safety level](PiiObjectServer::setSafetyLevel()) using
  * Q_CLASSINFO:
  *
  * ~~~(c++)

@@ -29,8 +29,8 @@ namespace PiiImage
    * compressed towards left and right borders). The image must
    * contain the full visible width of the cylinder and no background.
    *
-   * @param focalLength the focal length of the camera. See @ref
-   * calibration_intrinsic_parameters for more information. Use a
+   * @param focalLength the focal length of the camera. See 
+   * [calibration_intrinsic_parameters] for more information. Use a
    * large value to approximate a telecentric lens.
    *
    * @param center the location of the optical center in the image. If

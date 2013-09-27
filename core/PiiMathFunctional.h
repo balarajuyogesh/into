@@ -502,8 +502,11 @@ namespace Pii
   /**
    * Helper function for algorithms that involve scrolling elements.
    *
-   * @tparam FuItem: Unary functor, takes (matrix) element as argument and the return value is used as second parameter in FuMem.
-   * @tparam FuMem : Binaryfunctor: takes memoryobject and result of FuItem as arguments, and returns memoryobject.
+   * - `FuItem` - Unary functor, takes (matrix) element as argument
+       and the return value is used as second parameter in `FuMem`.
+   *
+   * - `FuMem` - Binaryfunctor: takes memoryobject and result of
+       `FuItem` as arguments, and returns memoryobject.
    */
   template<class FuItem, class FuMemory>
   struct ForEachFunction
@@ -514,7 +517,7 @@ namespace Pii
      * @param fMem Functor that handles internal memory updating.
      * @param initMem Initial value for memory.
      *
-     * ! see [createForEachFunction()] for creating object of this type more easily.
+     * ! See [createForEachFunction()] for creating object of this type more easily.
      */
     ForEachFunction(FuItem fItem, FuMemory fMem, typename FuMemory::result_type initMem)
       : _fuItem(fItem), _fuMem(fMem), _Mem(initMem) {}

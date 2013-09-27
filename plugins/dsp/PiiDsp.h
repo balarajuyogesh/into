@@ -22,6 +22,9 @@
 #include <complex>
 #include "PiiDspGlobal.h"
 
+/**
+ * Routines for common digital signal processing tasks.
+ */
 namespace PiiDsp
 {
   /**

@@ -316,8 +316,8 @@ private:
 /**
  * A class that stores information about a loaded plug-in. Each
  * plug-in has two names: the name of the shared library the plug-in
- * was loaded from, and the name of the plug-in in Ydin's @ref
- * PiiYdin::resourceDatabase() "resource database".
+ * was loaded from, and the name of the plug-in in Ydin's 
+ * [resource database](PiiYdin::resourceDatabase()).
  */
 class PII_YDIN_EXPORT PiiEngine::Plugin
 {

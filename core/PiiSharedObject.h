@@ -134,7 +134,7 @@ namespace PiiSerialization
     return new PiiSharedObjectHolder(ptr);
   }
   
-  /// A specialization that increases the refcount of @ptr by one.
+  /// A specialization that increases the refcount of `ptr` by one.
   inline void rereferencePointer(PiiSharedObject* ptr)
   {
     ptr->reserve();

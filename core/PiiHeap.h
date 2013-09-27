@@ -109,14 +109,8 @@ public:
     fill(size, fillValue);
   }
 
-  /**
-   * Copies *other*.
-   */
   PiiHeap(const PiiHeap& other) : _array(other._array), _bInverse(other._bInverse) {}
 
-  /**
-   * Assigns *other* to `this` and returns @p *this.
-   */
   PiiHeap& operator= (const PiiHeap& other)
   {
     _array = other._array;

@@ -35,19 +35,16 @@ class PII_CORE_EXPORT PiiFifoBuffer : public QIODevice
   
 public:
   /**
-   * Create a new fifo buffer.
+   * Creates a new fifo buffer.
    *
    * @param size the number of bytes to reserve for the memory buffer
    */
   PiiFifoBuffer(qint64 size);
 
-  /**
-   * Destroy the buffer.
-   */
   ~PiiFifoBuffer();
 
   /**
-   * Set the number of millisecond a reader/writer will halted if no
+   * Sets the number of millisecond a reader/writer will halted if no
    * data is available for reading or there is no free space for
    * writing. Reading/writing will continue as soon as new data is
    * available or something has been read out. Zero means that if data
@@ -56,17 +53,18 @@ public:
    */
   void setWaitTime(unsigned long readWaitTime);
   /**
-   * Get the current wait time.
+   * Returns current wait time.
    */
   unsigned long waitTime() const;
 
   /**
-   * Move both reading and writing position to the beginning of the buffer.
+   * Moves both reading and writing position to the beginning of the
+   * buffer.
    */
   bool reset();
 
   /**
-   * Move the @i reading position. Writing is always sequential, but
+   * Moves the reading position. Writing is always sequential, but
    * reading position can be changed in certain limits. Seeking
    * backwards is supported only within the unget buffer. Seeking
    * forwards is equal to skipping data, and can happen as far as the
@@ -77,7 +75,7 @@ public:
   bool atEnd() const;
 
   /**
-   * Tell the buffer that everything has been written. This informs
+   * Tells the buffer that everything has been written. This informs
    * possible readers that there is no more data to come, which helps
    * in avoiding unnecessary waiting. Call [reset()] to start writing
    * again.
@@ -91,7 +89,7 @@ public:
 
 protected:
   /**
-   * Read at most `maxSize` bytes into `data`. In any case, the
+   * Reads at most `maxSize` bytes into `data`. In any case, the
    * number of bytes that can be read is less than or equal to the
    * size of the memory buffer. If less data has been written to the
    * buffer, the number of bytes written so far limits the number of
@@ -105,8 +103,8 @@ protected:
   qint64 readData(char * data, qint64 maxSize);
 
   /**
-   * Write at most `maxSize` bytes from `data`. The capacity of the
-   * internal buffer limits the amount of data that can be written. 
+   * Writes at most `maxSize` bytes from `data`. The capacity of the
+   * internal buffer limits the amount of data that can be written.
    * Once the buffer is full, no data can be written before something
    * is read out.
    *
@@ -133,6 +131,5 @@ private:
     bool bWriteFinished;
   } *d;
 };
-
 
 #endif //_PIIFIFOBUFFER_H

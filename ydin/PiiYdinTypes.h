@@ -301,8 +301,8 @@
 */
 
 /**
- * Case clauses for floating-point matrices. See @ref
- * PII_ALL_MATRIX_CASES for more information.
+ * Case clauses for floating-point matrices. See 
+ * [PII_ALL_MATRIX_CASES] for more information.
  */
 #define PII_FLOAT_MATRIX_CASES(func, param) PII_DO_FLOAT_MATRIX_CASES(func, (param))
 /**
@@ -318,8 +318,8 @@
   PII_DO_FLOAT_MATRIX_CASES(func, param)
 
 /**
- * Case clauses for all numeric matrices. See @ref
- * PII_ALL_MATRIX_CASES for more information.
+ * Case clauses for all numeric matrices. See 
+ * [PII_ALL_MATRIX_CASES] for more information.
  */
 #define PII_NUMERIC_MATRIX_CASES(func, param) PII_DO_NUMERIC_MATRIX_CASES(func, (param))
 
@@ -337,8 +337,8 @@
     break
 
 /**
- * Case clauses for all primitive matrix types. See @ref
- * PII_ALL_MATRIX_CASES for more information.
+ * Case clauses for all primitive matrix types. See 
+ * [PII_ALL_MATRIX_CASES] for more information.
  */
 #define PII_PRIMITIVE_MATRIX_CASES(func, param) PII_DO_PRIMITIVE_MATRIX_CASES(func, (param))
 /**
@@ -404,8 +404,8 @@
  * parameter. The function may be a class method, if the macro is used
  * within a class method. If the function returns a value, you may
  * also use the syntax "var = func". For example,
- * `PII_ALL_MATRIX_CASES(myInt = myFunction, obj)`. The @ref
- * PiiYdin::matrixAs() function template is a utility function
+ * `PII_ALL_MATRIX_CASES(myInt = myFunction, obj)`. The 
+ * [PiiYdin::matrixAs()] function template is a utility function
  * often used as the `func` parameter.
  *
  * @param param a parameter to the function, usually a PiiVariant.
@@ -474,8 +474,8 @@
     break
 
 /**
- * Case clauses for all gray-scale image types. See @ref
- * PII_ALL_MATRIX_CASES for more information.
+ * Case clauses for all gray-scale image types. See 
+ * [PII_ALL_MATRIX_CASES] for more information.
  */
 #define PII_GRAY_IMAGE_CASES(func, param) PII_DO_GRAY_IMAGE_CASES(func, (param))
 /**
@@ -497,8 +497,8 @@
     break
 
 /**
- * Case clauses for integer-valued color image types. See @ref
- * PII_ALL_MATRIX_CASES for more information.
+ * Case clauses for integer-valued color image types. See 
+ * [PII_ALL_MATRIX_CASES] for more information.
  */
 #define PII_INT_COLOR_IMAGE_CASES(func, param) PII_DO_INT_COLOR_IMAGE_CASES(func, (param))
 /**
@@ -517,8 +517,8 @@
     break
 
 /**
- * Case clauses for all color image types. See @ref
- * PII_ALL_MATRIX_CASES for more information.
+ * Case clauses for all color image types. See 
+ * [PII_ALL_MATRIX_CASES] for more information.
  */
 #define PII_COLOR_IMAGE_CASES(func, param) PII_DO_COLOR_IMAGE_CASES(func, (param))
 /**

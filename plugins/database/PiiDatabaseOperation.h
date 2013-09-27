@@ -60,9 +60,9 @@ class PII_DATABASE_EXPORT PiiDatabaseOperation : public PiiDefaultOperation
    *
    * Some examples:
    *
-   * - `mysql:`//user:password\@10.10.10.2/dumpdb
-   * - `null:`//
-   * - `qt:`//main
+   * - `mysql://user:password@10.10.10.2/dumpdb`
+   * - `null://`
+   * - `qt://main`
    *
    * @see [databaseName]
    */

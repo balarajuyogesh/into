@@ -140,8 +140,8 @@
  * GET /myClass/functions/plus?1&2 HTTP/1.1
  * ~~~
  *
- * Parameters are automatically decoded using @ref
- * PiiHttpDevice::decodeVariant(). If the function has a return value,
+ * Parameters are automatically decoded using 
+ * [PiiHttpDevice::decodeVariant()]. If the function has a return value,
  * the same encoding will be used in the return message body.
  *
  * Channels and call-back functions
@@ -403,7 +403,7 @@ public:
   void removeCallbacks();
 
   /**
-   * @fn void callBack<R>(const QString& function, ...)
+   * @decl void callBack<R>(const QString& function, ...)
    *
    * Invokes the call-back function called *function* with the given
    * parameters and return type R (which may be void). The parameters
@@ -415,7 +415,7 @@ public:
    * @exception PiiNetworkException& or PiiHttpException& if the
    * remote function call failed.
    *
-   * @exception PiiSerializationException& if function parameters
+   * @exception PiiSerializationException& if function parameters
    * could not be encoded.
    */
   

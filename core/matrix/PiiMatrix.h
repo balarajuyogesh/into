@@ -457,8 +457,8 @@ public:
    * Only elementary types can be used with this constructor. Complex
    * types cause a compile-time error.
    *
-   * @warning Take extreme care to ensure that the elements you give
-   * in the parameter list are of correct type. Examples:
+   * ! Take extreme care to ensure that the elements you give in the
+   * parameter list are of correct type. Examples:
    *
    * ~~~(c++)
    * PiiMatrix<char> a(3, 1, 'a', 'b', 'c');     //correct, chars are passed as ints

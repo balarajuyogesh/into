@@ -145,8 +145,8 @@ namespace PiiClassification
  * moc can't cope with template classes. This pattern is implemented,
  * for example, in PiiKnnClassifierOperation.
  *
- * The template classes are registered to the @ref
- * PiiYdin::resourceDatabase() "resource database" so that the
+ * The template classes are registered to the 
+ * [resource database](PiiYdin::resourceDatabase()) so that the
  * template type is a part of the name. For example,
  * PiiKnnClassifierOperation::Template<double> is registered as
  * PiiKnnClassifierOperation<double>.

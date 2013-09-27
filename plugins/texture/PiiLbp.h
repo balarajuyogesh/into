@@ -35,8 +35,8 @@
  *
  * Usually, the local neighborhood in LBP is circular, parameterized
  * by the number of samples and the neighborhood radius as shown in
- * the picture below. (There are other alternatives, such as @ref
- * PiiRandomLbp "random neighborhood".) Each pixel in the neighborhood
+ * the picture below. (There are other alternatives, such as 
+ * [random neighborhood](PiiRandomLbp).) Each pixel in the neighborhood
  * is compared to another pixel in the neighborhood. Depending on the
  * result of the comparison, one bit of a binary number is set to
  * either zero or one. Usually, the neighbors are compared to the

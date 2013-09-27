@@ -34,8 +34,8 @@
  * This operation implements the classical Hough transform, which is
  * concerned with the identification of lines in the image. Hough
  * transform has been extended to identifying positions of arbitrary
- * shapes, most commonly circles or ellipses. See @ref
- * PiiHoughTransform for details.
+ * shapes, most commonly circles or ellipses. See 
+ * [PiiHoughTransform] for details.
  *
  * Inputs
  * ------
@@ -95,8 +95,8 @@ class PII_TRANSFORMS_EXPORT PiiHoughTransformOperation : public PiiDefaultOperat
 
   /**
    * The minimum magnitude for a peak in the parameter space to be
-   * considered a peak. See the `threshold` parameter of @ref
-   * PiiTransforms::findPeaks(). Default value is 0. Getting this
+   * considered a peak. See the `threshold` parameter of 
+   * [PiiTransforms::findPeaks()]. Default value is 0. Getting this
    * value right usually requires experimenting.
    */
   Q_PROPERTY(double minPeakMagnitude READ minPeakMagnitude WRITE setMinPeakMagnitude);

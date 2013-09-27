@@ -77,8 +77,8 @@ class PiiThresholdingOperation : public PiiDefaultOperation
    * Inversion flag. If this value is set to `true`, the result will
    * be inverted. In all cases but with `HysteresisThreshold` the
    * "inverted" result will be same as the normal thresholding result
-   * except that zeros and ones are exchanged. See @ref
-   * PiiImage::inverseHysteresisThreshold() for details on hysteresis
+   * except that zeros and ones are exchanged. See 
+   * [PiiImage::inverseHysteresisThreshold()] for details on hysteresis
    * thresholding.
    */
   Q_PROPERTY(bool inverse READ isInverse WRITE setInverse);
@@ -160,8 +160,8 @@ public:
    *
    * - `SauvolaAdaptiveThreshold` - and adaptive thresholding
    * technique that takes local variance into account. The local
-   * threshold *t* is calculated as @f$t = \mu (1 + r
-   * (\sigma/\sigma_{\mathrm max} - 1)) + a@f$, where *r* stands for
+   * threshold *t* is calculated as \(t = \mu (1 + r
+   * (\sigma/\sigma_{\mathrm max} - 1)) + a\), where *r* stands for
    * [relativeThreshold], *a* for [absoluteThreshold], and
    * \(\sigma_{\mathrm max}\) for the maximum possible standard
    * deviation, which is assumed to be 128 for integer-typed images

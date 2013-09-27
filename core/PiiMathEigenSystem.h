@@ -39,8 +39,8 @@ namespace Pii
    * (eigenvalues and eigenvectors). Intended to be used through
    * [eigensolve](Pii::eigensolve()).
    *
-   * @tparam T Matrix elementtype
-   * @tparam Real Real number type used in calculations.
+   * - `tT` - Matrix elementtype
+   * - `tReal` - Real number type used in calculations.
    */
   template<class tT, class tReal>
   class EigenSystem

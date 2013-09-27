@@ -26,8 +26,8 @@
 /**
  * @file
  *
- * Functions for creating resources described in the @ref
- * PiiYdin::resourceDatabase() "resource database". This header file
+ * Functions for creating resources described in the 
+ * [resource database](PiiYdin::resourceDatabase()). This header file
  * must be included after all the types involved in the function calls
  * have been declared.
  *
@@ -91,8 +91,8 @@ namespace PiiYdin
    * template parameter is used in checking that the resource really
    * is an instantiable entity. If `ParentType` is not a superclass
    * of the resource identified by *name*, the function will return a
-   * null pointer. Consequently, `ParentType` must have the @ref
-   * PiiSerializationTraits::ClassName "class name trait" defined. A
+   * null pointer. Consequently, `ParentType` must have the 
+   * [class name trait](PiiSerializationTraits::ClassName) defined. A
    * null pointer will be returned also if the named resource does not
    * exist.
    *

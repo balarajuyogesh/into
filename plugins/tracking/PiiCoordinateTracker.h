@@ -166,8 +166,8 @@ protected:
    * "predictionThreshold" is reached.
    *
    * If there is no prediction, `measurement` will be compared to the
-   * trajectory's last point. If the squared distance is within @ref
-   * setInitialThreshold() "initialThreshold", 1.0 will be returned. 
+   * trajectory's last point. If the squared distance is within 
+   * [initialThreshold](setInitialThreshold()), 1.0 will be returned. 
    * Otherwise, 0.0 will be returned.
    *
    * Should `measurement` work as a starting point for a new

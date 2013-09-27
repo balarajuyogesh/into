@@ -178,8 +178,8 @@
  * };
  * ~~~
  *
- * When registering an operation compound to a plug-in, use the @ref
- * PII_REGISTER_COMPOUND macro instead of [PII_REGISTER_OPERATION].
+ * When registering an operation compound to a plug-in, use the 
+ * [PII_REGISTER_COMPOUND] macro instead of [PII_REGISTER_OPERATION].
  *
  */
 class PII_YDIN_EXPORT PiiOperationCompound : public PiiOperation

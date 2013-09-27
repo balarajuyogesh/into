@@ -20,13 +20,6 @@
 #include "PiiHistogram.h"
 #include "PiiLabeling.h"
 
-/**
- * @file
- *
- * Image thresholding routines.
- */
-
-
 namespace PiiImage
 {
   /**
@@ -486,10 +479,9 @@ namespace PiiImage
                                                                     int windowRows, int windowColumns);
   
   /**
-   * A function that calculates a local threshold *t* as @f$t = \mu +
-   * r \sigma@f$, where *r* stands for `relativeThreshold`. The
-   * output of the function is *thresholdFunc(transformFunc(pixel),
-   * t)*.
+   * A function that calculates a local threshold *t* as \(t = \mu + r
+   * \sigma\), where *r* stands for `relativeThreshold`. The output of
+   * the function is *thresholdFunc(transformFunc(pixel), t)*.
    *
    * @see adaptiveThreshold()
    */
@@ -536,11 +528,11 @@ namespace PiiImage
   }
 
   /**
-   * A function that calculates a local threshold *t* as @f$t = \mu
-   * (1 + r (\sigma/\sigma_{\mathrm max} - 1))@f$, where *r* stands
-   * for `relativeThreshold` and \(\sigma_{\mathrm max}\) for the
-   * maximum possible standard deviation. The output of the function
-   * is *thresholdFunc(transformFunc(pixel), t)*.
+   * A function that calculates a local threshold *t* as \(t = \mu (1
+   * + r (\sigma/\sigma_{\mathrm max} - 1))\), where *r* stands for
+   * `relativeThreshold` and \(\sigma_{\mathrm max}\) for the maximum
+   * possible standard deviation. The output of the function is
+   * *thresholdFunc(transformFunc(pixel), t)*.
    *
    * @see adaptiveThreshold()
    */

@@ -135,8 +135,8 @@ namespace Pii
    *
    * @param propertyOffset skip this many properties in the beginning. 
    * This value can be used to skip the properties of superclasses. 
-   * For example, using one as the *propertyOffset* skips the @ref
-   * QObject::objectName property.
+   * For example, using one as the *propertyOffset* skips the 
+   * [QObject::objectName] property.
    *
    * @param flags a logical or of property types to be included in the
    * query (see [Properties](Pii::Properties)). The function only

@@ -71,7 +71,7 @@ public:
    */
   State state() const;
 
-  /// Returns @p true.
+  /// Returns `true`.
   bool wait(unsigned long time);
 
   /**

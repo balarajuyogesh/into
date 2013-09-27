@@ -825,8 +825,8 @@ namespace Pii
                                                               MatrixDirection direction);
 
   /**
-   * Fast 2-D moving average. This function uses the @ref
-   * cumulativeSum(const PiiMatrix<T>&, CumulativeSumMode)
+   * Fast 2-D moving average. This function uses the 
+   * [cumulativeSum(const PiiMatrix<T>&, CumulativeSumMode)]
    * "cumulative sum" of a matrix to calculate the moving average
    * over `mat`.
    *
@@ -2266,8 +2266,7 @@ namespace Pii
    * @param p a probability, in the range [0,1]
    *
    * @return erf(p). If p < 0 or p > 1, `NaN` will be returned. If p
-   * == 0, @p -Inf will be returned. If p == 1, `Inf` will be
-   * returned.
+   * == 0, `-Inf` will be returned. If p == 1, `Inf` will be returned.
    */
   double erf(double p);
 
@@ -2275,8 +2274,8 @@ namespace Pii
    * Calculates the distance from `abs`(value) to the next real
    * number larger in magnitude. The return value can be seen as the
    * accuracy of the number type at the given magnitude. A crude
-   * approximation of `epsilon`(x) can be obtained with 
-   * `epsilon`(1.0)*abs(x).
+   * approximation of `ep3silon`(x) can be obtained with 
+   * `epsilon(1.0)*abs(x)`.
    *
    * @param value the value whose accuracy is to be measured. If value
    * == 1.0, returns `std::numeric_limits`<Real>::epsilon().

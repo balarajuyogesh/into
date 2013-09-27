@@ -39,8 +39,8 @@ class PiiCornerDetector : public PiiDefaultOperation
   Q_OBJECT
 
   /**
-   * Corner detection threshold. See @ref
-   * PiiImage::detectFastCorners().
+   * Corner detection threshold. See 
+   * [PiiImage::detectFastCorners()].
    */
   Q_PROPERTY(double threshold READ threshold WRITE setThreshold);
 

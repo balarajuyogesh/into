@@ -46,14 +46,13 @@
  * \end{array}\right)
  * \]
  *
- * The mathematical model is parametrized by four unknowns: @f$(s,
- * \theta, t_x, t_y)@f$, which stand for scaling factor, rotation
+ * The mathematical model is parametrized by four unknowns: \((s,
+ * \theta, t_x, t_y)\), which stand for scaling factor, rotation
  * angle, horizontal translation, and vertical translation,
  * respectively.
  *
  * This estimator uses squared geometric distance as the goodness of
  * fit.
- *
  */
 template <class T> class PiiRigidPlaneRansac :
   public PiiRansac,

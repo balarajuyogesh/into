@@ -49,9 +49,9 @@ class PiiColorConverter : public PiiDefaultOperation
   /**
    * A 3-by-3 conversion matrix (PiiMatrix<float> or
    * PiiMatrix<double>) for the generic conversion. Let us assume the
-   * color to be converted is represented by @f$C_i = [ c_1 c_2 c_3
-   * ]^T\(. The converted color is obtained by \)C_o = A C_i@f$,
-   * where A is the conversion matrix. The default value is a 3-by-3
+   * color to be converted is represented by \(C_i = [ c_1 c_2 c_3
+   * ]^T\). The converted color is obtained by \(C_o = A C_i\), where
+   * A is the conversion matrix. The default value is a 3-by-3
    * identity matrix.
    */
   Q_PROPERTY(PiiVariant conversionMatrix READ conversionMatrix WRITE setConversionMatrix);

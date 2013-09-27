@@ -24,12 +24,13 @@
 #include <PiiPoint.h>
 
 /**
- * @file
+ * Definitions and functions for image processing.
  *
- * Generic image handling operations.
- *
+ * This namespace contains functions and definitions for creating
+ * digital image filters and for applying them to images,
+ * thresholding, labeling binary images, connected component analysis,
+ * edge detection, and histogram handling.
  */
-
 namespace PiiImage
 {
   typedef PiiMatrix<PiiPoint<int> > IntCoordinateMap;
@@ -333,9 +334,9 @@ namespace PiiImage
   }
 
   /**
-   * A unary function that converts radians to points of the compass. 
-   * Angles in \([-\pi/8, \pi/8)\) turned to 0, angles in @f$[\pi/8,
-   * \pi/4)@f$pi to 1 and so on.
+   * A unary function that converts radians to points of the compass.
+   * Angles in \([-\pi/8, \pi/8)\) are point 0, angles in \([\pi/8,
+   * 3\pi/8)\) point 1 and so on.
    */
   template <class T> struct RadiansToPoints : public Pii::UnaryFunction<T,int>
   {
@@ -772,9 +773,9 @@ namespace PiiImage
    * \left( \begin{array}{c} x \\ y \\ 1 \end{array} \right)
    * \]
    *
-   * Transformation matrices are most easily created by @ref
-   * createRotationTransform(), [createScalingTransform()], @ref
-   * createTranslationTransform, and [createShearingTransform()]. 
+   * Transformation matrices are most easily created by
+   * [createRotationTransform()], [createScalingTransform()],
+   * [createTranslationTransform], and [createShearingTransform()].
    * Transformations can be chained by simply multiplying the
    * transformation matrices. Assume *R* is a rotation transform and
    * *S* is a shear transform. Shear after rotate transform is

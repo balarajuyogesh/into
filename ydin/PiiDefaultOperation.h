@@ -155,8 +155,8 @@ public:
   /**
    * Checks the operation for execution. This function creates a
    * suitable flow controller by calling [createFlowController()]. It
-   * then sets the flow controller to the active @ref
-   * PiiOperationProcessor "processor" and sets the processor as the
+   * then sets the flow controller to the active 
+   * [processor](PiiOperationProcessor) and sets the processor as the
    * [input controller](PiiInputController) for all inputs. It
    * also makes all output sockets listeners to their connected
    * inputs.

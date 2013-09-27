@@ -95,8 +95,8 @@ namespace PiiDsp
    * \mathrm{corr}(a,b) = F^{-1}(F(a)F(b)^*),
    * \]
    *
-   * where *F* stands for the Fourier transform, and @e * marks
-   * complex conjugation. The input matrices must be equal in size.
+   * where *F* stands for the Fourier transform, and "*" marks complex
+   * conjugation. The input matrices must be equal in size.
    *
    * @exception PiiMathException& if input matrices are different in
    * size

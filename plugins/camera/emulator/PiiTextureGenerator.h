@@ -25,8 +25,8 @@
  * An interface for classes that produce background texture for
  * PiiLineScanEmulator. You may create your own generator by
  * subclassing this interface. Register the class to the resource
- * database (see PiiYdin::resourceDatabase()) and set the @ref
- * PiiLineScanEmulator::textureGenerator "textureGenerator" property
+ * database (see PiiYdin::resourceDatabase()) and set the 
+ * [textureGenerator](PiiLineScanEmulator::textureGenerator) property
  * in PiiLineScanEmulator to the name of your class.
  *
  */

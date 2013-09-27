@@ -118,8 +118,8 @@
  * };
  * ~~~
  *
- * Distance measures are used by algorithms such as @ref
- * PiiClassification::findClosestMatch() "NN", @ref
+ * Distance measures are used by algorithms such as 
+ * [NN](PiiClassification::findClosestMatch()), @ref
  * PiiClassification::knnClassify() "k-NN" and [SOM](PiiSom) to
  * measure the dissimilarity between code vectors. PiiDistanceMeasure
  * is a polymorphic implementation of the concept and used when
@@ -157,8 +157,8 @@
  * ignored with kernel methods. The penalty? Practically none. While
  * it is required for the low-dimensional case, the practical effect
  * of the missing bias in a high-dimensional space is to decrease the
- * degree of freedom by one. With kernels such as the @ref
- * PiiGaussianKernel "Gaussian kernel" the bias term would have no
+ * degree of freedom by one. With kernels such as the 
+ * [Gaussian kernel](PiiGaussianKernel) the bias term would have no
  * effect anyway. The upside is that neither feature vectors nor
  * kernel functions need to take the possible existence of an extra
  * term into account.

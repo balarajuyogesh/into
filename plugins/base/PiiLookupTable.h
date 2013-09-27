@@ -25,8 +25,8 @@
  * ------
  *
  * @in index - a zero-based index into the look-up table. If there is
- * no @ref [defaultValue] "default value", overflows and underflows
- * will cause a run-time exception. Any primitive type is be accepted.
+ * no [default value](defaultValue), overflows and underflows will
+ * cause a run-time exception. Any primitive type is be accepted.
  * 
  * Outputs
  * -------

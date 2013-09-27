@@ -16,8 +16,8 @@
 /**
  * @defgroup PiiCalibrationPlugin
  *
- * Tools for calibrating cameras. Please refer to @ref
- * calibration_overview for an introduction to camera calibration.
+ * Tools for calibrating cameras. Please refer to 
+ * [calibration_overview] for an introduction to camera calibration.
  * [calibration_stereo] describes how calibrated cameras can be
  * used for 3D measurement.
  */

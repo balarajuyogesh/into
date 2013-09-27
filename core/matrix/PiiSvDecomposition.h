@@ -233,9 +233,6 @@ namespace Pii
    * not square, [QR decomposition](qrDecompose()) is used to
    * first reduce the input matrix to a square upper diagonal matrix.
    *
-   * @tparam Real the number type used in calculations (should be a
-   * floating-point type)
-   * 
    * @param A the input matrix
    *
    * @param U pointer to a matrix that will store U.

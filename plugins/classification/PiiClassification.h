@@ -29,8 +29,8 @@
 /**
  * Training algorithms that take a long time to run must occassionally
  * call this macro to check if they are still allowed to continue. 
- * This function calls the *CONTROLLER*'s @ref
- * PiiProgressController::canContinue() "canContinue(*PROGRESS*)"
+ * This function calls the *CONTROLLER*'s 
+ * [canContinue(*PROGRESS*)](PiiProgressController::canContinue())
  * function. If *CONTROLLER* non-zero and returns `false`, this
  * macro throws a PiiClassificationException. Otherwise it does
  * nothing.
