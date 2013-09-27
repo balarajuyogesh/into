@@ -43,8 +43,8 @@
  * the bias to find the separating hyperplane.
  *
  * The input for the training algorithm is a sample set with binary
- * classifications: @f$\mathbf{S} = \{ (\mathbf{x}_i, c_i)| c_i \in
- * \{0,1\}\}_{i=1}^M@f$. On each iteration, the weigh vector and the
+ * classifications: \(\mathbf{S} = \{ (\mathbf{x}_i, c_i)| c_i \in
+ * \{0,1\}\}_{i=1}^M\). On each iteration, the weigh vector and the
  * bias are updated as follows:
  *
  * \[

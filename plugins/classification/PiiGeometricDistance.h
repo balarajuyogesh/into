@@ -20,8 +20,8 @@
 
 /**
  * Geometric distance. The geometric distance is calculated as the
- * square root of the sum of squared differences of the vectors: @f$ d
- * = \sqrt{(S-M)(S-M)^T} @f$, where *S* and *M* represent the sample
+ * square root of the sum of squared differences of the vectors: \( d
+ * = \sqrt{(S-M)(S-M)^T} \), where *S* and *M* represent the sample
  * and model feature vectors, respectively.
  *
  */

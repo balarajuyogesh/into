@@ -85,8 +85,8 @@ class PiiLbpOperation : public PiiDefaultOperation
    * smoothed prior to applying the LBP operation. The smoothing is
    * performed with Pii::fastMovingAverage() using the distance
    * between neighborhood samples as the size of the smoothing window.
-   * Formally, the window size is calculated as @f$s = \ceil{2 \pi R /
-   * N}@f$, where *N* is the number of samples and *N* is the
+   * Formally, the window size is calculated as \(s = \ceil{2 \pi R /
+   * N}\), where *N* is the number of samples and *N* is the
    * neighborhood radius. Multi-scale LBP with smoothing can be seen
    * as a pyramid description of image texture.
    *

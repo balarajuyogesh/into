@@ -25,8 +25,8 @@
 /**
  * An interface for classification and regression algorithms. A
  * classifier is an algorithm that maps an N-dimensional feature
- * vector *X* into to a set of discrete class labels @f$c \in
- * {0,M-1}@f$. In regression, the algorithm maps *X* to a continuous
+ * vector *X* into to a set of discrete class labels \(c \in
+ * {0,M-1}\). In regression, the algorithm maps *X* to a continuous
  * value \(c \in [0,1]\).
  *
  */

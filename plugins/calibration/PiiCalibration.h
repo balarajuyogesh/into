@@ -451,8 +451,8 @@ namespace PiiCalibration
 
   /**
    * Convert a rotation vector `rotation` to a rotation matrix. This
-   * function converts the three-dimensional column vector @f$V =
-   * [v_x,v_y,v_z]^T\( to a rotation matrix \)R@f$ as follows:
+   * function converts the three-dimensional column vector \(V =
+   * [v_x,v_y,v_z]^T\( to a rotation matrix \)R\) as follows:
    *
    * \[
    * R = e^{M\theta} = I + M \sin(\theta) +
@@ -469,8 +469,8 @@ namespace PiiCalibration
    * \end{array} \right],
    * \]
    *
-   * where \(\theta = ||V||\) and @f$V_n = V/\theta = [v_{nx},
-   * v_{ny}, v_{nz}]^T@f$.
+   * where \(\theta = ||V||\) and \(V_n = V/\theta = [v_{nx},
+   * v_{ny}, v_{nz}]^T\).
    *
    * The norm of V (its geometric length) is used as the rotation
    * angle wheras the direction of the vector specifies the rotation

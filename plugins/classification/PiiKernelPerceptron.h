@@ -47,12 +47,12 @@
  * space. In the case of a Gaussian kernel, the feature space is
  * infinite-dimensional.
  *
- * The dual form of the decision threshold is @f$\sum_{i=1}^M(\alpha_i
+ * The dual form of the decision threshold is \(\sum_{i=1}^M(\alpha_i
  * \mathbf{x}_i) \cdot \mathbf{x} = \sum_{i=1}^M(\alpha_i \mathbf{x}_i
- * \cdot \mathbf{x})@f$. Now, if the weight vector and the feature
+ * \cdot \mathbf{x})\). Now, if the weight vector and the feature
  * vector are mapped into a high-dimensional feature space, the
- * threshold becomes @f$\sum_{i=1}^M(\alpha_i \Phi(\mathbf{x}_i) \cdot
- * \Phi(\mathbf{x}))@f$. Thus, the decision function for the Kernel
+ * threshold becomes \(\sum_{i=1}^M(\alpha_i \Phi(\mathbf{x}_i) \cdot
+ * \Phi(\mathbf{x}))\). Thus, the decision function for the Kernel
  * Perceptron is
  *
  * \[

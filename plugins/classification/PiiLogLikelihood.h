@@ -20,8 +20,8 @@
 
 /**
  * Log-likelihood dissimilarity. Measures difference between two 
- * `distributions` as a log-likelihood ratio: @f$ d = -\sum S_i
- * \log(M_i) @f$, where *S* and *M* represent the sample and model
+ * `distributions` as a log-likelihood ratio: \( d = -\sum S_i
+ * \log(M_i) \), where *S* and *M* represent the sample and model
  * distributions, respectively. Input features are assumed to be
  * distributions that sum up to unity.
  *

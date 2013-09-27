@@ -52,8 +52,8 @@
  * one of them. In Into, a *sample set* is a randomly
  * accessible collection of samples with functions for querying the
  * size of the set and the number of features. Each sample in a sample
- * set must have an equal number of features. Formally, @f$\mathbf{X}
- * = \{\mathbf{x}_i\}_{i=1}^M@f$, where M is the number of samples in
+ * set must have an equal number of features. Formally, \(\mathbf{X}
+ * = \{\mathbf{x}_i\}_{i=1}^M\), where M is the number of samples in
  * the set.
  *
  * To be able to use a data structure as a sample set Into needs to be
@@ -84,9 +84,9 @@
  * associated label. In documentation, labels are usually denoted by
  * *c* (for `class`). Sometimes, a sample set is defined as a set of
  * (feature vector, label) pairs. For example, a set of samples with
- * binary classifications can be formally defined as @f$\mathbf{S} =
+ * binary classifications can be formally defined as \(\mathbf{S} =
  * \{ (\mathbf{x}_i, c_i)|\mathbf{x}_i \in \mathbb{R}^N, c_i \in
- * \{0,1\}\}_{i=1}^M@f$. In code, however, sample and label sets are
+ * \{0,1\}\}_{i=1}^M\). In code, however, sample and label sets are
  * treated as distinct entities.
  *
  *
@@ -133,17 +133,16 @@
  * same interface. Their meaning in mathematical sense is however
  * quite different.
  *
- * The *kernel trick* is a method of converting a hyperplane
- * (linear) classifier into a non-linear one. A kernel funtion is used
- * in converting a linear *input space* non-linearly into a
- * high-dimensional *feature space*, in which a linear
- * classifier can find a solution. This is done using Mercer's
- * theorem, which states (approximately) that any continuous,
- * symmetric, positive semi-definite function \(k(x,y)\) can be
- * expressed as a dot product in a high-dimensional space. It follows
- * that @f$k(\mathbf{x}_i, \mathbf{x}_j) = \Phi(\mathbf{x}_i)\cdot
- * \Phi(\mathbf{x}_j)\(, where \)\Phi(x)@f$ is the non-linear
- * mapping function.
+ * The *kernel trick* is a method of converting a hyperplane (linear)
+ * classifier into a non-linear one. A kernel funtion is used in
+ * converting a linear *input space* non-linearly into a
+ * high-dimensional *feature space*, in which a linear classifier can
+ * find a solution. This is done using Mercer's theorem, which states
+ * (approximately) that any continuous, symmetric, positive
+ * semi-definite function \(k(x,y)\) can be expressed as a dot product
+ * in a high-dimensional space. It follows that \(k(\mathbf{x}_i,
+ * \mathbf{x}_j) = \Phi(\mathbf{x}_i)\cdot \Phi(\mathbf{x}_j)\), where
+ * \(\Phi(x)\) is the non-linear mapping function.
  *
  * An interesting thing about kernels is that one does not need to
  * actually know the mapping function or even the dimensionality of

@@ -20,8 +20,8 @@
 
 /**
  * Chi squared distance. The chi squared distance between two vectors
- * S and M is defined as @f$ d = \frac{1}{2} \sum (S_i - M_i)^2 / (S_i
- * + M_i) @f$. This distance measure doesn't however divide the sum by
+ * S and M is defined as \( d = \frac{1}{2} \sum (S_i - M_i)^2 / (S_i
+ * + M_i) \). This distance measure doesn't however divide the sum by
  * two.
  *
  */
