@@ -1,7 +1,10 @@
 Overview of Camera Calibration
 ==============================
 
-The following secetions give you a broad overview of camera
+The calibration plug-in provides tools for calibrating cameras and
+making accurate 3D measurements with multiple cameras.
+
+The following sections give you a broad overview of camera
 calibration. Please refer to the documentation of calibration
 functions in the [PiiCalibration] namespace for real usage examples.
 

@@ -24,7 +24,6 @@ SUBDIRS += calibration \
            video \
            camera \
            colors \
-           features \
            tracking \
            transforms \
            statistics \
@@ -43,4 +42,3 @@ IODRIVERS = modbus
 for(driver, IODRIVERS) {
   enabled($$driver): SUBDIRS += io/$$driver
 }
-

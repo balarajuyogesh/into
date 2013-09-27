@@ -26,7 +26,6 @@
 /**
  * A namespace for functions that transform images into different
  * types of domains.
- *
  */
 namespace PiiTransforms
 {

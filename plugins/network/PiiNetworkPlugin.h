@@ -13,13 +13,6 @@
  * refer to LICENSE.AGPL3 for details.
  */
 
-/**
- * @defgroup PiiNetworkPlugin
- *
- * PiiNetworkPlugin contains operations for sending and receiving
- * objects through the network.
- */
-
 #ifndef _PIINETWORKPLUGIN_H
 #define _PIINETWORKPLUGIN_H
 
