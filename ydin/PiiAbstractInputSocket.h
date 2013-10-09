@@ -113,6 +113,7 @@ private:
   friend class PiiAbstractOutputSocket;
 };
 
-Q_DECLARE_METATYPE(PiiAbstractInputSocket*);
+Q_DECLARE_METATYPE(PiiAbstractInputSocket*)
+Q_DECLARE_INTERFACE(PiiAbstractInputSocket, "com.intopii.PiiAbstractInputSocket/1.0")
 
 #endif //_PIIABSTRACTINPUTSOCKET_H

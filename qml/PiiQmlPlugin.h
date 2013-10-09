@@ -13,24 +13,23 @@
  * refer to LICENSE.AGPL3 for details.
  */
 
-#ifndef _TESTPIIRESOURCEDATABASE_H
-#define _TESTPIIRESOURCEDATABASE_H
+#ifndef _PIIQMLPLUGIN_H
+#define _PIIQMLPLUGIN_H
 
-#include <QObject>
-#include <PiiResourceDatabase.h>
+#include <QQmlExtensionPlugin>
 
-class TestPiiResourceDatabase : public QObject
+class QQmlContext;
+class QQmlEngine;
+class QJSEngine;
+
+class PiiQmlPlugin : public QQmlExtensionPlugin
 {
   Q_OBJECT
+  Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
 
-private slots:
-  void initTestCase();
-  void select();
-  void subselect();
-
-private:
-  PiiResourceDatabase db;
+public:
+  void registerTypes(const char* uri);
+  void initializeEngine(QQmlEngine* engine, const char* uri);
 };
 
-
-#endif //_TESTPIIRESOURCEDATABASE_H
+#endif //_PIIQMLPLUGIN_H

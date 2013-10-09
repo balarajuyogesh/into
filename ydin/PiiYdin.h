@@ -157,6 +157,11 @@ namespace PiiYdin
    * repeating the string literal to save memory.
    */
   extern PII_YDIN_EXPORT const char* offsetPredicate;
+  /**
+   * A pointer to the string literal "pii:metaobject". Use this instead of
+   * repeating the string literal to save memory.
+   */
+  extern PII_YDIN_EXPORT const char* metaObjectPredicate;
 }
 
 #endif //_PIIYDIN_H

@@ -13,24 +13,14 @@
  * refer to LICENSE.AGPL3 for details.
  */
 
-#ifndef _TESTPIIRESOURCEDATABASE_H
-#define _TESTPIIRESOURCEDATABASE_H
+#ifndef _PIIOPERATIONCOMPOUNDWRAPPER_H
+#define _PIIOPERATIONCOMPOUNDWRAPPER_H
 
-#include <QObject>
-#include <PiiResourceDatabase.h>
+#include <private/qqmlglobal_p.h>
 
-class TestPiiResourceDatabase : public QObject
+namespace PiiOperationCompoundWrapper
 {
-  Q_OBJECT
+  void init(QV8Engine*,v8::Handle<v8::Object>);
+}
 
-private slots:
-  void initTestCase();
-  void select();
-  void subselect();
-
-private:
-  PiiResourceDatabase db;
-};
-
-
-#endif //_TESTPIIRESOURCEDATABASE_H
+#endif //_PIIOPERATIONCOMPOUNDWRAPPER_H

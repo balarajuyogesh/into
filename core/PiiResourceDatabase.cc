@@ -27,12 +27,51 @@ namespace Pii
 
 PiiResourceDatabase::PiiResourceDatabase() :
   d(new Data)
-{
-}
+{}
 
 PiiResourceDatabase::~PiiResourceDatabase()
 {
   delete d;
+}
+
+PiiResourceStatement PiiResourceDatabase::resource(const char* subject, const char* predicate, const char* object)
+{
+  return PiiResourceStatement(subject, predicate, object, PiiResourceStatement::Resource);
+}
+
+PiiResourceStatement PiiResourceDatabase::literal(const char* subject, const char* predicate, const char* object)
+{
+  return PiiResourceStatement(subject, predicate, object, PiiResourceStatement::Literal);
+}
+
+PiiResourceStatement PiiResourceDatabase::resource(const QString& subject, const QString& predicate, const QString& object)
+{
+  return PiiResourceStatement(subject, predicate, object, PiiResourceStatement::Resource);
+}
+
+PiiResourceStatement PiiResourceDatabase::literal(const QString& subject, const QString& predicate, const QString& object)
+{
+  return PiiResourceStatement(subject, predicate, object, PiiResourceStatement::Literal);
+}
+
+PiiResourceStatement PiiResourceDatabase::resource(const char* subject, const char* predicate, void* object)
+{
+  return PiiResourceStatement(subject, predicate, object);
+}
+
+PiiResourceStatement PiiResourceDatabase::resource(const QString& subject, const QString& predicate, void* object)
+{
+  return PiiResourceStatement(subject, predicate, object);
+}
+
+PiiResourceStatement PiiResourceDatabase::resource(int subject, const QString& predicate, const QString& object)
+{
+  return PiiResourceStatement(subject, predicate, object, PiiResourceStatement::Resource);
+}
+
+PiiResourceStatement PiiResourceDatabase::literal(int subject, const QString& predicate, const QString& object)
+{
+  return PiiResourceStatement(subject, predicate, object, PiiResourceStatement::Literal);
 }
 
 int PiiResourceDatabase::generateId()
@@ -50,34 +89,6 @@ int PiiResourceDatabase::addStatement(const PiiResourceStatement& statement)
   return id;
 }
 
-int PiiResourceDatabase::addStatement(const char* subject,
-                                      const char* predicate,
-                                      const char* object,
-                                      PiiResourceStatement::Type type)
-{
-  int id = generateId();
-  d->lstStatements << PiiResourceStatement(subject, predicate, object, type, id);
-  return id;
-}
-
-int PiiResourceDatabase::addStatement(const QString& subject,
-                                      const QString& predicate,
-                                      const QString& object,
-                                      PiiResourceStatement::Type type)
-{
-  int id = generateId();
-  d->lstStatements << PiiResourceStatement(subject, predicate, object, type, id);
-  return id;
-}
-
-int PiiResourceDatabase::addStatement(int subject,
-                                      const QString& predicate,
-                                      const QString& object,
-                                      PiiResourceStatement::Type type)
-{
-  return addStatement(QString("#%1").arg(subject), predicate, object, type);
-}
-
 QList<int> PiiResourceDatabase::addStatements(const QList<PiiResourceStatement>& statements)
 {
   QList<int> lstIds;
@@ -88,7 +99,12 @@ QList<int> PiiResourceDatabase::addStatements(const QList<PiiResourceStatement>&
       // "#" refers to the id of the previous statement (that is not a
       // reification of another statement)
       if (s.subject() == "#" && i != 0)
-        lstIds << addStatement(id, s.predicate(), s.object(), s.type());
+        {
+          if (s.type() != PiiResourceStatement::Pointer)
+            lstIds << addStatement(PiiResourceStatement(QString("#%1").arg(id), s.predicate(), s.object(), s.type()));
+          else
+            lstIds << addStatement(PiiResourceStatement(id, s.predicate(), s.object(), s.type()));
+        }
       else
         {
           id = addStatement(s);
@@ -135,7 +151,7 @@ void PiiResourceDatabase::dump() const
         .arg(d->lstStatements[i].subject(),
              d->lstStatements[i].predicate())
         .arg(d->lstStatements[i].id());
-      if (d->lstStatements[i].type() == PiiResourceStatement::LiteralType)
+      if (d->lstStatements[i].type() == PiiResourceStatement::Literal)
         strStatement = strStatement.arg(QString("\"%1\"").arg(d->lstStatements[i].object()));
       else
         strStatement = strStatement.arg(d->lstStatements[i].object());

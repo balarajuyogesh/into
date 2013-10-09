@@ -75,45 +75,32 @@ public:
   PiiResourceDatabase();
   ~PiiResourceDatabase();
 
+  static PiiResourceStatement resource(const char* subject, const char* predicate, const char* object);
+  static PiiResourceStatement literal(const char* subject, const char* predicate, const char* object);
+  static PiiResourceStatement resource(const QString& subject, const QString& predicate, const QString& object);
+  static PiiResourceStatement literal(const QString& subject, const QString& predicate, const QString& object);
+  static PiiResourceStatement resource(const char* subject, const char* predicate, void* object);
+  static PiiResourceStatement resource(const QString& subject, const QString& predicate, void* object);
+  
   /**
-   * Add a statement to the database. Returns the id of the statement.
+   * Creates a resource statement that refers to another
+   * statement. The subject will be converted to "#subject". The
+   * following two statements are equivalent:
+   *
+   * ~~~(c++)
+   * PiiResourceDatabase::resource("#123", "pii:connector", "MyConnector");
+   * PiiResourceDatabase::resource(123, "pii:connector", "MyConnector");
+   * ~~~
+   */
+  static PiiResourceStatement resource(int subject, const QString& predicate, const QString& object);
+  static PiiResourceStatement literal(int subject, const QString& predicate, const QString& object);
+  
+  /**
+   * Adds a statement to the database. Returns the id of the
+   * statement.
    */
   int addStatement(const PiiResourceStatement& statement);
 
-  /**
-   * Add a statement to the database. Returns the id of the statement.
-   *
-   * @code
-   * PiiResourceDatabase db;
-   * db.addStatement("PiiResourceDatabase", "creator", "Intopii", PiiResourceStatement::LiteralType);
-   * @endcode
-   */
-  int addStatement(const char* subject,
-                   const char* predicate,
-                   const char* object,
-                   PiiResourceStatement::Type type = PiiResourceStatement::LiteralType);
-  /// @overload
-  int addStatement(const QString& subject,
-                   const QString& predicate,
-                   const QString& object,
-                   PiiResourceStatement::Type type = PiiResourceStatement::LiteralType);
-
-  /**
-   * Add a statement to the database. This function takes a statement
-   * id as the subject, and can be used in reifying statements.
-   *
-   * @code
-   * // I think statement #123 is vague
-   * db.addStatement(123, "my:evaluation", "bullshit");
-   * @endcode
-   *
-   * @return the id of the new statement
-   */
-  int addStatement(int subject,
-                   const QString& predicate,
-                   const QString& object,
-                   PiiResourceStatement::Type type = PiiResourceStatement::LiteralType);
-  
   /**
    * A statements to the database. This function adds the given @p
    * statements to the database, starting from the first one. If the
@@ -278,13 +265,15 @@ public:
   void dump() const;
 
 private:
-  class Data
+  class Data    
   {
   public:
     QList<PiiResourceStatement> lstStatements;
   } *d;
 
   int generateId();
+  
+  PII_DISABLE_COPY(PiiResourceDatabase);
 };
 
 template <class Filter> QList<PiiResourceStatement> PiiResourceDatabase::select(Filter filter) const

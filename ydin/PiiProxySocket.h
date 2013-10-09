@@ -37,7 +37,7 @@ class PII_YDIN_EXPORT PiiProxySocket :
   public PiiInputController
 {
   Q_OBJECT
-
+  Q_INTERFACES(PiiAbstractOutputSocket PiiAbstractInputSocket)
 public:
   PiiProxySocket();
   ~PiiProxySocket();

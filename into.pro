@@ -10,3 +10,5 @@ SUBDIRS  = core \
            script \
            test \
            demos
+
+qt5: SUBDIRS += qml

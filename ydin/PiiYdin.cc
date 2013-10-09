@@ -24,6 +24,7 @@ namespace PiiYdin
   const char* parentPredicate = "pii:parent";
   const char* connectorPredicate = "pii:connector";
   const char* offsetPredicate = "pii:offset";
+  const char* metaObjectPredicate = "pii:qmetaobject";
 
   PiiResourceDatabase* resourceDatabase()
   {
@@ -37,12 +38,17 @@ namespace PiiYdin
   }
 }
 
-static const char* pluginName() { static const char* pName = "PiiYdin"; return pName; }
+static const char* pluginName() { return "PiiYdin"; }
 
 PII_REGISTER_CLASS(PiiProbeInput, QObject);
 
+#define PII_REGISTER_YDIN_OPERATION(CLASS, SUPER) \
+  PII_REGISTER_RESOURCE_STATEMENT(CLASS, PiiYdin::parentPredicate, PiiYdin) \
+  PII_REGISTER_SUPERCLASS(CLASS, SUPER) \
+  PII_REGISTER_RESOURCEPTR_STATEMENT(CLASS, PiiYdin::metaObjectPredicate, const_cast<QMetaObject*>(&CLASS::staticMetaObject))
+
 PII_BEGIN_STATEMENTS(PiiYdin)
-  PII_REGISTER_SUPERCLASS(PiiOperation, QObject)
-  PII_REGISTER_SUPERCLASS(PiiEngine, PiiOperationCompound)
-  PII_REGISTER_SUPERCLASS(PiiOperationCompound, PiiOperation)
+  PII_REGISTER_YDIN_OPERATION(PiiOperation, QObject)
+  PII_REGISTER_YDIN_OPERATION(PiiOperationCompound, PiiOperation)
+  PII_REGISTER_YDIN_OPERATION(PiiEngine, PiiOperationCompound)
 PII_END_STATEMENTS

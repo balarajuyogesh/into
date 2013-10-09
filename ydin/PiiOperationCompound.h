@@ -388,7 +388,7 @@ public:
    * dotted notation (see #input() and #output()). Returns @p true if
    * the connection was successfully made, and @p false otherwise.
    */
-  Q_INVOKABLE bool connectOutput(const QString& output, const QString& input);  
+  bool connectOutput(const QString& output, const QString& input);
   
   /**
    * Replaces @a oldOp with @a newOp. If the compound is neither
@@ -497,40 +497,40 @@ public:
    * alias or a proxy. If an existing proxy is replaced with an alias,
    * only one internal connection will be retained.
    */
-  void exposeInput(PiiAbstractInputSocket* socket,
-                   const QString& alias,
-                   ConnectionType connectionType = ProxyConnection);
+  Q_INVOKABLE void exposeInput(PiiAbstractInputSocket* socket,
+                               const QString& alias,
+                               ConnectionType connectionType = ProxyConnection);
 
   /**
    * Exposes on output socket to this compound's interface. See
    * #exposeInput().
    */
-  void exposeOutput(PiiAbstractOutputSocket* socket,
-                    const QString& alias,
-                    ConnectionType connectionType = ProxyConnection);
+  Q_INVOKABLE void exposeOutput(PiiAbstractOutputSocket* socket,
+                                const QString& alias,
+                                ConnectionType connectionType = ProxyConnection);
   /**
    * A convenience function that allows one to expose an input socket
    * with the dot syntax (explained @ref PiiOperationCompound
    * "above").
    */
-  void exposeInput(const QString& fullName,
-                   const QString& alias,
-                   ConnectionType connectionType = ProxyConnection);
-
+  Q_INVOKABLE void exposeInput(const QString& fullName,
+                               const QString& alias,
+                               ConnectionType connectionType = ProxyConnection);
+  
   /**
    * A convenience function that exposes each named socket in @p
-   * fullNames as @a alias.
+   * fullNames as *proxyName*.
    */
-  void exposeInputs(const QStringList& fullNames, const QString& alias);
+  Q_INVOKABLE void exposeInputs(const QStringList& fullNames, const QString& proxyName);
   
   /**
    * A convenience function that allows one to expose an output socket
    * with the dot syntax (explained @ref PiiOperationCompound
    * "above").
    */
-  void exposeOutput(const QString& fullName,
-                    const QString& alias,
-                    ConnectionType connectionType = ProxyConnection);
+  Q_INVOKABLE void exposeOutput(const QString& fullName,
+                                const QString& alias,
+                                ConnectionType connectionType = ProxyConnection);
 
   /**
    * Removes @a socket from the public interface. If the socket is
@@ -540,22 +540,22 @@ public:
    *
    * @param socket the socket to be removed from the public interface
    */
-  void unexposeInput(PiiAbstractInputSocket* socket);
+  Q_INVOKABLE void unexposeInput(PiiAbstractInputSocket* socket);
   
   /**
    * Removes @a socket from the public interface. See #unexposeInput().
    */
-   void unexposeOutput(PiiAbstractOutputSocket* socket);
+  Q_INVOKABLE void unexposeOutput(PiiAbstractOutputSocket* socket);
 
   /**
    * Removes an aliased input socket from the public interface. This
    * will break connections to all sockets aliased with @a alias.
    */
-  void unexposeInput(const QString& alias);
+  Q_INVOKABLE void unexposeInput(const QString& alias);
   /**
    * Removes an aliased output socket from the public interface.
    */
-  void unexposeOutput(const QString& alias);
+  Q_INVOKABLE void unexposeOutput(const QString& alias);
 
   /**
    * Removes all exposed input and output sockets from the public
@@ -568,14 +568,14 @@ public:
    * PiiSocketProxy and reflects its input socket as @a alias. If @a
    * alias already exists, the function does nothing.
    */
-  void createInputProxy(const QString& alias);
+  Q_INVOKABLE void createInputProxy(const QString& alias);
 
   /**
    * Creates an unconnected proxy output. This function creates a new
    * PiiSocketProxy and reflects its output socket as @a alias.  If @a
    * alias already exists, the function does nothing.
    */
-  void createOutputProxy(const QString& alias);
+  Q_INVOKABLE void createOutputProxy(const QString& alias);
 
   /**
    * Returns the proxy whose input is reflected as @a alias. If the
@@ -665,7 +665,7 @@ public:
    *
    * @return a deep copy of the compound.
    */
-  Q_INVOKABLE PiiOperationCompound* clone() const;
+  PiiOperationCompound* clone() const;
 
 protected:
   /// @cond null

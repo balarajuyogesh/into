@@ -387,9 +387,15 @@ public:
    *
    * @return @p true if both sockets were found, @p false otherwise
    */
-  Q_INVOKABLE bool connectOutput(const QString& output, PiiOperation* other, const QString& input);
+  bool connectOutput(const QString& output, PiiOperation* other, const QString& input);
 
-  Q_INVOKABLE bool connectOutput(const QString& output, PiiAbstractInputSocket* input);
+  bool connectOutput(const QString& output, PiiAbstractInputSocket* input);
+
+  /**
+   * Connects the output with the given name to *input*, which may be
+   * either a name or a pointer to a PiiAbstractInputSocket.
+   */
+  Q_INVOKABLE bool connectOutput(const QString& outputName, const QVariant& input);
 
   /**
    * Starts storing a named property set. Between startPropertySet()

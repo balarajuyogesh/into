@@ -18,6 +18,7 @@
 
 #include <cstdarg>
 #include <cstring>
+#include <iterator>
 #include "PiiTypeTraits.h"
 
 /// @file
@@ -58,6 +59,18 @@
 
 // No docs
 /// @cond null
+
+namespace std
+{
+  template <class T> struct iterator_traits<QList<T> >
+  {
+    typedef typename std::random_access_iterator_tag iterator_category;
+    typedef typename QList<T>::value_type            value_type;
+    typedef typename QList<T>::difference_type       difference_type;
+    typedef typename QList<T>::pointer               pointer;
+    typedef typename QList<T>::reference             reference;
+  };
+}
 
 namespace Pii
 {

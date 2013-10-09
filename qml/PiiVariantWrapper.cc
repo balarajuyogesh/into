@@ -13,24 +13,10 @@
  * refer to LICENSE.AGPL3 for details.
  */
 
-#ifndef _TESTPIIRESOURCEDATABASE_H
-#define _TESTPIIRESOURCEDATABASE_H
+#include "PiiVariantWrapper.h"
 
-#include <QObject>
-#include <PiiResourceDatabase.h>
-
-class TestPiiResourceDatabase : public QObject
+PiiVariantTypeProvider* PiiVariantTypeProvider::instance()
 {
-  Q_OBJECT
-
-private slots:
-  void initTestCase();
-  void select();
-  void subselect();
-
-private:
-  PiiResourceDatabase db;
-};
-
-
-#endif //_TESTPIIRESOURCEDATABASE_H
+  static PiiVariantTypeProvider provider;
+  return &provider;
+}

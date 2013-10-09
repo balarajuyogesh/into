@@ -80,7 +80,7 @@ namespace PiiYdin
 class PII_YDIN_EXPORT PiiOutputSocket : public PiiSocket, public PiiAbstractOutputSocket
 {
   Q_OBJECT
-  
+  Q_INTERFACES(PiiAbstractOutputSocket)
 public:
   /**
    * Construct a new output socket with the given name. This

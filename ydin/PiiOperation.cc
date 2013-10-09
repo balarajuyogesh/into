@@ -110,6 +110,21 @@ bool PiiOperation::connectOutput(const QString& outputName, PiiOperation* other,
   return connectOutput(outputName, in);
 }
 
+bool PiiOperation::connectOutput(const QString& outputName, const QVariant& input)
+{
+  PiiAbstractInputSocket* pInput = qobject_cast<PiiAbstractInputSocket*>(input.value<QObject*>());
+  if (!pInput)
+    {
+      pInput = this->input(input.toString());
+      if (!pInput)
+        {
+          piiWarning(tr("There is no \"%1\" input in %2.").arg(input.toString(), metaObject()->className()));
+          return false;
+        }
+    }
+  return connectOutput(outputName, pInput);
+}
+
 QString PiiOperation::socketName(PiiAbstractSocket* socket) const
 {
   return socketProperty(socket, "name").toString();

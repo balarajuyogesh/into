@@ -34,6 +34,12 @@ class PII_YDIN_EXPORT PiiProbeInput :
 {
   Q_OBJECT
 
+  /**
+   * The last received object. If no object has been received,
+   * contains an invalid variant.
+   */
+  Q_PROPERTY(PiiVariant savedObject READ savedObject WRITE setSavedObject);
+  Q_INTERFACES(PiiAbstractInputSocket)
 public:
   /**
    * Constructs a new probe input and sets its @p objectName property
@@ -71,20 +77,13 @@ public:
    */
   bool tryToReceive(PiiAbstractInputSocket* sender, const PiiVariant& object) throw ();
 
-  /**
-   * Returns the last received object. If no object has been received,
-   * returns an invalid variant.
-   */
   PiiVariant savedObject() const;
-  /**
-   * Sets the saved object to @a obj.
-   */
   void setSavedObject(const PiiVariant& obj);
 
   /**
    * Returns true if an object has been saved into this socket.
    */
-  bool hasSavedObject() const;
+  Q_INVOKABLE bool hasSavedObject() const;
 
   PiiInputController* controller() const;
 

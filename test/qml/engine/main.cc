@@ -13,24 +13,5 @@
  * refer to LICENSE.AGPL3 for details.
  */
 
-#ifndef _TESTPIIRESOURCEDATABASE_H
-#define _TESTPIIRESOURCEDATABASE_H
-
-#include <QObject>
-#include <PiiResourceDatabase.h>
-
-class TestPiiResourceDatabase : public QObject
-{
-  Q_OBJECT
-
-private slots:
-  void initTestCase();
-  void select();
-  void subselect();
-
-private:
-  PiiResourceDatabase db;
-};
-
-
-#endif //_TESTPIIRESOURCEDATABASE_H
+#include <QtQuickTest>
+QUICK_TEST_MAIN(engine)

@@ -36,71 +36,40 @@ public:
   /**
    * Possible types of the object of the statement.
    *
-   * @li InvalidType - the statement is invalid.
+   * @li Invalid - the statement is invalid.
    *
-   * @li LiteralType - the object is a string literal.
+   * @li Literal - the object is a string literal.
    *
-   * @li ResourceType - the object is a resource id and references
+   * @li Resource - the object is a resource id and references
    * another resource.
+   *
+   * @li Pointer - the object is a pointer to any user-defined
+   * object.
    */
-  enum Type { InvalidType, LiteralType, ResourceType };
+  enum Type { Invalid, Literal, Resource, Pointer };
 
   /**
-   * Create an invalid statement.
+   * Creates an invalid statement.
    */
   PiiResourceStatement();
-  
-  /**
-   * Create a new statement.
-   */
-  PiiResourceStatement(const char* subject,
-                       const char* predicate,
-                       const char* object,
-                       Type type = LiteralType,
-                       int id = -1);
-
-  /**
-   * Create a new statement.
-   */
-  PiiResourceStatement(const QString& subject,
-                       const QString& predicate,
-                       const QString& object,
-                       Type type = LiteralType,
-                       int id = -1);
-
-  /**
-   * Create a new statement. This constructor creates a statement that
-   * refers another statement. The subject will be converted to
-   * "#subject". The following two statements are equal:
-   *
-   * @code
-   * PiiResourceStatement s1("#123", "pii:connector", "MyConnector");
-   * PiiResourceStatement s2(123, "pii:connector", "MyConnector");
-   * @endcode
-   */
-  PiiResourceStatement(int subject,
-                       const QString& predicate,
-                       const QString& object,
-                       Type type = LiteralType,
-                       int id = -1);
 
   ~PiiResourceStatement();
   
   /**
-   * Copy another statement.
+   * Creates a copy of another statement.
    */
   PiiResourceStatement(const PiiResourceStatement& other);
 
   /**
-   * Assign the contents of @p other to this.
+   * Assigns the contents of @p other to this.
    */
   PiiResourceStatement& operator= (const PiiResourceStatement& other);
     
   /**
-   * See if this is a valid statement. A statement is valid if and
-   * only if both subject and object are non-empty, and the type of
-   * the object is not @p InvalidType. The predicate may be an empty
-   * string.
+   * Returns `true` if this is a valid statement, and `false`
+   * otherwise. A statement is valid if and only if both subject and
+   * object are non-empty, and the type of the object is not
+   * `Invalid`. The predicate may be an empty string.
    */
   bool isValid() const;
 
@@ -116,9 +85,16 @@ public:
   QString predicate() const;
   /**
    * Returns the object of the statement. The object is either a
-   * string literal or a resource identifier, depending on #type().
+   * string literal, a resource identifier or a pointer, depending on
+   * #type(). If the object is a pointer, this function returns null
+   * string.
    */
   QString object() const;
+  /**
+   * Returns the object of the statement as a pointer. If the type of
+   * the statement is not `Pointer`, returns 0.
+   */
+  void* objectPtr() const;
   /**
    * Returns the type of the statement. The type specifies how the
    * object should be interpreted.
@@ -129,36 +105,36 @@ public:
    * automatically assigns id numbers to inserted statements.
    */
   int id() const;
-  /**
-   * Set the resource id.
-   */
-  void setId(int id);
 
 private:
-  class Data
-  {
-  public:
-    Data();
-    Data(const char* s,
-         const char* p,
-         const char* o,
-         Type t,
-         int i);
-    Data(const QString& s,
-         const QString& p,
-         const QString& o,
-         Type t,
-         int i);
-    ~Data();
-    void deleteStrings();
-  
-    bool bStringData;
-    union { void* pSubject; const void* pConstSubject; };
-    union { void* pPredicate; const void* pConstPredicate; };
-    union { void* pObject; const void* pConstObject; };
-    Type type;
-    int id;
-  } *d;
+  class Data;
+  Data* d;
+  PII_SHARED_D_FUNC_DECL;
+  friend class PiiResourceDatabase;
+  PiiResourceStatement(const char* subject,
+                       const char* predicate,
+                       const char* object,
+                       Type type);
+
+  PiiResourceStatement(const char* subject,
+                       const char* predicate,
+                       void* object);
+
+  PiiResourceStatement(const QString& subject,
+                       const QString& predicate,
+                       const QString& object,
+                       Type type);
+
+  PiiResourceStatement(const QString& subject,
+                       const QString& predicate,
+                       void* object);
+
+  PiiResourceStatement(int subject,
+                       const QString& predicate,
+                       const QString& object,
+                       Type type);
+
+  void setId(int id);
 };
 
 #endif //_PIIRESOURCESTATEMENT_H

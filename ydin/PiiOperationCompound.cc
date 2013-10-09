@@ -526,10 +526,10 @@ void PiiOperationCompound::exposeInput(const QString& fullName, const QString& a
     piiWarning(tr("There is no \"%1\" input in %2.").arg(fullName).arg(metaObject()->className()));
 }
 
-void PiiOperationCompound::exposeInputs(const QStringList& fullNames, const QString& alias)
+void PiiOperationCompound::exposeInputs(const QStringList& fullNames, const QString& proxyName)
 {
   for (int i=fullNames.size(); i--; )
-    exposeInput(fullNames[i], alias);
+    exposeInput(fullNames[i], proxyName);
 }
   
 void PiiOperationCompound::exposeOutput(const QString& fullName, const QString& alias, ConnectionType connectionType)

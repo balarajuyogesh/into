@@ -173,6 +173,7 @@ private:
   void disconnectInputAt(int index);
 };
 
-Q_DECLARE_METATYPE(PiiAbstractOutputSocket*);
+Q_DECLARE_METATYPE(PiiAbstractOutputSocket*)
+Q_DECLARE_INTERFACE(PiiAbstractOutputSocket, "com.intopii.PiiAbstractOutputSocket/1.0")
 
 #endif //_PIIABSTRACTOUTPUTSOCKET_H

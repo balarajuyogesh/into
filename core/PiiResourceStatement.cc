@@ -16,128 +16,163 @@
 #include "PiiResourceStatement.h"
 
 
-
-PiiResourceStatement::Data::Data() :
-  bStringData(false),
-  pSubject(0),
-  pPredicate(0),
-  pObject(0),
-  type(InvalidType),
-  id(-1)
+class PiiResourceStatement::Data : public PiiSharedD<Data>
 {
-}
+public:
+  Data() :
+    bStringData(false),
+    pSubject(0),
+    pPredicate(0),
+    pObject(0),
+    type(Invalid),
+    id(-1)
+  {}
 
-PiiResourceStatement::Data::Data(const char* s,
-                                 const char* p,
-                                 const char* o,
-                                 Type t,
-                                 int i) :
-  bStringData(false),
-  pConstSubject(s),
-  pConstPredicate(p),
-  pConstObject(o),
-  type(t),
-  id(i)
-{
-}
+  Data(const Data& other) :
+    bStringData(other.bStringData),
+    type(other.type),
+    id(other.id)
+  {
+    if (bStringData)
+      {
+        pSubject = new QString(*reinterpret_cast<QString*>(other.pSubject));
+        pPredicate = new QString(*reinterpret_cast<QString*>(other.pPredicate));
+        if (type == Pointer)
+          pObject = other.pObject;
+        else if (bStringData)
+          pObject = new QString(*reinterpret_cast<QString*>(other.pObject));
+      }
+    else
+      {
+        pSubject = other.pSubject;
+        pPredicate = other.pPredicate;
+        pObject = other.pObject;
+      }
+  }
+  
+  Data(const char* s,
+       const char* p,
+       const char* o,
+       Type t) :
+    bStringData(false),
+    pConstSubject(s),
+    pConstPredicate(p),
+    pConstObject(o),
+    type(t),
+    id(-1)
+  {}
+  
+  Data(const char* s,
+       const char* p,
+       void* o) :
+    bStringData(false),
+    pConstSubject(s),
+    pConstPredicate(p),
+    pObject(o),
+    type(Pointer),
+    id(-1)
+  {}
+  
+  Data(const QString& s,
+       const QString& p,
+       const QString& o,
+       Type t) :
+    bStringData(true),
+    pSubject(new QString(s)),
+    pPredicate(new QString(p)),
+    pObject(new QString(o)),
+    type(t),
+    id(-1)
+  {}
+  
+  Data(const QString& s,
+       const QString& p,
+       void* o) :
+    bStringData(true),
+    pSubject(new QString(s)),
+    pPredicate(new QString(p)),
+    pObject(o),
+    type(Pointer),
+    id(-1)
+  {}
+  
+  ~Data()
+  {
+    if (bStringData)
+      deleteStrings();
+  }
+  
+  void deleteStrings()
+  {
+    delete reinterpret_cast<QString*>(pSubject);
+    delete reinterpret_cast<QString*>(pPredicate);
+    if (type != Pointer)
+      delete reinterpret_cast<QString*>(pObject);
+  }
+  
+  bool bStringData;
+  union { void* pSubject; const void* pConstSubject; };
+  union { void* pPredicate; const void* pConstPredicate; };
+  union { void* pObject; const void* pConstObject; };
+  Type type;
+  int id;
+};
 
-PiiResourceStatement::Data::Data(const QString& s,
-                                 const QString& p,
-                                 const QString& o,
-                                 Type t,
-                                 int i) :
-  bStringData(true),
-  pSubject(new QString(s)),
-  pPredicate(new QString(p)),
-  pObject(new QString(o)),
-  type(t),
-  id(i)
-{
-}
+PII_SHARED_D_FUNC_DEF(PiiResourceStatement)
 
-PiiResourceStatement::Data::~Data()
-{
-  if (bStringData)
-    deleteStrings();
-}
-
-void PiiResourceStatement::Data::deleteStrings()
-{
-  delete reinterpret_cast<QString*>(pSubject);
-  delete reinterpret_cast<QString*>(pPredicate);
-  delete reinterpret_cast<QString*>(pObject);
-}
+PiiResourceStatement::PiiResourceStatement() : d(new Data) {}
 
 PiiResourceStatement::PiiResourceStatement(const char* s,
                                            const char* p,
                                            const char* o,
-                                           Type t,
-                                           int i) :
-  d(new Data(s, p, o, t, i))
-{
-}
+                                           Type t) :
+  d(new Data(s, p, o, t))
+{}
+
+PiiResourceStatement::PiiResourceStatement(const char* s,
+                                           const char* p,
+                                           void* o) :
+  d(new Data(s, p, o))
+{}
 
 PiiResourceStatement::PiiResourceStatement(const QString& s,
                                            const QString& p,
                                            const QString& o,
-                                           Type t,
-                                           int i) :
-  d(new Data(s, p, o, t, i))
-{
-}
+                                           Type t) :
+  d(new Data(s, p, o, t))
+{}
+
+PiiResourceStatement::PiiResourceStatement(const QString& s,
+                                           const QString& p,
+                                           void* o) :
+  d(new Data(s, p, o))
+{}
 
 PiiResourceStatement::PiiResourceStatement(int s,
                                            const QString& p,
                                            const QString& o,
-                                           Type t,
-                                           int i) :
-  d(new Data(QString("#%1").arg(s), p, o, t, i))
-{
-}
+                                           Type t) :
+  d(new Data(QString("#%1").arg(s), p, o, t))
+{}
 
 PiiResourceStatement::~PiiResourceStatement()
 {
-  delete d;
+  d->release();
 }
 
 PiiResourceStatement::PiiResourceStatement(const PiiResourceStatement& other) :
-  d(other.d->bStringData ?
-    new Data(other.subject(), other.predicate(), other.object(), other.type(), other.id()) :
-    new Data(reinterpret_cast<char*>(other.d->pSubject),
-             reinterpret_cast<char*>(other.d->pPredicate),
-             reinterpret_cast<char*>(other.d->pObject),
-             other.type(), other.id()))
-{
-}
+  d(other.d->reserved())
+{}
 
 PiiResourceStatement& PiiResourceStatement::operator= (const PiiResourceStatement& other)
 {
-  if (&other != this)
-    {
-      if (other.d->bStringData)
-        {
-          d->deleteStrings();
-          d->pSubject = new QString(other.subject());
-          d->pPredicate = new QString(other.predicate());
-          d->pObject = new QString(other.object());
-          d->bStringData = true;
-        }
-      else
-        {
-          d->pSubject = other.d->pSubject;
-          d->pPredicate = other.d->pPredicate;
-          d->pObject = other.d->pObject;
-          d->bStringData = false;
-        }
-      d->type = other.d->type;
-      d->id = other.d->id;
-    }
+  other.d->assignTo(this->d);
   return *this;
 }
 
 bool PiiResourceStatement::isValid() const
 {
-  return !subject().isEmpty() && !object().isEmpty() && d->type != InvalidType;
+  return !subject().isEmpty() && !object().isEmpty() && d->type != Invalid;
 }
 
 QString PiiResourceStatement::subject() const
@@ -152,7 +187,14 @@ QString PiiResourceStatement::predicate() const
 
 QString PiiResourceStatement::object() const
 {
+  if (d->type == Pointer)
+    return QString();
   return d->bStringData ? *reinterpret_cast<QString*>(d->pObject) : reinterpret_cast<char*>(d->pObject);
+}
+
+void* PiiResourceStatement::objectPtr() const
+{
+  return d->type == Pointer ? d->pObject : 0;
 }
 
 PiiResourceStatement::Type PiiResourceStatement::type() const
@@ -167,5 +209,5 @@ int PiiResourceStatement::id() const
 
 void PiiResourceStatement::setId(int id)
 {
-  d->id = id;
+  _d()->id = id;
 }

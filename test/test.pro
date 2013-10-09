@@ -63,3 +63,5 @@ SUBDIRS = algorithm \
           versionnumber \
           video \
           ydin
+
+qt5: SUBDIRS += qml

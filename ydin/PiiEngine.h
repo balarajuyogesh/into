@@ -234,7 +234,7 @@ public:
   /**
    * Creates a deep copy of the engine.
    */
-  Q_INVOKABLE PiiEngine* clone() const;
+  PiiEngine* clone() const;
 
   /**
    * Saves the engine to @a fileName. The @a format argument specifies
@@ -328,24 +328,25 @@ public:
   ~Plugin();
 
   Plugin& operator= (const Plugin& other);
+  bool operator== (const Plugin& other) const;
 
   /**
-   * Get the resource name of the plug-in. Note that this is not the
-   * name of the shared library but the resource ID of the plug-in in
-   * Ydin's resource database. (See PiiYdin::resourceDatabase())
+   * Returns the resource name of the plug-in. Note that this is not
+   * the name of the shared library but the resource ID of the plug-in
+   * in Ydin's resource database. (See PiiYdin::resourceDatabase())
    */
   QString resourceName() const;
 
   /**
-   * Get the library name of the plug-in. This function returns the
-   * name of the plug-in as passed to the PiiEngine::loadPlugin()
+   * Returns the library name of the plug-in. This function returns
+   * the name of the plug-in as passed to the PiiEngine::loadPlugin()
    * function.
    */
   QString libraryName() const;
 
   /**
-   * Get the version of Into the plug-in was originally compiled and
-   * linked against.
+   * Returns the version of Into the plug-in was originally compiled
+   * and linked against.
    */
   PiiVersionNumber version() const;
 
@@ -359,6 +360,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(PiiEngine*);
+Q_DECLARE_METATYPE(PiiEngine::Plugin);
 
 template <class Archive> void PiiEngine::save(Archive& archive, const unsigned int /*version*/)
 {

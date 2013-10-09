@@ -75,6 +75,15 @@
   inline const Data* _d() const { return static_cast<const Data*>(this->d); } \
   friend class Data
 
+#define PII_SHARED_D_FUNC_DECL \
+  inline Data* _d(); \
+  inline const Data* _d() const; \
+  friend class Data
+
+#define PII_SHARED_D_FUNC_DEF(CLASS) \
+  CLASS::Data* CLASS::_d() { return static_cast<Data*>(this->d = static_cast<Data*>(this->d->detach())); } \
+  const CLASS::Data* CLASS::_d() const { return static_cast<const Data*>(this->d); }
+
 // reinterpret_cast must be used instead of (the safer) static_cast if
 // the Data class is defined outside of the containing class. In this
 // case the compiler does not know if static_cast can be performed.

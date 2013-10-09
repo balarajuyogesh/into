@@ -1,5 +1,5 @@
 /* This file is part of Into. 
- * Copyright (C) Intopii 2013.
+ * Copyright (C) Intopii %y.
  * All rights reserved.
  *
  * Licensees holding a commercial Into license may use this file in
@@ -13,24 +13,4 @@
  * refer to LICENSE.AGPL3 for details.
  */
 
-#ifndef _TESTPIIRESOURCEDATABASE_H
-#define _TESTPIIRESOURCEDATABASE_H
-
-#include <QObject>
-#include <PiiResourceDatabase.h>
-
-class TestPiiResourceDatabase : public QObject
-{
-  Q_OBJECT
-
-private slots:
-  void initTestCase();
-  void select();
-  void subselect();
-
-private:
-  PiiResourceDatabase db;
-};
-
-
-#endif //_TESTPIIRESOURCEDATABASE_H
+%@
