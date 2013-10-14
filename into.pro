@@ -1,7 +1,6 @@
 include(qt5.pri)
 
 TEMPLATE = subdirs
-CONFIG += ordered
 
 SUBDIRS  = core \
            ydin \
@@ -11,4 +10,14 @@ SUBDIRS  = core \
            test \
            demos
 
-qt5: SUBDIRS += qml
+ydin.depends += core
+gui.depends += ydin
+plugins.depends += ydin
+script.depends += ydin
+test.depends += ydin
+demos.depends += plugins
+
+qt5: {
+  SUBDIRS += qml
+  qml.depends += ydin
+}

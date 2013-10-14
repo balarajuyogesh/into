@@ -2,35 +2,47 @@ INTODIR = ..
 include($$INTODIR/extensions.pri)
 
 TEMPLATE = subdirs
-CONFIG += ordered
 
 # Directories
 SUBDIRS = base \
+          camera \
+          camera/emulator \
+          classification \
+          colors \
+          calibration \
           database \
           dsp \
+          features \
           flowcontrol \
           geometry \
           image \
-          classification \
-          optimization \
+          io \
+          io/emulator \
           matching \
-          network
+          network \
+          optimization \
+          statistics \
+          texture \
+          tracking \
+          transforms \
+          video
 
-# Include opencv?
-enabled(opencv):SUBDIRS += opencv
+enabled(opencv) {
+  SUBDIRS += opencv
+  opencv.depends += image
+  calibration.depends += opencv
+}
 
-SUBDIRS += calibration \
-           texture \
-           video \
-           camera \
-           colors \
-           features \
-           tracking \
-           transforms \
-           statistics \
-           io \
-           camera/emulator \
-           io/emulator
+image.depends += dsp
+video.depends += image
+colors.depends += image
+geometry.depends += dsp
+features.depends += image
+matching.depends += geometry classification optimization
+camera.depends += image geometry
+texture.depends += image
+calibration.depends += image classification optimization
+
 
 # Camera drivers
 CAMERADRIVERS = webcam
@@ -43,4 +55,3 @@ IODRIVERS = modbus
 for(driver, IODRIVERS) {
   enabled($$driver): SUBDIRS += io/$$driver
 }
-
