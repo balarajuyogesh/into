@@ -135,7 +135,8 @@ namespace PiiQml
 
   void configure(v8::Handle<v8::Object> obj, v8::Handle<v8::Value> configMap);
   void registerClasses(QV8Engine* engine, v8::Handle<v8::Object> globalObject, const QString& parent);
-  v8::Local<v8::Object> globalObject(v8::Handle<v8::Context> context);
+  v8::Local<v8::Object> globalObject();
+  v8::Local<v8::Object> globalIntoObject();
 }
 
 #endif //_PIIQML_H

@@ -33,10 +33,10 @@ class PiiAbstractOutputSocket;
  *
  * @ingroup Ydin
  */
-class PII_YDIN_EXPORT PiiAbstractInputSocket : public virtual PiiAbstractSocket
+class PII_YDIN_EXPORT PiiAbstractInputSocket : public PiiSocket
 {
 public:
-  virtual ~PiiAbstractInputSocket();
+  ~PiiAbstractInputSocket();
 
   /**
    * Connects this socket to the given output socket. If this socket
@@ -80,13 +80,13 @@ public:
 
 protected:
   /// @internal
-  class PII_YDIN_EXPORT Data
+  class PII_YDIN_EXPORT Data : public PiiSocket::Data
   {
   public:
     Data();
-    virtual ~Data();
+    ~Data();
 
-    /**
+    /*
      * Set the connection status of this socket to @p connected. The
      * default implementation just returns @p connected.
      *
@@ -103,8 +103,9 @@ protected:
     
     PiiAbstractOutputSocket* pConnectedOutput;
     PiiInputListener* pListener;
-  } *d;
-
+  };
+  PII_D_FUNC;
+  
   /// @internal
   PiiAbstractInputSocket(Data* d);
   
@@ -114,6 +115,5 @@ private:
 };
 
 Q_DECLARE_METATYPE(PiiAbstractInputSocket*)
-Q_DECLARE_INTERFACE(PiiAbstractInputSocket, "com.intopii.PiiAbstractInputSocket/1.0")
 
 #endif //_PIIABSTRACTINPUTSOCKET_H

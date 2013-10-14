@@ -77,10 +77,10 @@ namespace PiiYdin
  *
  * @ingroup Ydin
  */
-class PII_YDIN_EXPORT PiiOutputSocket : public PiiSocket, public PiiAbstractOutputSocket
+class PII_YDIN_EXPORT PiiOutputSocket : public PiiAbstractOutputSocket
 {
   Q_OBJECT
-  Q_INTERFACES(PiiAbstractOutputSocket)
+
 public:
   /**
    * Construct a new output socket with the given name. This
@@ -381,6 +381,10 @@ protected:
 
     inline int queueIndex(Qt::HANDLE threadId) const;
     inline bool hasBufferedObjects(Qt::HANDLE activeThreadId) const;
+    void inputConnected(PiiAbstractInputSocket* input);
+    void inputDisconnected(PiiAbstractInputSocket* input);
+    void inputUpdated(PiiAbstractInputSocket* input);
+    void createFlagArray();
   
     int iGroupId;
     bool bConnected;
@@ -402,17 +406,11 @@ protected:
 
   PiiOutputSocket(Data* data, const QString& name);
   /// @endcond
-
-  void inputConnected(PiiAbstractInputSocket* input);
-  void inputDisconnected(PiiAbstractInputSocket* input);
-  void inputUpdated(PiiAbstractInputSocket* input);
   
 private:
   bool flushBuffer();
   void emitThreaded(const PiiVariant& object);
   void emitNonThreaded(const PiiVariant& object);
-  // Create pbInputCompleted.
-  void createFlagArray();
 };
 
 Q_DECLARE_METATYPE(PiiOutputSocket*);

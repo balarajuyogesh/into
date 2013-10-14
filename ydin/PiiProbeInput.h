@@ -28,7 +28,6 @@
  * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiProbeInput :
-  public PiiSocket,
   public PiiAbstractInputSocket,
   public PiiInputController
 {
@@ -39,7 +38,6 @@ class PII_YDIN_EXPORT PiiProbeInput :
    * contains an invalid variant.
    */
   Q_PROPERTY(PiiVariant savedObject READ savedObject WRITE setSavedObject);
-  Q_INTERFACES(PiiAbstractInputSocket)
 public:
   /**
    * Constructs a new probe input and sets its @p objectName property

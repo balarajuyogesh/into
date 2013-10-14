@@ -45,8 +45,7 @@ class PiiInputController;
  * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiAbstractOutputSocket :
-  public virtual PiiAbstractSocket,
-  public PiiInputListener
+  public PiiSocket
 {
 public:
   ~PiiAbstractOutputSocket();
@@ -75,6 +74,8 @@ public:
    * connections are to be broken.
    */
   void disconnectInput(PiiAbstractInputSocket* input = 0);
+
+  void disconnectInputs() { disconnectInput(0); }
 
   /**
    * Reconnects all inputs currently connected to this output to @p
@@ -117,19 +118,21 @@ protected:
     void updateController(PiiAbstractInputSocket* input);
   };
 
-  class PII_YDIN_EXPORT Data
+  class PII_YDIN_EXPORT Data :
+    public PiiSocket::Data,
+    public InputListener
   {
   public:
-    Data(PiiAbstractOutputSocket* owner);
-    virtual ~Data();
+    Data();
+    ~Data();
 
-    /**
+    /*
      * Called by the non-virtual function in the public interface.
      */
     virtual PiiAbstractOutputSocket* rootOutput() const = 0;
     
-    /**
-     * Recursively update connection statuses of input sockets
+    /*
+     * Recursively updates connection statuses of input sockets
      * connected to this output.
      *
      * @param connected a flag that indicates whether the sequence of
@@ -142,38 +145,37 @@ protected:
      * leads to a connected input.
      */
     virtual bool setOutputConnected(bool connected);
-
+    
+    /*
+     * Called by #connectInput() when an input has been connected.
+     * The default implementation does nothing.
+     */
+    virtual void inputConnected(PiiAbstractInputSocket* input);
+    /*
+     * Called by #updateInput() when an input has been updated.
+     * The default implementation does nothing.
+     */
+    virtual void inputUpdated(PiiAbstractInputSocket* input);
+    /*
+     * Called by #disconnectInput() when an input has been disconnected.
+     * The default implementation does nothing.
+     */
+    virtual void inputDisconnected(PiiAbstractInputSocket* input);
+    
     // All connected input sockets.
     InputList lstInputs;
-    PiiAbstractOutputSocket* q;
-  } *d;
+  };
+  PII_D_FUNC;
 
   friend class Data;
 
   PiiAbstractOutputSocket(Data* data);
   /// @endcond
-  
-  /**
-   * Called by #connectInput() when an input has been connected.
-   * The default implementation does nothing.
-   */
-  virtual void inputConnected(PiiAbstractInputSocket* input);
-  /**
-   * Called by #updateInput() when an input has been updated.
-   * The default implementation does nothing.
-   */
-  virtual void inputUpdated(PiiAbstractInputSocket* input);
-  /**
-   * Called by #disconnectInput() when an input has been disconnected.
-   * The default implementation does nothing.
-   */
-  virtual void inputDisconnected(PiiAbstractInputSocket* input);
-  
+    
 private:
   void disconnectInputAt(int index);
 };
 
 Q_DECLARE_METATYPE(PiiAbstractOutputSocket*)
-Q_DECLARE_INTERFACE(PiiAbstractOutputSocket, "com.intopii.PiiAbstractOutputSocket/1.0")
 
 #endif //_PIIABSTRACTOUTPUTSOCKET_H

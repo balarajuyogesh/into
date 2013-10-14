@@ -17,6 +17,7 @@
 #include "PiiEngine.h"
 #include "PiiPlugin.h"
 #include "PiiProbeInput.h"
+#include "PiiDefaultOperation.h"
 
 namespace PiiYdin
 {
@@ -36,19 +37,27 @@ namespace PiiYdin
   {
     return !strcmp(propertyName, "name");
   }
+
+  template <class T> inline const char* resourceName();
+  template <> inline const char* resourceName<PiiSocket>()
+  {
+    return "PiiSocket";
+  }
 }
 
 static const char* pluginName() { return "PiiYdin"; }
 
-PII_REGISTER_CLASS(PiiProbeInput, QObject);
+PII_REGISTER_CLASS(PiiProbeInput, PiiSocket);
 
-#define PII_REGISTER_YDIN_OPERATION(CLASS, SUPER) \
+#define PII_YDIN_REGISTER_QOBJECT(CLASS, SUPER) \
   PII_REGISTER_RESOURCE_STATEMENT(CLASS, PiiYdin::parentPredicate, PiiYdin) \
   PII_REGISTER_SUPERCLASS(CLASS, SUPER) \
   PII_REGISTER_RESOURCEPTR_STATEMENT(CLASS, PiiYdin::metaObjectPredicate, const_cast<QMetaObject*>(&CLASS::staticMetaObject))
 
 PII_BEGIN_STATEMENTS(PiiYdin)
-  PII_REGISTER_YDIN_OPERATION(PiiOperation, QObject)
-  PII_REGISTER_YDIN_OPERATION(PiiOperationCompound, PiiOperation)
-  PII_REGISTER_YDIN_OPERATION(PiiEngine, PiiOperationCompound)
+  PII_YDIN_REGISTER_QOBJECT(PiiSocket, QObject)
+  PII_YDIN_REGISTER_QOBJECT(PiiOperation, QObject)
+  PII_YDIN_REGISTER_QOBJECT(PiiDefaultOperation, PiiOperation)
+  PII_YDIN_REGISTER_QOBJECT(PiiOperationCompound, PiiOperation)
+  PII_YDIN_REGISTER_QOBJECT(PiiEngine, PiiOperationCompound)
 PII_END_STATEMENTS

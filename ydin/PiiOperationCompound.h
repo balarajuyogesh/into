@@ -381,15 +381,6 @@ public:
    */
   Q_INVOKABLE PiiOperation* childOperation(const QString& name) const;
 
-  using PiiOperation::connectOutput;
-  
-  /**
-   * Connects @a output to @a input. Both arguments can be given in
-   * dotted notation (see #input() and #output()). Returns @p true if
-   * the connection was successfully made, and @p false otherwise.
-   */
-  bool connectOutput(const QString& output, const QString& input);
-  
   /**
    * Replaces @a oldOp with @a newOp. If the compound is neither
    * stopped nor paused, this function has no effect. If @a oldOp has
@@ -436,27 +427,6 @@ public:
   QList<PiiAbstractOutputSocket*> outputs() const;
 
   /**
-   * Returns the value associated with @a name in @a socket. If the
-   * "name" property is requested, this function first checks if the
-   * socket is exposed in the interface of this operation, and returns
-   * the alias name. If the socket is not exposed, it is recursively
-   * searched in all of this operations child operations. If it is
-   * found, a dotted name (in the stype childop.childop.socketname)
-   * will be returned.
-   *
-   * If any other property is requsted, only exposed output sockets
-   * will be searched. This is because inputs may be connected to many
-   * input sockets, and the property values would not be unique. If a
-   * match is found in the output sockets, the query will be passed to
-   * the parent of its @ref PiiAbstractOutputSocket::rootOutput()
-   * "root output".
-   *
-   * If @a socket is not found or there is no property called @a name
-   * associated with it, an invalid property will be returned.
-   */
-  QVariant socketProperty(PiiAbstractSocket* socket, const char* name) const;
-
-  /**
    * Exposes an input socket to this compound's interface. This
    * function adds an alias or a proxy to a socket attached to an
    * operation within the compound. After exposing, the socket is
@@ -497,40 +467,27 @@ public:
    * alias or a proxy. If an existing proxy is replaced with an alias,
    * only one internal connection will be retained.
    */
-  Q_INVOKABLE void exposeInput(PiiAbstractInputSocket* socket,
-                               const QString& alias,
-                               ConnectionType connectionType = ProxyConnection);
+  Q_INVOKABLE void createAlias(PiiAbstractSocket* socket);
 
-  /**
-   * Exposes on output socket to this compound's interface. See
-   * #exposeInput().
-   */
-  Q_INVOKABLE void exposeOutput(PiiAbstractOutputSocket* socket,
-                                const QString& alias,
-                                ConnectionType connectionType = ProxyConnection);
   /**
    * A convenience function that allows one to expose an input socket
    * with the dot syntax (explained @ref PiiOperationCompound
    * "above").
    */
-  Q_INVOKABLE void exposeInput(const QString& fullName,
-                               const QString& alias,
-                               ConnectionType connectionType = ProxyConnection);
+  Q_INVOKABLE void createAlias(const QString& fullName, const QString& name);
   
   /**
-   * A convenience function that exposes each named socket in @p
-   * fullNames as *proxyName*.
+   * A convenience function that exposes each named socket in
+   * *fullNames* as *proxyName*.
    */
-  Q_INVOKABLE void exposeInputs(const QStringList& fullNames, const QString& proxyName);
+  Q_INVOKABLE void createProxy(const QStringList& fullNames, const QString& proxyName);
   
   /**
    * A convenience function that allows one to expose an output socket
    * with the dot syntax (explained @ref PiiOperationCompound
    * "above").
    */
-  Q_INVOKABLE void exposeOutput(const QString& fullName,
-                                const QString& alias,
-                                ConnectionType connectionType = ProxyConnection);
+  Q_INVOKABLE void exposeOutput(const QString& fullName);
 
   /**
    * Removes @a socket from the public interface. If the socket is
@@ -568,28 +525,28 @@ public:
    * PiiSocketProxy and reflects its input socket as @a alias. If @a
    * alias already exists, the function does nothing.
    */
-  Q_INVOKABLE void createInputProxy(const QString& alias);
+  Q_INVOKABLE void createInputProxy(const QString& name);
 
   /**
    * Creates an unconnected proxy output. This function creates a new
    * PiiSocketProxy and reflects its output socket as @a alias.  If @a
    * alias already exists, the function does nothing.
    */
-  Q_INVOKABLE void createOutputProxy(const QString& alias);
+  Q_INVOKABLE void createOutputProxy(const QString& name);
 
   /**
    * Returns the proxy whose input is reflected as @a alias. If the
    * input does not exist or it is not a proxy input, 0 will be
    * returned.
    */
-  PiiProxySocket* inputProxy(const QString& alias) const;
+  PiiProxySocket* inputProxy(const QString& name) const;
 
   /**
    * Returns the proxy whose output is reflected as @a alias. If the
    * output does not exist or it is not a proxy output, 0 will be
    * returned.
    */
-  PiiProxySocket* outputProxy(const QString& alias) const;
+  PiiProxySocket* outputProxy(const QString& name) const;
   
   /**
    * Returns the number of output sockets. Equivalent to but faster
@@ -755,7 +712,7 @@ private:
   private:
     QString _strName;
     PiiSocket::Type _type;
-    PiiAbstractSocket* _pSocket;
+    PiiSocket* _pSocket;
     // The socket pointer needs to be stored as a QObject because
     // socket pointers being deleted already lack rtti
     // when the destroyed() signal arrives. (dynamic_cast not possible)

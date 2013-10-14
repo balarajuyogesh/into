@@ -17,29 +17,24 @@
 #include <PiiAlgorithm.h>
 
 PiiProxySocket::Data::Data(PiiProxySocket* owner) :
-  PiiAbstractOutputSocket::Data(owner),
+  PiiSocket::Data(Proxy)
   pbInputCompleted(0)
 {
 }
 
 PiiProxySocket::PiiProxySocket() :
-  PiiAbstractOutputSocket(new Data(this)),
-  PiiAbstractInputSocket(_d())
-{
-}
+  PiiSocket(new Data(this))
+{}
 
 PiiProxySocket::~PiiProxySocket()
 {
   delete[] _d()->pbInputCompleted;
-  // Avoid double delete
-  disconnectOutput();
-  PiiAbstractInputSocket::d = 0;
 }
 
-PiiAbstractOutputSocket* PiiProxySocket::Data::rootOutput() const
+PiiAbstractOutputSocket* PiiProxyOutputSocket::Data::rootOutput() const
 {
-  if (pConnectedOutput)
-    return pConnectedOutput->rootOutput();
+  if (pInput->pConnectedOutput)
+    return pInput->pConnectedOutput->rootOutput();
   return 0;
 }
 
@@ -48,27 +43,27 @@ bool PiiProxySocket::Data::setInputConnected(bool connected)
   return setOutputConnected(connected);
 }
 
-PiiSocket::Type PiiProxySocket::type() const { return Proxy; }
-
-PiiInputController* PiiProxySocket::controller() const
+PiiInputController* PiiProxyInputSocket::controller() const
 {
-  return const_cast<PiiProxySocket*>(this);
+  return const_cast<Data*>(_d());
 }
 
-bool PiiProxySocket::tryToReceive(PiiAbstractInputSocket* /*sender*/, const PiiVariant& object) throw ()
+bool PiiProxyInputSocket::Data::tryToReceive(PiiAbstractInputSocket* /*sender*/, const PiiVariant& object) throw ()
 {
   PII_D;
   bool bAllCompleted = true;
+  int iCnt = pOutput->lstInputs.size();
   // Try to send to inputs that haven't already accepted the object.
-  for (int i=d->lstInputs.size(); i--; )
-    if (!d->pbInputCompleted[i])
-      bAllCompleted &= (d->pbInputCompleted[i] = d->lstInputs.controllerAt(i)->tryToReceive(d->lstInputs.inputAt(i), object));
+  for (int i=0; i<iCnt; ++i)
+    if (!pbInputCompleted[i])
+      bAllCompleted &= (pbInputCompleted[i] =
+                        pOutput->lstInputs.controllerAt(i)->tryToReceive(pOutput->lstInputs.inputAt(i), object));
 
   // Everything is done -> reinitialize completion flags and return
   // true
   if (bAllCompleted)
     {
-      Pii::fillN(d->pbInputCompleted, d->lstInputs.size(), false);
+      Pii::fillN(pbInputCompleted, iCnt, false);
       return true;
     }
   // Something is still missing

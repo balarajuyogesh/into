@@ -44,6 +44,8 @@ PiiBasicOperation::~PiiBasicOperation()
 
 QVariant PiiBasicOperation::socketProperty(PiiAbstractSocket* socket, const char* name) const
 {
+  if (socket == 0)
+    return QVariant();
   const PII_D;
   PiiInputSocket* pInput = static_cast<PiiInputSocket*>(socket->socket());
   if (d->lstInputs.contains(pInput))

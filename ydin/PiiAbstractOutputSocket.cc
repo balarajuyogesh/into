@@ -18,14 +18,12 @@
 #include "PiiAbstractInputSocket.h"
 #include "PiiInputController.h"
 
-PiiAbstractOutputSocket::Data::Data(PiiAbstractOutputSocket* owner) :
-  q(owner)
-{
-}
+PiiAbstractOutputSocket::Data::Data() :
+  PiiSocket::Data(Output)
+{}
 
 PiiAbstractOutputSocket::Data::~Data() 
-{
-}
+{}
 
 bool PiiAbstractOutputSocket::Data::setOutputConnected(bool connected)
 {
@@ -33,7 +31,7 @@ bool PiiAbstractOutputSocket::Data::setOutputConnected(bool connected)
   // An output is forward-connected only if at least one of its child
   // branches is connected.
   for (int i=lstInputs.size(); i--; )
-    bBranchConnected |= lstInputs.inputAt(i)->d->setInputConnected(connected);
+    bBranchConnected |= lstInputs.inputAt(i)->_d()->setInputConnected(connected);
 
   // The output is fully connected if it is both backward and forward
   // connected.
@@ -42,25 +40,22 @@ bool PiiAbstractOutputSocket::Data::setOutputConnected(bool connected)
 
 PiiAbstractOutputSocket::PiiAbstractOutputSocket(Data* data) :
   d(data)
-{
-}
+{}
 
 PiiAbstractOutputSocket::~PiiAbstractOutputSocket()
 {
-  // Invalidate owner
-  d->q = 0;
   // Break all connections
   disconnectInput();
-  delete d;
 }
 
 PiiAbstractOutputSocket* PiiAbstractOutputSocket::rootOutput() const
 {
-  return d->rootOutput();
+  return _d()->rootOutput();
 }
 
 QList<PiiAbstractInputSocket*> PiiAbstractOutputSocket::connectedInputs() const
 {
+  const PII_D;
   QList<PiiAbstractInputSocket*> lstInputs;
   for (int i=0; i<d->lstInputs.size(); ++i)
     lstInputs << d->lstInputs.inputAt(i);
@@ -69,6 +64,7 @@ QList<PiiAbstractInputSocket*> PiiAbstractOutputSocket::connectedInputs() const
 
 void PiiAbstractOutputSocket::updateInput(PiiAbstractInputSocket* socket)
 {
+  PII_D;
   if (d->lstInputs.indexOf(socket) != -1)
     {
       d->lstInputs.updateController(socket);
@@ -78,6 +74,7 @@ void PiiAbstractOutputSocket::updateInput(PiiAbstractInputSocket* socket)
 
 void PiiAbstractOutputSocket::connectInput(PiiAbstractInputSocket* input)
 {
+  PII_D;
   if (input != 0 && d->lstInputs.indexOf(input) == -1)
     {
       // Disconnect old output
@@ -88,7 +85,7 @@ void PiiAbstractOutputSocket::connectInput(PiiAbstractInputSocket* input)
       d->lstInputs.append(input);
       
       input->d->pConnectedOutput = this;
-      input->d->pListener = this;
+      input->d->pListener = this->d;
 
       PiiAbstractOutputSocket* pRootOutput = d->rootOutput();
       if (pRootOutput != 0)
@@ -100,6 +97,7 @@ void PiiAbstractOutputSocket::connectInput(PiiAbstractInputSocket* input)
 
 void PiiAbstractOutputSocket::disconnectInput(PiiAbstractInputSocket* input)
 {
+  PII_D;
   if (input != 0)
     disconnectInputAt(d->lstInputs.indexOf(input));
   else //disconnect all if input == 0
@@ -111,6 +109,7 @@ void PiiAbstractOutputSocket::disconnectInput(PiiAbstractInputSocket* input)
 
 void PiiAbstractOutputSocket::disconnectInputAt(int index)
 {
+  PII_D;
   if (index >= 0 && index < d->lstInputs.size())
     {
       PiiAbstractInputSocket* input = d->lstInputs.takeInputAt(index);
@@ -123,13 +122,13 @@ void PiiAbstractOutputSocket::disconnectInputAt(int index)
       if (pRootOutput != 0)
         pRootOutput->d->setOutputConnected(true);
 
-      if (d->q != 0)
-        inputDisconnected(input);
+      inputDisconnected(input);
     }
 }
 
 void PiiAbstractOutputSocket::reconnect(PiiAbstractOutputSocket* output, PiiAbstractInputSocket* input)
 {
+  PII_D;
   // Store connected inputs
   InputList lstInputs = d->lstInputs;
   // Disconnect them all
@@ -143,16 +142,13 @@ void PiiAbstractOutputSocket::reconnect(PiiAbstractOutputSocket* output, PiiAbst
 }
 
 void PiiAbstractOutputSocket::inputConnected(PiiAbstractInputSocket*)
-{
-}
+{}
 
 void PiiAbstractOutputSocket::inputUpdated(PiiAbstractInputSocket*)
-{
-}
+{}
 
 void PiiAbstractOutputSocket::inputDisconnected(PiiAbstractInputSocket*)
-{
-}
+{}
 
 
 int PiiAbstractOutputSocket::InputList::indexOf(PiiAbstractInputSocket* input) const

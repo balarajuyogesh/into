@@ -91,7 +91,7 @@ class PII_YDIN_EXPORT PiiOperation : public QObject, public PiiConfigurable
    */
   Q_PROPERTY(bool cachingProperties READ isCachingProperties);
     
-  Q_ENUMS(State);
+  Q_ENUMS(State ProtectionLevel);
 
   PII_DECLARE_VIRTUAL_METAOBJECT_FUNCTION;
   PII_DEFAULT_SERIALIZATION_FUNCTION(QObject);
@@ -289,7 +289,7 @@ public:
    * The order in which the sockets are returned should be
    * "intuitive", but no strict restrictions are imposed.
    */
-  Q_INVOKABLE virtual QList<PiiAbstractInputSocket*> inputs() const = 0;
+  virtual QList<PiiAbstractInputSocket*> inputs() const = 0;
 
   /**
    * Returns the names of all inputs.
@@ -300,7 +300,7 @@ public:
    * Returns a list of all output sockets connected to this operation. 
    * Analogous to inputs().
    */
-  Q_INVOKABLE virtual QList<PiiAbstractOutputSocket*> outputs() const = 0;
+  virtual QList<PiiAbstractOutputSocket*> outputs() const = 0;
 
   /**
    * Returns the names of all outputs.
@@ -315,19 +315,15 @@ public:
    *
    * Operations are free to implement any scheme for naming their
    * sockets. For example, PiiBasicOperation uses the @p objectName
-   * property of the socket, and PiiOperationCompound keeps an
-   * internal map of socket aliases. Since there is no default naming
-   * scheme, the default implementation returns an empty string.
-   *
-   * This is a convenience function that calls socketProperty(@a
-   * socket, "name").
+   * property of the socket, and PiiOperationCompound maintains an
+   * internal map of socket aliases.
    *
    * @param socket the socket whose name is to be found
    *
    * @return the name of the socket or an empty string if the socket
    * is not owned by this operation.
    */
-  Q_INVOKABLE QString socketName(PiiAbstractSocket* socket) const;
+  virtual QString socketName(PiiAbstractSocket* socket) const = 0;
 
   /**
    * Returns meta information associated with @a socket. This function
@@ -364,8 +360,6 @@ public:
    */
   virtual QVariant socketProperty(PiiAbstractSocket* socket, const char* name) const;
 
-  Q_INVOKABLE QVariant socketProperty(PiiAbstractSocket* socket, const QString& name) const;
-  
   /**
    * A convenience function for connecting a named output socket to a
    * named input socket in another operation. This is (almost)
@@ -390,12 +384,6 @@ public:
   bool connectOutput(const QString& output, PiiOperation* other, const QString& input);
 
   bool connectOutput(const QString& output, PiiAbstractInputSocket* input);
-
-  /**
-   * Connects the output with the given name to *input*, which may be
-   * either a name or a pointer to a PiiAbstractInputSocket.
-   */
-  Q_INVOKABLE bool connectOutput(const QString& outputName, const QVariant& input);
 
   /**
    * Starts storing a named property set. Between startPropertySet()
@@ -498,9 +486,15 @@ public:
    */
   ProtectionLevel protectionLevel(const char* property) const;
 
-  /// @internal
+  /// @hide
   bool isCompound() const;
-  
+
+  Q_INVOKABLE ProtectionLevel protectionLevel(const QString& property) const;
+  /* Connects the output with the given name to *input*, which may be
+   * either a name or a pointer to a PiiAbstractInputSocket.
+   */
+  Q_INVOKABLE bool connectOutput(const QString& outputName, const QVariant& input);
+  /// @endhide
 signals:
   /**
    * Signals an error. The @a message should be a user-friendly

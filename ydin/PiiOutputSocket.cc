@@ -34,8 +34,7 @@ PiiOutputSocket::Data::Data(PiiOutputSocket* owner) :
   bInterrupted(false),
   pbInputCompleted(0),
   activeThreadId(0)
-{
-}
+{}
 
 bool PiiOutputSocket::Data::setOutputConnected(bool connected)
 {
@@ -46,6 +45,52 @@ PiiAbstractOutputSocket* PiiOutputSocket::Data::rootOutput() const
 {
   return q;
 }
+
+void PiiOutputSocket::Data::inputUpdated(PiiAbstractInputSocket*)
+{
+  if (dlstInputs.size() > 0)
+    pFirstController = lstInputs.controllerAt(0);
+}
+
+void PiiOutputSocket::Data::inputConnected(PiiAbstractInputSocket* input)
+{
+  // Run-time optimization
+  if (lstInputs.size() == 1)
+    {
+      pFirstInput = input;
+      pFirstController = input->controller();
+    }
+  createFlagArray();
+}
+
+void PiiOutputSocket::Data::inputDisconnected(PiiAbstractInputSocket*)
+{
+  if (lstInputs.size() > 0)
+    {
+      pFirstInput = lstInputs.inputAt(0);
+      pFirstController = lstInputs.controllerAt(0);
+    }
+  else
+    {
+      pFirstInput = 0;
+      pFirstController = 0;
+    }
+  createFlagArray();
+}
+
+void PiiOutputSocket::Data::createFlagArray()
+{
+  //qDebug("PiiOutputSocket: creating flag array for %d connections.", d->lstInputs.size());
+  delete[] pbInputCompleted;
+  if (lstInputs.size() > 0)
+    {
+      pbInputCompleted = new bool[lstInputs.size()];
+      Pii::fillN(pbInputCompleted, lstInputs.size(), false);
+    }
+  else
+    pbInputCompleted = 0;
+}
+
 
 PiiOutputSocket::PiiOutputSocket(const QString& name) :
   PiiAbstractOutputSocket(new Data(this))
@@ -280,55 +325,6 @@ PiiAbstractOutputSocket* PiiOutputSocket::asOutput() { return this; }
 void PiiOutputSocket::synchronizeTo(PiiInputSocket* input)
 {
   setGroupId(input->groupId());
-}
-
-void PiiOutputSocket::inputConnected(PiiAbstractInputSocket* input)
-{
-  PII_D;
-  // Run-time optimization
-  if (d->lstInputs.size() == 1)
-    {
-      d->pFirstInput = input;
-      d->pFirstController = input->controller();
-    }
-  createFlagArray();
-}
-
-void PiiOutputSocket::inputDisconnected(PiiAbstractInputSocket*)
-{
-  PII_D;
-  if (d->lstInputs.size() > 0)
-    {
-      d->pFirstInput = d->lstInputs.inputAt(0);
-      d->pFirstController = d->lstInputs.controllerAt(0);
-    }
-  else
-    {
-      d->pFirstInput = 0;
-      d->pFirstController = 0;
-    }
-  createFlagArray();
-}
-
-void PiiOutputSocket::inputUpdated(PiiAbstractInputSocket*)
-{
-  PII_D;
-  if (d->lstInputs.size() > 0)
-    d->pFirstController = d->lstInputs.controllerAt(0);
-}
-
-void PiiOutputSocket::createFlagArray()
-{
-  PII_D;
-  //qDebug("PiiOutputSocket: creating flag array for %d connections.", d->lstInputs.size());
-  delete[] d->pbInputCompleted;
-  if (d->lstInputs.size() > 0)
-    {
-      d->pbInputCompleted = new bool[d->lstInputs.size()];
-      Pii::fillN(d->pbInputCompleted, d->lstInputs.size(), false);
-    }
-  else
-    d->pbInputCompleted = 0;
 }
 
 void PiiOutputSocket::resume(PiiSocketState state)

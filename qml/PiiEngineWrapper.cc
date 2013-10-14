@@ -16,12 +16,6 @@
 #include "PiiEngineWrapper.h"
 #include "PiiQml.h"
 
-PiiPluginTypeProvider* PiiPluginTypeProvider::instance()
-{
-  static PiiPluginTypeProvider provider;
-  return &provider;
-}
-
 namespace PiiEngineWrapper
 {
   PII_STATIC_TR_FUNC(PiiEngine)
@@ -29,13 +23,11 @@ namespace PiiEngineWrapper
   static v8::Handle<v8::Value> loadPlugin(QV8Engine* engine,
                                           v8::Handle<v8::String> pluginName)
   {
-    v8::Local<v8::Context> context(v8::Local<v8::Context>::New(engine->context()));
-    v8::Context::Scope contextScope(context);
-    v8::Local<v8::Object> globalObject(PiiQml::globalObject(context));
+    v8::Local<v8::Object> into(PiiQml::globalIntoObject());
     try
       {
         PiiEngine::Plugin plugin = PiiEngine::loadPlugin(PiiQml::toString(pluginName));
-        PiiQml::registerClasses(engine, globalObject, plugin.resourceName());
+        PiiQml::registerClasses(engine, into, plugin.resourceName());
         return engine->fromVariant(QVariant::fromValue(plugin));
       }
     catch (PiiLoadException& ex)

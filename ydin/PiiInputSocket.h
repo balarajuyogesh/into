@@ -73,7 +73,7 @@ class PiiOutputSocket;
  *
  * @ingroup Ydin
  */
-class PII_YDIN_EXPORT PiiInputSocket : public PiiSocket, public PiiAbstractInputSocket
+class PII_YDIN_EXPORT PiiInputSocket : public PiiAbstractInputSocket
 {
   Q_OBJECT
 
@@ -96,11 +96,6 @@ public:
 
   /// Destroys the socket.
   ~PiiInputSocket();
-
-  /**
-   * Returns @p Input.
-   */
-  Type type() const;
   
   /**
    * Sets the group id. Input sockets are organized to groups
@@ -268,7 +263,7 @@ protected:
     int iQueueStart, iQueueLength;
     mutable QMutex firstObjectMutex;
   };
-  PII_UNSAFE_D_FUNC;
+  PII_D_FUNC;
 
   /// @internal
   PiiInputSocket(Data* data, const QString& name);

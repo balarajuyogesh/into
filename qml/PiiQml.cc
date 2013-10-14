@@ -83,7 +83,6 @@ namespace PiiQml
 
     v8::Local<v8::FunctionTemplate> tmpl(v8::FunctionTemplate::New(createQObject, v8::External::New(engine)));
     tmpl->SetClassName(v8strClassName);
-    v8::Local<v8::Object> prototype(v8::Object::New());
     
     // Set enum values as properties to the function object
     for (int i=meta->enumeratorOffset(); i<meta->enumeratorCount(); ++i)
@@ -151,6 +150,7 @@ namespace PiiQml
   void registerClasses(QV8Engine* engine, v8::Handle<v8::Object> globalObject, const QString& parent)
   {
     PiiResourceDatabase* pDb = PiiYdin::resourceDatabase();
+    //pDb->dump();
     // Find all metaobjects in the specified plug-in (or other
     // group). This selects all statements of the form (class,
     // "pii:qmetaobject", ptr), where "class" is the name of a C++
@@ -172,12 +172,15 @@ namespace PiiQml
                                  findClassPrototype(globalObject, pMeta));
       }
   }
-  
-  v8::Local<v8::Object> globalObject(v8::Handle<v8::Context> context)
+
+  v8::Local<v8::Object> globalObject()
   {
     // HACK: Global object is frozen, but we can modify its __proto__
-    return v8::Local<v8::Object>::Cast(context->Global()->Get(v8::String::New("__proto__")));
+    return v8::Local<v8::Object>::Cast(v8::Context::GetCurrent()->Global()->Get(v8::String::New("__proto__")));
+  }
+
+  v8::Local<v8::Object> globalIntoObject()
+  {
+    return v8::Local<v8::Object>::Cast(globalObject()->Get(v8::String::New("Into")));
   }
 }
-
-

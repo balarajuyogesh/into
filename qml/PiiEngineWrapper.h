@@ -46,22 +46,6 @@ public:
   QString version() const { return v.version().toString(); }
 };
 
-class PiiPluginTypeProvider : public QQmlValueTypeProvider
-{
-public:
-  bool create(int type, QQmlValueType *&v)
-  {
-    if (type == qMetaTypeId<PiiEngine::Plugin>())
-      {
-        v = new PiiPluginValueType;
-        return true;
-      }
-    return false;
-  }
-
-  static PiiPluginTypeProvider* instance();
-};
-
 namespace PiiEngineWrapper
 {
   void init(QV8Engine*,v8::Handle<v8::Object>);

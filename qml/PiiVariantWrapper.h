@@ -54,20 +54,4 @@ public slots:
   }
 };
 
-class PiiVariantTypeProvider : public QQmlValueTypeProvider
-{
-public:
-  bool create(int type, QQmlValueType *&v)
-  {
-    if (type == qMetaTypeId<PiiVariant>())
-      {
-        v = new PiiVariantValueType;
-        return true;
-      }
-    return false;
-  }
-
-  static PiiVariantTypeProvider* instance();
-};
-
 #endif //_PIIVARIANTWRAPPER_H

@@ -291,3 +291,8 @@ PiiOperation::ProtectionLevel PiiOperation::protectionLevel(const char* property
 bool PiiOperation::isCompound() const { return d->isCompound(); }
 
 QMutex* PiiOperation::stateLock() { return &d->stateMutex; }
+
+PiiOperation::ProtectionLevel PiiOperation::protectionLevel(const QString& property) const
+{
+  return protectionLevel(qPrintable(property));
+}

@@ -759,25 +759,6 @@ PiiOperation* PiiOperationCompound::removeOperation(const QString& name)
   return pOp;
 }
 
-bool PiiOperationCompound::connectOutput(const QString& out, const QString& in)
-{
-  PiiAbstractOutputSocket* pOutput = output(out);
-  if (pOutput == 0)
-    {
-      piiWarning(tr("There is no \"%1\" output in %2.").arg(out, metaObject()->className()));
-      return false;
-    }
-  PiiAbstractInputSocket* pInput = input(in);
-  if (pInput == 0)
-    {
-      piiWarning(tr("There is no \"%1\" input in %2.").arg(in, metaObject()->className()));
-      return false;
-    }
-  pOutput->connectInput(pInput);
-  return true;
-}
-
-
 struct PiiOperationCompound::InputFinder
 {
   typedef PiiAbstractInputSocket* Type;

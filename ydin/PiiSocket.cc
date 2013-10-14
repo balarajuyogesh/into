@@ -15,11 +15,17 @@
 
 #include "PiiSocket.h"
 
+PiiSocket::Data::Data(Type t) :
+  type(t)
+{}
 
-PiiSocket::PiiSocket()
-{
-}
+PiiSocket::Data::~Data() {}
+
+PiiSocket::PiiSocket(Data* d) :
+  d(d)
+{}
 
 PiiSocket::~PiiSocket()
 {
+  delete d;
 }

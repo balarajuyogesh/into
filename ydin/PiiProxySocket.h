@@ -22,6 +22,36 @@
 #include "PiiAbstractOutputSocket.h"
 #include "PiiInputController.h"
 
+/// @internal
+class PiiProxyInputSocket : public PiiAbstractInputSocket
+{
+  Q_OBJECT
+public:
+  PiiInputController* controller() const;
+  
+private:
+  class Data : public PiiAbstractInputSocket::Data
+  {
+  public:
+    Data();
+  };
+};
+
+/// @internal
+class PiiProxyOutputSocket : public PiiAbstractOutputSocket
+{
+  Q_OBJECT
+public:
+
+private:
+  class Data : public PiiAbstractOutputSocket::Data
+  {
+  public:
+    Data();
+    virtual PiiAbstractOutputSocket* rootOutput() const;
+  };
+};
+
 /**
  * An input-output socket. This socket implements both
  * PiiAbstractOutputSocket and PiiAbstractInputSocket, and works as a
@@ -31,13 +61,10 @@
  * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiProxySocket :
-  public PiiSocket,
-  public PiiAbstractOutputSocket,
-  public PiiAbstractInputSocket,
-  public PiiInputController
+  public PiiSocket
 {
   Q_OBJECT
-  Q_INTERFACES(PiiAbstractOutputSocket PiiAbstractInputSocket)
+
 public:
   PiiProxySocket();
   ~PiiProxySocket();
@@ -50,8 +77,6 @@ public:
   PiiInputController* controller() const;
   PiiAbstractOutputSocket* rootOutput() const;
   bool setInputConnected(bool connected);
-  bool tryToReceive(PiiAbstractInputSocket* sender, const PiiVariant& object) throw ();
-  void inputReady(PiiAbstractInputSocket*);
 
   void reset();
 
@@ -59,28 +84,27 @@ public:
   PiiAbstractInputSocket* asInput();
   PiiAbstractOutputSocket* asOutput();
 
-protected:
-  void inputConnected(PiiAbstractInputSocket* input);
-  void inputDisconnected(PiiAbstractInputSocket* input);
-  
 private:
-  class Data :
-    public PiiAbstractOutputSocket::Data,
-    public PiiAbstractInputSocket::Data
+  class Data : public PiiSocket::Data
   {
   public:
     Data(PiiProxySocket* owner);
 
     PiiAbstractOutputSocket* rootOutput() const;
     bool setInputConnected(bool connected);
+    void inputConnected(PiiAbstractInputSocket* input);
+    void inputDisconnected(PiiAbstractInputSocket* input);
+    bool tryToReceive(PiiAbstractInputSocket* sender, const PiiVariant& object) throw ();
+    void inputReady(PiiAbstractInputSocket*);
+
+    PiiProxyInputSocket input;
+    PiiProxyOutputSocket output;
     
     bool *pbInputCompleted;
 
     PII_Q_FUNC(PiiProxySocket);
   };
-  
-  inline Data* _d() { return static_cast<Data*>(PiiAbstractOutputSocket::d); }
-  inline const Data* _d() const { return static_cast<const Data*>(PiiAbstractOutputSocket::d); }
+  PII_D_FUNC;
 };
 
 Q_DECLARE_METATYPE(PiiProxySocket*);

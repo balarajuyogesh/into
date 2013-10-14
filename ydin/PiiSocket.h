@@ -57,7 +57,7 @@ public:
    * Get the type of the socket. This function can be used for fast
    * run-time type checking.
    */
-  Q_INVOKABLE virtual Type type() const = 0;
+  Q_INVOKABLE Type type() const;
 
   /**
    * Returns a pointer to this socket as PiiAbstractInputSocket, if this
@@ -74,7 +74,15 @@ public:
   virtual PiiAbstractOutputSocket* asOutput() = 0;
 
 protected:
-  PiiSocket();
+  class PII_YDIN_EXPORT Data
+  {
+  public:
+    Data(Type t);
+    virtual ~Data();
+    Type type;
+  } *d;
+  PiiSocket(Data);
+  PII_DISABLE_COPY(PiiSocket);
 };
 
 Q_DECLARE_METATYPE(PiiSocket*);

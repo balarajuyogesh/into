@@ -13,4 +13,5 @@
  * refer to LICENSE.AGPL3 for details.
  */
 
-#include "PiiVariantWrapper.h"
+#include <QtQuickTest>
+QUICK_TEST_MAIN(engine)

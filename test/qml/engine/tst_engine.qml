@@ -14,7 +14,7 @@
  */
 
 import QtTest 1.0
-import Into 1.0
+import Into 2.0
 
 TestCase
 {
@@ -37,7 +37,6 @@ TestCase
 
   function initTestCase()
   {
-    //show((function () { return __proto__; })());
     compare(qmlEngine.childCount(), 0);
     qmlEngine.objectName = "qmlEngine";
     compare(qmlEngine.objectName, "qmlEngine");
@@ -49,7 +48,7 @@ TestCase
 
   function test_00_loadPlugin()
   {
-    var plugin = PiiEngine.loadPlugin("piibase");
+    var plugin = Into.PiiEngine.loadPlugin("piibase");
     compare(plugin.resourceName, "PiiBasePlugin");
     compare(plugin.libraryName, "piibase");
     verify(plugin.version.length > 0);
@@ -57,7 +56,7 @@ TestCase
 
   function test_01_loadPlugins()
   {
-    var plugins = PiiEngine.loadPlugins("piiflowcontrol", "piiimage");
+    var plugins = Into.PiiEngine.loadPlugins("piiflowcontrol", "piiimage");
     compare(plugins.length, 2);
     compare(plugins[0].resourceName, "PiiFlowControlPlugin");
     compare(plugins[0].libraryName, "piiflowcontrol");
@@ -67,19 +66,20 @@ TestCase
 
   function test_02_enums()
   {
-    compare(PiiEngine.TextFormat, 0);
-    compare(PiiEngine.BinaryFormat, 1);
+    compare(Into.PiiEngine.TextFormat, 0);
+    compare(Into.PiiEngine.BinaryFormat, 1);
   }
 
   function test_03_new_engine()
   {
-    jsEngine = new PiiEngine();
+    jsEngine = new Into.PiiEngine();
     //show(jsEngine);
     compare(jsEngine.childCount(), 0);
   }
 
   function test_04_empty_start_stop()
   {
+    compare(jsEngine.childCount(), 0);
     jsEngine.execute();
     compare(jsEngine.state(), PiiOperation.Running);
     jsEngine.stop();
@@ -88,8 +88,8 @@ TestCase
 
   function test_05_add_operations()
   {
-    trigger = new PiiTriggerSource("trigger");
-    var sgen1 = new PiiSequenceGenerator("sgen1", { sequenceEnd: 2, step: 2 });
+    trigger = new Into.PiiTriggerSource("trigger");
+    var sgen1 = new Into.PiiSequenceGenerator("sgen1", { sequenceEnd: 2, step: 2 });
     compare(sgen1.objectName, "sgen1");
     compare(sgen1.sequenceEnd, 2);
     compare(sgen1.step, 2);
@@ -97,7 +97,7 @@ TestCase
     compare(sgen2.objectName, "sgen2");
     compare(jsEngine.childCount(), 1);
 
-    var sum = new PiiArithmeticOperation("sum");
+    var sum = new Into.PiiArithmeticOperation("sum");
     jsEngine.addOperations(trigger, sgen1, sum);
     compare(jsEngine.childCount(), 4);
   }
@@ -105,14 +105,16 @@ TestCase
   function test_06_connect()
   {
     verify(jsEngine.connectOutput("trigger.trigger", "sgen1.trigger"));
-    verify(jsEngine.connectOutput("trigger.trigger", "sgen2.trigger"));
+    // Alternative way
+    jsEngine.output("trigger.trigger").connectInput(jsEngine.input("sgen2.trigger"));
+    compare(jsEngine.input("sgen2.trigger").connectedOutput(), jsEngine.output("trigger.trigger"));
     verify(jsEngine.connectOutput("sgen1.output", "sum.input0"));
     verify(jsEngine.connectOutput("sgen2.output", "sum.input1"));
   }
 
   function test_07_add_probe()
   {
-    probe = new PiiProbeInput;
+    probe = new Into.PiiProbeInput;
     verify(jsEngine.connectOutput("sum.output", probe));
     verify(!probe.hasSavedObject());
   }
@@ -133,7 +135,7 @@ TestCase
   function test_09_save_load()
   {
     jsEngine.save("test.cft");
-    var jsEngine2 = PiiEngine.load("test.cft");
+    var jsEngine2 = Into.PiiEngine.load("test.cft");
     compare(jsEngine2.childCount(), 4);
   }
 }

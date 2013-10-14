@@ -17,14 +17,13 @@
 #include "PiiAbstractOutputSocket.h"
 
 PiiAbstractInputSocket::Data::Data() :
+  PiiSocket::Data(Input),
   pConnectedOutput(0),
   pListener(0)
-{
-}
+{}
 
 PiiAbstractInputSocket::Data::~Data()
-{
-}
+{}
 
 bool PiiAbstractInputSocket::Data::setInputConnected(bool connected)
 {
@@ -32,17 +31,12 @@ bool PiiAbstractInputSocket::Data::setInputConnected(bool connected)
 }
 
 PiiAbstractInputSocket::PiiAbstractInputSocket(Data* data) :
-  d(data)
-{
-}
+  PiiSocket(data)
+{}
 
 PiiAbstractInputSocket::~PiiAbstractInputSocket()
 {
-  if (d != 0)
-    {
-      disconnectOutput();
-      delete d;
-    }
+  disconnectOutput();
 }
 
 void PiiAbstractInputSocket::disconnectOutput()
@@ -58,6 +52,6 @@ void PiiAbstractInputSocket::connectOutput(PiiAbstractOutputSocket* output)
     output->connectInput(this);
 }
 
-PiiAbstractOutputSocket* PiiAbstractInputSocket::connectedOutput() const { return d->pConnectedOutput; }
-void PiiAbstractInputSocket::setListener(PiiInputListener* listener) { d->pListener = listener; }
-PiiInputListener* PiiAbstractInputSocket::listener() const { return d->pListener; }
+PiiAbstractOutputSocket* PiiAbstractInputSocket::connectedOutput() const { return _d()->pConnectedOutput; }
+void PiiAbstractInputSocket::setListener(PiiInputListener* listener) { _d()->pListener = listener; }
+PiiInputListener* PiiAbstractInputSocket::listener() const { return _d()->pListener; }
