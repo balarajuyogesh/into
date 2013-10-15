@@ -21,20 +21,19 @@
 #include <iterator>
 #include "PiiTypeTraits.h"
 
-/// @file
 
 /**
  * A macro that allows one to use a convenient syntax for checking if
  * a value is a member of a set. With compiler optimizations turned
  * on, this technique is equally fast as direct comparison.
  *
- * @code
+ * ~~~(c++)
  * if (rand() % 5 member_of (1, 2, 3))
  *   cout << "You had luck.\n";
  * const char* fruit = "Apple";
  * if (fruit member_of ("Apple", "Orange", "Pear"))
  *   cout << "Yes, this works too.\n";
- * @endcode
+ * ~~~
  *
  * @see not_member_of
  */
@@ -42,23 +41,23 @@
 
 /**
  * A macro that allows one to use a convenient syntax for checking if
- * a value is @e not a member of a set. With compiler optimizations
+ * a value is *not* a member of a set. With compiler optimizations
  * turned on, this technique is equally fast as direct comparison.
  *
- * @code
+ * ~~~(c++)
  * if (1 not_member_of (1, 2, 3))
  *   cout << "Now, this is weird.\n";
  * const char* fruit = "Apple";
  * if (fruit not_member_of ("Banana", "Orange", "Pear"))
  *   cout << "Comparing apples to oranges is not fair.\n";
- * @endcode
+ * ~~~
  *
  * @see member_of
  */
 #define not_member_of != Pii::valueSet
 
 // No docs
-/// @cond null
+/// @hide
 
 namespace std
 {
@@ -227,6 +226,6 @@ namespace Pii
   { return PiiValueSet<T,10>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10); }
 }
 
-/// @endcond
+/// @endhide
 
 #endif //_PIIVALUESET_H

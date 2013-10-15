@@ -23,51 +23,52 @@
  * Scale the values in a matrix so that its values are limited to a
  * predefined range.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in input - the input matrix. Any numeric matrix.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out output - the output matrix. The output type is determined by
- * the #outputType property.
+ * the [outputType] property.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiMatrixNormalizer : public PiiDefaultOperation
 {
   Q_OBJECT
 
   /**
-   * The minimum value in the output matrix. Used in @p
-   * NormalizeMinMax mode. Default is zero.
+   * The minimum value in the output matrix. Used in 
+   * `NormalizeMinMax` mode. Default is zero.
    */
   Q_PROPERTY(double min READ min WRITE setMin);
   /**
-   * The minimum value in the output matrix. Used in @p
-   * NormalizeMinMax mode. Default is one.
+   * The minimum value in the output matrix. Used in 
+   * `NormalizeMinMax` mode. Default is one.
    */
   Q_PROPERTY(double max READ max WRITE setMax);
   /**
-   * Mean of the output matrix. Used in @p NormalizeMeanVar mode.
+   * Mean of the output matrix. Used in `NormalizeMeanVar` mode.
    * Default is zero.
    */
   Q_PROPERTY(double mean READ mean WRITE setMean);
   /**
-   * Variance of the output matrix. Used in @p NormalizeMeanVar mode
-   * if non-zero. If @p variance is set to zero, only the mean value
+   * Variance of the output matrix. Used in `NormalizeMeanVar` mode
+   * if non-zero. If `variance` is set to zero, only the mean value
    * will be changed. Default is one.
    */
   Q_PROPERTY(double variance READ variance WRITE setVariance);
   /**
-   * The output type. See @ref PiiYdin::MatrixTypeId for valid values. 
-   * Only numeric matrix types are allowed. The default is @p
-   * PiiYdin::DoubleMatrixType.
+   * The output type. See [PiiYdin::MatrixTypeId] for valid values. 
+   * Only numeric matrix types are allowed. The default is 
+   * `PiiYdin::DoubleMatrixType`.
    */
   Q_PROPERTY(int outputType READ outputType WRITE setOutputType);
   
   /**
-   * Normalization mode. Default is @p NormalizeMinMax.
+   * Normalization mode. Default is `NormalizeMinMax`.
    */
   Q_PROPERTY(NormalizationMode normalizationMode READ normalizationMode WRITE setNormalizationMode);
   Q_ENUMS(NormalizationMode);
@@ -77,10 +78,10 @@ public:
   /**
    * Normalization modes.
    *
-   * @lip NormalizeMinMax - scale the input matrix to fixed minimum
+   * - `NormalizeMinMax` - scale the input matrix to fixed minimum
    * and maximum values.
    *
-   * @lip NormalizeMeanVar - scale the input matrix to fixed mean and
+   * - `NormalizeMeanVar` - scale the input matrix to fixed mean and
    * variance.
    */
   enum NormalizationMode { NormalizeMinMax, NormalizeMeanVar };

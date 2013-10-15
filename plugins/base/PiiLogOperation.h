@@ -21,22 +21,23 @@
 /**
  * An operation that calculates the logarithm of its input.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in input - any number or numeric matrix.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out output - the logarithm as a double scalar or a double matrix.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiLogOperation : public PiiDefaultOperation
 {
   Q_OBJECT
 
   /**
-   * The base of the logarithm. The default value is @e e.
+   * The base of the logarithm. The default value is *e*.
    */
   Q_PROPERTY(double base READ base WRITE setBase);
 

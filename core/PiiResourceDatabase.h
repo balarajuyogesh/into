@@ -27,7 +27,7 @@
 
 /**
  * A database that stores statements about resources. 
- * %PiiResourceDatabase is based upon the idea of making statements
+ * PiiResourceDatabase is based upon the idea of making statements
  * about resources in the form of subject-predicate-object
  * expressions, just like in RDF (http://www.w3.org/RDF/). These
  * expressions are known as triples in RDF terminology, and the term
@@ -38,36 +38,35 @@
  * RDF is as a triple: a subject denoting "PiiResourceDatabase", a
  * predicate denoting "creator", and an object denoting "Intopii". The
  * shorthand form for such a triplet could be something like
- * <tt>(%PiiResourceDatabase,creator,"Intopii")</tt>.
+ * `(PiiResourceDatabase,creator,"Intopii")`.
  *
- * Unlike W3C's RDF, %PiiResourceDatabase does not require that
+ * Unlike W3C's RDF, PiiResourceDatabase does not require that
  * resources and predicates are identified by URIs. Any string
  * containing no white spaces will work as long as it is unique in the
  * context of the database. In particular, class names are excellent
  * resource identifiers for already being unique due to symbol naming
  * restrictions. For predicates, namespaces may be used if needed. An
  * example of a statement with a namespace could be
- * <tt>(%PiiResourceDatabase,my:opinion,"Confusing")</tt>, which
+ * `(PiiResourceDatabase,my:opinion,"Confusing")`, which
  * states that "In my opinion, PiiResourceDatabase is confusing." The
  * "my:" namespace avoids polluting the global namespace with my
  * custom predicates.
  *
  * Instances of PiiResourceStatement are used to store the triples in
- * %PiiResourceDatabase. The object of each triple may be either a
+ * PiiResourceDatabase. The object of each triple may be either a
  * reference to another resource or a string literal. In the examples
  * above, double quotes were used to illustrate that the object was a
  * literal. But a triplet can describe a relationship between two
  * resources, for example that "PiiResourceDatabase uses
  * PiiResourceStatement":
- * <tt>(%PiiResourceDatabase,uses,%PiiResourceStatement)</tt>.
+ * `(PiiResourceDatabase,uses,PiiResourceStatement)`.
  *
- * Statements in %PiiResourceDatabase are also resources, and they
- * have automatically assigned ids. Therefore, it is possible to @e
- * reify statements in RDF style. In RDF terminology, reification
- * means staments about statements. Resource ids of the form "#123"
+ * Statements in PiiResourceDatabase are also resources, and they
+ * have automatically assigned ids. Therefore, it is possible to 
+ * *reify* statements in RDF style. In RDF terminology, reification
+ * means staments about statements. Resource ids of the form "[123]"
  * (a hash followed by an integer) are reserved for statements.
  *
- * @ingroup Core
  */
 class PII_CORE_EXPORT PiiResourceDatabase
 {
@@ -102,22 +101,22 @@ public:
   int addStatement(const PiiResourceStatement& statement);
 
   /**
-   * A statements to the database. This function adds the given @p
-   * statements to the database, starting from the first one. If the
+   * A statements to the database. This function adds the given 
+   * `statements` to the database, starting from the first one. If the
    * subject of a statement is "#", the statement is treated as a
    * reification of the previous statement (a statement about
    * statement). The subject ("#") will be replaced with the resource
    * id of the previous statement. Note that all successive
    * reifications refer to the same (non-reified) statement.
    *
-   * @code
+   * ~~~(c++)
    * PiiResourceDatabase db;
    * // In my opinion, PiiResourceDatabase is flexible
    * // The truth value of the previous statement is true.
    * db.addStatements(QList<PiiResourceStatement>() <<
    *                  PiiResourceStatement("PiiResourceDatabase", "my:opinion", "flexible") <<
    *                  PiiResourceStatement("#", "my:truth value", "true"));
-   * @endcode
+   * ~~~
    */
   QList<int> addStatements(const QList<PiiResourceStatement>& statements);
 
@@ -141,9 +140,9 @@ public:
   int statementCount() const;
   
   /**
-   * Returns a list of statements matching the given @a filter.
+   * Returns a list of statements matching the given *filter*.
    *
-   * @code
+   * ~~~(c++)
    * QList<PiiResourceStatement> lstResult;
    * // Fetch all statements that specify a parent-child relationship
    * lstResult = db->select(Pii::predicate == "pii:parent");
@@ -157,10 +156,10 @@ public:
    * lstResult = db->select(Pii::predicate == "pii:parent" && Pii::object == "MyPlugin");
    * // Same, but shorter
    * lstResult = db->select(Pii::attribute("pii:parent") == "MyPlugin");
-   * @endcode
+   * ~~~
    *
-   * In the examples, @p Pii::subject, @p Pii::predicate etc. are
-   * global instances of @e selector @e structures Pii::Subject,
+   * In the examples, `Pii::subject`, `Pii::predicate` etc. are
+   * global instances of *selector* *structures* Pii::Subject,
    * Pii::Predicate etc. One can equally well use Pii::Subject(),
    * Pii::Predicate() etc. in their place.
    */
@@ -168,28 +167,28 @@ public:
 
   /**
    * Returns a list of subjects, predicates, or objects whose
-   * containing statement matches @a filter. A selector is a function
+   * containing statement matches *filter*. A selector is a function
    * object that picks one field of a statement. The type of the
    * returned list depends on the return value of the selector. 
    * Supported selectors are:
    *
-   * @lip subject - the subject of a statement, QString
+   * - `subject` - the subject of a statement, QString
    *
-   * @lip predicate - the predicate of a statement, QString
+   * - `predicate` - the predicate of a statement, QString
    *
-   * @lip object - the object of a statement, QString
+   * - `object` - the object of a statement, QString
    *
-   * @lip attribute("name") - named attribute of a statement, QString. 
+   * - `attribute`("name") - named attribute of a statement, QString. 
    * The attribute selector is equal to a logical AND filter that
-   * first matches the predicate to @p name and then compares the
+   * first matches the predicate to `name` and then compares the
    * object.
    *
-   * @lip statementId - the id of a statement, @p int.
+   * - `statementId` - the id of a statement, `int`.
    *
-   * @lip resourceType - the type of the object,
+   * - `resourceType` - the type of the object,
    * PiiResourceStatement::Type.
    *
-   * @code
+   * ~~~(c++)
    * QList<QString> lstResult;
    * // Find all child resources of PiiImagePlugin
    * lstResult = db->select(Pii::subject, Pii::attribute("pii:parent") == "PiiImagePlugin");
@@ -210,24 +209,24 @@ public:
    * // the predicate.
    * lstResult = db->select(Pii::subject, Pii::attribute("pii:parent") != "MyPlugin") &&
    *             db->select(Pii::subject, Pii::attribute("pii:class") == "PiiOperation");
-   * @endcode
+   * ~~~
    *
    * Filters support all comparison operators and the logical AND and
    * OR operators. In addition, there are two fuctions to convert the
    * QString output of a selector to a number:
    *
-   * @lip resourceStringTo<T>() - converts a string argument to a
+   * - `resourceStringTo`<T>() - converts a string argument to a
    * numeric type denoted by T. Returns 0 if the string cannot be
    * converted. If the conversion fails, any subsequent comparison
-   * will fail. That is, <tt>resourceStringTo<int>("abc") == 0</tt>
-   * will be @p false even though the function will return 0.
+   * will fail. That is, `resourceStringTo<int>("abc") == 0`
+   * will be `false` even though the function will return 0.
    *
-   * @lip resourceidToInt() - converts a resource id of the form #123
+   * - `resourceidToInt`() - converts a resource id of the form [123]
    * to an integer. If the input string is not an id of a statement,
-   * -1 will be returned, and any subsequent comparison will return @p
-   * false.
+   * -1 will be returned, and any subsequent comparison will return 
+   * `false`.
    *
-   * @code
+   * ~~~(c++)
    * using namespace Pii;
    * // Find the names of relations between MyClass and YourClass
    * db->select(predicate, subject == "MyClass" && object == "YourClass");
@@ -248,13 +247,13 @@ public:
    * // Find the ids of the reification statements.
    * QList<int> = db->select(statementId,
    *                         resourceIdToInt(subject) != -1);
-   * @endcode
+   * ~~~
    */
   template <class Selector, class Filter>
   QList<typename Selector::ValueType> select(Selector selector, Filter filter) const;
 
   /**
-   * Returns the id of the first statement matching @p filter. If no
+   * Returns the id of the first statement matching `filter`. If no
    * statement matches, -1 will be returned.
    */
   template <class Filter> int findFirst(Filter filter) const;
@@ -308,7 +307,7 @@ template <class Filter> int PiiResourceDatabase::findFirst(Filter filter) const
   return -1;
 }
 
-/// @cond null
+/// @hide
 namespace Pii
 {
   // Forward declaration
@@ -605,6 +604,6 @@ namespace Pii
   extern PII_CORE_EXPORT ResourceType resourceType;
   extern PII_CORE_EXPORT StatementId statementId;
 }
-/// @endcond
+/// @endhide
 
 #endif //_PIIRESOURCEDATABASE_H

@@ -23,7 +23,7 @@
 /**
  * A class that decodes MIME multipart messages.
  *
- * %PiiMultipartDecoder is an IO device that decodes a multipart MIME
+ * PiiMultipartDecoder is an IO device that decodes a multipart MIME
  * message and splits the input stream into chunks based on the
  * extracted information. Once a header has been fetched, read
  * operations will be terminated to the next boundary of the multipart
@@ -32,36 +32,36 @@
  * Consider the following multipart MIME message (example from
  * http://www.w3.org/TR/html401/interact/forms.html):
  *
-@verbatim
-Content-Type: multipart/form-data; boundary=AaB03x
-
---AaB03x
-Content-Disposition: form-data; name="submit-name"
-
-Larry
---AaB03x
-Content-Disposition: form-data; name="files"
-Content-Type: multipart/mixed; boundary=BbC04y
-
---BbC04y
-Content-Disposition: file; filename="text.txt"
-Content-Type: text/plain
-
-... contents of text.txt ...
---BbC04y
-Content-Disposition: file; filename="image.png"
-Content-Type: image/png
-Content-Transfer-Encoding: binary
-
-...contents of image.png...
---BbC04y--
---AaB03x--
-
-@endverbatim
+ * ~~~
+ * Content-Type: multipart/form-data; boundary=AaB03x
+ * 
+ * --AaB03x
+ * Content-Disposition: form-data; name="submit-name"
+ * 
+ * Larry
+ * --AaB03x
+ * Content-Disposition: form-data; name="files"
+ * Content-Type: multipart/mixed; boundary=BbC04y
+ * 
+ * --BbC04y
+ * Content-Disposition: file; filename="text.txt"
+ * Content-Type: text/plain
+ * 
+ * ... contents of text.txt ...
+ * --BbC04y
+ * Content-Disposition: file; filename="image.png"
+ * Content-Type: image/png
+ * Content-Transfer-Encoding: binary
+ * 
+ * ...contents of image.png...
+ * --BbC04y--
+ * --AaB03x--
+ * 
+ * ~~~
  *
  * The code to read the message is as follows:
  *
- * @code
+ * ~~~(c++)
  * // Assume you have a tcp connection through "socket"
  * PiiMultipartDecoder decoder(socket);
  * while (decoder.nextMessage())
@@ -71,21 +71,20 @@ Content-Transfer-Encoding: binary
  *     if (decoder.header().contentType() == "image/png")
  *       decodePngImage(aBody);
  *   }
- * @endcode
+ * ~~~
  *
  * The decoder will read the topmost header first. Since the header
  * represents a multipart message, the header of the first body part
- * will also be read. After the first call to #bodyPartHeader(),
- * there will be two headers on the header stack (#depth()
- * will return 2). The first call to @p readAll() will return "Larry".
+ * will also be read. After the first call to [bodyPartHeader()],
+ * there will be two headers on the header stack ([depth()]
+ * will return 2). The first call to `readAll`() will return "Larry".
  *
  * The next round will also read two headers because the message
- * contains a nested multipart message (#depth() will return 3). The
- * second @p readAll() call will return the contents of file1.txt. The
+ * contains a nested multipart message ([depth()] will return 3). The
+ * second `readAll`() call will return the contents of file1.txt. The
  * third round fetches the contents of file2.gif, after which the loop
  * will break.
  *
- * @ingroup Network
  */
 class PII_NETWORK_EXPORT PiiMultipartDecoder : public QIODevice
 {
@@ -99,7 +98,7 @@ public:
    * Create a new multipart message decoder with a header that has
    * already been read from the input device.
    *
-   * @code
+   * ~~~(c++)
    * void MyHandler::handleRequest(const QString& uri,
    *                               PiiHttpDevice* h,
    *                               PiiProgressController* controller)
@@ -117,7 +116,7 @@ public:
    *          }
    *     }
    * }
-   * @endcode
+   * ~~~
    */
   PiiMultipartDecoder(QIODevice* device, const PiiMimeHeader& header);
 
@@ -132,10 +131,10 @@ public:
    * been read, the body part stack will be emptied.
    *
    * Since a multipart message can contain another multipart message,
-   * the depth of the header stack can be arbitrary. The @p level
+   * the depth of the header stack can be arbitrary. The `level`
    * parameter can be used to obtain information about enclosing
-   * messages. If there are no more body parts, or an incorrect @p
-   * level is given, an invalid header will be returned.
+   * messages. If there are no more body parts, or an incorrect 
+   * `level` is given, an invalid header will be returned.
    *
    * @param level the stacking level. 0 refers to the body part the
    * device is currently reading, 1 is its parent and so on.
@@ -150,7 +149,7 @@ public:
    * into the header stack. Headers can only be read once all the data
    * in a message body has been read.
    *
-   * @return @p true if a message was successfully read, @p false if
+   * @return `true` if a message was successfully read, `false` if
    * no more messages could be read.
    *
    * @exception PiiMimeException& if the header is incorrectly encoded

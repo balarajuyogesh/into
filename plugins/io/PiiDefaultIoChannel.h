@@ -23,7 +23,6 @@ class PiiDefaultIoDriver;
 /**
  * Default implementation of the PiiIoChannel interface.
  *
- * @ingroup PiiIoPlugin
  */
 class PII_IO_EXPORT PiiDefaultIoChannel : public PiiIoChannel
 {
@@ -42,14 +41,14 @@ class PII_IO_EXPORT PiiDefaultIoChannel : public PiiIoChannel
   /**
    * The mode of an channel can assume five different values:
    *
-   * @lip NoMode - the default state.
+   * - `NoMode` - the default state.
    *
-   * @lip Input - notice only pulses. The inputStateChanged()
+   * - `Input` - notice only pulses. The inputStateChanged()
    * signal will be sent every time the channel becomes active (its
-   * state becomes #activeState). If signalFallingEdge is enabled,
+   * state becomes [activeState]). If signalFallingEdge is enabled,
    * inputStateChanged() signal will be sent also in falling edge.
    *
-   * @lip Output - emit the pulse depends on pulseWidth and
+   * - `Output` - emit the pulse depends on pulseWidth and
    * pulseDelay. If pulseWidth == 0, then this output requires
    * acknowledgment. It means that we only take the output to the High
    * and it is user responsibility to acknowledge the output to Low.
@@ -64,7 +63,7 @@ class PII_IO_EXPORT PiiDefaultIoChannel : public PiiIoChannel
   Q_PROPERTY(int pulseWidth READ pulseWidth WRITE setPulseWidth);
   /**
    * Initial delay of an output pulse, in milliseconds. This property
-   * is effective only in  @p Output.
+   * is effective only in  `Output`.
    */
   Q_PROPERTY(int pulseDelay READ pulseDelay WRITE setPulseDelay);
 
@@ -73,16 +72,16 @@ class PII_IO_EXPORT PiiDefaultIoChannel : public PiiIoChannel
    * If signalFallingEdge is enabled, we send inputStateChanged()
    * signal also with falling edge. In the default state (false) the
    * inputStateChanged() signal will be emitted only with rising edge.
-   * This property is effective only in @p Input mode.
+   * This property is effective only in `Input` mode.
    */
   Q_PROPERTY(bool signalFallingEdge READ signalFallingEdge WRITE setSignalFallingEdge);
   
   /**
-   * The state in which the channel is active. By default, @p true
+   * The state in which the channel is active. By default, `true`
    * means an active signal. In some applications it may however be
    * more logical to turn this around so that activating an output
    * channel actually turns it to zero. In such case the "active
-   * state" should be set to @p false.
+   * state" should be set to `false`.
    */
   Q_PROPERTY(bool activeState READ activeState WRITE setActiveState);
 

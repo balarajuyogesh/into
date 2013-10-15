@@ -21,7 +21,6 @@
 /**
  * An interface for input/output channels.
  *
- * @ingroup PiiIoPlugin
  */
 class PII_IO_EXPORT PiiIoChannel : public QObject
 {
@@ -29,7 +28,7 @@ class PII_IO_EXPORT PiiIoChannel : public QObject
 
 public:
   /**
-   * Immediately changes the state of an output channel to @a state.
+   * Immediately changes the state of an output channel to *state*.
    * May throw PiiIoDriverException.
    */
   virtual void setOutputState(bool state) = 0;
@@ -43,7 +42,7 @@ public:
 
   /**
    * Checks the channel to see if its state has been changed since
-   * last invokation. If so, emits #inputStateChanged(). May throw
+   * last invokation. If so, emits [inputStateChanged()]. May throw
    * PiiIoDriverException.
    */
   virtual void checkInputState() = 0;

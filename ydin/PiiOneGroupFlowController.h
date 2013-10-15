@@ -22,9 +22,8 @@
 
 /**
  * A flow controller that synchronizes a group of sockets with the
- * same @ref PiiSocket::setGroupId() "group ID".
+ * same [group ID](PiiSocket::setGroupId()).
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiOneGroupFlowController : public PiiFlowController
 {
@@ -36,7 +35,7 @@ public:
    * synchronous and in the same synchronization group.
    *
    * @param outputs the a list of outputs to be controlled. This class
-   * only considers outputs whose @ref PiiSocket::setGroupId() "group
+   * only considers outputs whose [PiiSocket::setGroupId()] "group
    * ID" matches that of the input.
    */
   PiiOneGroupFlowController(const QList<PiiInputSocket*>& inputs,

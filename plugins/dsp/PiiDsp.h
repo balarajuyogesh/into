@@ -22,19 +22,22 @@
 #include <complex>
 #include "PiiDspGlobal.h"
 
+/**
+ * Routines for common digital signal processing tasks.
+ */
 namespace PiiDsp
 {
   /**
    * Filtering modes for convolution and relatives.
    *
-   * @lip FilterFull - full convolution/correlation. The size of the
+   * - `FilterFull` - full convolution/correlation. The size of the
    * convolution between matrices A and B whose sizes are denoted by a
    * and b is a+b-1 (A*B -> a+b-1).
    *
-   * @lip FilterOriginalSize - retain the size of the original matrix. 
+   * - `FilterOriginalSize` - retain the size of the original matrix. 
    * (A*B -> a)
    *
-   * @lip FilterValidPart - return only those parts that can be
+   * - `FilterValidPart` - return only those parts that can be
    * computed without zero-padding. (A*B -> a-b+1, if a>b. Otherwise,
    * an empty matrix is returned.)
    */
@@ -57,12 +60,12 @@ namespace PiiDsp
    *
    * @param mode filtering mode
    *
-   * @code
+   * ~~~(c++)
    * PiiMatrix<int> a(1,5, 1,2,3,4,5);
    * PiiMatrix<int> b(1,3, -1, 0, 1);
    * PiiMatrix<int> result = PiiDsp::convolution<int>(a, b);
    * // result = -1 -2 -2 -2 -2 4 5
-   * @endcode
+   * ~~~
    */
   template <class ResultType, class T, class U>
   PiiMatrix<ResultType> convolution(const PiiMatrix<T>& a,
@@ -91,9 +94,9 @@ namespace PiiDsp
 
   /**
    * Normalized cross-correlation of two-dimensional signals. Works
-   * analogously to #correlation(), but normalizes the source signal
-   * @p a so that its local sum over the area covered by the
-   * correlation mask @a b is always one. In normalized correlation,
+   * analogously to [correlation()], but normalizes the source signal
+   * `a` so that its local sum over the area covered by the
+   * correlation mask *b* is always one. In normalized correlation,
    * changing the level or scaling of the source signal will not
    * affect the correlation result.
    */
@@ -122,7 +125,7 @@ namespace PiiDsp
 
   /**
    * A structure that stores information about a peak detected by
-   * #findPeaks().
+   * [findPeaks()].
    */
   struct Peak
   {
@@ -170,7 +173,7 @@ namespace PiiDsp
    * crossing.
    *
    * @param data a row vector containing the measurements (e.g. a time
-   * series). If @p data is a 2-by-N matrix, the first row will be
+   * series). If `data` is a 2-by-N matrix, the first row will be
    * treated as the x coordinate, and the second row as the y
    * coordinate. If the data only contains the y coordinate (1-by-N
    * row vector), the x is assumed to be in [0,N-1].
@@ -210,17 +213,17 @@ namespace PiiDsp
    * moves the origin of a Fourier spectrum to the center of the
    * matrix. Two successive calls restore the original matrix. If the
    * matrix has an odd number of rows or columns, the original state
-   * will only be restored if the @p inverse flag is set to true when
+   * will only be restored if the `inverse` flag is set to true when
    * shifting back. The figure below shows the matrix quadrants before
    * (left) and after (right) shifting.
    *
-@verbatim
-+---+---+      +---+---+
-| 1 | 2 |      | 4 | 3 |
-+---+---+  ->  +---+---+
-| 3 | 4 |      | 2 | 1 |
-+---+---+      +---+---+
-@endverbatim
+   * ~~~
+   * +---+---+      +---+---+
+   * | 1 | 2 |      | 4 | 3 |
+   * +---+---+  ->  +---+---+
+   * | 3 | 4 |      | 2 | 1 |
+   * +---+---+      +---+---+
+   * ~~~
    *
    * @param matrix the matrix to be shifted
    *

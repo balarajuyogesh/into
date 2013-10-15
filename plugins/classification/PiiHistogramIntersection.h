@@ -20,18 +20,17 @@
 
 /**
  * Histogram intersection. Measures difference between two
- * distributions in a straightforward way: @f$ d = - \sum
- * \min(S_i,M_i) @f$ , where @e S and @e M represent the sample and
+ * distributions in a straightforward way: \( d = - \sum
+ * \min(S_i,M_i) \) , where *S* and *M* represent the sample and
  * model distributions, respectively. Histogram intersection assumes
  * that the input samples are distributions. In classification, the
  * sum of the values in each should be the same, preferably one.
  *
  * The histogram intersection is optimized so that it produces a
- * negative distance. The minimum possible value (@e S and @e M are
+ * negative distance. The minimum possible value (*S* and *M* are
  * equal) is the negation of the sum of input features. The maximum is
  * zero.
  *
- * @ingroup PiiClassificationPlugin
  */
 PII_DEFAULT_DISTANCE_MEASURE_DEF(PiiHistogramIntersection)
 {

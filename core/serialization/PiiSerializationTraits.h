@@ -16,14 +16,6 @@
 #ifndef _PIISERIALIZATIONTRAITS_H
 #define _PIISERIALIZATIONTRAITS_H
 
-/**
- * @file
- *
- * Traits for serializable classes and macros for altering them.
- *
- * @ingroup Serialization
- */
-
 #include <PiiPreprocessor.h>
 #include <PiiMetaTemplate.h>
 #include <PiiTypeTraits.h>
@@ -33,68 +25,68 @@
 class QString;
 
 /**
- * Mark @p CLASS_NAME as an abstract type. This prevents the
+ * Mark `CLASS_NAME` as an abstract type. This prevents the
  * serialization library from trying to instantiate the class.
  *
- * @code
+ * ~~~(c++)
  * class MyClass;
  * PII_SERIALIZATION_ABSTRACT(MyClass);
- * @endcode
+ * ~~~
  */
 #define PII_SERIALIZATION_ABSTRACT(CLASS_NAME) \
   namespace PiiSerializationTraits { template <> struct IsAbstract<CLASS_NAME > : Pii::True {}; }
 
 /**
- * Mark all instances of the class template @p CLASS_NAME as abstract
+ * Mark all instances of the class template `CLASS_NAME` as abstract
  * classes.
  *
- * @code
+ * ~~~(c++)
  * template <class T> class MyClass;
  * PII_SERIALIZATION_ABSTRACT_TEMPLATE(MyClass);
- * @endcode
+ * ~~~
  */
 #define PII_SERIALIZATION_ABSTRACT_TEMPLATE(CLASS_NAME) \
   namespace PiiSerializationTraits { template <class T> struct IsAbstract<CLASS_NAME<T> > : Pii::True {}; }
 
 /**
- * Set object tracking for the given class to @p on (true/false).
+ * Set object tracking for the given class to `on` (true/false).
  * Non-tracked objects will be serialized many times if many
  * pointers/references to them are serialized. Use
- * #PII_SERIALIZATION_TRACKING_TEMPLATE() if @p CLASS_NAME is a
+ * [PII_SERIALIZATION_TRACKING_TEMPLATE()] if `CLASS_NAME` is a
  * template class.
  *
- * @code
+ * ~~~(c++)
  * class MyClass;
  * // Disable tracking of MyClass
  * PII_SERIALIZATION_TRACKING(MyClass, false);
- * @endcode
+ * ~~~
  */
 #define PII_SERIALIZATION_TRACKING(CLASS_NAME, ON) \
   namespace PiiSerializationTraits { template <> struct Tracking<CLASS_NAME > { enum { boolValue = ON }; }; }
 
 /**
- * Set object tracking for the given class template to @p on
+ * Set object tracking for the given class template to `on`
  * (true/false).
  *
- * @code
+ * ~~~(c++)
  * template <class T> class MyClass;
  * // Disable tracking of all MyClass template instances
  * PII_SERIALIZATION_TRACKING_TEMPLATE(MyClass, false);
- * @endcode
+ * ~~~
  */
 #define PII_SERIALIZATION_TRACKING_TEMPLATE(CLASS_NAME, ON) \
   namespace PiiSerializationTraits { template <class T> struct Tracking<CLASS_NAME<T> > { enum { boolValue = ON }; }; }
 
 /**
  * Enable/disable storing of class information for the given type. Use
- * #PII_SERIALIZATION_CLASSINFO_TEMPLATE() if @p CLASS_NAME is a
+ * [PII_SERIALIZATION_CLASSINFO_TEMPLATE()] if `CLASS_NAME` is a
  * template class.
  *
- * @code
+ * ~~~(c++)
  * class MyClass;
  * // Do not save class info with MyClass
  * PII_SERIALIZATION_CLASSINFO(MyClass, false);
- * @endcode
+ * ~~~
  */
 #define PII_SERIALIZATION_CLASSINFO(CLASS_NAME, ON) \
   namespace PiiSerializationTraits { template <> struct ClassInfo<CLASS_NAME > { enum { boolValue = ON }; }; }
@@ -103,25 +95,25 @@ class QString;
  * Enable/disable storing of class information for all instances of
  * the given template type.
  *
- * @code
+ * ~~~(c++)
  * template <class T> class MyClass;
  * // Do not save class info with any MyClass template instance
  * PII_SERIALIZATION_CLASSINFO_TEMPLATE(MyClass, false);
- * @endcode
+ * ~~~
  */
 #define PII_SERIALIZATION_CLASSINFO_TEMPLATE(CLASS_NAME, ON) \
   namespace PiiSerializationTraits { template <class T> struct ClassInfo<CLASS_NAME<T> > { enum { boolValue = ON }; }; }
 
 /**
  * Set object version for the given class (int). Use
- * #PII_SERIALIZATION_VERSION_TEMPLATE() if @p CLASS_NAME is a template
+ * [PII_SERIALIZATION_VERSION_TEMPLATE()] if `CLASS_NAME` is a template
  * class.
  *
- * @code
+ * ~~~(c++)
  * class MyClass;
  * // Set the current version number of MyClass to 2
  * PII_SERIALIZATION_VERSION(MyClass, 2);
- * @endcode
+ * ~~~
  */
 #define PII_SERIALIZATION_VERSION(CLASS_NAME, VERSION) \
   namespace PiiSerializationTraits { template <> struct Version<CLASS_NAME > { enum { intValue = VERSION }; }; }
@@ -130,11 +122,11 @@ class QString;
  * Set object version for all instances of the given class template
  * (int).
  *
- * @code
+ * ~~~(c++)
  * template <class T> class MyClass;
  * // Set the current version number of all MyClass template instances to 2
  * PII_SERIALIZATION_VERSION_TEMPLATE(MyClass, 2);
- * @endcode
+ * ~~~
  */
 #define PII_SERIALIZATION_VERSION_TEMPLATE(CLASS_NAME, VERSION) \
   namespace PiiSerializationTraits { template <class T> struct Version<CLASS_NAME<T> > { enum { intValue = VERSION }; }; }
@@ -145,11 +137,11 @@ class QString;
  * of a type name or you just want a custom name for the class. Commas
  * in type names confuse cpp. Here's how to work around:
  *
- * @code
+ * ~~~(c++)
  * template <class T, class U> class MyClass;
  * typedef MyClass<int,int> MyIntIntClass;
  * PII_SERIALIZATION_NAME_CUSTOM(MyIntIntClass, "MyClass<int,int>");
- * @endcode
+ * ~~~
  */
 #define PII_SERIALIZATION_NAME_CUSTOM(CLASS_NAME, NAME_STR) \
   namespace PiiSerializationTraits { template <> struct ClassName<CLASS_NAME > { static const char* get() { return NAME_STR; } }; }
@@ -157,13 +149,13 @@ class QString;
 /**
  * Set default name for the given class. The name for MyClass becomes
  * "MyClass" etc. Template classes with multiple template parameters
- * must be handled with @ref PII_SERIALIZATION_NAME_CUSTOM because the
+ * must be handled with [PII_SERIALIZATION_NAME_CUSTOM] because the
  * preprocessor cannot handle commas in macro arguments.
  *
- * @code
+ * ~~~(c++)
  * class MyClass;
  * PII_SERIALIZATION_NAME(MyClass);
- * @endcode
+ * ~~~
  */
 #define PII_SERIALIZATION_NAME(CLASS_NAME) PII_SERIALIZATION_NAME_CUSTOM(CLASS_NAME, PII_STRINGIZE(CLASS_NAME))
 
@@ -191,10 +183,9 @@ class QString;
  * ClassInfo or Tracking for type A, version number of B will be
  * stored and pointers to it tracked, even if B was a subclass of A.
  *
- * @note Traits (except for Version) cannot be changed between save
+ * ! Traits (except for Version) cannot be changed between save
  * and load. Doing so will invalidate your archives.
  *
- * @ingroup Serialization
  */
 namespace PiiSerializationTraits
 {
@@ -219,19 +210,19 @@ namespace PiiSerializationTraits
   
   /**
    * Pointer tracking trait. Tracking is enabled by default for all
-   * complex types. Pointers to primitive types will also be tracked. 
+   * complex types. Pointers to primitive types will also be tracked.
    * If tracking is disabled, memory addresses will not be tracked and
-   * the same object may be serialized many times. Use the @ref
-   * PII_SERIALIZATION_TRACKING macro to conveniently set the tracking
-   * trait.
+   * the same object may be serialized many times. Use the
+   * [PII_SERIALIZATION_TRACKING] macro to conveniently set the
+   * tracking trait.
    */
   template <class T> struct Tracking : Pii::True {};
   template <class T> struct Tracking<const T> { enum { boolValue = Tracking<T>::boolValue }; };
 
   /**
    * Class information trait. Class information (currently only
-   * version number) is stored by default. Set this trait to @p false
-   * with @ref PII_SERIALIZATION_CLASSINFO to disable storing of the
+   * version number) is stored by default. Set this trait to `false`
+   * with [PII_SERIALIZATION_CLASSINFO] to disable storing of the
    * version number.
    */
   template <class T> struct ClassInfo : Pii::True {};
@@ -239,7 +230,7 @@ namespace PiiSerializationTraits
 
   /**
    * Class version trait. The default version number is zero. Change
-   * the default with the @ref PII_SERIALIZATION_VERSION macro.
+   * the default with the [PII_SERIALIZATION_VERSION] macro.
    */
   template <class T> struct Version { enum { intValue = 0 }; };
   template <class T> struct Version<const T> { enum { intValue = Version<T>::intValue }; };
@@ -248,7 +239,7 @@ namespace PiiSerializationTraits
    * Class name trait. The default instantation returns an empty
    * string. This trait must be defined if the class will be
    * serialized through a base class pointer. Set class name with the
-   * @ref PII_SERIALIZATION_NAME macro.
+   * [PII_SERIALIZATION_NAME] macro.
    */
   template <class T> struct ClassName { static const char* get() { return ""; } };
   template <class T> struct ClassName<const T> { static const char* get() { return ClassName<T>::get(); } };

@@ -21,19 +21,20 @@
 /**
  * An operation that maps integers into arbitrary data.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in index - a zero-based index into the look-up table. If there is
- * no @ref #defaultValue "default value", overflows and underflows
- * will cause a run-time exception. Any primitive type is be accepted.
+ * no [default value](defaultValue), overflows and underflows will
+ * cause a run-time exception. Any primitive type is be accepted.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out outputX - any number of outputs that emit arbitrary data. For
- * each incoming @p index, the corresponding look-up table entry will
+ * each incoming `index`, the corresponding look-up table entry will
  * be emitted.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiLookupTable : public PiiDefaultOperation
 {
@@ -42,12 +43,12 @@ class PiiLookupTable : public PiiDefaultOperation
   /**
    * The look-up table. The look-up table is represented as a list of
    * variants. Each entry may be either a PiiVariant or a
-   * QVariantList. In the first case, <tt>table[index]</tt> will be
-   * emitted through all outputs whenever @p index is received. If the
-   * list elements are QVariantLists, <tt>table[0][index]</tt> will be
-   * emitted through @p output0 etc.
+   * QVariantList. In the first case, `table[index]` will be
+   * emitted through all outputs whenever `index` is received. If the
+   * list elements are QVariantLists, `table[0][index]` will be
+   * emitted through `output0` etc.
    *
-   * @code
+   * ~~~(c++)
    * PiiOperation* lut = engine.createOperation("PiiLookupTable");
    * // Map 0 to true and 1 to false. Emit the boolean value through all outputs.
    * lut->setProperty("table", QVariantList() << Pii::createQVariant(true) << Pii::createQVariant(false));
@@ -58,10 +59,10 @@ class PiiLookupTable : public PiiDefaultOperation
    * // Map 0 to "zero" and 1 to "one" in output1
    * tbl.append(QVariantList() << Pii::createQVariant(QString("zero")) << Pii::createQVariant(QString("one")));
    * lut->setProperty("table", tbl);
-   * @endcode
+   * ~~~
    *
    * If the number of look-up lists is less than the number of outputs
-   * (see #outputCount), the last valid value will be used for all
+   * (see [outputCount]), the last valid value will be used for all
    * extra outputs. If multiple lists are provided, each must be of
    * the same length. Invalid lists will be ignored. If list values
    * are not PiiVariants, they will be substituted with zeros. This

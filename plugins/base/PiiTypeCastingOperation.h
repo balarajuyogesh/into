@@ -23,15 +23,16 @@
 /**
  * An operation that converts the data type of a matrix.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in input - any matrix.
  *
- * @outputs
+ * Outputs
+ * -------
  *
- * @out output - a matrix whose type is specified by #outputType.
+ * @out output - a matrix whose type is specified by [outputType].
  *
- * @ingroup PiiBasePlugin
  */
 class PiiTypeCastingOperation : public PiiDefaultOperation
 {

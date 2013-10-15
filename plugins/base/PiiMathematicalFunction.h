@@ -22,24 +22,25 @@
 /**
  * An operation that applies a mathematical function to its input.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in input - any scalar or matrix
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out output - the result of applying a mathematical function to the
  * input. The output type depends both on the input and the function. 
  * For example, the absolute value for a complex number is real. The
  * input type will be preserved whenever possible.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiMathematicalFunction : public PiiDefaultOperation
 {
   Q_OBJECT
   /**
-   * The function to apply. The default value is @p NoFunction.
+   * The function to apply. The default value is `NoFunction`.
    */
   Q_PROPERTY(Function function READ function WRITE setFunction);
   Q_ENUMS(Function);
@@ -49,42 +50,42 @@ public:
   /**
    * Supported mathematical functions.
    *
-   * @lip NoFunction - just pass the input object
+   * - `NoFunction` - just pass the input object
    *
    * Functions that will be applied element-wise to matrices and
    * scalars:
    *
-   * @lip Abs - absolute value. Output type equals input type for all
+   * - `Abs` - absolute value. Output type equals input type for all
    * but complex numbers.
    *
-   * @lip Log - natural logarithm. Output type is @p double. Complex
+   * - `Log` - natural logarithm. Output type is `double`. Complex
    * numbers cause run-time exception.
    *
-   * @lip Sqrt - square root. Output type is @p double. Complex
+   * - `Sqrt` - square root. Output type is `double`. Complex
    * numbers cause run-time exception.
    *
-   * @lip Square - square. Output type equals input type. Beware of
+   * - `Square` - square. Output type equals input type. Beware of
    * overflows!
    *
-   * @lip Sin - sine of angle. Output type is @p double except for @p
-   * float input, for which it is @p float. Complex numbers cause
+   * - `Sin` - sine of angle. Output type is `double` except for 
+   * `float` input, for which it is `float`. Complex numbers cause
    * run-time exception.
    *
-   * @lip Cos - cosine of angle. Output type is @p double except for
-   * @p float input, for which it is @p float. Complex numbers cause
+   * - `Cos` - cosine of angle. Output type is `double` except for
+   * `float` input, for which it is `float`. Complex numbers cause
    * run-time exception.
    *
-   * @lip Tan - tangent of angle. Output type is @p double except for
-   * @p float input, for which it is @p float. Complex numbers cause
+   * - `Tan` - tangent of angle. Output type is `double` except for
+   * `float` input, for which it is `float`. Complex numbers cause
    * run-time exception.
    *
    * Functions that calculate a value over all elements in a matrix. 
-   * In all these cases the output type is @p double. Scalars and
+   * In all these cases the output type is `double`. Scalars and
    * complex-valued matrices as input cause run-time exception:
    *
-   * @lip Var - variance
-   * @lip Std - standard deviation
-   * @lip Mean - mean
+   * - `Var` - variance
+   * - `Std` - standard deviation
+   * - `Mean` - mean
    */
   enum Function
   {

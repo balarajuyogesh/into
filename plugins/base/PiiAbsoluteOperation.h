@@ -23,15 +23,16 @@
  * An operation that calculates the absolute value of any numeric or
  * complex type or a matrix containing such types.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in input - any number or a matrix containing numbers
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out output - absolute value(s)
  *
- * @ingroup PiiBasePlugin
  */
 class PiiAbsoluteOperation : public PiiDefaultOperation
 {

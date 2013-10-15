@@ -22,38 +22,37 @@
 /**
  * An generic implementation of a boosted classifier. "Boosting" is
  * actually not a classification method but rather a meta-algorithm
- * that can be used to @i boost the performance of another classifier. 
+ * that can be used to *boost* the performance of another classifier.
  * It is required that the classifier to be boosted is able to learn
  * weighted samples.
  *
- * All boosting algorithms work by repeatedly applying a <em>weak
- * classifier</em> to weighted training samples. On each iteration,
+ * All boosting algorithms work by repeatedly applying a *weak
+ * classifier* to weighted training samples. On each iteration,
  * misclassified samples gain more weight so that subsequently added
- * classifiers will focus on getting them right. The @p FloatBoost
+ * classifiers will focus on getting them right. The `FloatBoost`
  * algorithm also goes backwards and eliminates already added
  * classifiers if doing so would decrease training error.
  *
- * The boosting algorithm will quit when the @ref setMaxClassifiers()
- * "maximum number of classifiers" has been reached. The @p FloatBoost
+ * The boosting algorithm will quit when the [setMaxClassifiers()]
+ * "maximum number of classifiers" has been reached. The `FloatBoost`
  * algorithm will also quit if its exponential loss function goes
- * below @ref setExponentialLossThreshold() "a threshold". The output
+ * below [a threshold](setExponentialLossThreshold()). The output
  * of the boosted classifier is a weighted sum over the ensemble of
  * weak classifiers:
  *
- * @f[
+ * \[
  * f(\mathbf{x}) = \left\{
  * \begin{array}{ll}
  * 1 & \text{if } \sum_{i=1}^N \alpha_i (f_i(\mathbf{x}) - 0.5) > 0 \\
  * 0 & \text{otherwise} \\
  * \end{array}
  * \right.
- * @f]
+ * \]
  *
- * Here, @f$f_i@f$ is the ith weak classifier. The weak classifiers
- * are binary classifiers with all but the multi-class @p SammeBoost
+ * Here, \(f_i\) is the ith weak classifier. The weak classifiers
+ * are binary classifiers with all but the multi-class `SammeBoost`
  * algorithm, which uses weighted voting to find the winning class.
  *
- * @ingroup PiiClassificationPlugin
  */
 template <class SampleSet> class PiiBoostClassifier :
   public PiiLearningAlgorithm<SampleSet>,
@@ -92,9 +91,9 @@ public:
   };
 
   /**
-   * Create a new boosting classifier that uses @a factory to create
-   * the weak classifiers. The learning algorithm will be set to @a
-   * algorithm. This class will not own @a factory; the pointer must
+   * Create a new boosting classifier that uses *factory* to create
+   * the weak classifiers. The learning algorithm will be set to 
+   * *algorithm*. This class will not own *factory*; the pointer must
    * be deleted by the caller.
    */
   PiiBoostClassifier(Factory* factory = 0,
@@ -105,7 +104,7 @@ public:
   double classify(ConstFeatureIterator sample) throw();
 
   /**
-   * Runs the selected boosting algorithm on @a samples.
+   * Runs the selected boosting algorithm on *samples*.
    *
    * @param samples training samples
    *
@@ -123,7 +122,7 @@ public:
   bool converged() const throw ();
 
   /**
-   * Returns @p WeightedLearner.
+   * Returns `WeightedLearner`.
    */
   PiiClassification::LearnerCapabilities capabilities() const;
 
@@ -151,7 +150,7 @@ public:
   PiiClassification::BoostingAlgorithm algorithm() const;
 
   /**
-   * Sets the maximum number of classifiers #learn() will create. The
+   * Sets the maximum number of classifiers [learn()] will create. The
    * default value is 100.
    */
   void setMaxClassifiers(int maxClassifiers);

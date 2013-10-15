@@ -20,12 +20,6 @@
 #include "PiiOperationCompound.h"
 #include <QString>
 
-/**
- * @file
- *
- * Utility functions for mainly debugging purposes.
- */
-
 namespace PiiYdin
 {
   enum IllustrationFlag
@@ -48,7 +42,7 @@ namespace PiiYdin
   PII_YDIN_EXPORT QString illustrateOperation(PiiOperation* op, IllustrationFlags flags = ShowAll);
 
   /**
-   * Prints out an illustration of @a op and its child operations (if
+   * Prints out an illustration of *op* and its child operations (if
    * any).
    *
    * @param op the operation to dump to debug output

@@ -16,7 +16,6 @@
 #ifndef _PIIGENERICTEXTOUTPUTARCHIVE_H
 #define _PIIGENERICTEXTOUTPUTARCHIVE_H
 
-/** @file */
 
 #include "PiiTextOutputArchive.h"
 #include "PiiGenericOutputArchive.h"
@@ -25,7 +24,6 @@
  * A shorthand for a text output archive derived from
  * PiiGenericOutputArchive.
  *
- * @ingroup Serialization
  */
 typedef PiiGenericOutputArchive::Impl<PiiTextOutputArchive> PiiGenericTextOutputArchive;
 

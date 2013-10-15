@@ -28,7 +28,6 @@
  * described, and object specifies the value of the aspect. The value
  * may be either a string literal or a reference to another resource.
  *
- * @ingroup Core
  */
 class PII_CORE_EXPORT PiiResourceStatement
 {
@@ -36,12 +35,12 @@ public:
   /**
    * Possible types of the object of the statement.
    *
-   * @li Invalid - the statement is invalid.
+   * - Invalid - the statement is invalid.
    *
-   * @li Literal - the object is a string literal.
+   * - Literal - the object is a string literal.
    *
-   * @li Resource - the object is a resource id and references
-   * another resource.
+   * - Resource - the object is a resource id and references another
+   * resource.
    *
    * @li Pointer - the object is a pointer to any user-defined
    * object.
@@ -60,9 +59,6 @@ public:
    */
   PiiResourceStatement(const PiiResourceStatement& other);
 
-  /**
-   * Assigns the contents of @p other to this.
-   */
   PiiResourceStatement& operator= (const PiiResourceStatement& other);
     
   /**
@@ -86,7 +82,7 @@ public:
   /**
    * Returns the object of the statement. The object is either a
    * string literal, a resource identifier or a pointer, depending on
-   * #type(). If the object is a pointer, this function returns null
+   * [type()]. If the object is a pointer, this function returns null
    * string.
    */
   QString object() const;

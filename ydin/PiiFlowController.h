@@ -29,7 +29,6 @@ class PiiOutputSocket;
  * sockets. Instances of this class are used by PiiDefaultOperation to
  * control the flow of objects through operations.
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiFlowController
 {
@@ -44,12 +43,12 @@ public:
     /**
      * Event types.
      *
-     * @lip StartInput - the specified group, or one of its child
+     * - `StartInput` - the specified group, or one of its child
      * groups is about to receive an object. This type of event will
      * be sent just before an input group is activated, but only if
      * the group has child groups.
      *
-     * @lip EndInput - all child groups of the specified group have
+     * - `EndInput` - all child groups of the specified group have
      * got all objects related to the last object in the parent group.
      * This event indicates that there will be no more objects to be
      * handled before the next object in the parent group.
@@ -83,7 +82,7 @@ public:
     virtual ~SyncListener();
 
     /**
-     * Calls the protected #syncEvent() function and ensures no
+     * Calls the protected [syncEvent()] function and ensures no
      * successive events of the same type are delivered to any input
      * group. This is necessary to make it possible to add operations
      * into a configuration during pause.
@@ -130,27 +129,27 @@ public:
   /**
    * Flow states.
    *
-   * @lip IncompleteState - processing is not possible because no
+   * - `IncompleteState` - processing is not possible because no
    * group of synchronized input sockets that could be handled now is
    * completely filled.
    *
-   * @lip ProcessableState - processing can be performed because a
+   * - `ProcessableState` - processing can be performed because a
    * group of synchronized input is full. There may be more objects to
    * be processed, and the caller should send sync events, process the
-   * objects and try #prepareProcess() again.
+   * objects and try [prepareProcess()] again.
    *
-   * @lip SynchronizedState - the operation received a start/end tag. 
+   * - `SynchronizedState` - the operation received a start/end tag. 
    * There is nothing to be processed now, but the caller should try
-   * #prepareProcess() again as with @p ProcessableState.
+   * [prepareProcess()] again as with `ProcessableState`.
    *
-   * @lip PausedState - the operation should be paused
+   * - `PausedState` - the operation should be paused
    *
-   * @lip FinishedState - the operation should fully stop processing
+   * - `FinishedState` - the operation should fully stop processing
    *
-   * @lip ResumedState - the operation was resumed after pause and
+   * - `ResumedState` - the operation was resumed after pause and
    * should continue where ever it was left.
    *
-   * @lip ReconfigurableState - the operation is ready to be
+   * - `ReconfigurableState` - the operation is ready to be
    * reconfigured. This is equivalent to pause except that the
    * operation doesn't change state.
    */
@@ -167,36 +166,36 @@ public:
 
   /**
    * Type bit masks for input objects. These values are used by
-   * #inputGroupTypeMask() when checking the state of a group of
+   * [inputGroupTypeMask()] when checking the state of a group of
    * synchronized input sockets.
    *
-   * @lip NoObject - not all inputs in the group have been filled yet
+   * - `NoObject` - not all inputs in the group have been filled yet
    *
-   * @lip NormalObject - all inputs contain a normal object to be
+   * - `NormalObject` - all inputs contain a normal object to be
    * processed.
    *
-   * @lip EndTag - all inputs contain a synchronization end tag. This
+   * - `EndTag` - all inputs contain a synchronization end tag. This
    * indicates that all objects related to an object at a lower flow
    * level have been received.
    *
-   * @lip StartTag - all inputs contain a synchronization start tag.
+   * - `StartTag` - all inputs contain a synchronization start tag.
    * This indicates that a set of objects related to an object at a
    * lower flow level are going to be received.
    *
-   * @lip StopTag - all inputs contain a stop tag. If all groups
+   * - `StopTag` - all inputs contain a stop tag. If all groups
    * contain stop tags, the operation should be stopped.
    *
-   * @lip PauseTag - all inputs contain a pause tag. If all groups
+   * - `PauseTag` - all inputs contain a pause tag. If all groups
    * contain pause tags, the operation should be paused.
    *
-   * @lip ResumeTag - all inputs contain a resume tag. Resume tags are
+   * - `ResumeTag` - all inputs contain a resume tag. Resume tags are
    * used to restore flow levels after pausing. Their functioning is
    * similar to a start tag.
    *
-   * @lip ReconfigurationTag - all inputs contain a reconfiguration
+   * - `ReconfigurationTag` - all inputs contain a reconfiguration
    * tag. Reconfiguration tags are QStrings that carry the id of the
    * property set that must be applied when the flow controller
-   * returns @p ReconfigurableState.
+   * returns `ReconfigurableState`.
    */
   enum InputGroupType
     {
@@ -221,16 +220,16 @@ public:
    *
    * @param end an iterator the the last input to be checked
    *
-   * @return a logical OR composition of #InputGroupType masks. If the
+   * @return a logical OR composition of [InputGroupType] masks. If the
    * returned value is none of the values listed in InputGroupType,
    * the group's synchronization is in error.
    *
-   * @note In some rare occasions, it may happen that the type mask is
-   * (legally) a composition of @p PauseTag and @p NormalObject, or @p
-   * ResumeTag and @p NormalObject. This function automatically
+   * ! In some rare occasions, it may happen that the type mask is
+   * (legally) a composition of `PauseTag` and `NormalObject`, or 
+   * `ResumeTag` and `NormalObject`. This function automatically
    * resolves such situations by modifying the object queues in input
    * sockets, if possible. If a resolution is found, the function
-   * returns @p PauseTag or @p ResumeTag, and leaves some input
+   * returns `PauseTag` or `ResumeTag`, and leaves some input
    * objects in the queues.
    */
   template <class InputIterator> static inline int inputGroupTypeMask(InputIterator begin, InputIterator end);
@@ -261,18 +260,18 @@ public:
    * If you reimplement this function yourself, follow these
    * guidelines:
    *
-   * @li If any of the connected sockets in a group does not contain
-   * an object, @p IncompleteState must be returned.
+   * - If any of the connected sockets in a group does not contain
+   * an object, `IncompleteState` must be returned.
    *
-   * @li If all inputs contain sync tags, they need to be passed to
-   * synchronized outputs (@ref PiiOutputSocket::emitObject()) and @p
-   * SynchronizedState must be returned. The input queues must be
-   * shifted (@ref PiiInputSocket::shift()).
+   * - If all inputs contain sync tags, they need to be passed to
+   * synchronized outputs ([PiiOutputSocket::emitObject()]) and 
+   * `SynchronizedState` must be returned. The input queues must be
+   * shifted ([PiiInputSocket::shift()]).
    *
-   * @li If all inputs contain a stop/pause/resume/reconfiguration
+   * - If all inputs contain a stop/pause/resume/reconfiguration
    * tag, the operation must be either stopped, paused, resumed, or
-   * reconfigured. The function must return @p FinishedState, @p
-   * PausedState, @p ResumedState, or @p ReconfigurableState,
+   * reconfigured. The function must return `FinishedState`, 
+   * `PausedState`, `ResumedState`, or `ReconfigurableState`,
    * respectively. The caller is responsible for passing the control
    * objects in these cases. PiiOperationProcessor uses
    * PiiBasicOperation::operationStopped(),
@@ -280,32 +279,32 @@ public:
    * PiiBasicOperation::operationResumed() helper functions for this. 
    * The input queues must be shifted. If the tag is a reconfiguration
    * tag, its value (QString) must be stored with
-   * #setPropertySetName().
+   * [setPropertySetName()].
    *
-   * @li If all inputs in a group contain ordinary objects
+   * - If all inputs in a group contain ordinary objects
    * (PiiYdin::isNonControlType()), move objects to be processed from
    * incoming to outgoing slots with PiiInputSocket::shift() and
-   * return @p ProcessableState. Only one group can be processed
+   * return `ProcessableState`. Only one group can be processed
    * at once. The caller is responsible for re-invoking this function
-   * to make sure all processable groups will be handled. Set the @ref
-   * setActiveInputGroup() "active group" to the group id of the
+   * to make sure all processable groups will be handled. Set the 
+   * [active group](setActiveInputGroup()) to the group id of the
    * active group.
    *
-   * @li If a group of synchronized inputs contains mixed inputs (e.g. 
+   * - If a group of synchronized inputs contains mixed inputs (e.g. 
    * ordinary objects and sync tags), a PiiExecutionException must be
    * thrown.
    *
-   * @li Synchronization events (if any) should be queued. The
-   * #sendSyncEvents(SyncListener*) function empties the queue.
+   * - Synchronization events (if any) should be queued. The
+   * [sendSyncEvents(SyncListener*)] function empties the queue.
    *
    * @return If all inputs contain stop, pause, resume, or reconfigure
-   * tags, either @p FinishedState or @p PausedState, @p ResumedState,
-   * or @p ReconfigurableState will be returned. Otherwise, returns @p
-   * ProcessableState when a processing round can be performed and @p
-   * IncompleteState when not. Processing can be performed if a group
+   * tags, either `FinishedState` or `PausedState`, `ResumedState`,
+   * or `ReconfigurableState` will be returned. Otherwise, returns 
+   * `ProcessableState` when a processing round can be performed and 
+   * `IncompleteState` when not. Processing can be performed if a group
    * of synchronized sockets is filled with ordinary objects. If a
-   * group is filled with synchronization objects, @p
-   * SynchronizedState will be returned.
+   * group is filled with synchronization objects, 
+   * `SynchronizedState` will be returned.
    *
    * @exception PiiExecutionException& if a synchronization error
    * occurs.
@@ -313,14 +312,14 @@ public:
   virtual FlowState prepareProcess() = 0;
 
   /**
-   * Returns @p true if the controller has queued synchronization
-   * events and @p false otherwise. The default implementation returns
-   * @p false.
+   * Returns `true` if the controller has queued synchronization
+   * events and `false` otherwise. The default implementation returns
+   * `false`.
    */
   virtual bool hasSyncEvents() const;
   
   /**
-   * Sends queued sync events to @p listener and empties the event
+   * Sends queued sync events to `listener` and empties the event
    * queue. The default implementation does nothing.
    *
    * @exception PiiExecutionException& if the listener's syncEvent()
@@ -335,7 +334,7 @@ public:
 
   /**
    * Returns the name of the property set to be applied if
-   * prepareProcess() returns @p ReconfigurableState.
+   * prepareProcess() returns `ReconfigurableState`.
    */
   QString propertySetName() const;
   

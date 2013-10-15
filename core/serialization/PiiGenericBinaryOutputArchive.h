@@ -16,7 +16,6 @@
 #ifndef _PIIGENERICBINARYOUTPUTARCHIVE_H
 #define _PIIGENERICBINARYOUTPUTARCHIVE_H
 
-/** @file */
 
 #include "PiiBinaryOutputArchive.h"
 #include "PiiGenericOutputArchive.h"
@@ -25,7 +24,6 @@
  * A shorthand for a binary output archive derived from
  * PiiGenericOutputArchive.
  *
- * @ingroup Serialization
  */
 typedef PiiGenericOutputArchive::Impl<PiiBinaryOutputArchive> PiiGenericBinaryOutputArchive;
 

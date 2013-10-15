@@ -21,14 +21,6 @@
 #include "PiiImageGlobal.h"
 #include <PiiTemplateExport.h>
 
-/**
- * @file
- * @ingroup PiiImagePlugin
- *
- * Morphological operations such as erosion, dilation, opening,
- * closing, top-hat and bottom-hat.
- */
-
 namespace PiiImage
 { 
   /**
@@ -46,11 +38,11 @@ namespace PiiImage
   template <class T> PiiMatrix<T> createMask(MaskType type, int rows, int columns = 0);
 
   /**
-   * Writes a morphological structuring element to @a mask.
+   * Writes a morphological structuring element to *mask*.
    *
    * @param mask a matrix to be filled with the morphological mask.
    *
-   * @note The implementation writes only non-zero values to @a mask. 
+   * ! The implementation writes only non-zero values to *mask*. 
    * One usually needs to make sure the mask is initially zeros.
    */
   template <class T> void createMask(MaskType type, PiiMatrix<T>& mask);
@@ -77,17 +69,17 @@ namespace PiiImage
    * function. Each mask detects borders in one direction. The masks
    * are numbered as follows:
    *
-   * @li 0 - north
-   * @li 1 - north-east
-   * @li 2 - east
-   * @li 3 - south-east
-   * @li 4 - south
-   * @li 5 - south-west
-   * @li 6 - west
-   * @li 7 - north-west
+   * - 0 - north
+   * - 1 - north-east
+   * - 2 - east
+   * - 3 - south-east
+   * - 4 - south
+   * - 5 - south-west
+   * - 6 - west
+   * - 7 - north-west
    *
-   * <tt>borderMasks[X][0]</tt> is the detector and
-   * <tt>borderMasks[X][1]</tt> the corresponding significance mask.
+   * `borderMasks[X][0]` is the detector and
+   * `borderMasks[X][1]` the corresponding significance mask.
    */
   PII_IMAGE_EXPORT extern PiiMatrix<int> borderMasks[8][2];
   
@@ -113,12 +105,12 @@ namespace PiiImage
    * @param mask is structuring element.
    *
    * @param handleBorders is flag that determines whether image
-   * borders are handled with a padding technique. If this flag is @p
-   * false (the default), zeros are assumed outside of the image.
+   * borders are handled with a padding technique. If this flag is 
+   * `false` (the default), zeros are assumed outside of the image.
    *
    * @return the binary image which is result of erosion 
    *
-   * @code
+   * ~~~(c++)
    *
    * PiiMatrix<int> source(8,8,
    *                        0,0,0,0,0,0,0,0,
@@ -176,7 +168,7 @@ namespace PiiImage
    * //0,0,0,0,0,0,0,0,
    * //0,0,0,0,0,0,0,0
    *
-   * @endcode
+   * ~~~
    */
   template <class Matrix, class U>
   PiiMatrix<typename Matrix::value_type> erode(const Matrix& image, const PiiMatrix<U>& mask,
@@ -190,7 +182,7 @@ namespace PiiImage
    *
    * @return the binary image which is result of dilation.
    * 
-   * @code
+   * ~~~(c++)
    *    
    * PiiMatrix<int> source(8,8,
    *                       0,0,0,0,0,0,0,0,
@@ -219,7 +211,7 @@ namespace PiiImage
    * //0,1,1,1,1,1,1,1,
    * //0,1,1,1,1,0,0,0   
    *
-   * @endcode
+   * ~~~
    */
   template <class Matrix, class U>
   PiiMatrix<typename Matrix::value_type> dilate(const Matrix& image, const PiiMatrix<U>& mask);
@@ -248,7 +240,7 @@ namespace PiiImage
    *
    * @return bottom-hat transform
    * 
-   * @code
+   * ~~~(c++)
    * PiiMatrix<int> source(8,8,
    *                       0,0,0,0,0,0,0,0,
    *                       1,1,1,1,1,1,1,0,
@@ -274,7 +266,7 @@ namespace PiiImage
    * // 0,0,1,0,0,0,0,0,
    * // 0,0,0,0,0,0,0,0,
    * // 0,0,0,0,0,0,0,0
-   * @endcode
+   * ~~~
    */
   template <class Matrix, class U>
   PiiMatrix<typename Matrix::value_type> bottomHat(const Matrix& image, const PiiMatrix<U>& mask);
@@ -289,9 +281,9 @@ namespace PiiImage
   PiiMatrix<typename Matrix::value_type> topHat(const Matrix& image, const PiiMatrix<U>& mask);
 
   /**
-   * Hit-and-miss transform. The transform slides @p mask over all
+   * Hit-and-miss transform. The transform slides `mask` over all
    * pixels in the input image. The mask is compared to image data
-   * only on the pixels that have the corresponding @p significance
+   * only on the pixels that have the corresponding `significance`
    * mask entry set to a non-zero value. The result is one if all such
    * pixels match, and zero otherwise.
    *
@@ -300,14 +292,14 @@ namespace PiiImage
    * @param mask structuring element
    *
    * @param significance "significance" mask for the structuring
-   * element. Non-zero values in this mask mark the pixels in @p
-   * structure that we should care about.
+   * element. Non-zero values in this mask mark the pixels in 
+   * `structure` that we should care about.
    *
    * @return transformed image
    *
    * Locate north-east pointing corners in the image:
    *
-   * @code
+   * ~~~(c++)
    * PiiMatrix<int> image(5,5,
    *                      0,0,0,0,0,
    *                      0,1,1,1,0,
@@ -332,7 +324,7 @@ namespace PiiImage
    * //                       0,0,0,0,0,
    * //                       0,0,0,0,0,
    * //                       0,0,0,0,0);
-   * @endcode
+   * ~~~
    */
   template <class Matrix, class U>
   PiiMatrix<typename Matrix::value_type> hitAndMiss(const Matrix& image,

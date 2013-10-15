@@ -22,7 +22,8 @@
  * An operation that straightens cylindrically warped images. See
  * PiiImage::unwarpCylinder().
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - a distorted input image. Any image type.
  *
@@ -34,12 +35,13 @@
  * @in center - the location of the optical center in the image
  * (double). Optional.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out image - unwarped version of the input. Same type as input.
  *
  * @out radius - the radius of the cylinder, in units used by
- * #cameraDistance.
+ * [cameraDistance].
  *
  * @out distance - the distance between camera aperture and cylinder
  * center.
@@ -51,15 +53,14 @@
  * different from end angle.
  *
  * @out sector - the angle of the visible sector, in radians. This
- * value is affected by the #focalLength.
+ * value is affected by the [focalLength].
  *
  * @out scale - the physical size of a pixel in the unwarped image. 
  * Pixel scale is represented as a 1-by-2 PiiMatrix<double>. 
  * Horizontal size (first matrix element) is expressed in rad/px, and
  * vertical size (second matrix element) in units determined by
- * #cameraDistance.
+ * [cameraDistance].
  *
- * @ingroup PiiImagePlugin
  */
 class PiiImageUnwarpOperation : public PiiDefaultOperation
 {

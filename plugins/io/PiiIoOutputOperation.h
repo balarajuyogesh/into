@@ -21,7 +21,8 @@
 /**
  * An operation that controls digital output channels based on input.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in channel - the index of the output channel to be activated
  * (int). The index is not the physical index of the output channel in
@@ -35,14 +36,13 @@
  * Connecting this input makes it possible to selectively
  * enable/disable I/O signals at run time.
  * 
- * @ingroup PiiIoPlugin
  */
 class PiiIoOutputOperation : public PiiIoOperation
 {
   Q_OBJECT
 
   /**
-   * A list of integers that stores the @p pulseWidth configuration
+   * A list of integers that stores the `pulseWidth` configuration
    * value for each output channel.
    */
   Q_PROPERTY(QVariantList pulseWidths READ pulseWidths);
@@ -54,7 +54,7 @@ public:
 
 public slots:
   /**
-   * Sets the state of @a channel to @a value.
+   * Sets the state of *channel* to *value*.
    */
   void setChannelState(int channel, bool value);
 

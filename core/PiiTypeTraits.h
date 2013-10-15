@@ -20,30 +20,28 @@
 
 namespace std { template <class T> class complex; }
 
-/// @file
-
 namespace Pii
 {
   /**
-   * @name Static type checking
+   * @group pii_static_type_checking Static type checking
    *
    * This group contains structures that can be used for static type
    * checking in template meta-programming. The structures can be used
    * as checks for conditional structrures such as Pii::If to compile
    * different versions of code for different types.
    *
-   * All @p IsXXXX structs implement a similar design pattern:
+   * All `IsXXXX` structs implement a similar design pattern:
    *
-   * @code
+   * ~~~(c++)
    * ASSERT(Pii::IsPointer<int>::boolValue == false);
    * ASSERT(Pii::IsPointer<int*>::boolValue == true);
    * ASSERT(Pii::IsArray<char[]>::boolValue == true);
    * // etc...
-   * @endcode
+   * ~~~
    *
    * Static type checking is very useful in template meta-programs.
    *
-   * @code
+   * ~~~(c++)
    * // Divide by two by shifting an integer one position to the right.
    * struct IntOp { static inline int divide(int value) { return value >> 1; } };
    * // Divide by two by multiplying by 0.5
@@ -56,9 +54,8 @@ namespace Pii
    *   return Pii::IfClass<Pii::IsInteger<T>,
    *                       IntOp, FloatOp>::Type::divide(value);
    * };
-   * @endcode
+   * ~~~
    */
-  //@{
   
   /**
    * An empty structure.
@@ -66,41 +63,41 @@ namespace Pii
   struct Empty {};
 
   /**
-   * A structure whose nested type, @p Type, is @p T.
+   * A structure whose nested type, `Type`, is `T`.
    */
   template <class T> struct Id { typedef T Type; };
 
   /**
-   * A tester struct whose @p boolValue member evaluates statically to
-   * @p true if the template parameter @p T is @p void.
+   * A tester struct whose `boolValue` member evaluates statically to
+   * `true` if the template parameter `T` is `void`.
    */
   template <class T> struct IsVoid : False {};
   template <> struct IsVoid<void> : True {};
   
   /**
-   * A tester struct whose @p boolValue member evaluates statically to
-   * @p true if the template parameter @p T is a pointer.
+   * A tester struct whose `boolValue` member evaluates statically to
+   * `true` if the template parameter `T` is a pointer.
    */
   template <class T> struct IsPointer : False {};
   template <class T> struct IsPointer<T*> : True {};
 
   /**
-   * A tester struct whose @p boolValue member evaluates statically to
-   * @p true if the template parameter @p T is a reference.
+   * A tester struct whose `boolValue` member evaluates statically to
+   * `true` if the template parameter `T` is a reference.
    */
   template <class T> struct IsReference : False {};
   template <class T> struct IsReference<T&> : True {};
 
   /**
-   * A tester struct whose @p boolValue member evaluates statically to
-   * @p true if the template parameter @p T is an array.
+   * A tester struct whose `boolValue` member evaluates statically to
+   * `true` if the template parameter `T` is an array.
    */
   template <class T> struct IsArray : False {};
   template <class T> struct IsArray<T[]> : True {};
 
   /**
-   * A tester struct whose @p boolValue member evaluates statically to
-   * @p true if the template parameter @p T is a signed integer type.
+   * A tester struct whose `boolValue` member evaluates statically to
+   * `true` if the template parameter `T` is a signed integer type.
    */
   template <class T> struct IsSigned : False {};
   template <> struct IsSigned<char> : True {};
@@ -110,8 +107,8 @@ namespace Pii
   template <> struct IsSigned<long long> : True {};
 
   /**
-   * A tester struct whose @p boolValue member evaluates statically to
-   * @p true if the template parameter @p T is an unsigned integer
+   * A tester struct whose `boolValue` member evaluates statically to
+   * `true` if the template parameter `T` is an unsigned integer
    * type.
    */
   template <class T> struct IsUnsigned : False {};
@@ -122,15 +119,15 @@ namespace Pii
   template <> struct IsUnsigned<unsigned long long> : True {};
 
   /**
-   * A tester struct whose @p boolValue member evaluates statically to
-   * @p true if the template parameter @p T is an integer type (either
+   * A tester struct whose `boolValue` member evaluates statically to
+   * `true` if the template parameter `T` is an integer type (either
    * signed or unsigned).
    */
   template <class T> struct IsInteger : Or<IsSigned<T>::boolValue, IsUnsigned<T>::boolValue> {};
 
   /**
-   * A tester struct whose @p boolValue member evaluates statically to
-   * @p true if the template parameter @p T is a floating point number
+   * A tester struct whose `boolValue` member evaluates statically to
+   * `true` if the template parameter `T` is a floating point number
    * type.
    */
   template <class T> struct IsFloatingPoint : False {};
@@ -139,8 +136,8 @@ namespace Pii
   template <> struct IsFloatingPoint<long double> : True {};
 
   /**
-   * A tester struct whose @p boolValue member evaluates statically to
-   * @p true if the template parameter @p T is a numeric primitive
+   * A tester struct whose `boolValue` member evaluates statically to
+   * `true` if the template parameter `T` is a numeric primitive
    * (non-bool) type.
    */
   template <class T> struct IsNumeric : Or<IsSigned<T>::boolValue,
@@ -149,19 +146,19 @@ namespace Pii
   {};
   
   /**
-   * A tester struct whose @p boolValue member evaluates statically to
-   * @p true if the template parameter @p T is a primitive type.
+   * A tester struct whose `boolValue` member evaluates statically to
+   * `true` if the template parameter `T` is a primitive type.
    */
   template <class T> struct IsPrimitive : IsNumeric<T> {};
   template <> struct IsPrimitive<bool> : True {};
 
   /**
-   * A structure that has a nested type @p Type if and only if @p T is
-   * a primitive type. This can be exploited as a <em>substitution
-   * failure is not an error</em> (SFINAE) trick to guide overload
+   * A structure that has a nested type `Type` if and only if `T` is
+   * a primitive type. This can be exploited as a *substitution
+   * failure is not an error* (SFINAE) trick to guide overload
    * resolution.
    *
-   * @code
+   * ~~~(c++)
    * // I want this function to be called for primitive types only
    * template <class T> void func(T value, typename Pii::OnlyPrimitive<T>::Type = 0)
    * {}
@@ -173,24 +170,24 @@ namespace Pii
    * // Derived inherits Base
    * Derived d;
    * func(d); // calls func(const Base&)
-   * @endcode
+   * ~~~
    *
    * If you left the second dummy parameter out, the template function
    * would be called for types derived from Base, as the template type
-   * @p T is always an exact match. Since
-   * <tt>Pii::OnlyPrimitive<T>::Type</tt> only exists if @p T is a
+   * `T` is always an exact match. Since
+   * `Pii::OnlyPrimitive<T>::Type` only exists if `T` is a
    * primitive type, the first function causes a substitution failure
    * for all other types, and will be left out of oveload resolution.
    *
    * The second template parameter can be used to change the type the
    * structure resolves to. By default, Pii::OnlyPrimitive<T>::Type is
    * T for all primitive types, but Pii::OnlyPrimitive<T,int>::Type is
-   * an @p int.
+   * an `int`.
    */
   template <class T, class U = T> struct OnlyPrimitive : IfClass<IsPrimitive<T>, Id<U>, Empty>::Type {};
 
   /**
-   * A structure that has a nested type @p Type if and only if @p T is
+   * A structure that has a nested type `Type` if and only if `T` is
    * not a primitive type.
    *
    * @see OnlyPrimitive
@@ -198,7 +195,7 @@ namespace Pii
   template <class T, class U = T> struct OnlyNonPrimitive : IfClass<IsPrimitive<T>, Empty, Id<U> >::Type {};
 
   /**
-   * A structure that has a nested type @p Type if and only if @p T is
+   * A structure that has a nested type `Type` if and only if `T` is
    * a floating-point type.
    *
    * @see OnlyPrimitive
@@ -206,7 +203,7 @@ namespace Pii
   template <class T, class U = T> struct OnlyFloatingPoint : IfClass<IsFloatingPoint<T>, Id<U>, Empty>::Type {};
 
   /**
-   * A structure that has a nested type @p Type if and only if @p T is
+   * A structure that has a nested type `Type` if and only if `T` is
    * a numeric primitive type.
    *
    * @see OnlyPrimitive
@@ -214,15 +211,15 @@ namespace Pii
   template <class T, class U = T> struct OnlyNumeric : IfClass<IsNumeric<T>, Id<U>, Empty>::Type {};
 
   /**
-   * A tester struct whose @p boolValue member evaluates statically to
-   * @p true if the template parameter @p T is a complex number
+   * A tester struct whose `boolValue` member evaluates statically to
+   * `true` if the template parameter `T` is a complex number
    * (std::complex).
    */
   template <class T> struct IsComplex : False {};
   template <class T> struct IsComplex<std::complex<T> > : True {};
 
   /**
-   * A structure that has a nested type @p Type if and only if @p T is
+   * A structure that has a nested type `Type` if and only if `T` is
    * a numeric primitive type.
    *
    * @see OnlyPrimitive
@@ -232,8 +229,8 @@ namespace Pii
   template <class T, class U = T> struct OnlyNonComplex : IfClass<IsComplex<T>, Empty, Id<U> >::Type {};
 
   /**
-   * A tester struct whose @p boolValue member evaluates statically to
-   * @p true if the template parameter @p T is a numeric primitive
+   * A tester struct whose `boolValue` member evaluates statically to
+   * `true` if the template parameter `T` is a numeric primitive
    * (non-bool) type or a complex number (std::complex).
    */
   template <class T> struct IsNumericOrComplex : Or<IsNumeric<T>::boolValue,
@@ -241,7 +238,7 @@ namespace Pii
   {};
   
   /**
-   * A structure that has a nested type @p Type if and only if @p T is
+   * A structure that has a nested type `Type` if and only if `T` is
    * a numeric primitive type or a complex number.
    *
    * @see Primitive
@@ -249,37 +246,37 @@ namespace Pii
   template <class T, class U = T> struct OnlyNumericOrComplex : IfClass<IsNumericOrComplex<T>, Id<U>, Empty>::Type {};
 
   /**
-   * A structure that has a nested @p Type if and only if @p rule is
-   * @p true. In other words, OnlyIf<true,T>::Type is T, whereas
+   * A structure that has a nested `Type` if and only if `rule` is
+   * `true`. In other words, OnlyIf<true,T>::Type is T, whereas
    * OnlyIf<false,T>::Type does not exists.
    */
   template <bool rule, class T = int> struct OnlyIf : If<rule, Id<T>, Empty>::Type {};
 
   /**
-   * A tester struct whose @p boolValue member evaluates statically to
-   * @p true if the template parameter @p T is a @p const type.
+   * A tester struct whose `boolValue` member evaluates statically to
+   * `true` if the template parameter `T` is a `const` type.
    */
   template <class T> struct IsConst : False {};
   template <class T> struct IsConst<const T> : True {};
 
   /**
-   * A tester struct whose @p boolValue member evaluates statically to
-   * @p true if the template parameters @p T and @p U are the same
+   * A tester struct whose `boolValue` member evaluates statically to
+   * `true` if the template parameters `T` and `U` are the same
    * type.
    */
   template <class T, class U> struct IsSame : False {};
   template <class T> struct IsSame<T,T> : True {};
   
   /**
-   * A structure whose @p boolValue member evaluates statically to @p
-   * true if (and only if) @p Base is a base class of @p Derived. Note
-   * that instances of @p Derived are instances of @p Base also if @p
-   * Base and @p Derived are the same type. Therefore, this trait will
-   * be @p true if @p Base and @p Derived are the same type.
+   * A structure whose `boolValue` member evaluates statically to 
+   * `true` if (and only if) `Base` is a base class of `Derived`. Note
+   * that instances of `Derived` are instances of `Base` also if 
+   * `Base` and `Derived` are the same type. Therefore, this trait will
+   * be `true` if `Base` and `Derived` are the same type.
    */
   template <class Base, class Derived> struct IsBaseOf
   {
-    /// @cond null
+    /// @hide
     typedef char (&Yes)[1];
     typedef char (&No)[2];
     
@@ -299,12 +296,12 @@ namespace Pii
     // http://stackoverflow.com/questions/2910979/how-is-base-of-works
     enum { boolValue = sizeof(isBaseOf(Converter(), int(0))) == sizeof(Yes) ||
            IsSame<Base,Derived>::boolValue };
-    /// @endcond
+    /// @endhide
   };
 
   /**
-   * A structure whose member type @p Type is a non-const version of
-   * the template parameter @p T.
+   * A structure whose member type `Type` is a non-const version of
+   * the template parameter `T`.
    */
   template <class T> struct ToNonConst { typedef T Type; };    
   template <class T> struct ToNonConst<const T> { typedef T Type; };
@@ -313,15 +310,15 @@ namespace Pii
    * A static functor that converts pointers to references and keeps
    * references as such.
    *
-   * @code
+   * ~~~(c++)
    * int i = 1, j;
    * // Both of these set j to 1
    * j = ToReference<int>::apply(i);
    * j = ToReference<int*>::apply(&i);
-   * @endcode
+   * ~~~
    *
-   * The @p Type member of this class evaluates to the non-pointer
-   * type. That is, ToReference<T>::Type is @p T&, and so is
+   * The `Type` member of this class evaluates to the non-pointer
+   * type. That is, ToReference<T>::Type is `T`&, and so is
    * ToReference<T*>::Type.
    */
   template <class T> struct ToReference
@@ -391,13 +388,13 @@ namespace Pii
   };
 
   /**
-   * Converts a type to a corresponding floating-point type. The @p
-   * Type member of this structure is @p float for all primitive types
-   * except @p double and @p long @p double, for which no conversion
+   * Converts a type to a corresponding floating-point type. The 
+   * `Type` member of this structure is `float` for all primitive types
+   * except `double` and `long` `double`, for which no conversion
    * will be made. Composed types such as PiiMatrix should specialize
    * this structure:
    *
-   * @code
+   * ~~~(c++)
    * namespace Pii
    * {
    *   template <class T> struct ToFloatingPoint<PiiMatrix<T> >
@@ -406,23 +403,23 @@ namespace Pii
    *     typedef typename ToFloatingPoint<T>::Type PrimitiveType;
    *   };
    * }
-   * @endcode
+   * ~~~
    */
   template <class T> struct ToFloatingPoint
   {
     /**
-     * Primitive types are converted to @p floats by default.
+     * Primitive types are converted to `floats` by default.
      */
     typedef float Type;
     /**
-     * Primitive types are primitive, so the @p PrimitiveType equals
-     * @p Type.
+     * Primitive types are primitive, so the `PrimitiveType` equals
+     * `Type`.
      */
     typedef float PrimitiveType;
   };
 
   /**
-   * Specialization for @p double.
+   * Specialization for `double`.
    */
   template <> struct ToFloatingPoint<double>
   {
@@ -431,7 +428,7 @@ namespace Pii
   };
 
   /**
-   * Specialization for @p long @p double.
+   * Specialization for `long` `double`.
    */
   template <> struct ToFloatingPoint<long double>
   {
@@ -462,23 +459,23 @@ namespace Pii
   // Requires an IsEnum trait.
   
   /**
-   * The @p Type member typedef of this structure maps to the @p
-   * value_type member type of the type given as the template
+   * The `Type` member typedef of this structure maps to the 
+   * `value_type` member type of the type given as the template
    * argument. The structure is specialized for pointers to return the
    * type pointed to.
    *
-   * @code
+   * ~~~(c++)
    * using namespace Pii;
    * typedef ValueType<PiiMatrix<double>::column_iterator>::Type DoubleType1;
    * typedef ValueType<PiiMatrix<double>::row_iterator>::Type DoubleType2; 
-   * @endcode
+   * ~~~
    */
   template <class T> struct ValueType { typedef typename T::value_type Type; };
   template <class T> struct ValueType<T*> { typedef T Type; };
   
   /**
-   * A trait whose @p boolValue member is @p true if type @p T has
-   * less bits than type @p U.
+   * A trait whose `boolValue` member is `true` if type `T` has
+   * less bits than type `U`.
    */
   template <class T, class U> struct LessBits : public If<sizeof(T) < sizeof(U),
                                                           True,
@@ -486,8 +483,8 @@ namespace Pii
   {};
   
   /**
-   * A trait whose @p boolValue member is @p true if type @p T has
-   * more bits than type @p U.
+   * A trait whose `boolValue` member is `true` if type `T` has
+   * more bits than type `U`.
    */
   template <class T, class U> struct MoreBits : public If<sizeof(T) <= sizeof(U),
                                                           False,
@@ -495,20 +492,20 @@ namespace Pii
   {};
 
   /**
-   * A trait whose @p Type is @p U if @p sizeof(T) is less than @p
-   * sizeof(U) and @p T otherwise.
+   * A trait whose `Type` is `U` if `sizeof`(T) is less than 
+   * `sizeof`(U) and `T` otherwise.
    */
   template <class T, class U> struct Larger { typedef typename IfClass<LessBits<T,U>, U, T>::Type Type; };
   
   /**
-   * A trait whose @p Type is @p T if @p sizeof(T) is larger than @p
-   * sizeof(U) and @p T otherwise.
+   * A trait whose `Type` is `T` if `sizeof`(T) is larger than 
+   * `sizeof`(U) and `T` otherwise.
    */
   template <class T, class U> struct Smaller { typedef typename IfClass<MoreBits<T,U>, U, T>::Type Type; };
 
   /**
    * Convert any integer type to its signed counterpart. For example,
-   * ToSigned<unsigned int>::Type is @p int.
+   * ToSigned<unsigned int>::Type is `int`.
    */
   template <class T> struct ToSigned { typedef T Type; };
   template <> struct ToSigned<unsigned char> { typedef char Type; };
@@ -519,7 +516,7 @@ namespace Pii
   
   /**
    * Convert any integer type to its unsigned counterpart. For
-   * example, ToSigned<char>::Type is @p unsigned @p char.
+   * example, ToSigned<char>::Type is `unsigned` `char`.
    */
   template <class T> struct ToUnsigned { typedef T Type; };
   template <> struct ToUnsigned<char> { typedef unsigned char Type; };
@@ -569,23 +566,23 @@ namespace Pii
    *
    * The logic is as follows:
    *
-   * @li If both types are floating-point, the result is the type with
-   * larger number of bits. For example (@p double, @p float) maps to
-   * @p double.
+   * - If both types are floating-point, the result is the type with
+   * larger number of bits. For example (`double`, `float`) maps to
+   * `double`.
    *
-   * @li If one of the types is floating-point and the other is
-   * integer, the floating-point type will be used. For example (@p
-   * float, @p int) maps to @p float.
+   * - If one of the types is floating-point and the other is
+   * integer, the floating-point type will be used. For example (
+   * `float`, `int`) maps to `float`.
    *
-   * @li If both types are integers, and either of them is signed, the
+   * - If both types are integers, and either of them is signed, the
    * result is a signed version of the type with larger number of
-   * bits. For example (@p unsigned @p long, @p char) maps to @p long.
+   * bits. For example (`unsigned` `long`, `char`) maps to `long`.
    *
-   * @li If both types are unsigned integers, the result is the type
-   * with larger number of bits. For example (@p unsigned @p int, @p
-   * unsigned @p char) maps to @p unsigned @p int.
+   * - If both types are unsigned integers, the result is the type
+   * with larger number of bits. For example (`unsigned` `int`, 
+   * `unsigned` `char`) maps to `unsigned` `int`.
    *
-   * @code
+   * ~~~(c++)
    * template <class T, class U> void calculate(T a, U b)
    * {
    *   typedef typename Pii::Combine<T,U>::Type R;
@@ -601,7 +598,7 @@ namespace Pii
    * // Outputs -10.
    * // If you directly multiply a*b, you'll get 4294967286
    * // as an unsigned int
-   * @endcode
+   * ~~~
    */
   template <class T, class U> struct Combine
   {
@@ -614,7 +611,7 @@ namespace Pii
                              typename CombineFloats<T,U>::Type >::Type Type;
   };
 
-  //@}
+  /// @endgroup
 }
 
 #endif //_PIITYPETRAITS_H

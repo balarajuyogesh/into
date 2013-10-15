@@ -17,11 +17,9 @@
 #define _PIILOADEXCEPTION_H
 
 /**
- * @class PiiLoadException
+ * @decl class PiiLoadException
  *
- * Thrown when the loading of a plug-in fails.
- *
- * @ingroup Ydin
+ * Thrown when loading a plug-in fails.
  */
 #include "PiiYdin.h"
 

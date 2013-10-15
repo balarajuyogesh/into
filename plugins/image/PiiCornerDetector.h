@@ -22,24 +22,25 @@
  * Detects corners in gray-level images using the FAST corner
  * detector.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - a gray-level input image
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out corners - corner coordinates, a N-by-2 PiiMatrix<int> in which
  * each row stores the (x,y) coordinates of a detected corner.
  *
- * @ingroup PiiImagePlugin
  */
 class PiiCornerDetector : public PiiDefaultOperation
 {
   Q_OBJECT
 
   /**
-   * Corner detection threshold. See @ref
-   * PiiImage::detectFastCorners().
+   * Corner detection threshold. See 
+   * [PiiImage::detectFastCorners()].
    */
   Q_PROPERTY(double threshold READ threshold WRITE setThreshold);
 

@@ -20,14 +20,6 @@
 #include "PiiHistogram.h"
 #include "PiiLabeling.h"
 
-/**
- * @file
- * @ingroup PiiImagePlugin
- *
- * Image thresholding routines.
- */
-
-
 namespace PiiImage
 {
   /**
@@ -39,10 +31,10 @@ namespace PiiImage
    *
    * @return optimal threshold for separating the two modes
    *
-   * @code
+   * ~~~(c++)
    * using namespace PiiImage;
    * int iThreshold = otsuThreshold(normalize<float>(histogram(image)));
-   * @endcode
+   * ~~~
    */
   template <class T> int otsuThreshold(const PiiMatrix<T>& histogram);
 
@@ -51,7 +43,7 @@ namespace PiiImage
    * based on the comparison result. You can use this struct for
    * example with PiiMatrix<T>::map():
    *
-   * @code
+   * ~~~(c++)
    * int threshold = 5;
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
    * mat.map<PiiImage::ThresholdFunction<int> >(threshold);
@@ -62,7 +54,7 @@ namespace PiiImage
    * PiiMatrix<bool> binary = mat2.mapped(PiiImage::ThresholdFunction<int,bool>(), 5);
    *
    * // binary = 0 0 0 0 1 1 1 1 1
-   * @endcode
+   * ~~~
    */
   template <class T, class U = T> struct ThresholdFunction : public Pii::BinaryFunction<T,T,U>
   {
@@ -76,17 +68,17 @@ namespace PiiImage
   /**
    * %InverseThresholdFunction compares two values and outputs either 0
    * or 1 based on the comparison result. Works analogously to
-   * ThresholdFunction, but outputs one if @p value is smaller than or
-   * equal to @p threshold. You can use this struct for
+   * ThresholdFunction, but outputs one if `value` is smaller than or
+   * equal to `threshold`. You can use this struct for
    * example with PiiMatrix<T>::binaryOp():
    *
-   * @code
+   * ~~~(c++)
    * int threshold = 5;
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
    * mat.binaryOp(PiiImage::InverseThresholdFunction<int>(), threshold);
    *
    * // mat = 1 1 1 1 0 0 0 0 0
-   * @endcode
+   * ~~~
    */
   template <class T, class U = T> struct InverseThresholdFunction : public Pii::BinaryFunction<T,T,U>
   {
@@ -102,12 +94,12 @@ namespace PiiImage
    * thresholds and returns one if the argument is in between them
    * (inclusive).
    *
-   * @code
+   * ~~~(c++)
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
    * mat.unaryOp(PiiImage::TwoLevelThresholdFunction<int>(5, 7));
    *
    * // mat = 0 0 0 0 1 1 1 0 0
-   * @endcode
+   * ~~~
    */
   template <class T, class U = T> class TwoLevelThresholdFunction : public Pii::BinaryFunction<T,T,U>
   {
@@ -130,12 +122,12 @@ namespace PiiImage
    * %InverseTwoLevelThresholdFunction works analogously to
    * TwoLevelThresholdFunction, but inverses the result.
    *
-   * @code
+   * ~~~(c++)
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
    * mat.unaryOp(PiiImage::InverseTwoLevelThresholdFunction<int>(5, 7));
    *
    * // mat = 1 1 1 1 0 0 0 1 1
-   * @endcode
+   * ~~~
    */
   template <class T, class U = T> class InverseTwoLevelThresholdFunction : public Pii::BinaryFunction<T,T,U>
   {
@@ -155,17 +147,17 @@ namespace PiiImage
   };
 
   /**
-   * CutFunction compares @p value to a @p threshold and outputs either
-   * @p value or @p threshold based on the comparison result. You can
+   * CutFunction compares `value` to a `threshold` and outputs either
+   * `value` or `threshold` based on the comparison result. You can
    * use this struct for example with PiiMatrix<T>::binaryOp():
    *
-   * @code
+   * ~~~(c++)
    * int threshold = 5;
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
    * mat.binaryOp(PiiImage::CutFunction<int>(), threshold);
    *
    * // mat = 1 2 3 4 5 5 5 5 5
-   * @endcode
+   * ~~~
    */
   template <class T, class U = T> struct CutFunction : public Pii::BinaryFunction<T,T,U>
   {
@@ -173,18 +165,18 @@ namespace PiiImage
   };
 
   /**
-   * InverseCutFunction compares @p value to a @p threshold and
-   * outputs either @p value or @p threshold based on the comparison
+   * InverseCutFunction compares `value` to a `threshold` and
+   * outputs either `value` or `threshold` based on the comparison
    * result. You can use this struct for example with
    * PiiMatrix<T>::binaryOp():
    *
-   * @code
+   * ~~~(c++)
    * int threshold = 5;
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
    * mat.binaryOp(PiiImage::InverseCutFunction<int>(), threshold);
    *
    * // mat = 5 5 5 5 5 6 7 8 9
-   * @endcode
+   * ~~~
    */
   template <class T, class U = T> struct InverseCutFunction : public Pii::BinaryFunction<T,T,U>
   {
@@ -192,17 +184,17 @@ namespace PiiImage
   };
 
   /**
-   * ZeroBelowFunction compares @p value to a @p threshold and outputs
-   * either @p value or 0 based on the comparison result. You can use
+   * ZeroBelowFunction compares `value` to a `threshold` and outputs
+   * either `value` or 0 based on the comparison result. You can use
    * this struct for example with PiiMatrix<T>::binaryOp():
    *
-   * @code
+   * ~~~(c++)
    * int threshold = 5;
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
    * mat.binaryOp(PiiImage::ZeroBelowFunction<int>(), threshold);
    *
    * // mat = 0 0 0 0 5 6 7 8 9
-   * @endcode
+   * ~~~
    */
   template <class T, class U = T> struct ZeroBelowFunction : public Pii::BinaryFunction<T,T,U>
   {
@@ -213,13 +205,13 @@ namespace PiiImage
    * ZeroAboveFunction works analogously to ZeroBelowFunction, but
    * outputs zero for values that are above or equal to the threshold.
    *
-   * @code
+   * ~~~(c++)
    * int threshold = 5;
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
    * mat.binaryOp(PiiImage::ZeroAboveFunction<int>(), threshold);
    *
    * // mat = 1 0 1 2 3 4 0 0 0 0 0
-   * @endcode
+   * ~~~
    */
   template <class T, class U = T> struct ZeroAboveFunction : public Pii::BinaryFunction<T,T,U>
   {
@@ -227,19 +219,19 @@ namespace PiiImage
   };
   
   /**
-   * DropFunction compares @p value to a @p threshold and outputs
-   * either @p value - @p threshold or 0 based on the comparison
+   * DropFunction compares `value` to a `threshold` and outputs
+   * either `value` - `threshold` or 0 based on the comparison
    * result. The function "drops" gray levels above a threshold to
    * zero. You can use this struct for example with
    * PiiMatrix<T>::binaryOp():
    *
-   * @code
+   * ~~~(c++)
    * int threshold = 5;
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
    * mat.binaryOp(PiiImage::DropFunction<int>(), threshold);
    *
    * // mat = 0 0 0 0 0 1 2 3 4
-   * @endcode
+   * ~~~
    */
   template <class T, class U = T> struct DropFunction : public Pii::BinaryFunction<T,T,U>
   {
@@ -284,7 +276,7 @@ namespace PiiImage
    *
    * @param threshold gray level value for thresholding the original
    * image. Note that the threshold value must be of the same type as
-   * the image. Don't try to pass an @p int if the image is @p uchar.
+   * the image. Don't try to pass an `int` if the image is `uchar`.
    *
    * @return thresholded binary image
    *
@@ -312,7 +304,7 @@ namespace PiiImage
   }
 
   /**
-   * Sets pixels above @a threshold to @a threshold.
+   * Sets pixels above *threshold* to *threshold*.
    *
    * @see CutFunction
    */
@@ -322,7 +314,7 @@ namespace PiiImage
   }
 
   /**
-   * Sets pixels below @a threshold to @a threshold.
+   * Sets pixels below *threshold* to *threshold*.
    *
    * @see InverseCutFunction
    */
@@ -332,7 +324,7 @@ namespace PiiImage
   }
 
   /**
-   * Sets pixels below @a threshold to zero.
+   * Sets pixels below *threshold* to zero.
    *
    * @see ZeroBelowFunction
    */
@@ -342,7 +334,7 @@ namespace PiiImage
   }
 
   /**
-   * Sets pixels above @a threshold to zero.
+   * Sets pixels above *threshold* to zero.
    *
    * @see ZeroAboveFunction
    */
@@ -353,10 +345,10 @@ namespace PiiImage
 
   /**
    * Performs hysteresis thresholding on image. This is a convenience
-   * function that uses #labelImage() to find connected components in
-   * which the gray level of all pixels is greater than or equal to @p
-   * lowThreshold and and at least one pixel is greater than or equal
-   * to @p highThreshold.
+   * function that uses [labelImage()] to find connected components in
+   * which the gray level of all pixels is greater than or equal to 
+   * `lowThreshold` and and at least one pixel is greater than or equal
+   * to `highThreshold`.
    *
    * @param image a gray-level image
    *
@@ -386,9 +378,9 @@ namespace PiiImage
   /**
    * Inverse hysteresis thresholding. Works inversely to
    * hysteresisThreshold(): connected components in which all gray
-   * levels are below @p highThreshold and at least one gray level is
-   * below @p lowThreshold will be set to one. Note that the result is
-   * @b not the same as inverting the result of hysteresisThreshold().
+   * levels are below `highThreshold` and at least one gray level is
+   * below `lowThreshold` will be set to one. Note that the result is
+   * **not** the same as inverting the result of hysteresisThreshold().
    *
    * @param image a gray-level image
    *
@@ -418,20 +410,20 @@ namespace PiiImage
   /**
    * Thresholds an image adaptively. The threshold is calculated
    * separately for each pixel based on the local mean. The local mean
-   * @f$\mu@f$ is calculated over an area determined by @p windowRows
-   * and @p windowColumns. The final threshold @e t is obtained by
-   * @f$t = \mu * r + a@f$, where @e r denotes @p relativeThreshold
-   * and @e a @p absoluteThreshold. If @p windowColumns is
+   * \(\mu\) is calculated over an area determined by `windowRows`
+   * and `windowColumns`. The final threshold *t* is obtained by
+   * \(t = \mu * r + a\), where *r* denotes `relativeThreshold`
+   * and *a* `absoluteThreshold`. If `windowColumns` is
    * non-positive, the same value will be used for both window
    * dimensions.
    *
    * @param image the input image
    *
    * @param func a binary function whose return value replaces the
-   * pixel value in @p image. Invoked as @f$\mathrm{func}(p,t)@f$,
-   * where @p is the value of a pixel and @p t is a locally calculated
-   * threshold. The type of the threshold is @p float for all other
-   * image types except @p double, in which case a @p double will be
+   * pixel value in `image`. Invoked as \(\mathrm{func}(p,t)\),
+   * where `is` the value of a pixel and `t` is a locally calculated
+   * threshold. The type of the threshold is `float` for all other
+   * image types except `double`, in which case a `double` will be
    * passed.
    *
    * @param relativeThreshold multiply local average with this value
@@ -443,24 +435,24 @@ namespace PiiImage
    * window
    *
    * @param windowColumns the number of columns in the local averaging
-   * window. If this value is non-positive, a @p windowRows - by - @p
-   * windowRows square window will be used.
+   * window. If this value is non-positive, a `windowRows` - by - 
+   * `windowRows` square window will be used.
    *
-   * @note Window size has no effect on processing time.
+   * ! Window size has no effect on processing time.
    *
-   * @code
+   * ~~~(c++)
    * using namespace PiiImage;
    * PiiMatrix<float> img;
    * // Threshold at 0.8 times the local mean. Using
    * // InverseThresholdFunction as function sets values lower than
    * // the threshold to one.
    * img = adaptiveThreshold(img, InverseThresholdFunction<float>(), 0.8, 0.0, 65);
-   * @endcode
+   * ~~~
    *
-   * @note If the input image is integer-typed, you can avoid rounding
+   * ! If the input image is integer-typed, you can avoid rounding
    * errors by providing a different input type for the thresholding
    * function. ThresholdFunction<float,int>, for example, will take in
-   * a @p fload and return an @p int.
+   * a `fload` and return an `int`.
    */
   template <class Matrix, class BinaryFunction>
   PiiMatrix<typename BinaryFunction::result_type> adaptiveThreshold(const Matrix& image,
@@ -470,7 +462,6 @@ namespace PiiImage
                                                                     int windowRows, int windowColumns);
 
   /**
-   * @overload This version calls @a func using the pixel value and
    * the local mean as parameters.
    */
   template <class Matrix, class BinaryFunction>
@@ -478,9 +469,8 @@ namespace PiiImage
                                                                     BinaryFunction func,
                                                                     int windowRows, int windowColumns);
   /**
-   * @overload This version only considers pixels whose corresponding
-   * entry in @a roiMask evaluates to @p true. The @a image and @a
-   * roiMask matrices must match in size.
+   * entry in *roiMask* evaluates to `true`. The *image* and 
+   * *roiMask* matrices must match in size.
    */
   template <class Matrix, class BinaryFunction>
   PiiMatrix<typename BinaryFunction::result_type> adaptiveThreshold(const Matrix& image,
@@ -489,10 +479,9 @@ namespace PiiImage
                                                                     int windowRows, int windowColumns);
   
   /**
-   * A function that calculates a local threshold @e t as @f$t = \mu +
-   * r \sigma@f$, where @e r stands for @p relativeThreshold. The
-   * output of the function is <em>thresholdFunc(transformFunc(pixel),
-   * t)</em>.
+   * A function that calculates a local threshold *t* as \(t = \mu + r
+   * \sigma\), where *r* stands for `relativeThreshold`. The output of
+   * the function is *thresholdFunc(transformFunc(pixel), t)*.
    *
    * @see adaptiveThreshold()
    */
@@ -539,11 +528,11 @@ namespace PiiImage
   }
 
   /**
-   * A function that calculates a local threshold @e t as @f$t = \mu
-   * (1 + r (\sigma/\sigma_{\mathrm max} - 1))@f$, where @e r stands
-   * for @p relativeThreshold and @f$\sigma_{\mathrm max}@f$ for the
-   * maximum possible standard deviation. The output of the function
-   * is <em>thresholdFunc(transformFunc(pixel), t)</em>.
+   * A function that calculates a local threshold *t* as \(t = \mu (1
+   * + r (\sigma/\sigma_{\mathrm max} - 1))\), where *r* stands for
+   * `relativeThreshold` and \(\sigma_{\mathrm max}\) for the maximum
+   * possible standard deviation. The output of the function is
+   * *thresholdFunc(transformFunc(pixel), t)*.
    *
    * @see adaptiveThreshold()
    */
@@ -619,14 +608,14 @@ namespace PiiImage
   
   /**
    * Thresholds an image adaptively. This function calculates local
-   * mean and local variance for each pixel, and uses @p func as the
+   * mean and local variance for each pixel, and uses `func` as the
    * thresholding function.
    *
    * @param image the input image
    *
    * @param func a ternary function whose return value replaces the
-   * pixel value in @p image. Invoked as
-   * @f$\mathrm{func}(p,\mu,\sigma^2)@f$, where @f$p, \mu, \sigma^2@f$
+   * pixel value in `image`. Invoked as
+   * \(\mathrm{func}(p,\mu,\sigma^2)\), where \(p, \mu, \sigma^2\)
    * stand for the pixel value, the local mean, and the local
    * variance, respectively.
    *
@@ -634,10 +623,10 @@ namespace PiiImage
    * window
    *
    * @param windowColumns the number of columns in the local averaging
-   * window. If this value is non-positive, a @p windowRows - by - @p
-   * windowRows square window will be used.
+   * window. If this value is non-positive, a `windowRows` - by - 
+   * `windowRows` square window will be used.
    *
-   * @code
+   * ~~~(c++)
    * // Document binarization
    * using namespace PiiImage;
    * PiiMatrix<int> image;
@@ -646,9 +635,9 @@ namespace PiiImage
    *                                                       Pii::Identity<int>(),
    *                                                       0.34, 255),
    *                              31);
-   * @endcode
+   * ~~~
    *
-   * The #sauvolaThresholdFunction() and #meanStdThresholdFunction()
+   * The [sauvolaThresholdFunction()] and [meanStdThresholdFunction()]
    * helper functions can be used to create suitable thresholding
    * functions.
    */

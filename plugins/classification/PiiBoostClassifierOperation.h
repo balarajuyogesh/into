@@ -29,14 +29,13 @@
  * PiiDecisionStump as the weak classifier. See PiiClassifierOperation
  * and PiiBoostClassifier for details.
  *
- * @ingroup PiiClassificationPlugin
  */
 class PiiBoostClassifierOperation : public PiiClassifierOperation
 {
   Q_OBJECT
 
   /**
-   * The boosting algorithm to use. Default is @p RealBoost.
+   * The boosting algorithm to use. Default is `RealBoost`.
    */
   Q_PROPERTY(PiiClassification::BoostingAlgorithm algorithm READ algorithm WRITE setAlgorithm);
 

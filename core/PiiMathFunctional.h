@@ -70,12 +70,12 @@ namespace Pii
    * An adaptable binary function that raises the absolute value of its
    * first argument to the power of the second argument.
    *
-   * @code
+   * ~~~(c++)
    * PiiMatrix<double> mat(...); // Initialize as you want
    *
    * // For each element, set m(i,j) = |m(i,j)|^n
    * mat.binaryOp(Pii::AbsPow<double>(), n);
-   * @endcode
+   * ~~~
    */
   //template <class T, class U = T> struct AbsPow : public Pii::BinaryFunction<T,U>
   template <class T,
@@ -88,7 +88,7 @@ namespace Pii
 
   /**
    * An adaptable binary function that calculates the sum of absolute
-   * values, @f$|x| + |y|@f$.
+   * values, \(|x| + |y|\).
    */
   template <class T> struct AbsSum : public Pii::BinaryFunction<T>
   {
@@ -97,7 +97,7 @@ namespace Pii
 
   /**
    * An adaptable binary function that calculates the absolute
-   * difference of its arguments, @f$|x - y|@f$.
+   * difference of its arguments, \(|x - y|\).
    */
   template <class T> struct AbsDiff : public Pii::BinaryFunction<T>
   {
@@ -106,7 +106,7 @@ namespace Pii
 
   /**
    * An adaptable binary function that calculates the squared
-   * difference of its arguments, @f$(x - y)^2@f$.
+   * difference of its arguments, \((x - y)^2\).
    */
   template <class T> struct SquaredDiff : public Pii::BinaryFunction<T>
   {
@@ -172,7 +172,7 @@ namespace Pii
     double operator() (const T& value) const { return sqrt(value); }
   };
   /**
-   * A specialization for floats. Sometimes faster than the @p double
+   * A specialization for floats. Sometimes faster than the `double`
    * version if the compiler supports the C99 standard.
    */
   template <> struct Sqrt<float> : public Pii::UnaryFunction<float>
@@ -181,14 +181,14 @@ namespace Pii
   };
 
   /**
-   * A unary function that returns @p sin(x).
+   * A unary function that returns `sin`(x).
    */
   template <class T> struct Sin : public Pii::UnaryFunction<T,double>
   {
     double operator() (const T& value) const { return sin(value); }
   };
   /**
-   * A specialization for floats. Sometimes faster than the @p double
+   * A specialization for floats. Sometimes faster than the `double`
    * version if the compiler supports the C99 standard.
    */
   template <> struct Sin<float> : public Pii::UnaryFunction<float>
@@ -197,14 +197,14 @@ namespace Pii
   };
 
   /**
-   * A unary function that returns @p asin(x).
+   * A unary function that returns `asin`(x).
    */
   template <class T> struct Asin : public Pii::UnaryFunction<T,double>
   {
     double operator() (const T& value) const { return asin(value); }
   };
   /**
-   * A specialization for floats. Sometimes faster than the @p double
+   * A specialization for floats. Sometimes faster than the `double`
    * version if the compiler supports the C99 standard.
    */
   template <> struct Asin<float> : public Pii::UnaryFunction<float>
@@ -213,14 +213,14 @@ namespace Pii
   };
 
   /**
-   * A unary function that returns @p cos(x).
+   * A unary function that returns `cos`(x).
    */
   template <class T> struct Cos : public Pii::UnaryFunction<T,double>
   {
     double operator() (const T& value) const { return cos(value); }
   };
   /**
-   * A specialization for floats. Sometimes faster than the @p double
+   * A specialization for floats. Sometimes faster than the `double`
    * version if the compiler supports the C99 standard.
    */
   template <> struct Cos<float> : public Pii::UnaryFunction<float>
@@ -229,14 +229,14 @@ namespace Pii
   };
 
   /**
-   * A unary function that returns @p acos(x).
+   * A unary function that returns `acos`(x).
    */
   template <class T> struct Acos : public Pii::UnaryFunction<T,double>
   {
     double operator() (const T& value) const { return acos(value); }
   };
   /**
-   * A specialization for floats. Sometimes faster than the @p double
+   * A specialization for floats. Sometimes faster than the `double`
    * version if the compiler supports the C99 standard.
    */
   template <> struct Acos<float> : public Pii::UnaryFunction<float>
@@ -245,14 +245,14 @@ namespace Pii
   };
 
   /**
-   * A unary function that returns @p tan(x).
+   * A unary function that returns `tan`(x).
    */
   template <class T> struct Tan : public Pii::UnaryFunction<T,double>
   {
     double operator() (const T& value) const { return tan(value); }
   };
   /**
-   * A specialization for floats. Sometimes faster than the @p double
+   * A specialization for floats. Sometimes faster than the `double`
    * version if the compiler supports the C99 standard.
    */
   template <> struct Tan<float> : public Pii::UnaryFunction<float>
@@ -261,14 +261,14 @@ namespace Pii
   };
 
   /**
-   * A unary function that returns @p tan(x).
+   * A unary function that returns `tan`(x).
    */
   template <class T> struct Atan : public Pii::UnaryFunction<T,double>
   {
     double operator() (const T& value) const { return atan(value); }
   };
   /**
-   * A specialization for floats. Sometimes faster than the @p double
+   * A specialization for floats. Sometimes faster than the `double`
    * version if the compiler supports the C99 standard.
    */
   template <> struct Atan<float> : public Pii::UnaryFunction<float>
@@ -286,7 +286,7 @@ namespace Pii
   };
 
   /**
-   * Specialization for @p float arguments.
+   * Specialization for `float` arguments.
    */
   template <> struct Atan2<float> : public Pii::BinaryFunction<float>
   {
@@ -314,7 +314,7 @@ namespace Pii
 
   /**
    * An adaptable binary function that calculates the hypotenuse given
-   * two orthogonal sides of a triangle, @f$\sqrt{x^2 + y^2}@f$.
+   * two orthogonal sides of a triangle, \(\sqrt{x^2 + y^2}\).
    */
   template <class T> struct Hypotenuse : public Pii::BinaryFunction<T>
   {
@@ -330,7 +330,7 @@ namespace Pii
   };
 
   /**
-   * A unary function that returns @p ceil(x).
+   * A unary function that returns `ceil`(x).
    */
   template <class T> struct Ceil : public Pii::UnaryFunction<T>
   {
@@ -338,7 +338,7 @@ namespace Pii
   };
 
   /**
-   * A unary function that returns @p floor(x).
+   * A unary function that returns `floor`(x).
    */
   template <class T> struct Floor : public Pii::UnaryFunction<T>
   {
@@ -347,8 +347,8 @@ namespace Pii
   
   /**
    * An adaptable unary function that rounds its argument to the closest
-   * integer. Template parameter @p T determines the input type and @p
-   * U the output type. The output type can be omitted as it defaults
+   * integer. Template parameter `T` determines the input type and 
+   * `U` the output type. The output type can be omitted as it defaults
    * to the input type.
    */
   template <class From, class To = From> struct Round : public Pii::UnaryFunction<From,To>
@@ -389,12 +389,12 @@ namespace Pii
    * function has been called. As such, the function can be used to
    * calculate the mean value of data.
    *
-   * @code
+   * ~~~(c++)
    * // Calculate the mean value of a matrix:
    * PiiMatrix<float> matrix(3,3);
    * Pii::Mean<float> mean;
    * std::cout << Pii::forEach(matrix, mean).mean() << std::endl;
-   * @endcode
+   * ~~~
    */
   template <class T, class U = T> class Mean : public Pii::UnaryFunction<T,U>
   {
@@ -486,8 +486,8 @@ namespace Pii
 
   /**
    * A unary function that bounds its argument to a predefined range.
-   * If the argument is less than @a min, @a min will be returned. If
-   * the argument is larger than @a max, @a max will be returned.
+   * If the argument is less than *min*, *min* will be returned. If
+   * the argument is larger than *max*, *max* will be returned.
    * Otherwise, the argument will be returned unchanged.
    */
   template <class T> struct Bound : public Pii::UnaryFunction<T>
@@ -502,8 +502,11 @@ namespace Pii
   /**
    * Helper function for algorithms that involve scrolling elements.
    *
-   * @tparam FuItem: Unary functor, takes (matrix) element as argument and the return value is used as second parameter in FuMem.
-   * @tparam FuMem : Binaryfunctor: takes memoryobject and result of FuItem as arguments, and returns memoryobject.
+   * - `FuItem` - Unary functor, takes (matrix) element as argument
+       and the return value is used as second parameter in `FuMem`.
+   *
+   * - `FuMem` - Binaryfunctor: takes memoryobject and result of
+       `FuItem` as arguments, and returns memoryobject.
    */
   template<class FuItem, class FuMemory>
   struct ForEachFunction
@@ -514,7 +517,7 @@ namespace Pii
      * @param fMem Functor that handles internal memory updating.
      * @param initMem Initial value for memory.
      *
-     * @note see @ref createForEachFunction() for creating object of this type more easily.
+     * ! See [createForEachFunction()] for creating object of this type more easily.
      */
     ForEachFunction(FuItem fItem, FuMemory fMem, typename FuMemory::result_type initMem)
       : _fuItem(fItem), _fuMem(fMem), _Mem(initMem) {}

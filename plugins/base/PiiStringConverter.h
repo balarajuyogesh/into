@@ -21,15 +21,16 @@
 /**
  * Converts strings to numbers.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in input - a string to be converted (QString)
  *
- * @outputs
+ * Outputs
+ * -------
  *
- * @out output - converted value. Either a @p double or an @p int.
+ * @out output - converted value. Either a `double` or an `int`.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiStringConverter : public PiiDefaultOperation
 {
@@ -46,10 +47,10 @@ public:
   /**
    * Conversion modes.
    *
-   * @lip ConvertToInt - the input string will be converted to an @p
-   * int.
-   * @lip ConvertToDouble - the input string will be converted to a @p
-   * double.
+   * - `ConvertToInt` - the input string will be converted to an 
+   * `int`.
+   * - `ConvertToDouble` - the input string will be converted to a 
+   * `double`.
    */
   enum ConversionMode
   {

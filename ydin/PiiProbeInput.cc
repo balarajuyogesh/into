@@ -15,15 +15,17 @@
 
 #include "PiiProbeInput.h"
 
+PiiProbeInput::Data::Data() :
+  PiiAbstractInputSocket::Data()
+{}
+
 PiiProbeInput::PiiProbeInput(const QString& name) :
-  PiiAbstractInputSocket(new Data)
-{
-  setObjectName(name);
-}
+  PiiAbstractInputSocket(name, new Data)
+{}
 
 PiiProbeInput::PiiProbeInput(PiiAbstractOutputSocket* output, const QObject* receiver,
                              const char* slot, Qt::ConnectionType type) :
-  PiiAbstractInputSocket(new Data)
+  PiiAbstractInputSocket("probe", new Data)
 {
   connectOutput(output);
   QObject::connect(this, SIGNAL(objectReceived(PiiVariant)), receiver, slot, type);
@@ -36,17 +38,10 @@ bool PiiProbeInput::tryToReceive(PiiAbstractInputSocket*, const PiiVariant& obje
   return true;
 }
 
-PiiSocket::Type PiiProbeInput::type() const { return Input; }
-
-
 PiiInputController* PiiProbeInput::controller() const
 {
   return const_cast<PiiProbeInput*>(this);
 }
-
-PiiProbeInput* PiiProbeInput::socket() { return this; }
-PiiAbstractInputSocket* PiiProbeInput::asInput() { return this; }
-PiiAbstractOutputSocket* PiiProbeInput::asOutput() { return 0; }
 
 PiiVariant PiiProbeInput::savedObject() const { return _d()->varSavedObject; }
 void PiiProbeInput::setSavedObject(const PiiVariant& obj) { _d()->varSavedObject = obj; }

@@ -31,7 +31,6 @@
  * together to get the final distance. Other options are minimum,
  * maximum and product.
  *
- * @ingroup PiiClassificationPlugin
  */
 template <class FeatureIterator> class PiiMultiFeatureDistance :
   public QList<PiiDistanceMeasure<FeatureIterator>* >

@@ -26,7 +26,6 @@
 
 #include <QMutex>
 
-/// @file
 
 /**
  * Declares a virtual piiMetaObject() function and implements a
@@ -70,7 +69,6 @@
  * automatically deleted. Thus, one doesn't need to care about
  * deleting anything but the operation itself.
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiOperation : public QObject, public PiiConfigurable
 {
@@ -79,15 +77,15 @@ class PII_YDIN_EXPORT PiiOperation : public QObject, public PiiConfigurable
 
   /**
    * The name of the property set currently being cached. See
-   * #startPropertySet(). If no property set is being cached, the name
+   * [startPropertySet()]. If no property set is being cached, the name
    * is an empty string. Note that an empty string is also the default
    * name for a cached property set.
    */
   Q_PROPERTY(QString propertySetName READ propertySetName);
 
   /**
-   * This flag is @p true if the operation is currently caching
-   * properties (see #startPropertySet()) and @p false otherwise.
+   * This flag is `true` if the operation is currently caching
+   * properties (see [startPropertySet()]) and `false` otherwise.
    */
   Q_PROPERTY(bool cachingProperties READ isCachingProperties);
     
@@ -103,23 +101,23 @@ public:
   /**
    * The state of an operation can assume six different values:
    *
-   * @lip Stopped - the operation is not running.
+   * - `Stopped` - the operation is not running.
    *
-   * @lip Starting - the operation has received a #start() signal, but
+   * - `Starting` - the operation has received a [start()] signal, but
    * it is not running yet.
    *
-   * @lip Running - the operation is running.
+   * - `Running` - the operation is running.
    *
-   * @lip Pausing - the operation has received a #pause() signal, but
+   * - `Pausing` - the operation has received a [pause()] signal, but
    * it hasn't finished execution yet.
    *
-   * @lip Paused - the operation has finished execution due to a
-   * #pause() command.
+   * - `Paused` - the operation has finished execution due to a
+   * [pause()] command.
    *
-   * @lip Stopping - the operation has received a #stop() signal, but
+   * - `Stopping` - the operation has received a [stop()] signal, but
    * it hasn't stopped yet.
    *
-   * @lip Interrupted - the operation has received an #interrupt()
+   * - `Interrupted` - the operation has received an [interrupt()]
    * signal, but it hasn't stopped yet.
    */
   enum State
@@ -136,20 +134,20 @@ public:
   /**
    * Protection levels for setting properties.
    *
-   * @lip WriteAlways - setting the value of a property is always
-   * allowed. This is the default value for all properties.
+   * - `WriteAlways` - setting the value of a property is always
+   *   allowed. This is the default value for all properties.
    *
-   * @lip WriteWhenStoppedOrPaused - setting the value of a property
-   * is allowed only if the state of the operation is either @p
-   * Stopped or @p Paused.
+   * - `WriteWhenStoppedOrPaused` - setting the value of a property is
+   *   allowed only if the state of the operation is either `Stopped`
+   *   or `Paused`.
    *
-   * @lip WriteWhenStopped - setting the value of a property is
-   * allowed only if the state of the operation is @p Stopped.
+   * - `WriteWhenStopped` - setting the value of a property is allowed
+   *   only if the state of the operation is `Stopped`.
    *
-   * @lip WriteNotAllowed - setting the value of a property is not
-   * allowed at all. This value makes it possible for subclasses to
-   * make the properties of a superclass read-only even if they had a
-   * setter function.
+   * - `WriteNotAllowed` - setting the value of a property is not
+   *   allowed at all. This value makes it possible for subclasses to
+   *   make the properties of a superclass read-only even if they had
+   *   a setter function.
    */
   enum ProtectionLevel
     {
@@ -167,7 +165,7 @@ public:
   /**
    * Checks that the necessary preconditions for processing are met. 
    * This function is called by before processing is started. It is
-   * followed by a #start() call, provided that all operations in an
+   * followed by a [start()] call, provided that all operations in an
    * engine have been successfully initialized. The function should
    * check, for example, that all required inputs are connected.
    *
@@ -175,10 +173,10 @@ public:
    * before any of them is started. This ensures there will be no
    * input into any operation before each of them have been checked.
    *
-   * @param reset if @p true, reset the operation to its initial
+   * @param reset if `true`, reset the operation to its initial
    * state. This flag is true whenever the operation was interrupted
    * and started again. If the operation was just paused, the reset
-   * flag is set to @p false, and the operation should continue where
+   * flag is set to `false`, and the operation should continue where
    * ever it was left.
    *
    * @exception PiiExecutionException& if the operation cannot be run.
@@ -188,45 +186,45 @@ public:
   /**
    * Starts the operation and executes it until interrupted or paused. 
    * The operation should prepare itself for work and change state to
-   * @p Starting or @p Running.
+   * `Starting` or `Running`.
    *
    * This function will be called not only on start-up but also before
-   * restarting after a #pause() call.
+   * restarting after a [pause()] call.
    *
    * Note that PiiOperationCompound (and PiiEngine) commands child
    * operations in an arbitrary order. Therefore, objects may appear
    * in the inputs of a operation before %start() is invoked. Any
-   * resetting action should take place in #check().
+   * resetting action should take place in [check()].
    */
   virtual void start() = 0;
 
   /**
-   * Pauses the operation. The operation should change its state to @p
-   * Pausing. Pausing has direct effect on producer operations only. 
-   * If a producer is in @p Pausing state, it'll finish its current
-   * processing round, turn to @p Paused state and inform all
+   * Pauses the operation. The operation should change its state to 
+   * `Pausing`. Pausing has direct effect on producer operations only. 
+   * If a producer is in `Pausing` state, it'll finish its current
+   * processing round, turn to `Paused` state and inform all
    * connected operations that it is now safe to pause. This will
-   * finally turn all operations in a pipeline to @p Paused state. 
-   * Before the next #start() call, #check() will be called with the
-   * @p reset parameter set to @p false.
+   * finally turn all operations in a pipeline to `Paused` state. 
+   * Before the next [start()] call, [check()] will be called with the
+   * `reset` parameter set to `false`.
    *
-   * Note that pause() has no effect if the operation is not in @p
-   * Running state.
+   * Note that pause() has no effect if the operation is not in 
+   * `Running` state.
    */
   virtual void pause() = 0;
 
   /**
-   * Stops the operation. The operation should change its state to @p
-   * Stopping. Stopping and pausing work similarly in most cases. 
+   * Stops the operation. The operation should change its state to 
+   * `Stopping`. Stopping and pausing work similarly in most cases. 
    * Usually, the only difference is in the final state of the
    * operation. Overriding this function makes it possible for an
-   * operation to prepare for stopping. The difference between @p
-   * stop() and #interrupt() is in that the former performs a "clean"
+   * operation to prepare for stopping. The difference between 
+   * `stop`() and [interrupt()] is in that the former performs a "clean"
    * stop, which won't leave any object currently being processed in
    * the pipeline.
    *
-   * Note that stop() has no effect if the operation is not in @p
-   * Running state.
+   * Note that stop() has no effect if the operation is not in 
+   * `Running` state.
    */
   virtual void stop() = 0;
   
@@ -234,8 +232,8 @@ public:
    * Interrupts the execution. Calling this function should stop the
    * execution of this operation as soon as possible, even in the
    * middle of a processing round. After an interrupt, the next
-   * #start() call will be preceded by a #check() call with the @p
-   * reset parameter set to @p true.
+   * [start()] call will be preceded by a [check()] call with the 
+   * `reset` parameter set to `true`.
    */
   virtual void interrupt() = 0;
 
@@ -246,13 +244,13 @@ public:
 
   /**
    * Waits for this operation to stop running. The calling function
-   * blocks until the operation stops running or @p time milliseconds
+   * blocks until the operation stops running or `time` milliseconds
    * has elapsed. By default, the call will never time out. Note that
    * the state of the operation may not have changed yet when this
    * function returns.
    *
-   * @return @p true if the operation exited within @p time
-   * milliseconds, @p false if the call timed out.
+   * @return `true` if the operation exited within `time`
+   * milliseconds, `false` if the call timed out.
    */
   virtual bool wait(unsigned long time = ULONG_MAX) = 0;
 
@@ -263,13 +261,16 @@ public:
   Q_INVOKABLE virtual int inputCount() const;
   
   /**
-   * Returns a pointer to the input associated with @a name.
+   * Returns a pointer to the input associated with *name*.
    *
    * @return a pointer to the input socket or 0 if no socket matches
-   * @a name
+   * *name*. The default implementation iterates through input() to
+   * find a socket with *name*.
    */
-  Q_INVOKABLE virtual PiiAbstractInputSocket* input(const QString& name) const = 0;
+  Q_INVOKABLE virtual PiiAbstractInputSocket* input(const QString& name) const;
 
+  Q_INVOKABLE virtual PiiAbstractInputSocket* inputAt(int index) const;
+  
   /**
    * Returns the number of output sockets. The default implementation
    * returns outputs().size().
@@ -277,12 +278,12 @@ public:
   Q_INVOKABLE virtual int outputCount() const;
 
   /**
-   * Returns a pointer to the output associated with @a name.
-   *
-   * @return a pointer to the output socket or 0 if no socket matches
-   * @a name
+   * Returns a pointer to the output associated with *name* or 0 if
+   * there is no such socket.
    */
-  Q_INVOKABLE virtual PiiAbstractOutputSocket* output(const QString& name) const = 0;
+  Q_INVOKABLE virtual PiiAbstractOutputSocket* output(const QString& name) const;
+
+  Q_INVOKABLE virtual PiiAbstractOutputSocket* outputAt(int index) const;
 
   /**
    * Returns a list of all input sockets connected to this operation. 
@@ -308,44 +309,26 @@ public:
   Q_INVOKABLE QStringList outputNames() const;
 
   /**
-   * Returns the name of a socket in the context of this operation. 
-   * The name of a socket may change based on nesting level. The same
-   * socket may be accessed with multiple names, if it is exported to
-   * the interface of an @ref PiiOperationCompound "operation compound".
-   *
-   * Operations are free to implement any scheme for naming their
-   * sockets. For example, PiiBasicOperation uses the @p objectName
-   * property of the socket, and PiiOperationCompound maintains an
-   * internal map of socket aliases.
-   *
-   * @param socket the socket whose name is to be found
-   *
-   * @return the name of the socket or an empty string if the socket
-   * is not owned by this operation.
-   */
-  virtual QString socketName(PiiAbstractSocket* socket) const = 0;
-
-  /**
-   * Returns meta information associated with @a socket. This function
+   * Returns meta information associated with *socket*. This function
    * can be used to query named properties of input and output
-   * sockets. Operations are required to provide at least the @p name
+   * sockets. Operations are required to provide at least the `name`
    * property. Other properties can be used depending on application. 
    * Below is a short list of commonly used properies:
    *
-   * @lip name - the name of the socket in the context of this
+   * - `name` - the name of the socket in the context of this
    * operation. See socketName().
    *
-   * @lip min - the minimum possible scalar value a socket can
+   * - `min` - the minimum possible scalar value a socket can
    * send/receive
    *
-   * @lip max - the maximum possible scalar value a socket can
+   * - `max` - the maximum possible scalar value a socket can
    * send/receive
    *
-   * @lip resolution - the resolution of the value. Integers have a
+   * - `resolution` - the resolution of the value. Integers have a
    * resolution of 1. If the value can take values only in known
-   * steps, the @p resolution property specifies the step size.
+   * steps, the `resolution` property specifies the step size.
    *
-   * @lip displayName - a user-displayable name of the socket. May be
+   * - `displayName` - a user-displayable name of the socket. May be
    * translated.
    *
    * @param socket the socket whose properties are queried
@@ -358,18 +341,18 @@ public:
    *
    * @see PiiYdin::isNameProperty()
    */
-  virtual QVariant socketProperty(PiiAbstractSocket* socket, const char* name) const;
+  //virtual QVariant socketProperty(PiiAbstractSocket* socket, const char* name) const;
 
   /**
    * A convenience function for connecting a named output socket to a
    * named input socket in another operation. This is (almost)
    * analogous to:
    *
-   * @code
+   * ~~~(c++)
    * output("output")->connectInput(other->input(input));
-   * @endcode
+   * ~~~
    *
-   * The difference is in that this function returns @p false in case
+   * The difference is in that this function returns `false` in case
    * of a failure.
    *
    * @param output the name of the output socket
@@ -377,19 +360,25 @@ public:
    * @param other the operation that contains the input we need to
    * connect to
    *
-   * @param input the name of the input socket in @p other
+   * @param input the name of the input socket in `other`
    *
-   * @return @p true if both sockets were found, @p false otherwise
+   * @return `true` if both sockets were found, `false` otherwise
    */
   bool connectOutput(const QString& output, PiiOperation* other, const QString& input);
 
   bool connectOutput(const QString& output, PiiAbstractInputSocket* input);
 
   /**
+   * Connects the output with the given name to *input*, which may be
+   * either a name or a pointer to a PiiAbstractInputSocket.
+   */
+  Q_INVOKABLE bool connectOutput(const QString& outputName, const QVariant& input);
+
+  /**
    * Starts storing a named property set. Between startPropertySet()
-   * and #endPropertySet() calls all #setProperty() calls will be
+   * and [endPropertySet()] calls all [setProperty()] calls will be
    * cached. The property values won't be changed until
-   * #applyPropertySet() is called.
+   * [applyPropertySet()] is called.
    *
    * While this mechanism may seem unnecessary and even cumbersome on
    * surface, it makes it possible to change the properties of a
@@ -411,22 +400,22 @@ public:
   
   /**
    * Ends storing a named property set. After calling this function
-   * calls to #setProperty() will change property values directly.
+   * calls to [setProperty()] will change property values directly.
    */
   Q_INVOKABLE virtual void endPropertySet();
 
   /**
-   * Removes the properties cached in the set identified by @a name.
+   * Removes the properties cached in the set identified by *name*.
    */
   Q_INVOKABLE virtual void removePropertySet(const QString& name = QString());
 
   /**
    * Synchronously reconfigures an operation with the properties
-   * cached in the set identified by @a propertySetName. This function
+   * cached in the set identified by *propertySetName*. This function
    * may not change the values immediately. The properties will be
    * changed as data passes through the processing pipeline.
    *
-   * @note Reconfiguration may fail if operations are interrupted
+   * ! Reconfiguration may fail if operations are interrupted
    * (either explicitly or due to a processing error) during
    * reconfiguration. In such a case only a subset of operations may
    * have applied the new properties.
@@ -435,7 +424,7 @@ public:
   
   /**
    * Virtual version of QObject::setProperty(). Making a non-virtual
-   * function virtual in a subclass is @e baad. But we need to be able
+   * function virtual in a subclass is *baad*. But we need to be able
    * to override this function to support nested property names,
    * mutual exclusion, and cached properties.
    *
@@ -445,7 +434,7 @@ public:
   virtual bool setProperty(const char* name, const QVariant& value);
 
   /**
-   * Returns the value of the property identified by @a name.
+   * Returns the value of the property identified by *name*.
    */
   virtual QVariant property(const char* name) const;
 
@@ -453,10 +442,10 @@ public:
    * A convenience function that automatically creates a QVariant out
    * of a PiiVariant.
    *
-   * @code
+   * ~~~(c++)
    * PiiOperation* op = ...;
    * op->setProperty("property", Pii::createVariant(PiiMatrix<int>(4,4)));
-   * @endcode
+   * ~~~
    */
   bool setProperty(const char* name, const PiiVariant& value);
 
@@ -482,23 +471,17 @@ public:
   Q_INVOKABLE void disconnectAllOutputs();
   
   /**
-   * Returns the protection level of @a property.
+   * Returns the protection level of *property*.
    */
   ProtectionLevel protectionLevel(const char* property) const;
+  Q_INVOKABLE ProtectionLevel protectionLevel(const QString& property) const;
 
-  /// @hide
   bool isCompound() const;
 
-  Q_INVOKABLE ProtectionLevel protectionLevel(const QString& property) const;
-  /* Connects the output with the given name to *input*, which may be
-   * either a name or a pointer to a PiiAbstractInputSocket.
-   */
-  Q_INVOKABLE bool connectOutput(const QString& outputName, const QVariant& input);
-  /// @endhide
 signals:
   /**
-   * Signals an error. The @a message should be a user-friendly
-   * explanation of the cause of the error. @a sender is the original
+   * Signals an error. The *message* should be a user-friendly
+   * explanation of the cause of the error. *sender* is the original
    * source of the message.
    */
   void errorOccured(PiiOperation* sender, const QString& message);
@@ -514,13 +497,13 @@ signals:
    * implement a mutual exclusion mechanism in the receiving slot.
    *
    * @param state the new state of the operation. The type of this
-   * value is actually PiiOperation::State, but @p int is used to
+   * value is actually PiiOperation::State, but `int` is used to
    * avoid registering a new meta type.
    */
   void stateChanged(int state);
   
 protected:
-  /// @cond null
+  /// @hide
   typedef QList<QPair<const char*, ProtectionLevel> > ProtectionList;
   typedef QList<QPair<QString,QVariant> > PropertyList;
 
@@ -539,7 +522,7 @@ protected:
   } *d;
   
   PiiOperation(Data* d);
-  /// @endcond
+  /// @endhide
 
   /**
    * Constructs a new PiiOperation.
@@ -547,7 +530,7 @@ protected:
   PiiOperation();
 
   /**
-   * Sets the protection level of @a property to @a level. This
+   * Sets the protection level of *property* to *level*. This
    * function is a generic way of controlling write access to
    * properties. By default, all properties writable independent of
    * the state of the operation. Some properties do however affect the
@@ -556,25 +539,25 @@ protected:
    * changed on the fly without careful handling of the internal
    * synchronization mechanism.
    *
-   * @code
+   * ~~~(c++)
    * MyOperation::MyOperation()
    * {
    *   // Disallow changing of the processing mode
    *   setWritePermission("processingMode", WriteNever);
    * }
-   * @endcode
+   * ~~~
    *
-   * @note Protection is only effective if properties are set through
+   * ! Protection is only effective if properties are set through
    * setProperty(). Calling property setters directly bypasses the
    * protection mechanism.
    */
   void setProtectionLevel(const char* property, ProtectionLevel level);
 
   /**
-   * Copies cached properties from the set identified by @a name to
+   * Copies cached properties from the set identified by *name* to
    * the operation's properties. If you don't call endPropertySet()
    * before this function, the properties will be cached in the set
-   * that was last started with #startPropertySet(). This makes it
+   * that was last started with [startPropertySet()]. This makes it
    * possible to easily copy property sets to each other.
    *
    * Applying a set of cached properties this way is equivalent to
@@ -590,7 +573,7 @@ protected:
    * Returns a pointer to the mutex that prevents concurrent access to
    * the state of this operation.
    *
-   * @code
+   * ~~~(c++)
    * void MyOperation::stop()
    * {
    *   synchronized (stateLock())
@@ -599,7 +582,7 @@ protected:
    *       setState(Stopping);
    *   }
    * }
-   * @endcode
+   * ~~~
    */
   QMutex* stateLock();
 

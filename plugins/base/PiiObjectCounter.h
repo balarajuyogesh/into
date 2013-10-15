@@ -21,15 +21,16 @@
 /**
  * Counts received objects.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in input - any object
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out count - the number of objects received so far.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiObjectCounter : public PiiDefaultOperation
 {
@@ -43,10 +44,10 @@ class PiiObjectCounter : public PiiDefaultOperation
   Q_PROPERTY(int count READ count WRITE setCount);
 
   /**
-   * If this flag is @p true, the value of the counter will be reset
+   * If this flag is `true`, the value of the counter will be reset
    * to zero when the operation is restarted after stopping. If the
-   * flag is @p false, the previous count will be retained. The
-   * default value is @p true.
+   * flag is `false`, the previous count will be retained. The
+   * default value is `true`.
    */
   Q_PROPERTY(bool autoReset READ autoReset WRITE setAutoReset);
   

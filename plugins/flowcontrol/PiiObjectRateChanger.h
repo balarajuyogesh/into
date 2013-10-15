@@ -20,18 +20,19 @@
 
 /**
  * Replicate or sample input objects. Depending on the value of
- * #rateChange, this operation either replicates each input object N
+ * [rateChange], this operation either replicates each input object N
  * times or passes just every Nth object.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in input - any object
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out output - input objects, replicated or sampled
  *
- * @ingroup PiiFlowControlPlugin
  */
 class PiiObjectRateChanger : public PiiDefaultOperation
 {
@@ -40,8 +41,8 @@ class PiiObjectRateChanger : public PiiDefaultOperation
   /**
    * Change in object rate. The default value is 0 which causes every
    * input object to be passed as such. If this value is greater than
-   * zero, every object will be sent @p rateChange times. If the value
-   * is less than zero, @p abs(rateChange) objects will be skipped
+   * zero, every object will be sent `rateChange` times. If the value
+   * is less than zero, `abs`(rateChange) objects will be skipped
    * after each passed object. For example, a rate change of -1 means
    * that every second object will be passed, starting from the second
    * one.

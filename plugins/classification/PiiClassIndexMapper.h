@@ -20,7 +20,7 @@
 
 /**
  * An operation that maps indices into other indices. This operation
- * can make use of a special data structure, #classInfoMap, which
+ * can make use of a special data structure, [classInfoMap], which
  * stores information about class indices. Its purpose is to map a
  * continuous range of class indices to a possibly non-continuos
  * range. The operation is useful if classes need to be deleted and
@@ -32,16 +32,16 @@
  * we need to map 1 and 2 to 2 and 3 to retain the old indices. Here's
  * how:
  *
- * @code
+ * ~~~(c++)
  * PiiOperation* mapper = engine.createOperation("PiiClassIndexMapper");
  * mapper->setProperty("classIndexMap", QVariantList() << 0 << 2 << 3);
- * @endcode
+ * ~~~
  *
  * The operation makes it easy to connect additional information to
  * classes. Let us assume that we later changed the order of classes 0
  * and 2. Here's what we need to do:
  *
- * @code
+ * ~~~(c++)
  * // The normal stuff for converting class indices
  * mapper->setProperty("classIndexMap", QVariantList() << 2 << 0 << 3);
  *
@@ -49,16 +49,16 @@
  * QVariantMap classInfoMap;
  * classInfoMap["classNames"] = QStringList() << "two" << "zero" << "three";
  * mapper->setProperty("classInfoMap", classInfoMap);
- * @endcode
+ * ~~~
  *
- * As a result, the <tt>class name</tt> output will emit "two" for any
+ * As a result, the `class name` output will emit "two" for any
  * incoming 0, "zero" for ones, "three" for twos, and "Unknown" for
  * anything else.
  *
  * It is also possible to map multiple indices into one but still
  * include the class information only once. Here's how:
  *
- * @code
+ * ~~~(c++)
  * // Mapping table:
  * // 0-2 -> 1
  * // 3   -> 5
@@ -72,7 +72,7 @@
  * // These indices map the values in classIndexMap back to classNames
  * classInfoMap["classIndices"] = QVariantList() << 0 << 1 << 2 << 5;
  * mapper->setProperty("classInfoMap", classInfoMap);
- * @endcode
+ * ~~~
  *
  * The result:
  *
@@ -86,23 +86,24 @@
  * <tr><td>5</td><td>0</td><td>zero</td><td>0</td></tr>
  * </table>
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in class index - Input class index (any primitive type, converted
  * to an int)
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out class index - Converted class index as specified by
- * #classIndexMap (int)
+ * [classIndexMap] (int)
  *
- * @out class name - Class name, if #classInfoMap provides such
+ * @out class name - Class name, if [classInfoMap] provides such
  * information, "Unknown" otherwise. (QString)
  *
- * @out list index - the index of the class in the @p classIndices
- * list (see #classInfoMap).
+ * @out list index - the index of the class in the `classIndices`
+ * list (see [classInfoMap]).
  *
- * @ingroup PiiClassificationPlugin
  */
 class PiiClassIndexMapper : public PiiDefaultOperation
 {
@@ -113,14 +114,14 @@ class PiiClassIndexMapper : public PiiDefaultOperation
    * number of QVariantLists that provide additional information for
    * the classes. Each of the lists must be of equal length.
    *
-   * @lip classIndices - indices of the classes. The indices may not
+   * - `classIndices` - indices of the classes. The indices may not
    * be zero-based and may skip values. A QVariantList whose elements
    * are convertible to ints. If this value is present, the indices in
-   * #classIndexMap are mapped back to list indices using the values
-   * in this list. The output of <tt>list index</tt> is meaningful
+   * [classIndexMap] are mapped back to list indices using the values
+   * in this list. The output of `list index` is meaningful
    * only if this value is set.
    *
-   * @lip classNames - the names of the classes. A QStringList.
+   * - `classNames` - the names of the classes. A QStringList.
    *
    * The map may also include other information, which is ignored by
    * the operation. All information will however be saved and restored
@@ -137,10 +138,10 @@ class PiiClassIndexMapper : public PiiDefaultOperation
    * input index is below zero or exceeds the size of the class index
    * map, zero will be emitted.
    *
-   * @code
+   * ~~~(c++)
    * // Map zero to one and one to zero
    * mapper->setProperty("classIndexMap", QVariantList() << 1 << 0);
-   * @endcode
+   * ~~~
    */
   Q_PROPERTY(QVariantList classIndexMap READ classIndexMap WRITE setClassIndexMap);
   

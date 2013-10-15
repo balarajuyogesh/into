@@ -23,16 +23,17 @@
  * An operation that puts multiple matrices into a grid that produces
  * a larger matrix.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in inputX - any number of input matrices. X is a zero-based index.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out compound - a compound matrix on which the input matrices are
- * placed as denoted by the #rows an #columns properties.
+ * placed as denoted by the [rows] an [columns] properties.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiMatrixCombiner : public PiiDefaultOperation
 {

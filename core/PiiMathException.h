@@ -17,11 +17,9 @@
 #define _PIIMATHEXCEPTION_H
 
 /**
- * @class PiiMathException
+ * @decl class PiiMathException
  *
  * PiiMathException is thrown when errors occur in calculations.
- *
- * @ingroup Core
  */
 #include "PiiGlobal.h"
 

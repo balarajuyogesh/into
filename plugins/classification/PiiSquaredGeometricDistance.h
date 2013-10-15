@@ -21,13 +21,12 @@
 /**
  * Squared geometric distance. The squared geometric distance is
  * calculated as the the sum of squared differences of the vectors:
- * @f$ d = (S-M)(S-M)^T @f$, where S and M represent the sample and
+ * \( d = (S-M)(S-M)^T \), where S and M represent the sample and
  * model feature vectors, respectively. It is equivalent to the
  * geometric distance in most classification tasks, because square
  * root is a monotonic function. Squared distance however works much
  * faster because no square root needs to be taken.
  *
- * @ingroup PiiClassificationPlugin
  */
 PII_DEFAULT_DISTANCE_MEASURE_DEF(PiiSquaredGeometricDistance)
 {

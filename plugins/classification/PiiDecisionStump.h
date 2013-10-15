@@ -33,7 +33,6 @@
  * stump that selects not only the optimal threshold but also two
  * classes that are optimally separated by the threshold.
  *
- * @ingroup PiiClassificationPlugin
  */
 template <class SampleSet> class PiiDecisionStump :
   public PiiClassifier<SampleSet>,
@@ -47,15 +46,15 @@ public:
   
   /**
    * Finds the feature that best separates the two classes present in
-   * @a samples and an optimal threshold for it.
+   * *samples* and an optimal threshold for it.
    */
   void learn(const SampleSet& samples,
              const QVector<double>& labels,
              const QVector<double>& weights);
 
   /**
-   * Returns #leftLabel() if the @ref selectedFeature() "selected
-   * feature" is less than or equal to #threshold() and #rightLabel()
+   * Returns [leftLabel()] if the [selectedFeature()] "selected
+   * feature" is less than or equal to [threshold()] and [rightLabel()]
    * otherwise.
    */
   double classify(ConstFeatureIterator sample) throw();
@@ -63,19 +62,19 @@ public:
   virtual bool converged() const throw ();
 
   /**
-   * Returns @p WeightedLearner.
+   * Returns `WeightedLearner`.
    */
   virtual PiiClassification::LearnerCapabilities capabilities() const;
 
   /**
-   * Sets the selected feature to @a feature. If the selected feature
+   * Sets the selected feature to *feature*. If the selected feature
    * is set manually, one must ensure it won't exceed the length of
    * the incoming feature vectors.
    */
   void setSelectedFeature(int feature);
   /**
    * Returns the index of the feature that was chosen as the optimal
-   * one by #learn().
+   * one by [learn()].
    */
   int selectedFeature() const;
 

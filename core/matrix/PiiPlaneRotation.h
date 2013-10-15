@@ -23,7 +23,7 @@
  * coordinates axes. The rotation can be represented by a matrix of
  * the form
  *
- * @f[
+ * \[
  * R = \left(
  * \begin{array}{ccccccc}
  * 1 & \cdots & 0 & \cdots & 0 & \cdots & 0 \         \
@@ -35,7 +35,7 @@
  * 0 & \cdots & 0 & \cdots & 0 & \cdots & 1
  * \end{array}
  * \right)
- * @f]
+ * \]
  *
  * Note that the rotation only affects the rows and columns that have
  * non-zero off-diagonal entries in R. Therefore, it only affects a
@@ -46,9 +46,8 @@
  * affected.
  *
  * This class does not store the full rotation matrix. Instead, just
- * the coefficients @e c and @e s are stored.
+ * the coefficients *c* and *s* are stored.
  *
- * @ingroup Matrix
  */
 template <class T> class PiiPlaneRotation
 {
@@ -75,16 +74,16 @@ public:
   }
 
   /**
-   * Returns @p true if @a other is equal to this, and @p false
+   * Returns `true` if *other* is equal to this, and `false`
    * otherwise.
    */
   bool operator== (const PiiPlaneRotation& other) const { return c == other.c && s == other.s; }
 
   /**
-   * Applies the rotation matrix to @a mat from the left. The vectors
-   * to be rotated are stored as column vectors in @a mat, hence the
-   * name. The rotation will affect all columns but only rows @a p and
-   * @p q (p < q).
+   * Applies the rotation matrix to *mat* from the left. The vectors
+   * to be rotated are stored as column vectors in *mat*, hence the
+   * name. The rotation will affect all columns but only rows *p* and
+   * `q` (p < q).
    */
   template <class Matrix> void rotateColumns(PiiConceptualMatrix<Matrix>& mat,
                                              int p, int q) const
@@ -93,10 +92,10 @@ public:
   }
 
   /**
-   * Applies the rotation matrix to @a mat from the right. The vectors
-   * to be rotated are stored as row vectors in @a mat, hence the
-   * name. The rotation will affect all rows but only columns @a p and
-   * @p q (p < q).
+   * Applies the rotation matrix to *mat* from the right. The vectors
+   * to be rotated are stored as row vectors in *mat*, hence the
+   * name. The rotation will affect all rows but only columns *p* and
+   * `q` (p < q).
    */
   template <class Matrix> void rotateRows(PiiConceptualMatrix<Matrix>& mat,
                                           int p, int q) const
@@ -123,7 +122,7 @@ private:
 namespace Pii
 {
   /**
-   * Returns the transpose of @a rotation. Since rotation matrices are
+   * Returns the transpose of *rotation*. Since rotation matrices are
    * orthogonal, the transposition of a rotation matrix equals its
    * inverse (rotation to the opposite direction).
    *
@@ -177,26 +176,26 @@ namespace Pii
    * zeroes a pair of off-diagonal entries in a Hermitian (or
    * self-adjoint, in the real case symmetric) 2-by-2 matrix.
    *
-   * @f[
+   * \[
    * A = \left( \begin{array}{cc}
    * a & b \\
    * b^* & c
    * \end{array} \right),
-   * @f]
+   * \]
    *
    * where * denotes a complex conjugate.
    *
    * The rotation matrix R is chosen so that a similarity transform on
    * A yields a diagonal matrix:
    *
-   * @f[
+   * \[
    * R^H A R = \left( \begin{array}{cc}
    * d & 0 \\
    * 0 & e
    * \end{array} \right),
-   * @f]
+   * \]
    *
-   * where @e d and @e e are non-zero. @f$R^H@f$ is the Hermitian
+   * where *d* and *e* are non-zero. \(R^H\) is the Hermitian
    * transpose of R.
    *
    * @relates PiiPlaneRotation

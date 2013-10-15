@@ -26,7 +26,6 @@ template <class T> class PiiRigidPlaneRansac;
  *
  * @see PiiRigidPlaneRansac
  *
- * @ingroup PiiMatchingPlugin
  */
 class PiiRigidPlaneMatcher : public PiiRansacPointMatcher
 {
@@ -37,13 +36,13 @@ class PiiRigidPlaneMatcher : public PiiRansacPointMatcher
   Q_PROPERTY(double maxScale READ maxScale WRITE setMaxScale);
   Q_PROPERTY(double maxRotationAngle READ maxRotationAngle WRITE setMaxRotationAngle);
   /**
-   * Same as #maxRotationAngle, but in degrees.
+   * Same as [maxRotationAngle], but in degrees.
    */
   Q_PROPERTY(double maxRotationAngleDeg READ maxRotationAngleDeg WRITE setMaxRotationAngleDeg STORED false);
 
   /**
    * The maximum allowed relative scale change in merging overlapping
-   * detections. Setting @p scaleTolerance to a non-zero value makes
+   * detections. Setting `scaleTolerance` to a non-zero value makes
    * it possible to merge detected models even if their sizes are
    * slightly different. The default value is 0.1, which allows a 10%
    * scale change.
@@ -52,20 +51,20 @@ class PiiRigidPlaneMatcher : public PiiRansacPointMatcher
 
   /**
    * The maximum allowed angle change in merging overlapping
-   * detections. Setting @p angleTolerance to a non-zero value makes
+   * detections. Setting `angleTolerance` to a non-zero value makes
    * it possible to merge detected models even if their angles are
    * slightly different. The default is pi/36, which allows a rotation
    * of at most 5 degrees.
    */
   Q_PROPERTY(double angleTolerance READ angleTolerance WRITE setAngleTolerance);
   /**
-   * Same as #angleTolerance, but in degrees.
+   * Same as [angleTolerance], but in degrees.
    */
   Q_PROPERTY(double angleToleranceDeg READ angleToleranceDeg WRITE setAngleToleranceDeg STORED false);
 
   /**
    * The maximum allowed position change in merging overlapping
-   * detections. Setting @p translationTolerance to a non-zero value
+   * detections. Setting `translationTolerance` to a non-zero value
    * makes it possible to merge detected models even if their
    * locations are slightly different. The default is 10, which allows
    * a translation of at most 10 pixels.
@@ -105,8 +104,8 @@ protected:
 
   /**
    * This function merges two matches if the differences in their
-   * parameters are in tolerances (#scaleTolerance, #angleTolerance,
-   * #translationTolerance). "Merging" is done by simply selecting the
+   * parameters are in tolerances ([scaleTolerance], [angleTolerance],
+   * [translationTolerance]). "Merging" is done by simply selecting the
    * match with more matched points.
    */
   void removeDuplicates(PiiMatching::MatchList& matchedModels);

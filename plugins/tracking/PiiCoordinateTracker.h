@@ -22,21 +22,20 @@
 
 
 /**
- * %PiiCoordinateTracker tracks points in Cartesian coordinates.
+ * PiiCoordinateTracker tracks points in Cartesian coordinates.
  *
  * This class does not yet implement the measurement model. It merely
  * augments PiiMultiHypothesisTracker by using PiiTrackerPoint* as the
  * measurement type and by adding facilities for managing measurements
  * and trajectories.
  *
- * %PiiCoordinateTracker tracks coordinates in a @p D -dimensional
- * space. The coordinates can be expressed as any data type, @p T. 
+ * PiiCoordinateTracker tracks coordinates in a `D` -dimensional
+ * space. The coordinates can be expressed as any data type, `T`. 
  * Evaluation of new measurements is based on predictions. A
  * prediction is derived from an existing trajectory, and the distance
  * between a new measurement and the prediction works as a measure of
  * goodness.
  *
- * @ingroup PiiTrackingPlugin
  */
 template <class T, int D> class PiiCoordinateTracker :
   public PiiMultiHypothesisTracker<PiiVector<T,D>, PiiCoordinateTrackerNode<T,D>*>
@@ -56,12 +55,12 @@ public:
    * a prediction for each active trajectory and then runs the
    * tracking algorithm.
    *
-   * @code
+   * ~~~(c++)
    * PiiCoordinateTracker<int,2> tracker;
    * typedef PiiTrackerPoint<int,2> Point;
    * tracker.addMeasurements(QList<Point>() << Point(1,2) << Point(-1, 3), 0);
    * tracker.addMeasurements(QList<Point>() << Point(4,3) << Point(-2, 5) << Point(-4, 8), 1);
-   * @endcode
+   * ~~~
    */
   void addMeasurements(const QList<MeasurementType>& measurements, int t);
 
@@ -69,16 +68,16 @@ public:
    * A utility function that makes it possible to use a matrix to set
    * the measurements at once.
    *
-   * @code
+   * ~~~(c++)
    * PiiCoordinateTracker<int,2> tracker;
    * tracker.addMeasurements(PiiMatrix<int>(2, 2,
    *                                        1, 2,
    *                                       -1, 3));
-   * @endcode
+   * ~~~
    *
    * @param measurements a N-by-D matrix. Each row represents a
    * measurement point. If the number of columns in the matrix does
-   * not equal @p D, the function does nothing.
+   * not equal `D`, the function does nothing.
    */
   void addMeasurements(const PiiMatrix<T>& measurements, int t);
 
@@ -87,7 +86,7 @@ public:
    * the measurements at once and set labels or block some
    * measurements depends on given labels.
    *
-   * @code
+   * ~~~(c++)
    * PiiCoordinateTracker<int,2> tracker;
    * tracker.addMeasurements(PiiMatrix<int>(2, 2,
    *                                        1, 2,
@@ -95,11 +94,11 @@ public:
    *                         PiiMatrix<int>(2,1,
    *                                        0,
    *                                        1));
-   * @endcode
+   * ~~~
    *
    * @param measurements a N-by-D matrix. Each row represents a
    * measurement point. If the number of columns in the matrix does
-   * not equal @p D, the function does nothing.
+   * not equal `D`, the function does nothing.
    *
    * @param labels a N-by-1 matrix.
    */
@@ -108,7 +107,7 @@ public:
   /**
    * Set the prediction threshold. If the squared distance to a
    * measurement is larger than or equal to this value,
-   * #measureFit(TrajectoryType**,const MeasurementType&,int) will
+   * [measureFit(TrajectoryType**,const MeasurementType&,int)] will
    * return zero. The default threshold is 1.
    */
   void setPredictionThreshold(double predictionThreshold) { _dPredictionThreshold = predictionThreshold; }
@@ -121,7 +120,7 @@ public:
    * Set the threshold for connectable measurements until there is a
    * prediction. If the squared distance between measurements is less
    * than this threshold, the measurements can be connected, and
-   * #measureFit(TrajectoryType**,const MeasurementType&,int) will
+   * [measureFit(TrajectoryType**,const MeasurementType&,int)] will
    * return 1.0. If it is more, 0.0 will be returned. The default
    * threshold is 1.
    */
@@ -138,12 +137,12 @@ public:
    * based on the trajectory fitness. If you want to reverse the
    * order, do something like the following:
    *
-   * @code
+   * ~~~(c++)
    * typedef PiiCoordinateTrackerNode<double,2> TrajectoryType;
    * PiiCoordinateTracker<double,2> tracker;
    * QList<TrajectoryType> trajectories = tracker.trajectories();
    * qSort(trajectories.begin(), trajectories.end(), TrajectoryType::GreaterThan());
-   * @endcode
+   * ~~~
    *
    * @see PiiCoordinateTrackerNode::trajectoryFitness()
    */
@@ -151,36 +150,36 @@ public:
   
 protected:
   /**
-   * Extends @p trajectory by adding a new PiiCoordinateTrackerNode to
+   * Extends `trajectory` by adding a new PiiCoordinateTrackerNode to
    * the end of the linked list. The measurement will be stored into
    * the new node.
    */
   TrajectoryType* createTrajectory(TrajectoryType** trajectory, const MeasurementType& measurement, double fitness, int t);
 
   /**
-   * Measure the likelihood of @p measurement belonging to @p
-   * trajectory at time instant @p t. The default implementation
-   * computes squared distance between @p measurement and the
-   * trajectory's prediction (#predict()). If they are equal, 1.0 will
+   * Measure the likelihood of `measurement` belonging to 
+   * `trajectory` at time instant `t`. The default implementation
+   * computes squared distance between `measurement` and the
+   * trajectory's prediction ([predict()]). If they are equal, 1.0 will
    * be returned. The returned value decreases linearly towards zero
-   * with (squared) distance until @ref setPredictionThreshold()
+   * with (squared) distance until [setPredictionThreshold()]
    * "predictionThreshold" is reached.
    *
-   * If there is no prediction, @p measurement will be compared to the
-   * trajectory's last point. If the squared distance is within @ref
-   * setInitialThreshold() "initialThreshold", 1.0 will be returned. 
+   * If there is no prediction, `measurement` will be compared to the
+   * trajectory's last point. If the squared distance is within 
+   * [initialThreshold](setInitialThreshold()), 1.0 will be returned. 
    * Otherwise, 0.0 will be returned.
    *
-   * Should @p measurement work as a starting point for a new
-   * trajectory, the tracker consults the #measureFit(const
+   * Should `measurement` work as a starting point for a new
+   * trajectory, the tracker consults the [measureFit](const
    * MeasurementType&, int) function.
    */
   double measureFit(TrajectoryType** trajectory, const MeasurementType& measurement, int t) const;
 
   /**
-   * Evaluate the likelihood that @p measurement is a starting point
+   * Evaluate the likelihood that `measurement` is a starting point
    * of a new trajectory. The default implementation returns 1.0 when
-   * @p t is zero, 0.0 otherwise. This creates new trajectories on the
+   * `t` is zero, 0.0 otherwise. This creates new trajectories on the
    * first iteration only.
    *
    * @param measurement the measurement
@@ -197,9 +196,9 @@ protected:
   }
 
   /**
-   * Create a prediction for all trajectories at time instant @p t. 
+   * Create a prediction for all trajectories at time instant `t`. 
    * The default implementation loops through the trajectories and
-   * calls #predict(TrajectoryType*, int) for each trajectory.
+   * calls [predict(TrajectoryType*, int)] for each trajectory.
    */
   virtual void predict(int t)
   {
@@ -211,7 +210,7 @@ protected:
   }
   
   /**
-   * Predict the location of a measurement at the time instant @p t
+   * Predict the location of a measurement at the time instant `t`
    * given a trajectory. The function should return a pointer to a
    * newly allocated measurement object. The tracker assumes the
    * ownership of the pointer. If a prediction cannot be derived yet,

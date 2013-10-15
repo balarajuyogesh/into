@@ -28,11 +28,11 @@
  * formats. If a video with the same name already exists,
  * it will be overwritten.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - video frames, any gray-level or color image
  *
- * @ingroup PiiVideoPlugin
  */
 class PII_VIDEO_EXPORT PiiVideoFileWriter : public PiiDefaultOperation
 {

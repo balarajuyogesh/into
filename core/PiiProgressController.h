@@ -23,7 +23,6 @@
  * An interface for objects that control the functioning of operations
  * that take a long time.
  *
- * @ingroup Core
  */
 class PII_CORE_EXPORT PiiProgressController
 {
@@ -32,11 +31,11 @@ public:
 
   /**
    * Check if the slow operation is still allowed to continue. The
-   * implementation should return @p true if the operation is still
-   * allowed to run and @p false otherwise.
+   * implementation should return `true` if the operation is still
+   * allowed to run and `false` otherwise.
    *
    * @param progressPercentage an estimate of the current state of
-   * progress as a percentage (0.0 - 1.0). If the value is @p NaN, the
+   * progress as a percentage (0.0 - 1.0). If the value is `NaN`, the
    * current state of progress is not known to the caller.
    */
   virtual bool canContinue(double progressPercentage = NAN) const = 0;

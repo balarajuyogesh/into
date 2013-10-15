@@ -27,7 +27,6 @@
  * Binary output archive stores data in a raw binary format. The
  * binary format is platform-dependent.
  *
- * @ingroup Serialization
  */
 class PII_SERIALIZATION_EXPORT PiiBinaryOutputArchive :
   public PiiOutputArchive<PiiBinaryOutputArchive>,

@@ -23,13 +23,15 @@
 /**
  * Basic labeling operations.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - the input image. Binary image. If the image is not
  * binary, it will be automatically thresholded. (Any gray-level image
  * type.)
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out image - the labeled image. A PiiMatrix<int> type in which
  * objects are marked with increasing ordinal numbers 1,2,...,N. The
@@ -38,14 +40,13 @@
  * @out labels - the number of distinct objects in the input image. 
  * (int)
  *
- * @ingroup PiiImagePlugin
  */
 class PiiLabelingOperation : public PiiDefaultOperation
 {
   Q_OBJECT
 
   /**
-   * Connectivity type for labeling. The default is @p Connect4.
+   * Connectivity type for labeling. The default is `Connect4`.
    */
   Q_PROPERTY(PiiImage::Connectivity connectivity READ connectivity WRITE setConnectivity);
 
@@ -57,18 +58,18 @@ class PiiLabelingOperation : public PiiDefaultOperation
   Q_PROPERTY(double threshold READ threshold WRITE setThreshold);
 
   /**
-   * A hysteresis for the thresholding. If this value is non-zero, @p
-   * threshold will decide the minimum value for a gray level that can
+   * A hysteresis for the thresholding. If this value is non-zero, 
+   * `threshold` will decide the minimum value for a gray level that can
    * be a "seed" for a connected object. A all pixels surrounding the
-   * seed that are brighter than @p threshold - @p hysteresis are
+   * seed that are brighter than `threshold` - `hysteresis` are
    * joined to the connected component.
    */
   Q_PROPERTY(double hysteresis READ hysteresis WRITE setHysteresis);
 
   /**
    * A flag that can be used to invert the automatic thresholding. If
-   * this value is set to @p true, dark objects will be considered
-   * targets. The default value is @p false.
+   * this value is set to `true`, dark objects will be considered
+   * targets. The default value is `false`.
    */
   Q_PROPERTY(bool inverse READ inverse WRITE setInverse);
   

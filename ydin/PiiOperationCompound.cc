@@ -34,12 +34,10 @@ PiiOperationCompound::Data::Data() :
   state(PiiOperation::Stopped),
   bChecked(false),
   bWaiting(false)
-{
-}
+{}
 
 PiiOperationCompound::Data::~Data()
-{
-}
+{}
   
 PiiOperationCompound::PiiOperationCompound() :
   PiiOperation(new Data)
@@ -49,27 +47,31 @@ PiiOperationCompound::PiiOperationCompound() :
 
 PiiOperationCompound::PiiOperationCompound(Data* data) :
   PiiOperation(data)
-{
-}
+{}
 
 PiiOperationCompound::~PiiOperationCompound()
 {
-  unexposeAll();
+  removeAllSockets();
 }
 
-void PiiOperationCompound::unexposeAll()
+template <class Socket> void PiiOperationCompound::clearSocketList(QList<Socket*>& list)
+{
+  for (int i=0; i<list.size(); ++i)
+    delete PiiProxySocket::parent(list[i]);
+  list.clear();
+}
+
+void PiiOperationCompound::removeAllSockets()
 {
   PII_D;
-  qDeleteAll(d->lstInputs);
-  d->lstInputs.clear();
-  qDeleteAll(d->lstOutputs);
-  d->lstOutputs.clear();
+  clearSocketList(d->lstInputs);
+  clearSocketList(d->lstOutputs);
 }
 
 void PiiOperationCompound::clear()
 {
   PII_D;
-  unexposeAll();
+  removeAllSockets();
   qDeleteAll(d->lstOperations);
   d->lstOperations.clear();
 }
@@ -105,7 +107,10 @@ void PiiOperationCompound::check(bool reset)
   if (bError)
     throw compoundEx;
   if (reset)
-    resetProxies();
+    {
+      resetProxies(d->lstInputs);
+      resetProxies(d->lstOutputs);
+    }
   d->bChecked = true;
 }
 
@@ -176,14 +181,15 @@ void PiiOperationCompound::interrupt()
     setState(Stopped);
 }
 
-void PiiOperationCompound::resetProxies()
+template <class Socket>
+void PiiOperationCompound::resetProxies(const QList<Socket*>& list)
 {
-  PII_D;
-  // Reset all proxy inputs and outputs
-  for (int i=0; i<d->lstInputs.size(); ++i)
-    d->lstInputs[i]->reset();
-  for (int i=0; i<d->lstOutputs.size(); ++i)
-    d->lstOutputs[i]->reset();
+  for (int i=0; i<list.size(); ++i)
+    {
+      PiiProxySocket* pProxy = PiiProxySocket::parent(list[i]);
+      if (pProxy)
+        pProxy->reset();
+    }
 }
 
 /* Check if a child's state change to newState causes a state change
@@ -357,20 +363,12 @@ bool PiiOperationCompound::wait(State state, unsigned long time)
 
 QList<PiiAbstractInputSocket*> PiiOperationCompound::inputs() const
 {
-  const PII_D;
-  QList<PiiAbstractInputSocket*> lstInputs;
-  for (int i=0; i < d->lstInputs.size(); ++i)
-    lstInputs << d->lstInputs[i]->input();
-  return lstInputs;
+  return _d()->lstInputs;
 }
 
 QList<PiiAbstractOutputSocket*> PiiOperationCompound::outputs() const
 {
-  const PII_D;
-  QList<PiiAbstractOutputSocket*> lstOutputs;
-  for (int i=0; i < d->lstOutputs.size(); ++i)
-    lstOutputs << d->lstOutputs[i]->output();
-  return lstOutputs;
+  return _d()->lstOutputs;
 }
 
 int PiiOperationCompound::inputCount() const
@@ -383,221 +381,172 @@ int PiiOperationCompound::outputCount() const
   return _d()->lstOutputs.size();
 }
 
-QVariant PiiOperationCompound::socketProperty(PiiAbstractSocket* socket, const char* name) const
-{
-  const PII_D;
-  QString alias;
-
-  // Search outputs
-  for (int i=0; i<d->lstOutputs.size(); ++i)
-    if (d->lstOutputs[i]->socket() == socket)
-      {
-        if (PiiYdin::isNameProperty(name))
-          return d->lstOutputs[i]->name();
-        PiiAbstractOutputSocket* pRootOutput = d->lstOutputs[i]->output()->rootOutput();
-        PiiOperation* pParentOp = qobject_cast<PiiOperation*>(pRootOutput->socket()->parent());
-        return pParentOp->socketProperty(pRootOutput, name);
-      }
-
-  if (PiiYdin::isNameProperty(name))
-    {
-      // Search inputs
-      for (int i=0; i<d->lstInputs.size(); ++i)
-        if (d->lstInputs[i]->socket() == socket)
-          return d->lstInputs[i]->name();
-
-      // No match found in my aliases -> search child operations
-  
-      return internalName(socket);
-    }
-  return QVariant();
-}
-
-QString PiiOperationCompound::internalName(PiiAbstractSocket* socket) const
-{
-  if (socket == 0)
-    return QString();
-  
-  const PII_D;
-  QList<PiiOperation*> parents =
-    Pii::findAllParents<PiiOperation*>(socket->socket());
-  
-  // Find a parent operation that is in our operation list 
-  for (int i=parents.size(); i--; )
-    {
-      int childIndex = d->lstOperations.indexOf(parents[i]);
-      // Yes, this parent is owned by us. Let it decide the name of the object.
-      if (childIndex != -1)
-        return d->lstOperations[childIndex]->objectName() + '.' +
-          d->lstOperations[childIndex]->socketName(socket);
-    }
-  
-  // Not in my children...
-  return QString();
-}
-
-void PiiOperationCompound::createInputProxy(const QString& alias)
+PiiProxySocket* PiiOperationCompound::createInputProxy(const QString& name)
 {
   PII_D;
-  if (!d->lstInputs.contains(alias))
-    {
-      ExposedSocket *pSocket = new ExposedSocket(alias, this);
-      pSocket->expose(static_cast<PiiAbstractInputSocket*>(0), ProxyConnection);
-      d->lstInputs.append(pSocket);
-    }
+  if (findSocket(name, d->lstInputs))
+    return 0;
+
+  PiiProxySocket* pProxy = new PiiProxySocket(name, '.' + name,  this);
+  d->lstInputs.append(pProxy->input());
+  return pProxy;
 }
 
-void PiiOperationCompound::createOutputProxy(const QString& alias)
+PiiProxySocket* PiiOperationCompound::createOutputProxy(const QString& name)
 {
   PII_D;
-  if (!d->lstOutputs.contains(alias))
-    {
-      ExposedSocket *pSocket = new ExposedSocket(alias, this);
-      pSocket->expose(static_cast<PiiAbstractOutputSocket*>(0), ProxyConnection);
-      d->lstOutputs.append(pSocket);
-    }
+  if (findSocket(name, d->lstOutputs))
+    return 0;
+
+  PiiProxySocket* pProxy = new PiiProxySocket('.' + name, name, this);
+  d->lstOutputs.append(pProxy->output());
+  return pProxy;
 }
 
-PiiProxySocket* PiiOperationCompound::inputProxy(const QString& alias) const
+PiiProxySocket* PiiOperationCompound::outputProxy(const QString& name) const
 {
-  ExposedSocket* pSocket = _d()->lstInputs[alias];
-  if (pSocket != 0)
-    return pSocket->proxy();
-
-  return 0;
+  PiiAbstractOutputSocket* pOutput = findSocket(name, _d()->lstOutputs);
+  return pOutput ? PiiProxySocket::parent(pOutput) : 0;
 }
 
-PiiProxySocket* PiiOperationCompound::outputProxy(const QString& alias) const
+bool PiiOperationCompound::exposeInput(PiiAbstractInputSocket* socket)
 {
-  ExposedSocket* pSocket = _d()->lstOutputs[alias];
-  if (pSocket != 0)
-    return pSocket->proxy();
-  return 0;
-}
-
-void PiiOperationCompound::exposeInput(PiiAbstractInputSocket* socket,
-                                       const QString& alias,
-                                       ConnectionType connectionType)
-{
+  if (socket == 0 || !Pii::isParent(this, socket)) return false;
   PII_D;
-  // Make sure input is exposed only once
-  unexposeInput(socket);
-  ExposedSocket* pSocket = d->lstInputs[alias];
-  if (pSocket == 0)
-    {
-      pSocket = new ExposedSocket(alias, this);
-      d->lstInputs.append(pSocket);
-    }
-  pSocket->expose(socket, connectionType);
+  // No duplicate entries with the same name
+  if (findSocket(socket->objectName(), d->lstInputs))
+    return false;
+
+  d->lstInputs.append(socket);
 
   // Break connection when the socket is destroyed.
-  connect(socket->socket(),
+  connect(socket,
           SIGNAL(destroyed(QObject*)),
-          SLOT(removeInput(QObject*)),
+          SLOT(removeExposedInput(QObject*)),
           Qt::DirectConnection);
+
+  return true;
 }
 
-void PiiOperationCompound::exposeOutput(PiiAbstractOutputSocket* socket,
-                                       const QString& alias,
-                                       ConnectionType connectionType)
+PiiProxySocket* PiiOperationCompound::inputProxy(const QString& name) const
 {
+  PiiAbstractInputSocket* pInput = findSocket(name, _d()->lstInputs);
+  return pInput ? PiiProxySocket::parent(pInput) : 0;
+}
+
+bool PiiOperationCompound::exposeOutput(PiiAbstractOutputSocket* socket)
+{
+  if (socket == 0 || !Pii::isParent(this, socket)) return false;
   PII_D;
-  ExposedSocket* pSocket = d->lstOutputs[alias];
-  if (pSocket == 0)
-    {
-      pSocket = new ExposedSocket(alias, this);
-      d->lstOutputs.append(pSocket);
-    }
-  pSocket->expose(socket, connectionType);
+  if (findSocket(socket->objectName(), d->lstOutputs))
+    return false;
+
+  d->lstOutputs.append(socket);
   
   // Break connection when the socket is destroyed
-  connect(socket->socket(),
+  connect(socket,
           SIGNAL(destroyed(QObject*)),
-          SLOT(removeOutput(QObject*)),
+          SLOT(removeExposedOutput(QObject*)),
           Qt::DirectConnection);
+  
+  return true;
 }
 
-void PiiOperationCompound::exposeInput(const QString& fullName, const QString& alias, ConnectionType connectionType)
+bool PiiOperationCompound::exposeInput(const QString& name)
 {
-  PiiAbstractInputSocket* pInput = input(fullName);
+  PiiAbstractInputSocket* pInput = input(name);
   if (pInput)
-    exposeInput(pInput, alias, connectionType);
-  else
-    piiWarning(tr("There is no \"%1\" input in %2.").arg(fullName).arg(metaObject()->className()));
+    return exposeInput(pInput);
+
+  piiWarning(tr("There is no \"%1\" input in %2.").arg(name).arg(metaObject()->className()));
+  return false;
 }
 
-void PiiOperationCompound::exposeInputs(const QStringList& fullNames, const QString& proxyName)
+bool PiiOperationCompound::exposeOutput(const QString& name)
 {
-  for (int i=fullNames.size(); i--; )
-    exposeInput(fullNames[i], proxyName);
+  PiiAbstractOutputSocket* pOutput = output(name);
+  if (pOutput)
+    return exposeOutput(pOutput);
+
+  piiWarning(tr("There is no \"%1\" output in %2.").arg(name).arg(metaObject()->className()));
+  return false;
+}
+
+PiiProxySocket* PiiOperationCompound::createInputProxy(const QString& name, const QStringList& intputNames)
+{
+  PiiProxySocket* pProxy = createInputProxy(name);
+  if (!pProxy)
+    return 0;
+  for (int i=0; i<intputNames.size(); ++i)
+    pProxy->output()->connectInput(input(intputNames[i]));
+  return pProxy;
+}
+
+PiiProxySocket* PiiOperationCompound::createOutputProxy(const QString& name, const QString& outputName)
+{
+  PiiProxySocket* pProxy = createInputProxy(name);
+  if (!pProxy)
+    return 0;
+  pProxy->output()->connectInput(input(outputName));
+  return pProxy;
 }
   
-void PiiOperationCompound::exposeOutput(const QString& fullName, const QString& alias, ConnectionType connectionType)
+bool PiiOperationCompound::removeInput(PiiAbstractInputSocket* input)
 {
-  PiiAbstractOutputSocket* pOutput = output(fullName);
-  if (pOutput)
-    exposeOutput(pOutput, alias, connectionType);
-  else
-    piiWarning(tr("There is no \"%1\" output in %2.").arg(fullName).arg(metaObject()->className()));
+  return removeSocket(input, _d()->lstInputs);
 }
 
-void PiiOperationCompound::unexposeInput(PiiAbstractInputSocket* input)
+bool PiiOperationCompound::removeOutput(PiiAbstractOutputSocket* output)
 {
-  if (input == 0) return;
-  PII_D;
-  for (int i=d->lstInputs.size(); i--; )
+  return removeSocket(output, _d()->lstOutputs);
+}
+
+template <class Socket>
+bool PiiOperationCompound::removeSocket(QObject* socket, QList<Socket*>& list)
+{
+  for (int i=list.size(); i--; )
     {
-      if (d->lstInputs[i]->isProxy())
-        d->lstInputs[i]->proxy()->disconnectInput(input);
-      else if (d->lstInputs[i]->input() == input)
-        delete d->lstInputs.takeAt(i);
-    }
-}
-
-void PiiOperationCompound::unexposeOutput(PiiAbstractOutputSocket* output)
-{
-  if (output == 0) return;
-  PII_D;
-  for (int i=d->lstOutputs.size(); i--; )
-    {
-      if (d->lstOutputs[i]->isProxy() && d->lstOutputs[i]->proxy()->connectedOutput() == output)
-        d->lstOutputs[i]->proxy()->disconnectOutput();
-      else if (d->lstOutputs[i]->output() == output)
-        delete d->lstOutputs.takeAt(i);
-    }
-}
-
-void PiiOperationCompound::unexposeInput(const QString& alias)
-{
-  delete _d()->lstInputs.take(alias);
-}
-
-void PiiOperationCompound::unexposeOutput(const QString& alias)
-{
-  delete _d()->lstOutputs.take(alias);
-}
-
-template <class Socket> void PiiOperationCompound::remove(QObject* socket, SocketList& sockets)
-{
-  for (int i=sockets.size(); i--; )
-    {
-      if (sockets[i]->qObject() == socket)
+      if (list[i] == socket)
         {
-          delete sockets.takeAt(i);
-          return;
+          delete PiiProxySocket::parent(list.takeAt(i));
+          return true;
         }
     }
-  //piiCritical("Could not find aliased socket to be removed.");
+  return false;
 }
 
-void PiiOperationCompound::removeInput(QObject* socket)
+bool PiiOperationCompound::removeInput(const QString& name)
 {
-  remove<PiiInputSocket>(socket, _d()->lstInputs);
+  return removeSocket(name, _d()->lstInputs);
 }
 
-void PiiOperationCompound::removeOutput(QObject* socket)
+bool PiiOperationCompound::removeOutput(const QString& name)
 {
-  remove<PiiOutputSocket>(socket, _d()->lstOutputs);
+  return removeSocket(name, _d()->lstOutputs);
+}
+
+template <class Socket>
+bool PiiOperationCompound::removeSocket(const QString& name, QList<Socket*>& list)
+{
+  for (int i=list.size(); i--; )
+    {
+      if (list[i]->objectName() == name)
+        {
+          delete PiiProxySocket::parent(list.takeAt(i));
+          return true;
+        }
+    }
+  return false;
+}
+
+void PiiOperationCompound::removeExposedInput(QObject* socket)
+{
+  _d()->lstInputs.removeOne(static_cast<PiiAbstractInputSocket*>(socket));
+}
+
+void PiiOperationCompound::removeExposedOutput(QObject* socket)
+{
+  _d()->lstOutputs.removeOne(static_cast<PiiAbstractOutputSocket*>(socket));
 }
 
 QList<PiiOperation*> PiiOperationCompound::childOperations() const
@@ -605,9 +554,25 @@ QList<PiiOperation*> PiiOperationCompound::childOperations() const
   return _d()->lstOperations;
 }
 
+QStringList PiiOperationCompound::childNames() const
+{
+  QStringList lstResult;
+  foreach (PiiOperation* op, _d()->lstOperations)
+    lstResult << op->objectName();
+  return lstResult;
+}
+
 int PiiOperationCompound::childCount() const
 {
   return _d()->lstOperations.size();
+}
+
+PiiOperation* PiiOperationCompound::childAt(int index) const
+{
+  const PII_D;
+  if (index > 0 && index < d->lstOperations.size())
+    return d->lstOperations[index];
+  return 0;
 }
 
 void PiiOperationCompound::addOperation(PiiOperation* op)
@@ -703,7 +668,7 @@ bool PiiOperationCompound::replaceOperation(PiiOperation *oldOp, PiiOperation* n
             continue;
           
           // Try to find a socket with a matching name.
-          PiiAbstractInputSocket* pInput = newOp->input(oldOp->socketName(lstOldInputs[i]));
+          PiiAbstractInputSocket* pInput = newOp->input(lstOldInputs[i]->objectName());
           if (pInput != 0)
             pOutput->connectInput(pInput);
           else if (i < lstNewInputs.size())
@@ -720,7 +685,7 @@ bool PiiOperationCompound::replaceOperation(PiiOperation *oldOp, PiiOperation* n
             continue;
           lstOldOutputs[i]->disconnectInput();
           
-          PiiAbstractOutputSocket* pOutput = newOp->output(oldOp->socketName(lstOldOutputs[i]));
+          PiiAbstractOutputSocket* pOutput = newOp->output(lstOldOutputs[i]->objectName());
           if (pOutput != 0 && i < lstNewOutputs.size())
             pOutput = lstNewOutputs[i];
           if (pOutput != 0)
@@ -762,27 +727,19 @@ PiiOperation* PiiOperationCompound::removeOperation(const QString& name)
 struct PiiOperationCompound::InputFinder
 {
   typedef PiiAbstractInputSocket* Type;
-  InputFinder(const SocketList& inputs) : lstInputs(inputs) {}
+  InputFinder(const QList<Type>& inputs) : lstInputs(inputs) {}
   Type find(PiiOperation* op, const QString& path) const { return op->input(path); }
-  Type get(const QString& name) const
-  {
-    ExposedSocket* s = lstInputs[name];
-    return s ? s->input() : 0;
-  }
-  const SocketList& lstInputs;
+  Type get(const QString& name) const { return findSocket(name, lstInputs); }
+  const QList<Type>& lstInputs;
 };
 
 struct PiiOperationCompound::OutputFinder
 {
   typedef PiiAbstractOutputSocket* Type;
-  OutputFinder(const SocketList& outputs) : lstOutputs(outputs) {}
+  OutputFinder(const QList<Type>& outputs) : lstOutputs(outputs) {}
   Type find(PiiOperation* op, const QString& path) const { return op->output(path); }
-  Type get(const QString& name) const
-  {
-    ExposedSocket* s = lstOutputs[name];
-    return s ? s->output() : 0;
-  }
-  const SocketList& lstOutputs;
+  Type get(const QString& name) const { return findSocket(name, lstOutputs); }
+  const QList<Type>& lstOutputs;
 };
 
 struct PiiOperationCompound::SetPropertyFinder
@@ -828,9 +785,8 @@ PiiAbstractInputSocket* PiiOperationCompound::input(const QString& path) const
   // Special treatment for the inner side sockets in proxy outputs.
   if (path.size() > 0 && path[0] == '.')
     {
-      const PII_D;
-      ExposedSocket* pSocket = d->lstOutputs[path.mid(1)];
-      return pSocket ? pSocket->input() : 0;
+      PiiAbstractOutputSocket* pProxy = findSocket(path.mid(1), _d()->lstOutputs);
+      return pProxy ? PiiProxySocket::input(pProxy) : 0;
     }
   return find(InputFinder(_d()->lstInputs), path);
 }
@@ -840,9 +796,8 @@ PiiAbstractOutputSocket* PiiOperationCompound::output(const QString& path) const
   // Special treatment for the inner side sockets in proxy inputs.
   if (path.size() > 0 && path[0] == '.')
     {
-      const PII_D;
-      ExposedSocket* pSocket = d->lstInputs[path.mid(1)];
-      return pSocket ? pSocket->output() : 0;
+      PiiAbstractInputSocket* pProxy = findSocket(path.mid(1), _d()->lstInputs);
+      return pProxy ? PiiProxySocket::output(pProxy) : 0;
     }
   return find(OutputFinder(_d()->lstOutputs), path);
 }
@@ -951,7 +906,7 @@ PiiOperation* PiiOperationCompound::createOperation(const QString& className, co
 {
   PiiOperation* op = PiiYdin::createResource<PiiOperation>(qPrintable(className));
 
-  // We got the pointer -> set className and add to operation list
+  // We got the pointer -> set objectName and add to operation list
   if (op != 0)
     {
       if (!objectName.isEmpty())
@@ -962,23 +917,30 @@ PiiOperation* PiiOperationCompound::createOperation(const QString& className, co
 }
 
 
-PiiOperationCompound::EndPointType PiiOperationCompound::locateSocket(PiiAbstractSocket* socket,
+PiiOperationCompound::EndPointType PiiOperationCompound::locateSocket(PiiSocket* socket,
                                                                       const PiiOperationCompound* context) const
 {
-  PiiSocket* pSocket = socket->socket();
   if (context == 0)
     {
-      PiiOperation* parent = Pii::findFirstParent<PiiOperation*>(pSocket);
-      return EndPointType(parent, parent->socketName(socket));
+      PiiOperation* parent = Pii::findFirstParent<PiiOperation*>(socket);
+      return EndPointType(parent, socket->objectName());
     }
   else
     {
-      QList<QObject*> lstParents = Pii::findAllParents(pSocket);
-      
-      if (lstParents.indexOf(const_cast<PiiOperationCompound*>(context)) != -1)
-        return EndPointType(const_cast<PiiOperationCompound*>(context), context->internalName(socket));
+      QList<PiiOperation*> lstParents = Pii::findAllParents<PiiOperation*>(socket);
+
+      int iContextIndex = lstParents.indexOf(const_cast<PiiOperationCompound*>(context));
+      if (iContextIndex != -1)
+        {
+          // Join the names of all parent operations with dots.
+          QString strFullName;
+          for (int i=iContextIndex+1; i<lstParents.size(); ++i)
+            strFullName += lstParents[i]->objectName() + '.';
+          strFullName += socket->objectName();
+          return EndPointType(const_cast<PiiOperationCompound*>(context), strFullName);
+        }
       else
-        return EndPointType(0, pSocket->objectName());
+        return EndPointType(0, socket->objectName());
     }
 }
 
@@ -998,12 +960,12 @@ PiiOperationCompound::buildEndPointList(PiiAbstractOutputSocket* output,
   QList<PiiAbstractInputSocket*> lstInputs = output->connectedInputs();
   for (int i=0; i<lstInputs.size(); ++i)
     {
-      PiiSocket* pInput = lstInputs[i]->socket();
+      PiiAbstractInputSocket* pInput = lstInputs[i];
       // The input is not owned by me nor any of my child operations.
       if (!Pii::isParent(this, pInput))
         continue; // skip this input
       // I'm the father of my own proxies.
-      else if (pInput->parent() == this)
+      else if (pInput->isProxy() && PiiProxySocket::parent(pInput)->parent() == this)
         result << EndPointType(const_cast<PiiOperationCompound*>(this), proxyInputName(lstInputs[i]));
       else
         result << locateSocket(lstInputs[i], context);
@@ -1021,13 +983,13 @@ QString PiiOperationCompound::proxyInputName(PiiAbstractInputSocket* input) cons
   const PII_D;
   // Search output proxies first
   for (int i=0; i<d->lstOutputs.size(); ++i)
-    if (d->lstOutputs[i]->isProxy() && d->lstOutputs[i]->input() == input)
-      return QString(".%0").arg(d->lstOutputs[i]->name());
+    if (PiiProxySocket::input(d->lstOutputs[i]) == input)
+      return QString(".%0").arg(d->lstOutputs[i]->objectName());
 
   // No luck. Try input proxies
   for (int i=0; i<d->lstInputs.size(); ++i)
-    if (d->lstInputs[i]->isProxy() && d->lstInputs[i]->input() == input)
-      return d->lstInputs[i]->name();
+    if (d->lstInputs[i]->isProxy() && d->lstInputs[i] == input)
+      return d->lstInputs[i]->objectName();
   
   return QString();
 }
@@ -1045,7 +1007,7 @@ PiiOperationCompound* PiiOperationCompound::clone() const
   
   if (pResult == 0) return 0;
 
-  // Get rid of everything but the compound (sub-operations, aliases)
+  // Get rid of everything but the compound (sub-operations, sockets)
   pResult->clear();
 
   // Set properties if we are the most derived class.
@@ -1064,44 +1026,43 @@ PiiOperationCompound* PiiOperationCompound::clone() const
       pResult->addOperation(pChildClone);
     }
   
-  // Clone exposed inputs
+  // Initialize inputs
   for (int i=0; i<d->lstInputs.size(); ++i)
     {
-      ExposedSocket* pSocket = d->lstInputs[i];
+      PiiAbstractInputSocket* pSocket = d->lstInputs[i];
       if (pSocket->isProxy())
-        pResult->createInputProxy(pSocket->name());
+        pResult->createInputProxy(pSocket->objectName());
       else
-        pResult->_d()->lstInputs << new ExposedSocket(pSocket->name(), pResult);
+        pResult->_d()->lstInputs << 0;
     }
 
-  // Clone exposed outputs
+  // Initialize outputs
   for (int i=0; i<d->lstOutputs.size(); ++i)
     {
-      ExposedSocket* pSocket = d->lstOutputs[i];
+      PiiAbstractOutputSocket* pSocket = d->lstOutputs[i];
       if (pSocket->isProxy())
-        pResult->createOutputProxy(pSocket->name());
+        pResult->createOutputProxy(pSocket->objectName());
       else
-        pResult->_d()->lstOutputs << new ExposedSocket(pSocket->name(), pResult);
+        pResult->_d()->lstOutputs << 0;
     }
+
+  // This must be done in two phases because an input may be directly
+  // connected to an output proxy and vice versa.
   
-  // Reflect input aliases    
+  // Remap input aliases
   for (int i=0; i<d->lstInputs.size(); ++i)
     {
-      ExposedSocket* pSocket = d->lstInputs[i];
+      PiiAbstractInputSocket* pSocket = d->lstInputs[i];
       if (!pSocket->isProxy())
-        pResult->exposeInput(locateSocket(pSocket->input(), this).second,
-                             pSocket->name(),
-                             AliasConnection);
+        pResult->_d()->lstInputs[i] = pResult->input(locateSocket(pSocket, this).second);
     }
   
-  // Reflect output aliases
+  // Remap output aliases
   for (int i=0; i<d->lstOutputs.size(); ++i)
     {
-      ExposedSocket* pSocket = d->lstOutputs[i];
+      PiiAbstractOutputSocket* pSocket = d->lstOutputs[i];
       if (!pSocket->isProxy())
-        pResult->exposeOutput(locateSocket(pSocket->output(), this).second,
-                              pSocket->name(),
-                              AliasConnection);
+        pResult->_d()->lstOutputs[i] = pResult->output(locateSocket(pSocket, this).second);
     }
 
   // At this point, all sockets (external and internal) exist and can be retrieved with their names.
@@ -1127,7 +1088,7 @@ PiiOperationCompound* PiiOperationCompound::clone() const
               // clone's child list. The name of the output in the
               // context of our child operation is used to find the
               // output in the cloned operation.
-              PiiAbstractOutputSocket *source = pResult->_d()->lstOperations[i]->output(d->lstOperations[i]->socketName(lstOutputs[j]));
+              PiiAbstractOutputSocket *source = pResult->_d()->lstOperations[i]->outputAt(j);
 
               if (source != 0 && target != 0)
                 source->connectInput(target);
@@ -1138,207 +1099,37 @@ PiiOperationCompound* PiiOperationCompound::clone() const
   // Clone connections from proxy inputs to operations and other proxies.
   for (int i=0; i<d->lstInputs.size(); ++i)
     {
-      ExposedSocket* pSocket = d->lstInputs[i];
+      PiiAbstractInputSocket* pSocket = d->lstInputs[i];
       if (pSocket->isProxy())
         {
-          EndPointListType lstExposedInputs = buildEndPointList(pSocket->output(), this);
+          EndPointListType lstExposedInputs = buildEndPointList(PiiProxySocket::output(pSocket), this);
+          PiiAbstractOutputSocket* pOutput = PiiProxySocket::output(pResult->_d()->lstInputs[i]);
           for (int j=0; j<lstExposedInputs.size(); ++j)
-            pResult->exposeInput(lstExposedInputs[j].second,
-                                 pSocket->name());
+            pOutput->connectInput(pResult->input(lstExposedInputs[j].second));
         }
     }
 
   // Corner case: someone routed a proxied output back to an internal operation or one of the exposed inputs.
   for (int i=0; i<d->lstOutputs.size(); ++i)
     {
-      ExposedSocket* pSocket = d->lstOutputs[i];
+      PiiAbstractOutputSocket* pSocket = d->lstOutputs[i];
       if (pSocket->isProxy())
         {
-          EndPointListType lstExposedInputs = buildEndPointList(pSocket->output(), this);
+          EndPointListType lstExposedInputs = buildEndPointList(pSocket, this);
           for (int j=0; j<lstExposedInputs.size(); ++j)
-            pResult->connectOutput(pSocket->name(),
-                                   lstExposedInputs[j].second);
+            pResult->connectOutput(pSocket->objectName(), lstExposedInputs[j].second);
         }
     }
   
   return pResult;
 }
 
-PiiOperationCompound::ExposedSocket::ExposedSocket(const QString& name, QObject* parent) :
-  _strName(name),
-  _type(PiiSocket::Proxy),
-  _pSocket(0),
-  _pQObject(0),
-  _pParent(parent)
+template <class Socket>
+Socket* PiiOperationCompound::findSocket(const QString& name, const QList<Socket*>& list)
 {
-}
-
-PiiOperationCompound::ExposedSocket::~ExposedSocket()
-{
-  if (_type == PiiSocket::Proxy)
-    // Deleting a proxy automatically breaks all connections
-    delete _pSocket;
-}
-
-QList<PiiAbstractInputSocket*> PiiOperationCompound::ExposedSocket::outgoingConnections() const
-{
-  QList<PiiAbstractInputSocket*> lstOutgoing;
-  if (output() != 0)
-    {
-      QList<PiiAbstractInputSocket*> lstAll = output()->connectedInputs();
-      for (int i=lstAll.size(); i--; )
-        if (!Pii::isParent(_pParent, lstAll[i]->socket()))
-          lstOutgoing << lstAll[i];
-    }
-  return lstOutgoing;
-}
-
-
-void PiiOperationCompound::ExposedSocket::expose(PiiAbstractOutputSocket* outputSocket,
-                                                 ConnectionType connectionType)
-{
-  // If the new connection is an alias, destroy a possible proxy and
-  // store the aliased output.
-  if (connectionType == AliasConnection)
-    {
-      // If a proxy exists, reconnect its existing inputs to the new
-      // exposed output.
-      QList<PiiAbstractInputSocket*> lstConnectedInputs;
-      if (proxy() != 0)
-        {
-          lstConnectedInputs = proxy()->connectedInputs();
-          delete _pSocket;
-        }
-      else if (output() != 0)
-        lstConnectedInputs = output()->connectedInputs();
-      
-      for (int i=0; i<lstConnectedInputs.size(); ++i)
-        outputSocket->connectInput(lstConnectedInputs[i]);
-
-      _pSocket = outputSocket;
-      _type = PiiSocket::Output;
-      _pQObject = outputSocket->socket();
-    }
-  else
-    {
-      // Am I already a proxy?
-      if (proxy() != 0) // yep, just reconnect the input
-        {
-          if (outputSocket != 0)
-            outputSocket->connectInput(proxy());
-        }
-      else // No, need to create a proxy
-        {
-          // Store old outgoing connections
-          QList<PiiAbstractInputSocket*> lstOutgoing = outgoingConnections();
-
-          // Create a proxy
-          _pSocket = new PiiProxySocket;
-          _type = PiiSocket::Proxy;
-
-          // Reconnect old outgoing connections
-          for (int i=0; i<lstOutgoing.size(); ++i)
-            proxy()->connectInput(lstOutgoing[i]);
-
-          // Connect the aliased output to the proxy
-          if (outputSocket != 0)
-            outputSocket->connectInput(proxy());
-
-          proxy()->setParent(_pParent);
-        }
-      _pQObject = proxy()->socket();
-    }
-}
-
-void PiiOperationCompound::ExposedSocket::expose(PiiAbstractInputSocket* inputSocket,
-                                                 ConnectionType connectionType)
-{
-  // If the new connection is an alias, destroy a possible proxy and
-  // store the aliased input.
-  if (connectionType == AliasConnection)
-    {
-      // If a proxy exists, connect the output currently connected to
-      // the proxy input to the new exposed input
-      PiiAbstractOutputSocket *pOutput = 0;
-      if (proxy() != 0)
-        {
-          pOutput = proxy()->connectedOutput();
-          delete _pSocket;
-        }
-      else if (input() != 0)
-        pOutput = input()->connectedOutput();
-
-      inputSocket->connectOutput(pOutput);
-      
-      _pSocket = inputSocket;
-      _type = PiiSocket::Input;
-      _pQObject = inputSocket->socket();
-    }
-  else
-    {
-      // Am I already a proxy?
-      if (proxy() != 0) // yep, just add a new internal connection
-        {
-          proxy()->connectInput(inputSocket);
-        }
-      else // No, need to create a proxy
-        {
-          // If the input is connected, store the connected output
-          PiiAbstractOutputSocket* pConnectedOutput = 0;
-          if (input() != 0)
-            pConnectedOutput = input()->connectedOutput();
-
-          _pSocket = new PiiProxySocket;
-          _type = PiiSocket::Proxy;
-
-          // Reconnect old connection
-          if (pConnectedOutput)
-            pConnectedOutput->connectInput(proxy());
-
-          // Connect the aliased input to the proxy
-          proxy()->connectInput(inputSocket);
-          proxy()->setParent(_pParent);
-        }
-      _pQObject = proxy()->socket();
-    }
-}
-
-PiiOperationCompound::ExposedSocket*
-PiiOperationCompound::SocketList::operator[] (const QString& name) const
-{
-  for (int i=0; i<size(); ++i)
-    if (operator[](i)->name() == name)
-      return operator[](i);
-  return 0;
-}
-
-PiiOperationCompound::ExposedSocket*
-PiiOperationCompound::SocketList::operator[] (PiiAbstractOutputSocket* socket) const
-{
-  if (socket == 0) return 0;
-  for (int i=0; i<size(); ++i)
-    {
-      ExposedSocket* pSocket = operator[](i);
-      if ((pSocket->isProxy() && pSocket->proxy()->connectedOutput() == socket) ||
-          (!pSocket->isProxy() && pSocket->output() == socket))
-        return pSocket;
-    }
-  return 0;
-}
-
-bool PiiOperationCompound::SocketList::contains(const QString& name) const
-{
-  for (int i=0; i<size(); ++i)
-    if (operator[](i)->name() == name)
-      return true;
-  return false;
-}
-
-PiiOperationCompound::ExposedSocket* PiiOperationCompound::SocketList::take(const QString& name)
-{
-  for (int i=0; i<size(); ++i)
-    if (operator[](i)->name() == name)
-      return takeAt(i);
+  for (typename QList<Socket*>::const_iterator it=list.begin(); it != list.end(); ++it)
+    if ((*it)->objectName() == name)
+      return *it;
   return 0;
 }
 

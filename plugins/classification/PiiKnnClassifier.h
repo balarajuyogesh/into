@@ -24,7 +24,6 @@
  * code vectors closest to an unknown sample. The winning class index
  * is chosen by voting among the k closest neighbors.
  *
- * @ingroup PiiClassificationPlugin
  */
 template <class SampleSet> class PiiKnnClassifier : public PiiVectorQuantizer<SampleSet>
 {
@@ -38,7 +37,7 @@ public:
    */
   PiiKnnClassifier();
   /**
-   * Creates a new k-NN classifier that uses @a measure to measure
+   * Creates a new k-NN classifier that uses *measure* to measure
    * distances between samples. The value for k is initialized to 5.
    */
   PiiKnnClassifier(PiiDistanceMeasure<SampleSet>* measure);
@@ -49,7 +48,7 @@ public:
    * Returns the class label of the closest model sample. If the
    * distance to the closest sample is too large (see
    * PiiVectorQuantizer::setRejectTreshold()), or there is no class
-   * label for the closest sample, @p NaN will be returned.
+   * label for the closest sample, `NaN` will be returned.
    */
   double classify(ConstFeatureIterator featureVector) throw();
 
@@ -76,7 +75,7 @@ public:
 
   /**
    * Sets the number of closest neighbors to find when classifying an
-   * unknown sample. If @a k is set to one, the classifier works as a
+   * unknown sample. If *k* is set to one, the classifier works as a
    * nearest-neighbor classifier.
    */
   void setK(int k);

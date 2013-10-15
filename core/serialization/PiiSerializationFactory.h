@@ -28,15 +28,7 @@
 #include <PiiGlobal.h>
 #include <cstring>
 
-/**
- * @file
- *
- * Object factory stuff for serializable classes.
- *
- * @ingroup Serialization
- */
-
-/// @cond null
+/// @hide
 #define PII_FACTORY_TEMPLATE_CLASS(T, ARCHIVE) PiiSerializationFactory::Template<T,ARCHIVE>
 #define PII_FACTORY_TEMPLATE_FUNC(T, ARCHIVE) PiiSerializationFactory::create<T,ARCHIVE>
 #define PII_DECLARE_FACTORY_MAP(ARCHIVE) \
@@ -46,7 +38,7 @@
 #define PII_DEFINE_FACTORY_MAP(ARCHIVE) \
   PII_DEFINE_EXPORTED_FUNCTION_TEMPLATE(PiiSerializationFactory::MapType*, \
                                         PiiSerializationFactory::map<ARCHIVE >, ())
-/// @endcond
+/// @endhide
 
 
 #define PII_INSTANTIATE_ARCHIVE_FACTORY(T, ARCHIVE) \
@@ -75,10 +67,10 @@
 
 /**
  * Declares an exported explicit instance of a factory function for
- * type @p T. This is needed if a serializable object is exported from
+ * type `T`. This is needed if a serializable object is exported from
  * a dll.
  *
- * @code
+ * ~~~(c++)
  * #ifdef BUILD_MYLIB
  * #  define MY_EXPORT __declspec(dllexport)
  * #  define BUILDING_MYLIB 1
@@ -91,7 +83,7 @@
  * struct MY_EXPORT MyType {};
  *
  * PII_DECLARE_FACTORY(MyType, BUILDING_MYLIB);
- * @endcode
+ * ~~~
  *
  * @param T the type to which a factory is to be declared
  *
@@ -108,7 +100,7 @@ namespace PiiSerialization
   template <class T> struct NewConstructor { static T* create() { return new T; } };
 
   /**
-   * Creates instances of @p T. This class is used by
+   * Creates instances of `T`. This class is used by
    * PiiSerializationFactory when objects are created into heap during
    * deserialization. This class can be specialized for types that
    * need constructor parameters.
@@ -119,7 +111,7 @@ namespace PiiSerialization
   template <class T, class Archive> struct Constructor
   {
     /**
-     * Creates and returns an instance of @p T.
+     * Creates and returns an instance of `T`.
      *
      * @param archive the archive that is currently being read. The
      * default implementation ignores this parameter, but it can be
@@ -136,7 +128,7 @@ namespace PiiSerialization
     }
   };
 
-  /// @cond null
+  /// @hide
   template <class T, class Archive> struct ConstructorVoid
   {
     static T* create(Archive&)
@@ -194,10 +186,10 @@ namespace PiiSerialization
 #define PII_MAKE_TYPE_LIST(CNT, TYPES) \
   PII_FOR_N(PII_ADD_COMMA_BEFORE, CNT, TYPES)
 
-/// @endcond
+/// @endhide
 
 /**
- * Creates a constructor class for @a CLASS. The constructor created
+ * Creates a constructor class for *CLASS*. The constructor created
  * with this macro will be used for all archive types. A constructor
  * created with this macro reads the constructor parameters from an
  * archive in the order they are specified, and passes them to the
@@ -209,20 +201,20 @@ namespace PiiSerialization
  *
  * @param TYPES the types of constructor parameters
  *
- * @code
+ * ~~~(c++)
  * // No default constructor but
  * // MyClass::MyClass(int, double)
  * PII_SERIALIZATION_CONSTRUCTOR(MyClass, 2, (int, double));
- * @endcode
+ * ~~~
  *
  * "Void" as the parameter count has a special meaning: it creates a
  * constructor that passes PiiSerialization::Void as a constructor
  * parameter.
  *
- * @code
+ * ~~~(c++)
  * // Use MyClass::MyClass(PiiSerialization::Void)
  * PII_SERIALIZATION_CONSTRUCTOR(MyClass, Void, ());
- * @endcode
+ * ~~~
  */
 #define PII_SERIALIZATION_CONSTRUCTOR(CLASS, CNT, TYPES)                \
   namespace PiiSerialization {                                          \
@@ -231,17 +223,17 @@ namespace PiiSerialization
   }
 
 /**
- * Creates a constructor for @a CLASS that will be used when no
+ * Creates a constructor for *CLASS* that will be used when no
  * archive-specific constructor is available. Using this macro makes
  * it possible to use a different constructor when the serialization
  * factory is used directly and not through the deserialization
  * mechanism.
  *
- * @code
+ * ~~~(c++)
  * // Use MyClass::MyClass() when an instance is created using
  * // PiiSerializationFactory::create() directly.
  * PII_SERIALIZATION_NORMAL_CONSTRUCTOR(MyClass, 0, ());
- * @endcode
+ * ~~~
  */
 #define PII_SERIALIZATION_NORMAL_CONSTRUCTOR(CLASS, CNT, TYPES)         \
   namespace PiiSerialization {                                          \
@@ -252,9 +244,8 @@ namespace PiiSerialization
 /**
  * A factory that creates objects based on their names. When
  * deserialized, instances of objects are created by calling the
- * static #create() function of this class.
+ * static [create()] function of this class.
  *
- * @ingroup Serialization
  */
 class PII_SERIALIZATION_EXPORT PiiSerializationFactory
 {
@@ -262,7 +253,7 @@ public:
   /**
    * Returns a factory for the named class in an archive-specific
    * factory map. If an instance of a subclass of
-   * PiiSerializationFactory that used @p className in its constructor
+   * PiiSerializationFactory that used `className` in its constructor
    * has been created, this function returns the instance. Otherwise
    * it returns 0.
    */
@@ -272,7 +263,6 @@ public:
   }
   
   /**
-   * @overload
    *
    * This function returns a factory object from the default factory
    * map.
@@ -307,10 +297,10 @@ public:
   // order.
   
   /**
-   * Creates an instance of the named object. If @p T has a virtual
+   * Creates an instance of the named object. If `T` has a virtual
    * metaobject function, a factory object will be fetched from the
    * static factory map and used in creating the object instance. For
-   * other types, new @p T is returned. If the class cannot be
+   * other types, new `T` is returned. If the class cannot be
    * created, 0 will be returned.
    */
   template <class T> static inline T* create(const char* className)
@@ -319,7 +309,7 @@ public:
   }
   
   /**
-   * Creates an instance of @p T. Returns <tt>new T</tt> for
+   * Creates an instance of `T`. Returns `new T` for
    * instantiable types and 0 for abstract ones.
    *
    * @see PiiSerializationTraits::IsAbstract
@@ -341,7 +331,7 @@ public:
   virtual void* create(void* archive) = 0;
 
   /**
-   * Calls #create(void*) with a null pointer. This is safe with the
+   * Calls [create(void*)] with a null pointer. This is safe with the
    * default factory that ignores the archive.
    */
   inline void* create() { return create(0); }
@@ -373,14 +363,13 @@ PII_DECLARE_FACTORY_MAP(PiiSerialization::Void);
  * Static instances of this class are used in inserting factories to
  * the global factory map.
  *
- * @ingroup Serialization
  */
 template <class T, class Archive> class PiiSerializationFactory::Template : public PiiSerializationFactory
 {
 public:
   /**
    * Create a new object factory instance. This factory will create
-   * objects of type @p T. The type is identified by its class name as
+   * objects of type `T`. The type is identified by its class name as
    * defined by PiiSerializationTraits::ClassName, and must be
    * application-wide unique.
    */
@@ -395,7 +384,7 @@ public:
   };
   
   /**
-   * Returns a new @p T.
+   * Returns a new `T`.
    */
   virtual void* create(void* archive) { return PiiSerializationFactory::create<T>(*reinterpret_cast<Archive*>(archive)); }
 

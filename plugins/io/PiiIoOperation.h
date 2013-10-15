@@ -44,7 +44,7 @@ class PiiIoOperation : public PiiDefaultOperation
 
   /**
    * A flag that can be used to stop receiving/sending I/O signals. 
-   * Once this value is set to @p false, the operation will neither
+   * Once this value is set to `false`, the operation will neither
    * react to changes in input signals nor activate any output
    * channels.
    */
@@ -58,7 +58,7 @@ class PiiIoOperation : public PiiDefaultOperation
    * question. Other propertis vary depending on channel type
    * (input/output) and the I/O driver.
    *
-   * @code
+   * ~~~(c++)
    * // Create a new output signal operation
    * PiiOperation* pOutput = engine.createOperation("PiiIoOutputOperation");
    *
@@ -85,7 +85,7 @@ class PiiIoOperation : public PiiDefaultOperation
    * props["electricalConnection"] = "IttlConnection";
    *
    * pOutput->setProperty("channelConfigs", QVariantList() << props1 << props2 << props3);
-   * @endcode   
+   * ~~~   
    */
   Q_PROPERTY(QVariantList channelConfigs READ channelConfigs WRITE setChannelConfigs);
 

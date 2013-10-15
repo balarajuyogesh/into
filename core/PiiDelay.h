@@ -23,21 +23,20 @@
  * A utility class that reveals the protected msleep() member of
  * QThread so that program flow can be delayed anywhere.
  *
- * @code
+ * ~~~(c++)
  * PiiDelay::msleep(1000); // stops for one second
- * @endcode
+ * ~~~
  *
- * @ingroup Core
  */
 class PII_CORE_EXPORT PiiDelay : public QThread
 {
 public:
   /**
-   * Suspend the current thread for @a msec milliseconds.
+   * Suspend the current thread for *msec* milliseconds.
    */
   static void msleep(int msec);
   /**
-   * Suspend the current thread for @a usec microseconds.
+   * Suspend the current thread for *usec* microseconds.
    */
   static void usleep(int usec);
 };

@@ -33,11 +33,6 @@ namespace PiiYdin
     return &database;
   }
 
-  bool isNameProperty(const char* propertyName)
-  {
-    return !strcmp(propertyName, "name");
-  }
-
   template <class T> inline const char* resourceName();
   template <> inline const char* resourceName<PiiSocket>()
   {

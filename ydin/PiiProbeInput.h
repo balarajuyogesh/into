@@ -22,10 +22,9 @@
 /**
  * An input socket that works without a controlling operation. The
  * socket works like a measurement probe that emits the
- * #objectReceived() signal whenever a new object is received. It also
+ * [objectReceived()] signal whenever a new object is received. It also
  * saves the last received object.
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiProbeInput :
   public PiiAbstractInputSocket,
@@ -40,38 +39,38 @@ class PII_YDIN_EXPORT PiiProbeInput :
   Q_PROPERTY(PiiVariant savedObject READ savedObject WRITE setSavedObject);
 public:
   /**
-   * Constructs a new probe input and sets its @p objectName property
-   * to @a name.
+   * Constructs a new probe input and sets its `objectName` property
+   * to *name*.
    */
   PiiProbeInput(const QString& name = "probe");
 
   /**
-   * Constructs a new probe input and connects it to @a output. 
-   * Connects the #objectReceived() signal to @a slot in @a receiver.
+   * Constructs a new probe input and connects it to *output*. 
+   * Connects the [objectReceived()] signal to *slot* in *receiver*.
    *
-   * @note If it is important that the objects are received in the
+   * ! If it is important that the objects are received in the
    * order they were emitted, use Qt::DirectConnection as the
    * connection type. The objects may be emitted from different
    * threads, and Qt's event loop doesn't guarantee chronological
    * ordering in such a case.
    *
-   * @code
+   * ~~~(c++)
    * PiiOperation* reader = engine.createOperation("PiiImageFileReader");
    * PiiImageDisplay* display = new PiiImageDisplay;
    * PiiProbeInput* probe = new PiiProbeInput(reader->output("image"),
    *                                          display, SLOT(setImage(PiiVariant)));
-   * @endcode
+   * ~~~
    */
   PiiProbeInput(PiiAbstractOutputSocket* output, const QObject* receiver,
                 const char* slot, Qt::ConnectionType = Qt::AutoConnection);
 
   /**
-   * Returns @p Input.
+   * Returns `Input`.
    */
   PiiSocket::Type type() const;
   
   /**
-   * Emits #objectReceived() and saves the received object.
+   * Emits [objectReceived()] and saves the received object.
    */
   bool tryToReceive(PiiAbstractInputSocket* sender, const PiiVariant& object) throw ();
 
@@ -84,10 +83,6 @@ public:
   Q_INVOKABLE bool hasSavedObject() const;
 
   PiiInputController* controller() const;
-
-  PiiProbeInput* socket();
-  PiiAbstractInputSocket* asInput();
-  PiiAbstractOutputSocket* asOutput();
 
 signals:
   /**
@@ -104,6 +99,7 @@ private:
   class Data : public PiiAbstractInputSocket::Data
   {
   public:
+    Data();
     PiiVariant varSavedObject;
   };
   PII_UNSAFE_D_FUNC;

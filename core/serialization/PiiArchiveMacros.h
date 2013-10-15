@@ -16,16 +16,6 @@
 #ifndef _PIIARCHIVEMACROS_H
 #define _PIIARCHIVEMACROS_H
 
-/**
- * @file
- *
- * Contains preprocessor macros for conveniently creating primitive
- * input/output operators for archive classes. Mostly for internal
- * use.
- *
- * @ingroup Serialization
- */
-
 #define PII_PRIMITIVE_OPERATOR(Archive, T, Stream, dir, ref) Archive& operator dir (T ref value) { startDelim(); Stream::operator dir (value); endDelim(); return *this; }
 
 #define PII_INTEGER_OPERATORS(Archive, Stream, dir, ref)   \

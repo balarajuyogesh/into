@@ -12,7 +12,6 @@ SUBDIRS = base \
           calibration \
           database \
           dsp \
-          features \
           flowcontrol \
           geometry \
           image \
@@ -42,7 +41,6 @@ matching.depends += geometry classification optimization
 camera.depends += image geometry
 texture.depends += image
 calibration.depends += image classification optimization
-
 
 # Camera drivers
 CAMERADRIVERS = webcam

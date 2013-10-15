@@ -20,17 +20,18 @@
 
 /**
  * Composes an output matrix from N inputs of primitive data types. 
- * The amount of inputs is set with #dynamicInputCount.
+ * The amount of inputs is set with [dynamicInputCount].
  *
  * At least one dynamic input must be connected. The output matrix
  * will be generated once all the connected inputs have received an
- * object. If the @p sync input is connected, the output will be
+ * object. If the `sync` input is connected, the output will be
  * emitted after all data has been received.
  *
  * The type of the output matrix is determined by the type of the
  * object in the first connected input.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in sync - an optional synchronization input. If this input is
  * connected, it is assumed that each synchronization object
@@ -40,19 +41,19 @@
  * @in inputX - inputX is element (0, X) in output matrix. Any
  * primitive type.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out output - composed matrix. The type of the matrix is determined
- * by the type of the first connected input. If type @p T is read, a
- * PiiMatrix<T> will be emitted. If #direction is @p
- * Pii::Horizontally, the matrix is M-by-#dynamicInputCount, where M
- * is the number of objects related to @p sync. If #direction is @p
- * Pii::Vertically, the matrix is #dynamicInputCount-by-M. If @p sync
- * is not connected, M is always one. If @p sync is connected and no
+ * by the type of the first connected input. If type `T` is read, a
+ * PiiMatrix<T> will be emitted. If [direction] is 
+ * `Pii::Horizontally`, the matrix is M-by-[dynamicInputCount], where M
+ * is the number of objects related to `sync`. If [direction] is 
+ * `Pii::Vertically`, the matrix is [dynamicInputCount]-by-M. If `sync`
+ * is not connected, M is always one. If `sync` is connected and no
  * objects are received in the other inputs during one sync object, an
  * empty matrix (PiiMatrix<int>) will be emitted.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiMatrixComposer : public PiiDefaultOperation
 {
@@ -60,20 +61,20 @@ class PiiMatrixComposer : public PiiDefaultOperation
 
   /**
    * The number of inputs. Defines also the amount of columns (or
-   * rows, if #direction = @p Pii::Vertically) in the output matrix. 
+   * rows, if [direction] = `Pii::Vertically`) in the output matrix. 
    * The default is one.
    */
   Q_PROPERTY(int dynamicInputCount READ dynamicInputCount WRITE setDynamicInputCount);
 
   /**
-   * The direction of the composition. @p Pii::Horizontally (the
-   * default) creates #dynamicInputCount columns, @p Pii::Vertically
+   * The direction of the composition. `Pii::Horizontally` (the
+   * default) creates [dynamicInputCount] columns, `Pii::Vertically`
    * creates the same number of rows.
    */
   Q_PROPERTY(Pii::MatrixDirection direction READ direction WRITE setDirection);
   
   /**
-   * A default value for each input as a @p double. The default value
+   * A default value for each input as a `double`. The default value
    * will be used if the corresponding input is not connected. Default
    * values will be casted to the type of the output matrix. For
    * exampe if the type of the output matrix is PiiMatrix<int> and the
@@ -81,16 +82,16 @@ class PiiMatrixComposer : public PiiDefaultOperation
    * 1 in the matrix.
    *
    * If the number of default values is smaller than
-   * #dynamicInputCount, extra zeroes will be automatically added at
+   * [dynamicInputCount], extra zeroes will be automatically added at
    * the end of the list when the operation is started.
    *
-   * @code
+   * ~~~(c++)
    * composer->setProperty("dynamicInputCount", 4);
    * composer->setProperty("defaultValues", QVariantList() << 1.0 << 2.0);
    * // ...
    * engine.execute();
    * // defaultValues is now (1.0, 2.0, 0.0, 0.0)
-   * @endcode
+   * ~~~
    */
   Q_PROPERTY(QVariantList defaultValues READ defaultValues WRITE setDefaultValues);
   

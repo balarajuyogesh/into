@@ -25,15 +25,14 @@ class QToolButton;
  * A pair of arrow buttons. This widget can be used to trigger, for
  * example, PiiImageFileReader and PiiVideoReader.
  *
- * @ingroup Gui
  */
 class PII_GUI_EXPORT PiiTriggerButton : public QWidget
 {
   Q_OBJECT  
 
   /**
-   * Determines the buttons to display. The default @p Left | @p
-   * Right, which means that both arrow buttons will be shown.
+   * Determines the buttons to display. The default `Left` | 
+   * `Right`, which means that both arrow buttons will be shown.
    */
   Q_PROPERTY(Buttons buttons READ buttons WRITE setButtons);
   Q_FLAGS(Buttons);
@@ -42,8 +41,8 @@ public:
   /**
    * Buttons to show.
    *
-   * @lip Left - show left arrow button
-   * @lip Right - show right arrow button
+   * - `Left` - show left arrow button
+   * - `Right` - show right arrow button
    */
   enum Button { Left = 1, Right = 2 };
   Q_DECLARE_FLAGS(Buttons, Button);
@@ -56,7 +55,7 @@ public:
 
 signals:
   /**
-   * Emitted when either of the buttons is pressed. The @a direction
+   * Emitted when either of the buttons is pressed. The *direction*
    * parameter tells which one: -1 means back and 1 means forward.
    */
   void triggered(int direction);

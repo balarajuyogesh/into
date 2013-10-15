@@ -28,7 +28,7 @@
  * translation so that for each inlying point the following equation
  * holds (at least approximately):
  *
- * @f[
+ * \[
  * \left(\begin{array}{c}
  * x_2 \\
  * y_2
@@ -44,17 +44,15 @@
  * t_x \\
  * t_y
  * \end{array}\right)
- * @f]
+ * \]
  *
- * The mathematical model is parametrized by four unknowns: @f$(s,
- * \theta, t_x, t_y)@f$, which stand for scaling factor, rotation
+ * The mathematical model is parametrized by four unknowns: \((s,
+ * \theta, t_x, t_y)\), which stand for scaling factor, rotation
  * angle, horizontal translation, and vertical translation,
  * respectively.
  *
  * This estimator uses squared geometric distance as the goodness of
  * fit.
- *
- * @ingroup PiiOptimization
  */
 template <class T> class PiiRigidPlaneRansac :
   public PiiRansac,
@@ -63,25 +61,25 @@ template <class T> class PiiRigidPlaneRansac :
 public:
   /**
    * Constructs a new RANSAC estimator with no points to match. You
-   * need to set the points to match with #setPoints() before calling
-   * @ref PiiRansac::findBestModel() "findBestModel()" or use the
-   * #findBestModel(const PiiMatrix<T>&, const PiiMatrix<T>&)
+   * need to set the points to match with [setPoints()] before calling
+   * [findBestModel()](PiiRansac::findBestModel()) or use the
+   * [findBestModel(const PiiMatrix<T>&, const PiiMatrix<T>&)]
    * function.
    */
   PiiRigidPlaneRansac();
   
   /**
-   * Constructs a new RANSAC estimator that matches @a points1 to @a
-   * points2 with an in-plane rotation-scaling-traslation transform. 
+   * Constructs a new RANSAC estimator that matches *points1* to 
+   * *points2* with an in-plane rotation-scaling-traslation transform. 
    * Both matrices should be N-by-2 and arranged so that matched
    * points are at the same indices.
    *
-   * It is assumed that the matching of @a points1 and @a points2 is
+   * It is assumed that the matching of *points1* and *points2* is
    * putative. A percentage of matches is expected to be wrong.
    *
-   * Call the @ref PiiRansac::findBestModel() "findBestModel()"
-   * function to find the transformation that maps @a points1 to @a
-   * points2.
+   * Call the [findBestModel()](PiiRansac::findBestModel())
+   * function to find the transformation that maps *points1* to 
+   * *points2*.
    */
   PiiRigidPlaneRansac(const PiiMatrix<T>& points1,
                       const PiiMatrix<T>& points2);
@@ -97,8 +95,8 @@ public:
   inline bool findBestModel() { return PiiRansac::findBestModel(); }
   
   /**
-   * Runs the RANSAC algorithm to find a transformation that maps @a
-   * points1 to @a points2.
+   * Runs the RANSAC algorithm to find a transformation that maps 
+   * *points1* to *points2*.
    *
    * @see PiiRansac::findBestModel()
    */
@@ -108,7 +106,7 @@ public:
   /**
    * Returns either the model estimated by RANSAC or a geometrically
    * refined, presumably better estimate, depending on the value of
-   * the #autoRefine() flag.
+   * the [autoRefine()] flag.
    */
   PiiMatrix<double> bestModel() const;
   
@@ -125,15 +123,15 @@ public:
 
   /**
    * Enables or disables automatic geometric refinement of the best
-   * model. If automatic refinement is enabled, the #bestModel()
-   * function returns #refineModel() instead of the probably slightly
+   * model. If automatic refinement is enabled, the [bestModel()]
+   * function returns [refineModel()] instead of the probably slightly
    * more inaccurate default estimate. By default, automatic
    * refinement is disabled.
    */
   void setAutoRefine(bool autoRefine);
   /**
-   * Returns @p true if automatic geometric refinement of the best
-   * model is enabled, @p false otherwise.
+   * Returns `true` if automatic geometric refinement of the best
+   * model is enabled, `false` otherwise.
    */
   bool autoRefine() const;
   /**
@@ -151,7 +149,7 @@ public:
   double maxRotationAngle() const;
   /**
    * Sets the minimum accepted scaling factor. Works in a similar
-   * manner than #setMaxRotationAngle(), but imposes a limit to the
+   * manner than [setMaxRotationAngle()], but imposes a limit to the
    * scaling factor. The default value is 0.5.
    */
   void setMinScale(double minScale);
@@ -161,7 +159,7 @@ public:
   double minScale() const;
   /**
    * Sets the maximum accepted scaling factor. Works analogously to
-   * #setMinScale(). The default value is 2.
+   * [setMinScale()]. The default value is 2.
    */
   void setMaxScale(double maxScale);
   /**
@@ -170,14 +168,13 @@ public:
   double maxScale() const;
 
   /**
-   * Transforms @a points to a new coordinate system using the given
-   * @a model parameters.
+   * Transforms *points* to a new coordinate system using the given
+   * *model* parameters.
    */
   static PiiMatrix<double> transform(const PiiMatrix<T>& points, const double* model);
   /**
-   * @overload
    *
-   * This function uses the first row of @a model as the model
+   * This function uses the first row of *model* as the model
    * parameter vector.
    */
   static PiiMatrix<double> transform(const PiiMatrix<T>& points, const PiiMatrix<double>& model)
@@ -186,11 +183,10 @@ public:
   }
 
   /**
-   * Converts the given @a model parameters to a 3-by-3 transformation
+   * Converts the given *model* parameters to a 3-by-3 transformation
    * matrix for homogeneous coordinates.
    */
   static PiiMatrix<double> toTransformMatrix(const double* model);
-  /// @overload
   static PiiMatrix<double> toTransformMatrix(const PiiMatrix<double>& model)
   {
     return toTransformMatrix(model[0]);
@@ -216,8 +212,8 @@ protected:
   PiiMatrix<double> findPossibleModels(const int* dataIndices);
 
   /**
-   * Transforms the point at @a dataIndices in the fist point set
-   * using the given @a model parameters. Returns the squared
+   * Transforms the point at *dataIndices* in the fist point set
+   * using the given *model* parameters. Returns the squared
    * geometric distance between the transformed point and the
    * corresponding point in the second point set.
    */

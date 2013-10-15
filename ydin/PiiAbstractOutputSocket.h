@@ -16,8 +16,7 @@
 #ifndef _PIIABSTRACTOUTPUTSOCKET_H
 #define _PIIABSTRACTOUTPUTSOCKET_H
 
-#include "PiiAbstractSocket.h"
-#include "PiiInputListener.h"
+#include "PiiSocket.h"
 #include <QVector>
 #include <QList>
 #include <QPair>
@@ -31,22 +30,22 @@ class PiiInputController;
  * connection between an output socket and an input socket is
  * one-directional: the output socket pushes data forwards, but the
  * input cannot "pull" new objects. The input can, however, tell the
- * output when it is ready to receive new data via the #inputReady()
+ * output when it is ready to receive new data via the [inputReady()]
  * signal.
  *
  * This class is a representation of a connection point that is able
  * to receive "I'm ready" signals from connected input sockets
- * (#inputReady()). The actual mechanism of passing data is defined
+ * ([inputReady()]). The actual mechanism of passing data is defined
  * in subclasses (PiiOutputSocket, PiiProxySocket).
  *
  * When an input socket is deleted, its connection to an output socket
  * is automatically destroyed and vice-versa.
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiAbstractOutputSocket :
   public PiiSocket
 {
+  Q_OBJECT
 public:
   ~PiiAbstractOutputSocket();
   
@@ -59,7 +58,7 @@ public:
   void connectInput(PiiAbstractInputSocket* input);
 
   /**
-   * Updates any cached information related to @p input. This function
+   * Updates any cached information related to `input`. This function
    * must be called by a connected input socket whenever its
    * configuration (such as the controller) changes.
    */
@@ -78,8 +77,8 @@ public:
   void disconnectInputs() { disconnectInput(0); }
 
   /**
-   * Reconnects all inputs currently connected to this output to @p
-   * output, and reconnects this output to @p input.
+   * Reconnects all inputs currently connected to this output to 
+   * `output`, and reconnects this output to `input`.
    */
   void reconnect(PiiAbstractOutputSocket* output, PiiAbstractInputSocket* input);
 
@@ -88,18 +87,8 @@ public:
    */
   QList<PiiAbstractInputSocket*> connectedInputs() const;
 
-  /**
-   * Finds (backwards) the most distant output connected to this
-   * socket through proxies. If the output is connected to an
-   * operation, this function returns @p this. Otherwise it goes
-   * recursively back through all proxies until it finds an output
-   * that is connected to an operation. If there is no such output,
-   * returns 0.
-   */
-  PiiAbstractOutputSocket* rootOutput() const;
-  
 protected:
-  /// @cond null
+  /// @hide
   typedef QVector<QPair<PiiAbstractInputSocket*,PiiInputController*> > InputListParent;
 
   class InputList : public InputListParent
@@ -119,18 +108,12 @@ protected:
   };
 
   class PII_YDIN_EXPORT Data :
-    public PiiSocket::Data,
-    public InputListener
+    public PiiSocket::Data
   {
   public:
     Data();
     ~Data();
 
-    /*
-     * Called by the non-virtual function in the public interface.
-     */
-    virtual PiiAbstractOutputSocket* rootOutput() const = 0;
-    
     /*
      * Recursively updates connection statuses of input sockets
      * connected to this output.
@@ -139,7 +122,7 @@ protected:
      * sockets leading to this socket is connected to an operation or
      * not.
      *
-     * @return @p true if the socket is connected, @p false otherwise. 
+     * @return `true` if the socket is connected, `false` otherwise. 
      * If the socket is a proxy, it may be unconnected even after
      * setInputConnected(true) if none of its outgoing connections
      * leads to a connected input.
@@ -152,8 +135,9 @@ protected:
      */
     virtual void inputConnected(PiiAbstractInputSocket* input);
     /*
-     * Called by #updateInput() when an input has been updated.
-     * The default implementation does nothing.
+     * Called by #updateInput() when an input has been updated
+     * (e.g. when the controller of an input changes). The default
+     * implementation does nothing.
      */
     virtual void inputUpdated(PiiAbstractInputSocket* input);
     /*
@@ -167,11 +151,8 @@ protected:
   };
   PII_D_FUNC;
 
-  friend class Data;
-
-  PiiAbstractOutputSocket(Data* data);
-  /// @endcond
-    
+  PiiAbstractOutputSocket(const QString& name, Data* data);
+  /// @endhide
 private:
   void disconnectInputAt(int index);
 };

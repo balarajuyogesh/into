@@ -25,8 +25,8 @@
 
 using namespace PiiYdin;
 
-PiiOutputSocket::Data::Data(PiiOutputSocket* owner) :
-  PiiAbstractOutputSocket::Data(owner),
+PiiOutputSocket::Data::Data() :
+  PiiAbstractOutputSocket::Data(),
   iGroupId(0),
   freeInputCondition(PiiWaitCondition::NoQueue),
   pFirstInput(0),
@@ -41,19 +41,15 @@ bool PiiOutputSocket::Data::setOutputConnected(bool connected)
   return bConnected = PiiAbstractOutputSocket::Data::setOutputConnected(connected);
 }
 
-PiiAbstractOutputSocket* PiiOutputSocket::Data::rootOutput() const
-{
-  return q;
-}
-
 void PiiOutputSocket::Data::inputUpdated(PiiAbstractInputSocket*)
 {
-  if (dlstInputs.size() > 0)
+  if (lstInputs.size() > 0)
     pFirstController = lstInputs.controllerAt(0);
 }
 
 void PiiOutputSocket::Data::inputConnected(PiiAbstractInputSocket* input)
 {
+  input->setListener(this);
   // Run-time optimization
   if (lstInputs.size() == 1)
     {
@@ -93,23 +89,17 @@ void PiiOutputSocket::Data::createFlagArray()
 
 
 PiiOutputSocket::PiiOutputSocket(const QString& name) :
-  PiiAbstractOutputSocket(new Data(this))
-{
-  setObjectName(name);
-}
+  PiiAbstractOutputSocket(name, new Data)
+{}
 
-PiiOutputSocket::PiiOutputSocket(Data* data, const QString& name) :
-  PiiAbstractOutputSocket(data)
-{
-  setObjectName(name);
-}
+PiiOutputSocket::PiiOutputSocket(const QString& name, Data* data) :
+  PiiAbstractOutputSocket(name, data)
+{}
 
 PiiOutputSocket::~PiiOutputSocket()
 {
   delete[] _d()->pbInputCompleted;
 }
-
-PiiSocket::Type PiiOutputSocket::type() const { return Output; }
 
 void PiiOutputSocket::setGroupId(int id) { _d()->iGroupId = id; }
 int PiiOutputSocket::groupId() const { return _d()->iGroupId; }
@@ -313,14 +303,10 @@ void PiiOutputSocket::emitNonThreaded(const PiiVariant& object)
   throw PiiExecutionException(PiiExecutionException::Interrupted);
 }
 
-void PiiOutputSocket::inputReady(PiiAbstractInputSocket* /*input*/)
+void PiiOutputSocket::Data::inputReady(PiiAbstractInputSocket* /*input*/)
 {
-  _d()->freeInputCondition.wakeOne();
+  freeInputCondition.wakeOne();
 }
-
-PiiOutputSocket* PiiOutputSocket::socket() { return this; }
-PiiAbstractInputSocket* PiiOutputSocket::asInput() { return 0; }
-PiiAbstractOutputSocket* PiiOutputSocket::asOutput() { return this; }
 
 void PiiOutputSocket::synchronizeTo(PiiInputSocket* input)
 {
@@ -363,7 +349,7 @@ void PiiOutputSocket::endMany()
 
 void PiiOutputSocket::setInputListener(PiiInputListener* listener)
 {
-  if (listener == 0) listener = this;
+  if (listener == 0) listener = _d();
   PII_D;
   for (int i=0; i<d->lstInputs.size(); ++i)
     d->lstInputs.inputAt(i)->setListener(listener);

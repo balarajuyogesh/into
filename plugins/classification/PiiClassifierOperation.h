@@ -53,7 +53,7 @@ namespace PiiClassification
     typedef const T* ConstFeatureIterator;
 
     /**
-     * Reads @a input and converts the incoming object to a
+     * Reads *input* and converts the incoming object to a
      * PiiMatrix<T>, if possible.
      *
      * @param input the input socket to read
@@ -61,14 +61,14 @@ namespace PiiClassification
      * @param featureCount the number of features to expect. This is
      * an input-output parameter that must be initially set to the
      * number of features to expect. If this value is zero, no checks
-     * will be performed. Upon return, @a featureCount will be set to
+     * will be performed. Upon return, *featureCount* will be set to
      * the number of columns in the input matrix.
      *
      * @return a pointer to the beginning of the feature vector (first
      * row of matrix).
      *
      * @exception PiiExecutionException& if the input object is not a
-     * PiiMatrix or if its size is not 1-by-@a featureCount.
+     * PiiMatrix or if its size is not 1-by-*featureCount*.
      */
     ConstFeatureIterator operator() (PiiInputSocket* input, int* featureCount)
     { 
@@ -96,23 +96,24 @@ namespace PiiClassification
  * Certain algorithms such as the SOM are also capable of incremental
  * (on-line) learning.
  *
- * The #learningBatchSize property is used as a
+ * The [learningBatchSize] property is used as a
  * learning/classification switch. Setting its value to zero disables
  * learning and turns the operation into classification mode. If the
  * learning algorithm is capable of on-line learning and
- * #learningBatchSize is set to one, each incoming sample will be
+ * [learningBatchSize] is set to one, each incoming sample will be
  * directly sent to learning.
  *
  * Batch learning must be initiated by the user by calling the
- * #startLearningThread() function. Although learning is usually done
+ * [startLearningThread()] function. Although learning is usually done
  * off-line, it is possible to start the learning thread while the
  * operation is running. The old classifier will be replaced by the
  * new one once the learning thread finishes. The downside of run-time
  * learning is that the old classifier must be kept in memory while
- * training. If you want to avoid this, @ref reset() "reset" the old
+ * training. If you want to avoid this, [reset](reset()) the old
  * classifier before learning.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in features - a feature vector. Features are usually represented
  * as a row matrix with a primitive content type (such as
@@ -129,35 +130,35 @@ namespace PiiClassification
  * weighted learning, and only in training mode. If this input is not
  * connected, a weight of 1.0 is assumed for all samples.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out classification - the result of classification (double). Either
- * a class index or a regression. @p NaN indicates failures.
+ * a class index or a regression. `NaN` indicates failures.
  *
  * The usual way of creating a custom classifier is to first create an
  * operation class that reflects the configuration of the classifier
  * in its properties and uses pure virtual getter and setter functions
  * for each. Then, an inner template class called "Template" is
- * derived from this operation class and instantiated for @p float and
- * @p double types. The reason for this design pattern is that Qt's
+ * derived from this operation class and instantiated for `float` and
+ * `double` types. The reason for this design pattern is that Qt's
  * moc can't cope with template classes. This pattern is implemented,
  * for example, in PiiKnnClassifierOperation.
  *
- * The template classes are registered to the @ref
- * PiiYdin::resourceDatabase() "resource database" so that the
+ * The template classes are registered to the 
+ * [resource database](PiiYdin::resourceDatabase()) so that the
  * template type is a part of the name. For example,
  * PiiKnnClassifierOperation::Template<double> is registered as
  * PiiKnnClassifierOperation<double>.
  *
- * @note Once the first feature vector has been received, the number
+ * ! Once the first feature vector has been received, the number
  * of features in subsequent feature vectors must stay the same. One
  * needs to explicitly reset the classifier before samples with a
  * different number of features can be used. If the operation has
  * training data, both the current classifier and the collected
- * training data must be cleared. This is done by calling #reset() and
- * setting #learningBatchSize to zero.
+ * training data must be cleared. This is done by calling [reset()] and
+ * setting [learningBatchSize] to zero.
  *
- * @ingroup PiiClassificationPlugin
  */
 class PII_CLASSIFICATION_EXPORT PiiClassifierOperation :
   public PiiDefaultOperation,
@@ -176,27 +177,27 @@ class PII_CLASSIFICATION_EXPORT PiiClassifierOperation :
    * This property is also used as a training/classification switch. 
    * Setting the value to zero means that no training samples will be
    * collected, and the operation will only classify incoming samples. 
-   * If @p learningBatchSize is set to one and the learning algorithm
+   * If `learningBatchSize` is set to one and the learning algorithm
    * is capable of on-line learning, incoming samples will be used to
-   * train the algorithm one by one. If @p learningBatchSize is set to
+   * train the algorithm one by one. If `learningBatchSize` is set to
    * N (N > 1), a buffer of N first, last or randomly selected samples
-   * will be kept in memory. If @p learningBatchSize is -1, all
+   * will be kept in memory. If `learningBatchSize` is -1, all
    * incoming samples will be buffered without a limit. The buffered
    * samples will be used as training data to the learning algorithm,
    * which will be run in a separate thread (see
-   * #startLearningThread()). The default value is 0.
+   * [startLearningThread()]). The default value is 0.
    */
   Q_PROPERTY(int learningBatchSize READ learningBatchSize WRITE setLearningBatchSize);
 
   /**
-   * The action to perform with new samples when #learningBatchSize has been
-   * exceeded. The default is @p OverwriteRandomSample.
+   * The action to perform with new samples when [learningBatchSize] has been
+   * exceeded. The default is `OverwriteRandomSample`.
    */
   Q_PROPERTY(PiiClassification::FullBufferBehavior fullBufferBehavior
              READ fullBufferBehavior WRITE setFullBufferBehavior);
 
   /**
-   * Progress required to emit the #progressed() signal. Must be set
+   * Progress required to emit the [progressed()] signal. Must be set
    * to a value in [0,1]. Set to 0 to disable the signal. Set to 1 to
    * send the signal only after training is complete. The default is
    * 0.01, which means that every percent of progress will be reported
@@ -218,8 +219,8 @@ class PII_CLASSIFICATION_EXPORT PiiClassifierOperation :
   Q_PROPERTY(int featureCount READ featureCount);
 
   /**
-   * A read-only property whose value is @p true when the learning
-   * thread is running, and @p false otherwise.
+   * A read-only property whose value is `true` when the learning
+   * thread is running, and `false` otherwise.
    */
   Q_PROPERTY(bool learningThreadRunning READ learningThreadRunning);
 
@@ -236,7 +237,7 @@ public:
   ~PiiClassifierOperation();
 
   /**
-   * If @a reset is @p true and the learning thread is running, this
+   * If *reset* is `true` and the learning thread is running, this
    * function stops it. Otherwise just passes the call to the
    * superclass.
    */
@@ -245,10 +246,10 @@ public:
   /**
    * Implementation of the PiiProgressController interface. This
    * function is called by learning algorithms to check if they are
-   * still allowed to proceed. This function returns @p true if
-   * #startLearningThread() has been called and #stopLearningThread()
-   * has not been called. It also emits the #progressed() signal if @a
-   * progressPercentage is not @p NaN and it is #progressStep units
+   * still allowed to proceed. This function returns `true` if
+   * [startLearningThread()] has been called and [stopLearningThread()]
+   * has not been called. It also emits the [progressed()] signal if 
+   * *progressPercentage* is not `NaN` and it is [progressStep] units
    * larger than the previous recorded progress.
    */
   bool canContinue(double progressPercentage) const;
@@ -259,25 +260,25 @@ public slots:
    * less than two or the learning thread is already running, this
    * function does nothing. Otherwise, it starts a thread that sends
    * the buffered samples to the learning algorithm (see
-   * #learnBatch()). The thread can be interrupted by calling
-   * #stopLearningThread().
+   * [learnBatch()]). The thread can be interrupted by calling
+   * [stopLearningThread()].
    *
-   * The learning thread will stop once #learnBatch() returns.
+   * The learning thread will stop once [learnBatch()] returns.
    *
-   * @return @p true if the learning thread was successfully started,
-   * @p false otherwise. The call will fail if the learning thread is
+   * @return `true` if the learning thread was successfully started,
+   * `false` otherwise. The call will fail if the learning thread is
    * already running or there are no buffered samples to learn.
    *
-   * @code
+   * ~~~(c++)
    * // To call this function from C++ code:
    * QMetaObject::invokeMethod(pClassifier, "startLearningThread", Qt::DirectConnection);
-   * @endcode
+   * ~~~
    */
   bool startLearningThread();
 
   /**
    * Stops the learning thread. After this function has been called,
-   * #canContinue() will return @p false, which interrupts the
+   * [canContinue()] will return `false`, which interrupts the
    * learning algorithm.
    */
   void stopLearningThread();
@@ -291,7 +292,7 @@ public slots:
    * the model samples of an NN classifier to an empty sample set).
    *
    * To clear buffered training data as well, set the
-   * #learningBatchSize property to zero.
+   * [learningBatchSize] property to zero.
    */
   void reset();
 
@@ -299,7 +300,7 @@ public slots:
    * Learns the batch of collected samples. This blocks until the
    * learning algorithm finishes.
    *
-   * @return @p true if the samples were successfully learnt, @p false
+   * @return `true` if the samples were successfully learnt, `false`
    * otherwise
    */
   bool learn();
@@ -308,22 +309,22 @@ signals:
   /**
    * Informs about the progress of a learning algorithm. This signal
    * will be emitted from the learning thread started with
-   * #startLearning() every time #progressStep is exceeded. Note that
+   * [startLearning()] every time [progressStep] is exceeded. Note that
    * if the learning algorithm is not capable of estimating its
    * progress, this signal will not be emitted until it is done.
    *
    * @param percentage the current progress of the learning algorithm. 
    * 0 means uninitialized, 1.0 means fully converged. Note that the
    * learning thread may not finish immediately after signaling 1.0. 
-   * use the #learningFinished() signal to find out when it is done.
+   * use the [learningFinished()] signal to find out when it is done.
    */
   void progressed(double percentage);
 
   /**
    * This signal is emitted when the learning thread finishes.
    *
-   * @param success @p true if the learning was successful, @p false
-   * otherwise. If an error occurs during training, the #learningError
+   * @param success `true` if the learning was successful, `false`
+   * otherwise. If an error occurs during training, the [learningError]
    * property may provide a textual error message.
    */
   void learningFinished(bool success);
@@ -381,23 +382,23 @@ protected:
   virtual int featureCount() const = 0;
 
   /**
-   * Classifies an incoming feature vector (see #classify()). If
-   * #learningBatchSize is set to a non-zero value, and if the
+   * Classifies an incoming feature vector (see [classify()]). If
+   * [learningBatchSize] is set to a non-zero value, and if the
    * learning thread is not running, collects the incoming sample to a
-   * buffer (see #collectSample()). If #learningBatchSize is set to
+   * buffer (see [collectSample()]). If [learningBatchSize] is set to
    * one and the learning algorithm is capable of on-line learning,
    * the incoming sample will be sent directly to learning (see
-   * #learnOne()).
+   * [learnOne()]).
    */
   void process();
 
   /**
-   * Returns @p true if the learning algorithm needs a learning
-   * thread, and @p false otherwise. Some classifiers such as simple
+   * Returns `true` if the learning algorithm needs a learning
+   * thread, and `false` otherwise. Some classifiers such as simple
    * linear-search nearest neighbors don't need to be trained. In such
-   * a case this function returns @p false, no learning thread will be
+   * a case this function returns `false`, no learning thread will be
    * started, and the old classifier is immediately replaced by a new
-   * one. The default implementation returns @p true.
+   * one. The default implementation returns `true`.
    */
   virtual bool needsThread() const;
   
@@ -406,7 +407,7 @@ protected:
    * This function is called by the learning thread and must be
    * overridden by subclasses to feed the buffered samples to the
    * learning algorithm. Typically, subclasses call the
-   * #learnBatch(PiiLearningAlgorithm<SampleSet>*, const SampleSet&,
+   * [learnBatch](PiiLearningAlgorithm<SampleSet>*, const SampleSet&,
    * const QVector<double>&, const QVector<double>&) function
    * template.
    *
@@ -416,15 +417,15 @@ protected:
    * classifier must be replaced with the newly trained one in
    * replaceClassifier().
    *
-   * @return @p true if the training succeeded, @p false otherwise.
+   * @return `true` if the training succeeded, `false` otherwise.
    *
-   * The default implementation returns @p false.
+   * The default implementation returns `false`.
    */
   virtual bool learnBatch();
 
   /**
    * Replaces the current classifier with a newly trained one. This
-   * function is called if #learnBatch() returns @p true. If the
+   * function is called if [learnBatch()] returns `true`. If the
    * classifier provides information about itself as properties (such
    * as the code book of an NN classifier), these property values need
    * to be changed here.
@@ -433,7 +434,7 @@ protected:
 
   /**
    * Resizes the batch of buffered samples. This function is called by
-   * #setLearningBatchSize() after ensuring mutual exclusion with the learning
+   * [setLearningBatchSize()] after ensuring mutual exclusion with the learning
    * thread. The function will only be called if needed. If the new
    * size is not smaller the current number of buffered samples,
    * nothing needs to be done. The buffer will grow automatically to
@@ -445,16 +446,16 @@ protected:
   virtual void resizeBatch(int newSize) = 0;
 
   /**
-   * Resets the classifier. This function is called by #reset() after
+   * Resets the classifier. This function is called by [reset()] after
    * ensuring mutual exclusion with the learning thread.
    */
   virtual void resetClassifier() = 0;
 
   /**
-   * A template function that installs @p this as the progress
-   * controller to @a algorithm and feeds it with the given @a samples
-   * and @a labels. Usually called from the implementation of the
-   * virtual #learnBatch() function.
+   * A template function that installs `this` as the progress
+   * controller to *algorithm* and feeds it with the given *samples*
+   * and *labels*. Usually called from the implementation of the
+   * virtual [learnBatch()] function.
    *
    * @param algorithm the algorithm to train
    *
@@ -466,8 +467,8 @@ protected:
    * @param weights an importance factor for each sample. May be
    * empty, in which case 1.0 will be used for all samples.
    *
-   * @return @p true if the algorithm was successfully trained, @p
-   * false otherwise.
+   * @return `true` if the algorithm was successfully trained, 
+   * `false` otherwise.
    */
   template <class SampleSet> bool learnBatch(PiiLearningAlgorithm<SampleSet>& algorithm,
                                              const SampleSet& samples,
@@ -475,55 +476,55 @@ protected:
                                              const QVector<double>& weights = QVector<double>());
 
   /**
-   * Reads a feature vector from the @p features input and emits its
-   * classification to the @p classification output. May also send
+   * Reads a feature vector from the `features` input and emits its
+   * classification to the `classification` output. May also send
    * additional objects through other output sockets. This function is
-   * called by #process() when an incoming sample must be classified.
+   * called by [process()] when an incoming sample must be classified.
    *
    * @return the classification
    */
   virtual double classify() = 0;
 
   /**
-   * Reads a feature vector from the @p features input, sends it to an
+   * Reads a feature vector from the `features` input, sends it to an
    * on-line learning algorithm, and emits the classification result
-   * to the @p classification output. May send additional objects
+   * to the `classification` output. May send additional objects
    * through other output sockets. The default implementation emits
-   * and returns @a label.
+   * and returns *label*.
    *
-   * This function is called by #process() when an incoming sample
+   * This function is called by [process()] when an incoming sample
    * must be used for on-line learning (only if the learning algorithm
    * is capable of on-line learning).
    *
-   * @param label the classification of the training sample, or @p NaN
+   * @param label the classification of the training sample, or `NaN`
    * if not applicable.
    *
-   * @param weight the importance of the sample. If the @p weight
+   * @param weight the importance of the sample. If the `weight`
    * input is not connected, this value will always be 1.0. Learning
    * algorithms that are not capable of weighted learning will ignore
    * this value.
    *
-   * @return the classification of the sample, if possible. @p NaN
+   * @return the classification of the sample, if possible. `NaN`
    * otherwise.
    */
   virtual double learnOne(double label, double weight);
 
   /**
-   * Reads a feature vector from the @p features input and stores it
+   * Reads a feature vector from the `features` input and stores it
    * into a batch of samples that will be used as the training samples
    * when the training thread is started. This function is called by
-   * #process() during learning if the learning algorithm is not
+   * [process()] during learning if the learning algorithm is not
    * capable of on-line learning or if batch-based learning is
    * requested by the user. Subclasses should respect the value of
-   * #learningBatchSize. If the current number of samples in the batch
-   * is larger than #learningBatchSize (and the batch size is not -1),
+   * [learningBatchSize]. If the current number of samples in the batch
+   * is larger than [learningBatchSize] (and the batch size is not -1),
    * the sample must be either be discarded or one of the older
-   * samples must be replaced, depending on #fullBufferBehavior.
+   * samples must be replaced, depending on [fullBufferBehavior].
    *
-   * @param label the classification of the training sample, or @p NaN
+   * @param label the classification of the training sample, or `NaN`
    * if not applicable.
    *
-   * @param weight the importance of the sample. If the @p weight
+   * @param weight the importance of the sample. If the `weight`
    * input is not connected, this value will always be 1.0. Learning
    * algorithms that are not capable of weighted learning will ignore
    * this value.
@@ -543,21 +544,21 @@ protected:
   void setLearningError(const QString& learningError);
   
   /**
-   * With supervised learning algorithms, this function reads the @p
-   * label input and returns the class label. With non-supervised
-   * learning algorithms, @p NaN will be returned.
+   * With supervised learning algorithms, this function reads the 
+   * `label` input and returns the class label. With non-supervised
+   * learning algorithms, `NaN` will be returned.
    *
    * @exception PiiExecutionException& if the input object cannot be
-   * converted to a @p double.
+   * converted to a `double`.
    */
   double readLabel() const;
 
   /**
-   * Returns the value read from the @p weight input, or 1.0 if the
+   * Returns the value read from the `weight` input, or 1.0 if the
    * input is not connected.
    *
    * @exception PiiExecutionException& if the input object cannot be
-   * converted to a @p double.
+   * converted to a `double`.
    */
   double readWeight() const;
 
@@ -585,9 +586,9 @@ protected:
   PiiOutputSocket* classificationOutput();
 
   /**
-   * Reads a feature vector from the @p features input and calls
-   * algorithm.learnOne() using @a label as the class label and @a
-   * weight as the importance.
+   * Reads a feature vector from the `features` input and calls
+   * algorithm.learnOne() using *label* as the class label and 
+   * *weight* as the importance.
    *
    * @exception PiiExecutionException& if the features are of
    * incorrect type or size.
@@ -596,7 +597,7 @@ protected:
                                           double label,
                                           double weight = 1.0);
   /**
-   * Reads a feature vector from the @p features input and calls
+   * Reads a feature vector from the `features` input and calls
    * classifier.classify() using it as the input.
    */
   template <class SampleSet> double classify(PiiClassifier<SampleSet>& classifier);

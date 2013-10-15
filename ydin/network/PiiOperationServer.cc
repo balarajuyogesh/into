@@ -173,7 +173,7 @@ bool PiiOperationServer::ChannelImpl::tryToReceive(PiiAbstractInputSocket* sende
   try
     {
       QByteArray aData(PiiSerialization::toByteArray<PiiGenericTextOutputArchive>(object));
-      return enqueuePushData("outputs/" + sender->socket()->objectName(), aData);
+      return enqueuePushData("outputs/" + sender->objectName(), aData);
     }
   catch (PiiSerializationException& ex)
     {

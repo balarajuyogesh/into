@@ -24,9 +24,4 @@
 #  define PII_GUI_EXPORT PII_DECL_IMPORT
 #endif
 
-/**
- * @defgroup Gui User interface classes
- *
- */
-
 #endif //_PIIGUI_H

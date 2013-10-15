@@ -24,7 +24,7 @@
 #include <PiiGenericBinaryInputArchive.h>
 #include <PiiGenericBinaryOutputArchive.h>
 
-/// @cond null
+/// @hide
 namespace PiiNetwork
 {
   template <class T> QByteArray toByteArray(const T& obj, EncodingFormat format)
@@ -49,6 +49,6 @@ namespace PiiNetwork
     return result;
   }
 }
-/// @endcond
+/// @endhide
 
 #endif //_PIINETWORKENCODING_H

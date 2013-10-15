@@ -16,15 +16,6 @@
 #if !defined(_PIISERIALIZATIONUTIL_H) && !defined(Q_MOC_RUN) // as of Qt 5, moc chokes on this file
 #define _PIISERIALIZATIONUTIL_H
 
-/**
- * @file
- *
- * Convenience macros and utility functions for serializing many Qt
- * types.
- *
- * @ingroup Serialization
- */
-
 #include <QObject>
 #include <QMetaObject>
 #include <QMetaProperty>
@@ -58,7 +49,7 @@
  * class declaration either by providing the function body or by
  * defining the function elsewhere.
  *
- * @code
+ * ~~~(c++)
  * class MyClass
  * {
  *   PII_DECLARE_SERIALIZATION_FUNCTION;
@@ -70,7 +61,7 @@
  * {
  *   //Serialize members here
  * }
- * @endcode
+ * ~~~
  */
 #define PII_DECLARE_SERIALIZATION_FUNCTION \
 private: \
@@ -79,15 +70,15 @@ private: \
 
 /**
  * A default implementation of serialization functions. The default
- * function just passes serialization to the base object denoted by @a
- * BASE.
+ * function just passes serialization to the base object denoted by 
+ * *BASE*.
  *
- * @code
+ * ~~~(c++)
  * class MyDerived : public MyClass
  * {
  *   PII_DEFAULT_SERIALIZATION_FUNCTION(MyClass)
  * };
- * @endcode
+ * ~~~
  */
 #define PII_DEFAULT_SERIALIZATION_FUNCTION(BASE) \
   PII_DECLARE_SERIALIZATION_FUNCTION { Q_UNUSED(version); PII_SERIALIZE_BASE(archive, BASE); }
@@ -96,13 +87,13 @@ private: \
  * An implementation of serialization functions that stores and
  * retrieves object properties. The object must be derived from
  * QObject. This implementation first serializes the base class
- * denoted by @a BASE. Then, it serializes object properties. This
- * macro is used like @ref PII_DEFAULT_SERIALIZATION_FUNCTION. If the
+ * denoted by *BASE*. Then, it serializes object properties. This
+ * macro is used like [PII_DEFAULT_SERIALIZATION_FUNCTION]. If the
  * state of your class can be fully stored/retrieved with its
  * properties, this is the macro you need. Note that all properties,
  * including those defined in subclasses will be serialized.
  *
- * @code
+ * ~~~(c++)
  * class MyClass : public QObject
  * {
  *   Q_OBJECT
@@ -116,7 +107,7 @@ private: \
  * private:
  *   int _iMember;
  * };
- * @endcode
+ * ~~~
  */
 #define PII_PROPERTY_SERIALIZATION_FUNCTION(base) \
   PII_DECLARE_SERIALIZATION_FUNCTION \
@@ -142,13 +133,13 @@ namespace PiiSerialization
    * default. This can be changed by adding a "version" tag to the
    * class:
    *
-   * @code
+   * ~~~(c++)
    * class MyClass : public QObject
    * {
    *   Q_OBJECT
    *   Q_CLASSINFO("version", "1");
    * };
-   * @endcode
+   * ~~~
    *
    * @see QMetaClassInfo
    */
@@ -163,7 +154,7 @@ namespace PiiSerialization
   /**
    * Save the properties of a QObject. This function stores properties
    * so that they can be retrieved in any order. It serializes all
-   * read/write properties whose @p stored flag is @p true, and all
+   * read/write properties whose `stored` flag is `true`, and all
    * dynamic properties.
    *
    * @param archive an output archive
@@ -171,7 +162,7 @@ namespace PiiSerialization
    * @param obj the object whose properties are to be stored
    *
    * @param propertyOffset start from this property. 0 means all
-   * properties, 1 means all but the @p objectName property.
+   * properties, 1 means all but the `objectName` property.
    */
   template <class Archive> void saveProperties(Archive& archive, const QObject& obj, int propertyOffset=0);
 
@@ -256,7 +247,7 @@ namespace PiiSerialization
   /**
    * Serializes any random-access collection (QVector/QList). A
    * random-access collection is serialized by storing the size
-   * followed by the items. A serializer for the type @p T must be
+   * followed by the items. A serializer for the type `T` must be
    * defined.
    */
   template <class T, class Archive, class Collection> void save(Archive& archive, const Collection& lst, const unsigned int version);
@@ -418,10 +409,10 @@ namespace PiiSerialization
    * objects need to be transferred through the clipboard, for
    * example.
    *
-   * @code
+   * ~~~(c++)
    * MyClass c;
    * QByteArray marshalled = PiiSerialization::toByteArray<PiiTextOutputArchive>(c);
-   * @endcode
+   * ~~~
    *
    * @see fromByteArray()
    */
@@ -430,10 +421,10 @@ namespace PiiSerialization
   /**
    * Deserializes an object stored into a byte array.
    *
-   * @code
+   * ~~~(c++)
    * MyClass c;
    * PiiSerialization::fromByteArray<PiiTextInputArchive>(marshalled, c);
-   * @endcode
+   * ~~~
    *
    * @see toByteArray()
    */

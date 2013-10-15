@@ -25,7 +25,7 @@
  * over local sockets/pipes. To create a minimalistic HTTP server, do
  * this:
  *
- * @code
+ * ~~~(c++)
  * #include <QCoreApplication>
  * #include <PiiHttpProtocol.h>
  * #include <PiiTcpServer.h>
@@ -40,13 +40,12 @@
  *     return 1;
  *   return app.exec();
  * }
- * @endcode
+ * ~~~
  *
  * The server will run eternally and answer "404 Not Found" to all
  * requests. Look at the documentation of PiiHttpProtocol on how to
  * add URI handlers to the server.
  *
- * @ingroup Network
  */
 class PII_NETWORK_EXPORT PiiTcpServer : public PiiNetworkServer
 {
@@ -56,7 +55,7 @@ class PII_NETWORK_EXPORT PiiTcpServer : public PiiNetworkServer
    * The IP address of the network interface this server binds to. By
    * default, the address is "0.0.0.0", which causes the server to
    * bind to all interfaces. The bind address and the port can both be
-   * set with the #serverAddress property.
+   * set with the [serverAddress] property.
    */
   Q_PROPERTY(QString bindAddress READ bindAddress WRITE setBindAddress);
 
@@ -69,14 +68,14 @@ class PII_NETWORK_EXPORT PiiTcpServer : public PiiNetworkServer
   /**
    * The number of milliseconds the server will wait for client input. 
    * If nothing has been received within the time-out period, the
-   * socket device (see #createSocket()) will return with zero bytes
+   * socket device (see [createSocket()]) will return with zero bytes
    * read. It is up to the protocol implementation to deal with
    * time-outs. The default value is 20000.
    */
   Q_PROPERTY(int readTimeout READ readTimeout WRITE setReadTimeout);
 
   /**
-   * The encryption mode. The default value is @p NoEncryption. The
+   * The encryption mode. The default value is `NoEncryption`. The
    * encryption mode only affects new connection attempts, not already
    * accepted connections.
    */
@@ -87,9 +86,9 @@ public:
   /**
    * Supported encryption modes.
    *
-   * @lip NoEncryption - the connection will not be encrypted.
+   * - `NoEncryption` - the connection will not be encrypted.
    *
-   * @lip SslEncryption - the connection will be encrypted with SSLv3.
+   * - `SslEncryption` - the connection will be encrypted with SSLv3.
    */
   enum Encryption { NoEncryption = 0, SslEncryption };
   
@@ -102,8 +101,8 @@ public:
   ~PiiTcpServer();
   
   /**
-   * Creates a new QTcpSocket or QSslSocket and assigns @p
-   * socketDescriptor to it.
+   * Creates a new QTcpSocket or QSslSocket and assigns 
+   * `socketDescriptor` to it.
    */
   QIODevice* createSocket(PiiGenericSocketDescriptor socketDescriptor);
   
@@ -127,7 +126,7 @@ protected:
   /**
    * This function creates a TCP socket and binds it to the
    * interface(s) and port specified. If the server cannot listen to
-   * the socket, returns @p false.
+   * the socket, returns `false`.
    *
    * @see QTcpServer::listen()
    */

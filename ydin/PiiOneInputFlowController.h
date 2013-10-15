@@ -22,10 +22,9 @@
 
 /**
  * A flow controller that does not handle synchronization between
- * sibling sockets. %PiiOneInputFlowController can be used with
+ * sibling sockets. PiiOneInputFlowController can be used with
  * operations that have only one connected input.
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiOneInputFlowController : public PiiFlowController
 {
@@ -36,7 +35,7 @@ public:
    * @param inputs the single synchronized input to be controlled.
    *
    * @param outputs the a list of outputs to be controlled. The class
-   * will only consider outputs whose @ref PiiSocket::setGroupId()
+   * will only consider outputs whose [PiiSocket::setGroupId()]
    * "group ID" matches that of the input.
    */
   PiiOneInputFlowController(PiiInputSocket* input,

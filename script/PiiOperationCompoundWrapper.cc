@@ -48,54 +48,49 @@ namespace PiiOperationCompoundWrapper
   struct InputExposer
   {
     typedef PiiAbstractInputSocket SocketType;
-    static PiiSocket::Type type() { return PiiSocket::Input; }
+    //static PiiSocket::Type type() { return PiiSocket::Input; }
     static const char* errorMsg() { return QT_TR_NOOP("%1(): argument 1 must be either a valid input socket name or an instance of PiiInputSocket."); }
     static SocketType* toSocket(PiiOperationCompound* compound, QScriptValue value)
     {
       if (value.isString())
         return compound->input(value.toString());
       PiiSocket* pSocket = qscriptvalue_cast<PiiSocket*>(value);
-      if (pSocket == 0 || pSocket->type() not_member_of (PiiSocket::Input, PiiSocket::Proxy))
+      if (pSocket == 0 || !pSocket->isInput())
         return 0;
-      return pSocket->asInput();
+      return static_cast<SocketType*>(pSocket);
     }
     static void expose(PiiOperationCompound* compound,
-                       SocketType* socket,
-                       const QString& alias,
-                       PiiOperationCompound::ConnectionType connectionType)
+                       SocketType* socket)
     {
-      compound->exposeInput(socket, alias, connectionType);
+      compound->exposeInput(socket);
     }
     static void unexpose(PiiOperationCompound* compound, SocketType* socket)
     {
-      compound->unexposeInput(socket);
+      compound->removeInput(socket);
     }
   };
 
   struct OutputExposer
   {
     typedef PiiAbstractOutputSocket SocketType;
-    static PiiSocket::Type type() { return PiiSocket::Output; }
     static const char* errorMsg() { return QT_TR_NOOP("%1(): argument 1 must be either a valid output socket name or an instance of PiiOutputSocket."); }
     static SocketType* toSocket(PiiOperationCompound* compound, QScriptValue value)
     {
       if (value.isString())
         return compound->output(value.toString());
       PiiSocket* pSocket = qscriptvalue_cast<PiiSocket*>(value);
-      if (pSocket == 0 || pSocket->type() not_member_of (PiiSocket::Output, PiiSocket::Proxy))
+      if (pSocket == 0 || !pSocket->isOutput())
         return 0;
-      return pSocket->asOutput();
+      return static_cast<SocketType*>(pSocket);
     }
     static void expose(PiiOperationCompound* compound,
-                       SocketType* socket,
-                       const QString& alias,
-                       PiiOperationCompound::ConnectionType connectionType)
+                       SocketType* socket)
     {
-      compound->exposeOutput(socket, alias, connectionType);
+      compound->exposeOutput(socket);
     }
     static void unexpose(PiiOperationCompound* compound, SocketType* socket)
     {
-      compound->unexposeOutput(socket);
+      compound->removeOutput(socket);
     }
   };
 
@@ -106,22 +101,13 @@ namespace PiiOperationCompoundWrapper
     PiiOperationCompound* pThis = qscriptvalue_cast<PiiOperationCompound*>(context->thisObject());
     if (pThis == 0)
       return context->throwError(tr(PiiScript::pInstanceOfXRequired).arg(function).arg("PiiOperationCompound"));
-    if (context->argumentCount() < 2 || context->argumentCount() > 3)
-      return context->throwError(tr(PiiScript::pTakesNArguments).arg(function).arg("2-3"));
-    PiiOperationCompound::ConnectionType connectionType = PiiOperationCompound::ProxyConnection;
-    if (context->argumentCount() == 3)
-      {
-        if (!context->argument(2).isNumber())
-          return context->throwError(tr(PiiScript::pArgumentNMustBeX).arg(function).arg(3).arg("number"));
-        connectionType = (PiiOperationCompound::ConnectionType)context->argument(2).toInt32();
-      }
-
+    PII_CHECK_ONE_ARGUMENT(expose);
     // Convert the first argument to a socket pointer.
     typename Exposer::SocketType* pSocket = Exposer::toSocket(pThis, context->argument(0));
     if (pSocket == 0)
       return context->throwError(tr(Exposer::errorMsg()).arg(function));
     // Expose the socket
-    Exposer::expose(pThis, pSocket, context->argument(1).toString(), connectionType);
+    Exposer::expose(pThis, pSocket);
     return engine->undefinedValue();
   }
 

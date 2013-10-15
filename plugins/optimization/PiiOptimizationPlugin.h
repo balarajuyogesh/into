@@ -12,20 +12,3 @@
  * to use Into as a part of open source software projects. Please
  * refer to LICENSE.AGPL3 for details.
  */
-
-/**
- * @defgroup PiiOptimizationPlugin
- *
- * Optimization plug-in contains functions and operations for linear
- * and non-linear optimization function optimization.
- */
-
-/**
- * @namespace PiiOptimization
- * @ingroup PiiOptimizationPlugin
- *
- * @brief Functions and operations for optimization.
- *
- * This namespace contains functions for optimizing linear and
- * non-linear functions with methods such as the bfgs.
- */

@@ -22,11 +22,13 @@
  * PiiImageConversionSwitch is an operation which convert a receiving
  * image from the color/gray to the gray/color type if necessary. 
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - color or gray scale image
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out gray image - gray scale image
  *
@@ -34,15 +36,14 @@
  *
  * @see PiiColorConverter
  *
- * @ingroup PiiColorsPlugin
  */
 class PiiImageConversionSwitch : public PiiDefaultOperation
 {
   Q_OBJECT
 
   /**
-   * The type of color conversion. The default value is @p
-   * RgbToGrayMean.
+   * The type of color conversion. The default value is 
+   * `RgbToGrayMean`.
    */
   Q_PROPERTY(ColorConversion colorConversion READ colorConversion WRITE setColorConversion);
   Q_ENUMS(ColorConversion);
@@ -52,7 +53,7 @@ public:
   /**
    * Supported color conversion schemes.
    *
-   * @lip RgbToGrayMean - calculate the mean of three color channels. 
+   * - `RgbToGrayMean` - calculate the mean of three color channels. 
    * Retains the type of color channels, but outputs a gray-level
    * image.
    */

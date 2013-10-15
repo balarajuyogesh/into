@@ -30,9 +30,11 @@ bool PiiAbstractInputSocket::Data::setInputConnected(bool connected)
   return connected;
 }
 
-PiiAbstractInputSocket::PiiAbstractInputSocket(Data* data) :
+PiiAbstractInputSocket::PiiAbstractInputSocket(const QString& name, Data* data) :
   PiiSocket(data)
-{}
+{
+  setObjectName(name);
+}
 
 PiiAbstractInputSocket::~PiiAbstractInputSocket()
 {

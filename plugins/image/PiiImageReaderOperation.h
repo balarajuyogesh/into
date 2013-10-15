@@ -23,18 +23,19 @@
 /**
  * A base class for image sources.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in trigger - an optional trigger input. A new image is emitted
  * whenever any object is received in this input.
  *
- * @par Outputs
+ * Outputs
+ * -------
  *
  * @out image - the image output. Emits either four-channel color
  * or grayscale (the default) images in 8-bit (unsigned char) channel
  * format.
  *
- * @ingroup PiiImagePlugin
  */
 class PII_IMAGE_EXPORT PiiImageReaderOperation : public PiiDefaultOperation
 {
@@ -65,14 +66,14 @@ public:
   /**
    * Possible image types.
    *
-   * @lip GrayScale - the images will be of an 8-bit gray scale type
+   * - `GrayScale` - the images will be of an 8-bit gray scale type
    * (unsigned char)
    *
-   * @lip Color - the images will be of a 32-bit RGBA color type
+   * - `Color` - the images will be of a 32-bit RGBA color type
    * (PiiColor4<unsigned char>). This is the native color format
    * supported by QImage.
    *
-   * @lip Original - the output type will be either gray scale or
+   * - `Original` - the output type will be either gray scale or
    * color, depending on the type of the input image.
    */
   enum ImageType { GrayScale, Color, Original };
@@ -87,22 +88,22 @@ public:
 
 protected:
   /**
-   * Creates a PiiQImage<unsigned char> out of @a img and emits
+   * Creates a PiiQImage<unsigned char> out of *img* and emits
    * it through the image output. The ownership of the data buffer in
-   * @a img is transferred to the PiiQImage, and may have been
+   * *img* is transferred to the PiiQImage, and may have been
    * deleted already when the function returns.
    */
   void emitGrayImage(QImage& img);
   /**
-   * Creates a PiiQImage<PiiColor4<> > out of @a img and emits
+   * Creates a PiiQImage<PiiColor4<> > out of *img* and emits
    * it through the image output. The ownership of the data buffer in
-   * @a img is transferred to the PiiQImage, and may have been
+   * *img* is transferred to the PiiQImage, and may have been
    * deleted already when the function returns.
    */
   void emitColorImage(QImage& img);
   /**
    * Creates either a PiiMatrix<PiiColor4<> > or PiiMatrix<unsigned
-   * char> depending on the type of @a img, and emits the result
+   * char> depending on the type of *img*, and emits the result
    * through the image output.
    */
   void emitImage(QImage& img);

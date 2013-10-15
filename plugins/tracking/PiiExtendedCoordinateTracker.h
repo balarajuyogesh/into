@@ -20,31 +20,30 @@
 #include "PiiTracking.h"
 
 /**
- * A tracker that follows trajectories in @p D dimensions. It extends
+ * A tracker that follows trajectories in `D` dimensions. It extends
  * PiiCoordinateTracker by adding more sophisticated trajectory
- * management facilities. %PiiExtendedCoordinateTracker has the
+ * management facilities. PiiExtendedCoordinateTracker has the
  * following properties:
  *
- * @li Predicts constant movement for all objects based on two latest
+ * - Predicts constant movement for all objects based on two latest
  * measurements.
  *
- * @li New trajectories will be created for measurements that are
+ * - New trajectories will be created for measurements that are
  * either not connected to a trajectory or connected with a bad
- * fitness value (see #setGoodFitnessThreshold()). The fitness of such
+ * fitness value (see [setGoodFitnessThreshold()]). The fitness of such
  * a new trajectory will be 1.0 - the maximum fitness compared to any
  * candidate trajectory.
  *
- * @li If a trajectory cannot be reliably continued (see
- * #setGoodFitnessThreshold()), the trajectory will be retained in
+ * - If a trajectory cannot be reliably continued (see
+ * [setGoodFitnessThreshold()]), the trajectory will be retained in
  * candidate trajectories without extending it. This enhancement is
  * needed to cope with missing measurements. Such trajectories are
  * extended by cloning the last trajectory node.
  *
- * @li If a trajectory has not been extended with new measurements for
- * N (#setMaxStopTime()) iterations, it will be killed
- * (#endTrajectories()).
+ * - If a trajectory has not been extended with new measurements for
+ * N ([setMaxStopTime()]) iterations, it will be killed
+ * ([endTrajectories()]).
  *
- * @ingroup PiiTrackingPlugin
  */
 template <class T, int D> class PiiExtendedCoordinateTracker : public PiiCoordinateTracker<T,D>
 {
@@ -90,12 +89,12 @@ public:
    * measurements connected to it. If this much time passes and a
    * trajectory has not been extended, it needs to be ended. The
    * tracker collects all such trajectories into a list it passes to
-   * #endTrajectories().
+   * [endTrajectories()].
    *
    * @param maximumStopTime the maximum amount of time a trajectory
    * stays alive without measurements connected to it. The time is
-   * expressed in the units given as the @p t parameter to @p
-   * addMeasurements(). The default value is 1.
+   * expressed in the units given as the `t` parameter to 
+   * `addMeasurements`(). The default value is 1.
    */
   void setMaximumStopTime(int maximumStopTime) { _iMaximumStopTime = maximumStopTime; }
   /**

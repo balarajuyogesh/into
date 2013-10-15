@@ -39,19 +39,10 @@
 #include "PiiAlgorithm.h"
 #include "PiiTemplateExport.h"
 
-/**
- * @file
- *
- * Miscellaneous useful functions, mainly for dealing with Qt classes.
- *
- * @ingroup Core
- */
-
-
 namespace Pii
 {
   /**
-   * Write a QString to an @p std output stream.
+   * Write a QString to an `std` output stream.
    */
   inline std::ostream& operator<< (std::ostream& out, const QString& str)
   {
@@ -62,8 +53,8 @@ namespace Pii
   /**
    * Find the intersection of two lists. The result contains the
    * elements that are present in both lists, or an empty list if the
-   * intersection is empty. Any collection defining @p size(), @p
-   * contains(), and @p append() functions can be used as a parameter.
+   * intersection is empty. Any collection defining `size`(), 
+   * `contains`(), and `append`() functions can be used as a parameter.
    */
   template <class Collection> Collection intersect(const Collection& list1, const Collection& list2)
   {
@@ -77,7 +68,7 @@ namespace Pii
   /**
    * Find the union of two lists. The result contains the elements
    * that are present in either list, ignoring duplicates. Any
-   * collection defining @p size(), @p contains(), and @p append()
+   * collection defining `size`(), `contains`(), and `append`()
    * functions can be used as a parameter.
    */
   template <class Collection> Collection join(const Collection& list1, const Collection& list2)
@@ -90,9 +81,9 @@ namespace Pii
   }
 
   /**
-   * Create a list that consists of the elements of @p list1 that are
-   * not present in @p list2. Any collection defining @p size(), @p
-   * contains(), and @p append() functions can be used as a parameter.
+   * Create a list that consists of the elements of `list1` that are
+   * not present in `list2`. Any collection defining `size`(), 
+   * `contains`(), and `append`() functions can be used as a parameter.
    */
   template <class Collection> Collection subtract(const Collection& list1, const Collection& list2)
   {
@@ -130,21 +121,21 @@ namespace Pii
   }
   
   /**
-   * Returns the properties of a QObject as a @p Collection.
+   * Returns the properties of a QObject as a `Collection`.
    *
    * @param obj the object whose properties are queried
    *
    * @param propertyOffset skip this many properties in the beginning. 
    * This value can be used to skip the properties of superclasses. 
-   * For example, using one as the @a propertyOffset skips the @ref
-   * QObject::objectName property.
+   * For example, using one as the *propertyOffset* skips the 
+   * [QObject::objectName] property.
    *
    * @param flags a logical or of property types to be included in the
-   * query (see @ref Pii::Properties "Properties"). The function only
+   * query (see [Properties](Pii::Properties)). The function only
    * returns properties that match all of the flags. For example, to
-   * return only stored properties, use @p StoredProperties as the
+   * return only stored properties, use `StoredProperties` as the
    * flag. "Readable" is, of course, always a requirement, so one does
-   * not need to explicitly specify it. @p DynamicProperties is an
+   * not need to explicitly specify it. `DynamicProperties` is an
    * exception: if it is set, dynamic properties will be returned,
    * otherwise not. The default value includes all readable
    * properties, including dynamic ones.
@@ -188,16 +179,16 @@ namespace Pii
                                                                int propertyOffset = 0,
                                                                PropertyFlags flags = DynamicProperties);
 
-  /// @cond null
+  /// @hide
   inline QString propertyNameFrom(QVariantMap::const_iterator i) { return i.key(); }
   inline QVariant propertyValueFrom(QVariantMap::const_iterator i) { return i.value(); }
   template <class Iterator> inline QString propertyNameFrom(Iterator i) { return i->first; }
   template <class Iterator> inline QVariant propertyValueFrom(Iterator i) { return i->second; }
-  /// @endcond
+  /// @endhide
   
   /**
    * Sets many properties in a bunch. Properties will be set in
-   * the order @a collection gives them when iterating over it.
+   * the order *collection* gives them when iterating over it.
    *
    * @param obj the object to be modified
    *
@@ -219,13 +210,13 @@ namespace Pii
   PII_CORE_EXPORT QStringList argsToList(int argc, char* argv[]);
   
   /**
-   * Converts a list of QVariant objects into a QList of type @p T.
+   * Converts a list of QVariant objects into a QList of type `T`.
    *
-   * @code
+   * ~~~(c++)
    * QVariantList lst;
    * lst << 1.0 << 2.3;
    * QList<double> dLst = Pii::variantsToList<double>(lst);
-   * @endcode
+   * ~~~
    */
   template <class T> QList<T> variantsToList(const QVariantList& variants)
   {
@@ -266,13 +257,13 @@ namespace Pii
   }
 
   /**
-   * Convert a list of QVariant objects into a QVector of type @p T.
+   * Convert a list of QVariant objects into a QVector of type `T`.
    *
-   * @code
+   * ~~~(c++)
    * QVariantList lst;
    * lst << 1.0 << 2.3;
    * QVector<double> dLst = Pii::variantsToVector<double>(lst);
-   * @endcode
+   * ~~~
    */
   template <class T> QVector<T> variantsToVector(const QVariantList& variants)
   {
@@ -285,11 +276,11 @@ namespace Pii
   /**
    * Randomize the order of elements in a collection.
    *
-   * @code
+   * ~~~(c++)
    * QList<int> lst;
    * lst << 1 << 2 << 3;
    * Pii::shuffle(lst);
-   * @endcode
+   * ~~~
    */
   template <class Collection> inline void shuffle(Collection& lst)
   {
@@ -298,45 +289,44 @@ namespace Pii
 
   
   /**
-   * Select randomly @a n distinct integers that are smaller than @a
-   * max. This function can be used to take a random sample of a
+   * Select randomly *n* distinct integers that are smaller than 
+   * *max*. This function can be used to take a random sample of a
    * collection.
    *
-   * @code
+   * ~~~(c++)
    * QStringList lstNames;
    * lstNames << "foo" << "bar" << "etc";
    * QVector<int> indices = Pii::selectRandomly(2, lstNames.size());
    * for (int i=0; i<indices.size(); ++i)
    *   qDebug(qPrintable(lstNames[indices[i]]));
-   * @endcode
+   * ~~~
    *
-   * @return randomly selected indices. If @a n is larger than @a max,
-   * @a max indices will returned.
+   * @return randomly selected indices. If *n* is larger than *max*,
+   * *max* indices will returned.
    *
    * @see selectRandomly(Collection&, const Collection&, int)
    */
   QVector<int> PII_CORE_EXPORT selectRandomly(int n, int max);
 
   /**
-   * @overload
    *
-   * Randomly selects @a n distinct integers in [0, max-1] and stores
-   * them to @a indices. This version is better suited for selecting a
+   * Randomly selects *n* distinct integers in [0, max-1] and stores
+   * them to *indices*. This version is better suited for selecting a
    * small number of indices in tight loops.
    */
   void PII_CORE_EXPORT selectRandomly(QVector<int>& indices, int n, int max);
 
   /**
-   * Select randomly @a n elements from @a source and insert them to
-   * @a target. The @p Collection type must have size() and append()
+   * Select randomly *n* elements from *source* and insert them to
+   * *target*. The `Collection` type must have size() and append()
    * member functions defined.
    *
-   * @code
+   * ~~~(c++)
    * QStringList lstNames;
    * lstNames << "foo" << "bar" << "etc";
    * QStringList selected;
    * Pii::selectRandomly(selected, lstNames, 2);
-   * @endcode
+   * ~~~
    */
   template <class Collection>
   void selectRandomly(Collection& target, const Collection& source, int n)
@@ -347,15 +337,15 @@ namespace Pii
   }
   
   /**
-   * Find all parent objects of @p obj up to @p maxParents parent
+   * Find all parent objects of `obj` up to `maxParents` parent
    * objects. By default, all parents are returned. If a template
    * parameter is specified, only parents matching the given type are
    * returned.
    *
-   * @code
+   * ~~~(c++)
    * QList<MyObj*> parents = Pii::findAllParents<MyObj*>(obj);
    * // Returns all parents of obj whose type is MyObj*
-   * @endcode
+   * ~~~
    */
   template <class T> QList<T> findAllParents(const QObject* obj,
                                              unsigned int maxParents = Pii::Numeric<unsigned int>::maxValue())
@@ -373,13 +363,13 @@ namespace Pii
   }
 
   /**
-   * Returns @p true if @a obj is an instance of @a className.
+   * Returns `true` if *obj* is an instance of *className*.
    *
-   * @code
+   * ~~~(c++)
    * QObject* pWidget = new QWidget;
    * Pii::isA("QWidget", pWidget); // true
    * Pii::isA("QFrame", pWidget); // false
-   * @endcode
+   * ~~~
    */
   PII_CORE_EXPORT bool isA(const char* className, const QObject* obj);
 
@@ -389,7 +379,7 @@ namespace Pii
   PII_CORE_EXPORT QList<QObject*> findAllParents(const QObject* obj, unsigned int maxParents = Pii::Numeric<unsigned int>::maxValue());
 
   /**
-   * Find the first parent of @p obj whose type matches @p T.
+   * Find the first parent of `obj` whose type matches `T`.
    * Equivalent to findAllParents(obj,1), but faster.
    */
   template <class T> T findFirstParent(const QObject* obj)
@@ -406,20 +396,20 @@ namespace Pii
   }
 
   /**
-   * Returns @p true if @p parent is a parent of @p child.
+   * Returns `true` if `parent` is a parent of `child`.
    */
   PII_CORE_EXPORT bool isParent(const QObject* parent, const QObject* child);
 
   /**
-   * Find the object that is the closest common ancestor of @p obj1
-   * and @p obj2 in the object hierarchy.
+   * Find the object that is the closest common ancestor of `obj1`
+   * and `obj2` in the object hierarchy.
    *
    * @param obj1 first object
    *
    * @param obj2 second object
    *
    * @param parentIndex if non-zero, the index of the closest parent
-   * object in @p obj1's parent list is stored here.
+   * object in `obj1`'s parent list is stored here.
    *
    * @return a pointer to the parent found, or zero if the objects
    * don't have a common parent.
@@ -447,7 +437,7 @@ namespace Pii
 
   /**
    * Match a list of crontab-like strings against the given time
-   * stamp. Each string in @p list represents a rule with a syntax
+   * stamp. Each string in `list` represents a rule with a syntax
    * similar but not equivalent to crontab (man crontab). Each rule
    * contains six fields separated by spaces. The fields are (in this
    * order): minute, hour, day, month, day of week, and week number. 
@@ -456,7 +446,7 @@ namespace Pii
    * all of its fields match. A set of rules matches if any of its
    * rules matches.
    *
-   * @code
+   * ~~~(c++)
    * // Returns true during the first minute after midnight every day and
    * // 4:00-6:00 on the first day of every month
    * matchCrontab(QStringList() <<
@@ -467,32 +457,32 @@ namespace Pii
    * // Friday on weeks 1, 2, 3, 5, 6, 7, 8, and 9
    * matchCrontab(QStringList() <<
    *              "30 8 * * 1,3,5 1-3,5-9);
-   * @endcode
+   * ~~~
    *
    * @param list a list of crontab entries.
    *
    * @param timeStamp the time to match the entries against
    *
-   * @return @p true if any of the entries match the time stamp.
+   * @return `true` if any of the entries match the time stamp.
    */
   PII_CORE_EXPORT bool matchCrontab(QStringList list, QDateTime timeStamp = QDateTime::currentDateTime());
 
   /**
    * Flags for controlling property decoding.
    *
-   * @lip NoDecodingFlag - no options apply
+   * - `NoDecodingFlag` - no options apply
    *
-   * @lip TrimPropertyName - remove white space in the beginning and
+   * - `TrimPropertyName` - remove white space in the beginning and
    * end of property name.
    *
-   * @lip TrimPropertyValue - remove white space in the beginning and
+   * - `TrimPropertyValue` - remove white space in the beginning and
    * end of property value.
    *
-   * @lip RemoveQuotes - remove double quotes around property
-   * names/values. Implies @p TrimPropertyName and @p
-   * TrimPropertyValue.
+   * - `RemoveQuotes` - remove double quotes around property
+   * names/values. Implies `TrimPropertyName` and 
+   * `TrimPropertyValue`.
    *
-   * @lip DowncasePropertyName - convert all property names to lower
+   * - `DowncasePropertyName` - convert all property names to lower
    * case.
    */
   enum PropertyDecodingFlag
@@ -508,23 +498,23 @@ namespace Pii
   Q_DECLARE_OPERATORS_FOR_FLAGS(PropertyDecodingFlags)
 
   /**
-   * Returns the index of the first occurrence of @a separator in @p
-   * str, starting at @a startIndex. This function ignores occurrences
-   * that are preceded by an odd number of @a escape characters. If
+   * Returns the index of the first occurrence of *separator* in 
+   * `str`, starting at *startIndex*. This function ignores occurrences
+   * that are preceded by an odd number of *escape* characters. If
    * the separator is not found, returns -1.
    *
-   * @code
+   * ~~~(c++)
    * Pii::findSeparator("\"Test \\"string\"", '"', 1); // returns 14
-   * @endcode
+   * ~~~
    */
   PII_CORE_EXPORT int findSeparator(const QString& str, QChar separator, int startIndex = 0, QChar escape = QChar('\\'));
 
   /**
    * Splits a string in which each part may be quoted.
    *
-   * @code
+   * ~~~(c++)
    * Pii::splitQuoted("\"a,b,c\",d,e"); // returns ("a,b,c", "d", "e")
-   * @endcode
+   * ~~~
    */
   PII_CORE_EXPORT QStringList splitQuoted(const QString& str, QChar separator = QChar(','), QChar quote = QChar('"'),
                                           QString::SplitBehavior behavior = QString::KeepEmptyParts);
@@ -534,7 +524,7 @@ namespace Pii
    * function can be used to parse ini files, css-style properties or
    * anything similar to a map of name-value pairs. All values will be
    * QStrings, but they are stored as QVariants for easy cooperation
-   * with #setProperties().
+   * with [setProperties()].
    *
    * @param encodedProperties the string to decode
    *
@@ -549,12 +539,12 @@ namespace Pii
    *
    * @return a map of name-value pairs
    *
-   * @code
+   * ~~~(c++)
    * QVariantMap props = Pii::decodeProperties("color: #fff;font-size: 5pt", ';', ':');
    * // props now has two values:
    * // "color" -> "#fff"
    * // "font-size" -> "5pt"
-   * @endcode
+   * ~~~
    */
   PII_CORE_EXPORT QVariantMap decodeProperties(const QString& encodedProperties,
                                                QChar propertySeparator = QChar('\n'),
@@ -563,22 +553,22 @@ namespace Pii
                                                PropertyDecodingFlags flags = TrimPropertyName | TrimPropertyValue | RemoveQuotes);
 
   /**
-   * Replaces variables in @a string and returns a new string.
+   * Replaces variables in *string* and returns a new string.
    *
    * @param string the input string with variables. Variables are
    * prefixed with a dollar sign and optionally delimited by curly
    * braces. ($variable or ${variable}).
    *
    * @param variables a map of variable values. This can be any type
-   * that defines <tt>QString operator[] (const QString&)</tt>.
+   * that defines `QString operator[] (const QString&)`.
    *
-   * @code
+   * ~~~(c++)
    * QMap<QString,QString> mapVariables;
    * mapVariables["foo"] = "bar";
    * mapVariables["bar"] = "foo";
    * QString strResult = Pii::replaceVariables("$foo ${bar}", mapVariables);
    * // strResult == "bar foo"
-   * @endcode
+   * ~~~
    */
   template <class VariableMap> QString replaceVariables(const QString& string, const VariableMap& variables)
   {
@@ -600,16 +590,16 @@ namespace Pii
 
 
   /**
-   * Finds the name of a property in @p obj that matches @p name in a
+   * Finds the name of a property in `obj` that matches `name` in a
    * case-insensitive manner.
    *
    * @return the real name of the property or 0 if no such property exists
    *
-   * @code
+   * ~~~(c++)
    * QObject obj;
    * const char* objName = Pii::propertyName(obj, "objectname");
    * // returns "objectName"
-   * @endcode
+   * ~~~
    */
   PII_CORE_EXPORT const char* propertyName(const QObject* obj, const QString& name);
 
@@ -622,24 +612,24 @@ namespace Pii
    *
    * @param valueMap a map that stores the actual property values
    *
-   * @param sensitivity if @p Qt::CaseSensitive, the property names
-   * must match exactly. If @p Qt::CaseInsensitive, case-insensitive
-   * matching will be performed (@ref propertyName()).
+   * @param sensitivity if `Qt::CaseSensitive`, the property names
+   * must match exactly. If `Qt::CaseInsensitive`, case-insensitive
+   * matching will be performed ([propertyName()]).
    *
    * @param commentMark ignore values starting with this string
    *
-   * @code
+   * ~~~(c++)
    * // Read properties from an ini file (case-sensitive)
    * QSettings settings(configFile, QSettings::IniFormat);
    * Pii::setProperties(obj, settings.childKeys(), settings);
-   * @endcode
+   * ~~~
    *
-   * @code
+   * ~~~(c++)
    * // Read string-encoded properties (case-insensitive)
    * QVariantMap properties = Pii::decodeProperties("objectname=foobar\n"
    *                                                "//comment, ignored");
    * Pii::setProperties(obj, properties.keys(), properties, Qt::CaseInsensitive, "//");
-   * @endcode
+   * ~~~
    */
   template <class Map> bool setProperties(QObject* obj, const QStringList& properties, const Map& valueMap,
                                           Qt::CaseSensitivity sensitivity = Qt::CaseSensitive,
@@ -670,7 +660,7 @@ namespace Pii
    * @param from Pointer to source array.
    * @param itemCount Number of items of type T to copy.
    *
-   * @note Behavior is undefined if arrays @p to and @p from overlap.
+   * ! Behavior is undefined if arrays `to` and `from` overlap.
    */
   template<class T, class size_type>
   inline void arrayCopy(T* to, const T* from, const size_type itemCount)
@@ -690,41 +680,41 @@ namespace Pii
    * QString::toDouble() and friends in that it recognizes magnitude
    * suffices.
    *
-   * @code
+   * ~~~(c++)
    * Pii::toDouble("10k"); // returns 10000
    * Pii::toDouble("-2M"); // returns -2000000
    * Pii::toDouble("1.2m"); // returns 0.0012
-   * @endcode
+   * ~~~
    *
    * The following suffices are recognized:
    *
    * <table style="border: 0">
    * <tr><th>Name</th><th>Symbol</th><th>Magnitude</th></tr>
-   * <tr><td>yotta</td><td>Y</td><td>@f$10^{24}@f$</td></tr>
-   * <tr><td>zetta</td><td>Z</td><td>@f$10^{21}@f$</td></tr>
-   * <tr><td>exa</td><td>E</td><td>@f$10^{18}@f$</td></tr>
-   * <tr><td>peta</td><td>P</td><td>@f$10^{15}@f$</td></tr>
-   * <tr><td>tera</td><td>T</td><td>@f$10^{12}@f$</td></tr>
-   * <tr><td>giga</td><td>G</td><td>@f$10^{9}@f$</td></tr>
-   * <tr><td>mega</td><td>M</td><td>@f$10^{6}@f$</td></tr>
-   * <tr><td>kilo</td><td>k</td><td>@f$10^{3}@f$</td></tr>
-   * <tr><td>hecto</td><td>h</td><td> @f$10^{2}@f$</td></tr>
-   * <tr><td>deka</td><td>e</td><td> @f$10^{1}@f$</td></tr>
-   * <tr><td>deci</td><td>d</td><td>@f$10^{-1}@f$</td></tr>
-   * <tr><td>centi</td><td>c</td><td> @f$10^{-2}@f$</td></tr>
-   * <tr><td>milli</td><td>m</td><td> @f$10^{-3}@f$</td></tr>
-   * <tr><td>micro</td><td>u</td><td> @f$10^{-6}@f$</td></tr>
-   * <tr><td>nano</td><td>n</td><td>@f$10^{-9}@f$</td></tr>
-   * <tr><td>pico</td><td>p</td><td>@f$10^{-12}@f$</td></tr>
-   * <tr><td>femto</td><td>f</td><td> @f$10^{-15}@f$</td></tr>
-   * <tr><td>atto</td><td>a</td><td>@f$10^{-18}@f$</td></tr>
-   * <tr><td>zepto</td><td>z</td><td> @f$10^{-21}@f$</td></tr>
-   * <tr><td>yocto</td><td>y</td><td> @f$10^{-24}@f$</td></tr>
+   * <tr><td>yotta</td><td>Y</td><td>\(10^{24}\)</td></tr>
+   * <tr><td>zetta</td><td>Z</td><td>\(10^{21}\)</td></tr>
+   * <tr><td>exa</td><td>E</td><td>\(10^{18}\)</td></tr>
+   * <tr><td>peta</td><td>P</td><td>\(10^{15}\)</td></tr>
+   * <tr><td>tera</td><td>T</td><td>\(10^{12}\)</td></tr>
+   * <tr><td>giga</td><td>G</td><td>\(10^{9}\)</td></tr>
+   * <tr><td>mega</td><td>M</td><td>\(10^{6}\)</td></tr>
+   * <tr><td>kilo</td><td>k</td><td>\(10^{3}\)</td></tr>
+   * <tr><td>hecto</td><td>h</td><td> \(10^{2}\)</td></tr>
+   * <tr><td>deka</td><td>e</td><td> \(10^{1}\)</td></tr>
+   * <tr><td>deci</td><td>d</td><td>\(10^{-1}\)</td></tr>
+   * <tr><td>centi</td><td>c</td><td> \(10^{-2}\)</td></tr>
+   * <tr><td>milli</td><td>m</td><td> \(10^{-3}\)</td></tr>
+   * <tr><td>micro</td><td>u</td><td> \(10^{-6}\)</td></tr>
+   * <tr><td>nano</td><td>n</td><td>\(10^{-9}\)</td></tr>
+   * <tr><td>pico</td><td>p</td><td>\(10^{-12}\)</td></tr>
+   * <tr><td>femto</td><td>f</td><td> \(10^{-15}\)</td></tr>
+   * <tr><td>atto</td><td>a</td><td>\(10^{-18}\)</td></tr>
+   * <tr><td>zepto</td><td>z</td><td> \(10^{-21}\)</td></tr>
+   * <tr><td>yocto</td><td>y</td><td> \(10^{-24}\)</td></tr>
    * </table>
    *
    * @param number the string to convert
    *
-   * @param ok an optional pointer to a @p bool that indicates if the
+   * @param ok an optional pointer to a `bool` that indicates if the
    * conversion was successful.
    */
   PII_CORE_EXPORT double toDouble(const QString& number, bool* ok = 0);
@@ -752,21 +742,21 @@ namespace Pii
 
   /**
    * Converts a variant to a string suitable for use as a value in
-   * many programming languages. If @a value is a string, it will be
+   * many programming languages. If *value* is a string, it will be
    * quoted and converted to ASCII-only characters. Numeric and
-   * boolean values will be converted with QVariant::toString(). If @a
-   * value is not any of the supported types, a null string will be
+   * boolean values will be converted with QVariant::toString(). If 
+   * *value* is not any of the supported types, a null string will be
    * returned.
    */
   PII_CORE_EXPORT QString escape(const QVariant& value);
 
   /**
-   * Strips escape sequences from @a value.
+   * Strips escape sequences from *value*.
    */
   PII_CORE_EXPORT QString unescapeString(const QString& value);
 
   /**
-   * Decodes @a value and returns the result as a variant. This
+   * Decodes *value* and returns the result as a variant. This
    * function recognizes numbers, boolean values and strings.
    */
   PII_CORE_EXPORT QVariant unescapeVariant(const QString& value);
@@ -779,14 +769,14 @@ namespace Pii
    * each entry contains a list of indices that were chained. Each
    * list is sorted in ascending order.
    *
-   * @code
+   * ~~~(c++)
    * QLinkedList<QPair<int,int> > lstPairs;
    * lstPairs << qMakePair(0,1) << qMakePair(0,3) << qMakePair(0,4) << qMakePair(3,4) << qMakePair(3,5);
    * lstPairs << qMakePair(2,6) << qMakePair(6,8) << qMakePair(7,8);
    *
    * QList<QList<int> > lstNeighbors(Pii::findNeighbors(lstPairs));
    * // ((0, 1, 3, 4, 5), (2, 6, 7, 8))
-   * @endcode
+   * ~~~
    */
   PII_CORE_EXPORT QList<QList<int> > findNeighbors(QLinkedList<QPair<int,int> >& pairs);
 }

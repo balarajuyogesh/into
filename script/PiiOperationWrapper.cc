@@ -35,8 +35,8 @@ namespace PiiOperationWrapper
     else if (input.isQObject())
       {
         PiiSocket* pSocket = qobject_cast<PiiSocket*>(input.toQObject());
-        if (pSocket != 0)
-          pInput = pSocket->asInput();
+        if (pSocket != 0 && pSocket->isInput())
+          pInput = static_cast<PiiAbstractInputSocket*>(pSocket);
       }
 
     if (pInput == 0)

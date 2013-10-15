@@ -38,23 +38,23 @@ class PiiProgressController;
  *
  * The class automates the handling of HTTP headers as much as
  * possible. If you request information that is not available without
- * reading the request header, @p %PiiHttpDevice will read the header
+ * reading the request header, PiiHttpDevice will read the header
  * automatically. It also builds the request or response header, and
  * has reasonable defaults for most header fields. The header will be
  * automatically sent if data is written to the device.
  *
- * @p %PiiHttpDevice supports output filtering. All data written to
- * the client/server can be passed through an unlimited number of
- * filters which may buffer the data. If no filters are installed,
- * data will be written directly to the low-level socket. Headers will
- * be sent just before the first byte of the message body is going to
- * be written to the client. It is not possible to change the headers
+ * PiiHttpDevice supports output filtering. All data written to the
+ * client/server can be passed through an unlimited number of filters
+ * which may buffer the data. If no filters are installed, data will
+ * be written directly to the low-level socket. Headers will be sent
+ * just before the first byte of the message body is going to be
+ * written to the client. It is not possible to change the headers
  * afterwards.
  *
- * In @p Server mode, @p %PiiHttpDevice is typically used in the @p
- * handleRequest() function of PiiHttpProtocol::UriHandler:
+ * In `Server` mode, PiiHttpDevice is typically used in the
+ * `handleRequest`() function of PiiHttpProtocol::UriHandler:
  *
- * @code
+ * ~~~(c++)
  * void MyHandler::handleRequest(const QString& uri,
  *                               PiiHttpDevice* h,
  *                               PiiProgressController* controller)
@@ -68,7 +68,7 @@ class PiiProgressController;
  *   h->setHeader("Content-Type", "text/html");
  *   h->print("<html><body>You hit a handler at " + uri + "</body></html>\n");
  * }
- * @endcode
+ * ~~~
  *
  * Using a PiiStreamBuffer as an output filter will usually increase
  * performance. The effect is that writes to the device will be stored
@@ -76,11 +76,11 @@ class PiiProgressController;
  * utilizes the buffer by automatically setting the Content-Length
  * header.
  *
- * In @p Client mode, the I/O device must be created first. 
+ * In `Client` mode, the I/O device must be created first. 
  * PiiNetworkClient can be used to easily create a suitable I/O
  * device:
  *
- * @code
+ * ~~~(c++)
  * PiiNetworkClient client("tcp://127.0.0.1:80");
  * PiiHttpDevice dev(client.openConnection(), PiiHttpDevice::Client);
  * dev.setRequest("GET", "/");
@@ -90,9 +90,8 @@ class PiiProgressController;
  * // Read response header and ignore the response body.
  * dev.readHeader();
  * dev.discardBody();
- * @endcode
+ * ~~~
  *
- * @ingroup Network
  */
 class PII_NETWORK_EXPORT PiiHttpDevice : public QIODevice, public PiiStreamFilter
 {
@@ -100,12 +99,12 @@ class PII_NETWORK_EXPORT PiiHttpDevice : public QIODevice, public PiiStreamFilte
   
 public:
   /**
-   * Connection types, specified by the @p Connection request header.
+   * Connection types, specified by the `Connection` request header.
    *
-   * @lip KeepAliveConnection - the default for HTTP/1.1. The
+   * - `KeepAliveConnection` - the default for HTTP/1.1. The
    * connection will not be closed after a request.
    *
-   * @lip CloseConnection - the connection will be closed after
+   * - `CloseConnection` - the connection will be closed after
    * request. This happens when the client sends the "Connection:
    * close" request header.
    */
@@ -114,16 +113,16 @@ public:
   /**
    * Communication modes.
    *
-   * @lip Client - the device is used at the client side
+   * - `Client` - the device is used at the client side
    *
-   * @lip Server - the device is used at the server side
+   * - `Server` - the device is used at the server side
    */
   enum Mode { Client, Server };
 
   /**
    * Initialize a HTTP device with the given low-level device.
    *
-   * @param device the communication device. Typically, @a device is a
+   * @param device the communication device. Typically, *device* is a
    * PiiWaitingIODevice. The pointer must remain valid during the
    * lifetime of the HTTP device.
    *
@@ -145,8 +144,8 @@ public:
 
   /**
    * Returns the connection type. If either the request or the
-   * response header specifies "Connection: close" returns @p
-   * CloseConnection. Otherwise returns @p KeepAliveConnection.
+   * response header specifies "Connection: close" returns 
+   * `CloseConnection`. Otherwise returns `KeepAliveConnection`.
    */
   ConnectionType connectionType() const;
 
@@ -165,11 +164,11 @@ public:
    * @return the query string. Percent-encoded characters will be
    * automatically converted. May be empty.
    *
-   * @code
+   * ~~~(c++)
    * // request URI: /foo/bar/baz?a=2
    * QString str = h->queryString();
    * // str = "a=2"
-   * @endcode
+   * ~~~
    */
   QString queryString() const;
 
@@ -182,32 +181,32 @@ public:
   QString rawQueryString() const;
 
   /**
-   * Returns @p true if the request URI contains a query string, and
-   * @p false otherwise.
+   * Returns `true` if the request URI contains a query string, and
+   * `false` otherwise.
    */
   bool hasQuery() const;
 
   /**
    * Returns a query value from the request URI. This function returns
-   * the variable called @a name in the encoded request string. If
+   * the variable called *name* in the encoded request string. If
    * there are multiple values associated with the same key, a list of
    * values will be returned. Values are automatically decoded (see
-   * #decodeVariant()).
+   * [decodeVariant()]).
    *
-   * @code
+   * ~~~(c++)
    * // request URI: /path/?var1=a&var2=b&var2=c
    *
    * QString a = h->queryValue("var1").toString();
    * // a = "a"
    * QVariantList bc = h->queryValue("var2").toList();
    * // bc = ("b", "c")
-   * @endcode
+   * ~~~
    */
   QVariant queryValue(const QString& name) const;
 
   /**
    * Returns all query values as a map of key-value pairs. Parameter
-   * values are automatically decoded (see #decodeVariant()).
+   * values are automatically decoded (see [decodeVariant()]).
    */
   QVariantMap queryValues() const;
 
@@ -220,21 +219,21 @@ public:
 
   /**
    * Adds a query value to the request URI. This function can be used
-   * in @p Client mode to automatically encode values in the query.
+   * in `Client` mode to automatically encode values in the query.
    *
    * @param name the name of the query value.
    *
    * @param value the value, will be automatically encoded (see
-   * #encode()). Multiple items with the same name may exists. If the
+   * [encode()]). Multiple items with the same name may exists. If the
    * value is invalid, it (and the equal sign) will be omitted.
    *
-   * @code
+   * ~~~(c++)
    * dev.addQueryValue("v1", 1);
    * dev.addQueryValue("v2", "Hello");
    * dev.addQueryValue("v2", 3.14);
    *
    * // dev.queryString() == "v1=1&v2=%22hello%22&v2=3.14"
-   * @endcode
+   * ~~~
    */
   void addQueryValue(const QString& name, const QVariant& value);
 
@@ -255,16 +254,16 @@ public:
    * This is useful if you want to find the relative path of a URI
    * handler.
    *
-   * @code
+   * ~~~(c++)
    * // request URI: /foo/bar/baz?a=2
    * QString str = h->requestPath("/foo/");
    * // str = "bar/baz"
-   * @endcode
+   * ~~~
    */
   QString requestPath(const QString& basePath = QString()) const;
 
   /**
-   * Same as #requestPath(), but doesn't automatically decode
+   * Same as [requestPath()], but doesn't automatically decode
    * percent-encoded characters in URI.
    */
   QString rawRequestPath(const QString& basePath = QString()) const;
@@ -296,8 +295,8 @@ public:
    * @param replace indicates whether the header should replace a
    * previous similar header, or add a second header of the same type.
    *
-   * @note The function will automatically change the status code
-   * (#setStatus()) if needed. For example, setting the @p Location
+   * ! The function will automatically change the status code
+   * ([setStatus()]) if needed. For example, setting the `Location`
    * header changes the status code automatically to 302 (redirect),
    * unless the status code is already in the 3xx series.
    */
@@ -309,19 +308,19 @@ public:
   PiiHttpResponseHeader responseHeader() const;
 
   /**
-   * Sets the request method to @a method and request URI to @a uri. 
-   * The @a uri will not be parsed; you can give anything (including
+   * Sets the request method to *method* and request URI to *uri*. 
+   * The *uri* will not be parsed; you can give anything (including
    * invalid data) as the request uri.
    *
-   * If the given @a uri contains query parameters (indicated by a
+   * If the given *uri* contains query parameters (indicated by a
    * question mark), all query parameters previously added with
-   * #addQueryValue() will be cleared.
+   * [addQueryValue()] will be cleared.
    *
-   * If @a method is @p GET, Content-Type header will be automatically
+   * If *method* is `GET`, Content-Type header will be automatically
    * removed.
    *
-   * In @p Client mode, and if the previous request has been finished
-   * (see #finish()), calling this function will call #restart()
+   * In `Client` mode, and if the previous request has been finished
+   * (see [finish()]), calling this function will call [restart()]
    * first. Note that this resets the device to its initial state,
    * clearing all output buffers.
    */
@@ -333,25 +332,25 @@ public:
 
   /**
    * Returns a request parameter from an
-   * @p application/x-www-form-urlencoded POST body. If the body is not
-   * such type, or the value called @a name does not exist, an invalid
+   * `application`/x-www-form-urlencoded POST body. If the body is not
+   * such type, or the value called *name* does not exist, an invalid
    * variant will be returned. Note that this function will only work
    * if you haven't already read the message body yourself.
    *
-   * @note If the message body has not been read, this function does
-   * so, even though it is @p const.
+   * ! If the message body has not been read, this function does
+   * so, even though it is `const`.
    *
-   * @see #queryValue()
+   * @see [queryValue()]
    */
   QVariant formValue(const QString& name) const;
 
   /**
    * Returns all form-encoded values in the message body as a map. 
    * Parameter values are automatically decoded (see
-   * #decodeVariant()).
+   * [decodeVariant()]).
    *
-   * @note If the message body has not been read, this function does
-   * so, even though it is @p const.
+   * ! If the message body has not been read, this function does
+   * so, even though it is `const`.
    */
   QVariantMap formValues() const;
 
@@ -359,8 +358,8 @@ public:
    * Returns the names of form fields in the order they appear in the
    * POST message body.
    *
-   * @note If the message body has not been read, this function does
-   * so, even though it is @p const.
+   * ! If the message body has not been read, this function does
+   * so, even though it is `const`.
    *
    * @see queryItems()
    */
@@ -378,7 +377,7 @@ public:
    * or form values in the message body) as a map. If the same
    * variable is found in both, the request URI takes precedence. 
    * Parameter values are automatically decoded (see
-   * #decodeVariant()).
+   * [decodeVariant()]).
    */
   QVariantMap requestValues() const;
 
@@ -399,20 +398,20 @@ public:
 
   /**
    * Puts an output filter on the filter stack. All subsequent writes
-   * to the device will go through @a filter first.
+   * to the device will go through *filter* first.
    *
    * You may call startOutputFiltering() many times. Just make sure
-   * that you call #endOutputFiltering() the same number of times. If
+   * that you call [endOutputFiltering()] the same number of times. If
    * multiple output filters are active, output will be filtered
    * sequentially through each of them.
    *
-   * @param filter the output filter. %PiiHttpDevice takes the
+   * @param filter the output filter. PiiHttpDevice takes the
    * ownership of the pointer.
    *
-   * @code
+   * ~~~(c++)
    * // Buffer all data into memory until finish() or endOutputFiltering() is called.
    * dev.startOutputFiltering(new PiiStreamBuffer);
-   * @endcode
+   * ~~~
    */
   void startOutputFiltering(PiiStreamFilter* filter);
 
@@ -426,9 +425,9 @@ public:
   
   /**
    * Pops an output filter from the filter stack. This function will
-   * collapse the filter stack until it finds @a filter and tell each
+   * collapse the filter stack until it finds *filter* and tell each
    * filter to finish its job. The removed filters will be deleted. 
-   * The next filter below @a filter on the stack (if any) will be
+   * The next filter below *filter* on the stack (if any) will be
    * activated.
    *
    * If the last filter is removed, and the filter has buffered data,
@@ -440,15 +439,15 @@ public:
    * endOutputFiltering().
    *
    * @param filter the filter until which all filters will be
-   * finished. If @a filter is 0, only the topmost filter will be
+   * finished. If *filter* is 0, only the topmost filter will be
    * removed.
    */
   void endOutputFiltering(PiiStreamFilter* filter = 0);
 
   /**
    * Sets a HTTP request/response header field. If the device is in
-   * @p Client mode, this function modifies the request header. In
-   * @p Server mode, it modifies the response header.
+   * `Client` mode, this function modifies the request header. In
+   * `Server` mode, it modifies the response header.
    *
    * @param name the name of the header field, such as "Location".
    *
@@ -457,7 +456,7 @@ public:
    * @param replace indicates whether the header should replace a
    * previous similar header, or add a second header of the same type.
    *
-   * @code
+   * ~~~(c++)
    * // An example for setHeader() usage on server side.
    *
    * // Set content type
@@ -478,25 +477,25 @@ public:
    *
    * // Asks the server to close the connection after request.
    * h->setHeader("Connection", "close");
-   * @endcode
+   * ~~~
    *
-   * @note Setting the @p Content-Encoding header will automatically
+   * ! Setting the `Content`-Encoding header will automatically
    * change the output text codec. See QTextCodec for supported
    * encodings.
    */
   void setHeader(const QString& name, const QVariant& value, bool replace = true);
 
   /**
-   * Removes the header field(s) with @a name. If the device is in
-   * @p Client mode, this function modifies the request header. In
-   * @p Server mode, it modifies the response header.
+   * Removes the header field(s) with *name*. If the device is in
+   * `Client` mode, this function modifies the request header. In
+   * `Server` mode, it modifies the response header.
    */
   void removeHeader(const QString& name);
 
   /**
    * See if request/response header have been successfully read.
    *
-   * @return @p true, if request headers have been read, @p false
+   * @return `true`, if request headers have been read, `false`
    * otherwise.
    */
   bool headerRead() const;
@@ -531,13 +530,13 @@ public:
    * client side, this function must be called before reading a
    * response. The final form of the request/response headers is
    * available only after finish() is done. For example,
-   * #connectionType() may be @p CloseConnection even if the client
+   * [connectionType()] may be `CloseConnection` even if the client
    * did not request it.
    *
    * Calling finish() multiple times has no effect. If you intend to
-   * use the same %PiiHttpDevice for successive requests, you need to
-   * call #restart() after handling the request. The #setRequest() (on
-   * the client side) and #readHeader() (on the server side) functions
+   * use the same PiiHttpDevice for successive requests, you need to
+   * call [restart()] after handling the request. The [setRequest()] (on
+   * the client side) and [readHeader()] (on the server side) functions
    * automatically restart the request.
    */
   void finish();
@@ -549,35 +548,35 @@ public:
    * filters and clears stored form/query values.
    *
    * This function needs to be called after each request if the same
-   * device is used again. On the client side, #setRequest()
+   * device is used again. On the client side, [setRequest()]
    * automatically calls this function. On the server side,
-   * #readHeader() does the same.
+   * [readHeader()] does the same.
    */
   void restart();
   
   /**
-   * Returns @p true if the low-level socket device is still
-   * connected, @p false otherwise.
+   * Returns `true` if the low-level socket device is still
+   * connected, `false` otherwise.
    */
   bool isWritable() const;
 
   /**
-   * Returns @p true if the low-level socket device is still
-   * connected, @p false otherwise.
+   * Returns `true` if the low-level socket device is still
+   * connected, `false` otherwise.
    */
   bool isReadable() const;
 
   /**
    * Prints text to the device. This function is equivalent to
    * QIODevice::write(), but it converts the unicode input text using
-   * the encoding style defined with the @p Content-Encoding header. 
+   * the encoding style defined with the `Content`-Encoding header. 
    * If no encoding has been set, UTF-8 will be used.
    */
   qint64 print(const QString& data);
 
   /**
-   * Encodes @a msg to a byte array using the current encoding. If the
-   * @p Content-Encoding header has not been set, UTF-8 will be used.
+   * Encodes *msg* to a byte array using the current encoding. If the
+   * `Content`-Encoding header has not been set, UTF-8 will be used.
    */
   QByteArray encode(const QString& msg) const;
 
@@ -591,9 +590,9 @@ public:
    * that the function returns data even if the whole body could not
    * be read.
    *
-   * @note If you call this function yourself, a POST encoded message
+   * ! If you call this function yourself, a POST encoded message
    * body can no longer be automatically parsed, and functions such as
-   * #formItems() and #formValues() return empty values.
+   * [formItems()] and [formValues()] return empty values.
    */
   QByteArray readBody();
 
@@ -602,9 +601,9 @@ public:
    * device is zero, the body will be discarded. Returns the number of
    * bytes read on success and -1 on failure.
    *
-   * @note If you call this function yourself, a POST encoded message
+   * ! If you call this function yourself, a POST encoded message
    * body can no longer be automatically parsed, and functions such as
-   * #formItems() and #formValues() return empty values.
+   * [formItems()] and [formValues()] return empty values.
    */
   qint64 readBody(QIODevice* device);
 
@@ -615,7 +614,7 @@ public:
   
   /**
    * Reads request/response header. This function checks that the
-   * header has not been read and calls the protected #decodeHeader()
+   * header has not been read and calls the protected [decodeHeader()]
    * function if needed.
    */
   bool readHeader();
@@ -623,13 +622,13 @@ public:
   /**
    * Sends request/response headers. This function checks that the
    * headers have not been sent and calls the protected
-   * #encodeHeader() function if needed.
+   * [encodeHeader()] function if needed.
    */
   bool sendHeader();
 
   /**
-   * Returns @p true if at least one byte of the message body has been
-   * read and @p false otherwise.
+   * Returns `true` if at least one byte of the message body has been
+   * read and `false` otherwise.
    */
   bool isBodyRead() const;
 
@@ -646,26 +645,26 @@ public:
   qint64 headerLength() const;
 
   /**
-   * Decodes @a data and returns its value as a %QVariant. The
+   * Decodes *data* and returns its value as a %QVariant. The
    * following conversions are tried, in preference order:
    *
-   * @li If @a data begins with a magic string that identifies an
+   * - If *data* begins with a magic string that identifies an
    * archive (e.g. "Into Txt" or "Into Bin"), it is assumed to contain
    * a serialized QVariant. The variant will be deserialized.
    *
-   * @li If @a data can be converted to an @p int, an @p int will be
+   * - If *data* can be converted to an `int`, an `int` will be
    * returned.
    *
-   * @li If @a data can be converted to a @p double, a @p double will
+   * - If *data* can be converted to a `double`, a `double` will
    * be returned.
    *
-   * @li If @a data is either "true" or "false" (without the quotes),
+   * - If *data* is either "true" or "false" (without the quotes),
    * the corresponding boolean value will be returned.
    *
-   * @li Otherwise, a QString will be returned. If the value is
+   * - Otherwise, a QString will be returned. If the value is
    * enclosed in double quotes, they will be removed.
    *
-   * @note In some occasions, it may be necessary to pass "true",
+   * ! In some occasions, it may be necessary to pass "true",
    * "false", "1.23" or "Into Bin" as strings. To prevent automatic
    * conversion, enclose the value in double quotes.
    *
@@ -673,7 +672,6 @@ public:
    * variant will be returned.
    */
   QVariant decodeVariant(const QByteArray& data) const;
-  /// @overload
   QVariant decodeVariant(const QString& data) const;
 
   /**
@@ -686,14 +684,14 @@ public:
   QByteArray encode(const QVariant& variant, PiiNetwork::EncodingFormat format = PiiNetwork::TextFormat) const;
 
   /**
-   * Set the communication device. Usually, a new %PiiHttpDevice is
+   * Set the communication device. Usually, a new PiiHttpDevice is
    * created whenever a new communication device is needed. This
-   * function is useful in @p Client mode if you need to reopen a
+   * function is useful in `Client` mode if you need to reopen a
    * connection to a server but still want to retain old configuration
-   * such as request parameters or cookies. Setting @a device to null
+   * such as request parameters or cookies. Setting *device* to null
    * is not allowed.
    *
-   * @exception PiiInvalidArgumentException& if @a device is null.
+   * @exception PiiInvalidArgumentException& if *device* is null.
    */
   void setDevice(const PiiSocketDevice& device);
   

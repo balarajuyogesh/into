@@ -16,7 +16,7 @@
 #ifndef _PIIABSTRACTINPUTSOCKET_H
 #define _PIIABSTRACTINPUTSOCKET_H
 
-#include "PiiAbstractSocket.h"
+#include "PiiSocket.h"
 #include "PiiInputListener.h"
 
 class PiiInputController;
@@ -29,12 +29,12 @@ class PiiAbstractOutputSocket;
  *
  * This class represents a connection point but provides no means of
  * actually handling the received objects. Received objects are
- * handled by an input controller (#controller()).
+ * handled by an input controller ([controller()]).
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiAbstractInputSocket : public PiiSocket
 {
+  Q_OBJECT
 public:
   ~PiiAbstractInputSocket();
 
@@ -86,15 +86,14 @@ protected:
     Data();
     ~Data();
 
-    /*
-     * Set the connection status of this socket to @p connected. The
-     * default implementation just returns @p connected.
+    /* Sets the connection status of this socket to `connected`. The
+     * default implementation just returns `connected`.
      *
      * @param connected a flag that indicates whether the sequence of
      * sockets leading to this socket is connected to an operation or
      * not.
      *
-     * @return @p true if the socket is connected, @p false otherwise. 
+     * @return `true` if the socket is connected, `false` otherwise. 
      * If the socket is a proxy, it may be unconnected even after
      * setInputConnected(true) if none of its outgoing connections leads
      * to a connected input.
@@ -107,7 +106,7 @@ protected:
   PII_D_FUNC;
   
   /// @internal
-  PiiAbstractInputSocket(Data* d);
+  PiiAbstractInputSocket(const QString& name, Data* d);
   
 private:
   // Must be able to set pConnectedOutput and call setInputConnected.

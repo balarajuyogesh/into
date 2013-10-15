@@ -26,8 +26,6 @@
 /**
  * A namespace for functions that transform images into different
  * types of domains.
- *
- * @ingroup PiiTransformsPlugin
  */
 namespace PiiTransforms
 {
@@ -42,10 +40,10 @@ namespace PiiTransforms
    *
    * @param minDistance the minimum distance between peaks. If peaks
    * are closer than this value, only the larger will survive. Setting
-   * @e minDistance less than 1 has no effect.
+   * *minDistance* less than 1 has no effect.
    *
    * @param maxCnt the maximum number of highest peaks to return. If
-   * this value is zero, every peak exceeding @a threshold will be
+   * this value is zero, every peak exceeding *threshold* will be
    * returned.
    *
    * @param threshold the minimum magnitude for a peak. If this value
@@ -62,7 +60,7 @@ namespace PiiTransforms
 
   /**
    * A function object that selects pixels whose gradient magnitude is
-   * higher than or equal to @a threshold.
+   * higher than or equal to *threshold*.
    *
    * @see circularHough()
    */
@@ -78,7 +76,7 @@ namespace PiiTransforms
 
   /**
    * A function object that randomly selects pixels whose gradient
-   * magnitude is higher than or equal to @a threshold.
+   * magnitude is higher than or equal to *threshold*.
    *
    * @see circularHough()
    */
@@ -109,10 +107,10 @@ namespace PiiTransforms
    * domain specific to a known radius r.
    *
    * @param gradientX estimated magnitude of horizontal image
-   * gradient. (e.g. image filtered with the @p SobelX filter)
+   * gradient. (e.g. image filtered with the `SobelX` filter)
    *
    * @param gradientX estimated magnitude of vertical image gradient
-   * (e.g. image filtered with the @p SobelX filter).
+   * (e.g. image filtered with the `SobelX` filter).
    *
    * @param selector a function that is used to accept or reject
    * pixels. Use ThresholdSelector to choose pixels based on the
@@ -120,22 +118,22 @@ namespace PiiTransforms
    * necessarily needed.
    *
    * @param radius the radius of the circles to be found. If this
-   * value is a @p double, the returned matrix will also be a double,
+   * value is a `double`, the returned matrix will also be a double,
    * and a floating-point (more accurate) algorithm will be used. If
-   * this value is an @p int, a faster integer algorithm will be used.
+   * this value is an `int`, a faster integer algorithm will be used.
    *
    * @param angleError an esimate of angular error in the calculated
-   * gradients. Setting @p angleError to a non-zero value will
+   * gradients. Setting `angleError` to a non-zero value will
    * increase accuracy but also slow down the algorithm.
    *
    * @return the transformation domain. Each pixel in the
    * transformation domain stores the number of times it was accessed
    * during the algorithm. With the floating point version, the counts
    * are weighted by gradient magnitude. A high value means that a
-   * circle with the given @a radius is centered at that pixel with a
+   * circle with the given *radius* is centered at that pixel with a
    * high likelihood.
    *
-   * @code
+   * ~~~(c++)
    * PiiMatrix<unsigned char> matInput; // input image
    * PiiMatrix<GradType> matGradX(PiiImage::filter<int>(matInput, PiiImage::SobelXFilter));
    * PiiMatrix<GradType> matGradY(PiiImage::filter<int>(matInput, PiiImage::SobelYFilter));
@@ -144,7 +142,7 @@ namespace PiiTransforms
    *                                           ThresholdSelector(5.0),
    *                                           5,
    *                                           0.01));
-   * @endcode
+   * ~~~
    */
   template <class T, class Selector, class U>
   PiiMatrix<U> circularHough(const PiiMatrix<T>& gradientX,
@@ -156,17 +154,17 @@ namespace PiiTransforms
   
   /**
    * This version uses the Sobel edge detector to first estimate
-   * gradient in @a image. Then, it applies circularHough() to all
-   * radii in [@a startRadius, @a endRadius] in @a radiusStep steps.
+   * gradient in *image*. Then, it applies circularHough() to all
+   * radii in [*startRadius*, *endRadius*] in *radiusStep* steps.
    *
    * @return a transformation domain for each inspected radius
    *
-   * @code
+   * ~~~(c++)
    * using namespace PiiTransforms;
    * QList<PiiMatrix<int> > lstMatrices(circularHough(matInput,
    *                                                  RandomSelector(1.0, 0.1), // Selects one tenth of pixels
    *                                                  10, 20, 2)); // Scan radii from 10 to 20 in 2 pixel steps
-   * @endcode
+   * ~~~
    */
   template <class T, class Selector, class U>
   QList<PiiMatrix<U> > circularHough(const PiiMatrix<T>& image,

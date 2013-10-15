@@ -23,11 +23,13 @@
  * Detect peaks in noisy data. See PiiDsp::findPeaks() for a detailed
  * description of function.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in signal - input signal. A row vector. (real-valued PiiMatrix)
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out peaks - detected peaks. A (possibly empty) PiiMatrix<double>
  * with one row for each peak. Each row has three entries, in this
@@ -36,7 +38,6 @@
  * @out indices - zero-based indices of detected peaks in the original
  * signal. A N-by-1 PiiMatrix<int>.
  *
- * @ingroup PiiDspPlugin
  */
 class PiiPeakDetector : public PiiDefaultOperation
 {

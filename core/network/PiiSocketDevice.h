@@ -34,8 +34,8 @@ class QLocalSocket;
  * used interchangeably because their common superclass, QIODevice,
  * provides no general way of checking if the device is
  * readable/writable. For example, TCP sockets are "open" (isOpen()
- * returns @p true) even after the connection has been broken. This
- * class provides the #isReadable() and #isWritable() functions that
+ * returns `true`) even after the connection has been broken. This
+ * class provides the [isReadable()] and [isWritable()] functions that
  * can be used to check if the socket is really available for reading
  * and writing. This class also provides functionality for reading and
  * writing data to/from devices that may not have everything available
@@ -45,7 +45,6 @@ class QLocalSocket;
  * if it was a QIODevice pointer. Once initialized with a QIODevice
  * pointer, the class masquerades as one itself.
  *
- * @ingroup Network
  */
 class PII_NETWORK_EXPORT PiiSocketDevice
 {
@@ -56,21 +55,21 @@ public:
    */
   PiiSocketDevice();
   /**
-   * Constructs a PiiSocketDevice that wraps the given @a device. The
+   * Constructs a PiiSocketDevice that wraps the given *device*. The
    * type of the device will be automatically determined. All Qt
    * socket types are recognized.
    */
   PiiSocketDevice(QIODevice* device);
   /**
-   * Constructs a PiiSocketDevice that wraps the given @a socket.
+   * Constructs a PiiSocketDevice that wraps the given *socket*.
    */
   PiiSocketDevice(QAbstractSocket* socket);
   /**
-   * Constructs a PiiSocketDevice that wraps the given @a socket.
+   * Constructs a PiiSocketDevice that wraps the given *socket*.
    */
   PiiSocketDevice(QLocalSocket* socket);
   /**
-   * Constructs a copy of @a other.
+   * Constructs a copy of *other*.
    */
   PiiSocketDevice(const PiiSocketDevice& other);
   ~PiiSocketDevice();
@@ -79,29 +78,29 @@ public:
   PiiSocketDevice& operator= (QIODevice* device);
 
   /**
-   * Returns @p true if it is possible that the socket still has data
-   * and @p false otherwise. This function handles special cases such
+   * Returns `true` if it is possible that the socket still has data
+   * and `false` otherwise. This function handles special cases such
    * as a disconnected socket with unread data in its receive buffer.
    */
   bool isReadable() const;
   
   /**
-   * Returns @p true if the socket can be written to and @p false
+   * Returns `true` if the socket can be written to and `false`
    * otherwise.
    */
   bool isWritable() const;
 
   /**
-   * Reads at most @a maxSize bytes of data from the socket and places
-   * it to @a data. If not enough data is immediately available, waits
-   * at most @a waitTime milliseconds to get more. If @a controller is
+   * Reads at most *maxSize* bytes of data from the socket and places
+   * it to *data*. If not enough data is immediately available, waits
+   * at most *waitTime* milliseconds to get more. If *controller* is
    * given, it can be used to terminate a long wait.
    */
   qint64 readWaited(char* data, qint64 maxSize, int waitTime = 5000, PiiProgressController* controller = 0);
   /**
-   * Writes at most @a maxSize bytes of data from @a data to the
+   * Writes at most *maxSize* bytes of data from *data* to the
    * socket. If all data cannot be immediately written, waits at most
-   * @a waitTime milliseconds. If @a controller is given, it can be
+   * *waitTime* milliseconds. If *controller* is given, it can be
    * used to terminate a long wait.
    */
   qint64 writeWaited(const char* data, qint64 maxSize, int waitTime = 5000, PiiProgressController* controller = 0);

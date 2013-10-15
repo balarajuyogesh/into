@@ -22,16 +22,17 @@
  * An operation that composes formatted strings out of data read from
  * a configurable number of inputs.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in inputX - any type convertable to a QString. All primitive types
  * and QString are accepted.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out output - the output
  *
- * @ingroup PiiBasePlugin
  */
 class PiiStringFormatter : public PiiDefaultOperation
 {
@@ -39,14 +40,14 @@ class PiiStringFormatter : public PiiDefaultOperation
 
   /**
    * Format string. Use "%0", "%1", etc. to insert the data read from
-   * @p input0, @p input1, etc. The default value is "%0". Setting
+   * `input0`, `input1`, etc. The default value is "%0". Setting
    * this property automatically changes the number of input sockets
    * to match the number of distinct argument places in the format
    * string. For example "%0 %3 %0" as the format string adds two
    * inputs to the operation. If the number of argument places is
    * zero, one input will still be retained.
    *
-   * @code
+   * ~~~(c++)
    * PiiOperation* op = engine.createOperation("PiiStringFormatter");
    * // This will add two inputs to the operation.
    * op->setProperty("format", "%0 (%1)");
@@ -58,7 +59,7 @@ class PiiStringFormatter : public PiiDefaultOperation
    * // 0 (false)
    * // 1 (true)
    * // 2 (false)
-   * @endcode
+   * ~~~
    */
   Q_PROPERTY(QString format READ format WRITE setFormat);
 

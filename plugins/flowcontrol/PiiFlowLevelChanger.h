@@ -23,24 +23,25 @@
  * It is useful in situations where one needs to adjust different flow
  * levels before connecting them to further processing. A typical use
  * is to fake image pieces to be "original" images as shown in the
- * image below. The images emitted through @p output will be at the
- * flow level of PiiImageFileReader's @p image.
+ * image below. The images emitted through `output` will be at the
+ * flow level of PiiImageFileReader's `image`.
  *
- * @image html flowlevelchanger.png
+ * ![Flow level changer](flowlevelchanger.png)
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in sync - Synchronization input. The output will always maintain
  * the flow level of this input.
  *
- * @in input - The objects whose flow level must match @p sync.
+ * @in input - The objects whose flow level must match `sync`.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
- * @out output - Objects read from @p input at the flow level of @p
- * sync.
+ * @out output - Objects read from `input` at the flow level of 
+ * `sync`.
  *
- * @ingroup PiiFlowControlPlugin
  */
 class PiiFlowLevelChanger : public PiiDefaultOperation
 {

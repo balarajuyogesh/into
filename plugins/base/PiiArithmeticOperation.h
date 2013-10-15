@@ -24,23 +24,24 @@
  * An operation that performs simple arithmetic like adding and
  * subtracting values.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in input0 - first operand. Any matrix or scalar type.
  *
  * @in input1 - second operand (optional). If this input is not
- * connected, the second operand will initialized to a #constant
+ * connected, the second operand will initialized to a [constant]
  * value. The default constant value is a zero (double). Note that if
- * this input is a matrix, @p input0 must also be a matrix.
+ * this input is a matrix, `input0` must also be a matrix.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out output - the type of the output is a combination of the
- * inputs. For example, if @p input0 is PiiMatrix<int> and @p input1
- * is @p double, output type is PiiMatrix<double>. If both types are
+ * inputs. For example, if `input0` is PiiMatrix<int> and `input1`
+ * is `double`, output type is PiiMatrix<double>. If both types are
  * the same, no type change will be made.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiArithmeticOperation : public PiiDefaultOperation
 {
@@ -53,7 +54,7 @@ class PiiArithmeticOperation : public PiiDefaultOperation
   Q_PROPERTY(PiiVariant constant READ constant WRITE setConstant);
 
   /**
-   * The arithmetic operator to be used. Default value is @p Plus.
+   * The arithmetic operator to be used. Default value is `Plus`.
    */
   Q_PROPERTY(Function function READ function WRITE setFunction);
   Q_ENUMS(Function);
@@ -66,19 +67,19 @@ public:
    * Known arithmetic functions. We can't use "operator", because it
    * is reserved by C++.
    *
-   * @lip Plus - addition
+   * - `Plus` - addition
    *
-   * @lip Minus - subtraction
+   * - `Minus` - subtraction
    *
-   * @lip Division - division
+   * - `Division` - division
    *
-   * @lip Multiplication - multiplication
+   * - `Multiplication` - multiplication
    *
-   * @lip ElementMultiplication - multiply matrices element-by-element
+   * - `ElementMultiplication` - multiply matrices element-by-element
    * (see Pii::multiply()). This operator applies only to two
    * matrices. For other types, ordinary multiplication will be used.
    *
-   * @lip ElementDivision - divide matrices element-by-element (see
+   * - `ElementDivision` - divide matrices element-by-element (see
    * Pii::divide()). This operator applies only to two matrices. 
    * For other types, ordinary division will be used.
    */

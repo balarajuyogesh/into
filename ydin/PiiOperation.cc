@@ -63,13 +63,43 @@ int PiiOperation::outputCount() const
   return outputs().size();
 }
 
+PiiAbstractInputSocket* PiiOperation::input(const QString& name) const
+{
+  foreach (PiiAbstractInputSocket* pInput, inputs())
+    if (pInput->objectName() == name)
+      return pInput;
+  return 0;
+}
+
+PiiAbstractInputSocket* PiiOperation::inputAt(int index) const
+{
+  if (index >= 0 && index < inputCount())
+    return inputs()[index];
+  return 0;
+}
+
 QStringList PiiOperation::inputNames() const
 {
   const QList<PiiAbstractInputSocket*> lstInputs = inputs();
   QStringList lstResult;
   for (int i=0; i<lstInputs.size(); i++)
-    lstResult << socketName(lstInputs[i]);
+    lstResult << lstInputs[i]->objectName();
   return lstResult;
+}
+
+PiiAbstractOutputSocket* PiiOperation::output(const QString& name) const
+{
+  foreach (PiiAbstractOutputSocket* pOutput, outputs())
+    if (pOutput->objectName() == name)
+      return pOutput;
+  return 0;
+}
+
+PiiAbstractOutputSocket* PiiOperation::outputAt(int index) const
+{
+  if (index >= 0 && index < outputCount())
+    return outputs()[index];
+  return 0;
 }
 
 QStringList PiiOperation::outputNames() const
@@ -77,7 +107,7 @@ QStringList PiiOperation::outputNames() const
   const QList<PiiAbstractOutputSocket*> lstOutputs = outputs();
   QStringList lstResult;
   for (int i=0; i<lstOutputs.size(); i++)
-    lstResult << socketName(lstOutputs[i]);
+    lstResult << lstOutputs[i]->objectName();
   return lstResult;
 }
 
@@ -123,21 +153,6 @@ bool PiiOperation::connectOutput(const QString& outputName, const QVariant& inpu
         }
     }
   return connectOutput(outputName, pInput);
-}
-
-QString PiiOperation::socketName(PiiAbstractSocket* socket) const
-{
-  return socketProperty(socket, "name").toString();
-}
-
-QVariant PiiOperation::socketProperty(PiiAbstractSocket*, const char*) const
-{
-  return QVariant();
-}
-
-QVariant PiiOperation::socketProperty(PiiAbstractSocket* socket, const QString& name) const
-{
-  return socketProperty(socket, piiPrintable(name));
 }
 
 const char* PiiOperation::stateName(State state)

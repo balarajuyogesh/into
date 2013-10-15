@@ -27,7 +27,6 @@
  * Text output archive stores data in a space-separated textual
  * format. The archive uses UTF-8 to encode non-ASCII characters.
  *
- * @ingroup Serialization
  */
 class PII_SERIALIZATION_EXPORT PiiTextOutputArchive :
   public PiiOutputArchive<PiiTextOutputArchive>,

@@ -31,7 +31,7 @@
  * major, minor and patch, but the class does not prevent you from
  * using any number of parts.
  *
- * @code
+ * ~~~(c++)
  * PiiVersionNumber v1("1.0.0");
  * PiiVersionNumber v2("1.1-custom");
  * PiiVersionNumber v3(0, 9);
@@ -49,16 +49,15 @@
  * QVERIFY(v7 < v8);
  * QCOMPARE(v2.revision(), QString("custom"));
  * QCOMPARE(v6.revision(), QString("custom-2"));
- * @endcode
+ * ~~~
  *
- * @ingroup Core
  */
 class PII_CORE_EXPORT PiiVersionNumber
 {
 public:
   /**
-   * Create a new version number with the given @p major, @p minor, and
-   * @p patch numbers and a @p revision name.
+   * Create a new version number with the given `major`, `minor`, and
+   * `patch` numbers and a `revision` name.
    */
   PiiVersionNumber(int major=0, int minor=0, int patch=-1, const QString& revision = "");
   /**
@@ -77,12 +76,12 @@ public:
    * Parse a version number string and set the version number fields
    * accordingly.
    *
-   * @return @p true iff the number was successfully parsed
+   * @return `true` iff the number was successfully parsed
    */
   bool setVersionString(const QString& versionString);
 
   /**
-   * Get the @p indexth part of the version number. Index 0 is for the
+   * Get the `indexth` part of the version number. Index 0 is for the
    * major version, 1 for the minor version etc. If there is no such
    * part, 0 will be returned.
    */

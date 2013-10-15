@@ -20,13 +20,13 @@
 
 /**
  * An implicitly shared pointer. The PiiSharedPtr class holds a
- * reference-counted pointer (@ref PiiSharedObject) and masquerades as
+ * reference-counted pointer ([PiiSharedObject]) and masquerades as
  * one itself. The class automatically increases and decreases the
  * reference count when copies of it are requested. Thus, you never
  * need to care about deleting the memory. Typical usage (compare this
- * to the explicit sharing example in @ref PiiSharedObject):
+ * to the explicit sharing example in [PiiSharedObject]):
  *
- * @code
+ * ~~~(c++)
  * class MyObject : public PiiSharedObject;
  * typedef PiiSharedPtr<MyObject> MyPtr;
  *
@@ -44,30 +44,30 @@
  *   internalVariable = ptr;
  *   doWhatEverNeeded();
  * }
- * @endcode
+ * ~~~
  *
  * The class supports all types types, including arrays. If the
  * reference-counted type is not directly derived from
  * PiiSharedObject, a reference-counted wrapper will be automatically
  * created.
  *
- * @code
+ * ~~~(c++)
  * PiiSharedPtr<string> ptr(new string("this is"));
  * *ptr += " a test";
  * cout << ptr->c_str() << endl; //outputs "this is a test"
- * @endcode
+ * ~~~
  *
- * @code
+ * ~~~(c++)
  * PiiSharedPtr<int> ptr(new int);
  * ptr = new int; //releases the old one
  * *ptr = 3; //use the class just like an int pointer
- * @endcode
+ * ~~~
  *
- * @code
+ * ~~~(c++)
  * PiiSharedPtr<int[]> ptr(new int[5]);
  * ptr = new int[6]; //releases the old array
  * ptr[0] = 3; //use the class just like an int array
- * @endcode
+ * ~~~
  *
  * The computational overhead of using a shared pointer instead of a
  * direct one is minimal. Copying a pointer costs one (non-virtual and
@@ -84,24 +84,23 @@
  * directly if you ensure that the PiiSharedPtr instance stays in
  * memory.
  *
- * @code
+ * ~~~(c++)
  * MyPtr ptr(new MyObject);
  * MyObject* ptr2 = ptr;
  * // You may now safely use ptr2 as long as ptr is in memory
- * @endcode
+ * ~~~
  *
  * One can assign PiiSharedPtrs just like ordinary pointers. That is,
  * a PiiSharedPtr<Base> can hold a pointer to a class derived from
  * Base.
  *
- * @note If the types are not derived from PiiSharedObject, multiple
+ * ! If the types are not derived from PiiSharedObject, multiple
  * inheritance is not always handled correctly. You can assign derived
  * pointers to base class pointers only if the base class is the first
  * one in inheritance order.
  *
  * @see PiiSharedObject
  *
- * @ingroup Core
  */
 template <class T> class PiiSharedPtr
 {
@@ -133,7 +132,7 @@ public:
   /**
    * Creates an implicitly shared pointer that holds the given pointer.
    *
-   * @param obj a pointer to the object to be shared. %PiiSharedPtr
+   * @param obj a pointer to the object to be shared. PiiSharedPtr
    * takes the ownership of the pointer.
    */
   PiiSharedPtr(T* obj) : _ptr(wrap(obj)) {}
@@ -149,7 +148,7 @@ public:
 
   /**
    * Create a copy of a pointer. This constructor only accepts
-   * pointers to objects that are derived from the template type @p T
+   * pointers to objects that are derived from the template type `T`
    * of this class.
    */
   template <class U> PiiSharedPtr(const PiiSharedPtr<U>& other, typename OnlyDerived<U>::Type = 0) :
@@ -169,10 +168,10 @@ public:
   /**
    * Assigns a new value to this pointer and releases the old pointer.
    *
-   * @code
+   * ~~~(c++)
    * PiiSharedPtr<MyObject> ptr1(new MyObject), ptr2(new MyObject);
    * ptr1 = ptr2; //releases the old pointer in ptr1, increases refcount in ptr2
-   * @endcode
+   * ~~~
    */
   PiiSharedPtr& operator= (const PiiSharedPtr& other)
   {
@@ -183,7 +182,7 @@ public:
   /**
    * Assigns a new value to this pointer and release the old pointer. 
    * This operator only accepts pointers to objects that are derived
-   * from the template type @p T of this class.
+   * from the template type `T` of this class.
    */
   template <class U> inline PiiSharedPtr& operator= (const PiiSharedPtr<U>& other)
   {
@@ -192,7 +191,7 @@ public:
   }
   
   /**
-   * Returns a reference to the element at @a index, if the wrapped
+   * Returns a reference to the element at *index*, if the wrapped
    * pointer is an array.
    */
   inline T& operator[] (int index)
@@ -201,7 +200,7 @@ public:
   }
 
   /**
-   * Returns the element at @a index, if the wrapped pointer is an
+   * Returns the element at *index*, if the wrapped pointer is an
    * array.
    */
   inline T operator[] (int index) const
@@ -222,12 +221,12 @@ public:
   bool operator!= (const PiiSharedPtr& other) const { return other._ptr != _ptr; }
 
   /**
-   * Compare the internal pointer to the given @p ptr.
+   * Compare the internal pointer to the given `ptr`.
    */
   bool operator== (const void* ptr) const { return ptr == _ptr; }
   
   /**
-   * Compare the internal pointer to the given @p ptr.
+   * Compare the internal pointer to the given `ptr`.
    */
   bool operator!= (const void* ptr) const { return ptr != _ptr; }
 

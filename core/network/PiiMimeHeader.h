@@ -26,13 +26,12 @@
  * headers by providing some useful functions for querying common
  * header fields.
  *
- * @note An important thing to note about MIME headers is that the
+ * ! An important thing to note about MIME headers is that the
  * field names (keys) are case-insensitive. That is, "Content-Type"
  * and "CONTENT-TYPE" are equivalent. If you first set a header in
  * capital letters, and later replace its value with setValue() using
  * a lowercase key, the capitalized key will remain.
  *
- * @ingroup Network
  */
 class PII_NETWORK_EXPORT PiiMimeHeader
 {
@@ -54,29 +53,29 @@ public:
   ~PiiMimeHeader();
 
   /**
-   * Returns @p true if no header fields have been added.
+   * Returns `true` if no header fields have been added.
    */
   bool isEmpty() const;
   
   /**
-   * Returns @p true if there is at least one valid header field.
+   * Returns `true` if there is at least one valid header field.
    */
   bool isValid() const;
 
   /**
-   * Sets the value of the entry with the given @a key to @a value. If
+   * Sets the value of the entry with the given *key* to *value*. If
    * no entry with the given key exists, a new entry will be created. 
    * If an entry with the key already exists, the first of them will
    * be replaced with the given value.
    *
-   * @note Keys are case-insensitive.
+   * ! Keys are case-insensitive.
    */
   void setValue(const QString& key, const QString& value);
   void addValue(const QString& key, const QString& value);
   /**
    * Decodes the given raw header data and adds all key-value pairs in
-   * it. Returns @p true if @a headerData was correctly formatted, and
-   * @p false otherwise. Note that if a decoding error occurs, all
+   * it. Returns `true` if *headerData* was correctly formatted, and
+   * `false` otherwise. Note that if a decoding error occurs, all
    * values found so far will be retained.
    */
   bool addValues(const QByteArray& headerData);
@@ -84,7 +83,7 @@ public:
 
   QString value(const QString& key) const;
   /**
-   * Removes the first field with the given @p key from the header.
+   * Removes the first field with the given `key` from the header.
    */
   void removeValue(const QString& key);
   /**
@@ -101,15 +100,15 @@ public:
   QList<QPair<QString,QString> > values() const;
 
   /**
-   * Returns @p true if there is a value associated with @a key, and
-   * @p false otherwise.
+   * Returns `true` if there is a value associated with *key*, and
+   * `false` otherwise.
    */
   bool hasKey(const QString& key) const;
   
   /**
-   * Returns @p true if the header describes a multipart message, and
-   * @p false otherwise. The @p Content-Type header field of a
-   * multipart message begins with @p multipart/. The body of a
+   * Returns `true` if the header describes a multipart message, and
+   * `false` otherwise. The `Content`-Type header field of a
+   * multipart message begins with `multipart`/. The body of a
    * multipart message consists of many entities.
    */
   bool isMultipart() const;
@@ -127,11 +126,11 @@ public:
   QByteArray preamble() const;
 
   /**
-   * Returns @p true if the header describes a file uploaded from a
-   * HTML form, and @p false otherwise. Browsers use @p
-   * multipart/form-data encoding to send files from HTML forms. If
-   * the @p Content-Disposition header contains a file name, the
-   * entity can be treated as an uploaded file. Use the #fileName()
+   * Returns `true` if the header describes a file uploaded from a
+   * HTML form, and `false` otherwise. Browsers use 
+   * `multipart`/form-data encoding to send files from HTML forms. If
+   * the `Content`-Disposition header contains a file name, the
+   * entity can be treated as an uploaded file. Use the [fileName()]
    * function to get the name of the file.
    */
   bool isUploadedFile() const;
@@ -141,10 +140,10 @@ public:
    * entity. If the header does not contain such information, an empty
    * string will be returned.
    *
-   * @code
+   * ~~~(c++)
    * // Content-Disposition: form-data; name=control
    * QString name = header.controlName(); // returns "control"
-   * @endcode
+   * ~~~
    */
   QString controlName() const;
 
@@ -181,13 +180,13 @@ public:
   bool hasContentLength() const;
   
   /**
-   * Returns the value of the @p Content-Disposition header, without
+   * Returns the value of the `Content`-Disposition header, without
    * parameters.
    *
-   * @code
+   * ~~~(c++)
    * // Content-Disposition: form-data; name=control
    * QString disposition = header.contentDisposition(); // returns "form-data"
-   * @endcode
+   * ~~~
    */
   QString contentDisposition() const;
 
@@ -198,22 +197,22 @@ public:
    * value) on a line. CRLF (\r\n) will be used as a line separator. 
    * The last line of the header will always be empty.
    *
-   * @note If any of the values contains invalid characters (such as a
+   * ! If any of the values contains invalid characters (such as a
    * linefeed), the resulting chunk of bytes cannot be parsed as a
    * MIME header. PiiMimeHeader doesn't encode the values.
    */
   QByteArray toByteArray() const;
 
   /**
-   * Reads a MIME header from @a device. This functions reads lines
-   * from @a device until an empty line is found.
+   * Reads a MIME header from *device*. This functions reads lines
+   * from *device* until an empty line is found.
    *
    * @param device the input device
    *
    * @param maxLength the maximum number of bytes to read
    *
    * @param bytesRead a return-value parameter that stores the number
-   * of bytes actually read from @a device. Note that this value may
+   * of bytes actually read from *device*. Note that this value may
    * be different from the size of the returned array.
    *
    * @return header data as a byte array, excluding the empty line at

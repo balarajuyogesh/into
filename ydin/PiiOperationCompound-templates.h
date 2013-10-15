@@ -31,9 +31,9 @@ template <class Archive> void PiiOperationCompound::save(Archive& archive, const
   
   for (int i=0; i<inputCnt; ++i)
     {
-      ExposedSocket* pSocket = d->lstInputs[i];
+      PiiAbstractInputSocket* pSocket = d->lstInputs[i];
       // For each input, its name is first stored
-      QString name = pSocket->name();
+      QString name = pSocket->objectName();
       PII_SERIALIZE(archive, name);
       
       // Is it a proxy or not?
@@ -47,9 +47,9 @@ template <class Archive> void PiiOperationCompound::save(Archive& archive, const
   
   for (int i=0; i<outputCnt; ++i)
     {
-      ExposedSocket* pSocket = d->lstOutputs[i];
+      PiiAbstractOutputSocket* pSocket = d->lstOutputs[i];
       // For each output, its name is first stored
-      QString name = pSocket->name();
+      QString name = pSocket->objectName();
       PII_SERIALIZE(archive, name);
       
       // Is it a proxy?
@@ -60,10 +60,10 @@ template <class Archive> void PiiOperationCompound::save(Archive& archive, const
   // Store aliased inputs
   for (int i=0; i<inputCnt; ++i)
     {
-      ExposedSocket* pSocket = d->lstInputs[i];
+      PiiAbstractInputSocket* pSocket = d->lstInputs[i];
       if (!pSocket->isProxy())
         {
-          EndPointType aliased = locateSocket(pSocket->input());
+          EndPointType aliased = locateSocket(pSocket);
           PII_SERIALIZE(archive, aliased);
         }
     }
@@ -71,10 +71,10 @@ template <class Archive> void PiiOperationCompound::save(Archive& archive, const
   // Store aliased outputs
   for (int i=0; i<outputCnt; ++i)
     {
-      ExposedSocket* pSocket = d->lstOutputs[i];
+      PiiAbstractOutputSocket* pSocket = d->lstOutputs[i];
       if (!pSocket->isProxy())
         {
-          EndPointType aliased = locateSocket(pSocket->output());
+          EndPointType aliased = locateSocket(pSocket);
           PII_SERIALIZE(archive, aliased);
         }
     }
@@ -96,7 +96,7 @@ template <class Archive> void PiiOperationCompound::save(Archive& archive, const
       for (int j=0; j<outputs.size(); j++)
         {
           // Store the name of the start point
-          QString name = d->lstOperations[i]->socketName(outputs[j]);
+          QString name = outputs[j]->objectName();
           PII_SERIALIZE(archive, name);
 
           // Store all end points
@@ -108,10 +108,10 @@ template <class Archive> void PiiOperationCompound::save(Archive& archive, const
   // Store connections from proxy inputs
   for (int i=0; i<inputCnt; ++i)
     {
-      ExposedSocket* pSocket = d->lstInputs[i];
+      PiiAbstractInputSocket* pSocket = d->lstInputs[i];
       if (pSocket->isProxy())
         {
-          EndPointListType inputs(buildEndPointList(pSocket->output()));
+          EndPointListType inputs(buildEndPointList(PiiProxySocket::output(pSocket)));
           PII_SERIALIZE(archive, inputs);
         }
     }
@@ -120,10 +120,10 @@ template <class Archive> void PiiOperationCompound::save(Archive& archive, const
   // (albeit stupid) to connect an output proxy inside the compound.
   for (int i=0; i<outputCnt; ++i)
     {
-      ExposedSocket* pSocket = d->lstOutputs[i];
+      PiiAbstractOutputSocket* pSocket = d->lstOutputs[i];
       if (pSocket->isProxy())
         {
-          EndPointListType inputs(buildEndPointList(pSocket->output()));
+          EndPointListType inputs(buildEndPointList(pSocket));
           PII_SERIALIZE(archive, inputs);
         }
     }
@@ -160,7 +160,7 @@ template <class Archive> void PiiOperationCompound::load(Archive& archive, const
       if (proxy)
         createInputProxy(name);
       else
-        d->lstInputs << new ExposedSocket(name, this);
+        d->lstInputs << 0;
     }
   
   // Load all exposed output sockets
@@ -177,31 +177,31 @@ template <class Archive> void PiiOperationCompound::load(Archive& archive, const
       if (proxy)
         createOutputProxy(name);
       else
-        d->lstOutputs << new ExposedSocket(name, this);
+        d->lstOutputs << 0;
     }
 
   // Load aliased inputs
   for (int i=0; i<inputCnt; ++i)
     {
-      ExposedSocket* pSocket = d->lstInputs[i];
+      PiiAbstractInputSocket* pSocket = d->lstInputs[i];
       // Proxies have the socket at this point
-      if (pSocket->socket() == 0)
+      if (pSocket == 0)
         {
           EndPointType aliased;
           PII_SERIALIZE(archive, aliased);
-          exposeInput(aliased.first->input(aliased.second), pSocket->name(), AliasConnection);
+          d->lstInputs[i] = aliased.first->input(aliased.second);
         }
     }
 
   // Load aliased outputs
   for (int i=0; i<outputCnt; ++i)
     {
-      ExposedSocket* pSocket = d->lstOutputs[i];
-      if (pSocket->socket() == 0)
+      PiiAbstractOutputSocket* pSocket = d->lstOutputs[i];
+      if (pSocket == 0)
         {
           EndPointType aliased;
           PII_SERIALIZE(archive, aliased);
-          exposeOutput(aliased.first->output(aliased.second), pSocket->name(), AliasConnection);
+          d->lstOutputs[i] = aliased.first->output(aliased.second);
         }
     }
 
@@ -230,24 +230,24 @@ template <class Archive> void PiiOperationCompound::load(Archive& archive, const
   // Load connections from proxy inputs
   for (int i=0; i<inputCnt; ++i)
     {
-      ExposedSocket* pSocket = d->lstInputs[i];
+      PiiAbstractInputSocket* pSocket = d->lstInputs[i];
       if (pSocket->isProxy())
         {
           EndPointListType inputs;
           PII_SERIALIZE(archive, inputs);
-          connectAll(pSocket->output(), inputs);
+          connectAll(PiiProxySocket::output(pSocket), inputs);
         }
     }
 
   // Load connections from proxy outputs
   for (int i=0; i<outputCnt; ++i)
     {
-      ExposedSocket* pSocket = d->lstOutputs[i];
+      PiiAbstractOutputSocket* pSocket = d->lstOutputs[i];
       if (pSocket->isProxy())
         {
           EndPointListType inputs;
           PII_SERIALIZE(archive, inputs);
-          connectAll(pSocket->output(), inputs);
+          connectAll(pSocket, inputs);
         }
     }
 

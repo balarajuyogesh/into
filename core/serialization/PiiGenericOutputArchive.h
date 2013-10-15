@@ -26,7 +26,6 @@
  * archive. This is useful when one cannot know all archive types at
  * compile time.
  *
- * @ingroup Serialization
  */
 class PII_SERIALIZATION_EXPORT PiiGenericOutputArchive :
   public PiiOutputArchive<PiiGenericOutputArchive>
@@ -73,7 +72,6 @@ private:
  * contains convenient typedefs for known archive types (e.g. 
  * PiiGenericBinaryOutputArchive).
  *
- * @ingroup Serialization
  */
 template <class Archive> class PiiGenericOutputArchive::Impl :
   public PiiGenericOutputArchive,

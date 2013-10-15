@@ -21,10 +21,9 @@
 
 
 /**
- * A trajectory node for PiiCoordinateTracker. Uses @ref PiiVector
+ * A trajectory node for PiiCoordinateTracker. Uses [PiiVector]
  * "PiiVectors" as measurements.
  *
- * @ingroup PiiTrackingPlugin
  */
 template <class T, int D> class PiiCoordinateTrackerNode : public PiiTrackerTrajectoryNode<PiiVector<T,D>, PiiCoordinateTrackerNode<T,D> >
 {
@@ -42,7 +41,7 @@ public:
    * @param t current time instant
    *
    * @param fitness the "fitness score" of the measurement, compared
-   * to the @e previous prediction.
+   * to the *previous* prediction.
    *
    * @param next the next node in chain
    */
@@ -82,8 +81,8 @@ public:
    */
   MeasurementType* prediction() const { return _pPrediction; }
   /**
-   * Set the prediction. The node takes the ownership of @p
-   * prediction.
+   * Set the prediction. The node takes the ownership of 
+   * `prediction`.
    */
   void setPrediction(MeasurementType* prediction) { _pPrediction = prediction; }
 

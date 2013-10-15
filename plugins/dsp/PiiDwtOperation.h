@@ -22,11 +22,13 @@
 /**
  * Discrete wavelet decomposition in two dimensions.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in input - input matrix. Any integer or floating-point matrix.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out approximation - approximation coefficients (the result of
  * low-pass filtering in both dimensions)
@@ -39,23 +41,22 @@
  *
  * @out diagonal - diagonal details (high-pass in both dimensions)
  *
- * @ingroup PiiDspPlugin
  */
 class PiiDwtOperation : public PiiDefaultOperation
 {
   Q_OBJECT
   /**
    * The family of wavelets used in the decomposition. The default is
-   * @p Haar.
+   * `Haar`.
    */
   Q_PROPERTY(WaveletFamily waveletFamily READ waveletFamily WRITE setWaveletFamily);
   Q_ENUMS(WaveletFamily);
   
   /**
    * The index of the wavelet within the chosen family. This value is
-   * ignored for the @p Haar "family". The operation supports members
-   * 1-10 of the @p Daubechies family. Note that @p Daubechies 1 is
-   * equal to @p Haar. The default value is 1.
+   * ignored for the `Haar` "family". The operation supports members
+   * 1-10 of the `Daubechies` family. Note that `Daubechies` 1 is
+   * equal to `Haar`. The default value is 1.
    */
   Q_PROPERTY(int familyMember READ familyMember WRITE setFamilyMember);
   
@@ -64,10 +65,10 @@ public:
   /**
    * Known wavelet families. Families currently known are:
    *
-   * @li Haar - the Haar wavelet. Not actually a family, but equal to
+   * - Haar - the Haar wavelet. Not actually a family, but equal to
    * the first Daubechies wavelet.
    *
-   * @li Daubechies - Daubechies wavelet family
+   * - Daubechies - Daubechies wavelet family
    */
   enum WaveletFamily { Haar, Daubechies };
   PiiDwtOperation();

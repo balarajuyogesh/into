@@ -30,7 +30,7 @@ extern "C"
 /**
  * An interface for reading videos with avcodec.
  *
- * @code
+ * ~~~(c++)
  * // Typical use with gray-scale videos
  *
  * PiiVideoReader reader("video.avi");
@@ -59,15 +59,14 @@ extern "C"
  *   {
  *      // Handle exception.   
  *   }
- * @endcode
+ * ~~~
  *
- * @ingroup PiiVideoPlugin
  */
 class PII_VIDEO_EXPORT PiiVideoReader
 {
 public:
   /**
-   * Create a new instance of %PiiVideoReader that reads video from
+   * Create a new instance of PiiVideoReader that reads video from
    * the given file.
    */
   PiiVideoReader(const QString& filename = "");
@@ -86,8 +85,8 @@ public:
   void initialize() throw(PiiVideoException&);
 
   /**
-   * Encode one frame of the input stream. The template argument @p T
-   * determines the output type. Use <tt>unsigned char</tt> to get an
+   * Encode one frame of the input stream. The template argument `T`
+   * determines the output type. Use `unsigned char` to get an
    * 8-bit (gray-scale) frame and PiiColor4<unsigned char> to get a
    * 32-bit RGB frame.
    *

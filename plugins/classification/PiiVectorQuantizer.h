@@ -26,10 +26,9 @@
  * holds a number of model vectors (a.k.a. the code book) to which it
  * compares any unknown sample. As a classification result, the index
  * of the closest vector is returned. The "closeness" is defined in
- * terms of a @ref classification_distance_measures "distance
+ * terms of a [classification_distance_measures] "distance
  * measure".
  *
- * @ingroup PiiClassificationPlugin
  */
 template <class SampleSet> class PiiVectorQuantizer :
   public PiiClassifier<SampleSet>
@@ -49,7 +48,7 @@ public:
    *
    * @param measure the way of measuring distances between vectors. 
    * PiiVectorQuantizer takes the ownership of the pointer. The
-   * distance measure must be set before calling #classify().
+   * distance measure must be set before calling [classify()].
    */
   PiiVectorQuantizer(PiiDistanceMeasure<ConstFeatureIterator>* measure);
   
@@ -61,13 +60,13 @@ public:
   /**
    * Returns the index of the closest vector in the model set. If two
    * vectors are equally close, the one first in the model set will
-   * returned. If the feature vector cannot be classified, @p NaN will
-   * be returned. Calls #findClosestMatch() by default.
+   * returned. If the feature vector cannot be classified, `NaN` will
+   * be returned. Calls [findClosestMatch()] by default.
    */
   double classify(ConstFeatureIterator featureVector) throw();
 
   /**
-   * Analogous to #classify(), but also returns the distance to the
+   * Analogous to [classify()], but also returns the distance to the
    * closest neighbor.
    */
   virtual int findClosestMatch(ConstFeatureIterator featureVector, double* distance) const throw();
@@ -75,7 +74,7 @@ public:
   /**
    * Set a distance threshold for rejecting samples. If the distance to
    * the closest code vector is above this threshold, the sample is
-   * rejected and #classify(const PiiMatrix<T>&) returns -1.
+   * rejected and [classify(const PiiMatrix<T>&)] returns -1.
    */
   void setRejectThreshold(double rejectThreshold);
 
@@ -90,8 +89,8 @@ public:
   PiiDistanceMeasure<ConstFeatureIterator>* distanceMeasure() const;
 
   /**
-   * Sets the distance measure. This class takes the ownership of @a
-   * measure. The old distance measure will be deleted.
+   * Sets the distance measure. This class takes the ownership of 
+   * *measure*. The old distance measure will be deleted.
    */
   void setDistanceMeasure(PiiDistanceMeasure<ConstFeatureIterator>* measure);
 
@@ -122,12 +121,12 @@ public:
 
   /**
    * Returns a modifiable iterator to the beginning of the model
-   * sample at @a index.
+   * sample at *index*.
    */
   FeatureIterator modelAt(int index);
   /**
    * Returns a const iterator to the beginning of the model sample at
-   * @a index.
+   * *index*.
    */
   ConstFeatureIterator modelAt(int index) const;
   

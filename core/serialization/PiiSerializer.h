@@ -23,16 +23,8 @@
 #include "PiiTemplateExport.h"
 #include <PiiGlobal.h>
 
-/**
- * @file
- *
- * Macros and class declarations for serializers.
- *
- * @ingroup Serialization
- */
-
 /*
- * Instantiate a PiiSerializerTemplate for the given archive and data
+ * Instantiates a PiiSerializerTemplate for the given archive and data
  * type. This registers the serializer to the global serializer map of
  * the given archive type.
  */
@@ -71,13 +63,12 @@
  * that this allows one to conveniently create a name-based dictionary
  * of serializers with virtual serialization functions.
  *
- * @ingroup Serialization
  */
 template <class Archive> class PiiSerializer
 {
 public:
   /**
-   * Returns the serializer associated with @a className, or 0 if
+   * Returns the serializer associated with *className*, or 0 if
    * no serializer is found.
    */
   static const PiiSerializer* serializer(const char* className)
@@ -92,11 +83,11 @@ public:
   static QList<const char*> keys();
 
   /**
-   * Seializes an object of type @p T. If @p T is a dynamic type, this
-   * function fetches a serializer for the type denoted by @a
-   * className. If no serializer is found, returns @p false. 
+   * Seializes an object of type `T`. If `T` is a dynamic type, this
+   * function fetches a serializer for the type denoted by 
+   * *className*. If no serializer is found, returns `false`. 
    * Otherwise, it calls the virtual serialize() function of the found
-   * serializer and returns @p true. If the type is not dynamic,
+   * serializer and returns `true`. If the type is not dynamic,
    * PiiSerialization::serialize() will be called directly.
    */
   template <class T> static bool serialize(const char* className,
@@ -110,7 +101,7 @@ public:
    * @param archive the archive to store the data into
    *
    * @param value a pointer to the object to be stored. Subclasses
-   * should use @p reinterpret_cast to convert the pointer to the
+   * should use `reinterpret_cast` to convert the pointer to the
    * correct type.
    *
    * @param version the version of the class
@@ -118,7 +109,7 @@ public:
   virtual void serialize(Archive& archive, void* value, const unsigned int version) const = 0;
   
   /**
-   * Removes @p this from the archive's serializer map.
+   * Removes `this` from the archive's serializer map.
    */
   virtual ~PiiSerializer();
 
@@ -194,7 +185,6 @@ template <class T> QList<const char*> PiiSerializer<T>::keys()
  * A template class that is statically instantiated to add
  * serializable classes to an archive's serializer registry.
  *
- * @ingroup Serialization
  */
 template <class Archive, class T> class PiiSerializerTemplate :
   public PiiSerializer<Archive>

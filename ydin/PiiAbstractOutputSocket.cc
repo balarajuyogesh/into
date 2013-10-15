@@ -17,6 +17,7 @@
 
 #include "PiiAbstractInputSocket.h"
 #include "PiiInputController.h"
+#include "PiiProxySocket.h"
 
 PiiAbstractOutputSocket::Data::Data() :
   PiiSocket::Data(Output)
@@ -38,19 +39,16 @@ bool PiiAbstractOutputSocket::Data::setOutputConnected(bool connected)
   return bBranchConnected && connected;
 }
 
-PiiAbstractOutputSocket::PiiAbstractOutputSocket(Data* data) :
-  d(data)
-{}
+PiiAbstractOutputSocket::PiiAbstractOutputSocket(const QString& name, Data* data) :
+  PiiSocket(data)
+{
+  setObjectName(name);
+}
 
 PiiAbstractOutputSocket::~PiiAbstractOutputSocket()
 {
   // Break all connections
   disconnectInput();
-}
-
-PiiAbstractOutputSocket* PiiAbstractOutputSocket::rootOutput() const
-{
-  return _d()->rootOutput();
 }
 
 QList<PiiAbstractInputSocket*> PiiAbstractOutputSocket::connectedInputs() const
@@ -68,7 +66,7 @@ void PiiAbstractOutputSocket::updateInput(PiiAbstractInputSocket* socket)
   if (d->lstInputs.indexOf(socket) != -1)
     {
       d->lstInputs.updateController(socket);
-      inputUpdated(socket);
+      d->inputUpdated(socket);
     }
 }
 
@@ -84,14 +82,13 @@ void PiiAbstractOutputSocket::connectInput(PiiAbstractInputSocket* input)
       // Store the connected input and its controller
       d->lstInputs.append(input);
       
-      input->d->pConnectedOutput = this;
-      input->d->pListener = this->d;
+      input->_d()->pConnectedOutput = this;
 
-      PiiAbstractOutputSocket* pRootOutput = d->rootOutput();
+      PiiAbstractOutputSocket* pRootOutput = PiiProxySocket::root(this);
       if (pRootOutput != 0)
-        pRootOutput->d->setOutputConnected(true);
+        pRootOutput->_d()->setOutputConnected(true);
 
-      inputConnected(input);
+      d->inputConnected(input);
     }
 }
 
@@ -114,15 +111,15 @@ void PiiAbstractOutputSocket::disconnectInputAt(int index)
     {
       PiiAbstractInputSocket* input = d->lstInputs.takeInputAt(index);
 
-      input->d->pConnectedOutput = 0;
-      input->d->pListener = 0;
-      input->d->setInputConnected(false);
+      input->_d()->pConnectedOutput = 0;
+      input->_d()->pListener = 0;
+      input->_d()->setInputConnected(false);
 
-      PiiAbstractOutputSocket* pRootOutput = d->rootOutput();
+      PiiAbstractOutputSocket* pRootOutput = PiiProxySocket::root(this);
       if (pRootOutput != 0)
-        pRootOutput->d->setOutputConnected(true);
+        pRootOutput->_d()->setOutputConnected(true);
 
-      inputDisconnected(input);
+      d->inputDisconnected(input);
     }
 }
 
@@ -141,13 +138,13 @@ void PiiAbstractOutputSocket::reconnect(PiiAbstractOutputSocket* output, PiiAbst
     connectInput(input);
 }
 
-void PiiAbstractOutputSocket::inputConnected(PiiAbstractInputSocket*)
+void PiiAbstractOutputSocket::Data::inputConnected(PiiAbstractInputSocket*)
 {}
 
-void PiiAbstractOutputSocket::inputUpdated(PiiAbstractInputSocket*)
+void PiiAbstractOutputSocket::Data::inputUpdated(PiiAbstractInputSocket*)
 {}
 
-void PiiAbstractOutputSocket::inputDisconnected(PiiAbstractInputSocket*)
+void PiiAbstractOutputSocket::Data::inputDisconnected(PiiAbstractInputSocket*)
 {}
 
 

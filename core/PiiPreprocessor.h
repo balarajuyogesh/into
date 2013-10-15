@@ -16,23 +16,17 @@
 #ifndef _PIIPREPROCESSOR_H
 #define _PIIPREPROCESSOR_H
 
-/**
- * @file
- *
- * Useful preprocessor tricks.
- *
- * @ingroup Core
- */
+/// @group preprocessor Preprocessor tricks
 
 /// @internal
 #define PII_DO_STRINGIZE(arg) #arg
 /**
  * Converts the argument to a string.
  *
- * @code
+ * ~~~(c++)
  * const char* name = PII_STRINGIZE(ClassName);
  * // const char* name == "ClassName";
- * @endcode
+ * ~~~
  */
 #define PII_STRINGIZE(arg) PII_DO_STRINGIZE(arg)
 
@@ -41,10 +35,10 @@
 /**
  * Joins arguments a and b.
  *
- * @code
+ * ~~~(c++)
  * struct PII_JOIN(Class, Name);
  * // struct ClassName.
- * @endcode
+ * ~~~
  */
 #define PII_JOIN(a, b) PII_DO_JOIN(a, b)
 
@@ -63,7 +57,7 @@
 #define PII_IF_SELECTOR_1(A,B) A
 
 /**
- * Expands to @a A if @a CONDITION is 0, and to @a B otherwise.
+ * Expands to *A* if *CONDITION* is 0, and to *B* otherwise.
  */
 #define PII_IF(CONDITION, A, B) PII_JOIN(PII_IF_SELECTOR_, CONDITION) (A,B)
 
@@ -81,10 +75,10 @@
 #define PII_RPAREN )
 
 /**
- * Expands to @a PARAM. This macro is useful if you need to format the
+ * Expands to *PARAM*. This macro is useful if you need to format the
  * arguments of a macro using another macro.
  *
- * @code
+ * ~~~(c++)
  * #define PRINTF(FORMAT, ARG1, ARG2) printf(FORMAT, ARG1, ARG2);
  *
  * #define ARGS1 "%s%d", "abc"
@@ -95,51 +89,51 @@
  * CALL(PRINTF);
  * // expands to
  * // printf ("%s%d", "abc", 1);
- * @endcode
+ * ~~~
  */
 #define PII_EXPAND(PARAM) PARAM
 
 /**
- * Expands to the uppercase version of @a LETTER.
+ * Expands to the uppercase version of *LETTER*.
  *
- * @code
+ * ~~~(c++)
  * PII_UPPERCASE(a)
  * // Expands to A
- * @endcode
+ * ~~~
  */
 #define PII_UPPERCASE(LETTER) PII_UPCASE_ ## LETTER
 /**
- * Expands to the uppercase version of @a LETTER as a character string
+ * Expands to the uppercase version of *LETTER* as a character string
  * constant.
  *
- * @code
+ * ~~~(c++)
  * PII_UPPERCASE_STR(a)
  * // Expands to "A"
- * @endcode
+ * ~~~
  */
 #define PII_UPPERCASE_STR(LETTER) PII_STRINGIZE(PII_UPPERCASE(LETTER))
 
 /**
- * Expands to the lowercase version of @a LETTER.
+ * Expands to the lowercase version of *LETTER*.
  *
- * @code
+ * ~~~(c++)
  * PII_LOWERCASE(B)
  * // Expands to b
- * @endcode
+ * ~~~
  */
 #define PII_LOWERCASE(LETTER) PII_LOCASE_ ## LETTER
 /**
- * Expands to the lowercase version of @a LETTER as a character string
+ * Expands to the lowercase version of *LETTER* as a character string
  * constant.
  *
- * @code
+ * ~~~(c++)
  * PII_LOWERCASE_STR(B)
  * // Expands to "b"
- * @endcode
+ * ~~~
  */
 #define PII_LOWERCASE_STR(LETTER) PII_STRINGIZE(PII_LOWERCASE(LETTER))
 
-/// @cond null
+/// @hide
 #define PII_UPCASE_a A
 #define PII_UPCASE_b B
 #define PII_UPCASE_c C
@@ -193,27 +187,27 @@
 #define PII_LOCASE_X x
 #define PII_LOCASE_Y y
 #define PII_LOCASE_Z z
-/// @cond null
+/// @hide
 
 /**
- * Remove parentheses around @a PARAMS. The number of comma-separated
- * elements in @a PARAMS must be @a N.
+ * Remove parentheses around *PARAMS*. The number of comma-separated
+ * elements in *PARAMS* must be *N*.
  *
- * @code
+ * ~~~(c++)
  * PII_REMOVE_PARENS(3, (a, b, c))
  * // Expands to a, b, c
- * @endcode
+ * ~~~
  */
 #define PII_REMOVE_PARENS(N, PARAMS) PII_JOIN(PII_REMOVE_PARENS_, N)PARAMS
 
 /**
- * Expands to 0 if @a PARAM is a non-empty list of the form (first,
+ * Expands to 0 if *PARAM* is a non-empty list of the form (first,
  * rest), and to 1 otherwise.
  */
 #define PII_IS_NIL(PARAM) PII_JOIN(PII_TEST_NIL_, PII_TEST_NIL PARAM))
 
 
-/// @cond null
+/// @hide
 #define PII_TEST_NIL(P1,P2) PII_NON_NIL
 #define PII_TEST_NIL_PII_NON_NIL PII_NIL_FALSE(
 #define PII_TEST_NIL_PII_TEST_NIL PII_NIL_TRUE(
@@ -225,39 +219,39 @@
 #define PII_CDR_2(CAR, CDR) CDR
 #define PII_CAR(LIST) PII_CAR_2 LIST
 #define PII_CDR(LIST) PII_CDR_2 LIST
-/// @endcond
+/// @endhide
 
 
 #ifndef _MSC_VER
 /**
- * Repeats @a MACRO for each of the @a N elements in @a ELEMENTS. @a
- * MACRO will be called with two parameters: the (zero-based) index of
+ * Repeats *MACRO* for each of the *N* elements in *ELEMENTS*. 
+ * *MACRO* will be called with two parameters: the (zero-based) index of
  * the current element and the element.
  *
- * @code
+ * ~~~(c++)
  * #define PRINTF(N, X) printf(#X);
  *
  * PII_FOR_N(PRINTF, 3, (a, b, c))
  * // Expands to
  * // printf("a"); printf("b"); printf("c");
- * @endcode
+ * ~~~
  */
 #  define PII_FOR_N(MACRO, N, ELEMENTS) \
   PII_EXPAND(PII_JOIN(PII_FOR_, N) PII_LPAREN MACRO PII_COMMA PII_NULL_SEP PII_COMMA PII_REMOVE_PARENS(N, ELEMENTS) PII_RPAREN)
 /**
- * Repeats @a MACRO for each of the @a N elements in @a ELEMENTS,
- * placing @a SEPARATOR between each element. @a SEPARATOR will be
+ * Repeats *MACRO* for each of the *N* elements in *ELEMENTS*,
+ * placing *SEPARATOR* between each element. *SEPARATOR* will be
  * called with one parameter: the (zero-based) index of the current
- * element and the element. Use @p PII_COMMA_SEP to place a comma
+ * element and the element. Use `PII_COMMA_SEP` to place a comma
  * between elements.
  *
- * @code
+ * ~~~(c++)
  * #define MYMACRO(N, X) i##X = N
  *
  * int PII_FOR_N_SEP(MYMACRO, PII_COMMA_SEP, 3, (a, b, c));
  * // Expands to
  * // int ia = 0 , ib = 1 , ic = 2;
- * @endcode
+ * ~~~
  */
 #  define PII_FOR_N_SEP(MACRO, SEPARATOR, N, ELEMENTS) \
   PII_EXPAND(PII_JOIN(PII_FOR_, N) PII_LPAREN MACRO PII_COMMA SEPARATOR PII_COMMA PII_REMOVE_PARENS(N, ELEMENTS) PII_RPAREN)
@@ -273,18 +267,20 @@
 #define PII_COMMA_SEP(N) ,
 
 /**
- * Repeat @a MACRO for each element in @a LIST.
+ * Repeat *MACRO* for each element in *LIST*.
  *
- * @code
+ * ~~~(c++)
  * #define LIST (1, (2, (3, (4, (5, PII_NIL)))))
  * #define MACRO(PARAM) + PARAM
  *
  * int i = PII_FOREACH(MACRO, LIST);
  * // expands to + 1 + 2 + 3 + 4 + 5
- * @endcode
+ * ~~~
  */
 #define PII_FOREACH(MACRO, LIST) \
   PII_NEXT_LOOP(0, LIST)(MACRO, PII_CAR(LIST), PII_CDR(LIST))
+
+/// @endgroup
 
 #include "PiiPreprocessorFor.h"
 

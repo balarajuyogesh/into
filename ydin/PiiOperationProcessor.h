@@ -28,15 +28,14 @@ class PiiFlowController;
  * A helper class used by PiiDefaultOperation to implement threaded
  * and non-threaded processing modes. It implements most of the
  * PiiOperation interface and adds a few functions of its own. The
- * input processor uses a @ref PiiFlowController "flow controller" to
+ * input processor uses a [flow controller](PiiFlowController) to
  * synchronize objects read from the input sockets.
  *
- * %PiiOperationProcessor is intimately bound to PiiDefaultOperation
+ * PiiOperationProcessor is intimately bound to PiiDefaultOperation
  * and not of much use elsewhere. Its interface is not guaranteed to
  * remain binary compatible. You have been warned.
  *
  * @internal
- * @ingroup Ydin
  */
 class PiiOperationProcessor : public PiiInputController
 {
@@ -53,7 +52,7 @@ public:
   virtual bool wait(unsigned long time = ULONG_MAX) = 0;
 
   /**
-   * Set the processing priority of this processor to @p priority. 
+   * Set the processing priority of this processor to `priority`. 
    */
   virtual void setProcessingPriority(QThread::Priority priority) = 0;
 
@@ -82,7 +81,7 @@ public:
 
 protected:
   /**
-   * Creates a new %PiiOperationProcessor.
+   * Creates a new PiiOperationProcessor.
    *
    * @param parent the operation to be executed
    */

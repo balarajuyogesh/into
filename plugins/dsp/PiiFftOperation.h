@@ -25,50 +25,51 @@ using namespace PiiYdin;
  * An operation that calculates the fast fourier transform for any
  * matrix.
  *
- * @inputs
+ * Inputs
+ * ------
  *
- * @in input - the input matrix. If #direction == @p Inverse, the type
+ * @in input - the input matrix. If [direction] == `Inverse`, the type
  * of the input matrix must be a PiiMatrix<complex<float> > or a
  * PiiMatrix<complex<double> >. Otherwise, any numeric or complex
  * matrix will do.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out output - the (forward or inverse) Fourier transform of the
  * input matrix (PiiMatrix<complex<float> > or
  * PiiMatrix<complex<double> >).
  *
  * @out power spectrum - real-valued power spectrum of the
- * transformed matrix. Used only in @p Forward transformation.
+ * transformed matrix. Used only in `Forward` transformation.
  *
- * @ingroup PiiDspPlugin
  */
 class PiiFftOperation : public PiiDefaultOperation
 {
   Q_OBJECT
 
   /**
-   * The direction of the transform. The default is @p Forward.
+   * The direction of the transform. The default is `Forward`.
    */
   Q_PROPERTY(FftDirection direction READ direction WRITE setDirection);
   Q_ENUMS(FftDirection);
 
   /**
-   * If this flag is set to @p true, the operation shifts the
+   * If this flag is set to `true`, the operation shifts the
    * zero-frequency component to the center of the spectrum. For
    * vectors, FftShift swaps the left and right halves. For matrices,
    * it swaps the first and fourth quadrants and the second and third
    * quadrants. FftShift is useful for visualizing the Fourier
    * transform with the zero- frequency component in the middle of the
-   * spectrum. The default value is @p false.
+   * spectrum. The default value is `false`.
    */
   Q_PROPERTY(bool shift READ shift WRITE setShift);
 
   /**
-   * If this flag is @p true, the mean value of the input is
+   * If this flag is `true`, the mean value of the input is
    * subtracted before applying the FFT. This makes the zero-frequency
    * component zero and helps in visualizing the result. The default
-   * is @p false. This flag has no effect in inverse transform.
+   * is `false`. This flag has no effect in inverse transform.
    */
   Q_PROPERTY(bool subtractMean READ subtractMean WRITE setSubtractMean);
   
@@ -79,9 +80,9 @@ public:
   /**
    * FFT direction.
    *
-   * @lip Forward - calculates FFT.
+   * - `Forward` - calculates FFT.
    *
-   * @lip Inverse - calculates inverse FFT.
+   * - `Inverse` - calculates inverse FFT.
    */
   enum FftDirection { Forward, Inverse };
   

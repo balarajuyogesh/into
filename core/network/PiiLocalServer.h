@@ -24,7 +24,6 @@
  * local socket. On Unix, this means a Unix-domain socket. On Windows,
  * pipes are used.
  *
- * @ingroup Network
  */
 class PII_NETWORK_EXPORT PiiLocalServer : public PiiNetworkServer
 {
@@ -44,7 +43,7 @@ public:
   QString serverAddress() const;
   
   /**
-   * Creates a new QLocalSocket and assigns @p socketDescriptor to it.
+   * Creates a new QLocalSocket and assigns `socketDescriptor` to it.
    */
   QIODevice* createSocket(PiiGenericSocketDescriptor socketDescriptor);
 

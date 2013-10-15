@@ -21,7 +21,7 @@
 #include "PiiTypeTraits.h"
 
 /**
- * A utility class for calling functions asynchronously. %PiiAsyncCall
+ * A utility class for calling functions asynchronously. PiiAsyncCall
  * is a thread that invokes a member function of a class from a new
  * thread. It can be used to conveniently throw long-lasting processes
  * into threads without deriving from QThread. This class is
@@ -33,7 +33,6 @@
  * Pii::asyncCall() and Pii::createAsyncCall() functions to
  * conveniently call functions asynchronously.
  *
- * @ingroup Core
  */
 template <class Object, class Function> class PiiAsyncCall : public QThread
 {
@@ -45,15 +44,15 @@ public:
     
 protected:
   /**
-   * Create a new asynchronous call thread that calls @p function on
-   * @p object.
+   * Create a new asynchronous call thread that calls `function` on
+   * `object`.
    *
    * @param obj the object whose member function is to be called
    *
    * @param func the address of the function to be called
    *
    * You probably won't ever use this constructor directly. Use the
-   * @ref Pii::asyncCall() helper function instead.
+   * [Pii::asyncCall()] helper function instead.
    */
   PiiAsyncCall(Object obj, Function function) :
     _pObject(obj), _pFunction(function)
@@ -63,7 +62,7 @@ protected:
   Function _pFunction;
 };
 
-/// @cond null
+/// @hide
 #define PII_ASYNC_TPL_PARAM(N, PARAM) , class PARAM
 #define PII_ASYNC_TPL_IMPL(N, PARAM) , PARAM
 #define PII_ASYNC_CTR_PARAM(N, PARAM) , PARAM PII_JOIN(__, PARAM)
@@ -114,16 +113,16 @@ PII_CREATE_ASYNCCALL(6, (P1, P2, P3, P4, P5, P6));
 PII_CREATE_ASYNCCALL(7, (P1, P2, P3, P4, P5, P6, P7));
 PII_CREATE_ASYNCCALL(8, (P1, P2, P3, P4, P5, P6, P7, P8));
 
-/// @endcond
+/// @endhide
 
 /**
- * @fn template <class Object, class Function> QThread* Pii::asyncCall(Object object, Function function, ...)
+ * @decl template <class Object, class Function> QThread* Pii::asyncCall(Object object, Function function, ...)
  *
  * Calls a function asynchronously from another thread.
  *
  * @param obj the address of the object whose member function is to
  * be called. You may also use a reference type if the type
- * overrides @p operator->*.
+ * overrides `operator`->*.
  *
  * @param func the address of the function to be called
  *
@@ -131,7 +130,7 @@ PII_CREATE_ASYNCCALL(8, (P1, P2, P3, P4, P5, P6, P7, P8));
  * automatically deleted once it is finished and control returns to
  * the event loop of the calling thread.
  *
- * @code
+ * ~~~(c++)
  * struct MyStruct
  * {
  *   void func() { std::cout << "Moi!" << std::endl; }
@@ -142,19 +141,19 @@ PII_CREATE_ASYNCCALL(8, (P1, P2, P3, P4, P5, P6, P7, P8));
  * Pii::asyncCall(&s, &MyStruct::func);
  * Pii::asyncCall(&s, &MyStruct::func2, message);
  * // Must have event loop in this thread
- * @endcode
+ * ~~~
  *
- * @note Make sure the object pointer is valid in the context of the
+ * ! Make sure the object pointer is valid in the context of the
  * new thread. Do not pass a pointer to an object on the stack of
  * the calling thread unless you ensure that the async call finishes
  * during the lifetime of the object.
  *
- * @note All pararameters passed to the asynchronous function must be
+ * ! All pararameters passed to the asynchronous function must be
  * copyable.
  *
- * @note %PiiAsyncCall can call private functions. If you are
+ * ! PiiAsyncCall can call private functions. If you are
  * allowed to take the pointer of a virtual function (i.e. you are
- * in the class itself or in a friend class/function) %PiiAsyncCall
+ * in the class itself or in a friend class/function) PiiAsyncCall
  * will be able to use it.
  *
  * @relates PiiAsyncCall
@@ -162,11 +161,11 @@ PII_CREATE_ASYNCCALL(8, (P1, P2, P3, P4, P5, P6, P7, P8));
 
  
 /**
- * @fn template <class Object, class Function> QThread* Pii::createAsyncCall(Object object, Function function, ...)
+ * @decl template <class Object, class Function> QThread* Pii::createAsyncCall(Object object, Function function, ...)
  *
  * Creates a thread that will call a function asynchronously.
  *
- * @code
+ * ~~~(c++)
  * struct MyStruct
  * {
  *   void func() { std::cout << "Moi!" << std::endl; }
@@ -179,7 +178,7 @@ PII_CREATE_ASYNCCALL(8, (P1, P2, P3, P4, P5, P6, P7, P8));
  * pThread->start();
  * pThread->wait();
  * delete pThread;
- * @endcode
+ * ~~~
  *
  * @relates PiiAsyncCall
  */

@@ -41,11 +41,11 @@
  * Creates conversion functions to/from a sequence type LIST_TYPE and
  * uses NAME as the human-readable name. An example:
  *
- * @code
+ * ~~~(c++)
  * typedef QList<PiiSocket*> PiiSocketList;
  * Q_DECLARE_METATYPE(PiiSocketList);
  * PII_SEQUENCE_CONVERSION_FUNCTIONS(PiiSocketList)
- * @endcode
+ * ~~~
  */
 #define PII_SEQUENCE_CONVERSION_FUNCTIONS(TYPE_NAME)                    \
   static QScriptValue convert ## TYPE_NAME ## ToScriptValue(QScriptEngine* engine, TYPE_NAME const & list) \
@@ -155,12 +155,12 @@ namespace PiiScript
   extern PII_SCRIPT_EXPORT const QScriptEngine::QObjectWrapOptions defaultWrapOptions;
 
   /**
-   * Sets the @a __proto__ property of the given @a prototype object
-   * to be the prototype of a global object called @a superClass. This
+   * Sets the *__proto__* property of the given *prototype* object
+   * to be the prototype of a global object called *superClass*. This
    * function is used in building class hierarchies. The preferred
    * pattern of creating a new script class is as follows:
    *
-   * @code
+   * ~~~(c++)
    * // Create a prototype object
    * QScriptValue prototype = engine->newObject();
    * // MyOperation drives from piiOperation
@@ -171,31 +171,31 @@ namespace PiiScript
    * engine->setDefaultPrototype(qMetaTypeId<MyOperation*>(), prototype);
    * // Place the constructor into the global scope
    * engine->globalObject().setProperty("MyOperation", constructor);
-   * @endcode   
+   * ~~~   
    */
   PII_SCRIPT_EXPORT void setSuperclass(QScriptValue prototype, const char* superclass);
 
   /**
-   * Copies all properies of @a source to @a target.
+   * Copies all properies of *source* to *target*.
    */
   PII_SCRIPT_EXPORT void configure(QScriptValue target, QScriptValue source);
 
   /**
-   * Stores the key-value pairs in @a map as properties to @a object.
-   * Returns @a object.
+   * Stores the key-value pairs in *map* as properties to *object*.
+   * Returns *object*.
    */
   PII_SCRIPT_EXPORT QScriptValue configure(QScriptValue object, const QVariantMap& map);
 
   /**
-   * Stores the properties of @a object to a variant map and returns
+   * Stores the properties of *object* to a variant map and returns
    * the map.
    */
   PII_SCRIPT_EXPORT QVariantMap objectToMap(QScriptValue object);
 
   /**
-   * Stores the key-value pairs in @a map as properties in a script
+   * Stores the key-value pairs in *map* as properties in a script
    * object and returns the object. The new object will be attached to
-   * @a engine.
+   * *engine*.
    */
   PII_SCRIPT_EXPORT QScriptValue mapToObject(QScriptEngine* engine, const QVariantMap& map);
 

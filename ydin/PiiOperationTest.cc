@@ -130,7 +130,7 @@ void PiiOperationTest::connectInput(PiiAbstractInputSocket* input)
   pOutput->setParent(this);
   pOutput->connectInput(input);
   // Delete output socket if the input is destroyed
-  connect(input->socket(), SIGNAL(destroyed(QObject*)), SLOT(deleteOutput(QObject*)), Qt::DirectConnection);
+  connect(input, SIGNAL(destroyed(QObject*)), SLOT(deleteOutput(QObject*)), Qt::DirectConnection);
 }
 
 void PiiOperationTest::deleteOutput(QObject* input)
@@ -183,7 +183,7 @@ PiiProbeInput* PiiOperationTest::createProbe(PiiAbstractOutputSocket* output, co
   PiiProbeInput* pProbe = new PiiProbeInput(name);
   output->connectInput(pProbe);
   connect(pProbe, SIGNAL(objectReceived(PiiVariant)), SLOT(emitObject(PiiVariant)), Qt::DirectConnection);
-  connect(output->socket(), SIGNAL(destroyed(QObject*)), SLOT(deleteProbe(QObject*)), Qt::DirectConnection);
+  connect(output, SIGNAL(destroyed(QObject*)), SLOT(deleteProbe(QObject*)), Qt::DirectConnection);
   return pProbe;
 }
 
@@ -191,10 +191,7 @@ void PiiOperationTest::deleteProbe(QObject* output)
 {
   PiiOutputSocket* pOutput = qobject_cast<PiiOutputSocket*>(output);
   if (pOutput != 0)
-    {
-      QString strName = d->pOperation->socketName(pOutput);
-      delete d->mapProbes.take(strName);
-    }
+    delete d->mapProbes.take(pOutput->objectName());
 }
 
 void PiiOperationTest::createProbes()
@@ -204,7 +201,7 @@ void PiiOperationTest::createProbes()
   QList<PiiAbstractOutputSocket*> lstOutputs = d->pOperation->outputs();
   for (int i=lstOutputs.size(); i--; )
     {
-      QString strName = d->pOperation->socketName(lstOutputs[i]);
+      QString strName = lstOutputs[i]->objectName();
       d->mapProbes[strName] = createProbe(lstOutputs[i], strName);
     }
 }

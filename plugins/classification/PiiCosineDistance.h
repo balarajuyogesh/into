@@ -22,7 +22,6 @@
  * Cosine distance calculates the cosine of the angle between feature
  * vectors.
  *
- * @ingroup PiiClassificationPlugin
  */
 PII_DEFAULT_DISTANCE_MEASURE_DEF(PiiCosineDistance)
 {

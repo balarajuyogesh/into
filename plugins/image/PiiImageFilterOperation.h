@@ -24,17 +24,18 @@
  * supports the most commonly used edge detection and noise reduction
  * filters and also allows one to specify a custom filter.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - the image to be filtered. Any image type. For color
  * images, the filter will be applied channel-wise.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out image - the filtered image. The type of the output image
  * equals that of the input.
  *
- * @ingroup PiiImagePlugin
  */
 class PiiImageFilterOperation : public PiiDefaultOperation
 {
@@ -43,13 +44,13 @@ class PiiImageFilterOperation : public PiiDefaultOperation
   /**
    * The name of the image filter. This is an easy way to set the
    * filter. For valid values see PiiImage::PrebuiltFilterType. Use
-   * "sobelx" for @p SobelXFilter, "gaussian" for @p GaussianFilter
+   * "sobelx" for `SobelXFilter`, "gaussian" for `GaussianFilter`
    * etc. There are two special values not supported by makeFilter():
    *
-   * @lip median - a median filter. Median filter is non-linear and
+   * - `median` - a median filter. Median filter is non-linear and
    * cannot be implemented with ordinary correlation masks.
    *
-   * @lip custom - #filter will be used as the filter mask.
+   * - `custom` - [filter] will be used as the filter mask.
    *
    * The default value is "uniform".
    */
@@ -57,30 +58,30 @@ class PiiImageFilterOperation : public PiiDefaultOperation
 
   /**
    * The size of the filter mask. This property has no effect if
-   * #filterName is set to @p custom. It is also ignored by some
+   * [filterName] is set to `custom`. It is also ignored by some
    * filters as described in PiiImage::makeFilter(). Automatically
    * created filters are always square. The default value is 3.
    */
   Q_PROPERTY(int filterSize READ filterSize WRITE setFilterSize);
     
   /**
-   * The filter as a matrix. This value is used only if #filterName is
+   * The filter as a matrix. This value is used only if [filterName] is
    * set to "custom".
    *
-   * @code
+   * ~~~(c++)
    * PiiOperation* op = engine.createOperation("PiiImageFilter");
    * op->setProperty("filter",
    *                 PiiVariant(new PiiMatrix<int>(3, 3,
    *                                                       1, 2, 1,
    *                                                       2, 4, 2,
    *                                                       1, 2, 1));
-   * @endcode
+   * ~~~
    */
   Q_PROPERTY(PiiVariant filter READ filter WRITE setFilter);
 
   /**
-   * The method of handling image borders. The default value is @p
-   * ExtendZeros.
+   * The method of handling image borders. The default value is 
+   * `ExtendZeros`.
    */
   Q_PROPERTY(ExtendMode borderHandling READ borderHandling WRITE setBorderHandling);
   Q_ENUMS(ExtendMode);
@@ -90,13 +91,13 @@ class PiiImageFilterOperation : public PiiDefaultOperation
 public:
   /**
    * Different ways of extending images in filtering. Copied from
-   * PiiMatrixUtil to avoid extensive @p moc hacking.
+   * PiiMatrixUtil to avoid extensive `moc` hacking.
    *
-   * @lip ExtendZeros - pad with zeros
-   * @lip ExtendReplicate - replicate the value on the border
-   * @lip ExtendSymmetric - symmetrically mirror boundary values
-   * @lip ExtendPeriodic - take values from the opposite border
-   * @lip ExtendNot - do not extend
+   * - `ExtendZeros` - pad with zeros
+   * - `ExtendReplicate` - replicate the value on the border
+   * - `ExtendSymmetric` - symmetrically mirror boundary values
+   * - `ExtendPeriodic` - take values from the opposite border
+   * - `ExtendNot` - do not extend
    */
   enum ExtendMode { ExtendZeros, ExtendReplicate, ExtendSymmetric, ExtendPeriodic, ExtendNot };
 

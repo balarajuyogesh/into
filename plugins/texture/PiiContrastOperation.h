@@ -22,16 +22,17 @@
  * An operation that calculates the contrast in a local neighborhood
  * in a gray-scale image.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - the input image, any numeric matrix
  *
- * @outputs
+ * Outputs
+ * -------
  *
- * @out image - the contrast image, data type depends on the @p type
+ * @out image - the contrast image, data type depends on the `type`
  * property and on the input.
  *
- * @ingroup PiiTexturePlugin
  */
 class PiiContrastOperation : public PiiDefaultOperation
 {
@@ -44,7 +45,7 @@ class PiiContrastOperation : public PiiDefaultOperation
   Q_ENUMS(ContrastType);
   /**
    * Local neighborhood radius. The local contrast is calculated for
-   * each pixel in a neighborhood that reaches @p radius pixels from
+   * each pixel in a neighborhood that reaches `radius` pixels from
    * the center.
    */
   Q_PROPERTY(int radius READ radius WRITE setRadius);
@@ -55,10 +56,10 @@ public:
   /**
    * Contrast calculation modes.
    *
-   * @lip MaxDiff - maximum absolute difference between the center and
+   * - `MaxDiff` - maximum absolute difference between the center and
    * a neighbor. The output is of the same type as the input.
    *
-   * @lip LocalVar - contrast calculated as the variance of gray
+   * - `LocalVar` - contrast calculated as the variance of gray
    * levels in a local neighborhood. The output is PiiMatrix<float>.
    */
   enum ContrastType { MaxDiff, LocalVar };
