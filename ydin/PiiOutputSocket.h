@@ -366,6 +366,7 @@ protected:
   {
   public:
     Data();
+    ~Data();
     
     void inputReady(PiiAbstractInputSocket* input);
     bool setOutputConnected(bool connected);

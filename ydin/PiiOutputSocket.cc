@@ -36,6 +36,12 @@ PiiOutputSocket::Data::Data() :
   activeThreadId(0)
 {}
 
+PiiOutputSocket::Data::~Data()
+{
+  delete[] pbInputCompleted;
+  pbInputCompleted = 0;
+}
+
 bool PiiOutputSocket::Data::setOutputConnected(bool connected)
 {
   return bConnected = PiiAbstractOutputSocket::Data::setOutputConnected(connected);
@@ -97,9 +103,7 @@ PiiOutputSocket::PiiOutputSocket(const QString& name, Data* data) :
 {}
 
 PiiOutputSocket::~PiiOutputSocket()
-{
-  delete[] _d()->pbInputCompleted;
-}
+{}
 
 void PiiOutputSocket::setGroupId(int id) { _d()->iGroupId = id; }
 int PiiOutputSocket::groupId() const { return _d()->iGroupId; }
