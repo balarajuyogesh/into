@@ -30,6 +30,9 @@ PiiPisoOperation::PiiPisoOperation() :
   addSocket(new PiiOutputSocket("index"));
   addSocket(new PiiOutputSocket("output0"));
 
+  setProtectionLevel("dynamicInputCount", WriteWhenStopped);
+  setProtectionLevel("operationMode", WriteWhenStopped);
+  setProtectionLevel("groupSize", WriteWhenStopped);
   setDynamicInputCount(2);
 }
 

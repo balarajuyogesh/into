@@ -222,7 +222,7 @@ PiiEngine* PiiEngine::clone() const
 
   // Set properties if not derived
   if (pResult != 0 && PiiEngine::metaObject() == metaObject())
-    Pii::setProperties(pResult, Pii::propertyList(this, Pii::WritableProperties | Pii::DynamicProperties));
+    Pii::setProperties(pResult, Pii::propertyList(this, 0, Pii::WritableProperties | Pii::DynamicProperties));
 
   return pResult;
 }

@@ -251,7 +251,7 @@ PiiOperation* PiiOperation::clone() const
   
   // Copy properties from the old to the new one
   if (op != 0)
-    Pii::setProperties(op, Pii::propertyList(this, Pii::WritableProperties | Pii::DynamicProperties));
+    Pii::setProperties(op, Pii::propertyList(this, 0, Pii::WritableProperties | Pii::DynamicProperties));
   
   return op;
 }

@@ -100,6 +100,9 @@ TestCase
     var sum = new Into.PiiArithmeticOperation("sum");
     jsEngine.addOperations(trigger, sgen1, sum);
     compare(jsEngine.childCount(), 4);
+    compare(jsEngine.childAt(0), trigger);
+    compare(jsEngine.childAt(-1), null);
+    compare(jsEngine.childAt(4), null);
   }
 
   function test_06_connect()
@@ -112,14 +115,31 @@ TestCase
     verify(jsEngine.connectOutput("sgen2.output", "sum.input1"));
   }
 
-  function test_07_add_probe()
+  function test_07_expose_output()
+  {
+    verify(jsEngine.exposeOutput("sum.output"));
+    verify(!jsEngine.exposeOutput("sum.output"));
+    verify(jsEngine.createOutputProxy("sequence1", "sgen1.output") != null);
+    verify(jsEngine.createOutputProxy("sequence2", "sgen2.output") != null);
+    compare(jsEngine.outputCount(), 3);
+    jsEngine.removeOutput("sequence2");
+    compare(jsEngine.outputCount(), 2);
+    jsEngine.removeOutput(jsEngine.output("sequence1"));
+    compare(jsEngine.outputCount(), 1);
+    jsEngine.removeOutput(jsEngine.output("sum.output"));
+    compare(jsEngine.outputCount(), 0);
+    jsEngine.exposeOutput("sum.output");
+    compare(jsEngine.outputCount(), 1);
+  }
+
+  function test_08_add_probe()
   {
     probe = new Into.PiiProbeInput;
-    verify(jsEngine.connectOutput("sum.output", probe));
+    verify(jsEngine.connectOutput("output", probe));
     verify(!probe.hasSavedObject());
   }
 
-  function test_08_execute()
+  function test_09_execute()
   {
     jsEngine.execute();
     verify(jsEngine.wait(PiiOperation.Running, 1000));
@@ -132,7 +152,7 @@ TestCase
     verify(jsEngine.wait(PiiOperation.Stopped, 1000));
   }
 
-  function test_09_save_load()
+  function test_10_save_load()
   {
     jsEngine.save("test.cft");
     var jsEngine2 = Into.PiiEngine.load("test.cft");

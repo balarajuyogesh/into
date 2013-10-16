@@ -1012,7 +1012,7 @@ PiiOperationCompound* PiiOperationCompound::clone() const
 
   // Set properties if we are the most derived class.
   if (PiiOperationCompound::metaObject() == metaObject())
-    Pii::setProperties(pResult, Pii::propertyList(this, Pii::WritableProperties | Pii::DynamicProperties));
+    Pii::setProperties(pResult, Pii::propertyList(this, 0, Pii::WritableProperties | Pii::DynamicProperties));
 
   // Clone sub-operations
   for (int i=0; i<d->lstOperations.size(); ++i)

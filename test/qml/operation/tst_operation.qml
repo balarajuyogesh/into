@@ -47,7 +47,7 @@ TestCase
   {
     try
       {
-        var nil = new Into.PiiOperation;
+        var nil = new Into.PiiOperation();
         fail("Shouldn't be able to instantiate an abstract class.");
       }
     catch (error)
@@ -65,11 +65,42 @@ TestCase
 
   function test_03_inputs_and_outputs()
   {
-    console.log(operation.input("input0"));
-    compare(operation.socketName(operation.input("input0")), "input0");
-    var inputs = operation.inputs();
-    var outputs = operation.outputs();
-    compare(inputs.length, 2);
-    compare(outputs.length, 1);
+    compare(operation.inputCount(), 2);
+    compare(operation.outputCount(), 2);
+    compare(operation.inputAt(-1), null);
+    compare(operation.inputAt(2), null);
+    compare(operation.inputAt(0), operation.input("input0"));
+    compare(operation.inputAt(1), operation.input("input1"));
+    compare(operation.input("input0").objectName, "input0");
+    compare(operation.outputAt(-1), null);
+    compare(operation.outputAt(2), null);
+    compare(operation.outputAt(0).objectName, "index");
+    compare(operation.outputAt(1).objectName, "output0");
+    compare(operation.inputNames(), [ "input0", "input1" ]);
+    compare(operation.outputNames(), [ "index", "output0" ]);
+  }
+
+  function test_04_protectionLevel()
+  {
+    compare(operation.protectionLevel("dynamicInputCount"),
+            Into.PiiOperation.WriteWhenStopped);
+    compare(operation.protectionLevel("defaultValue"),
+            Into.PiiOperation.WriteAlways);
+  }
+
+  function test_05_reconfigure()
+  {
+    operation.startPropertySet("test");
+    operation.dynamicInputCount = 3;
+    compare(operation.dynamicInputCount, 2);
+    operation.endPropertySet();
+  }
+
+  function test_06_clone()
+  {
+    var op2 = operation.clone();
+    compare(operation.dynamicInputCount, 3);
+    compare(op2.dynamicInputCount, 3);
+    compare(op2.inputCount(), 3);
   }
 }

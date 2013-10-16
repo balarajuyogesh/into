@@ -19,7 +19,6 @@
 #include "PiiOperationCompoundWrapper.h"
 #include "PiiEngineWrapper.h"
 #include "PiiVariantWrapper.h"
-#include "PiiSocketWrapper.h"
 #include <PiiProbeInput.h>
 
 class PiiValueTypeProvider : public QQmlValueTypeProvider
@@ -29,10 +28,6 @@ public:
   {
     if (type == qMetaTypeId<PiiVariant>())
       v = new PiiVariantValueType;
-    else if (type == qMetaTypeId<PiiAbstractInputSocket*>())
-      v = new PiiInputSocketPtrValueType;
-    else if (type == qMetaTypeId<PiiAbstractOutputSocket*>())
-      v = new PiiOutputSocketPtrValueType;
     else if (type == qMetaTypeId<PiiEngine::Plugin>())
       v = new PiiPluginValueType;
     else
@@ -49,8 +44,12 @@ public:
 
 void PiiQmlPlugin::registerTypes(const char *uri)
 {
+  const char* pAbstractClass = "Cannot create an instance of an abstract class.";
   Q_ASSERT(uri == QLatin1String("Into"));
-  qmlRegisterUncreatableType<PiiOperation>(uri, 2, 0, "PiiOperation", "PiiOperation is an abstract superclass that cannot be instantiated.");
+  qmlRegisterUncreatableType<PiiOperation>(uri, 2, 0, "PiiOperation", pAbstractClass);
+  qmlRegisterUncreatableType<PiiSocket>(uri, 2, 0, "PiiSocket", pAbstractClass);
+  qmlRegisterUncreatableType<PiiAbstractInputSocket>(uri, 2, 0, "PiiAbstractInputSocket", pAbstractClass);
+  qmlRegisterUncreatableType<PiiAbstractOutputSocket>(uri, 2, 0, "PiiAbstractOutputSocket", pAbstractClass);
   qmlRegisterType<PiiOperationCompound>(uri, 2, 0, "PiiEngine");
   qmlRegisterType<PiiEngine>(uri, 2, 0, "PiiEngine");
   qmlRegisterType<PiiProbeInput>(uri, 2, 0, "PiiProbeInput");
