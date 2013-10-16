@@ -44,14 +44,14 @@ public:
    * a utility function that calls
    * PiiAbstractOutputSocket::connectInput().
    */
-  void connectOutput(PiiAbstractOutputSocket* output);
+  Q_INVOKABLE void connectOutput(PiiAbstractOutputSocket* output);
 
   /**
    * Disconnects this socket from its output socket. If this socket is
    * not connected, nothing happens. This is a utility function that
    * calls PiiAbstractOutputSocket::disconnectInput().
    */
-  void disconnectOutput();
+  Q_INVOKABLE void disconnectOutput();
   
   /**
    * Returns the input controller. Input controller is responsible for
@@ -69,7 +69,7 @@ public:
    * @return the output that sends objects to this input, or 0 if the
    * socket is not connected
    */
-  PiiAbstractOutputSocket* connectedOutput() const;
+  Q_INVOKABLE PiiAbstractOutputSocket* connectedOutput() const;
 
   /**
    * Sets the listener that receives inputReady() events.

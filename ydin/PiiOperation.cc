@@ -269,7 +269,7 @@ void PiiOperation::disconnectAllOutputs()
   QList<PiiAbstractOutputSocket*> lstOutputs = outputs();
 
   for (int i=0; i<lstOutputs.size(); ++i)
-    lstOutputs[i]->disconnectInput();
+    lstOutputs[i]->disconnectInputs();
 }
 
 int PiiOperation::indexOf(const char* property) const

@@ -48,7 +48,7 @@ PiiAbstractOutputSocket::PiiAbstractOutputSocket(const QString& name, Data* data
 PiiAbstractOutputSocket::~PiiAbstractOutputSocket()
 {
   // Break all connections
-  disconnectInput();
+  disconnectInputs();
 }
 
 QList<PiiAbstractInputSocket*> PiiAbstractOutputSocket::connectedInputs() const
@@ -129,7 +129,7 @@ void PiiAbstractOutputSocket::reconnect(PiiAbstractOutputSocket* output, PiiAbst
   // Store connected inputs
   InputList lstInputs = d->lstInputs;
   // Disconnect them all
-  disconnectInput();
+  disconnectInputs();
   // Reconnect inputs to the new output
   for (int i=0; i<lstInputs.size(); ++i)
     output->connectInput(lstInputs.inputAt(i));

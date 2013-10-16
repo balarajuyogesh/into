@@ -50,6 +50,7 @@ void PiiQmlPlugin::registerTypes(const char *uri)
   qmlRegisterUncreatableType<PiiSocket>(uri, 2, 0, "PiiSocket", pAbstractClass);
   qmlRegisterUncreatableType<PiiAbstractInputSocket>(uri, 2, 0, "PiiAbstractInputSocket", pAbstractClass);
   qmlRegisterUncreatableType<PiiAbstractOutputSocket>(uri, 2, 0, "PiiAbstractOutputSocket", pAbstractClass);
+  qmlRegisterUncreatableType<PiiProxySocket>(uri, 2, 0, "PiiProxySocket", pAbstractClass);
   qmlRegisterType<PiiOperationCompound>(uri, 2, 0, "PiiEngine");
   qmlRegisterType<PiiEngine>(uri, 2, 0, "PiiEngine");
   qmlRegisterType<PiiProbeInput>(uri, 2, 0, "PiiProbeInput");

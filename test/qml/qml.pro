@@ -1,2 +1,3 @@
 TEMPLATE = subdirs
-SUBDIRS += engine
+SUBDIRS += engine \
+           operation

@@ -14,4 +14,4 @@
  */
 
 #include <QtQuickTest>
-QUICK_TEST_MAIN(engine)
+QUICK_TEST_MAIN(QML)

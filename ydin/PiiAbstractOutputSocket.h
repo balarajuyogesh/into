@@ -55,7 +55,7 @@ public:
    *
    * @param input the input socket to connect
    */
-  void connectInput(PiiAbstractInputSocket* input);
+  Q_INVOKABLE void connectInput(PiiAbstractInputSocket* input);
 
   /**
    * Updates any cached information related to `input`. This function
@@ -72,15 +72,15 @@ public:
    * @param input the input to disconnect from, or 0 if all
    * connections are to be broken.
    */
-  void disconnectInput(PiiAbstractInputSocket* input = 0);
+  Q_INVOKABLE void disconnectInput(PiiAbstractInputSocket* input);
 
-  void disconnectInputs() { disconnectInput(0); }
+  Q_INVOKABLE void disconnectInputs() { disconnectInput(0); }
 
   /**
    * Reconnects all inputs currently connected to this output to 
    * `output`, and reconnects this output to `input`.
    */
-  void reconnect(PiiAbstractOutputSocket* output, PiiAbstractInputSocket* input);
+  Q_INVOKABLE void reconnect(PiiAbstractOutputSocket* output, PiiAbstractInputSocket* input);
 
   /**
    * Returns all inputs this socket is connected to.

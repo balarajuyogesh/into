@@ -355,7 +355,7 @@ public:
   /**
    * Returns all direct child operations of this compound as a list.
    */
-  Q_INVOKABLE QList<PiiOperation*> childOperations() const;
+  QList<PiiOperation*> childOperations() const;
 
   /**
    * Returns the number of child operations. Equal to but faster than
@@ -448,45 +448,51 @@ public:
    * a child of this compound or there is a name conflict).
    * 
    */
-  Q_INVOKABLE bool exposeInput(PiiAbstractInputSocket* socket);
-  Q_INVOKABLE bool exposeOutput(PiiAbstractOutputSocket* socket);
+  bool exposeInput(PiiAbstractInputSocket* socket);
+  bool exposeOutput(PiiAbstractOutputSocket* socket);
 
   /**
    * A convenience function that allows one to expose an input socket
    * with the dot syntax.
    */
-  Q_INVOKABLE bool exposeInput(const QString& fullName);
+  bool exposeInput(const QString& fullName);
   
   /**
    * A convenience function that allows one to expose an output socket
    * with the dot syntax (explained above).
    */
-  Q_INVOKABLE bool exposeOutput(const QString& fullName);
+  bool exposeOutput(const QString& fullName);
+
+  Q_INVOKABLE bool exposeInput(const QVariant& input);
+  Q_INVOKABLE bool exposeOutput(const QVariant& output);
 
   /**
    * Removes *socket* from the public interface. Returns `true` if the
    * input was successfully removed, and `false` if the socket is not
    * currently exposed.
    */
-  Q_INVOKABLE bool removeInput(PiiAbstractInputSocket* socket);
+  bool removeInput(PiiAbstractInputSocket* socket);
   /**
    * Removes an input socket from the public interface. Returns `true`
    * if the input was successfully removed, and `false` if no socket
    * with the given name is exposed.
    */
-  Q_INVOKABLE bool removeInput(const QString& name);
+  bool removeInput(const QString& name);
   /**
    * Removes *socket* from the public interface. Returns `true` if the
    * output was successfully removed, and `false` if the socket is not
    * currently exposed.
    */
-  Q_INVOKABLE bool removeOutput(PiiAbstractOutputSocket* socket);
+  bool removeOutput(PiiAbstractOutputSocket* socket);
   /**
    * Removes an output socket from the public interface. Returns
    * `true` if the output was successfully removed, and `false` if no
    * socket with the given name is exposed.
    */
-  Q_INVOKABLE bool removeOutput(const QString& name);
+  bool removeOutput(const QString& name);
+
+  Q_INVOKABLE bool removeInput(const QVariant& input);
+  Q_INVOKABLE bool removeOutput(const QVariant& output);
 
   /**
    * Removes all input and output sockets from the public interface.

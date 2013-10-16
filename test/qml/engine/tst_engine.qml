@@ -100,9 +100,9 @@ TestCase
     var sum = new Into.PiiArithmeticOperation("sum");
     jsEngine.addOperations(trigger, sgen1, sum);
     compare(jsEngine.childCount(), 4);
-    compare(jsEngine.childAt(0), trigger);
     compare(jsEngine.childAt(-1), null);
     compare(jsEngine.childAt(4), null);
+    compare(jsEngine.childAt(0), sgen2);
   }
 
   function test_06_connect()
@@ -115,20 +115,21 @@ TestCase
     verify(jsEngine.connectOutput("sgen2.output", "sum.input1"));
   }
 
-  function test_07_expose_output()
+  function test_07_expose_unexpose_output()
   {
     verify(jsEngine.exposeOutput("sum.output"));
     verify(!jsEngine.exposeOutput("sum.output"));
+    verify(!jsEngine.removeOutput("non-existing"));
     verify(jsEngine.createOutputProxy("sequence1", "sgen1.output") != null);
     verify(jsEngine.createOutputProxy("sequence2", "sgen2.output") != null);
     compare(jsEngine.outputCount(), 3);
-    jsEngine.removeOutput("sequence2");
+    verify(jsEngine.removeOutput("sequence2"));
     compare(jsEngine.outputCount(), 2);
-    jsEngine.removeOutput(jsEngine.output("sequence1"));
+    verify(jsEngine.removeOutput(jsEngine.output("sequence1")));
     compare(jsEngine.outputCount(), 1);
-    jsEngine.removeOutput(jsEngine.output("sum.output"));
+    verify(jsEngine.removeOutput(jsEngine.output("sum.output")));
     compare(jsEngine.outputCount(), 0);
-    jsEngine.exposeOutput("sum.output");
+    verify(jsEngine.exposeOutput(jsEngine.childOperation("sum").output("output")));
     compare(jsEngine.outputCount(), 1);
   }
 
@@ -157,5 +158,37 @@ TestCase
     jsEngine.save("test.cft");
     var jsEngine2 = Into.PiiEngine.load("test.cft");
     compare(jsEngine2.childCount(), 4);
+  }
+
+  function test_11_expose_unexpose_input()
+  {
+    verify(jsEngine.exposeInput("sgen1.trigger"));
+    verify(!jsEngine.exposeInput("sgen1.trigger"));
+    verify(jsEngine.createInputProxy("trigger2", ["sgen2.trigger"]));
+    compare(jsEngine.inputCount(), 2);
+    verify(!jsEngine.output("trigger.trigger").isConnected());
+    verify(!jsEngine.removeInput("sgen1.trigger"));
+    verify(jsEngine.removeInput("trigger"));
+    compare(jsEngine.inputCount(), 1);
+    verify(jsEngine.removeInput("trigger2"));
+    compare(jsEngine.inputCount(), 0);
+  }
+
+  function test_12_clone()
+  {
+    var jsEngine2 = jsEngine.clone();
+    compare(jsEngine2.childCount(), jsEngine.childCount());
+    compare(jsEngine2.childNames(), jsEngine.childNames());
+    compare(jsEngine2.inputNames(), jsEngine.inputNames());
+    compare(jsEngine2.outputNames(), jsEngine.outputNames());
+
+    try
+    {
+      jsEngine2.execute();
+      fail("Sequence generator inputs are not connected. Should fail.");
+    }
+    catch (error)
+    {
+    }
   }
 }

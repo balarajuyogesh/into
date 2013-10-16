@@ -417,6 +417,9 @@ bool PiiOperationCompound::exposeInput(PiiAbstractInputSocket* socket)
   if (findSocket(socket->objectName(), d->lstInputs))
     return false;
 
+  // Input socket can be connected only once and must thus be
+  // disconnected before exposing.
+  socket->disconnectOutput();
   d->lstInputs.append(socket);
 
   // Break connection when the socket is destroyed.
@@ -472,6 +475,30 @@ bool PiiOperationCompound::exposeOutput(const QString& name)
   return false;
 }
 
+bool PiiOperationCompound::exposeInput(const QVariant& input)
+{
+  PiiAbstractInputSocket* pInput = qobject_cast<PiiAbstractInputSocket*>(input.value<QObject*>());
+  return pInput ? exposeInput(pInput) : exposeInput(input.toString());
+}
+
+bool PiiOperationCompound::exposeOutput(const QVariant& output)
+{
+  PiiAbstractOutputSocket* pOutput = qobject_cast<PiiAbstractOutputSocket*>(output.value<QObject*>());
+  return pOutput ? exposeOutput(pOutput) : exposeOutput(output.toString());
+}
+
+bool PiiOperationCompound::removeInput(const QVariant& input)
+{
+  PiiAbstractInputSocket* pInput = qobject_cast<PiiAbstractInputSocket*>(input.value<QObject*>());
+  return pInput ? removeInput(pInput) : removeInput(input.toString());
+}
+
+bool PiiOperationCompound::removeOutput(const QVariant& output)
+{
+  PiiAbstractOutputSocket* pOutput = qobject_cast<PiiAbstractOutputSocket*>(output.value<QObject*>());
+  return pOutput ? removeOutput(pOutput) : removeOutput(output.toString());
+}
+
 PiiProxySocket* PiiOperationCompound::createInputProxy(const QString& name, const QStringList& intputNames)
 {
   PiiProxySocket* pProxy = createInputProxy(name);
@@ -484,7 +511,7 @@ PiiProxySocket* PiiOperationCompound::createInputProxy(const QString& name, cons
 
 PiiProxySocket* PiiOperationCompound::createOutputProxy(const QString& name, const QString& outputName)
 {
-  PiiProxySocket* pProxy = createInputProxy(name);
+  PiiProxySocket* pProxy = createOutputProxy(name);
   if (!pProxy)
     return 0;
   pProxy->output()->connectInput(input(outputName));
@@ -570,7 +597,7 @@ int PiiOperationCompound::childCount() const
 PiiOperation* PiiOperationCompound::childAt(int index) const
 {
   const PII_D;
-  if (index > 0 && index < d->lstOperations.size())
+  if (index >= 0 && index < d->lstOperations.size())
     return d->lstOperations[index];
   return 0;
 }
@@ -657,7 +684,7 @@ bool PiiOperationCompound::replaceOperation(PiiOperation *oldOp, PiiOperation* n
       for (int i=0; i<lstNewInputs.size(); ++i)
         lstNewInputs[i]->disconnectOutput();
       for (int i=0; i<lstNewOutputs.size(); ++i)
-        lstNewOutputs[i]->disconnectInput();
+        lstNewOutputs[i]->disconnectInputs();
   
       //connect all inputs
       for (int i=0; i<lstOldInputs.size(); ++i)
@@ -683,7 +710,7 @@ bool PiiOperationCompound::replaceOperation(PiiOperation *oldOp, PiiOperation* n
           QList<PiiAbstractInputSocket*> lstInputs = lstOldOutputs[i]->connectedInputs();
           if (lstInputs.isEmpty())
             continue;
-          lstOldOutputs[i]->disconnectInput();
+          lstOldOutputs[i]->disconnectInputs();
           
           PiiAbstractOutputSocket* pOutput = newOp->output(lstOldOutputs[i]->objectName());
           if (pOutput != 0 && i < lstNewOutputs.size())
@@ -934,7 +961,7 @@ PiiOperationCompound::EndPointType PiiOperationCompound::locateSocket(PiiSocket*
         {
           // Join the names of all parent operations with dots.
           QString strFullName;
-          for (int i=iContextIndex+1; i<lstParents.size(); ++i)
+          for (int i=iContextIndex-1; i>=0; --i)
             strFullName += lstParents[i]->objectName() + '.';
           strFullName += socket->objectName();
           return EndPointType(const_cast<PiiOperationCompound*>(context), strFullName);
