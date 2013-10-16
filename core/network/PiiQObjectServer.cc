@@ -21,6 +21,7 @@
 
 #include <PiiUtil.h>
 #include <PiiMetaTypeUtil.h>
+#include <PiiConfigurable.h>
 
 #include <QUrl>
 
@@ -30,6 +31,7 @@ static const int iQObjectFunctionCount = QObject::staticMetaObject.methodCount()
 
 PiiQObjectServer::Data::Data(QObject* object, ExposedFeatures features) :
   pObject(object),
+  pConfigurable(qobject_cast<PiiConfigurable*>(object)),
   features(features)
 {}
 
@@ -127,7 +129,7 @@ void PiiQObjectServer::init()
       QMetaEnum safetyLevelEnum = metaObject()->enumerator(metaObject()->indexOfEnumerator("ThreadSafetyLevel"));
       int iValue = safetyLevelEnum.keyToValue(info.value());
       if (iValue != -1)
-  setSafetyLevel(static_cast<ThreadSafetyLevel>(iValue));
+        setSafetyLevel(static_cast<ThreadSafetyLevel>(iValue));
     }
 }
 
@@ -212,7 +214,9 @@ QVariant PiiQObjectServer::objectProperty(const QString& name) const
   ThreadSafetyLevel level = propertySafetyLevel(name);
   if (level != AccessConcurrently)
     d->accessMutex.lock();
-  QVariant varResult = d->pObject->property(qPrintable(name));
+  QVariant varResult = d->pConfigurable ?
+    d->pConfigurable->property(qPrintable(name)) :
+    d->pObject->property(qPrintable(name));
   if (level != AccessConcurrently)
     d->accessMutex.unlock();
   return varResult;
@@ -269,9 +273,16 @@ bool PiiQObjectServer::setObjectProperty(const QString& name, const QVariant& va
         return bResult;
       }
     case AccessFromAnyThread:
-      synchronized (d->accessMutex) return d->pObject->setProperty(qPrintable(name), value);
+      synchronized (d->accessMutex)
+        {
+          return d->pConfigurable ?
+            d->pConfigurable->setProperty(qPrintable(name), value) :
+            d->pObject->setProperty(qPrintable(name), value);
+        }
     case AccessConcurrently:
-      return d->pObject->setProperty(qPrintable(name), value);
+      return d->pConfigurable ?
+        d->pConfigurable->setProperty(qPrintable(name), value) :
+        d->pObject->setProperty(qPrintable(name), value);
     }
   return false;
 }
@@ -291,7 +302,7 @@ void PiiQObjectServer::handleRequest(const QString& uri, PiiHttpDevice* dev,
   if (strRequestPath.startsWith("properties/"))
     {
       // Only directory listing (empty) allowed
-      // PENDING this isn't quite there yet.
+      // TODO: this isn't quite there yet.
       if (!(d->features & (ExposeProperties | ExposeDynamicProperties)))
         {
           if (strRequestPath.size() > 11)

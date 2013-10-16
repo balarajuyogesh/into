@@ -18,6 +18,8 @@
 
 #include "PiiObjectServer.h"
 
+class PiiConfigurable;
+
 /**
  * An object that maps QObject's functions and properties into the URI
  * space of a PiiHttpProtocol.
@@ -342,6 +344,7 @@ protected:
     Data(QObject* object, ExposedFeatures features);
     ~Data();
     QObject *pObject;
+    PiiConfigurable* pConfigurable;
     ExposedFeatures features;
     QStringList lstSignals;
     SlotList lstSlots;
