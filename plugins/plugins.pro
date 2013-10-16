@@ -6,7 +6,6 @@ TEMPLATE = subdirs
 # Directories
 SUBDIRS = base \
           camera \
-          camera/emulator \
           classification \
           colors \
           calibration \
@@ -16,7 +15,6 @@ SUBDIRS = base \
           geometry \
           image \
           io \
-          io/emulator \
           matching \
           network \
           optimization \
@@ -32,24 +30,38 @@ enabled(opencv) {
   calibration.depends += opencv
 }
 
-image.depends += dsp
 video.depends += image
 colors.depends += image
 geometry.depends += dsp
-features.depends += image
+transforms.depends += image
+image.depends += dsp
 matching.depends += geometry classification optimization
 camera.depends += image geometry
 texture.depends += image
 calibration.depends += image classification optimization
 
 # Camera drivers
-CAMERADRIVERS = webcam
+CAMERADRIVERS = emulator webcam
 for(driver, CAMERADRIVERS) {
-  enabled($$driver): SUBDIRS += camera/$$driver
+  !enabled($$driver):!equals(driver,emulator) {
+    warning($$driver camera driver will not be built)
+  } else {
+    DRIVERID = camera_$$driver
+    SUBDIRS += $$DRIVERID
+    $${DRIVERID}.subdir = camera/$$driver
+    $${DRIVERID}.depends = camera
+  }
 }
 
 # Io drivers
-IODRIVERS = modbus
+IODRIVERS = emulator modbus
 for(driver, IODRIVERS) {
-  enabled($$driver): SUBDIRS += io/$$driver
+  !enabled($$driver):!equals(driver,emulator) {
+    warning($$driver I/O driver will not be built)
+  } else {
+    DRIVERID = io_$$driver
+    SUBDIRS += $$DRIVERID
+    $${DRIVERID}.subdir = io/$$driver
+    $${DRIVERID}.depends = io
+  }
 }

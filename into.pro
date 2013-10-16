@@ -14,7 +14,7 @@ ydin.depends += core
 gui.depends += ydin
 plugins.depends += ydin
 script.depends += ydin
-test.depends += ydin
+test.depends += plugins
 demos.depends += plugins
 
 qt5: {
