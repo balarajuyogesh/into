@@ -30,9 +30,8 @@
  * such as [indexOf()] and [lastIndexOf()]. Inserting elements to the
  * middle of the list is an O(N) operation.
  *
- * ! Be careful in modifying the elements of the list. Doing so
- * may invalidate the sort order.
- *
+ * ! Be careful when modifying the elements of the list. Doing so may
+ *   invalidate the sort order.
  */
 template <class T, class Less = std::less<T>, class Equals = std::equal_to<T> >
 class PiiSortedList : private QList<T>

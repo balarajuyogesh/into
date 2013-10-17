@@ -39,6 +39,8 @@ class PiiFreqOutputEmitter;
  * Outputs
  * -------
  *
+ * @out frequency - the current input frequency in Hz (double)
+ *
  * @out outputX - numbered outputs corresponding to the inputs.
  *
  */

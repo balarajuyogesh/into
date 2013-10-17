@@ -185,7 +185,7 @@ public:
 
   /**
    * Returns a new PiiQImage that is a deep copy of *matrix*
-   * and shared the same data with QImage. This function automatically
+   * and shares the same data with QImage. This function automatically
    * converts the data type of *matrix* to a QImage-compatible type.
    *
    * ~~~(c++)
@@ -260,14 +260,63 @@ Q_DECLARE_METATYPE(QImagePtr);
 
 #include <PiiColor.h>
 
-typedef PiiQImage<unsigned char> PiiGrayQImage;
-typedef PiiQImage<PiiColor4<unsigned char> > PiiColorQImage;
+typedef PiiQImage<uchar> PiiGrayQImage;
+typedef PiiQImage<PiiColor4<uchar> > PiiColorQImage;
 
-template <class T> struct PiiQImageTraits;
-template <> struct PiiQImageTraits<char> { enum { Format = QImage::Format_Indexed8 }; };
-template <> struct PiiQImageTraits<unsigned char> { enum { Format = QImage::Format_Indexed8 }; };
-template <> struct PiiQImageTraits<PiiColor4<char> > { enum { Format = QImage::Format_RGB32 }; };
-template <> struct PiiQImageTraits<PiiColor4<unsigned char> > { enum { Format = QImage::Format_RGB32 }; };
+template <class T> struct PiiQImageTraits
+{
+  enum { Format = QImage::Format_Indexed8 };
+  static inline void memcpy(uchar* to, const T* from, size_t pixels)
+  {
+    for (size_t i=0; i<pixels; ++i)
+      to[i] = uchar(from[i]);
+  }
+};
+template <class T> struct PiiCompatibleQImageTraits
+{
+  static inline void memcpy(uchar* to, const T* from, size_t pixels) { ::memcpy(to, from, pixels*sizeof(T)); }
+};
+template <> struct PiiQImageTraits<char> : PiiCompatibleQImageTraits<char>
+{
+  enum { Format = QImage::Format_Indexed8 };
+};
+template <> struct PiiQImageTraits<uchar> : PiiCompatibleQImageTraits<uchar>
+{
+  enum { Format = QImage::Format_Indexed8 };
+};
+template <> struct PiiQImageTraits<PiiColor4<char> > : PiiCompatibleQImageTraits<PiiColor4<char> >
+{
+  enum { Format = QImage::Format_RGB32 };
+};
+template <> struct PiiQImageTraits<PiiColor4<uchar> > : PiiCompatibleQImageTraits<PiiColor4<uchar> >
+{
+  enum { Format = QImage::Format_RGB32 };
+};
+template <> struct PiiQImageTraits<PiiColor<uchar> >
+{
+  enum { Format = QImage::Format_RGB32 };
+  static inline void memcpy(uchar* to, const PiiColor<uchar>* from, size_t pixels)
+  {
+    for (size_t i=0; i<pixels; ++i, to+=4,  ++from)
+      {
+        *to = from->channels[0];
+        to[1] = from->channels[1];
+        to[2] = from->channels[2];
+        to[3] = 0;
+      }
+  }
+};
+template <> struct PiiQImageTraits<PiiColor<char> > : PiiQImageTraits<PiiColor<uchar> > {};
+template <> struct PiiQImageTraits<float>
+{
+  enum { Format = QImage::Format_Indexed8 };
+  static inline void memcpy(uchar* to, const float* from, size_t pixels)
+  {
+    for (size_t i=0; i<pixels; ++i)
+      to[i] = uchar(from[i]*255);
+  }
+};
+
 
 template <class T> PiiQImage<T>* PiiQImage<T>::create(QImage& image)
 {
@@ -312,8 +361,7 @@ template <class T> PiiQImage<T>::PiiQImage(void* data, int rows, int columns, si
                                            Pii::PtrOwnership ownership) :
   QImage(static_cast<uchar*>(data), columns, rows, stride, (QImage::Format)PiiQImageTraits<T>::Format),
   PiiMatrix<T>(rows, columns, data, ownership, stride)
-{
-}
+{}
 
 template <class T> PiiQImage<T>::PiiQImage(const PiiMatrix<T>& matrix) :
   QImage((uchar*)matrix.row(0),
@@ -321,18 +369,17 @@ template <class T> PiiQImage<T>::PiiQImage(const PiiMatrix<T>& matrix) :
          matrix.stride(),
          (QImage::Format)PiiQImageTraits<T>::Format),
   PiiMatrix<T>(matrix)
-{
-}
+{}
 
 namespace Pii
 {
   template <class T> QImage matrixToQImage(const PiiMatrix<T>& matrix)
   {
     QImage result(matrix.columns(), matrix.rows(), (QImage::Format)PiiQImageTraits<T>::Format);
-    int iBytesPerRow = matrix.columns() * sizeof(T);
+    const int iCols = matrix.columns();
     for (int r=0; r<matrix.rows(); ++r)
-      memcpy(result.scanLine(r), matrix.row(r), iBytesPerRow);
-    if (sizeof(T) == 1)
+      PiiQImageTraits<T>::memcpy(result.scanLine(r), matrix.row(r), iCols);
+    if (result.format() == QImage::Format_Indexed8)
       result.setColorTable(Pii::grayColorTable());
     return result;
   }

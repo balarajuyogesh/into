@@ -22,9 +22,8 @@
 /**
  * An input socket that works without a controlling operation. The
  * socket works like a measurement probe that emits the
- * [objectReceived()] signal whenever a new object is received. It also
- * saves the last received object.
- *
+ * [objectReceived()] signal whenever a new object is received. It
+ * also saves the last received object.
  */
 class PII_YDIN_EXPORT PiiProbeInput :
   public PiiAbstractInputSocket,
@@ -37,6 +36,24 @@ class PII_YDIN_EXPORT PiiProbeInput :
    * contains an invalid variant.
    */
   Q_PROPERTY(PiiVariant savedObject READ savedObject WRITE setSavedObject);
+
+  /**
+   * Toggles filtering of control objects. The default value is
+   * `false`, which means every incoming object will be
+   * emitted. Turning this value to `true` blocks the saving and
+   * emitting of control objects.
+   */
+  Q_PROPERTY(bool discardControlObjects READ discardControlObjects WRITE setDiscardControlObjects);
+
+  /**
+   * The minimum time between successive objectReceived() signals in
+   * milliseconds. Setting this value to a positive value limits the
+   * rate of signals emitted. Note that the emission interval affects
+   * only outgoing signals; the last incoming object will be saved
+   * anyway. The default value is zero.
+   */
+  Q_PROPERTY(int signalInterval READ signalInterval WRITE setSignalInterval);
+
 public:
   /**
    * Constructs a new probe input and sets its `objectName` property
@@ -64,44 +81,44 @@ public:
   PiiProbeInput(PiiAbstractOutputSocket* output, const QObject* receiver,
                 const char* slot, Qt::ConnectionType = Qt::AutoConnection);
 
-  /**
-   * Returns `Input`.
-   */
-  PiiSocket::Type type() const;
-  
+
   /**
    * Emits [objectReceived()] and saves the received object.
    */
   bool tryToReceive(PiiAbstractInputSocket* sender, const PiiVariant& object) throw ();
 
   PiiVariant savedObject() const;
-  void setSavedObject(const PiiVariant& obj);
-
+  void setSavedObject(const PiiVariant& obj);  
   /**
    * Returns true if an object has been saved into this socket.
    */
   Q_INVOKABLE bool hasSavedObject() const;
+
+  void setDiscardControlObjects(bool discardControlObjects);
+  bool discardControlObjects() const;
+
+  void setSignalInterval(int signalInterval);
+  int signalInterval() const;
 
   PiiInputController* controller() const;
 
 signals:
   /**
    * Emitted whenever an object is received in this input socket. Note
-   * that all objects, including control objects, will be emitted. The
-   * slot receiving the objects can filter the objects based on their
-   * type.
+   * that all objects, including control objects, will be emitted by
+   * default. The slot receiving the objects can filter the objects
+   * based on their type. Additionally, the [discardControlObjects]
+   * property can be used to filter out control objects.
    *
    * @see PiiYdin::isControlType()
    */
-  void objectReceived(const PiiVariant& obj);
+  void objectReceived(const PiiVariant& obj, PiiProbeInput* sender);
 
+protected:
+  void timerEvent(QTimerEvent*);
+  
 private:
-  class Data : public PiiAbstractInputSocket::Data
-  {
-  public:
-    Data();
-    PiiVariant varSavedObject;
-  };
+  class Data;
   PII_UNSAFE_D_FUNC;
 };
 
