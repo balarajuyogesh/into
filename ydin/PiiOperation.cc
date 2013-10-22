@@ -158,7 +158,7 @@ bool PiiOperation::connectOutput(const QString& outputName, const QVariant& inpu
 const char* PiiOperation::stateName(State state)
 {
   static const char* states[] = { "Stopped", "Starting", "Running", "Pausing", "Paused", "Stopping", "Interrupted" };
-  return states[state];
+  return state >= 0 && state < sizeof(states)/sizeof(states[0]) ? states[state] : 0;
 }
 
 void PiiOperation::startPropertySet(const QString& name)

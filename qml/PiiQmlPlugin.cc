@@ -16,6 +16,7 @@
 #include "PiiQmlPlugin.h"
 #include "PiiQml.h"
 
+#include "PiiOperationWrapper.h"
 #include "PiiOperationCompoundWrapper.h"
 #include "PiiEngineWrapper.h"
 #include "PiiVariantWrapper.h"
@@ -65,8 +66,6 @@ void PiiQmlPlugin::initializeEngine(QQmlEngine* engine, const char* uri)
 
   PiiQmlImageProvider* pImageProvider = new PiiQmlImageProvider;
   engine->addImageProvider("Into", pImageProvider);
-  qDebug("pImageProvider->parent(): %p", pImageProvider->parent());
-  pImageProvider->setParent(engine);
 
   v8::HandleScope handleScope;
   v8::Local<v8::Context> context(v8::Local<v8::Context>::New(engine->handle()->context()));
@@ -78,14 +77,14 @@ void PiiQmlPlugin::initializeEngine(QQmlEngine* engine, const char* uri)
 
   QV8Engine* pV8Engine = engine->handle();
 
-  into->Set(v8::String::New("PiiImageProvider"), pV8Engine->newQObject(pImageProvider));
+  into->Set(v8::String::New("PiiImageProvider"), pV8Engine->newQObject(pImageProvider, QV8Engine::CppOwnership));
 
   // Register all QObjects in "PiiYdin". This creates constructors for
   // base types such as PiiOperation, PiiOperationCompound, PiiEngine,
   // PiiSocket and PiiProbeInput.
   PiiQml::registerClasses(pV8Engine, into, "PiiYdin");
 
-  //PiiOperationWrapper::init(engine, globalObject);
+  PiiOperationWrapper::init(pV8Engine, into);
   PiiOperationCompoundWrapper::init(pV8Engine, into);
   PiiEngineWrapper::init(pV8Engine, into);
 }

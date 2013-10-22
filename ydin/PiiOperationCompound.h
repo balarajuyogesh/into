@@ -32,21 +32,21 @@
   PII_PROPERTY_SERIALIZATION_FUNCTION(PiiOperationCompound)
 
 /**
- * PiiOperationCompound is a class that controls a set of operations. 
- * It can contain any number of other operations, which may also be
+ * PiiOperationCompound is a class that controls a set of operations.
+ * It can contain any number of child operations, which may also be
  * compounds themselves.
  *
  * Execution
  * ---------
  *
- * PiiOperationCompound does actually nothing when it is started,
+ * PiiOperationCompound does actually nothing by itself when started,
  * paused, or interrupted. It merely delegates the commands to its
  * direct ancestors. The state of a compound changes when the state of
  * all its children has changed. For example, when compound is
  * started, it changes state to `Starting` immediately after any of
- * its children changes state to `Starting` or `Running`. The state
- * of the compound will turn to `Running` when all child operations
- * have changed their state to `Running`.
+ * its children changes state to `Starting` or `Running`. The state of
+ * the compound will turn to `Running` when all child operations have
+ * changed their state to `Running`.
  *
  * If the execution of any of a compound's child operations is
  * terminated before all of its siblings have changed their state to
