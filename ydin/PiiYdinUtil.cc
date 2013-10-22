@@ -27,12 +27,12 @@ namespace PiiYdin
       {
         if (i > 0)
           strResult += " ";
-        PiiOperation* pParent = Pii::findFirstParent<PiiOperation*>(lstInputs[i]->socket());
+        PiiOperation* pParent = Pii::findFirstParent<PiiOperation*>(lstInputs[i]);
         if (pParent != 0)
           strResult += QString("%1.%2").arg(pParent->objectName(),
-                                            pParent->socketName(lstInputs[i]));
+                                            lstInputs[i]->objectName());
         else
-          strResult += "<unknown>." + lstInputs[i]->socket()->objectName();
+          strResult += "<null>." + lstInputs[i]->objectName();
       }
     return strResult;
   }
@@ -64,8 +64,8 @@ namespace PiiYdin
     int iMaxQueueLength = 0;
     for (int i=0; i<inputs.size(); i++)
       {
-        PiiInputSocket* pSocket = static_cast<PiiInputSocket*>(inputs[i]->socket());
-        QString name = op->socketName(inputs[i]);
+        PiiInputSocket* pSocket = qobject_cast<PiiInputSocket*>(inputs[i]);
+        QString name = inputs[i]->objectName();
         if (name.size() > iMaxSize)
           iMaxSize = name.size();
         if (pSocket != 0 && pSocket->queueLength() > iMaxQueueLength)
@@ -75,7 +75,7 @@ namespace PiiYdin
     
     for (int i=0; i<outputs.size(); i++)
       {
-        QString name = op->socketName(outputs[i]);
+        QString name = outputs[i]->objectName();
         if (name.size() > iMaxSize)
           iMaxSize = name.size();
       }
@@ -101,8 +101,8 @@ namespace PiiYdin
 
     for (int i=0; i<inputs.size(); i++)
       {
-        PiiInputSocket* pSocket = static_cast<PiiInputSocket*>(inputs[i]->socket());
-        QString name = op->socketName(inputs[i]);
+        PiiInputSocket* pSocket = qobject_cast<PiiInputSocket*>(inputs[i]);
+        QString name = inputs[i]->objectName();
         if ((flags & ShowInputQueues) &&
             pSocket != 0 &&
             pSocket->isConnected())
@@ -119,7 +119,7 @@ namespace PiiYdin
       }
     for (int i=0; i<outputs.size(); i++)
       {
-        QString name = op->socketName(outputs[i]);
+        QString name = outputs[i]->objectName();
         result += QString("%0| %1 >|").arg("", iMaxQueueLength).arg(name, iMaxSize);
         if (flags & ShowOutputStates)
           result += " " + dumpInputs(outputs[i]);

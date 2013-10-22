@@ -21,22 +21,23 @@
 /**
  * Flip a matrix vertically or horizontally.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in input - any matrix
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out output - the input matrix flipped either vertically or
  * horizontally.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiMatrixFlipper : public PiiDefaultOperation
 {
   Q_OBJECT
   /**
-   * Flip mode. Default is @p FlipHorizontally.
+   * Flip mode. Default is `FlipHorizontally`.
    */
   Q_PROPERTY(FlipMode flipMode READ flipMode WRITE setFlipMode);
   Q_ENUMS(FlipMode);
@@ -46,12 +47,12 @@ public:
   /**
    * Flip modes.
    *
-   * @lip FlipHorizontally - retain row order but turn data on each
+   * - `FlipHorizontally` - retain row order but turn data on each
    * row around.
    *
-   * @lip FlipVertically - retain column order but turn rows around.
+   * - `FlipVertically` - retain column order but turn rows around.
    *
-   * @lip FlipBoth - flip horizontally and then vertically (same as
+   * - `FlipBoth` - flip horizontally and then vertically (same as
    * 180 degrees rotation)
    */
   enum FlipMode { FlipHorizontally, FlipVertically, FlipBoth };

@@ -23,18 +23,19 @@
  * reads in any color image type and outputs three to four separated
  * channel images on different outputs.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - a color image
  *
- * @outputs
+ * Outputs
+ * -------
  *
- * @out channelX - color channel X as an intensity image. @p
- * channel0 is for the red color channel, @p channel1 for green, and
- * @p channel2 for blue. If the input image has an alpha channel, it
- * is emitted from @p channel3.
+ * @out channelX - color channel X as an intensity image. 
+ * `channel0` is for the red color channel, `channel1` for green, and
+ * `channel2` for blue. If the input image has an alpha channel, it
+ * is emitted from `channel3`.
  *
- * @ingroup PiiColorsPlugin
  */
 class PiiColorChannelSplitter : public PiiDefaultOperation
 {

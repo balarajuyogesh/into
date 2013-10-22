@@ -57,6 +57,7 @@ void PiiSomOperation::protectProps()
     setProtectionLevel(protectedProps[i], WriteWhenStoppedOrPaused);
 }
 
+/* TODO
 QVariant PiiSomOperation::socketProperty(PiiAbstractSocket* socket, const char* name) const
 {
   const PII_D;
@@ -79,6 +80,7 @@ QVariant PiiSomOperation::socketProperty(PiiAbstractSocket* socket, const char* 
 
   return PiiVectorQuantizerOperation::socketProperty(socket,name);
 }
+*/
 
 void PiiSomOperation::setSize(QSize size) { _d()->size = size; }
 QSize PiiSomOperation::size() const { return _d()->size; }

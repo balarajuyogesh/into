@@ -24,7 +24,6 @@
  * A texture generator that produces tiled image background
  * texture.
  *
- * @ingroup PiiCameraPlugin
  */
 class PII_CAMERAEMULATOR_EXPORT PiiTiledImageGenerator : public PiiTextureGenerator
 {

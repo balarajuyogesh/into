@@ -23,7 +23,6 @@ class PiiIoChannel;
 /**
  * An interface for digital input/output drivers.
  *
- * @ingroup PiiIoPlugin
  */
 class PII_IO_EXPORT PiiIoDriver : public QObject
 {
@@ -37,7 +36,7 @@ public:
    * id. Possibilities include, for example, network addresses and
    * numeric board indices.
    *
-   * @return @p true if the selection was successful, @p false
+   * @return `true` if the selection was successful, `false`
    * otherwise.
    */
   virtual bool selectUnit(const QString& unit) = 0;
@@ -46,17 +45,17 @@ public:
    * Initializes the driver. This function is must be called before
    * the driver can be accessed
    *
-   * @return @p true if the initialization was successful, @p false
+   * @return `true` if the initialization was successful, `false`
    * otherwise.
    */
   virtual bool initialize() = 0;
 
   /**
-   * Closes an initialized driver. After @p close(), #initialize()
+   * Closes an initialized driver. After `close`(), [initialize()]
    * must be called again before the driver is functional. The default
-   * implementation returns @p true.
+   * implementation returns `true`.
    *
-   * @return @p true on success, @p false otherwise
+   * @return `true` on success, `false` otherwise
    */
   virtual bool close() = 0;
 

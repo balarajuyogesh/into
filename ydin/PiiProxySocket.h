@@ -17,70 +17,63 @@
 #define _PIIPROXYSOCKET_H
 
 #include "PiiYdin.h"
-#include "PiiSocket.h"
-#include "PiiAbstractInputSocket.h"
-#include "PiiAbstractOutputSocket.h"
-#include "PiiInputController.h"
+
+class PiiSocket;
+class PiiAbstractInputSocket;
+class PiiAbstractOutputSocket;
+class PiiProxyInputSocket;
+class PiiProxyOutputSocket;
+class PiiOperationCompound;
 
 /**
- * An input-output socket. This socket implements both
- * PiiAbstractOutputSocket and PiiAbstractInputSocket, and works as a
- * PiiInputController for itself. It merely passes all incoming
- * objects to the output.
- *
- * @ingroup Ydin
+ * A proxy that contains both an input and an output socket and passes
+ * incoming objects as such.
  */
 class PII_YDIN_EXPORT PiiProxySocket :
-  public PiiSocket,
-  public PiiAbstractOutputSocket,
-  public PiiAbstractInputSocket,
-  public PiiInputController
+  public QObject
 {
   Q_OBJECT
 
 public:
-  PiiProxySocket();
+  PiiProxySocket(QObject* parent = 0);
   ~PiiProxySocket();
 
+  Q_INVOKABLE PiiAbstractInputSocket* input() const;
+  Q_INVOKABLE PiiAbstractOutputSocket* output() const;
+
+  using QObject::parent;
+
   /**
-   * Returns @p Proxy.
+   * Returns the input side of a socket that is part of a proxy. If
+   * *socket* is not in a proxy, returns 0.
    */
-  Type type() const;
-  
-  PiiInputController* controller() const;
-  PiiAbstractOutputSocket* rootOutput() const;
-  bool setInputConnected(bool connected);
-  bool tryToReceive(PiiAbstractInputSocket* sender, const PiiVariant& object) throw ();
-  void inputReady(PiiAbstractInputSocket*);
+  static PiiAbstractInputSocket* input(PiiSocket* socket);
+  /**
+   * Returns the output side of a socket that is part of a proxy. If
+   * *socket* is not in a proxy, returns 0.
+   */
+  static PiiAbstractOutputSocket* output(PiiSocket* socket);
+  /**
+   * Returns the parent of *socket*, or 0 if *socket* is not part of a
+   * proxy.
+   */
+  static PiiProxySocket* parent(PiiSocket* socket);
+  /**
+   * Finds (backwards) the first non-proxy input in a chain of
+   * connected sockets. If *output* is not a proxy, returns
+   * *output*. Otherwise, goes back through all proxies until finds an
+   * output that is not a proxy. If there is no such output, returns
+   * 0.
+   */
+  static PiiAbstractOutputSocket* root(PiiAbstractOutputSocket* output);
 
-  void reset();
-
-  PiiProxySocket* socket();
-  PiiAbstractInputSocket* asInput();
-  PiiAbstractOutputSocket* asOutput();
-
-protected:
-  void inputConnected(PiiAbstractInputSocket* input);
-  void inputDisconnected(PiiAbstractInputSocket* input);
-  
 private:
-  class Data :
-    public PiiAbstractOutputSocket::Data,
-    public PiiAbstractInputSocket::Data
-  {
-  public:
-    Data(PiiProxySocket* owner);
-
-    PiiAbstractOutputSocket* rootOutput() const;
-    bool setInputConnected(bool connected);
-    
-    bool *pbInputCompleted;
-
-    PII_Q_FUNC(PiiProxySocket);
-  };
-  
-  inline Data* _d() { return static_cast<Data*>(PiiAbstractOutputSocket::d); }
-  inline const Data* _d() const { return static_cast<const Data*>(PiiAbstractOutputSocket::d); }
+  friend class PiiOperationCompound;
+  PiiProxySocket(const QString& inputName, const QString& outputName, QObject* parent = 0);
+  void reset();
+  class Data;
+  Data* d;
+  PII_DISABLE_COPY(PiiProxySocket);
 };
 
 Q_DECLARE_METATYPE(PiiProxySocket*);

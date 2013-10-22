@@ -19,15 +19,7 @@
 #include "PiiSerializationTraits.h"
 
 /**
- * @file
- *
- * Base class serialization stuff.
- *
- * @ingroup Serialization
- */
-
-/**
- * Invoke the serialization of the base class of your class. This
+ * Invokes the serialization of the base class of your class. This
  * macro is used within a serialization function to store the state of
  * a parent class. It works both in member functions and in separate
  * serialization functions.
@@ -37,24 +29,23 @@
  * @param base the name of the direct base class of the serializable
  * class
  *
- * Assume @p MyDerivedClass is derived from @p MyClass. Then:
+ * Assume `MyDerivedClass` is derived from `MyClass`. Then:
  *
- * @code
+ * ~~~(c++)
  * template <class Archive>
  * void MyDerivedClass::serialize(Archive& archive, const unsigned int version)
  * {
  *   PII_SERIALIZE_BASE(archive, MyClass);
  *   archive & member;
  * }
- * @endcode
+ * ~~~
  */
 #define PII_SERIALIZE_BASE(archive, Base) archive & PiiBaseClass<Base >(*this)
 
 
 /**
- * A wrapper for serializing a base class. See @ref PII_SERIALIZE_BASE.
+ * A wrapper for serializing a base class. See [PII_SERIALIZE_BASE].
  *
- * @ingroup Serialization
  */
 template <class T> struct PiiBaseClass
 {
@@ -62,13 +53,13 @@ template <class T> struct PiiBaseClass
    * Create an instance of base class serializer with a reference to
    * the derived class.
    *
-   * @code
+   * ~~~(c++)
    * template <class Archive>
    * void Derived::serialize(Archive& archive, const unsigned int)
    * {
    *   archive & PiiBaseClass<Base>(*this);
    * }
-   * @endcode
+   * ~~~
    */
   PiiBaseClass(T& child) : derived(&child) {}
 

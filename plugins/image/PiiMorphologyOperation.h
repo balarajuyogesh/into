@@ -24,37 +24,38 @@
 /**
  * Basic binary morphology operations.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - the input image. Any gray-scale image. Zero is treated
  * as "false". Any value other than zero is considered "true".
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out image - the image output. Output image is of the same data
  * type as the input image, but contains only ones and zeros.
  *
- * @ingroup PiiImagePlugin
  */
 class PiiMorphologyOperation : public PiiDefaultOperation
 {
   Q_OBJECT
 
   /**
-   * Type of the structuring element. The default is @p RectangularMask.
+   * Type of the structuring element. The default is `RectangularMask`.
    */
   Q_PROPERTY(PiiImage::MaskType maskType READ maskType WRITE setMaskType);
   
   /**
    * The type of a moprhological operation to be applied to input
-   * images. The default value is @p Erode.
+   * images. The default value is `Erode`.
    */
   Q_PROPERTY(PiiImage::MorphologyOperation operation READ operation WRITE setOperation);
 
   /**
    * A flag that controls the behavior of border handling with
    * erosion. See PiiImage::erode() for details. The default value is
-   * @p false.
+   * `false`.
    */
   Q_PROPERTY(bool handleBorders READ handleBorders WRITE setHandleBorders);
   

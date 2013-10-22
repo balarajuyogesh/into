@@ -19,34 +19,33 @@
 /**
  * Camera-related utility functions and definitions.
  *
- * @ingroup PiiCameraPlugin
  */
 namespace PiiCamera
 {
   /**
    * Supported image formats.
    *
-   * @lip InvalidFormat - the image format is unrecognized or not yet
+   * - `InvalidFormat` - the image format is unrecognized or not yet
    * known.
    *
-   * @lip MonoFormat - the image is monochrome (gray-scale)
+   * - `MonoFormat` - the image is monochrome (gray-scale)
    *
-   * @lip BayerRGGBFormat - the image is Bayer-encoded in BGGR color
+   * - `BayerRGGBFormat` - the image is Bayer-encoded in BGGR color
    * order.
    *
-   * @lip BayerGBRGFormat - the image is Bayer-encoded in GBRG color
+   * - `BayerGBRGFormat` - the image is Bayer-encoded in GBRG color
    * order.
    *
-   * @lip BayerGRBGFormat - the image is Bayer-encoded in GRBG color
+   * - `BayerGRBGFormat` - the image is Bayer-encoded in GRBG color
    * order.
    *
-   * @lip Yuv422Format - the image is in YUV422-format.
+   * - `Yuv422Format` - the image is in YUV422-format.
    *
-   * @lip Yuv411Format - the image is in YUV411-format.
+   * - `Yuv411Format` - the image is in YUV411-format.
    *
-   * @lip RgbFormat - the image is in RGB format
+   * - `RgbFormat` - the image is in RGB format
    *
-   * @lip BgrFormat - the image is in BGR format.
+   * - `BgrFormat` - the image is in BGR format.
    */
   enum ImageFormat
     {
@@ -65,9 +64,9 @@ namespace PiiCamera
   /**
    * Supported camera types.
    *
-   * @lip AreaScan - the camera type is area scan.
+   * - `AreaScan` - the camera type is area scan.
    *
-   * @lip LineScan - the camera type is line scan.
+   * - `LineScan` - the camera type is line scan.
    */
   enum CameraType
     {

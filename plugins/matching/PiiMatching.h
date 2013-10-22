@@ -41,15 +41,15 @@ public:
   /**
    * Feature point matching modes.
    *
-   * @lip MatchOneModel - match exactly one model. The search for
+   * - `MatchOneModel` - match exactly one model. The search for
    * matching models will be terminated once the best matching model
    * is found.
    *
-   * @lip MatchAllModels - match any number of models. Many matches to
+   * - `MatchAllModels` - match any number of models. Many matches to
    * the same model are allowed. For example, the same model may match
    * a query many times at different orientations.
    *
-   * @lip MatchDifferentModels - match any number of models, but at
+   * - `MatchDifferentModels` - match any number of models, but at
    * most one match is allowed for each model.
    */
   enum ModelMatchingMode { MatchOneModel, MatchAllModels, MatchDifferentModels };
@@ -60,16 +60,16 @@ public:
    * this enumeration can be used as flags to control the behavior of
    * such algorithms.
    *
-   * @lip NonInvariant - the algorithm is not invariant to any changes
+   * - `NonInvariant` - the algorithm is not invariant to any changes
    * in view geometry
    *
-   * @lip RotationInvariant - the algorithm is invariant against
+   * - `RotationInvariant` - the algorithm is invariant against
    * 2D (in-plane) rotations.
    *
-   * @lip ScaleInvariant - the algorithm is invariant against 2D
+   * - `ScaleInvariant` - the algorithm is invariant against 2D
    * scaling.
    *
-   * @li AffineInvariant - the algorithm is invariant against 2D
+   * - AffineInvariant - the algorithm is invariant against 2D
    * affine transformations (including rotation and scaling).
    */
   enum InvarianceFlag
@@ -92,7 +92,7 @@ public:
    *
    * @param keyPoints selected key points on which the shape context
    * descriptor should be calculated. This matrix can be the same as
-   * @a boundaryPoints.
+   * *boundaryPoints*.
    *
    * @param angles the number of quantization levels for angle in the
    * polar histogram. Typically, 12 quantization levels are used.
@@ -112,9 +112,9 @@ public:
    * keyPoints.rows(). The information is used in normalizing the
    * descriptor against rotations.
    *
-   * @param invariance either @p NonInvariant or @p ScaleInvariant. In
-   * @p ScaleInvariant mode, all distances will be divided by the mean
-   * (squared) distance between key points. Thus, @a distances must
+   * @param invariance either `NonInvariant` or `ScaleInvariant`. In
+   * `ScaleInvariant` mode, all distances will be divided by the mean
+   * (squared) distance between key points. Thus, *distances* must
    * not be absolute values but relative to the mean distance.
    */
   PII_MATCHING_EXPORT PiiMatrix<float> shapeContextDescriptor(const PiiMatrix<int>& boundaryPoints,
@@ -125,14 +125,14 @@ public:
                                                               InvarianceFlags invariance = NonInvariant);
 
   /**
-   * Returns the direction of the boundary for each point in @a
-   * boundaryPoints. Boundary direction at a point is the angle (in
+   * Returns the direction of the boundary for each point in 
+   * *boundaryPoints*. Boundary direction at a point is the angle (in
    * radians) of the vector that connects the points before and after
-   * it. Note that there must be at least three points in @a
-   * boundaryPoints. Otherwise, all angles will be zero. If the first
+   * it. Note that there must be at least three points in 
+   * *boundaryPoints*. Otherwise, all angles will be zero. If the first
    * and last boundary points are equal, the length of the returned
-   * vector will be one less than the number of rows in @a
-   * boundaryPoints.
+   * vector will be one less than the number of rows in 
+   * *boundaryPoints*.
    */
   PII_MATCHING_EXPORT QVector<double> boundaryDirections(const PiiMatrix<int>& boundaryPoints);
 };

@@ -24,14 +24,13 @@
  * by grouping synchronous sockets and injecting special
  * synchronization tags into the sockets. It handles hierarchical
  * relations between synchronized socket groups. Due to the extra
- * checking needed for this, @p %PiiDefaultFlowController is used by
+ * checking needed for this, PiiDefaultFlowController is used by
  * PiiDefaultOperation only if there is no more efficient
  * specialization available.
  *
  * @see PiiOneInputFlowController
  * @see PiiOneGroupFlowController
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiDefaultFlowController : public PiiFlowController
 {
@@ -70,14 +69,14 @@ public:
    * the list assigns a parent-child relationship between the given
    * two group ids.
    *
-   * The @p relations parameter is used to assign parent-child
-   * relations between input groups. @p %PiiDefaultFlowController can
+   * The `relations` parameter is used to assign parent-child
+   * relations between input groups. PiiDefaultFlowController can
    * handle many independent groups of synchronized sockets. This
    * parameter makes it possible to place restrictions to inter-group
    * synchronization.
    *
-   * There are two types of parent-child relationships: @e strict and
-   * @e loose. In a strict relationship, a child group can only
+   * There are two types of parent-child relationships: *strict* and
+   * *loose*. In a strict relationship, a child group can only
    * receive data once its parent has received data. This is sometimes
    * necessary, but requires special care in building the
    * configuration to prevent deadlocks. For example,
@@ -90,7 +89,7 @@ public:
    * group has been processed by the child groups. Once this happens,
    * another sync event will be sent with the parent's group id.
    *
-   * @code
+   * ~~~(c++)
    * MyOperation::MyOperation()
    * {
    *   // Receives large images
@@ -122,7 +121,7 @@ public:
    *                                       outputSockets(),
    *                                       lstRelations);
    * }
-   * @endcode
+   * ~~~
    */
   PiiDefaultFlowController(const QList<PiiInputSocket*>& inputs,
                            const QList<PiiOutputSocket*>& outputs,
@@ -132,13 +131,13 @@ public:
 
   /**
    * A utility function that creates a strict relationship between two
-   * groups, denoted by @p parent and @p child.
+   * groups, denoted by `parent` and `child`.
    */
   static Relation strictRelation(int parent, int child);
 
   /**
    * A utility function that creates a loose relationship between two
-   * groups, denoted by @p parent and @p child.
+   * groups, denoted by `parent` and `child`.
    */
   static Relation looseRelation(int parent, int child);
   
@@ -160,7 +159,7 @@ private:
     int groupId() const { return _iGroupId; }
 
     /**
-     * Add this group as a child to @p parent.
+     * Add this group as a child to `parent`.
      */
     void setParentGroup(SyncGroup* parent);
     /**

@@ -20,7 +20,6 @@
  * Stores the center and radius of a circle. See PiiPoint for usage
  * examples.
  *
- * @ingroup Core
  */
 template <class T> struct PiiCircle
 {

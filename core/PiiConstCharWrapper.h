@@ -20,10 +20,9 @@
 #include <cstring>
 
 /**
- * A wrapper structure for <tt>const char</tt> pointers that can be
+ * A wrapper structure for `const char` pointers that can be
  * used with QHash and QMap as a light-weight replacement for QString.
  *
- * @ingroup Core
  */
 struct PII_CORE_EXPORT PiiConstCharWrapper
 {
@@ -35,7 +34,7 @@ struct PII_CORE_EXPORT PiiConstCharWrapper
 };
 
 /**
- * Calculates a hash value for the character string wrapped by @a key.
+ * Calculates a hash value for the character string wrapped by *key*.
  *
  * @relates PiiConstCharWrapper
  */

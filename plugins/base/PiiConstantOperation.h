@@ -21,16 +21,17 @@
 /**
  * Emits a constant value.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in trigger - an optional input for triggering the constant value.
  *
- * @outputs
+ * Outputs
+ * -------
  *
- * @out value - a constant value each time @p trigger is received or
- * continuously if @p trigger is not connected.
+ * @out value - a constant value each time `trigger` is received or
+ * continuously if `trigger` is not connected.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiConstantOperation : public PiiDefaultOperation
 {

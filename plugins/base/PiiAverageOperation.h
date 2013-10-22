@@ -21,17 +21,18 @@
 /**
  * Calculate the average of all values in a matrix.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in matrix - any numeric or complex matrix
  * 
- * @outputs
+ * Outputs
+ * -------
  *
- * @out average - the mean value, either @p double or @p
- * complex<double>. If an average type is meanRows or meanColumns,
+ * @out average - the mean value, either `double` or 
+ * `complex`<double>. If an average type is meanRows or meanColumns,
  * then output type is PiiMatrix<double> or PiiMatrix<complex<double> >.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiAverageOperation : public PiiDefaultOperation
 {
@@ -51,13 +52,13 @@ public:
   /**
    * Calculation modes.
    *
-   * @lip MeanAll - output the mean of all values (double or double
+   * - `MeanAll` - output the mean of all values (double or double
    * complex)
    *
-   * @lip MeanRows - output the means of all rows (column matrix with
+   * - `MeanRows` - output the means of all rows (column matrix with
    * double or double complex data)
    *
-   * @lip MeanColumns - output the means of all columns (row matrix
+   * - `MeanColumns` - output the means of all columns (row matrix
    * with double or double complex data)
    */
   enum CalculationMode

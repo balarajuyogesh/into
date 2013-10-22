@@ -25,7 +25,6 @@
  * support such resolution) and adds a stop() function that can be
  * used to stop counting.
  *
- * @ingroup Core
  */
 class PII_CORE_EXPORT PiiTimer
 {
@@ -51,7 +50,7 @@ public:
 
   /**
    * Stops counting. When the timer is stopped, elapsed time is always
-   * 0. One needs to call #restart() to restart counting.
+   * 0. One needs to call [restart()] to restart counting.
    */
   void stop();
 

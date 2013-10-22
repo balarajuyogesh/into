@@ -24,7 +24,7 @@ void TestPiiOperationCompound::initTestCase()
 {
   _compound.createInputProxy("input");
   _compound.createOutputProxy("output");
-  _compound.inputProxy("input")->connectInput(_compound.outputProxy("output"));
+  _compound.inputProxy("input")->output()->connectInput(_compound.outputProxy("output")->input());
 
   setOperation(&_compound);
 }
@@ -53,8 +53,8 @@ void TestPiiOperationCompound::serialize()
       PiiGenericTextInputArchive ia(&buffer);
       PiiOperationCompound* pCompound;
       ia >> pCompound;
-      QCOMPARE(pCompound->outputProxy("output")->connectedOutput(),
-               static_cast<PiiAbstractOutputSocket*>(pCompound->inputProxy("input")));
+      QCOMPARE(pCompound->outputProxy("output")->input()->connectedOutput(),
+               pCompound->inputProxy("input")->output());
       delete pCompound;
     }
   catch (PiiSerializationException& ex)
@@ -68,8 +68,8 @@ void TestPiiOperationCompound::clone()
   PiiOperationCompound* pCompound = _compound.clone();
   QVERIFY(pCompound->input("input") != 0);
   QVERIFY(pCompound->output("output") != 0);
-  QCOMPARE(pCompound->outputProxy("output")->connectedOutput(),
-           static_cast<PiiAbstractOutputSocket*>(pCompound->inputProxy("input")));
+  QCOMPARE(pCompound->outputProxy("output")->input()->connectedOutput(),
+           pCompound->inputProxy("input")->output());
   delete pCompound;
 }
 

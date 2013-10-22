@@ -16,7 +16,7 @@
 #ifndef _PIIABSTRACTINPUTSOCKET_H
 #define _PIIABSTRACTINPUTSOCKET_H
 
-#include "PiiAbstractSocket.h"
+#include "PiiSocket.h"
 #include "PiiInputListener.h"
 
 class PiiInputController;
@@ -29,14 +29,14 @@ class PiiAbstractOutputSocket;
  *
  * This class represents a connection point but provides no means of
  * actually handling the received objects. Received objects are
- * handled by an input controller (#controller()).
+ * handled by an input controller ([controller()]).
  *
- * @ingroup Ydin
  */
-class PII_YDIN_EXPORT PiiAbstractInputSocket : public virtual PiiAbstractSocket
+class PII_YDIN_EXPORT PiiAbstractInputSocket : public PiiSocket
 {
+  Q_OBJECT
 public:
-  virtual ~PiiAbstractInputSocket();
+  ~PiiAbstractInputSocket();
 
   /**
    * Connects this socket to the given output socket. If this socket
@@ -44,14 +44,14 @@ public:
    * a utility function that calls
    * PiiAbstractOutputSocket::connectInput().
    */
-  void connectOutput(PiiAbstractOutputSocket* output);
+  Q_INVOKABLE void connectOutput(PiiAbstractOutputSocket* output);
 
   /**
    * Disconnects this socket from its output socket. If this socket is
    * not connected, nothing happens. This is a utility function that
    * calls PiiAbstractOutputSocket::disconnectInput().
    */
-  void disconnectOutput();
+  Q_INVOKABLE void disconnectOutput();
   
   /**
    * Returns the input controller. Input controller is responsible for
@@ -69,7 +69,7 @@ public:
    * @return the output that sends objects to this input, or 0 if the
    * socket is not connected
    */
-  PiiAbstractOutputSocket* connectedOutput() const;
+  Q_INVOKABLE PiiAbstractOutputSocket* connectedOutput() const;
 
   /**
    * Sets the listener that receives inputReady() events.
@@ -80,21 +80,20 @@ public:
 
 protected:
   /// @internal
-  class PII_YDIN_EXPORT Data
+  class PII_YDIN_EXPORT Data : public PiiSocket::Data
   {
   public:
     Data();
-    virtual ~Data();
+    ~Data();
 
-    /**
-     * Set the connection status of this socket to @p connected. The
-     * default implementation just returns @p connected.
+    /* Sets the connection status of this socket to `connected`. The
+     * default implementation just returns `connected`.
      *
      * @param connected a flag that indicates whether the sequence of
      * sockets leading to this socket is connected to an operation or
      * not.
      *
-     * @return @p true if the socket is connected, @p false otherwise. 
+     * @return `true` if the socket is connected, `false` otherwise. 
      * If the socket is a proxy, it may be unconnected even after
      * setInputConnected(true) if none of its outgoing connections leads
      * to a connected input.
@@ -103,16 +102,17 @@ protected:
     
     PiiAbstractOutputSocket* pConnectedOutput;
     PiiInputListener* pListener;
-  } *d;
-
+  };
+  PII_D_FUNC;
+  
   /// @internal
-  PiiAbstractInputSocket(Data* d);
+  PiiAbstractInputSocket(const QString& name, Data* d);
   
 private:
   // Must be able to set pConnectedOutput and call setInputConnected.
   friend class PiiAbstractOutputSocket;
 };
 
-Q_DECLARE_METATYPE(PiiAbstractInputSocket*);
+Q_DECLARE_METATYPE(PiiAbstractInputSocket*)
 
 #endif //_PIIABSTRACTINPUTSOCKET_H

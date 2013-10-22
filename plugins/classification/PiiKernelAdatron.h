@@ -23,8 +23,8 @@
 /**
  * An implementation of the Kernel Adatron algorithm. The Kernel
  * Adatron (KA) is a hyperplane classifier whose training algorithm
- * can be seen as a hybrid between @ref PiiPerceptron "the Perceptron"
- * and the @ref PiiSvm "Support Vector Machine". The objective of the
+ * can be seen as a hybrid between [the Perceptron](PiiPerceptron)
+ * and the [Support Vector Machine](PiiSvm). The objective of the
  * KA algorithm is to find a maximal margin hyperplane just like in
  * SVM. The solution algorithm does not however involve quadratic
  * programming, which makes the KA much faster to train than the SVM. 
@@ -36,20 +36,19 @@
  *
  * The decision function of the Kernel Adatron is
  *
- * @f[
+ * \[
  * f(\mathbf{x}) = \begin{cases}
  * 1 & \text{if }\sum_{i=1}^M \alpha_i k(\mathbf{x}_i, \mathbf{x}) (y_i - 0.5) > \theta \\
  * 0 & \text{otherwise}
  * \end{cases}
- * @f]
+ * \]
  *
- * In the equation, M is the number of <em>support vectors</em>, i.e. 
+ * In the equation, M is the number of *support vectors*, i.e. 
  * the number of training samples with a non-zero weight &alpha;
- * after training. &theta; is a desicion threshold, @e k()
- * denotes the kernel function, and @e y is the binary classification
+ * after training. &theta; is a desicion threshold, *k*()
+ * denotes the kernel function, and *y* is the binary classification
  * of a training sample (0 or 1).
  *
- * @ingroup PiiClassificationPlugin
  */
 template <class SampleSet> class PiiKernelAdatron :
   public PiiLearningAlgorithm<SampleSet>,
@@ -64,9 +63,9 @@ public:
   ~PiiKernelAdatron();
 
   /**
-   * Runs the Kernel Adatron algorithm with the given @a samples and
-   * class @a labels. Since the Kernel Adatron is a binary classifier,
-   * the class labels must be either ones or zeros. The @a weights
+   * Runs the Kernel Adatron algorithm with the given *samples* and
+   * class *labels*. Since the Kernel Adatron is a binary classifier,
+   * the class labels must be either ones or zeros. The *weights*
    * will be ignored.
    */
   void learn(const SampleSet& samples,
@@ -74,17 +73,17 @@ public:
              const QVector<double>& weights = QVector<double>());
 
   /**
-   * Returns @p true if learn() was called, and the learning algorithm
-   * converged to a solution, @p false otherwise. The learning
+   * Returns `true` if learn() was called, and the learning algorithm
+   * converged to a solution, `false` otherwise. The learning
    * algorithm won't converge if the classes are not linearly
-   * separable in the feature space or if #maxIterations() is reached
+   * separable in the feature space or if [maxIterations()] is reached
    * before finding a solution.
    */
   bool converged() const throw();
 
   /**
-   * Returns the classification of @p featureVector (either 0 or 1),
-   * or @p NaN if the Kernel Adatron has not been trained yet.
+   * Returns the classification of `featureVector` (either 0 or 1),
+   * or `NaN` if the Kernel Adatron has not been trained yet.
    */
   double classify(ConstFeatureIterator featureVector) throw ();
 
@@ -100,7 +99,7 @@ public:
   PiiKernelFunction<ConstFeatureIterator>* kernelFunction() const;
   /**
    * Sets the kernel function. This class will take the ownership of
-   * @a kernel. The old kernel function will be deleted. The default
+   * *kernel*. The old kernel function will be deleted. The default
    * kernel is a Gaussian kernel with unit variance.
    */
   void setKernelFunction(PiiKernelFunction<ConstFeatureIterator>* kernel);
@@ -133,7 +132,7 @@ public:
   void setSupportVectors(const SampleSet& supportVectors);
 
   /**
-   * Set the &theta; parameter to @a decisionThreshold.
+   * Set the &theta; parameter to *decisionThreshold*.
    */
   void setDecisionThreshold(double decisionThreshold);
   /**
@@ -170,8 +169,8 @@ public:
    * Adatron is to maximize the margin between two classes. 
    * Internally, the margin is calculated so that its maximum value is
    * one. The learning algorithm will stop once the margin is close
-   * enough to the optimum, i.e. when (1-margin) <= @a
-   * convergenceThreshold. The default value is 0.01.
+   * enough to the optimum, i.e. when (1-margin) <= 
+   * *convergenceThreshold*. The default value is 0.01.
    */
   void setConvergenceThreshold(double convergenceThreshold);
   /**

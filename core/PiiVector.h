@@ -29,7 +29,6 @@ template <class T, int D> class PiiVector;
  * Type information structure for PiiVector. See PiiArithmeticBase for
  * more information.
  *
- * @ingroup Core
  */
 template <class T, int D> struct PiiVectorTraits
 {
@@ -40,16 +39,16 @@ template <class T, int D> struct PiiVectorTraits
 };
 
 /**
- * A @p D -dimensional vector. %PiiVector can be used to represent
+ * A `D` -dimensional vector. PiiVector can be used to represent
  * points and vectors in multidimensional spaces. The size of a vector
  * is fixed, and all of its data is within the class itself. That is,
- * there is no heap-allocated data, and <tt>sizeof(PiiVector<T,D>) ==
- * sizeof(T) * D.</tt>
+ * there is no heap-allocated data, and `sizeof(PiiVector<T,D>) ==
+ * sizeof(T) * D.`
  *
  * Matrices and vectors are distinct entities, but a row of a matrix
  * can be treated as a vector:
  *
- * @code
+ * ~~~(c++)
  * typedef PiiVector<int,3> Vec3;
  * PiiMatrix<int> matData(1,3, 1,2,3);
  * Vec3& vec = *reinterpret_cast<Vec3*>(matData[0]);
@@ -57,9 +56,8 @@ template <class T, int D> struct PiiVectorTraits
  * QCOMPARE(vec[0], 1);
  * QCOMPARE(vec[1], 2);
  * QCOMPARE(vec[2], 3);
- * @endcode
+ * ~~~
  *
- * @ingroup Core
  */
 template <class T, int D> class PiiVector : public PiiArithmeticBase<PiiVector<T,D>, PiiVectorTraits<T,D> >
 {
@@ -87,7 +85,7 @@ public:
    * Create a new vector by copying values from a preallocated array.
    *
    * @param ptr a pointer to the first value. This array must hold at
-   * leasts @p D elements.
+   * leasts `D` elements.
    */
   PiiVector(const T* ptr)
   {
@@ -98,14 +96,14 @@ public:
   /**
    * Create a new measumerent point.
    *
-   * @code
+   * ~~~(c++)
    * PiiVector<int,3>* p = new PiiVector<int,3>(1, 2, 3);
    * PiiVector<double,4>* d = new PiiVector<double,4>(1.0, 2.0, 3.0, 4.0);
    *
    * PiiVector<double,4> pt(1, 2, 3, 4); // WRONG! Arguments are ints
-   * @endcode
+   * ~~~
    *
-   * @note Using this constructor is dangerous. Make sure that all
+   * ! Using this constructor is dangerous. Make sure that all
    * arguments are passed correctly.
    */
   PiiVector(VaArgType firstValue, ...)
@@ -216,7 +214,7 @@ public:
   }
   
   /**
-   * Get the value of the vector at @p index as a copy.
+   * Get the value of the vector at `index` as a copy.
    */
   T operator[] (int index) const
   {
@@ -224,7 +222,7 @@ public:
   }
 
   /**
-   * Get a reference to the value of the vector at @p index.
+   * Get a reference to the value of the vector at `index`.
    */
   T& operator[] (int index)
   {
@@ -233,7 +231,7 @@ public:
 
   /**
    * Analogous to operator[]. This operator is useful for template
-   * functions that work with both PiiMatrix and %PiiVector.
+   * functions that work with both PiiMatrix and PiiVector.
    */
   T operator() (int index) const
   {
@@ -243,7 +241,7 @@ public:
   /**
    * Analogous to operator[], non-const version. This operator is
    * useful for template functions that work with both PiiMatrix and
-   * %PiiVector.
+   * PiiVector.
    */
   T& operator() (int index)
   {
@@ -259,21 +257,18 @@ public:
 namespace Pii
 {
   /**
-   * @overload
    */
   template <class T, int D> inline T innerProduct(const PiiVector<T,D>& v1, const PiiVector<T,D>& v2)
   {
     return innerProductN(v1.begin(), D, v2.begin());
   }
   /**
-   * @overload
    */
   template <class T> inline T innerProduct(const PiiVector<T,2>& v1, const PiiVector<T,2>& v2)
   {
     return v1[0]*v2[0] + v1[1]*v2[1];
   }
   /**
-   * @overload
    */
   template <class T> inline T innerProduct(const PiiVector<T,3>& v1, const PiiVector<T,3>& v2)
   {

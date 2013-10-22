@@ -25,12 +25,11 @@
  *
  * @internal
  *
- * @ingroup Ydin
  */
 struct PII_YDIN_EXPORT PiiSocketState
 {
   /**
-   * Initialize a state with flow level @p l and delay @p d.
+   * Initialize a state with flow level `l` and delay `d`.
    */
   PiiSocketState(int l = 0, int d = 0) :
     flowLevel(l), delay(d)

@@ -31,15 +31,18 @@ class PiiFreqOutputEmitter;
  * allowable level. The operation can handle any number of
  * synchronized object streams in parallel.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in inputX - any number of input sockets.
  * 
- * @outputs
+ * Outputs
+ * -------
+ *
+ * @out frequency - the current input frequency in Hz (double)
  *
  * @out outputX - numbered outputs corresponding to the inputs.
  *
- * @ingroup PiiFlowControlPlugin
  */
 class PiiFrequencyCounter : public PiiDefaultOperation
 {
@@ -51,7 +54,7 @@ class PiiFrequencyCounter : public PiiDefaultOperation
    * sockets matches with the property value. For each input a
    * corresponding output is created, or removed, depending the amount
    * of inputs and outputs before setting the property. It should be
-   * taken into account, that there is always @p frequency output,
+   * taken into account, that there is always `frequency` output,
    * independent the amount of inputs and other outputs. The default
    * value is one.
    */

@@ -63,7 +63,7 @@ void PiiScriptExtensionPlugin::initialize(const QString& /*key*/, QScriptEngine*
   initQtTypes(engine);
 }
 
-QStringList	PiiScriptExtensionPlugin::keys() const
+QStringList PiiScriptExtensionPlugin::keys() const
 {
   return QStringList() << "Into";
 }

@@ -99,8 +99,8 @@ public:
    *
    * If you have changed the viewport's physical pixel size to, there
    * is no difference between physical and displayed pixel size. 
-   * Therefore, @a pixelsPerUnit will always be equal to the scale
-   * factor. If, for example, @a pixelsPerUnit 0.5 px/mm and you want
+   * Therefore, *pixelsPerUnit* will always be equal to the scale
+   * factor. If, for example, *pixelsPerUnit* 0.5 px/mm and you want
    * a grid spacing of at least 10 px while keeping the grid lines
    * aligned to multiples of powers of ten (that is, whole
    * millimeters, centimeters etc.), return 20 (each grid is 2 cm). 
@@ -121,29 +121,28 @@ public:
  *
  * Main features:
  *
- * @li Zooming with keys + and -, and using mouse wheel.
+ * - Zooming with keys + and -, and using mouse wheel.
  *
- * @li Mouse dragging (This requires that the widget is placed into a
- * PiiScrollArea, see #setScrollArea(PiiScrollArea*))
+ * - Mouse dragging (This requires that the widget is placed into a
+ * PiiScrollArea, see [setScrollArea(PiiScrollArea*)])
  *
- * @li Three states: Fit to view, Fill view and No fit (default
+ * - Three states: Fit to view, Fill view and No fit (default
  * state).
  *
- * @ingroup Gui
  */
 class PII_GUI_EXPORT PiiImageViewport : public QWidget, public PiiImageViewportAdapter
 {
   Q_OBJECT
 
   /**
-   * The fit mode of the image in the viewport. The default is @p
-   * NoFit.
+   * The fit mode of the image in the viewport. The default is 
+   * `NoFit`.
    */
   Q_PROPERTY(FitMode fitMode READ fitMode WRITE setFitMode);
   Q_ENUMS(FitMode);
 
   /**
-   * The area selection mode in the viewport. The default is @p Area.
+   * The area selection mode in the viewport. The default is `Area`.
    */
   Q_PROPERTY(SelectionMode selectionMode READ selectionMode WRITE setSelectionMode);
   Q_ENUMS(SelectionMode);
@@ -164,19 +163,19 @@ class PII_GUI_EXPORT PiiImageViewport : public QWidget, public PiiImageViewportA
 public:
   /**
    * Enumeration, which is used for determining the fit mode of the
-   * image in the viewport. With the fit modes @p FitToView and @p
-   * FillView the zoom factor is changed automatically, when the
+   * image in the viewport. With the fit modes `FitToView` and 
+   * `FillView` the zoom factor is changed automatically, when the
    * image viewport is resized. Regardless of the fit mode, the aspect
    * ratio of the image remains the same. The following values are determined:
    *
-   * @lip NoFit - the image will not rescaled when the viewport is
+   * - `NoFit` - the image will not rescaled when the viewport is
    * resized.
    *
-   * @lip FitToView - when viewport  is resized, the image is rescaled
+   * - `FitToView` - when viewport  is resized, the image is rescaled
    * as big as possible inside the viewport widget area, preserving the
    * aspect ratio, and still fitting in inside the image viewport widget. 
    *
-   * @lip FillView - when image is resized, the image is scaled as
+   * - `FillView` - when image is resized, the image is scaled as
    * small as possible outside the image viewport, filling the whole
    * image viewport area and preserving the aspect ratio. 
    */
@@ -191,15 +190,15 @@ public:
    * Enumeration, which is used for determining the focus point for
    * example in zooming or resizing. Has the following possible values:
    *
-   * @lip FocusPointMouseCursor - the image is focused to the mouse cursor.
+   * - `FocusPointMouseCursor` - the image is focused to the mouse cursor.
    *
-   * @lip FocusPointTopLeft - the image is focused to the top left
+   * - `FocusPointTopLeft` - the image is focused to the top left
    * corner of the widget.
    *
-   * @lip FocusPointTopLeft - the image is focused to the center
+   * - `FocusPointTopLeft` - the image is focused to the center
    * of the widget.
    *
-   * @lip FocusPointTopLeft - the image is focused to the center
+   * - `FocusPointTopLeft` - the image is focused to the center
    * of the image.
    */
   enum FocusPolicy
@@ -213,11 +212,11 @@ public:
   /**
    * Enumeration, which is used for drawing selection area.
    *
-   * @lip Area - the area from start point to end point
+   * - `Area` - the area from start point to end point
    *
-   * @lip Horizontal -
+   * - `Horizontal` -
    *
-   * @lip Vertical -
+   * - `Vertical` -
    */
   enum SelectionMode
     {
@@ -251,8 +250,8 @@ public:
   ~PiiImageViewport();
 
   /**
-   * Adds overlay to the viewport. See the documentation of @p
-   * PiiImageOverlay for more details about the overlays.
+   * Adds overlay to the viewport. See the documentation of 
+   * `PiiImageOverlay` for more details about the overlays.
    */
   void addOverlay(PiiImageOverlay* overlay);
    
@@ -406,14 +405,14 @@ public slots:
   void updateImage();
 
   /**
-   * This slot zooms in by the factor determined by the property @p
-   * zoomStep (property not implemented yet).
+   * This slot zooms in by the factor determined by the property 
+   * `zoomStep` (property not implemented yet).
    */
   void zoomIn();
 
   /**
-   * This slot zooms out by the factor determined by the property @p
-   * zoomStep (property not implemented yet).
+   * This slot zooms out by the factor determined by the property 
+   * `zoomStep` (property not implemented yet).
    */
   void zoomOut();
 
@@ -474,7 +473,7 @@ protected:
   void showEvent(QShowEvent* event);
   void hideEvent(QHideEvent* event);
 
-  /// @cond null
+  /// @hide
   struct Layer
   {
     Layer() : pImage(&image), dOpacity(1), bVisible(true) {}
@@ -598,7 +597,7 @@ protected:
   PiiImageViewport(Data *d, QImage* pImage, QWidget *parent = 0);
   PiiImageViewport(Data *d, const QImage& image, QWidget *parent = 0);
   PiiImageViewport(Data *d, QWidget *parent = 0);
-  /// @endcond
+  /// @endhide
   
 private:
   void init();

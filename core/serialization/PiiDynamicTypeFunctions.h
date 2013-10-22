@@ -20,17 +20,12 @@
 #include "PiiSerializationFactory.h"
 #include "PiiSerializer.h"
 
-/**
- * @file
- *
- * This file contains functions for getting meta information,
+/* This file contains functions for getting meta information,
  * serializers, and class factories for serializable types. The
  * functions are separated from context to ensure correct declaration
  * order of overloaded functions. If you include this file directly,
  * please ensure that all metaObjectPointer() and isDynamicType()
  * overloads have been declared beforehand.
- *
- * @ingroup Serialization
  */
 
 namespace PiiSerialization
@@ -39,11 +34,11 @@ namespace PiiSerialization
    * This function is used to check if the real type of the class is
    * known at compile time or not. If a class can be serialized
    * through a base class pointer, its type cannot be known at compile
-   * time. Thus, its type is @e dynamic. For such, types an overloaded
-   * version of this function that returns @p true must be provided. 
-   * Typically, such a type will also have an overload for @ref
-   * PiiSerialization::metaObjectPointer(). The default
-   * implementation returns @p false.
+   * time. Thus, its type is *dynamic*. For such, types an overloaded
+   * version of this function that returns `true` must be provided.
+   * Typically, such a type will also have an overload for
+   * [PiiSerialization::metaObjectPointer()]. The default
+   * implementation returns `false`.
    *
    * @see serialization_serializers
    */

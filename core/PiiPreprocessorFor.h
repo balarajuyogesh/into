@@ -16,7 +16,7 @@
 #ifndef _PIIPREPROCESSORFOR_H
 #define _PIIPREPROCESSORFOR_H
 
-/// @cond null
+/// @hide
 #define PII_REMOVE_PARENS_0()
 #define PII_REMOVE_PARENS_1(P0) P0
 #define PII_REMOVE_PARENS_2(P0, P1) P0, P1
@@ -3038,6 +3038,6 @@
 #define PII_REPEAT_254(M) PII_REPEAT_253(M) M(253)
 #define PII_REPEAT_255(M) PII_REPEAT_254(M) M(254)
 
-/// @endcond
+/// @endhide
 
 #endif //_PIIPREPROCESSORFOR_H

@@ -19,21 +19,15 @@
 #include <QString>
 #include <QCoreApplication>
 #include "PiiGlobal.h"
-
-/** @file
- *
- * @ingroup Core
- */
-
-/**
- * Construct an instance of @p EXCEPTION with the given @p MESSAGE.
- * This macro automatically fills in file and line number information
- * in debug builds. Error location will be omitted in release builds.
- */
 #ifndef _DEBUG
 // Release builds save memory by not storing error location.
 #  define PII_MAKE_EXCEPTION(EXCEPTION, MESSAGE) EXCEPTION(MESSAGE)
 #else
+/**
+ * Constructs an instance of `EXCEPTION` with the given `MESSAGE`.
+ * This macro automatically fills in file and line number information
+ * in debug builds. Error location will be omitted in release builds.
+ */
 #  define PII_MAKE_EXCEPTION(EXCEPTION, MESSAGE) EXCEPTION(MESSAGE, QString(__FILE__ ":%1").arg(__LINE__))
 #endif
 
@@ -41,12 +35,12 @@
  * A macro for throwing an exception with error location information. 
  * With this macro, the file name and line number of the current code
  * line are automatically stored as the error location. If you don't
- * need the location information, just throw the exception as in throw
- * PiiException("Everything just went kablooie.");. An example:
+ * need the location information, just throw the exception as in `throw
+ * PiiException("Everything just went kablooie.")`. An example:
  *
- * @code
- * PII_THROW(PiiException, tr("On synti‰ k‰‰nt‰‰ suomea englanniksi."));
- * @endcode
+ * ~~~(c++)
+ * PII_THROW(PiiException, tr("The software just failed spectacularly."));
+ * ~~~
  *
  * @param EXCEPTION the class name of the exception to be thrown, e.g. 
  * PiiException.
@@ -69,8 +63,6 @@ class PiiMetaObject;
  *
  * To support exceptions in remote function calls, all exception
  * classes should be made serializable.
- *
- * @ingroup Core
  */
 class PII_CORE_EXPORT PiiException
 {
@@ -84,7 +76,7 @@ public:
   PiiException();
   
   /**
-   * Constructs a new exception with the given @a message.
+   * Constructs a new exception with the given *message*.
    *
    * @param message the error message. The message should be a
    * user-readable explation of the error, and it is typically
@@ -92,7 +84,7 @@ public:
    */
   PiiException(const QString& message);
   /**
-   * Constructs a new exception with the given @a message and error
+   * Constructs a new exception with the given *message* and error
    * location.
    *
    * @param message the error message. The message should be a
@@ -101,7 +93,7 @@ public:
    *
    * @param location the location of the code this error occured at. 
    * The standard, official, God-given format is "%file:line", e.g. 
-   * "%PiiException.h:30". The reason is that such a string works as a
+   * "PiiException.h:30". The reason is that such a string works as a
    * hyperlink to source code when debugging applications with
    * (X)Emacs (which is the standard editor).
    */
@@ -130,13 +122,13 @@ public:
 
   /**
    * Returns the error location, for example
-   * "PiiException.h:106". Note that if you use the @ref PII_THROW
+   * "PiiException.h:106". Note that if you use the [PII_THROW]
    * macro, location will not be included in release builds.
    */
   QString location() const;
 
   /**
-   * Returns @a prefix + #location() + @a suffix, if location is
+   * Returns *prefix* + [location()] + *suffix*, if location is
    * non-empty. Otherwise returns an empty string.
    */
   QString location(const QString& prefix, const QString& suffix) const;
@@ -162,7 +154,7 @@ public:
   void throwIt();
 
 protected:
-  /// @cond null
+  /// @hide
   class PII_CORE_EXPORT Data
   {
   public:
@@ -176,7 +168,7 @@ protected:
   PiiException(Data* data);
   // Throws *this (as a value).
   virtual void throwThis();
-  /// @endcond
+  /// @endhide
 };
 
 #include <PiiVirtualMetaObject.h>

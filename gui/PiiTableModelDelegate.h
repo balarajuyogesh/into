@@ -26,7 +26,6 @@
  *
  * @internal
  *
- * @ingroup Gui
  */
 class PiiTableModelDelegate : public QItemDelegate
 {
@@ -34,7 +33,7 @@ class PiiTableModelDelegate : public QItemDelegate
 
 public:
   /**
-   * Create a new %PiiTableModelDelegate and attach to the given
+   * Create a new PiiTableModelDelegate and attach to the given
    * model.
    */
   PiiTableModelDelegate(PiiTableModel *parent);

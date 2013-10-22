@@ -26,7 +26,6 @@ class PiiMultiProcessorThread;
  * pool and calls process() concurrently from them.
  *
  * @internal
- * @ingroup Ydin
  */
 class PiiMultiThreadedProcessor :
   public PiiOperationProcessor,

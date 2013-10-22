@@ -32,10 +32,10 @@
  *
  * The number of rows in the result will always be odd. The row at the
  * middle always represents lines that intersect the origin (i.e. 
- * distance zero). If @p distanceResolution is 1.0 (the default),
+ * distance zero). If `distanceResolution` is 1.0 (the default),
  * moving up or down from the middle row increases distance to the
  * origin by one pixel. The first column represents lines with a zero
- * slope. If @p angleResolution is 1.0 (the default), the next column
+ * slope. If `angleResolution` is 1.0 (the default), the next column
  * represents lines with a 1 degree slope and so on. Zero angle points
  * downwards, and the angle grows clockwise. This peculiar choice was
  * made to make it easy to calculate the resulting lines in image
@@ -45,14 +45,14 @@
  * Formally, the detected lines are parametrized with the following
  * equation:
  *
- * @f[
+ * \[
  * d = x\cos \theta + y\sin \theta
- * @f]
+ * \]
  *
- * where @f$\theta@f$ stands for the angle, and d is the "distance"
+ * where \(\theta\) stands for the angle, and d is the "distance"
  * from origin (d can be negative). If you pick a value from the
  * transform domain, its row and column coordinates tell the values
- * of d and @f$\theta@f$, respectively. Once these are known, it
+ * of d and \(\theta\), respectively. Once these are known, it
  * is straightforward to solve x with respect to y or vice versa.
  *
  * Note that the transform adds the value of a transformed pixel to
@@ -73,10 +73,10 @@
  * leftmost column. This value can be negative.
  *
  * @param angleEnd the end angle of the transformation domain. This
- * value with @p angleStart can be used to limit the line search to
+ * value with `angleStart` can be used to limit the line search to
  * a certain range of angles. Note that the last angle will not be
- * present in the transformation. That is, if @p angleEnd is 180
- * (the default) and @p angleResolution is 1, the last angle will be
+ * present in the transformation. That is, if `angleEnd` is 180
+ * (the default) and `angleResolution` is 1, the last angle will be
  * 179.
  *
  * @param distanceStart the smallest (signed) distance to the origin
@@ -90,7 +90,7 @@
  * used.
  *
  *
- * @code
+ * ~~~(c++)
  * PiiMatrix<int> img; // fill somehow...
  * // Make the Hough transform. The result will be a PiiMatrix<int>,
  * // and each pixel with a value higher than or equal to three will
@@ -103,7 +103,7 @@
  *   PiiHoughTransform(distanceResolution,
  *                     angleResolution).transform(img,
  *                                                std::bind2nd(std::greater<int>(), 3));
- * @endcode
+ * ~~~
  */
 class PII_TRANSFORMS_EXPORT PiiHoughTransform
 {
@@ -142,11 +142,11 @@ public:
 
   /**
    * Returns the distance from the center of the input image, given
-   * the index of a @a row in the transformation result.
+   * the index of a *row* in the transformation result.
    */
   double distance(int row) const;
   /**
-   * Returns the angle (degrees) corresponding to the given @a column
+   * Returns the angle (degrees) corresponding to the given *column*
    * in the transformation result.
    */
   double angle(int column) const;
@@ -161,9 +161,9 @@ public:
    *
    * @return a 1-by-4 matrix storing the start and end points of a
    * line segment (x1, y1, x2, y2). The returned value is suitable for
-   * use with PiiImageAnnotator's @p property input.
+   * use with PiiImageAnnotator's `property` input.
    *
-   * @code
+   * ~~~(c++)
    * // Transform an image
    * PiiHoughTransform hough;
    * PiiMatrix<int> matTransformed(hough.transform(img));
@@ -172,7 +172,7 @@ public:
    * PiiMatrix<int> matPoints(0,4);
    * for (int i=0; i<maxima.size(); ++i)
    *   matPoints.insertRow(hough.lineEnds(maxima[i].row, maxima[i].column));
-   * @endcode
+   * ~~~
    *
    * @see Pii::findMaxima()
    */
@@ -180,12 +180,12 @@ public:
   
   /**
    * @param img the input image. The image will be scanned, and each
-   * pixel that makes @p rule evaluate @p true will be added to
+   * pixel that makes `rule` evaluate `true` will be added to
    * the parameter space. Typically, the input image is binary.
    *
    * @param rule the is unary function which is used to determine if a
    * pixel may be part of a line. The function takes the pixel value
-   * as a parameter and returns a @p bool.
+   * as a parameter and returns a `bool`.
    *
    * @return the accumulator array. The size of the returned matrix
    * depends on angle and distance limits and their resolution.

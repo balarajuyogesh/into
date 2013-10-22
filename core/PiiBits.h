@@ -23,20 +23,18 @@
 #  define INTBITS (sizeof(int)*8)
 #endif
 
-/**
- * @file
- * 
- * Functions for tweaking single bits. Some functions in this
- * namespace come with inline assembly versions for maximum
- * performance.
- *
- * @ingroup Core
- */
-
 namespace Pii
 {
   /**
-   * Rotate a binary code right by @p n positions.
+   * @group bits Bit Fiddling
+   * 
+   * Functions for tweaking single bits. Some functions in this
+   * group come with inline assembly versions for maximum
+   * performance.
+   */
+
+  /**
+   * Rotate a binary code right by `n` positions.
    *
    * @param c the number to be rotated
    * @param n the number of positions to rotate
@@ -47,20 +45,18 @@ namespace Pii
     return ((c >> n) | (c << (bits - n))) & ((1 << bits) - 1);
   }
 
-  /// @overload
   template <unsigned char bits> inline unsigned int ror(unsigned int c, const unsigned char n)
   {
     return ((c >> n) | (c << (bits - n))) & ((1 << bits) - 1);
   }
 
-  /// @overload
   template <> inline unsigned int ror<INTBITS>(unsigned int c, const unsigned char n)
   {
     return ((c >> n) | (c << (INTBITS - n)));
   }
     
   /**
-   * Rotate a binary code left by @p n positions.
+   * Rotate a binary code left by `n` positions.
    *
    * @param c the number to be rotated
    * @param n the number of positions to rotate
@@ -70,12 +66,10 @@ namespace Pii
   {
     return ((c << n) | (c >> (bits-n))) & ((1 << bits) - 1);
   }
-  /// @overload
   template <unsigned char bits> inline unsigned int rol(unsigned int c, const unsigned char n)
   {
     return ((c << n) | (c >> (bits-n))) & ((1 << bits) - 1);
   }
-  /// @overload
   template <> inline unsigned int rol<INTBITS>(unsigned int c, const unsigned char n)
   {
     return ((c << n) | (c >> (INTBITS-n)));
@@ -152,7 +146,6 @@ namespace Pii
    */
   PII_CORE_EXPORT int countOnes(unsigned int c, const unsigned char bits = INTBITS);
   
-  /// @overload
   template <unsigned char bits> int countOnes(unsigned int c)
   {
     int count = 0;
@@ -176,7 +169,6 @@ namespace Pii
    */
   PII_CORE_EXPORT int countTransitions(unsigned int c, const unsigned char bits = INTBITS);
 
-  /// @overload
   template <unsigned char bits> int countTransitions(unsigned int c)
   {
     return countOnes<bits>(c ^ ror<bits>(c, 1));
@@ -191,7 +183,6 @@ namespace Pii
    */
   PII_CORE_EXPORT unsigned int rotateToMinimum(unsigned int n, const unsigned char bits = INTBITS);
 
-  /// @overload
   template <unsigned char bits> unsigned int rotateToMinimum(unsigned int n)
   {
     unsigned int tmp = n << sizeof(int)*4;
@@ -225,7 +216,6 @@ namespace Pii
    */
   PII_CORE_EXPORT int hammingDistance(unsigned int a, unsigned int b, const unsigned char bits = INTBITS);
 
-  /// @overload
   template <unsigned char bits> int hammingDistance(unsigned int a, unsigned int b)
   {
     return countOnes<bits>(a^b); //find differing bits
@@ -235,18 +225,15 @@ namespace Pii
    * Get a binary mask for the sign bit of any integer type. To get
    * the sign bit, do the following:
    *
-   * @code
+   * ~~~(c++)
    * int i = -1;
    * int sign = i & signMask<int>();
-   * @endcode
+   * ~~~
    */
   template <class T> inline T signMask();
 
-  /// @overload
   template <> inline short signMask() { return SHRT_MIN; }
-  /// @overload
   template <> inline int signMask() { return INT_MIN; }
-  /// @overload
   template <> inline long signMask() { return LONG_MIN; }
 
   /**
@@ -300,7 +287,7 @@ namespace Pii
    * processor architecture.
    *
    * @return a new memory address rounded up to the next address
-   * divisible by @p bitMask + 1. If @p address is already aligned,
+   * divisible by `bitMask` + 1. If `address` is already aligned,
    * it'll be returned unmodified.
    */
   template <class T> inline T alignAddress(T address, size_t bitMask)
@@ -319,7 +306,7 @@ namespace Pii
 #endif
 
   /**
-   * Returns the sign bit of @a value1 - @a value2.
+   * Returns the sign bit of *value1* - *value2*.
    */
   template <class T> inline unsigned int signBit(T value1, T value2)
   {
@@ -328,7 +315,7 @@ namespace Pii
   }
 
   /**
-   * Returns the sign bit of @a value1 - @a value2.
+   * Returns the sign bit of *value1* - *value2*.
    */
   inline unsigned int signBit(float value1, float value2)
   {
@@ -338,7 +325,7 @@ namespace Pii
   }
   
   /**
-   * Returns the sign bit of @a value1 - @a value2.
+   * Returns the sign bit of *value1* - *value2*.
    */
   inline unsigned int signBit(double value1, double value2)
   {
@@ -356,7 +343,7 @@ namespace Pii
   }
 
   /**
-   * Returns the sign bit of @a value1 - @a value2. This function
+   * Returns the sign bit of *value1* - *value2*. This function
    * always uses the floating point version of signBit().
    */
   template <class T> inline unsigned int floatSignBit(T value1, float value2)
@@ -365,13 +352,15 @@ namespace Pii
   }
 
   /**
-   * Returns the sign bit of @a value1 - @a value2. This function
+   * Returns the sign bit of *value1* - *value2*. This function
    * always uses the floating point version of signBit().
    */
   template <> inline unsigned int floatSignBit(double value1, float value2)
   {
     return signBit(value1, (double)value2);
   }
+
+  /// @endgroup
 }
 
 #endif //_PIIBITS_H

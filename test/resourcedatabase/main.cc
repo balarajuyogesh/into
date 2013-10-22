@@ -21,34 +21,34 @@
 void TestPiiResourceDatabase::initTestCase()
 {
   // Claim: Topi is the designer of PiiResourceDatabase.
-  int id = db.addStatement("PiiResourceDatabase", "my:designer", "Topi",
-                           PiiResourceStatement::ResourceType);
+  int id = db.addStatement(db.resource("PiiResourceDatabase", "my:designer", "Topi"));
+  
   // Reificiation: I believe the statement is true
-  db.addStatement(id, "my:evaluation", "true");
+  db.addStatement(db.literal(id, "my:evaluation", "true"));
 
   // Lasse also participated
-  id = db.addStatement("PiiResourceDatabase", "my:designer", "Lasse",
-                       PiiResourceStatement::ResourceType);
-  db.addStatement(id, "my:evaluation", "true");
+  id = db.addStatement(db.resource("PiiResourceDatabase", "my:designer", "Lasse"));
+  db.addStatement(db.literal(id, "my:evaluation", "true"));
 
   // Olli? Not really.
-  id = db.addStatement("PiiResourceDatabase", "my:designer", "Olli",
-                       PiiResourceStatement::ResourceType);
-  db.addStatement(id, "my:evaluation", "false");
+  id = db.addStatement(db.resource("PiiResourceDatabase", "my:designer", "Olli"));
+  db.addStatement(db.literal(id, "my:evaluation", "false"));
 
   // Add information about us
-  db.addStatement("Topi", "my:title", "CTO");
-  db.addStatement("Topi", "my:wife", "Anna", PiiResourceStatement::ResourceType);
-  db.addStatement("Lasse", "my:title", "Software Engineer");
-  db.addStatement("Lasse", "my:wife", "Tuulikki", PiiResourceStatement::ResourceType);
-  db.addStatement("Olli", "my:title", "Keisari");
-  db.addStatement("Olli", "my:wife", "Johanna", PiiResourceStatement::ResourceType);
+  db.addStatement(db.literal("Topi", "my:title", "CTO"));
+  db.addStatement(db.resource("Topi", "my:wife", "Anna"));
+  db.addStatement(db.literal("Lasse", "my:title", "Software Engineer"));
+  db.addStatement(db.resource("Lasse", "my:wife", "Tuulikki"));
+  db.addStatement(db.literal("Olli", "my:title", "Keisari"));
+  db.addStatement(db.resource("Olli", "my:wife", "Johanna"));
 
-  db.addStatement("Topi", "my:kids", QString::number(6));
-  db.addStatement("Lasse", "my:kids", QString::number(3));
-  db.addStatement("Olli", "my:kids", QString::number(1));
+  db.addStatement(db.literal("Topi", "my:kids", QString::number(6)));
+  db.addStatement(db.literal("Lasse", "my:kids", QString::number(3)));
+  db.addStatement(db.literal("Olli", "my:kids", QString::number(1)));
   
   QCOMPARE(db.statementCount(), 15);
+
+  db.dump();
 }
 
 void TestPiiResourceDatabase::select()
@@ -119,10 +119,19 @@ void TestPiiResourceDatabase::select()
                           subject == "PiiResourceDatabase" &&
                           !(attribute("my:designer") == "Topi" ||
                             attribute("my:designer") == "Lasse") &&
-                          resourceType == PiiResourceStatement::ResourceType);
+                          resourceType == PiiResourceStatement::Resource);
     QCOMPARE(lstResult.size(), 1);
     QCOMPARE(lstResult[0], QString("Olli"));
    }
+}
+
+void TestPiiResourceDatabase::subselect()
+{
+  using namespace Pii;
+  // Find everything designed by a married guy.
+  QList<QString> lstResult = db.select(subject, attribute("my:designer") == (db.select(subject, attribute("my:wife") != "")));
+  QCOMPARE(lstResult.size(), 1);
+  QCOMPARE(lstResult[0], QString("PiiResourceDatabase"));
 }
 
 QTEST_MAIN(TestPiiResourceDatabase)

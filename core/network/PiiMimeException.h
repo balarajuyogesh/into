@@ -24,7 +24,6 @@
 /**
  * Used to indicate error conditions in MIME headers.
  *
- * @ingroup Network
  */
 class PII_NETWORK_EXPORT PiiMimeException : public PiiException
 {
@@ -39,9 +38,9 @@ public:
   /**
    * Codes for different exception types.
    *
-   * @lip HeaderTooLarge - header size exceeds limit
+   * - `HeaderTooLarge` - header size exceeds limit
    *
-   * @lip InvalidFormat - the MIME message has invalid format.
+   * - `InvalidFormat` - the MIME message has invalid format.
    */
   enum Code { HeaderTooLarge, InvalidFormat };
   
@@ -60,8 +59,8 @@ public:
   Code code() const;
 
   /**
-   * Returns a textual representation of the error associated with @a
-   * code.
+   * Returns a textual representation of the error associated with 
+   * *code*.
    */
   static const char* messageForCode(Code code);
 

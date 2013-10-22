@@ -22,7 +22,8 @@
 /**
  * Emits received objects as Qt signals.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in sync - sync input. Any type. If this input is not connected,
  * each incoming object (or a set of objects) will be sent once
@@ -30,23 +31,22 @@
  * sync object will be sent once everything has been received.
  *
  * @in inputX - reads in objects of any type. X ranges from 1 to
- * #dynamicInputCount - 1. @p input0 can also be accessed as @p input.
+ * [dynamicInputCount] - 1. `input0` can also be accessed as `input`.
  * 
- * @ingroup PiiBasePlugin
  */
 class PiiObjectCapturer : public PiiDefaultOperation
 {
   Q_OBJECT
 
   /**
-   * The number of dynamic inputs (in addition to @p sync). The
+   * The number of dynamic inputs (in addition to `sync`). The
    * default is one.
    */
   Q_PROPERTY(int dynamicInputCount READ dynamicInputCount WRITE setDynamicInputCount);
 
   /**
-   * Specifies how input objects are collected to lists if @p sync is
-   * connected. The default is @p OneListPerInput.
+   * Specifies how input objects are collected to lists if `sync` is
+   * connected. The default is `OneListPerInput`.
    */
   Q_PROPERTY(ListMode listMode READ listMode WRITE setListMode);
   Q_ENUMS(ListMode);
@@ -56,17 +56,17 @@ public:
   /**
    * Different ways of collecting many objects to lists.
    *
-   * @lip OneListPerInput - one list is maintained for each input. 
-   * Objects related to one @p sync object are collected to
+   * - `OneListPerInput` - one list is maintained for each input. 
+   * Objects related to one `sync` object are collected to
    * input-specific lists. These lists are put into a compound list
-   * whose length becomes #dynamicInputCount.
+   * whose length becomes [dynamicInputCount].
    *
-   * @lip OneListPerCycle - all input objects are collected to a list
-   * on each processing round so that the object received from @p
-   * input0 becomes the first element. Each list holds
-   * #dynamicInputCount elements. These lists are put into a compound
+   * - `OneListPerCycle` - all input objects are collected to a list
+   * on each processing round so that the object received from 
+   * `input0` becomes the first element. Each list holds
+   * [dynamicInputCount] elements. These lists are put into a compound
    * list whose length is the number of processing cycles related to
-   * one @p sync object.
+   * one `sync` object.
    */
   enum ListMode { OneListPerInput, OneListPerCycle };
   
@@ -74,7 +74,7 @@ public:
   ~PiiObjectCapturer();
     
   /**
-   * Aliases @p input to @p input0.
+   * Aliases `input` to `input0`.
    */
   PiiInputSocket* input(const QString &name) const;
 
@@ -82,22 +82,22 @@ public:
 
 signals:
   /**
-   * Emitted for each incoming object if the @p sync input is not
-   * connected and if #dynamicInputCount is one.
+   * Emitted for each incoming object if the `sync` input is not
+   * connected and if [dynamicInputCount] is one.
    */
   void objectCaptured(const PiiVariant& object);
   /**
-   * Emitted for each incoming object if the @p sync input is not
-   * connected and if #dynamicInputCount is greater than one. Each
+   * Emitted for each incoming object if the `sync` input is not
+   * connected and if [dynamicInputCount] is greater than one. Each
    * element in the list will be a PiiVariant. The first object is the
-   * one read from @p input0 and so on.
+   * one read from `input0` and so on.
    */
   void objectsCaptured(const QVariantList& objects);
   /**
-   * Emitted when everything related to the object in the @p sync
+   * Emitted when everything related to the object in the `sync`
    * input has been received.
    *
-   * @param syncObject the object received in the @p sync input
+   * @param syncObject the object received in the `sync` input
    *
    * @param objects all collected objects as a list of lists that
    * contain PiiVariants.

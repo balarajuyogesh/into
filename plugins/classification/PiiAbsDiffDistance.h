@@ -20,11 +20,10 @@
 
 /**
  * Calculates the sum of absolute differences between corresponding
- * elements in two feature vectors. @f$d = \sum |S_i - M_i|@f$, where
- * @e S and @e M represent the sample and model distributions,
+ * elements in two feature vectors. \(d = \sum |S_i - M_i|\), where
+ * *S* and *M* represent the sample and model distributions,
  * respectively.
  *
- * @ingroup PiiClassificationPlugin
  */
 PII_DEFAULT_DISTANCE_MEASURE_DEF(PiiAbsDiffDistance)
 {

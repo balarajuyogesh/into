@@ -22,7 +22,6 @@
  * A learning algorithm that just collects all incoming data into a
  * sample set.
  *
- * @ingroup PiiClassificationPlugin
  */
 template <class SampleSet> class PiiSampleSetCollector :
   public PiiLearningAlgorithm<SampleSet>
@@ -31,7 +30,7 @@ public:
   typedef typename PiiSampleSet::Traits<SampleSet>::ConstFeatureIterator ConstFeatureIterator;
 
   /**
-   * Creates a new %PiiSampleSetCollector that creates the sample,
+   * Creates a new PiiSampleSetCollector that creates the sample,
    * label and weight sets automatically and takes care of deleting
    * them.
    */
@@ -39,7 +38,7 @@ public:
 
   /**
    * Creates a new sample set collector that appends samples to the
-   * given sample set. %PiiSampleSetCollector doesn't take the
+   * given sample set. PiiSampleSetCollector doesn't take the
    * ownership of the pointers and it must remain valid during the
    * lifetime of this object. The label and weight lists will be
    * created internally.
@@ -48,7 +47,7 @@ public:
 
   /**
    * Creates a new sample set collector that appends samples to the
-   * given sample set and label list. %PiiSampleSetCollector doesn't
+   * given sample set and label list. PiiSampleSetCollector doesn't
    * take the ownership of the pointers, and they must remain valid
    * during the lifetime of this object. The weight list will be
    * created internally.
@@ -58,7 +57,7 @@ public:
   /**
    * Creates a new sample set collector that appends samples to the
    * given sample set, label list and weight list. 
-   * %PiiSampleSetCollector doesn't take the ownership of the
+   * PiiSampleSetCollector doesn't take the ownership of the
    * pointers, and they must remain valid during the lifetime of this
    * object.
    */
@@ -76,22 +75,22 @@ public:
              const QVector<double>& weights);
 
   /**
-   * Appends @a sample to the sample set. If label collection is
-   * enabled, @a label will be added to the label set. If weight
-   * collection is enabled, @a weight will be added to the weight set. 
-   * If @a length doesn't match the current number of features, the
+   * Appends *sample* to the sample set. If label collection is
+   * enabled, *label* will be added to the label set. If weight
+   * collection is enabled, *weight* will be added to the weight set. 
+   * If *length* doesn't match the current number of features, the
    * current sample set will be cleared first. Returns the index of
    * the just added sample in the sample set.
    */
   double learnOne(ConstFeatureIterator sample, int length, double label, double weight) throw ();
 
   /**
-   * Returns @p true.
+   * Returns `true`.
    */
   bool converged() const throw ();
 
   /**
-   * Returns @p NonSupervisedLearner | @p OnlineLearner | @p WeightedLearner;
+   * Returns `NonSupervisedLearner` | `OnlineLearner` | `WeightedLearner`;
    */
   PiiClassification::LearnerCapabilities capabilities() const;
 
@@ -139,12 +138,12 @@ public:
   /**
    * Enables or disables the collecting of class labels. If class
    * labels are not collected, the class label list will remain empty.
-   * The default value is @p true, unless only a sample list is given
+   * The default value is `true`, unless only a sample list is given
    * in the constructor.
    */
   void setCollectLabels(bool collectLabels);
   /**
-   * Returns @p true if class labels are being collected, @p false
+   * Returns `true` if class labels are being collected, `false`
    * otherwise.
    */
   bool collectLabels() const;
@@ -152,12 +151,12 @@ public:
   /**
    * Enables or disables the collecting of sample weights. If sample
    * weights are not collected, the weight list will remain empty. The
-   * default value is @p false, unless a weight list is explicitly
+   * default value is `false`, unless a weight list is explicitly
    * given in the constructor.
    */
   void setCollectWeights(bool collectWeights);
   /**
-   * Returns @p true if sample weights are being collected, @p false
+   * Returns `true` if sample weights are being collected, `false`
    * otherwise.
    */
   bool collectWeights() const;
@@ -184,7 +183,7 @@ public:
 
   /**
    * Resizes the collected sample set and associated labels and weight
-   * so that at most @a samples entries are be retained.
+   * so that at most *samples* entries are be retained.
    */
   void resize(int samples);
   

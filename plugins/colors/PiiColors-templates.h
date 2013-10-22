@@ -191,7 +191,7 @@ namespace PiiColors
   }
 
 
-  /// @cond null
+  /// @hide
   template <class T> struct UnsignedHueLimit
   {
     static T limitHue(T value) { return value < 360 ? value : value + 360; }
@@ -242,7 +242,7 @@ namespace PiiColors
     static unsigned char limitHue(unsigned char value) { return value; }
     static unsigned char round(CalculationType value) { return Pii::round<unsigned char>(value); }
   };
-  /// @endcond
+  /// @endhide
 
   template <class Clr> Clr rgbToHsv(const Clr& rgbColor)
   {

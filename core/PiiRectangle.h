@@ -20,7 +20,6 @@
  * Stores the upper left corner and the size of a rectangle. See
  * PiiPoint for usage examples.
  *
- * @ingroup Core
  */
 template <class T> struct PiiRectangle
 {
@@ -46,8 +45,8 @@ template <class T> struct PiiRectangle
   T height;
 
   /**
-   * Return @p true if either @p width or @p height is non-positive,
-   * @p false otherwise.
+   * Return `true` if either `width` or `height` is non-positive,
+   * `false` otherwise.
    */
   bool isEmpty() const { return width <= 0 || height <= 0; }
   
@@ -64,7 +63,7 @@ template <class T> struct PiiRectangle
   }
 
   /**
-   * Returns true if @p other is fully contained by @p this.
+   * Returns true if `other` is fully contained by `this`.
    */
   bool contains(const PiiRectangle& other) const
   {
@@ -89,7 +88,7 @@ template <class T> struct PiiRectangle
   }
 
   /**
-   * Returns true if @p other intersects @p this.
+   * Returns true if `other` intersects `this`.
    */
   bool intersects(const PiiRectangle& other) const
   {
@@ -102,7 +101,7 @@ template <class T> struct PiiRectangle
   }
 
   /**
-   * Enlarges this rectangle to include both @p this and @p other.
+   * Enlarges this rectangle to include both `this` and `other`.
    */
   PiiRectangle& operator|= (const PiiRectangle& other)
   {

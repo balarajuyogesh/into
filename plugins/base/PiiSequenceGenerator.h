@@ -20,17 +20,18 @@
 
 /**
  * An operation that generates sequences of numbers. The sequence goes
- * from #sequenceStart to #sequenceEnd, stepping #step units each time.
+ * from [sequenceStart] to [sequenceEnd], stepping [step] units each time.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in trigger - an optional input that triggers the emission.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out output - a number in the sequence.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiSequenceGenerator : public PiiDefaultOperation
 {
@@ -38,12 +39,12 @@ class PiiSequenceGenerator : public PiiDefaultOperation
 
   /**
    * The first value in the sequence. The default value is 0. This
-   * value must be less than or equal to #sequenceEnd.
+   * value must be less than or equal to [sequenceEnd].
    */
   Q_PROPERTY(double sequenceStart READ sequenceStart WRITE setSequenceStart);
   /**
    * The last value in the sequence. The default value is 1. This
-   * value must be larger than or equal to #sequenceStart.
+   * value must be larger than or equal to [sequenceStart].
    */
   Q_PROPERTY(double sequenceEnd READ sequenceEnd WRITE setSequenceEnd);
   /**
@@ -52,7 +53,7 @@ class PiiSequenceGenerator : public PiiDefaultOperation
    */
   Q_PROPERTY(double step READ step WRITE setStep);
   /**
-   * The sequence mode. The default mode is @p Repeat.
+   * The sequence mode. The default mode is `Repeat`.
    */
   Q_PROPERTY(SequenceMode sequenceMode READ sequenceMode WRITE setSequenceMode);
   Q_ENUMS(SequenceMode);
@@ -62,13 +63,13 @@ class PiiSequenceGenerator : public PiiDefaultOperation
    * count is reached, the operation will send a stop signal which
    * will stop the whole execution engine if properly connected. The
    * default value is zero, which means "eternally". This value has no
-   * effect if @p trigger is connected.
+   * effect if `trigger` is connected.
    */
   Q_PROPERTY(int repeatCount READ repeatCount WRITE setRepeatCount);
   /**
-   * The data type of the output. By default, this value is @p false
-   * and @p doubles will be emitted. Setting this value to @p true
-   * causes converts the output to @p ints.
+   * The data type of the output. By default, this value is `false`
+   * and `doubles` will be emitted. Setting this value to `true`
+   * causes converts the output to `ints`.
    */
   Q_PROPERTY(bool integerOutput READ integerOutput WRITE setIntegerOutput);
   
@@ -77,11 +78,11 @@ public:
   /**
    * Sequence modes.
    *
-   * @lip Repeat - the sequence will start at the beginning once
-   * #sequenceEnd is reached.
+   * - `Repeat` - the sequence will start at the beginning once
+   * [sequenceEnd] is reached.
    *
-   * @lip BackAndForth - the sequence goes back and forth between
-   * #sequenceEnd and #sequenceStart.
+   * - `BackAndForth` - the sequence goes back and forth between
+   * [sequenceEnd] and [sequenceStart].
    */
   enum SequenceMode { Repeat, BackAndForth };
   

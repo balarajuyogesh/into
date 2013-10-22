@@ -41,11 +41,10 @@ template <> struct PiiFixedPointTraits<long> { typedef long long WiderType; };
  * point number back to a float costs a division. Therefore, consider
  * your requirements carefully.
  *
- * The @p decimals template parameter tell the number of decimal bits. 
+ * The `decimals` template parameter tell the number of decimal bits. 
  * Typically, half of the data type is used (16 for int on PC). Use
  * the number to tune the trade-off between precision and range.
  *
- * @ingroup Core
  */
 template <int decimals, class T = int> class PiiFixedPoint
 {
@@ -59,8 +58,8 @@ public:
    *
    * @param value the value as an integer
    *
-   * @param shift the number of decimal bits to add to the number. @p
-   * value will be shifted this many times to the left.
+   * @param shift the number of decimal bits to add to the number. 
+   * `value` will be shifted this many times to the left.
    */
   PiiFixedPoint(T value, int shift = decimals) : _value(value << shift) {}
   /**

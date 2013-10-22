@@ -26,15 +26,15 @@
 #define PII_SOCKET_CONVERSION_FUNCTIONS_IMPL(CLASS, DIRECTION)          \
   static QScriptValue convert ## CLASS ## ToScriptValue(QScriptEngine* engine, CLASS* const & socket) \
   {                                                                     \
-    return engine->newQObject(socket != 0 ? socket->socket() : 0,       \
+    return engine->newQObject(socket,                                   \
                               QScriptEngine::AutoOwnership,             \
                               PiiScript::defaultWrapOptions);           \
   }                                                                     \
   static void convertScriptValueTo ## CLASS(const QScriptValue& obj, CLASS*& socket) \
   {                                                                     \
     PiiSocket* pSocket = qobject_cast<PiiSocket*>(obj.toQObject());     \
-    if (pSocket != 0)                                                   \
-      socket = pSocket->as ## DIRECTION();                              \
+    if (pSocket != 0 && pSocket->is ## DIRECTION())                     \
+      socket = static_cast<CLASS*>(pSocket);                            \
     else                                                                \
       socket = 0;                                                       \
   }
@@ -45,26 +45,6 @@
 namespace PiiSocketWrapper
 {
   PII_STATIC_TR_FUNC(PiiSocket);
-
-  static QScriptValue convertPiiAbstractSocketToScriptValue(QScriptEngine* engine, PiiAbstractSocket* const & socket)
-  {
-    return engine->newQObject(socket != 0 ? socket->socket() : 0,
-                              QScriptEngine::AutoOwnership,
-                              PiiScript::defaultWrapOptions);
-  }
-
-  static void convertScriptValueToPiiAbstractSocket(const QScriptValue& obj, PiiAbstractSocket*& socket)
-  {
-    PiiSocket* pSocket = qobject_cast<PiiSocket*>(obj.toQObject());
-    if (pSocket != 0)
-      {
-        socket = pSocket->asInput();
-        if (socket == 0)
-          socket = pSocket->asOutput();
-      }
-    else
-      socket = 0;
-  }
 
   PII_SOCKET_CONVERSION_FUNCTIONS(Input)
   PII_SOCKET_CONVERSION_FUNCTIONS(Output)
@@ -82,14 +62,13 @@ namespace PiiSocketWrapper
                                      const char* function)
   {
     PII_CHECK_THIS_TYPE(PiiSocket, convertSockets);
-    output = pThis->asOutput();
-    if (output == 0)
+    if (!pThis->isOutput())
       return context->throwError(tr(PiiScript::pInstanceOfXRequired).arg(function).arg("PiiOutputSocket"));
-
     PiiSocket* pSocket = qscriptvalue_cast<PiiSocket*>(context->argument(0));
-    if (pSocket == 0 || pSocket->type() not_member_of (PiiSocket::Input, PiiSocket::Proxy))
+    if (pSocket == 0 || !pSocket->isInput())
       return context->throwError(tr(PiiScript::pArgumentNMustBeX).arg(function).arg(0).arg("PiiInputSocket"));
-    input = pSocket->asInput();
+    output = static_cast<PiiAbstractOutputSocket*>(pThis);
+    input = static_cast<PiiAbstractInputSocket*>(pSocket);
     return QScriptValue();
   }
   
@@ -121,26 +100,23 @@ namespace PiiSocketWrapper
   {
     PII_CHECK_THIS_TYPE(PiiSocket, type);
     PII_CHECK_NO_ARGUMENTS(connectedInputs);
-    PiiAbstractOutputSocket* pOutput = pThis->asOutput();
-    if (pOutput == 0)
+    if (!pThis->isOutput())
       return context->throwError(tr(PiiScript::pInstanceOfXRequired).arg("connectedInputs").arg("PiiOutputSocket"));
-    return qScriptValueFromSequence(engine, pOutput->connectedInputs());
+    return qScriptValueFromSequence(engine, static_cast<PiiAbstractOutputSocket*>(pThis)->connectedInputs());
   }
 
   static QScriptValue connectedOutput(QScriptContext* context, QScriptEngine* engine)
   {
     PII_CHECK_THIS_TYPE(PiiSocket, type);
     PII_CHECK_NO_ARGUMENTS(connectedOutput);
-    PiiAbstractInputSocket* pInput = pThis->asInput();
-    if (pInput == 0)
+    if (!pThis->isInput())
       return context->throwError(tr(PiiScript::pInstanceOfXRequired).arg("connectedOutput").arg("PiiInputSocket"));
-    return qScriptValueFromValue(engine, pInput->connectedOutput());
+    return qScriptValueFromValue(engine, static_cast<PiiAbstractInputSocket*>(pThis)->connectedOutput());
   }
 }
 
 void initPiiSocket(QScriptEngine* engine)
 {
-  PII_REGISTER_SCRIPT_TYPE_CONVERSION(PiiSocketWrapper, PiiAbstractSocket);
   PII_REGISTER_SCRIPT_TYPE_CONVERSION(PiiSocketWrapper, PiiAbstractInputSocket);
   PII_REGISTER_SCRIPT_TYPE_CONVERSION(PiiSocketWrapper, PiiAbstractOutputSocket);
   PII_REGISTER_SCRIPT_TYPE_CONVERSION(PiiSocketWrapper, PiiProxySocket);

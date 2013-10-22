@@ -29,8 +29,7 @@ PiiInputSocket::Data::Data() :
   pController(0),
   iQueueStart(0),
   iQueueLength(0)
-{
-}
+{}
 
 bool PiiInputSocket::Data::setInputConnected(bool connected)
 {
@@ -38,24 +37,19 @@ bool PiiInputSocket::Data::setInputConnected(bool connected)
 }
 
 PiiInputSocket::PiiInputSocket(const QString& name) :
-  PiiAbstractInputSocket(new Data)
+  PiiAbstractInputSocket(name, new Data)
 {
-  setObjectName(name);
   setQueueCapacity(2);
 }
 
-PiiInputSocket::PiiInputSocket(Data* data, const QString& name) :
-  PiiAbstractInputSocket(data)
+PiiInputSocket::PiiInputSocket(const QString& name, Data* data) :
+  PiiAbstractInputSocket(name, data)
 {
-  setObjectName(name);
   setQueueCapacity(2);
 }
 
 PiiInputSocket::~PiiInputSocket()
-{
-}
-
-PiiSocket::Type PiiInputSocket::type() const { return Input; }
+{}
 
 bool PiiInputSocket::isConnected() const
 {
@@ -189,9 +183,6 @@ PiiVariant PiiInputSocket::firstObject() const
 
 
 PiiInputController* PiiInputSocket::controller() const { return _d()->pController; }
-PiiInputSocket* PiiInputSocket::socket() { return this; }
-PiiAbstractInputSocket* PiiInputSocket::asInput() { return this; }
-PiiAbstractOutputSocket* PiiInputSocket::asOutput() { return 0; }
 PiiVariant PiiInputSocket::queuedObject(int index) const { return _d()->lstQueue[queueIndex(index)]; }
 unsigned int PiiInputSocket::queuedType(int index) const { return _d()->lstQueue[queueIndex(index)].type(); }
 int PiiInputSocket::queueLength() const { return _d()->iQueueLength; }

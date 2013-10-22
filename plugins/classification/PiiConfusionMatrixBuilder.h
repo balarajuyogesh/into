@@ -20,32 +20,33 @@
 #include "PiiConfusionMatrix.h"
 
 /**
- * An operation that builds a @ref PiiConfusionMatrix "confusion matrix"
+ * An operation that builds a [confusion matrix](PiiConfusionMatrix)
  * out of classification results. Optionally, it may also
  * build a matrix of mean distances to the closest training sample, if
  * the classifier provides such information.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in real class - the real (known) class index for a sample. Any
- * primitive type that will be converted to an @p int.
+ * primitive type that will be converted to an `int`.
  *
  * @in classification - the result of classification. Any primitive
- * type that will be converted to an @p int.
+ * type that will be converted to an `int`.
  *
  * @in distance - an optional input that collects the distances to the
  * closest training sample.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out confusion matrix - The current confusion matrix. 
  * (PiiMatrix<int>)
  *
  * @out distance matrix - The current distance matrix. 
- * (PiiMatrix<double>) See the #distanceMatrix property for
+ * (PiiMatrix<double>) See the [distanceMatrix] property for
  * explanation.
  *
- * @ingroup PiiClassificationPlugin
  */
 class PiiConfusionMatrixBuilder : public PiiDefaultOperation
 {

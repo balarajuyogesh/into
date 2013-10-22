@@ -26,20 +26,20 @@ namespace Pii
   /**
    * Generates an elementary reflector (a.k.a the Householder
    * transformation). The Householder transformation of an
-   * n-dimensional vector @a x is an n-by-n matrix @a H for which the
+   * n-dimensional vector *x* is an n-by-n matrix *H* for which the
    * following equation holds:
    *
-   * @f[
+   * \[
    * H \left( \begin{array}{c} x_0 \\ \vdots \\ x{n_1} \end{array} \right) =
    * \left( \begin{array}{c} \beta \\ 0 \\ 0 \end{array} \right)
-   * @f]
+   * \]
    *
-   * In other words, @a H is a matrix that effectively transforms @a x
+   * In other words, *H* is a matrix that effectively transforms *x*
    * into a scalar. The transformation matrix H can be represented as
    *
-   * @f[
+   * \[
    * H = I - \tau v v^T
-   * @f]
+   * \]
    *
    * where v is an n-dimensional vector whose first component equals
    * one. (If complex numbers were involved, the transpose should be
@@ -49,14 +49,14 @@ namespace Pii
    * @param x an n-dimensional input/output vector. This vector will
    * be modified by the algorithm so that it contains the vector v.
    *
-   * @param n the length of @a x
+   * @param n the length of *x*
    *
    * @param tau a return-value parameter that will store the value of
-   * @f$\tau@f$. If @a x is a null vector, @a tau will be
-   * zero. Otherwise, @f$1 \le \tau \le 2@f$.
+   * \(\tau\). If *x* is a null vector, *tau* will be
+   * zero. Otherwise, \(1 \le \tau \le 2\).
    *
    * @param beta an optional return-value parameter that will store
-   * the value of @f$\beta@f$. If @a x is a null vector, @a beta will
+   * the value of \(\beta\). If *x* is a null vector, *beta* will
    * be set to zero.
    *
    * @see reflectColumns()
@@ -136,14 +136,14 @@ namespace Pii
   /**
    * Applies a reflection transform to a rectangular matrix from the
    * left. This function uses the vector representation of a
-   * reflection matrix (see householderTransform()) to speed up
-   * calculations. The algorithm is functionally equivalent to @f$A
-   * \gets HA@f$, but the full reflection matrix H is never
-   * calculated. Instead, since @f$H = I - \tau v v^T@f$, we get
+   * reflection matrix (see [householderTransform()]) to speed up
+   * calculations. The algorithm is functionally equivalent to \(A
+   * \gets HA\), but the full reflection matrix H is never
+   * calculated. Instead, since \(H = I - \tau v v^T\), we get
    *
-   * @f[
+   * \[
    * HA = (I - \tau v v^T) A = A - \tau v v^T A = A - \tau v (A^T v)^T .
-   * @f]
+   * \]
    *
    * @param A the input matrix storing the vectors to be reflected as
    * its columns. Will be modified in place.
@@ -151,7 +151,7 @@ namespace Pii
    * @param v an iterator to the beginning of the reflector vector. Must
    * have A.rows() elements.
    *
-   * @param tau the @f$tau@f$ parameter
+   * @param tau the \(tau\) parameter
    *
    * @param bfr a buffer of at least A.columns() elements for
    * temporary storage of calculation results.
@@ -187,7 +187,6 @@ namespace Pii
   }
 
   /**
-   * @overload This version does not require an externally allocated
    * temporary buffer.
    */
   template <class Matrix, class InputIterator>
@@ -203,9 +202,9 @@ namespace Pii
 
   /**
    * Applies a reflection transform to a rectangular matrix from the
-   * right. The algorithm is functionally equivalent to @f$A \gets
-   * AH^T@f$, where H is the reflection transform uniquely identified
-   * by @a v and @p tau.
+   * right. The algorithm is functionally equivalent to \(A \gets
+   * AH^T\), where H is the reflection transform uniquely identified
+   * by *v* and `tau`.
    *
    * @param A the input matrix storing the vectors to be reflected as
    * its rows. Will be modified in place.
@@ -213,7 +212,7 @@ namespace Pii
    * @param v an iterator to the beginning of the reflector vector. Must
    * have A.columns() elements.
    *
-   * @param tau the @f$tau@f$ parameter
+   * @param tau the \(tau\) parameter
    *
    * @param bfr a buffer of at least A.columns() elements for
    * temporary storage of calculation results.
@@ -246,47 +245,47 @@ namespace Pii
 
   /**
    * Unpacks a matrix in which a series of elementary reflections are
-   * represented as row or column vectors. Algorithms such as the @ref
-   * qrDecompose() "QR decomposition" and @ref bdDecomponse()
-   * "bidiagonal decomposition" represent the decomposition result in
-   * a compact form by storing the elementary reflector vectors only. 
-   * Given a set of such elementary reflectors in V, this function
-   * calculates the components of the left-hand reflector matrix Q in
-   * the form @f$Q = I + V T V^T@f$ (@a direction = @p Vertically), or
-   * the components of the right-hand reflector matrix P in the form
-   * @f$P = I + V^T T^T V@f$ (@a direction = @p Horizontally). This
-   * function requires preallocated temporary storage and is intended
-   * to be used in nested loops.
+   * represented as row or column vectors. Algorithms such as the [QR
+   * decomposition](qrDecompose) and [bidiagonal
+   * decomposition](bdDecomponse()) represent the decomposition result
+   * in a compact form by storing the elementary reflector vectors
+   * only.  Given a set of such elementary reflectors in V, this
+   * function calculates the components of the left-hand reflector
+   * matrix Q in the form \(Q = I + V T V^T\) (*direction* =
+   * `Vertically`), or the components of the right-hand reflector
+   * matrix P in the form \(P = I + V^T T^T V\) (*direction* =
+   * `Horizontally`). This function requires preallocated temporary
+   * storage and is intended to be used in nested loops.
    *
-@verbatim
-direction = Vertically
-Main diagonal        Subdiagonal
-diagonal = 0         diagonal = 1
-Nr = min(m, n)       Nr = min(m-1, n)
-( 1   x   x   x  )   ( x   x   x   x )
-( v1  1   x   x  )   ( 1   x   x   x )
-( v1  v2  1   x  )   ( v1  1   x   x )
-( v1  v2  v3  1  )   ( v1  v2  1   x )
-
-direction = Horizontally
-Main diagonal        Superdiagonal
-diagonal = 0         diagonal = 1
-Nr = min(m, n)       Nr = min(m, n-1)
-( 1   v1  v1  v1 )   ( x   1   v1  v1 )
-( x   1   v2  v2 )   ( x   x   1   v2 )
-( x   x   1   v3 )   ( x   x   x   1  )
-@endverbatim
+   * ~~~
+   * direction = Vertically
+   * Main diagonal        Subdiagonal
+   * diagonal = 0         diagonal = 1
+   * Nr = min(m, n)       Nr = min(m-1, n)
+   * ( 1   x   x   x  )   ( x   x   x   x )
+   * ( v1  1   x   x  )   ( 1   x   x   x )
+   * ( v1  v2  1   x  )   ( v1  1   x   x )
+   * ( v1  v2  v3  1  )   ( v1  v2  1   x )
+   *
+   * direction = Horizontally
+   * Main diagonal        Superdiagonal
+   * diagonal = 0         diagonal = 1
+   * Nr = min(m, n)       Nr = min(m, n-1)
+   * ( 1   v1  v1  v1 )   ( x   1   v1  v1 )
+   * ( x   1   v2  v2 )   ( x   x   1   v2 )
+   * ( x   x   1   v3 )   ( x   x   x   1  )
+   * ~~~
    *
    * Note that the number of reflector vectors (Nr) may be smaller
    * than the number of rows/columns as shown in the top right
    * illustration. Generally, the number of reflectors is
-   * <tt>min(m-diagonal, n)</tt> for the case where @a direction = @p
-   * Vertically, and <tt>min(m, n-diagonal)</tt> if @a direction = @p
-   * Horizontally. Here, m and n denote the number of rows and columns
-   * in @a V.
+   * `min(m-diagonal, n)` for the case where *direction* = 
+   * `Vertically`, and `min(m, n-diagonal)` if *direction* = 
+   * `Horizontally`. Here, m and n denote the number of rows and columns
+   * in *V*.
    *
    * @param direction specifies whether the reflector vectors are
-   * stored as columns (@p Vertically) or as rows (@p Horizontally).
+   * stored as columns (`Vertically`) or as rows (`Horizontally`).
    *
    * @param V a set of elementary reflector vectors in a compact form
    * (see the illustration above). The diagonal entries must be ones. 
@@ -299,8 +298,8 @@ Nr = min(m, n)       Nr = min(m, n-1)
    * elementary reflectors considered.
    *
    * @param T an output-value matrix. This must be a N-by-N matrix,
-   * where N is the number of rows (@a direction = Horizontally) or
-   * columns (@a direction = Vertically) in @a V. The algorithm fills
+   * where N is the number of rows (*direction* = Horizontally) or
+   * columns (*direction* = Vertically) in *V*. The algorithm fills
    * in the upper triangle of T.
    *
    * @param gram a temporary storage for a Gram matrix. This must be a

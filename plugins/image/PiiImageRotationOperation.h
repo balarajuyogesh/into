@@ -23,19 +23,20 @@
 /**
  * Rotate images to arbitrary angles in two dimension.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - the input image. Any primitive type matrix.
  *
  * @in angle - rotation angle (radians, clockwise). This input is
- * optional. If it is not connected, the @p angle property will be
+ * optional. If it is not connected, the `angle` property will be
  * used.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out image - rotated image
  *
- * @ingroup PiiImagePlugin
  */
 class PiiImageRotationOperation : public PiiDefaultOperation
 {
@@ -43,7 +44,7 @@ class PiiImageRotationOperation : public PiiDefaultOperation
 
   /**
    * Rotation angle in radians, measured clockwise. This value is used
-   * only if the @p angle input is not connected. Default is 0.
+   * only if the `angle` input is not connected. Default is 0.
    */
   Q_PROPERTY(double angle READ angle WRITE setAngle);
 
@@ -53,7 +54,7 @@ class PiiImageRotationOperation : public PiiDefaultOperation
   Q_PROPERTY(double angleDeg READ angleDeg WRITE setAngleDeg STORED false);
 
   /**
-   * How to handle the size of the result. Default is @p ExpandAsNecessary.
+   * How to handle the size of the result. Default is `ExpandAsNecessary`.
    *
    * @see PiiImage::TransformedSize
    */

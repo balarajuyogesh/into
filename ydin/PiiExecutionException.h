@@ -27,7 +27,6 @@ class PiiOperation;
  * Thrown when an operation cannot be started, or an error is detected
  * during execution.
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiExecutionException : public PiiException
 {
@@ -37,23 +36,23 @@ public:
   /**
    * Codes for different exception types.
    *
-   * @lip Error - the exception was caused by an error. The operation
+   * - `Error` - the exception was caused by an error. The operation
    * must be terminated.
    *
-   * @lip Finished - the operation that threw the exception finished
+   * - `Finished` - the operation that threw the exception finished
    * execution due to end of data (or similar reason) or upon
    * reception of a stop tag.
    *
-   * @lip Interrupted - the operation was abruptly interrupted by an
+   * - `Interrupted` - the operation was abruptly interrupted by an
    * external signal.
    *
-   * @lip Paused - the operation was paused upon reception of a pause
+   * - `Paused` - the operation was paused upon reception of a pause
    * tag.
    */
   enum Code { Error, Finished, Interrupted, Paused };
   
   /**
-   * Constructs a new @p Error with the given message and location.
+   * Constructs a new `Error` with the given message and location.
    */
   PiiExecutionException(const QString& message = "", const QString& location = "");
 
@@ -88,12 +87,12 @@ public:
   virtual bool isCompound() const;
 
   /**
-   * Returns a textual representation of the given @a code.
+   * Returns a textual representation of the given *code*.
    */
   static const char* errorName(Code code);
 
 protected:
-  /// @cond null
+  /// @hide
   class Data : public PiiException::Data
   {
   public:
@@ -106,7 +105,7 @@ protected:
 
   PiiExecutionException(Data* d);
   void throwThis();
-  /// @endcond
+  /// @endhide
 };
 
 #define PII_SERIALIZABLE_CLASS PiiExecutionException
@@ -120,7 +119,6 @@ protected:
  * This exception combines the possibly many error messages of all
  * child operations.
  *
- * @ingroup PiiYdin
  */
 class PII_YDIN_EXPORT PiiCompoundExecutionException : public PiiExecutionException
 {

@@ -36,7 +36,6 @@
  * This class works with integer-valued matrices (int, char, etc.) and
  * produces gray-scale clouds that can also be used as height maps.
  *
- * @ingroup PiiImagePlugin
  */
 class PiiCloudFractalGenerator
 {
@@ -86,7 +85,7 @@ public:
    * @param roughness the scale of random variations in the fractal. 
    * This value determines how large changes are allowed on the large
    * scale. Usually, a value between minimum and maximum is used. Use
-   * #setRoughnessScale to control how rapidly the roughness dies out.
+   * [setRoughnessScale] to control how rapidly the roughness dies out.
    */
   template <class T> void generateSquareFractal(PiiMatrix<T>& buffer,
                                                 int row, int col, int size,
@@ -103,10 +102,10 @@ public:
 
   /**
    * Generate a non-square fractal. This function splits the area into
-   * square blocks and recursively calls #generateSquareFractal(). It
+   * square blocks and recursively calls [generateSquareFractal()]. It
    * is possible to give a roughness value for x and y direction
    * separately, but it is usually wise to let the program decide the
-   * correct value for @p roughnessY.
+   * correct value for `roughnessY`.
    */
   template <class T> void generateFractal(PiiMatrix<T>& buffer,
                                           int row, int col, int rows, int cols,
@@ -145,8 +144,8 @@ public:
    * Set the mean level the fractal generator will try to achieve.
    * This value is useful in large non-rectangular fractals. The
    * generator will always drive the random variations slightly
-   * towards the target mean. If the value is less than @ref
-   * setMinimum() "minimum", it will not be used.
+   * towards the target mean. If the value is less than 
+   * [minimum](setMinimum()), it will not be used.
    */
   void setTargetMean(int targetMean)
   {

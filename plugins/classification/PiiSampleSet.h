@@ -28,7 +28,6 @@
  * an overloaded version for each function in this namespace and
  * specialize the PiiSampleSet::Traits structure.
  *
- * @ingroup PiiClassificationPlugin
  */
 namespace PiiSampleSet
 {
@@ -53,8 +52,8 @@ namespace PiiSampleSet
   };
 
   /**
-   * Creates a new sample set with @a sampleCount samples and @a
-   * featureCount features.
+   * Creates a new sample set with *sampleCount* samples and 
+   * *featureCount* features.
    */
   template <class SampleSet> inline SampleSet create(int sampleCount, int featureCount)
   {
@@ -71,8 +70,8 @@ namespace PiiSampleSet
    */
   template <class T> inline int featureCount(const PiiMatrix<T>& samples) { return samples.columns(); }
   /**
-   * Resizes a sample set to hold @a sampleCount samples with @a
-   * featureCount features. If @a featureCount is -1, the number of
+   * Resizes a sample set to hold *sampleCount* samples with 
+   * *featureCount* features. If *featureCount* is -1, the number of
    * features will not be changed.
    */
   template <class T> inline void resize(PiiMatrix<T>& samples, int sampleCount, int featureCount = -1)
@@ -81,8 +80,8 @@ namespace PiiSampleSet
     samples.resize(sampleCount, featureCount);
   }
   /**
-   * Reserves space for @a sampleCount samples with @a featureCount
-   * features. If @a featureCount is -1, the number of features will
+   * Reserves space for *sampleCount* samples with *featureCount*
+   * features. If *featureCount* is -1, the number of features will
    * not be changed.
    */
   template <class T> inline void reserve(PiiMatrix<T>& samples, int sampleCount, int featureCount = -1)
@@ -102,15 +101,14 @@ namespace PiiSampleSet
    */
   template <class T> inline int capacity(const PiiMatrix<T>& samples) { return samples.capacity(); }
   /**
-   * Returns the sample at @a index.
+   * Returns the sample at *index*.
    */
   template <class T> inline const T* sampleAt(const PiiMatrix<T>& samples, int index) { return samples[index]; }
-  /// @overload
   template <class T> inline T* sampleAt(PiiMatrix<T>& samples, int index) { return samples[index]; }
 
   /**
-   * Replaces the feature vector at @a index in @a samples with @a
-   * features.
+   * Replaces the feature vector at *index* in *samples* with 
+   * *features*.
    */
   template <class T> inline void setSampleAt(PiiMatrix<T>& samples, int index, const T* features)
   {
@@ -118,7 +116,7 @@ namespace PiiSampleSet
   }
 
   /**
-   * Adds @a sample to the and of a sample set.
+   * Adds *sample* to the and of a sample set.
    */
   template <class T> inline void append(PiiMatrix<T>& samples, const T* sample)
   {
@@ -129,7 +127,7 @@ namespace PiiSampleSet
   }
 
   /**
-   * Removes the sample at @a index.
+   * Removes the sample at *index*.
    */
   template <class T> inline void remove(PiiMatrix<T>& samples, int index)
   {
@@ -137,7 +135,7 @@ namespace PiiSampleSet
   }
   
   /**
-   * Returns @p true if @a set1 is equal to @a set2, and @p false
+   * Returns `true` if *set1* is equal to *set2*, and `false`
    * otherwise.
    */
   template <class T> inline bool equals(PiiMatrix<T>& set1, PiiMatrix<T>& set2)

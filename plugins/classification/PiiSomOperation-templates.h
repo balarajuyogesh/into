@@ -25,7 +25,6 @@
  * Implements the design pattern for QObject templates. Implements the
  * SOM classifier for PiiMatrix<T>.
  *
- * @ingroup PiiClassificationPlugin
  */
 template <class SampleSet> class PiiSomOperation::Template : public PiiSomOperation
 {

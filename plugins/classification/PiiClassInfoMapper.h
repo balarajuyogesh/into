@@ -21,31 +21,32 @@
 /**
  * An operation that maps class indices to arbitrary data. Useful when
  * classification results need to be coupled with, say, image file
- * names. The #training mode, the operation collects class indices and
+ * names. The [training] mode, the operation collects class indices and
  * the corresponding data into a look-up table. In normal operation,
  * the data corresponding to the input class index will be emitted.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in class index - class index.
  *
  * @in data - data to be coupled with the class index. Optional if
- * #training mode is @p false.
+ * [training] mode is `false`.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out data - the data that is attached to the incoming class index.
  * If there is no data for the incoming class or the operation is in
  * training mode, the default value will be emitted.
  *
- * @ingroup PiiClassificationPlugin
  */
 class PiiClassInfoMapper : public PiiDefaultOperation
 {
   Q_OBJECT
   
   /**
-   * If @p true, the operation collects incoming data. If @p false,
+   * If `true`, the operation collects incoming data. If `false`,
    * the collected data is used as output.
    */
   Q_PROPERTY(bool training READ training WRITE setTraining);
@@ -59,7 +60,7 @@ class PiiClassInfoMapper : public PiiDefaultOperation
   
   /**
    * Default value for classes that we haven't learned yet. The
-   * default value is @p null. Therefore, one must almost always set
+   * default value is `null`. Therefore, one must almost always set
    * the default value before running the operation.
    */
   Q_PROPERTY(PiiVariant defaultValue READ defaultValue WRITE setDefaultValue);

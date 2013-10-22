@@ -61,9 +61,8 @@ namespace Pii
   }
 
   /**
-   * @overload
    *
-   * This version requires a preallocated temporary storage @a tmp, a
+   * This version requires a preallocated temporary storage *tmp*, a
    * k-by-k square matrix in which k is the minimum of A's dimensions.
    */
   template <class Matrix>
@@ -214,41 +213,38 @@ namespace Pii
 
   /**
    * Calculates the Singular Value Decomposition (SVD) of a matrix.
-   * The SVD decomposes an m-by-n matrix @a A into @f$A = U*S*V^T@f$
+   * The SVD decomposes an m-by-n matrix *A* into \(A = U*S*V^T\)
    * with the following properties:
    *
-   * If @f$m \ge n@f$
-   * @li U is an m-by-n matrix with orthonormal column vectors.
-   * @li S is a diagonal n-by-n matrix with the singular values on its
+   * If \(m \ge n\)
+   * - U is an m-by-n matrix with orthonormal column vectors.
+   * - S is a diagonal n-by-n matrix with the singular values on its
    * diagonal in descending order (the largest at (0,0)).
-   * @li V is an orthogonal n-by-n matrix.
+   * - V is an orthogonal n-by-n matrix.
    * 
-   * If @f$m < n@f$
-   * @li U is an orthogonal m-by-m matrix
-   * @li S is a diagonal m-by-m matrix with the singular values on its
+   * If \(m < n\)
+   * - U is an orthogonal m-by-m matrix
+   * - S is a diagonal m-by-m matrix with the singular values on its
    * diagonal in descending order (the largest at (0,0)).
-   * @li V is an n-by-m matrix with orthonormal column vectors.
+   * - V is an n-by-m matrix with orthonormal column vectors.
    *
    * The algorithm used for calculating the SVD is based on two-sided
-   * @ref jacobiRotation "Jacobi rotations". If the input matrix is
-   * not square, @ref qrDecompose() "QR decomposition" is used to
+   * [Jacobi rotations](jacobiRotation). If the input matrix is
+   * not square, [QR decomposition](qrDecompose()) is used to
    * first reduce the input matrix to a square upper diagonal matrix.
    *
-   * @tparam Real the number type used in calculations (should be a
-   * floating-point type)
-   * 
    * @param A the input matrix
    *
    * @param U pointer to a matrix that will store U.
    *
    * @param V pointer to a matrix that will store V.
    *
-   * @return a @e row @e vector that stores the singular values in
+   * @return a *row* *vector* that stores the singular values in
    * descending magnitude order. Since the matrix S is always
    * diagonal, this function just stores the diagonal entries as a row
    * vector.
    *
-   * @note Output matrices U and V will be automatically resized.
+   * ! Output matrices U and V will be automatically resized.
    */
   template <class Matrix>
   PiiMatrix<typename Matrix::value_type> svDecompose(const PiiConceptualMatrix<Matrix>& A,

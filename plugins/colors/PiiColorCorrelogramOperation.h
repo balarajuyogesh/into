@@ -20,18 +20,19 @@
 
 /**
  * Calculate the color autocorrelogram of an image. See
- * @ref PiiColors::autoCorrelogram() for details.
+ * [PiiColors::autoCorrelogram()] for details.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - any color image or an indexed image. If a color image
- * is received, it will be converted to an indexed image. See #levels.
+ * is received, it will be converted to an indexed image. See [levels].
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out correlogram - the autocorrelogram. A PiiMatrix<float>.
  *
- * @ingroup PiiColorsPlugin
  */
 class PiiColorCorrelogramOperation : public PiiDefaultOperation
 {
@@ -39,21 +40,21 @@ class PiiColorCorrelogramOperation : public PiiDefaultOperation
 
   /**
    * A flag that controls quantization of color channels input. If
-   * this flag is @p true (the default), color channels will be
-   * quantized to the specified number of discrete #levels. If the
-   * flag is @p false, color channels are assumed to be quantized
-   * beforehand to the specified number of #levels.
+   * this flag is `true` (the default), color channels will be
+   * quantized to the specified number of discrete [levels]. If the
+   * flag is `false`, color channels are assumed to be quantized
+   * beforehand to the specified number of [levels].
    */
   Q_PROPERTY(bool quantize READ quantize WRITE setQuantize);
 
   /**
    * The number of quantization levels per each color channel for
    * color indexing. Color indices for RGB images are calculated as
-   * specified in @ref PiiColors::toIndexed(). The default value is 4. 
-   * If the #quantize flag is @p true, color channels are quantized to
+   * specified in [PiiColors::toIndexed()]. The default value is 4. 
+   * If the [quantize] flag is `true`, color channels are quantized to
    * this many levels before calculating the correlogram. If the
-   * #quantize flag is @p false, color channel values greater than or
-   * equal to @p levels will be ignored.
+   * [quantize] flag is `false`, color channel values greater than or
+   * equal to `levels` will be ignored.
    */
   Q_PROPERTY(int levels READ levels WRITE setLevels);
 

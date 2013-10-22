@@ -44,13 +44,13 @@ template <class Matrix, class Filter> struct PiiMatrixTraits<PiiFilteredMatrix<M
 };
 
 /**
- * A model of the @e matrix concept that accesses selected elements of
- * another matrix. %PiiFilteredMatrix is a 1-by-N matrix in which each
+ * A model of the *matrix* concept that accesses selected elements of
+ * another matrix. PiiFilteredMatrix is a 1-by-N matrix in which each
  * element refers to an element in another matrix that matches a
  * filter. An element is a match if the corresponding element in the
  * filter is non-zero.
  *
- * @code
+ * ~~~(c++)
  * PiiMatrix<int> mat(3, 3,
  *                    -3, -2, -1,
  *                    -4,  0,  1,
@@ -62,20 +62,19 @@ template <class Matrix, class Filter> struct PiiMatrixTraits<PiiFilteredMatrix<M
  *
  * PiiFilteredMatrix<PiiMatrix<int>, PiiMatrix<bool> > filtered(mat, filter);
  * // filtered = (-3, -1, -4, 4)
- * @endcode
+ * ~~~
  *
  * Usually, there is no need to explicitly create an instance of
- * %PiiFilteredMatrix. Use the @ref Pii::filteredMatrix() function
- * instead. PiiMatrix also has an @p operator() that takes another
+ * PiiFilteredMatrix. Use the [Pii::filteredMatrix()] function
+ * instead. PiiMatrix also has an `operator`() that takes another
  * matrix as a parameter and returns a filtered matrix.
  *
- * @code
+ * ~~~(c++)
  * PiiMatrix<int> filtered(Pii::filteredMatrix(mat, filter));
  * // Even simpler
  * PiiMatrix<int> filtered2(mat(filter));
- * @endcode
+ * ~~~
  *
- * @ingroup Matrix
  */
 template <class Matrix, class Filter>
 class PiiFilteredMatrix : public PiiConceptualMatrix<PiiFilteredMatrix<Matrix,Filter> >
@@ -141,9 +140,9 @@ private:
 namespace Pii
 {
   /**
-   * Creates a PiiFilteredMatrix that accesses those elements of @a
-   * matrix whose corresponding element in @a filter is non-zero. Note
-   * that this function does not check that @a matrix and @a filter
+   * Creates a PiiFilteredMatrix that accesses those elements of 
+   * *matrix* whose corresponding element in *filter* is non-zero. Note
+   * that this function does not check that *matrix* and *filter*
    * are equal in size.
    *
    * @relates PiiFilteredMatrix

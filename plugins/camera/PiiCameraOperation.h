@@ -24,7 +24,6 @@
 /**
  * PiiCameraOperation description
  *
- * @ingroup PiiCameraPlugin
  */
 class PII_CAMERA_EXPORT PiiCameraOperation : public PiiImageReaderOperation, public PiiCameraDriver::Listener
 {
@@ -38,7 +37,7 @@ class PII_CAMERA_EXPORT PiiCameraOperation : public PiiImageReaderOperation, pub
 
   /**
    * A list of available camera IDs. Note that not all camera drivers
-   * provide a camera list. In such cases, the #cameraId property must
+   * provide a camera list. In such cases, the [cameraId] property must
    * be set according to the camera driver. Some drivers provide a
    * list of accessible cameras, but still support other cameras as
    * well.
@@ -47,18 +46,18 @@ class PII_CAMERA_EXPORT PiiCameraOperation : public PiiImageReaderOperation, pub
 
   /**
    * The ID of the selected camera. A list of selectable cameras can
-   * be read from #cameraList. The ID of a camera can be any string. 
+   * be read from [cameraList]. The ID of a camera can be any string. 
    * For example, IP camera drivers use a URL to identify the camera.
    */
   Q_PROPERTY(QString cameraId READ cameraId WRITE setCameraId);
 
   /**
-   * If this property is @p true, the operation will make a deep copy
+   * If this property is `true`, the operation will make a deep copy
    * of each captured frame. Otherwise, it is up to the driver how the
    * memory is allocated. This mode is usually faster. However,
    * drivers that use a circular frame buffer, will silently overwrite
    * image data if the frame buffer is not big enough. The default
-   * value is @p false.
+   * value is `false`.
    */
   Q_PROPERTY(bool copyImage READ copyImage WRITE setCopyImage);
 
@@ -97,17 +96,17 @@ public:
 
 public slots:
   /**
-   * Loads the camera configuration from @a file. There might be the
+   * Loads the camera configuration from *file*. There might be the
    * configuration values which needs to start the processing again.
    * If no driver has been loaded yet, this function does nothing.
-   * Returns @p true on success, @p false otherwise.
+   * Returns `true` on success, `false` otherwise.
    */
   bool loadCameraConfig(const QString& file);
 
   /**
-   * Saves the camera configuration into @a file. If no driver has
-   * been loaded yet, this function does nothing. Returns @p true on
-   * success, @p false otherwise.
+   * Saves the camera configuration into *file*. If no driver has
+   * been loaded yet, this function does nothing. Returns `true` on
+   * success, `false` otherwise.
    */
   bool saveCameraConfig(const QString& file);
 
@@ -131,7 +130,7 @@ protected:
 
   /**
    * Processes an image before delivery. The default implementation
-   * returns @a image. Subclasses may add custom functionality by
+   * returns *image*. Subclasses may add custom functionality by
    * overriding this function.
    */
   virtual PiiVariant processImage(const PiiVariant& image, int frameIndex, qint64 elapsedTime);

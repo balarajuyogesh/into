@@ -23,12 +23,11 @@ class PiiProgressController;
 
 /**
  * An interface for all network communication protocols. If the
- * protocol is @e stateless (such as HTTP), all functions must be
- * thread-safe. @e Stateful protocols do not need to provide thread
- * safety in the #communicate() function as PiiNetworkServer clones
+ * protocol is *stateless* (such as HTTP), all functions must be
+ * thread-safe. *Stateful* protocols do not need to provide thread
+ * safety in the [communicate()] function as PiiNetworkServer clones
  * the class for each worker thread.
  *
- * @ingroup Network
  */
 class PII_NETWORK_EXPORT PiiNetworkProtocol
 {
@@ -50,7 +49,7 @@ public:
    *
    * @param controller a progress controller that either allows or
    * disallows the communication to proceed. The implementation must
-   * call the @ref PiiProgressController::canContinue()
+   * call the [PiiProgressController::canContinue()]
    * "canContinue()" function from time to time to check if it is
    * still allowed to run.
    */
@@ -62,11 +61,11 @@ public:
    * connecting client. If the protocol implementation is re-entrant
    * (i.e. the communicate() function can be called concurrently from
    * many threads and there is no state associated with a client),
-   * this function can return @p this. This function needs to be
+   * this function can return `this`. This function needs to be
    * thread-safe.
    *
    * @return an intialized copy of the protocol object. The default
-   * implementation returns @p this.
+   * implementation returns `this`.
    */
   virtual PiiNetworkProtocol* clone() const;
 

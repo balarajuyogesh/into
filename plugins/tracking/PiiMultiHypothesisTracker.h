@@ -23,33 +23,32 @@
  * to find the most likely measurement sequence, given a measurement
  * model. The algorithm works as follows:
  *
- * @li Initialize an empty set of trajectories.
+ * - Initialize an empty set of trajectories.
  *
- * @li At each time step read in a set of N candidate measurements.
+ * - At each time step read in a set of N candidate measurements.
  *
- * @li Evaluate how well each of the N measurements fits into the
+ * - Evaluate how well each of the N measurements fits into the
  * current set of M candidate trajectories (N x M evaluations). 
- * (#measureFit())
+ * ([measureFit()])
  *
- * @li Generate a new set of candidate trajectories by extending the
+ * - Generate a new set of candidate trajectories by extending the
  * old ones with the measurements with non-zero probabilities. This
  * may create many branches for a single trajectory. 
- * (#createTrajectory()) Note that trajectories will be cleared
+ * ([createTrajectory()]) Note that trajectories will be cleared
  * and the new trajectories will be added to the empty list.
  *
- * @li Evaluate how likely it is that a measurement is a starting
- * point for a new trajectory (N evaluations). (#measureFit())
+ * - Evaluate how likely it is that a measurement is a starting
+ * point for a new trajectory (N evaluations). ([measureFit()])
  *
- * @li For each measurement with a non-zero likelihood of being part
+ * - For each measurement with a non-zero likelihood of being part
  * of a new trajectory, create a new trajectory and add it to the set
- * of candidate trajectories. (#createTrajectory())
+ * of candidate trajectories. ([createTrajectory()])
  *
  * The tracker is a template class that works with any type of
  * measurements (e.g. 2-D or 3-D points) and trajectories (e.g. lists
  * of points). Measurements and trajectories can even be implemented
  * as indices to external storage.
  *
- * @ingroup PiiTrackingPlugin
  */
 template <class Measurement, class Trajectory> class PiiMultiHypothesisTracker : public QList<Trajectory>
 {
@@ -79,7 +78,7 @@ protected:
    * @param measurement the measurement to add to the trajectory.
    *
    * @param fitness fit of the measurement to the trajectory. Measured
-   * by the #measureFit() function.
+   * by the [measureFit()] function.
    *
    * @param t the current time instant
    *
@@ -88,9 +87,9 @@ protected:
   virtual TrajectoryType createTrajectory(TrajectoryType* trajectory, const MeasurementType& measurement, double fitness, int t) = 0;
 
   /**
-   * Measure how well @p measurement fits into @p trajectory.
+   * Measure how well `measurement` fits into `trajectory`.
    *
-   * @param trajectory the trajectory @p measurement is evaluated
+   * @param trajectory the trajectory `measurement` is evaluated
    * against. If this parameter is 0, the function should tell how
    * likely the measurement is to create a new trajectory. This
    * function implements the measurement model.
@@ -124,12 +123,12 @@ private:
    * The index of the measurement currently being inspected by the
    * tracking algorithm. This index can be used by subclasses to store
    * information specific to a certain sample. The index refers to the
-   * @p measurements list given as a parameter to @p addMeasurements.
+   * `measurements` list given as a parameter to `addMeasurements`.
    */
   int _iMeasurementIndex;
   /**
    * The index of the trajectory currently being inspected by the
-   * tracking algorithm. Works analogously to @p _iMeasurementIndex.
+   * tracking algorithm. Works analogously to `_iMeasurementIndex`.
    * The index refers to trajectories.
    */
   int _iTrajectoryIndex;

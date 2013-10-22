@@ -16,23 +16,7 @@
 #ifndef _PIIGLOBAL_H
 #define _PIIGLOBAL_H
 
-/**
- * @file
- *
- * Export/import macros and other global definitions such as d-pointer
- * stuff.
- */
-
-/**
- * @defgroup Core Core module
- *
- * The Core module contains data structures, classes, definitions and
- * utilities for many common tasks that are not dependent on the Ydin
- * execution engine.
- */
-
-// Disable documentation
-/// @cond null
+/// @hide
 
 #define INTO_VERSION_STR "2.0.0-beta-3"
 #define INTO_VERSION 0x02000003
@@ -74,6 +58,15 @@
   inline Data* _d() { return static_cast<Data*>(this->d = static_cast<Data*>(this->d->detach())); } \
   inline const Data* _d() const { return static_cast<const Data*>(this->d); } \
   friend class Data
+
+#define PII_SHARED_D_FUNC_DECL \
+  inline Data* _d(); \
+  inline const Data* _d() const; \
+  friend class Data
+
+#define PII_SHARED_D_FUNC_DEF(CLASS) \
+  CLASS::Data* CLASS::_d() { return static_cast<Data*>(this->d = static_cast<Data*>(this->d->detach())); } \
+  const CLASS::Data* CLASS::_d() const { return static_cast<const Data*>(this->d); }
 
 // reinterpret_cast must be used instead of (the safer) static_cast if
 // the Data class is defined outside of the containing class. In this
@@ -166,7 +159,7 @@ template <class Derived> struct PiiSharedD
 #include "PiiValueSet.h"
 #include "PiiLog.h"
 #include "PiiSynchronized.h"
-/// @endcond
+/// @endhide
 
 namespace Pii
 {

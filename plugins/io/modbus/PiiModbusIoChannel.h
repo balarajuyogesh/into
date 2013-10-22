@@ -23,7 +23,6 @@
 /**
  * I/O channel accessed through the Modbus I/O-driver.
  *
- * @ingroup PiiIoPlugin
  */
 class PII_MODBUSIODRIVER_EXPORT PiiModbusIoChannel : public PiiDefaultIoChannel
 {

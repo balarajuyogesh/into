@@ -16,17 +16,18 @@
 #ifndef _PIIFUNCTIONAL_H
 #define _PIIFUNCTIONAL_H
 
-/**
- * @file
- *
- * This file contains useful function objects missing from the
- * standard library. The @p typedefs required in adaptable functions
- * are provided both in STL and in Intopii/Qt style. The function
- * adaptors are modeled after SGI extensions to STL.
- */
 
 namespace Pii
 {
+  /**
+   * @group functional Function Objects
+   *
+   * Useful function objects missing from the standard library. The
+   * `typedefs` required in adaptable functions are provided both in
+   * STL and in Intopii/Qt style. The function adaptors are modeled
+   * after SGI extensions to STL.
+   */
+
   /**
    * An stl-compatible model for a generator function that takes no
    * arguments.
@@ -185,8 +186,8 @@ namespace Pii
   };
 
   /**
-   * An adaptable unary function that casts its argument from type @p
-   * From to type @p To.
+   * An adaptable unary function that casts its argument from type 
+   * `From` to type `To`.
    */
   template <class From, class To> struct Cast : public UnaryFunction<From,To>
   {
@@ -198,11 +199,11 @@ namespace Pii
    * function the argument of another. If function 1 is f(x) and
    * function 2 is g(x), the composition returns f(g(x)).
    *
-   * @code
+   * ~~~(c++)
    * PiiMatrix<double> mat(1,5, 1.0, 2.0, 3.0, 4.0, 5.0);
    * // Calculate -sin(x)
    * mat.map(Pii::unaryCompose(std::negate(), std::ptr_fun(sin)));
-   * @endcode
+   * ~~~
    *
    * @see unaryCompose()
    * @see BinaryCompose
@@ -214,7 +215,7 @@ namespace Pii
   public:
     /**
      * Construct a UnaryCompose object. It is seldom necessary to use
-     * the constructor directly. Use the @ref unaryCompose() function
+     * the constructor directly. Use the [unaryCompose()] function
      * instead.
      */
     UnaryCompose(const AdaptableUnaryFunction1& op1,
@@ -257,7 +258,7 @@ namespace Pii
    * the unary composition returns f(g(x),h(x)). If the object is used
    * as a binary function, the composition returns f(g(x), h(y)).
    *
-   * @code
+   * ~~~(c++)
    * PiiMatrix<double> mat(1,5, 1.0, 2.0, 3.0, 4.0, 5.0);
    * // Calculate sin(mat) + cos(mat)
    * mat.map(Pii::binaryCompose(std::plus<double>(), std::ptr_fun(sin), std::ptr_fun(cos)));
@@ -266,7 +267,7 @@ namespace Pii
    * // Calculate mat - sqrt(mat2)
    * mat.map(Pii::binaryCompose(std::minus<double>(), Pii::Identity<double>, Pii::Sqrt<double>()),
    *         mat2);
-   * @endcode
+   * ~~~
    *
    * @see binaryCompose()
    * @see UnaryCompose
@@ -283,7 +284,7 @@ namespace Pii
   public:
     /**
      * Construct a %BinaryCompose object. It is seldom necessary to use
-     * the constructor directly. Use the @ref binaryCompose() function
+     * the constructor directly. Use the [binaryCompose()] function
      * instead.
      */
     BinaryCompose(const AdaptableBinaryFunction& op1,
@@ -339,12 +340,12 @@ namespace Pii
    * A unary function that increments/decrements its internal counter
    * by a predefined value each time the function is called.
    *
-   * @code
+   * ~~~(c++)
    * PiiMatrix<float> matrix(1,3);
    * // Fill matrix
    * Pii::fill(matrix.begin(), matrix.end(), Pii::CountFunction<float>(0,2));
    * // matrix = 0 2 4
-   * @endcode
+   * ~~~
    */
   template <class T> class CountFunction : public Generator<T>
   {
@@ -415,7 +416,7 @@ namespace Pii
   };
   
   /**
-   * A unary function (predicate) that always returns @p true.
+   * A unary function (predicate) that always returns `true`.
    */
   template <class T> struct YesFunction : public UnaryFunction<T,bool>
   {
@@ -423,12 +424,14 @@ namespace Pii
   };
   
   /**
-   * A unary function (predicate) that always returns @p false.
+   * A unary function (predicate) that always returns `false`.
    */
   template <class T> struct NoFunction : public UnaryFunction<T,bool>
   {
     bool operator()(const T&) const { return false; }
   };
+
+  /// @endgroup
 };
 
 #endif //_PIIFUNCTIONAL_H

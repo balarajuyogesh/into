@@ -38,7 +38,6 @@
  * TextInputArchive reads space-separated textual data. All non-ASCII
  * characters need to be UTF-8 encoded.
  *
- * @ingroup Serialization
  */
 class PII_SERIALIZATION_EXPORT PiiTextInputArchive :
   public PiiInputArchive<PiiTextInputArchive>,

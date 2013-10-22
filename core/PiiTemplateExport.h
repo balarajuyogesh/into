@@ -17,31 +17,31 @@
 #define _PIITEMPLATEEXPORT_H
 
 /**
- * @file
+ * @page piitemplateexport_h Exporting Templates
  *
- * Contains macros for exporting explicit template instances from
- * shared libraries. Different compilers need different (non-standard)
- * tricks to export template instantiations. The standard-compliant @p
- * export keyword, which was intended approximately for the purpose
- * falls miles short of its target and is actually not supported by
- * most of the compilers.
+ * PiiTemplateExport.h contains macros for exporting explicit template
+ * instances from shared libraries. Different compilers need different
+ * (non-standard) tricks to export template instantiations. The
+ * standard-compliant `export` keyword, which was intended
+ * approximately for the purpose falls miles short of its target and
+ * is actually not supported by most compilers.
  *
- * @li GCC, MinGW: The @p DECLARE macros declare an @p extern explicit
- * instance of a template as per C++0x. The @p DEFINE macros create an
+ * - GCC, MinGW: The `DECLARE` macros declare an `extern` explicit
+ * instance of a template as per C++0x. The `DEFINE` macros create an
  * explicit instance.
  *
- * @li MSVC: The @p DECLARE macros expand to nothing if building a
- * library. If the library is not being build, the @p DECLARE macros
- * declare an explicit instance with @p __declspec(dllimport) storage
- * class. The @p DEFINE macros create an explicit instance with @p
- * __declspec(dllexport) storage class. This trick is needed because
+ * - MSVC: The `DECLARE` macros expand to nothing if building a
+ * library. If the library is not being build, the `DECLARE` macros
+ * declare an explicit instance with `__declspec`(dllimport) storage
+ * class. The `DEFINE` macros create an explicit instance with 
+ * `__declspec`(dllexport) storage class. This trick is needed because
  * there is no way to just declare an exported explicit instance in
- * MSVC. Even if the storage class is @p dllexport, the compiler
+ * MSVC. Even if the storage class is `dllexport`, the compiler
  * instantiates the template. In some cases all definitions for the
  * required template instance may not be available yet, and the
  * template must be instantiated later.
  *
- * @code
+ * ~~~(c++)
  * // In MyStruct.h
  * #include <PiiTemplateExport.h>
  *
@@ -61,16 +61,14 @@
  * PII_DECLARE_EXPORTED_CLASS_TEMPLATE(struct, MyStruct<double>, BUILDING_MYLIB);
  * // Declare an exported explicit instance of a template function.
  * PII_DECLARE_EXPORTED_FUNCTION_TEMPLATE(void, identityFunc<int>, (int), BUILDING_MYLIB);
- * @endcode
+ * ~~~
  *
- * @code
+ * ~~~(c++)
  * // In MyStruct.cc, create explicit instances:
  * #include "MyStruct.h"
  * PII_DEFINE_EXPORTED_CLASS_TEMPLATE(struct, MyStruct<double>);
  * PII_DEFINE_EXPORTED_FUNCTION_TEMPLATE(void, identityFunc<int>, (int));
- * @endcode
- *
- * @see PiiGlobal.h
+ * ~~~
  */
 
 #include "PiiPreprocessor.h"

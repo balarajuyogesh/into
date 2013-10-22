@@ -18,6 +18,8 @@
 
 #include "PiiYdin.h"
 
+class QMetaObject;
+
 /// @internal
 class PII_YDIN_EXPORT PiiClassInfoRegisterer
 {
@@ -25,16 +27,15 @@ public:
   PiiClassInfoRegisterer(const char* parent,
                          const char* child,
                          const char* superClass = 0,
-                         ptrdiff_t offset = 0);
+                         ptrdiff_t offset = 0,
+                         const QMetaObject* metaObject = 0);
 
   ~PiiClassInfoRegisterer();
 
 private:
-  class Data
-  {
-  public:
-    QList<int> lstIds;
-  } *d;
+  class Data;
+  Data* d;
+  PII_DISABLE_COPY(PiiClassInfoRegisterer);
 };
 
 #endif //_PIICLASSINFOREGISTERER_H

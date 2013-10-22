@@ -35,7 +35,6 @@
  * The interface has a default implementation for each method so that
  * only the necessary methods need to be overridden.
  *
- * @ingroup Ydin
  */
 class PII_GUI_EXPORT PiiConfigurationWidget : public QWidget
 {
@@ -54,25 +53,25 @@ public:
    * for example, with configuration dialogs that can be accepted only
    * if certain values have been correctly set. The default
    * implementation returns the value set by setAcceptable(). The
-   * default value is @p true.
+   * default value is `true`.
    */
   virtual bool canAccept() const;
   /**
    * See if the component can be reset to the state it was upon
    * creation or after the last acceptChanges() call. The default
-   * implementation returns @p false.
+   * implementation returns `false`.
    */
   virtual bool canReset() const;
   /**
    * See if the component has default values it can be initialized
-   * with. The default implementation returns @p false.
+   * with. The default implementation returns `false`.
    */
   virtual bool hasDefaults() const;
   /**
    * Check whether the component's state has changed since its
    * creation or the last acceptChanges() call. The default implementation
-   * returns the value set by setChanged(). The default value is @p
-   * false.
+   * returns the value set by setChanged(). The default value is 
+   * `false`.
    */
   virtual bool hasChanged() const;
 

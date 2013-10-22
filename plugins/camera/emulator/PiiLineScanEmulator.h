@@ -49,12 +49,12 @@ class PII_CAMERAEMULATOR_EXPORT PiiLineScanEmulator : public PiiCameraDriver
   /**
    * The name of the class that produces background for the web. If
    * none is set, the background will be painted with
-   * #backgroundColor. The generator must be registered to the object
+   * [backgroundColor]. The generator must be registered to the object
    * registry.
    *
-   * @code
+   * ~~~(c++)
    * emulator->setProperty("textureGeneratorName", "PiiNonWovenGenerator");
-   * @endcode
+   * ~~~
    */
   Q_PROPERTY(QString textureGeneratorName READ textureGeneratorName WRITE setTextureGeneratorName STORED false);
 
@@ -78,7 +78,7 @@ class PII_CAMERAEMULATOR_EXPORT PiiLineScanEmulator : public PiiCameraDriver
   /**
    * The field of view of the camera's lens in degrees. If this value
    * is set to a non-zero value, the emulator will simulate optical
-   * vignetting with the @f$cos^4(\theta)@f$ law.
+   * vignetting with the \(cos^4(\theta)\) law.
    */
   Q_PROPERTY(double fieldOfView READ fieldOfView WRITE setFieldOfView);
 
@@ -113,7 +113,7 @@ class PII_CAMERAEMULATOR_EXPORT PiiLineScanEmulator : public PiiCameraDriver
    * The number of scan-lines the texture generator is requested to
    * generate in each batch. The default value is 128. It is seldom
    * necessary to change this value, but make sure it is larger than
-   * #bufferHeight.
+   * [bufferHeight].
    */
   Q_PROPERTY(int textureBlockSize READ textureBlockSize WRITE setTextureBlockSize);
 

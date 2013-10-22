@@ -115,7 +115,7 @@ signals:
 
 public slots:
   /**
-   * Sets the displayed image. If @p image is not of a recognized
+   * Sets the displayed image. If `image` is not of a recognized
    * type, this function does nothing.
    */
   void setImage(const PiiVariant& image, int layer = 0);

@@ -26,8 +26,8 @@
 /**
  * An implementation of a threaded network server. This class provides
  * a framework for server processes that handle incoming connections
- * by creating a worker thread for each. @p %PiiNetworkServer is
- * designed to work with any native socket type. Subclasses provide
+ * by creating a worker thread for each. PiiNetworkServer is designed
+ * to work with any native socket type. Subclasses provide
  * implementations for TCP servers and local socket servers.
  *
  * PiiNetworkServer is intended to be used with an event loop. The
@@ -40,7 +40,6 @@
  * @see PiiTcpServer
  * @see PiiLocalServer
  *
- * @ingroup Network
  */
 class PII_NETWORK_EXPORT PiiNetworkServer :
   public QObject,
@@ -62,21 +61,21 @@ class PII_NETWORK_EXPORT PiiNetworkServer :
    * connections. The upper bound for this value is 1000. The default
    * value is 10.
    *
-   * @see #maxPendingConnections
+   * @see maxPendingConnections
    */
   Q_PROPERTY(int maxWorkers READ maxWorkers WRITE setMaxWorkers);
 
   /**
    * The time (in milliseconds) a worker thread is allowed to be idle
    * before dying. If a worker thread has not been activated within
-   * this time, and more than #minWorkers worker threads are alive,
+   * this time, and more than [minWorkers] worker threads are alive,
    * the thread will be destroyed. The default value is 10000.
    */
   Q_PROPERTY(int workerMaxIdleTime READ workerMaxIdleTime WRITE setWorkerMaxIdleTime);
 
   /**
    * The number of pending connection attempts to keep. If the server
-   * cannot create new worker threads due to #maxWorkers limitation,
+   * cannot create new worker threads due to [maxWorkers] limitation,
    * it will place the connection into a list of pending connections.
    * Keep this value low to avoid client timeouts without any
    * response. The default value is 0.
@@ -105,7 +104,7 @@ public:
   
   /**
    * Starts the server. This function initializes the server's thread
-   * pool and calls #startListening() to allow actual server implementations
+   * pool and calls [startListening()] to allow actual server implementations
    * to start listening to a socket.
    *
    * Note that this function will not block. If the server starts
@@ -116,14 +115,14 @@ public:
   /**
    * Sends a stop signal to the server. This function stops all worker
    * threads and waits until they are done. It then calls
-   * #stopListening().
+   * [stopListening()].
    *
    * @param mode InterruptClients: the worker threads will be
    * interrupted even if they are not done with their clients yet. 
    * WaitClients: the threads will wait until all clients finish
    * cleanly.
    *
-   * @return @p true if the server was successfully stopped, @p false
+   * @return `true` if the server was successfully stopped, `false`
    * if it wasn't running.
    *
    * @see QTcpServer::close()
@@ -154,7 +153,7 @@ public:
    * @param serverAddress the address in an implementation-dependent
    * format.
    *
-   * @return @p true if the address was successfully set, @p false
+   * @return `true` if the address was successfully set, `false`
    * otherwise.
    */
   virtual bool setServerAddress(const QString& serverAddress) = 0;
@@ -203,20 +202,20 @@ protected:
   PiiNetworkServer(PiiNetworkProtocol* protocol);
 
   /**
-   * This function is called by #start() after the thread pool has
+   * This function is called by [start()] after the thread pool has
    * been initialized. A typical overridden implementation makes the
    * low-level server implementation to start listening to a socket.
    *
-   * @return @p true if the server was successfully started, @p false
+   * @return `true` if the server was successfully started, `false`
    * otherwise.
    */
   virtual bool startListening() = 0;
   
   /**
-   * This function is called by #stop() after the thread pool has been
+   * This function is called by [stop()] after the thread pool has been
    * destroyed. Typically, a listening socket is be closed. The server
    * implementation must not accept new connections after this
-   * function has been called unless #startListening() is called
+   * function has been called unless [startListening()] is called
    * again.
    */
   virtual void stopListening() = 0;
@@ -227,11 +226,11 @@ protected:
    *
    * -# Pick an idle worker thread to handle the connection.
    *
-   * -# Create a new thread with #createWorker().
+   * -# Create a new thread with [createWorker()].
    *
    * -# Put the connection to the list of pending connections.
    *
-   * -# Call #serverBusy().
+   * -# Call [serverBusy()].
    *
    * The function is called by subclasses that handle the conversion
    * from their native socket descriptor format to
@@ -240,15 +239,15 @@ protected:
   void incomingConnection(PiiGenericSocketDescriptor socketDescriptor);
 
   /**
-   * Called by the server when #maxWorkers threads are running, and
-   * #maxPendingConnections connection attempts have been already
+   * Called by the server when [maxWorkers] threads are running, and
+   * [maxPendingConnections] connection attempts have been already
    * queued when a new connection attempt comes in. Subclasses
    * implement this function to provide a protocol-specific response.
    *
    * The default implementation sends a user-specified message (UTF-8
-   * encoded) to the device returned by @p createSocket().
+   * encoded) to the device returned by `createSocket`().
    *
-   * @see #setBusyMessage()
+   * @see [setBusyMessage()]
    */
   virtual void serverBusy(PiiGenericSocketDescriptor socketDescriptor);
   
@@ -258,12 +257,12 @@ protected:
    * a new PiiNetworkServerThread.
    *
    * @param protocol the protocol used for communication. If the
-   * protocol is stateless, @p %PiiNetworkServer retains its
-   * ownership. If it is stateful, the passed pointer is a clone that
-   * must be deleted by whoever will finally take the pointer. 
-   * Usually, the pointer is just passed to the constructor of
-   * PiiNetworkServerThread, which automatically takes care of deleting
-   * the pointer.
+   * protocol is stateless, PiiNetworkServer retains its ownership. If
+   * it is stateful, the passed pointer is a clone that must be
+   * deleted by whoever will finally take the pointer.  Usually, the
+   * pointer is just passed to the constructor of
+   * PiiNetworkServerThread, which automatically takes care of
+   * deleting the pointer.
    */
   virtual PiiNetworkServerThread* createWorker(PiiNetworkProtocol* protocol);
 

@@ -25,14 +25,16 @@
  * An operation that calculates the histogram of a gray-scale or a
  * color image.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - the input image, any gray-scale or color image.
  *
- * @in roi - region-of-interest. See @ref PiiImagePlugin for details. 
+ * @in roi - region-of-interest. See [PiiImagePlugin] for details. 
  * Optional.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out red - the red channel histogram
  *
@@ -43,7 +45,6 @@
  * If a gray-scale image is read, the histogram will be sent to all
  * three outputs.
  *
- * @ingroup PiiImagePlugin
  */
 class PiiHistogramOperation : public PiiDefaultOperation
 {
@@ -58,17 +59,17 @@ class PiiHistogramOperation : public PiiDefaultOperation
   Q_PROPERTY(int levels READ levels WRITE setLevels);
 
   /**
-   * Output normalization. If set to @p false (the default), the
+   * Output normalization. If set to `false` (the default), the
    * output will be a PiiMatrix<int> in which each column represents
-   * the number of times the specific color was encountered. If @p
-   * true, output histograms will be normalized so that they always
+   * the number of times the specific color was encountered. If 
+   * `true`, output histograms will be normalized so that they always
    * sum up to unity and represented by PiiMatrix<float>.
    */
   Q_PROPERTY(bool normalized READ normalized WRITE setNormalized);
 
   /**
-   * The type or the @p roi input, if connected. The default value is
-   * @p AutoRoi.
+   * The type or the `roi` input, if connected. The default value is
+   * `AutoRoi`.
    */
   Q_PROPERTY(PiiImage::RoiType roiType READ roiType WRITE setRoiType);
 

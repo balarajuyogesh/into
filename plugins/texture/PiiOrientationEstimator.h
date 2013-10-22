@@ -23,13 +23,15 @@
 /**
  * An operation that estimates the orientation of texture. For each
  * input image, an orientation histogram is calculated. The number of
- * quantization levels can be set by the @p angles property.
+ * quantization levels can be set by the `angles` property.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - input image. Any gray level or color image.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out histogram - orientation histogram. Prominent peaks mean
  * prominent orientations. Each bin in the histogram denotes the
@@ -37,10 +39,9 @@
  * that the orientation histogram represents the direction of image
  * gradient or "slope". A gradient pointing at 135 degrees means an
  * oriented element pointing at 45 or 225 degrees. To get texture
- * orientation instead of gradient direction, set the #rotateHistogram
- * flag to @p true. (PiiMatrix<float>)
+ * orientation instead of gradient direction, set the [rotateHistogram]
+ * flag to `true`. (PiiMatrix<float>)
  *
- * @ingroup PiiTexturePlugin
  */
 class PiiOrientationEstimator : public PiiDefaultOperation
 {
@@ -59,8 +60,8 @@ class PiiOrientationEstimator : public PiiDefaultOperation
 
   /**
    * The type of orientation estimation. Different methods have
-   * different strengths and weaknesses. The default is @p
-   * UnidirectionalGradient.
+   * different strengths and weaknesses. The default is 
+   * `UnidirectionalGradient`.
    */
   Q_PROPERTY(EstimationType estimationType READ estimationType WRITE setEstimationType);
   Q_ENUMS(EstimationType);
@@ -68,12 +69,12 @@ class PiiOrientationEstimator : public PiiDefaultOperation
   /**
    * Rotate the orientation histogram by 90 degrees. This effectively
    * gives you the texture orientation instead of gradient direction.
-   * The default value is @p false.
+   * The default value is `false`.
    */
   Q_PROPERTY(bool rotateHistogram READ rotateHistogram WRITE setRotateHistogram);
 
   /**
-   * Output normalization. If set to @p true (the default), the output
+   * Output normalization. If set to `true` (the default), the output
    * histogram will always sum up to unity. Otherwise, the sum depends
    * on input image size, gradient magnitudes etc.
    */
@@ -84,19 +85,19 @@ public:
   /**
    * Different ways of estimating texture orientation.
    *
-   * @lip Gradient - local gradient based method. Works well in most
+   * - `Gradient` - local gradient based method. Works well in most
    * cases, especially within small image windows. Faster than the
    * Fourier-based technique. The gradient method separates
    * orientations pointing to opposite directions and thus measures
    * orientation over a full circle.
    *
-   * @lip UnidirectionalGradient - same as @p Gradient, but combines
+   * - `UnidirectionalGradient` - same as `Gradient`, but combines
    * orientations pointing to opposite directions, thus using only
    * half of the orientation circle.
    *
-   * @lip Fourier - Fourier transform based method. Captures weak
+   * - `Fourier` - Fourier transform based method. Captures weak
    * repeating structures better than the gradient method. Typically
-   * requires larger samples than @p Gradient and is somewhat slower.
+   * requires larger samples than `Gradient` and is somewhat slower.
    */
   enum EstimationType { Gradient, UnidirectionalGradient, Fourier };
   

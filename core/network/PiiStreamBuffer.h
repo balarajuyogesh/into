@@ -20,10 +20,9 @@
 #include <QBuffer>
 
 /**
- * An output filter that buffers data into itself until #flushFilter()
+ * An output filter that buffers data into itself until [flushFilter()]
  * is called.
  *
- * @ingroup Network
  */
 class PII_NETWORK_EXPORT PiiStreamBuffer : public QByteArray, public PiiDefaultStreamFilter
 {
@@ -36,7 +35,7 @@ public:
   ~PiiStreamBuffer();
 
   /**
-   * Writes @p maxSize bytes of @p data to the buffer.
+   * Writes `maxSize` bytes of `data` to the buffer.
    */
   qint64 filterData(const char* data, qint64 maxSize);
 

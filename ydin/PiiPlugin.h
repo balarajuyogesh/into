@@ -25,14 +25,6 @@
 #include "PiiYdinResources.h"
 #include <QtGlobal>
 
-/**
- * @file
- *
- * This file contains useful macros for easily creating Into plug-ins
- * and registering classes from them.
- *
- * @ingroup Ydin
- */
 
 #define PII_PLUGIN_RETURN_SPEC PII_DECL_EXPORT const char*
 
@@ -68,35 +60,35 @@ typedef const char* (*pii_plugin_function)();
  * @param PLUGIN_NAME a unique identifier (resource name) for the
  * plug-in.
  *
- * @code
+ * ~~~(c++)
  * PII_IMPLEMENT_PLUGIN(PiiImagePlugin);
- * @endcode
+ * ~~~
  */
 #define PII_IMPLEMENT_PLUGIN(PLUGIN_NAME) \
   extern "C" PII_PLUGIN_RETURN_SPEC PII_PLUGIN_NAME_FUNCTION() { return PII_STRINGIZE(PLUGIN_NAME); } \
   extern "C" PII_PLUGIN_RETURN_SPEC PII_PLUGIN_VERSION_FUNCTION() { return INTO_VERSION_STR; } \
-  static const char* pluginName() { static const char* pName = PII_STRINGIZE(PLUGIN_NAME); return pName; } \
+  static const char* pluginName() { return PII_STRINGIZE(PLUGIN_NAME); } \
   static PiiClassInfoRegisterer PII_JOIN(classInfoOf,PLUGIN_NAME)("plugins", PII_STRINGIZE(PLUGIN_NAME))
 
 /**
- * Register an operation to Ydin's global resource database. This
- * macro registers the given @p CLASS_NAME as an instantiable resource
+ * Registers an operation to Ydin's global resource database. This
+ * macro registers the given `CLASS_NAME` as an instantiable resource
  * to the object registry, and places it as a child to the current
  * plug-in. The plug-in must have been implemented in the same
- * translation unit (see @ref PII_IMPLEMENT_PLUGIN).
+ * translation unit (see [PII_IMPLEMENT_PLUGIN]).
  *
- * @b Note: Registered operations must be serializable and they must
+ * **Note:** Registered operations must be serializable and they must
  * declare a virtual piiMetaObject() function. If you don't want your
  * class to be serializable, you can add statements about it in the
- * @ref PII_BEGIN_STATEMENTS "statements" section of a plug-in.
+ * [statements](PII_BEGIN_STATEMENTS) section of a plug-in.
  *
  * @param CLASS_NAME the name of the class to register.
  *
- * @code
+ * ~~~(c++)
  * PII_IMPLEMENT_PLUGIN(PiiImagePlugin);
  *
  * PII_REGISTER_OPERATION(PiiImageFileReader);
- * @endcode
+ * ~~~
  */
 #define PII_REGISTER_OPERATION(CLASS_NAME)                              \
   PII_DEFINE_VIRTUAL_METAOBJECT_FUNCTION(CLASS_NAME);                   \
@@ -105,11 +97,13 @@ typedef const char* (*pii_plugin_function)();
   static PiiClassInfoRegisterer                                         \
     PII_JOIN(classInfoOf,CLASS_NAME)(pluginName(),                      \
                                      PII_STRINGIZE(CLASS_NAME),         \
-                                     PiiYdin::operationResourceName(static_cast<CLASS_NAME*>(0)))
+                                     PiiYdin::operationResourceName(static_cast<CLASS_NAME*>(0)), \
+                                     0,                                 \
+                                     PiiYdin::qMetaObject<CLASS_NAME>())
 /**
- * Same as @ref PII_REGISTER_OPERATION, but for operations that
- * implement a special @p Void constructor for deserialization
- * purposes. See @ref PII_SERIALIZATION_CONSTRUCTOR.
+ * Same as [PII_REGISTER_OPERATION], but for operations that
+ * implement a special `Void` constructor for deserialization
+ * purposes. See [PII_SERIALIZATION_CONSTRUCTOR].
  */
 #define PII_REGISTER_OPERATION_VOIDCTOR(CLASS_NAME)                     \
   PII_SERIALIZATION_NAME(CLASS_NAME);                                   \
@@ -121,23 +115,25 @@ typedef const char* (*pii_plugin_function)();
   static PiiClassInfoRegisterer                                         \
     PII_JOIN(classInfoOf,CLASS_NAME)(pluginName(),                      \
                                      PII_STRINGIZE(CLASS_NAME),         \
-                                     PiiYdin::operationResourceName(static_cast<CLASS_NAME*>(0)))
+                                     PiiYdin::operationResourceName(static_cast<CLASS_NAME*>(0)), \
+                                     0,                                 \
+                                     PiiYdin::qMetaObject<CLASS_NAME>())
 
 /**
  * Use this macro to register operation compounds. An alias for
- * @ref PII_REGISTER_OPERATION_VOIDCTOR.
+ * [PII_REGISTER_OPERATION_VOIDCTOR].
  */
 #define PII_REGISTER_COMPOUND(CLASS_NAME) PII_REGISTER_OPERATION_VOIDCTOR(CLASS_NAME)
 
 /**
- * Register an instance of an operation template. The standard
+ * Registers an instance of an operation template. The standard
  * programming pattern for registering template classes to the
  * resource database is to create an inner template class named
  * "Template". Properties are stored/retrieved with pure virtual
  * functions. This macro exports an implementation of such a template.
  * Do this:
  *
- * @code
+ * ~~~(c++)
  * class MyClass : public QObject
  * {
  *   Q_OBJECT
@@ -162,14 +158,14 @@ typedef const char* (*pii_plugin_function)();
  *
  * PII_REGISTER_OPERATION_TEMPLATE(MyClass, float);
  * // This will register MyClass::Template<float> as "MyClass<float>" to the database.
- * @endcode
+ * ~~~
  *
- * This macro registers @a CLASS_NAME::Template<PRIMITIVE> as an
+ * This macro registers *CLASS_NAME::Template*<PRIMITIVE> as an
  * instantiable resource to the object registry, and uses
  * CLASS_NAME<PRIMITIVE> as the resource name. The resource will be
  * placed as a child to the current plug-in. The plug-in must have
- * been implemented in the same translation unit (see @ref
- * PII_IMPLEMENT_PLUGIN).
+ * been implemented in the same translation unit (see 
+ * [PII_IMPLEMENT_PLUGIN]).
  */
 #define PII_REGISTER_OPERATION_TEMPLATE(CLASS_NAME, PRIMITIVE) \
   PII_DEFINE_SPECIALIZED_VIRTUAL_METAOBJECT_FUNCTION(CLASS_NAME, PRIMITIVE); \
@@ -177,33 +173,35 @@ typedef const char* (*pii_plugin_function)();
   PII_SERIALIZABLE_EXPORT(CLASS_NAME::Template<PRIMITIVE>); \
   static PiiClassInfoRegisterer PII_JOIN3(classInfoOf,CLASS_NAME,PRIMITIVE)(pluginName(), \
                                                                             PII_STRINGIZE(CLASS_NAME<PRIMITIVE>), \
-                                                                            PiiYdin::operationResourceName(static_cast<CLASS_NAME*>(0)))
+                                                                            PiiYdin::operationResourceName(static_cast<CLASS_NAME*>(0)), \
+                                                                            0, \
+                                                                            PiiYdin::qMetaObject<CLASS_NAME>())
 
 /// @internal
 #define PII_POINTER_DIFF(CLASS, SUPERCLASS) reinterpret_cast<ptrdiff_t>(static_cast<SUPERCLASS*>(reinterpret_cast<CLASS*>(1)))-1
 
 /**
- * Register @a CLASS as an instantiable object to the resource
+ * Registers *CLASS* as an instantiable object to the resource
  * database. This macro does the following:
  *
- * @li Register the name of the type as a string literal to the
+ * - Register the name of the type as a string literal to the
  * serialization library.
  *
- * @li Create a factory object for the type.
+ * - Create a factory object for the type.
  *
- * @li Add two statements to the resource database: one that specifies
+ * - Add two statements to the resource database: one that specifies
  * a parent-child relationship (pii:parent) between the current
  * plug-in and the class, and another that labels the class as an
- * instantiable object (pii:class) of type @a SUPERCLASS.
+ * instantiable object (pii:class) of type *SUPERCLASS*.
  *
- * @li Add a pii:offset statement if @a SUPERCLASS is not the first
- * superclass of @a CLASS.
+ * - Add a pii:offset statement if *SUPERCLASS* is not the first
+ * superclass of *CLASS*.
  *
- * If @a CLASS is not a descendant of @a SUPERCLASS, the registration
- * will fail at compile time. If you use a custom interface as the @a
- * SUPERCLASS, make sure it has the class name trait defined.
+ * If *CLASS* is not a descendant of *SUPERCLASS*, the registration
+ * will fail at compile time. If you use a custom interface as the 
+ * *SUPERCLASS*, make sure it has the class name trait defined.
  *
- * @code
+ * ~~~(c++)
  * class MyInterface {};
  * class MyClass : public MyInterface {};
  *
@@ -211,7 +209,7 @@ typedef const char* (*pii_plugin_function)();
  *
  * // MyClass is instantiable as MyInterface
  * PII_REGISTER_CLASS(MyClass, MyInterface);
- * @endcode
+ * ~~~
  */
 #define PII_REGISTER_CLASS(CLASS, SUPERCLASS) \
   PII_SERIALIZATION_NAME(CLASS); \
@@ -219,10 +217,11 @@ typedef const char* (*pii_plugin_function)();
   static PiiClassInfoRegisterer PII_JOIN(classInfoOf,CLASS)(pluginName(), \
                                                             PII_STRINGIZE(CLASS), \
                                                             PiiYdin::resourceName<SUPERCLASS >(), \
-                                                            PII_POINTER_DIFF(CLASS, SUPERCLASS))
+                                                            PII_POINTER_DIFF(CLASS, SUPERCLASS), \
+                                                            PiiYdin::qMetaObject<CLASS>())
 /**
- * Same as @ref PII_REGISTER_CLASS, but also registers serializers for
- * @p CLASS, which must be serializable.
+ * Same as [PII_REGISTER_CLASS], but also registers serializers for
+ * `CLASS`, which must be serializable.
  */
 #define PII_REGISTER_SERIALIZABLE_CLASS(CLASS, SUPERCLASS) \
   PII_SERIALIZATION_NAME(CLASS); \
@@ -230,11 +229,12 @@ typedef const char* (*pii_plugin_function)();
   static PiiClassInfoRegisterer PII_JOIN(classInfoOf,CLASS)(pluginName(), \
                                                             PII_STRINGIZE(CLASS), \
                                                             PiiYdin::resourceName<SUPERCLASS >(), \
-                                                            PII_POINTER_DIFF(CLASS, SUPERCLASS))
+                                                            PII_POINTER_DIFF(CLASS, SUPERCLASS), \
+                                                            PiiYdin::qMetaObject<CLASS>())
 
 /**
- * Same as @ref PII_REGISTER_CLASS but for class templates. This macro
- * just registers @a CLASS<TYPE> instead of @a CLASS.
+ * Same as [PII_REGISTER_CLASS] but for class templates. This macro
+ * just registers *CLASS*<TYPE> instead of *CLASS*.
  */
 #define PII_REGISTER_CLASS_TEMPLATE(CLASS, TYPE, SUPERCLASS) \
   PII_SERIALIZATION_NAME_CUSTOM(CLASS<TYPE >, CLASS<TYPE>); \
@@ -242,7 +242,8 @@ typedef const char* (*pii_plugin_function)();
   static PiiClassInfoRegisterer PII_JOIN3(classInfoOf,CLASS,TYPE)(pluginName(), \
                                                                   PII_STRINGIZE(CLASS<TYPE>), \
                                                                   PiiYdin::resourceName<SUPERCLASS >(), \
-                                                                  PII_POINTER_DIFF(CLASS, SUPERCLASS))
+                                                                  PII_POINTER_DIFF(CLASS, SUPERCLASS) ,\
+                                                                  PiiYdin::qMetaObject<CLASS>())
 
 
 /// @internal
@@ -272,13 +273,13 @@ QList<PiiResourceStatement> STATEMENTS_CLASS::statements() \
 /**
  * A macro that starts a statement registration section. If you want
  * to add arbitrary statements to Ydin's global resource database, use
- * the @p PII_BEGIN_STATEMENTS and @ref PII_END_STATEMENTS macros as
+ * the `PII_BEGIN_STATEMENTS` and [PII_END_STATEMENTS] macros as
  * delimiters. Any number of statements can be registered in between. 
  * Note that this macro can appear only once per plugin to avoid name
  * clashes. It is however allowed to have many registration sections
  * if each of them has a globally unique name.
  *
- * @code
+ * ~~~(c++)
  * PII_BEGIN_STATEMENTS(PiiImagePlugin)
  *   PII_REGISTER_LITERAL_STATEMENT(PiiImageViewer, "my:opinion", "crap")
  *   PII_REGISTER_RESOURCE_STATEMENT(PiiImageViewer, "my:recursion", PiiImageViewer)
@@ -287,43 +288,53 @@ QList<PiiResourceStatement> STATEMENTS_CLASS::statements() \
  *   // instances.
  *   PII_REGISTER_CONNECTION(MyImageViewer, "pii:display", PiiImageDisplay, MyImageDisplayConnector)
  * PII_END_STATEMENTS
- * @endcode
+ * ~~~
  */
 #define PII_BEGIN_STATEMENTS(PLUGIN_NAME) PII_BEGIN_STATEMENTS_IMPL(PLUGIN_NAME ## Statements)
 
 /**
- * Insert the statement "the PREDICATE of SUBJECT is OBJECT" to the
- * resource database. This macro assumes that @p OBJECT is a string
+ * Inserts the statement "the PREDICATE of SUBJECT is OBJECT" to the
+ * resource database. This macro assumes that `OBJECT` is a string
  * literal.
  *
  * @see PII_BEGIN_STATEMENTS
  */
 #define PII_REGISTER_LITERAL_STATEMENT(SUBJECT, PREDICATE, OBJECT) \
-  << PiiResourceStatement(PII_STRINGIZE(SUBJECT), PREDICATE, OBJECT, PiiResourceStatement::LiteralType)
+  << PiiResourceDatabase::literal(PII_STRINGIZE(SUBJECT), PREDICATE, OBJECT)
 
 /**
- * Insert the statement "the PREDICATE of SUBJECT is OBJECT" to the
- * resource database. This macro assumes that @p OBJECT is a resource
+ * Inserts the statement "the PREDICATE of SUBJECT is OBJECT" to the
+ * resource database. This macro assumes that `OBJECT` is a resource
  * identifier such as a class name (not quoted).
  *
  * @see PII_BEGIN_STATEMENTS
  */
 #define PII_REGISTER_RESOURCE_STATEMENT(SUBJECT, PREDICATE, OBJECT) \
-  << PiiResourceStatement(PII_STRINGIZE(SUBJECT), PREDICATE, PII_STRINGIZE(OBJECT), PiiResourceStatement::ResourceType)
+  << PiiResourceDatabase::resource(PII_STRINGIZE(SUBJECT), PREDICATE, PII_STRINGIZE(OBJECT))
 
 /**
- * Register a named connection between two related resources. Both @a
- * SUBJECT and @a OBJECT must be resource identifiers. The @a
- * CONNECTOR is also a resource that configures the two related
+ * Inserts the statement "the PREDICATE of SUBJECT is OBJECT" to the
+ * resource database. This macro assumes that `OBJECT` is a resource
+ * pointer.
+ *
+ * @see PII_BEGIN_STATEMENTS
+ */
+#define PII_REGISTER_RESOURCEPTR_STATEMENT(SUBJECT, PREDICATE, OBJECT) \
+  << PiiResourceDatabase::resource(PII_STRINGIZE(SUBJECT), PREDICATE, OBJECT)
+
+/**
+ * Registers a named connection between two related resources. Both 
+ * *SUBJECT* and *OBJECT* must be resource identifiers. The 
+ * *CONNECTOR* is also a resource that configures the two related
  * resources so that they can work together. Either party of the
  * relationship can also work as the connector, which makes it
  * unnecessary to instantiate a separate connector object. The special
- * resources @p pii:subject and @p pii:object are reserved for this
- * purpose. @a ROLE is a string literal that names the connection
- * between two resources. This macro must be used between @ref
- * PII_BEGIN_STATEMENTS and @ref PII_END_STATEMENTS.
+ * resources `pii:subject` and `pii:object` are reserved for this
+ * purpose. *ROLE* is a string literal that names the connection
+ * between two resources. This macro must be used between 
+ * [PII_BEGIN_STATEMENTS] and [PII_END_STATEMENTS].
  *
- * @code
+ * ~~~(c++)
  * PII_BEGIN_STATEMENTS(MyPlugin)
  *   // MyConfiguratorWidget can work as a configurator UI for MyOperation.
  *   // When connected together in this role, MyConfiguratorWidget
@@ -331,21 +342,21 @@ QList<PiiResourceStatement> STATEMENTS_CLASS::statements() \
  *   // the statement).
  *   PII_REGISTER_CONNECTION(MyOperation, "pii:configurator", MyConfiguratorWidget, pii:object)
  * PII_END_STATEMENTS
- * @endcode
+ * ~~~
  *
  * @see PII_BEGIN_STATEMENTS
  * @see PiiResourceConnector
  */
 #define PII_REGISTER_CONNECTION(SUBJECT, ROLE, OBJECT, CONNECTOR) \
   PII_REGISTER_RESOURCE_STATEMENT(SUBJECT, ROLE, OBJECT) \
-  << PiiResourceStatement("#", PiiYdin::connectorPredicate, PII_STRINGIZE(CONNECTOR), PiiResourceStatement::ResourceType)
+  << PiiResourceDatabase::resource("#", PiiYdin::connectorPredicate, PII_STRINGIZE(CONNECTOR))
 
 /**
- * Register a superclass. This macro is used to make Ydin aware of
- * multiple inheritance as the usual @ref PII_REGISTER_CLASS macro
- * only takes one superclass as an argument.
+ * Registers a superclass. This macro is used to make Ydin aware of
+ * multiple inheritance as the usual [PII_REGISTER_CLASS] macro only
+ * takes one superclass as an argument.
  *
- * @code
+ * ~~~(c++)
  * class MyClass : public QObject, public MyInterface {};
  *
  * // MyClass is instantiable as a QObject
@@ -355,18 +366,17 @@ QList<PiiResourceStatement> STATEMENTS_CLASS::statements() \
  *   // It also inherits MyInterface
  *   PII_REGISTER_SUPERCLASS(MyClass, MyInterface)
  * PII_END_STATEMENTS
- * @endcode
+ * ~~~
  *
  * @see resource_cast()
  */
 #define PII_REGISTER_SUPERCLASS(CLASS, SUPERCLASS) \
   PII_REGISTER_RESOURCE_STATEMENT(CLASS, PiiYdin::classPredicate, SUPERCLASS) \
-  << PiiResourceStatement("#", PiiYdin::offsetPredicate, \
-                          QString::number(PII_POINTER_DIFF(CLASS, SUPERCLASS)), \
-                          PiiResourceStatement::LiteralType)
+  << PiiResourceDatabase::literal("#", PiiYdin::offsetPredicate,        \
+                                  QString::number(PII_POINTER_DIFF(CLASS, SUPERCLASS)))
 
 /**
- * End a statement registration section. See @ref PII_BEGIN_STATEMENTS.
+ * End a statement registration section. See [PII_BEGIN_STATEMENTS].
  */
 #define PII_END_STATEMENTS ; return lstStatements; }
 
@@ -385,6 +395,14 @@ namespace PiiYdin
   inline const char* operationResourceName(const PiiEngine*)
   {
     return PiiYdin::resourceName<PiiEngine>();
+  }
+
+  template <class T> struct StaticMeta { static const QMetaObject* meta() { return &T::staticMetaObject; } };
+  struct NullMeta { static const QMetaObject* meta() { return 0; } };
+  
+  template <class T> inline const QMetaObject* qMetaObject()
+  {
+    return Pii::If<Pii::IsBaseOf<QObject,T>::boolValue, StaticMeta<T>, NullMeta>::Type::meta();
   }
 }
 

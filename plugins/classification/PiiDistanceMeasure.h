@@ -34,27 +34,19 @@ template <class FeatureIterator> double NAME<FeatureIterator>::operator() (Featu
                                                                            int length) const throw()
 
 /**
- * @file
- * @ingroup PiiClassificationPlugin
- *
- * Definitions for distance measure classes.
- */
-
-/**
  * Type definition for a polymorphic implementation of the function
- * object @a MEASURE.
+ * object *MEASURE*.
  *
- * @code
+ * ~~~(c++)
  * PiiDistanceMeasure<ConstFeatureIterator>* pMeasure = new PII_POLYMORPHIC_MEASURE(PiiHistogramIntersection);
- * @endcode
+ * ~~~
  */
 #define PII_POLYMORPHIC_MEASURE(MEASURE) typename PiiDistanceMeasure<ConstFeatureIterator>::template Impl<MEASURE<ConstFeatureIterator> >
 
 /**
- * A polymorphic implementation of the @ref
- * classification_distance_measures "distance measure" concept.
+ * A polymorphic implementation of the 
+ * [distance measure](classification_distance_measures) concept.
  *
- * @ingroup PiiClassificationPlugin
  */
 template <class FeatureIterator> class PiiDistanceMeasure
 {
@@ -102,11 +94,10 @@ template <class FeatureIterator> PiiDistanceMeasure<FeatureIterator>::~PiiDistan
 
 /**
  * A template that implements the PiiDistanceMeasure interface by
- * using @p Measure as the distance measure implementation. The
- * virtual measure() function just passes the call to the given @p
- * Measure class.
+ * using `Measure` as the distance measure implementation. The
+ * virtual measure() function just passes the call to the given 
+ * `Measure` class.
  *
- * @ingroup PiiClassificationPlugin
  */
 template <class FeatureIterator> template <class Measure>
 class PiiDistanceMeasure<FeatureIterator>::Impl :

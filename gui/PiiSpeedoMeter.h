@@ -25,7 +25,6 @@
 /**
  * A class provides a simple speedometer display.
  *
- * @ingroup Gui
  */
 class PII_GUI_EXPORT PiiSpeedoMeter : public QWidget
 {
@@ -96,11 +95,11 @@ public:
   /**
    * Visibility flags.
    *
-   * @lip ShowMeasurementType - draw the type
-   * @lip ShowValue - draw the value
-   * @lip ShowBorders - draw the inner and outer borders
-   * @lip ShowScaleBrush -
-   * @lip ShowAlarmBrush -
+   * - `ShowMeasurementType` - draw the type
+   * - `ShowValue` - draw the value
+   * - `ShowBorders` - draw the inner and outer borders
+   * - `ShowScaleBrush` -
+   * - `ShowAlarmBrush` -
    */
   enum VisibilityFlag { ShowMeasurementType = 1,
                         ShowValue = 2,

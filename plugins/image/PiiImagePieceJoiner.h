@@ -33,7 +33,8 @@
  * with the same class label are joined together to form continuous
  * regions.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - the large image the pieces are extracted from (any
  * matrix or image type)
@@ -44,20 +45,21 @@
  * the input location. The location is expected to be a PiiMatrix<int>
  * with one row and at least two columns. The first two elements of
  * the matrix are treated as the (x,y) coordinates of the upper left
- * corner. This input is always coupled with the @a image input.
+ * corner. This input is always coupled with the *image* input.
  *
  * @in area - a rectangle bounding a sub-image within the large
  * image. Multiple rectangles may be read for each large image. 
  * (1-by-4 PiiMatrix<int>, interpreted as a PiiRectangle). This inputs
- * works in sync with @p label and assumes objects at a higher flow
- * level than @p image. Suitable input can be obtained for example
+ * works in sync with `label` and assumes objects at a higher flow
+ * level than `image`. Suitable input can be obtained for example
  * from PiiImageSplitter.
  *
  * @in label - an integer that labels the incoming area. This input is
  * optional. If it is not connected, -1 will be used. (any primitive
- * type, converted to an @p int)
+ * type, converted to an `int`)
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out image - any number of sub-images extracted from the main
  * image. The sub-images are created by finding the bounding box of
@@ -70,7 +72,6 @@
  *
  * @out label - the label of the compound sub-image.
  *
- * @ingroup PiiImagePlugin
  */
 class PiiImagePieceJoiner : public PiiDefaultOperation
 {
@@ -84,13 +85,13 @@ class PiiImagePieceJoiner : public PiiDefaultOperation
    * with a question mark. If transparency is not in use, the missing
    * slot is filled with original image data.
    *
-@verbatim
-+---+---+
-|   |   |
-+---+---+
-  ? |   |
-    +---+
-@endverbatim
+   * ~~~
+   * +---+---+
+   * |   |   |
+   * +---+---+
+   *   ? |   |
+   *     +---+
+   * ~~~
    *
    * Note that transparent mode is not as efficient as the
    * non-transparent one because original image data cannot be shared.
@@ -110,7 +111,7 @@ class PiiImagePieceJoiner : public PiiDefaultOperation
   /**
    * A flag that indicates whether the default label (0) is discarded
    * or not. By default, all sub-images labeled with zero are not
-   * considered in joining the components. Set to @p false to make the
+   * considered in joining the components. Set to `false` to make the
    * default label also form connected components.
    */
   Q_PROPERTY(bool discardDefault READ discardDefault WRITE setDiscardDefault);

@@ -29,16 +29,16 @@
  * keypoint descriptor is calculated by comparing pairs of pixels at
  * the selected locations. Each comparison yields a binary digit whose
  * value depends on which of the two pixels is brighter. N comparisons
- * result in an N-bit binary number analogously to the @ref PiiLbp
+ * result in an N-bit binary number analogously to the [PiiLbp]
  * "LBP operator".
  *
  * M different RLBP codes are calculated for each keypoint, resulting
  * in M N-bit binary numbers. The keypoint detector is trained by
  * applying different geometric transformations to the input image and
  * recalculating the RLBPs for each simulated viewpoint. The resulting
- * binary numbers are collected into M histograms, @f$2^N@f$ levels
+ * binary numbers are collected into M histograms, \(2^N\) levels
  * each. These histograms are concatenated to produce a single
- * histogram of @f$M 2^N@f$ bins.
+ * histogram of \(M 2^N\) bins.
  *
  * The technique was originally named "random ferns" by its
  * developers. The "random local binary patterns" used here is a more
@@ -46,7 +46,6 @@
  * between "random ferns" and LBP is just in the way the compared
  * pixel pairs are selected.
  *
- * @ingroup PiiTemplateMatchingPlugin
  */
 class PiiRandomLbp
 {
@@ -54,7 +53,7 @@ public:
   /**
    * Sets parameters for the RLBP and re-randomizes the selected point
    * pairs. The total length of the feature point descriptor will be
-   * @a patterns * 2 ^ @a pairs.
+   * *patterns* * 2 ^ *pairs*.
    *
    * @param patterns the number of random LBPs to create
    *
@@ -63,22 +62,22 @@ public:
    * @param rows the number of rows in the local window
    *
    * @param columns the number of columns in the local window. If this
-   * value is zero or negative, the local window will be a @a rows x
-   * @a rows square.
+   * value is zero or negative, the local window will be a *rows* x
+   * *rows* square.
    */
   void setParameters(int patterns, int pairs, int rows, int columns = 0);
 
   /**
-   * Returns a 1-by-@f$M 2^N@f$ matrix whose all entries will be
+   * Returns a 1-by-\(M 2^N\) matrix whose all entries will be
    * initially set to ones.
    */
   PiiMatrix<int> initializeHistogram() const;
 
   /**
-   * Calculates the M N-bit RLBP codes in @a image and adds one to all
-   * matching entries in @a histogram. Assume N is 4 and the
+   * Calculates the M N-bit RLBP codes in *image* and adds one to all
+   * matching entries in *histogram*. Assume N is 4 and the
    * calculated binary codes become 3, 10, 0, and 15. This function
-   * would then increment bins 3, 26, 32, and 63 in @a histogram.
+   * would then increment bins 3, 26, 32, and 63 in *histogram*.
    */
   template <class T> void updateHistogram(int* histogram, const PiiMatrix<T>& image);
   

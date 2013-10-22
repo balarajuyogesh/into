@@ -28,7 +28,6 @@ class QMutex;
  * and is awakened by each incoming object.
  *
  * @internal
- * @ingroup Ydin
  */
 class PiiThreadedProcessor : public QThread, public PiiOperationProcessor
 {
@@ -55,18 +54,18 @@ public:
   void start();
 
   /**
-   * Sets the state to @p Interrupted. The state changes to @p Stopped
+   * Sets the state to `Interrupted`. The state changes to `Stopped`
    * once the processor stops running.
    */
   void interrupt();
 
   /**
-   * Sets the state to @p Pausing.
+   * Sets the state to `Pausing`.
    */
   void pause();
 
   /**
-   * Sets the state to @p Stopping.
+   * Sets the state to `Stopping`.
    */
   void stop();
 

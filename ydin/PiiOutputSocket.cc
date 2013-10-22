@@ -25,8 +25,8 @@
 
 using namespace PiiYdin;
 
-PiiOutputSocket::Data::Data(PiiOutputSocket* owner) :
-  PiiAbstractOutputSocket::Data(owner),
+PiiOutputSocket::Data::Data() :
+  PiiAbstractOutputSocket::Data(),
   iGroupId(0),
   freeInputCondition(PiiWaitCondition::NoQueue),
   pFirstInput(0),
@@ -34,7 +34,12 @@ PiiOutputSocket::Data::Data(PiiOutputSocket* owner) :
   bInterrupted(false),
   pbInputCompleted(0),
   activeThreadId(0)
+{}
+
+PiiOutputSocket::Data::~Data()
 {
+  delete[] pbInputCompleted;
+  pbInputCompleted = 0;
 }
 
 bool PiiOutputSocket::Data::setOutputConnected(bool connected)
@@ -42,29 +47,63 @@ bool PiiOutputSocket::Data::setOutputConnected(bool connected)
   return bConnected = PiiAbstractOutputSocket::Data::setOutputConnected(connected);
 }
 
-PiiAbstractOutputSocket* PiiOutputSocket::Data::rootOutput() const
+void PiiOutputSocket::Data::inputUpdated(PiiAbstractInputSocket*)
 {
-  return q;
+  if (lstInputs.size() > 0)
+    pFirstController = lstInputs.controllerAt(0);
 }
+
+void PiiOutputSocket::Data::inputConnected(PiiAbstractInputSocket* input)
+{
+  input->setListener(this);
+  // Run-time optimization
+  if (lstInputs.size() == 1)
+    {
+      pFirstInput = input;
+      pFirstController = input->controller();
+    }
+  createFlagArray();
+}
+
+void PiiOutputSocket::Data::inputDisconnected(PiiAbstractInputSocket*)
+{
+  if (lstInputs.size() > 0)
+    {
+      pFirstInput = lstInputs.inputAt(0);
+      pFirstController = lstInputs.controllerAt(0);
+    }
+  else
+    {
+      pFirstInput = 0;
+      pFirstController = 0;
+    }
+  createFlagArray();
+}
+
+void PiiOutputSocket::Data::createFlagArray()
+{
+  //qDebug("PiiOutputSocket: creating flag array for %d connections.", d->lstInputs.size());
+  delete[] pbInputCompleted;
+  if (lstInputs.size() > 0)
+    {
+      pbInputCompleted = new bool[lstInputs.size()];
+      Pii::fillN(pbInputCompleted, lstInputs.size(), false);
+    }
+  else
+    pbInputCompleted = 0;
+}
+
 
 PiiOutputSocket::PiiOutputSocket(const QString& name) :
-  PiiAbstractOutputSocket(new Data(this))
-{
-  setObjectName(name);
-}
+  PiiAbstractOutputSocket(name, new Data)
+{}
 
-PiiOutputSocket::PiiOutputSocket(Data* data, const QString& name) :
-  PiiAbstractOutputSocket(data)
-{
-  setObjectName(name);
-}
+PiiOutputSocket::PiiOutputSocket(const QString& name, Data* data) :
+  PiiAbstractOutputSocket(name, data)
+{}
 
 PiiOutputSocket::~PiiOutputSocket()
-{
-  delete[] _d()->pbInputCompleted;
-}
-
-PiiSocket::Type PiiOutputSocket::type() const { return Output; }
+{}
 
 void PiiOutputSocket::setGroupId(int id) { _d()->iGroupId = id; }
 int PiiOutputSocket::groupId() const { return _d()->iGroupId; }
@@ -268,67 +307,14 @@ void PiiOutputSocket::emitNonThreaded(const PiiVariant& object)
   throw PiiExecutionException(PiiExecutionException::Interrupted);
 }
 
-void PiiOutputSocket::inputReady(PiiAbstractInputSocket* /*input*/)
+void PiiOutputSocket::Data::inputReady(PiiAbstractInputSocket* /*input*/)
 {
-  _d()->freeInputCondition.wakeOne();
+  freeInputCondition.wakeOne();
 }
-
-PiiOutputSocket* PiiOutputSocket::socket() { return this; }
-PiiAbstractInputSocket* PiiOutputSocket::asInput() { return 0; }
-PiiAbstractOutputSocket* PiiOutputSocket::asOutput() { return this; }
 
 void PiiOutputSocket::synchronizeTo(PiiInputSocket* input)
 {
   setGroupId(input->groupId());
-}
-
-void PiiOutputSocket::inputConnected(PiiAbstractInputSocket* input)
-{
-  PII_D;
-  // Run-time optimization
-  if (d->lstInputs.size() == 1)
-    {
-      d->pFirstInput = input;
-      d->pFirstController = input->controller();
-    }
-  createFlagArray();
-}
-
-void PiiOutputSocket::inputDisconnected(PiiAbstractInputSocket*)
-{
-  PII_D;
-  if (d->lstInputs.size() > 0)
-    {
-      d->pFirstInput = d->lstInputs.inputAt(0);
-      d->pFirstController = d->lstInputs.controllerAt(0);
-    }
-  else
-    {
-      d->pFirstInput = 0;
-      d->pFirstController = 0;
-    }
-  createFlagArray();
-}
-
-void PiiOutputSocket::inputUpdated(PiiAbstractInputSocket*)
-{
-  PII_D;
-  if (d->lstInputs.size() > 0)
-    d->pFirstController = d->lstInputs.controllerAt(0);
-}
-
-void PiiOutputSocket::createFlagArray()
-{
-  PII_D;
-  //qDebug("PiiOutputSocket: creating flag array for %d connections.", d->lstInputs.size());
-  delete[] d->pbInputCompleted;
-  if (d->lstInputs.size() > 0)
-    {
-      d->pbInputCompleted = new bool[d->lstInputs.size()];
-      Pii::fillN(d->pbInputCompleted, d->lstInputs.size(), false);
-    }
-  else
-    d->pbInputCompleted = 0;
 }
 
 void PiiOutputSocket::resume(PiiSocketState state)
@@ -367,7 +353,7 @@ void PiiOutputSocket::endMany()
 
 void PiiOutputSocket::setInputListener(PiiInputListener* listener)
 {
-  if (listener == 0) listener = this;
+  if (listener == 0) listener = _d();
   PII_D;
   for (int i=0; i<d->lstInputs.size(); ++i)
     d->lstInputs.inputAt(i)->setListener(listener);

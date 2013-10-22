@@ -21,13 +21,13 @@ namespace Pii
   /**
    * A traits structure that specifies the bit counts and
    * corresponding integer types for a floating-point number. 
-   * Specialization are provided for @p float and @p double.
+   * Specialization are provided for `float` and `double`.
    */
   template <class Real> struct IeeeFloatTraits;
 
   /**
    * A traits structure that specifies the bit counts and
-   * corresponding integer types for the @p float type.
+   * corresponding integer types for the `float` type.
    */
   template <> struct IeeeFloatTraits<float>
   {
@@ -39,7 +39,7 @@ namespace Pii
 
   /**
    * A traits structure that specifies the bit counts and
-   * corresponding integer types for the @p double type.
+   * corresponding integer types for the `double` type.
    */
   template <> struct IeeeFloatTraits<double>
   {
@@ -51,10 +51,10 @@ namespace Pii
 
   /**
    * A class that wraps a floating-point number and allows one to
-   * twiddle its bits. The class does not currently support @p long @p
-   * double.
+   * twiddle its bits. The class does not currently support `long` 
+   * `double`.
    *
-   * @note Make yourself familiar with the IEEE 754-1985 standard
+   * ! Make yourself familiar with the IEEE 754-1985 standard
    * before using this class. Most importantly, learn the difference
    * between binary and base-10 exponents and note that the floating
    * point number format stores the binary exponent in a biased format.
@@ -67,7 +67,7 @@ namespace Pii
     typedef typename IeeeFloatTraits<Real>::UnsignedType UnsignedType;
   
     /**
-     * Create a wrapper for @p value.
+     * Create a wrapper for `value`.
      */
     explicit IeeeFloat(Real value = 0) : _value(value) {}
 

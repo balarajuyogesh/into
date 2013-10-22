@@ -33,7 +33,6 @@
  * penalty, but prevents some overflows that would otherwise occur
  * rather often.
  *
- * @ingroup Core
  */
 template <class T> class PiiFraction
 {
@@ -58,9 +57,9 @@ public:
    * uses a recursive formula that uses continued fractions to build
    * an approximation for the floating-point number:
    *
-   * @f[
+   * \[
    * f = n_0 + \frac{1}{n_1 + \frac{1}{n_2 + \frac{1}{\cdots}}}
-   * @f]
+   * \]
    *
    * @param number a floating point number
    *
@@ -259,7 +258,7 @@ public:
 
   /**
    * Get a floating-point approximation of the fraction. If
-   * denominator is zero, @p INFINITY will be returned.
+   * denominator is zero, `INFINITY` will be returned.
    */
   operator double() const { return (double)numerator/denominator; }
 

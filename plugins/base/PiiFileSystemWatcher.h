@@ -26,12 +26,12 @@
  * is added or modified in directory that are being watched, its
  * absolute file name will be emitted.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out filename - the absolute path of a file that was modified or
  * added to a watched directory.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiFileSystemWatcher : public PiiDefaultOperation
 {
@@ -49,17 +49,17 @@ class PiiFileSystemWatcher : public PiiDefaultOperation
    * the one of the filters. If the filter list is empty, all changed
    * files will be reported. An example:
    *
-   * @code
+   * ~~~(c++)
    * QStringList lstNameFilters = QStringList() << "*.jpg" << "*.png";
    * pFileSystemWatcher->setProperty("nameFilters", lstNameFilters);
-   * @endcode
+   * ~~~
    */
   Q_PROPERTY(QStringList nameFilters READ nameFilters WRITE setNameFilters);
 
   /**
-   * Delay the emission of a file name for this many seconds. If @p
-   * watchDelay is non-zero, added and modified files will not be
-   * reported until they remain unchanged at least @p watchDelay
+   * Delay the emission of a file name for this many seconds. If 
+   * `watchDelay` is non-zero, added and modified files will not be
+   * reported until they remain unchanged at least `watchDelay`
    * seconds. This can be used delay the handling of a large file
    * until it is completely stored into the file system. The default
    * value is zero.

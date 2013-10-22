@@ -25,7 +25,6 @@
  * implements the measurement mode by calling
  * PiiTracking::predictConstantVelocity().
  *
- * @ingroup PiiTrackingPlugin
  */
 template <class T, int D> class PiiConstantVelocityTracker : public PiiCoordinateTracker<T,D>
 {

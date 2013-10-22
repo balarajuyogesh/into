@@ -29,16 +29,17 @@
  * The operation prevents overflows by cutting the gray levels at 255
  * in 8-bit images. Other data types will not be cut.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - any image. Color images will be normalized
  * channel-wise.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out image - normalized image, same type as input
  *
- * @ingroup PiiImagePlugin
  */
 class PiiAdaptiveImageNormalizer : public PiiDefaultOperation
 {

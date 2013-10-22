@@ -34,39 +34,40 @@
  * This operation implements the classical Hough transform, which is
  * concerned with the identification of lines in the image. Hough
  * transform has been extended to identifying positions of arbitrary
- * shapes, most commonly circles or ellipses. See @ref
- * PiiHoughTransform for details.
+ * shapes, most commonly circles or ellipses. See 
+ * [PiiHoughTransform] for details.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - an image to be transformed. Typically, the input
  * image is binary, but any gray-level image can be used. All non-zero
  * values in the input image will add to the transform. Higher values
  * have higher weight.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out accumulator - the accumulator array. A PiiMatrix<int>, unless
  * the input is a floating-point type, in which case the accumulator
  * will be a PiiMatrix<float>.
  *
  * @out peaks - detected peaks in the transformation domain. The
- * output value is a PiiMatrix<double> with at most #maxPeakCount
- * rows. Each row stores the location of a peak @f$(d, \theta)@f$,
- * where @e d is the distance to the center of the image and
- * @f$\theta@f$ is the slope of the line. If there are less than
- * #maxPeakCount peaks, the number of rows in the matrix matches the
+ * output value is a PiiMatrix<double> with at most [maxPeakCount]
+ * rows. Each row stores the location of a peak \((d, \theta)\),
+ * where *d* is the distance to the center of the image and
+ * \(\theta\) is the slope of the line. If there are less than
+ * [maxPeakCount] peaks, the number of rows in the matrix matches the
  * number of peaks found. The rows of the matrix are ordered so that
  * the highest peak comes first.
  * 
  * @out coordinates - a PiiMatrix<int> containing the end points of
- * detected lines at image boundaries #maxPeakCount highest peaks in
+ * detected lines at image boundaries [maxPeakCount] highest peaks in
  * the transformation domain are considered. The matrix has 4 columns
  * containing the begin and end points of a detected line (x1, y1, x2,
- * y2). This output can be directly connected to the @p property input
- * of @ref PiiImageAnnotator.
+ * y2). This output can be directly connected to the `property` input
+ * of [PiiImageAnnotator].
  *
- * @ingroup PiiTransformsPlugin
  */
 class PII_TRANSFORMS_EXPORT PiiHoughTransformOperation : public PiiDefaultOperation
 {
@@ -87,15 +88,15 @@ class PII_TRANSFORMS_EXPORT PiiHoughTransformOperation : public PiiDefaultOperat
   
   /**
    * The number of highest peaks detected in the accumulator. See the
-   * @p maxCnt parameter of @ref PiiTransforms::findPeaks(). Default
+   * `maxCnt` parameter of [PiiTransforms::findPeaks()]. Default
    * value is 1.
    */
   Q_PROPERTY(int maxPeakCount READ maxPeakCount WRITE setMaxPeakCount);
 
   /**
    * The minimum magnitude for a peak in the parameter space to be
-   * considered a peak. See the @p threshold parameter of @ref
-   * PiiTransforms::findPeaks(). Default value is 0. Getting this
+   * considered a peak. See the `threshold` parameter of 
+   * [PiiTransforms::findPeaks()]. Default value is 0. Getting this
    * value right usually requires experimenting.
    */
   Q_PROPERTY(double minPeakMagnitude READ minPeakMagnitude WRITE setMinPeakMagnitude);

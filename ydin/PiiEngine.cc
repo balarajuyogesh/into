@@ -31,6 +31,7 @@ PII_DEFINE_VIRTUAL_METAOBJECT_FUNCTION(PiiEngine)
 PII_SERIALIZABLE_EXPORT(PiiEngine);
 
 static int iEngineMetaType = qRegisterMetaType<PiiEngine*>("PiiEngine*");
+static int iPluginMetaType = qRegisterMetaType<PiiEngine::Plugin>("PiiEngine::Plugin");
 
 PiiEngine::PluginMap PiiEngine::_pluginMap;
 QMutex PiiEngine::_pluginLock;
@@ -52,6 +53,7 @@ public:
 PiiEngine::PiiEngine()
 {
   Q_UNUSED(iEngineMetaType); // suppresses compiler warning
+  Q_UNUSED(iPluginMetaType);
 #ifdef __MINGW32__
   /* HACK
    * Mingw exception handling is not thread safe. The first exception
@@ -156,6 +158,7 @@ PiiEngine::Plugin PiiEngine::loadPlugin(const QString& name)
   if (pluginVersion.part(0) < intoVersion.part(0))
     PII_THROW(PiiLoadException, tr("The plug-in is not binary compatible with your version of Into."));
 
+  unloader.pLib->setObjectName(name);
   Plugin plugin(unloader.release(), (*pNameFunc)(), pluginVersion);
   _pluginMap.insert(name, plugin);
 
@@ -219,7 +222,7 @@ PiiEngine* PiiEngine::clone() const
 
   // Set properties if not derived
   if (pResult != 0 && PiiEngine::metaObject() == metaObject())
-    Pii::setProperties(pResult, Pii::propertyList(this, Pii::WritableProperties | Pii::DynamicProperties));
+    Pii::setProperties(pResult, Pii::propertyList(this, 0, Pii::WritableProperties | Pii::DynamicProperties));
 
   return pResult;
 }
@@ -345,6 +348,12 @@ PiiEngine::Plugin& PiiEngine::Plugin::operator= (const PiiEngine::Plugin& other)
       d->iRefCount = other.d->iRefCount;
     }
   return *this;
+}
+
+bool PiiEngine::Plugin::operator== (const Plugin& other) const
+{
+  return d->strResourceName == other.d->strResourceName &&
+    d->version == other.d->version;
 }
 
 PiiEngine::Plugin::~Plugin()

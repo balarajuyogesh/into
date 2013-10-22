@@ -20,9 +20,10 @@
 #include "PiiAbstractOutputSocket.h"
 #include "PiiSocketState.h"
 #include "PiiExecutionException.h"
-#include "PiiVariant.h"
-#include "PiiMatrix.h"
+#include "PiiInputListener.h"
 
+#include <PiiVariant.h>
+#include <PiiMatrix.h>
 #include <PiiWaitCondition.h>
 
 #include <QLinkedList>
@@ -52,18 +53,18 @@ namespace PiiYdin
   }
 
   /**
-   * Returns a variant that contains @p value. By default, this
-   * function just returns @p PiiVariant(value). Using this function
+   * Returns a variant that contains `value`. By default, this
+   * function just returns `PiiVariant`(value). Using this function
    * as an indirection is however useful since it allows
    * specialized versions for different data types. For example, all
    * conceptual matrices are converted into concrete PiiMatrix
    * instances before creating a variant out of them.
    *
-   * @code
+   * ~~~(c++)
    * PiiMatrix<int> a, b;
    * PiiVariant v1(a+b); //Won't work, because a+b is not a concrete matrix
    * PiiVariant v2(PiiYdin::createVariant(a+b)); // works
-   * @endcode
+   * ~~~
    */
   template <class T> inline PiiVariant createVariant(const T& value)
   {
@@ -75,16 +76,15 @@ namespace PiiYdin
 /**
  * An output socket.
  *
- * @ingroup Ydin
  */
-class PII_YDIN_EXPORT PiiOutputSocket : public PiiSocket, public PiiAbstractOutputSocket
+class PII_YDIN_EXPORT PiiOutputSocket : public PiiAbstractOutputSocket
 {
   Q_OBJECT
-  
+
 public:
   /**
    * Construct a new output socket with the given name. This
-   * constructor sets @p name as the @p objectName property of the
+   * constructor sets `name` as the `objectName` property of the
    * class.
    */
   PiiOutputSocket(const QString& name);
@@ -94,11 +94,6 @@ public:
    */
   ~PiiOutputSocket();
 
-  /**
-   * Returns @p Output.
-   */
-  Type type() const;
-  
   /**
    * Set the group id of this socket. The group id of an output socket
    * is used to find synchronization pairs. The default flow control
@@ -113,15 +108,15 @@ public:
   Q_INVOKABLE int groupId() const;
 
   /**
-   * Set this socket synchronized with respect to @p input. This is a
+   * Set this socket synchronized with respect to `input`. This is a
    * convenience function that sets the socket's group id to that of
-   * @p input, which indicates that this output emits objects in
+   * `input`, which indicates that this output emits objects in
    * relation to the specified input. For example, the output may emit
-   * an object each time a new object is received in @p input. Or it
+   * an object each time a new object is received in `input`. Or it
    * may emit two objects for each input, or one for each three
    * inputs, or two for every other input and three for the others. In
    * principle, any variation is allowed. The main point is that the
-   * output is caused by objects read from @p input. By default, all
+   * output is caused by objects read from `input`. By default, all
    * inputs and outputs are in sync group 0. There is usually no need
    * to change this.
    */
@@ -135,13 +130,13 @@ public:
    * objects for each input, do something like this in the process()
    * function of your operation:
    *
-   * @code
+   * ~~~(c++)
    * PiiVariant obj = readObject();
    * output->startMany();
    * output->emitObject(1);
    * output->emitObject(2);
    * output->endMany();
-   * @endcode
+   * ~~~
    */
   void startMany();
 
@@ -161,13 +156,13 @@ public:
    * received. Examples of such operations include PiiImagePieceJoiner
    * and PiiHistogramCollector.
    *
-   * The following example assumes @p MyOperation has two inputs: one
+   * The following example assumes `MyOperation` has two inputs: one
    * for a large image and another for values calculated from image
-   * pieces just like PiiImagePieceJoiner. @p MyOperation calculates a
+   * pieces just like PiiImagePieceJoiner. `MyOperation` calculates a
    * value for each large image, but it needs both the large image and
    * the values from sub-images for it.
    *
-   * @code
+   * ~~~(c++)
    * void MyOperation::process()
    * {
    *   if (activeInputGroup() == _pImageInput->groupId())
@@ -187,7 +182,7 @@ public:
    *       _pResultOutput->endDelay();
    *     }
    * }
-   * @endcode
+   * ~~~
    *
    * It is possible to delay emissions more than one processing round,
    * but this function must be called once for each delayed object. 
@@ -195,7 +190,7 @@ public:
    * calls must be performed.
    *
    * One must ensure that the size of the input queue at a receiver is
-   * larger enough. In the example above, if @p _pResultOutput is
+   * larger enough. In the example above, if `_pResultOutput` is
    * connected to an operation that needs both the result and the
    * large image, the size of the input queue for the input that
    * receives the image must be at least three (one for the object
@@ -216,8 +211,8 @@ public:
   void endDelay();
 
   /**
-   * Restores socket state after pause. This function will modify @a
-   * inputState according to the current state of this socket and pass
+   * Restores socket state after pause. This function will modify 
+   * *inputState* according to the current state of this socket and pass
    * the information to all connected input sockets.
    *
    * @param inputState the state of a synchronized input socket group.
@@ -229,11 +224,11 @@ public:
    * function blocks until all connected synchronous inputs are able
    * to receive the object.
    *
-   * @note emitObject() assumes that this output socket is used as the
+   * ! emitObject() assumes that this output socket is used as the
    * listener for all connected inputs. If you have set a custom
    * listener to the connected input sockets, this function may block
-   * indefinitely. You may need to call #inputReady() from your
-   * implementation of the listener.
+   * indefinitely. You may need to call the `inputReady()` function of
+   * the original listener from your implementation.
    *
    * @exception PiiExecutionException& if the emission was interrupted
    * by an external signal.
@@ -243,7 +238,7 @@ public:
   /**
    * Tries to sends an object through this output to all connected
    * inputs. If any of the inputs is unable to receive the object,
-   * returns @p false. Otherwise returns @p true. Successive calls to
+   * returns `false`. Otherwise returns `true`. Successive calls to
    * this function will retry the emission until all connected inputs
    * have accepted the object. If you use this function, you may also
    * need to set a custom listener to the connected input sockets to
@@ -255,15 +250,15 @@ public:
   bool tryEmit(const PiiVariant& object);
 
   /**
-   * Creates a PiiVariant out of the given @a value and emits it. This
+   * Creates a PiiVariant out of the given *value* and emits it. This
    * is a convenience function that frees you from manually creating
    * the variant. The function calls PiiYdin::createVariant(T). The
    * following code emits a PiiVariant whose type() function returns
    * PiiVariant::IntType.
    *
-   * @code
+   * ~~~(c++)
    * output->emitObject(5);
-   * @endcode
+   * ~~~
    */
   template <class T> inline void emitObject(const T& value)
   {
@@ -271,8 +266,8 @@ public:
   }
 
   /**
-   * Returns @p true if the output is connected to at least one input
-   * that is not a proxy whose output is not connected, and @p false
+   * Returns `true` if the output is connected to at least one input
+   * that is not a proxy whose output is not connected, and `false`
    * otherwise.
    *
    * @see PiiSocketProxy
@@ -293,7 +288,7 @@ public:
   void reset();
 
   /**
-   * Puts @a activeThreadId to the emission order queue. This function
+   * Puts *activeThreadId* to the emission order queue. This function
    * makes it possible to use the same output socket from different
    * threads. Before letting concurrent threads send objects to a
    * socket one can call this function for each of the threads in the
@@ -305,9 +300,9 @@ public:
    * If an emitting thread is not listed in the emission queue,
    * emitted objects will be blocked indefinitely. One can make use of
    * this feature to buffer all objects emitted between startEmit()
-   * and #endEmit().
+   * and [endEmit()].
    *
-   * @code
+   * ~~~(c++)
    * // Only thread id 0 is allowed to emit objects, others will be buffered.
    * // This effectively blocks all threads.
    * pOutput->startEmit(0);
@@ -315,20 +310,20 @@ public:
    * pOutput->emitObject(PiiVariant(2));
    * // Remove the blocking thread from the queue.
    * pOutput->endEmit(0);
-   * @endcode
+   * ~~~
    */
   void startEmit(Qt::HANDLE activeThreadId);
 
   /**
-   * Removes @a activeThreadId from the emission order queue. If there
+   * Removes *activeThreadId* from the emission order queue. If there
    * are buffered objects blocked by this thread's emission turn, they
    * will be flushed. If you use custom input listeners, same
-   * precautions as with #emitObject() apply.
+   * precautions as with [emitObject()] apply.
    *
    * @exception PiiExecutionException& if the emission of buffered
    * objects was interrupted by an external signal.
    *
-   * @note Flushing parallel outputs easily hangs your processing
+   * ! Flushing parallel outputs easily hangs your processing
    * pipeline. If you flush buffered outputs one at a time, the input
    * queue at the receiving end must be able to hold all buffered
    * objects. You may consider using tryEndEmit() instead.
@@ -336,27 +331,21 @@ public:
   void endEmit(Qt::HANDLE activeThreadId);
 
   /**
-   * Tries to remove @a activeThreadId from the emission order queue
+   * Tries to remove *activeThreadId* from the emission order queue
    * and flush all buffered objects blocked by this thread's emission
-   * turn. Returns @p true if successful, @p false otherwise. See
-   * #tryEmit().
+   * turn. Returns `true` if successful, `false` otherwise. See
+   * [tryEmit()].
    */
   bool tryEndEmit(Qt::HANDLE activeThreadId);
 
   /**
-   * Sets @a listener as the input listener for all connected inputs. 
-   * If @a listener is zero, uses @p this as the listener.
+   * Sets *listener* as the input listener for all connected inputs.
+   * If *listener* is zero, uses a default listener.
    */
   void setInputListener(PiiInputListener* listener = 0);
   
-  void inputReady(PiiAbstractInputSocket* input);
-
-  PiiOutputSocket* socket();
-  PiiAbstractInputSocket* asInput();
-  PiiAbstractOutputSocket* asOutput();
-
 protected:
-  /// @cond null
+  /// @hide
   struct ThreadInfo
   {
     ThreadInfo(Qt::HANDLE i=0, bool f = false) : id(i), bFinished(f) {}
@@ -371,16 +360,23 @@ protected:
 #endif
   typedef QLinkedList<QPair<Qt::HANDLE,PiiVariant> > OutputBuffer;
 
-  class Data : public PiiAbstractOutputSocket::Data
+  class Data :
+    public PiiAbstractOutputSocket::Data,
+    public PiiInputListener
   {
   public:
-    Data(PiiOutputSocket* owner);
+    Data();
+    ~Data();
     
+    void inputReady(PiiAbstractInputSocket* input);
     bool setOutputConnected(bool connected);
-    PiiAbstractOutputSocket* rootOutput() const;
 
     inline int queueIndex(Qt::HANDLE threadId) const;
     inline bool hasBufferedObjects(Qt::HANDLE activeThreadId) const;
+    void inputConnected(PiiAbstractInputSocket* input);
+    void inputDisconnected(PiiAbstractInputSocket* input);
+    void inputUpdated(PiiAbstractInputSocket* input);
+    void createFlagArray();
   
     int iGroupId;
     bool bConnected;
@@ -400,19 +396,13 @@ protected:
   };
   PII_UNSAFE_D_FUNC;
 
-  PiiOutputSocket(Data* data, const QString& name);
-  /// @endcond
+  PiiOutputSocket(const QString& name, Data* data);
+  /// @endhide
 
-  void inputConnected(PiiAbstractInputSocket* input);
-  void inputDisconnected(PiiAbstractInputSocket* input);
-  void inputUpdated(PiiAbstractInputSocket* input);
-  
 private:
   bool flushBuffer();
   void emitThreaded(const PiiVariant& object);
   void emitNonThreaded(const PiiVariant& object);
-  // Create pbInputCompleted.
-  void createFlagArray();
 };
 
 Q_DECLARE_METATYPE(PiiOutputSocket*);

@@ -448,9 +448,9 @@ template <class T> void PiiMultiPointTracker::operateImage(const PiiVariant& obj
 
 
 /* 
- * This function checks, if the path from the point @p prev to the
- * point @p curr intersects the calculation line from the point
- * @p calcLineStart to @p calcLineEnd. If there is now intersection, 0 is
+ * This function checks, if the path from the point `prev` to the
+ * point `curr` intersects the calculation line from the point
+ * `calcLineStart` to `calcLineEnd.` If there is now intersection, 0 is
  * returned. If the intersection occurs from right to left relative to
  * the calculation line (vector) direction, +1 is returned. In the
  * opposite case (from left to right), -1 is returned.
@@ -468,8 +468,8 @@ int PiiMultiPointTracker::checkCalculationLine(const QPoint& calcLineStart, cons
 }
 
 /*
- * Returns true, if the line from @p prev to @p curr intersects the line
- * from @p calcLineStart and @p calcLineEnd
+ * Returns true, if the line from `prev` to `curr` intersects the line
+ * from `calcLineStart` and `calcLineEnd`
  */
 bool PiiMultiPointTracker::hasIntersection(const QPoint& calcLineStart, const QPoint& calcLineEnd,
                                            const QPoint& prev, const QPoint& curr )

@@ -24,21 +24,22 @@
  * Pixel values in the intensity map are proportional to the
  * likelihood of that pixel belonging to a predefined color model.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - the input color image. Any color image type.
  *
  * @in model - an image out of which the color model is to be derived.
  * Any color image type.
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out image - an intensity map image indicating the likelihood of
  * each pixel belonging to the model (PiiMatrix<float>) or a
- * thresholded image (PiiMatrix<unsigned char>), if #matchingThreshold
+ * thresholded image (PiiMatrix<unsigned char>), if [matchingThreshold]
  * is non-zero.
  *
- * @ingroup PiiColorsPlugin
  */
 class PiiColorModelMatcher : public PiiDefaultOperation
 {

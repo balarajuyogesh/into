@@ -23,31 +23,32 @@
 /**
  * Compare two values and output a binary outcome. Two inputs are
  * compared with a predefined comparison operator. The object read
- * from @p input0 is always used as the left-hand operand. The
- * right-hand operand is either a #constant or the object read from @p
- * input1, if it is connected.
+ * from `input0` is always used as the left-hand operand. The
+ * right-hand operand is either a [constant] or the object read from 
+ * `input1`, if it is connected.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in input0 - first input object. Any number or numeric matrix.
  *
  * @in input1 - second (optional) input object. Any number or numeric
- * matrix. If @p input0 contains a scalar, this must be a scalar. If
- * @p input0 contains a matrix, this must be either a scalar or a
+ * matrix. If `input0` contains a scalar, this must be a scalar. If
+ * `input0` contains a matrix, this must be either a scalar or a
  * matrix with the same size.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out output - The comparison result, bool or PiiMatrix<bool>.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiComparisonOperation : public PiiDefaultOperation
 {
   Q_OBJECT
 
   /**
-   * A constant value that is used instead of @p input1 if it is not
+   * A constant value that is used instead of `input1` if it is not
    * connected.
    */
   Q_PROPERTY(double constant READ constant WRITE setConstant);
@@ -61,12 +62,12 @@ class PiiComparisonOperation : public PiiDefaultOperation
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   /**
-   * @lip Equal - left == right
-   * @lip LessThan - left < right
-   * @lip GreaterThan - left > right
-   * @lip LessEqual - left <= right
-   * @lip GreaterEqual - left >= right
-   * @lip NotEqual - left != right
+   * - `Equal` - left == right
+   * - `LessThan` - left < right
+   * - `GreaterThan` - left > right
+   * - `LessEqual` - left <= right
+   * - `GreaterEqual` - left >= right
+   * - `NotEqual` - left != right
    */
   enum Function { Equal, LessThan, GreaterThan, LessEqual, GreaterEqual, NotEqual };
   

@@ -27,12 +27,12 @@ namespace Pii
    * The Moore-Penrose pseudoinverse of a matrix A has the following
    * properties:
    *
-   * @li @f$AA^+A = A@f$
-   * @li @f$A^+AA^+ = A^+@f$
-   * @li @f$(AA^+)^H = AA^+@f$ (H denotes a Hermitian transpose)
-   * @li @f$(A^+A)^H = A^+A@f$
+   * - \(AA^+A = A\)
+   * - \(A^+AA^+ = A^+\)
+   * - \((AA^+)^H = AA^+\) (H denotes a Hermitian transpose)
+   * - \((A^+A)^H = A^+A\)
    *
-   * This function uses @ref svDecompose() "SVD" to calculate the
+   * This function uses [SVD](svDecompose()) to calculate the
    * pseudoinverse in a numerically stable way.
    */
   template <class Matrix>

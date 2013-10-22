@@ -20,7 +20,6 @@
  * Stores the width and height of an area. See PiiPoint for usage
  * examples.
  *
- * @ingroup Core
  */
 template <class T> struct PiiSize
 {

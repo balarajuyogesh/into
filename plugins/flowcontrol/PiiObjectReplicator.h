@@ -19,38 +19,39 @@
 #include <PiiDefaultOperation.h>
 
 /**
- * An operation that replicates an object received in its @p data
+ * An operation that replicates an object received in its `data`
  * input. The operation useful when an object needs to be repeated
  * many times. A typical situation arises when an image is split into
  * smaller pieces, each of which is processed separately. Later, the
  * pieces need to be connected to the name of the original image file,
  * which is sent by PiiImageFileReader only once per each image. The
- * solution is to connect the file name to the @p data input of a
+ * solution is to connect the file name to the `data` input of a
  * PiiObjectReplicator and trigger its output with the smaller image
  * pieces.
  *
- * @note This operation can lead to lock-ups if not used carefully. If
- * two branches of a processing pipeline are connected to the @p data
- * and @p trigger inputs, make sure that @p data is always received
+ * ! This operation can lead to lock-ups if not used carefully. If
+ * two branches of a processing pipeline are connected to the `data`
+ * and `trigger` inputs, make sure that `data` is always received
  * first. Otherwise, if there are no threaded operations in the
- * pipelines, and if the input queue in @p trigger becomes full before
- * @p data is received, the whole configuration may hang. The output
- * that sends data to the two branches should be first connected to @p
- * data and then to the other branch.
+ * pipelines, and if the input queue in `trigger` becomes full before
+ * `data` is received, the whole configuration may hang. The output
+ * that sends data to the two branches should be first connected to 
+ * `data` and then to the other branch.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in data - the data that needs to be copied. Any type.
  *
- * @in trigger - emit the last object in @p data each time an object
+ * @in trigger - emit the last object in `data` each time an object
  * is received in this input. Any type.
  *
- * @outputs
+ * Outputs
+ * -------
  *
- * @out output - the object last received in @p data. This output will
- * emit the object whenever an object is received in @p trigger.
+ * @out output - the object last received in `data`. This output will
+ * emit the object whenever an object is received in `trigger`.
  *
- * @ingroup PiiFlowControlPlugin
  */
 class PiiObjectReplicator : public PiiDefaultOperation
 {

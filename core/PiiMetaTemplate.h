@@ -16,33 +16,30 @@
 #ifndef _PIIMETATEMPLATE_H
 #define _PIIMETATEMPLATE_H
 
-/// @file
 
 namespace Pii
 {
   /**
-   * @name Template meta-programming
+   * @group pii_template_metaprogramming Template meta-programming
    *
-   * Template meta-programs are structures the compiler evaluates. 
+   * Template meta-programs are structures the compiler evaluates.
    * They can be used in creating efficient code, for example control
    * structures that are evaluated at compile time.
    */
 
-  //@{
-  
   /**
-   * A conditional template. If @p condition is true, If::Type is
-   * equal to @p Then. The template specialization for condition ==
-   * false makes @p Type equal to @p Else.
+   * A conditional template. If `condition` is true, If::Type is
+   * equal to `Then`. The template specialization for condition ==
+   * false makes `Type` equal to `Else`.
    *
-   * @code
+   * ~~~(c++)
    * template <class T> void myFunc()
    * {
    *   // if T is four bytes, MyType is int, otherwise char
    *   typedef Pii::If<sizeof(T) == 4, int, char>::Type MyType;
    *   MyType myVal(0);
    * }
-   * @endcode
+   * ~~~
    */
   template <bool condition, class Then, class Else>
   struct If
@@ -59,9 +56,9 @@ namespace Pii
   /**
    * A conditional template that accepts a type name as the condition
    * parameter. There condition class must declare a static constant
-   * called @p boolValue. Otherwise, functions like If.
+   * called `boolValue`. Otherwise, functions like If.
    *
-   * @code
+   * ~~~(c++)
    * template <class T, class U> void myFunc()
    * {
    *   // if T is four bytes and U is two bytes, MyType is int, otherwise long
@@ -70,15 +67,15 @@ namespace Pii
    *                        int, long>::Type MyType;
    *   MyType myVal(0);
    * }
-   * @endcode
+   * ~~~
    */
   template <class Condition, class Then, class Else>
   struct IfClass : public If<Condition::boolValue, Then, Else>
   {};
 
   /**
-   * A structure whose constant @p boolValue member evaluates to @p
-   * true.
+   * A structure whose constant `boolValue` member evaluates to 
+   * `true`.
    */
   struct True
   {
@@ -86,8 +83,8 @@ namespace Pii
   };
 
   /**
-   * A structure whose constant @p boolValue member evaluates to @p
-   * false.
+   * A structure whose constant `boolValue` member evaluates to 
+   * `false`.
    */
   struct False
   {
@@ -98,9 +95,9 @@ namespace Pii
    * Logical not operation. The template parameter must be a boolean
    * value.
    *
-   * @code
+   * ~~~(c++)
    * ASSERT(Not<false>::boolValue == true);
-   * @endcode
+   * ~~~
    */
   template <bool b> struct Not
   {
@@ -111,10 +108,10 @@ namespace Pii
    * Logical not operation. The template parameter must be a valid
    * static logical operator.
    *
-   * @code
+   * ~~~(c++)
    * ASSERT(NotClass<False>::boolValue == true);
    * ASSERT(NotClass<True>::boolValue == false);
-   * @endcode
+   * ~~~
    */
   template <class T> struct NotClass
   {
@@ -123,7 +120,7 @@ namespace Pii
   
   /**
    * A template that performs a logical AND operation on its boolean
-   * template parameters. The @p boolValue member evaluates to @p true
+   * template parameters. The `boolValue` member evaluates to `true`
    * if all of the template parameters evaluate to true.
    */
   template <bool b1, bool b2, bool b3 = true, bool b4 = true, bool b5 = true, bool b6 = true, bool b7 = true>
@@ -134,7 +131,7 @@ namespace Pii
 
   /**
    * A template that performs a logical OR operation on its boolean
-   * template parameters. The @p boolValue member evaluates to @p true
+   * template parameters. The `boolValue` member evaluates to `true`
    * if any of the template parameters evaluate to true.
    */
   template <bool b1, bool b2, bool b3 = false, bool b4 = false, bool b5 = false, bool b6 = false, bool b7 = false>
@@ -154,7 +151,7 @@ namespace Pii
   template <int a, int b> struct MaxInt : If<(a >= b), IntIdentity<a>, IntIdentity<b> >::Type
   {};
 
-  //@}
+  /// @endgroup
 }
 
 #endif //_PIIMETATEMPLATE_H

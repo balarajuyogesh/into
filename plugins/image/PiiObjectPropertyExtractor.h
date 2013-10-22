@@ -23,7 +23,8 @@
 /**
  * Calculates geometric properties for labeled objects.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - a labeled image. Each object in the image must have a
  * unique integer label that distinguishes it from others. (any
@@ -32,7 +33,8 @@
  * @in labels - the number of distinct objects. This input is
  * optional. (int)
  *
- * @outputs
+ * Outputs
+ * -------
  *
  * @out areas - the number of pixels on each object. 
  * PiiMatrix<int>(N,1).
@@ -43,7 +45,6 @@
  * @out boundingboxes - The bounding boxes of each object
  * (x,y,width,height). PiiMatrix<int>(N,4).
  *
- * @ingroup PiiImagePlugin
  */
 class PiiObjectPropertyExtractor : public PiiDefaultOperation
 {

@@ -20,13 +20,6 @@
 #include <PiiQImage.h>
 #include "PiiVariant.h"
 
-/**
- * @file
- *
- * Utility functions for combining QImage with PiiVariant.
- *
- * @ingroup Ydin
- */
 namespace PiiYdin
 {
   template <class T> QImage* createColorQImage(const PiiVariant& obj)

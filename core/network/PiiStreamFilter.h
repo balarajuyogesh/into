@@ -23,10 +23,9 @@
  * An interface for stream filters. A stream filter is a class that
  * converts data written to it and writes it either to another filter
  * or somewhere else. Input data to the filter is sent with the
- * #writeToStream() function. Filter chains can be though of as linked
+ * [writeToStream()] function. Filter chains can be though of as linked
  * lists. The last filter on the list has no output filter.
  *
- * @ingroup Network
  */
 class PII_NETWORK_EXPORT PiiStreamFilter
 {
@@ -34,15 +33,14 @@ public:
   virtual ~PiiStreamFilter();
 
   /**
-   * Writes at most @p maxSize bytes of @p data to this output filter. 
+   * Writes at most `maxSize` bytes of `data` to this output filter. 
    * Returns the number of bytes actually written.
    */
   virtual qint64 filterData(const char* data, qint64 maxSize) = 0;
 
   /**
-   * @overload
    *
-   * Writes @p data to the filter and returns the number of bytes
+   * Writes `data` to the filter and returns the number of bytes
    * written.
    */
   qint64 filterData(const QByteArray& data);
@@ -90,7 +88,6 @@ protected:
  * Default implementation of the PiiStreamFilter interface. Stores the
  * output filter into an internal data member.
  *
- * @ingroup Network
  */
 class PII_NETWORK_EXPORT PiiDefaultStreamFilter : public PiiStreamFilter
 {

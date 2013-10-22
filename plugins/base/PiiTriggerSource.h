@@ -28,11 +28,11 @@
  * operation is useful when one needs to send values from a user
  * interface to the analysis engine.
  *
- * @outputs
+ * Outputs
+ * -------
  *
- * @out trigger - any object received into the #trigger() slot.
+ * @out trigger - any object received into the [trigger()] slot.
  *
- * @ingroup PiiBasePlugin
  */
 class PiiTriggerSource : public PiiBasicOperation
 {
@@ -54,7 +54,7 @@ public:
   
 public slots:
   /**
-   * Sends an @p int (1) to the output socket.
+   * Sends an `int` (1) to the output socket.
    */
   void trigger();
   /**
@@ -62,11 +62,11 @@ public slots:
    */
   void trigger(const PiiVariant& value);
   /**
-   * Sends an @p int to the output socket.
+   * Sends an `int` to the output socket.
    */
   void trigger(int value);
   /**
-   * Sends a @p double to the output socket.
+   * Sends a `double` to the output socket.
    */
   void trigger(double value);
   /**

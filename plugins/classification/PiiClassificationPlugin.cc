@@ -22,9 +22,6 @@
 #include "PiiConfusionMatrixBuilder.h"
 #include "PiiSampleRandomizer.h"
 #include "PiiSomOperation.h"
-#include "PiiVisualTrainer.h"
-#include "PiiVisualSomOperation.h"
-#include "PiiVisualSomClassifier.h"
 #include "PiiBoostClassifierOperation.h"
 
 // Distance measures
@@ -85,10 +82,6 @@ PII_REGISTER_OPERATION(PiiClassInfoMapper);
 PII_REGISTER_OPERATION(PiiConfusionMatrixBuilder);
 PII_REGISTER_OPERATION(PiiSampleRandomizer);
 PII_REGISTER_OPERATION(PiiSampleBalancer);
-PII_REGISTER_OPERATION(PiiVisualTrainer);
-PII_REGISTER_OPERATION(PiiVisualSomOperation);
-PII_REGISTER_OPERATION_VOIDCTOR(PiiVisualSomClassifier);
-
 
 #define PII_REGISTER_DISTANCE_MEASURE(MEASURE, TYPE)  \
   PII_SERIALIZATION_NAME_CUSTOM(PiiDistanceMeasure<const TYPE*>::Impl<MEASURE<const TYPE*> >, PII_STRINGIZE(MEASURE<TYPE>)); \

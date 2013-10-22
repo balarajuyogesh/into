@@ -21,7 +21,7 @@
 namespace Pii
 {
   /**
-   * Returns the PCA base vectors for a data set in @a X.
+   * Returns the PCA base vectors for a data set in *X*.
    *
    * Principal component analysis (PCA) produces an orthogonal
    * transformation that transforms the input data to a new coordinate

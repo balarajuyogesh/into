@@ -34,7 +34,7 @@
  * minimum computational overhead but may not be the most convenient
  * way to the programmer. A typical usage scenario is as follows:
  *
- * @code
+ * ~~~(c++)
  * class MyObject : public PiiSharedObject { ... };
  *
  * // Sender creates the pointer and passes it.
@@ -51,19 +51,18 @@
  *   internalVariable = obj->reserve();
  *   doWhatEverNeeded();
  * }
- * @endcode
+ * ~~~
  *
  * Once "Receiver" does not need the pointer any more, it calls
  * internalVariable->release() and forgets about the pointer.
  *
  * Usually, it is easier to use implicit sharing. For this, the
- * @ref PiiSharedPtr class can be used.
+ * [PiiSharedPtr] class can be used.
  *
  * PiiSharedObject is thread safe. Its memory overhead is one integer
  * for the reference counter plus a vtable pointer, if one doesn't
  * already exists.
  *
- * @ingroup Core
  */
 class PII_CORE_EXPORT PiiSharedObject
 {
@@ -102,7 +101,7 @@ public:
   }
 
   /**
-   * Sets the number of references to @p cnt.
+   * Sets the number of references to `cnt`.
    */
   void setReferences(int cnt)
   {
@@ -113,7 +112,7 @@ private:
   mutable QAtomicInt _ref;
 };
 
-/// @cond null
+/// @hide
 class PiiSharedObjectHolder : public PiiTrackedPointerHolder
 {
 public:
@@ -135,12 +134,12 @@ namespace PiiSerialization
     return new PiiSharedObjectHolder(ptr);
   }
   
-  /// A specialization that increases the refcount of @ptr by one.
+  /// A specialization that increases the refcount of `ptr` by one.
   inline void rereferencePointer(PiiSharedObject* ptr)
   {
     ptr->reserve();
   }
 }
-/// @endcond
+/// @endhide
 
 #endif //_PIISHAREDOBJECT_H

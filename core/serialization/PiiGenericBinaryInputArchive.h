@@ -16,7 +16,6 @@
 #ifndef _PIIGENERICBINARYINPUTARCHIVE_H
 #define _PIIGENERICBINARYINPUTARCHIVE_H
 
-/** @file */
 
 #include "PiiBinaryInputArchive.h"
 #include "PiiGenericInputArchive.h"
@@ -25,7 +24,6 @@
  * A shorthand for a binary input archive derived from
  * PiiGenericInputArchive.
  *
- * @ingroup Serialization
  */
 typedef PiiGenericInputArchive::Impl<PiiBinaryInputArchive> PiiGenericBinaryInputArchive;
 

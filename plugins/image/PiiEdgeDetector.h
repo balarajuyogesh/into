@@ -25,11 +25,13 @@
  * strength of local gradient with user-selectable masks. The output
  * is thresholded to produce a binary image.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - any gray-level image.
  * 
- * @outputs
+ * Outputs
+ * -------
  *
  * @out edges - detected edges as a binary image. The type of the
  * output is the same as the input, but the image only contains zeros
@@ -37,14 +39,13 @@
  *
  * @out magnitude - non-thresholded gradient image. If the input is
  * integer-valued, a PiiMatrix<int> will be emitted. Otherwise,
- * PiiMatrix<float> will be emitted. See @ref
- * PiiImage::gradientMagnitude().
+ * PiiMatrix<float> will be emitted. See 
+ * [PiiImage::gradientMagnitude()].
  *
  * @out direction - a PiiMatrix<float> that contains local gradient
- * direction for each pixel in radians. See @ref
- * PiiImage::gradientDirection().
+ * direction for each pixel in radians. See 
+ * [PiiImage::gradientDirection()].
  *
- * @ingroup PiiImagePlugin
  */
 class PiiEdgeDetector : public PiiDefaultOperation
 {
@@ -53,7 +54,7 @@ class PiiEdgeDetector : public PiiDefaultOperation
   /**
    * Edge detection method. Except for the Canny detector, the only
    * difference between the detection methods is in the gradient
-   * estimation filters. The default is @p CannyDetector.
+   * estimation filters. The default is `CannyDetector`.
    */
   Q_PROPERTY(Detector detector READ detector WRITE setDetector);
   Q_ENUMS(Detector);
@@ -68,7 +69,7 @@ class PiiEdgeDetector : public PiiDefaultOperation
   Q_PROPERTY(double threshold READ threshold WRITE setThreshold);
   /**
    * Used in hysteresis thresholding with the Canny edge detector. If
-   * set to zero, the low threshold will be 0.4 * #threshold. The
+   * set to zero, the low threshold will be 0.4 * [threshold]. The
    * default is zero.
    */
   Q_PROPERTY(double lowThreshold READ lowThreshold WRITE setLowThreshold);
@@ -78,22 +79,22 @@ public:
   /**
    * Supported edge detectors.
    *
-   * @lip SobelDetector - Sobel masks are used to calculate gradient.
+   * - `SobelDetector` - Sobel masks are used to calculate gradient.
    *
-   * @lip RobertsDetector - Roberts' masks are used to calculate
+   * - `RobertsDetector` - Roberts' masks are used to calculate
    * gradient.
    *
-   * @lip PrewittDetector - Prewitt's masks are used to calculate
+   * - `PrewittDetector` - Prewitt's masks are used to calculate
    * gradient.
    *
-   * @lip CannyDetector - The three-step procedure is used to detect
+   * - `CannyDetector` - The three-step procedure is used to detect
    * edges: 1) Sobel masks are used to measure the gradient 2) the
-   * image is processed to contain only local maxima (@ref
-   * PiiImage::suppressNonMaxima()) 3) hysteresis thresholding is
-   * performed (@ref PiiImage::hysteresisThreshold()). This technique
-   * requires two thresholds (#lowThreshold and #threshold).
+   * image is processed to contain only local maxima (
+   * [PiiImage::suppressNonMaxima()]) 3) hysteresis thresholding is
+   * performed ([PiiImage::hysteresisThreshold()]). This technique
+   * requires two thresholds ([lowThreshold] and [threshold]).
    *
-   * @note The original edge detection technique by Canny actually
+   * ! The original edge detection technique by Canny actually
    * uses derivatives of 2D Gaussians to calculate the gradient. This
    * implementation uses Sobel masks to estimate gradient. This choice
    * was made to keep the design modular. Typically, one should

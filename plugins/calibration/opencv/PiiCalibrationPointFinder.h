@@ -32,14 +32,13 @@
  *
  * To speed up the search, the following assumptions are made:
  *
- * @li calibration points are arranged on a planar surface (all z
+ * - calibration points are arranged on a planar surface (all z
  * coordinates are either zero or one).
  *
- * @li world points are given in counter-clockwise order with respect
+ * - world points are given in counter-clockwise order with respect
  * to the center of the calibration points in a right-handed
  * coordinate system.
  *
- * @ingroup PiiCalibrationPlugin
  */
 class PII_CALIBRATION_EXPORT PiiCalibrationPointFinder
 {
@@ -61,7 +60,7 @@ public:
   
   /**
    * Find the set of measurements that best matches the geometric
-   * arrangement of @p worldPoints.
+   * arrangement of `worldPoints`.
    *
    * @param worldPoints known 3D coordinates of calibration points
    *

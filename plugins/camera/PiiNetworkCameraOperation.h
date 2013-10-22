@@ -28,12 +28,12 @@
  * Currently, the operation only supports HTTP as the transfer
  * protocol.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in url - an optional image URL input. If this input is connected,
- * the QString read from it will override #imageUrl.
+ * the QString read from it will override [imageUrl].
  *
- * @ingroup PiiCameraPlugin
  */
 class PII_CAMERA_EXPORT PiiNetworkCameraOperation : public PiiImageReaderOperation
 {
@@ -44,17 +44,17 @@ class PII_CAMERA_EXPORT PiiNetworkCameraOperation : public PiiImageReaderOperati
    * is http://[user:password@]host[:port]/path. Bracketed parts are
    * optional. Example of valid URLs:
    *
-   * @li http://me:password@my.host.com:88/image.jpg
+   * - http://me:password@my.host.com:88/image.jpg
    *
-   * @li http://my.host.com/image.bmp
+   * - http://my.host.com/image.bmp
    *
-   * @li http://10.10.10.7/JPEG.CGI
+   * - http://10.10.10.7/JPEG.CGI
    */
   Q_PROPERTY(QString imageUrl READ imageUrl WRITE setImageUrl);
 
   /**
-   * The URL of a HTTP proxy server. Use the same syntax as for @p
-   * imageUrl, but do not provide a path. A valid proxy URL looks like
+   * The URL of a HTTP proxy server. Use the same syntax as for 
+   * `imageUrl`, but do not provide a path. A valid proxy URL looks like
    * this: http://my.proxy.com:8088.
    */
   Q_PROPERTY(QString proxyUrl READ proxyUrl WRITE setProxyUrl);
@@ -67,14 +67,14 @@ class PII_CAMERA_EXPORT PiiNetworkCameraOperation : public PiiImageReaderOperati
    * provided that any further operations are able to process the
    * data. If they are not, the internal buffer of
    * PiiHttpCameraOperation may overflow which causes the operation to
-   * abort. The default value is @p false.
+   * abort. The default value is `false`.
    */
   Q_PROPERTY(bool streamMode READ streamMode WRITE setStreamMode);
 
   /**
    * Should the operation ignore network and image decoding errors? 
-   * Set this flag to @p true if it does not harm to skip a few frames
-   * due to bad network connections etc. The default is @p false.
+   * Set this flag to `true` if it does not harm to skip a few frames
+   * due to bad network connections etc. The default is `false`.
    */
   Q_PROPERTY(bool ignoreErrors READ ignoreErrors WRITE setIgnoreErrors);
 

@@ -26,31 +26,30 @@
  * connect the remote meta-object implementation to a client-side
  * QObject instance.
  *
- * @ingroup Network
  */
 class PII_NETWORK_EXPORT PiiRemoteMetaObject : public PiiRemoteObject
 {
 public:
   /**
-   * Creates a new %PiiRemoteMetaObject that implements QObject's
-   * interface for the given @a object. The remote object becomes
-   * functional only after #setServerUri() has been called.
+   * Creates a new PiiRemoteMetaObject that implements QObject's
+   * interface for the given *object*. The remote object becomes
+   * functional only after [setServerUri()] has been called.
    */
   PiiRemoteMetaObject(QObject* object);
 
   /**
    * Creates a new PiiRemoteMetaObject and sets the server URI at
-   * the same time. See #setServerUri().
+   * the same time. See [setServerUri()].
    *
    * @exception PiiNetworkException& if the server cannot be connected
-   * @exception PiiInvalidArgumentException& if @a serverUri is
+   * @exception PiiInvalidArgumentException& if *serverUri* is
    * incorrecly formatted
    */
   PiiRemoteMetaObject(QObject* object, const QString& serverUri);
 
   ~PiiRemoteMetaObject();
   
-  /// @cond null
+  /// @hide
   void connectSignal(const char* signal);
   void disconnectSignal(const char* signal);
 
@@ -89,7 +88,7 @@ protected:
 
   class Data;
   PII_UNSAFE_D_FUNC;
-  /// @endcond
+  /// @endhide
 
   void decodePushedData(const QString& sourceId, const QByteArray& data);
   void serverUriChanged(const QString& serverUri);

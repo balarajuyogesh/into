@@ -32,7 +32,6 @@
 
 //Histograms 
 #include "PiiHistogramOperation.h"
-#include "PiiDefaultOperation.h"
 #include "PiiQuantizerOperation.h"
 #include "PiiHistogramBackProjector.h"
 #include "PiiHistogramEqualizer.h"

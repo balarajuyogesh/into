@@ -16,30 +16,38 @@
 #include "PiiClassInfoRegisterer.h"
 #include <PiiResourceStatement.h>
 
+class PiiClassInfoRegisterer::Data
+{
+public:
+  QList<int> lstIds;
+};
+
 PiiClassInfoRegisterer::PiiClassInfoRegisterer(const char* parent,
                                                const char* child,
                                                const char* superClass,
-                                               ptrdiff_t offset) :
+                                               ptrdiff_t offset,
+                                               const QMetaObject* metaObject) :
   d(new Data)
 {
   QList<PiiResourceStatement> lstStatements;
   if (parent != 0)
-    lstStatements << PiiResourceStatement(child,
-                                          PiiYdin::parentPredicate,
-                                          parent,
-                                          PiiResourceStatement::ResourceType);
+    lstStatements << PiiResourceDatabase::resource(child,
+                                                   PiiYdin::parentPredicate,
+                                                   parent);
   if (superClass != 0)
     {
-      lstStatements << PiiResourceStatement(child,
-                                            PiiYdin::classPredicate,
-                                            superClass,
-                                            PiiResourceStatement::ResourceType);
+      lstStatements << PiiResourceDatabase::resource(child,
+                                                     PiiYdin::classPredicate,
+                                                     superClass);
       if (offset != 0)
-        lstStatements << PiiResourceStatement("#",
-                                              PiiYdin::offsetPredicate,
-                                              QString::number(offset),
-                                              PiiResourceStatement::LiteralType);
+        lstStatements << PiiResourceDatabase::literal("#",
+                                                      PiiYdin::offsetPredicate,
+                                                      QString::number(offset));
     }
+  if (metaObject != 0)
+    lstStatements << PiiResourceDatabase::resource(child,
+                                                   PiiYdin::metaObjectPredicate,
+                                                   const_cast<QMetaObject*>(metaObject));
 
   d->lstIds = PiiYdin::resourceDatabase()->addStatements(lstStatements);
 }
@@ -49,5 +57,3 @@ PiiClassInfoRegisterer::~PiiClassInfoRegisterer()
   PiiYdin::resourceDatabase()->removeStatements(d->lstIds);
   delete d;
 }
-
-

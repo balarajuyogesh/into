@@ -24,14 +24,13 @@
 /**
  * A read-write lock. This class provides functionality similar to
  * QReadWriteLock and has a similar interface. The difference is that
- * %PiiReadWriteLock allows recursive locks to be re-acquired in
+ * PiiReadWriteLock allows recursive locks to be re-acquired in
  * different mode. It is possible to lock for writing in a thread that
  * has already locked for reading and vice-versa.
  *
  * Note that there is no unlock() function. Instead, a read lock must
  * be released with unlockRead() and a write lock with unlockWrite().
  *
- * @ingroup Core
  */
 class PII_CORE_EXPORT PiiReadWriteLock
 {

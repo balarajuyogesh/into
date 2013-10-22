@@ -48,7 +48,7 @@ namespace PiiSerialization
    * implementation does nothing. Override this function to perform
    * any action required to restore reference counts.
    *
-   * @code
+   * ~~~(c++)
    * namespace PiiSerialization
    * {
    *   inline void rereferencePointer(MyRefCountedObj* ptr)
@@ -56,7 +56,7 @@ namespace PiiSerialization
    *      ptr->increaseRefCount();
    *   }
    * }
-   * @endcode
+   * ~~~
    *
    * @relates PiiInputArchive
    */
@@ -71,7 +71,6 @@ namespace PiiSerialization
  * A base class for input archive implementations. This class
  * provides functions for saving pointers.
  *
- * @ingroup Serialization
  */
 template <class Archive> class PiiInputArchive
 {
@@ -113,17 +112,16 @@ public:
    * operator>>.
    */
   template <class T> Archive& operator& (T& value) { return *self() >> value; }
-  /// @overload
   template <class T> Archive& operator& (const T& value) { return *self() >> value; }
 
   /**
-   * Reads an array of @p size elements to the memory location pointed
-   * to by @2 ptr.
+   * Reads an array of *size* elements to the memory location pointed
+   * to by *ptr*.
    */
   template <class T> void readArray(T*& ptr, unsigned int& size)
   {
     *self() >> size;
-    //PENDING This may eat up all memory. Should we have a limit?
+    // TODO: This may eat up all memory. Should we have a limit?
     // Allocate memory and restore data
     if (size != 0)
       {
@@ -161,7 +159,7 @@ public:
    * Tell the archive that you changed the location of an object after
    * saving it.
    *
-   * @code
+   * ~~~(c++)
    * QList<MyObj> lst; // filled somehow
    *
    * // In your load() function:
@@ -174,7 +172,7 @@ public:
    *     // If a pointer refers to this object, it must be updated
    *     archive.objectMoved(obj, lst.last());
    *   }
-   * @endcode
+   * ~~~
    */
   template <class T> void objectMoved(T& from, T& to)
   {
@@ -183,7 +181,7 @@ public:
   
 private:
   /**
-   * Update all references to the memory address @p from to @p to.
+   * Update all references to the memory address `from` to `to`.
    */
   void moveObject(void* from, void* to)
   {

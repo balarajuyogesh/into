@@ -33,7 +33,6 @@ class QMutex;
  * calculations.
  *
  * @internal
- * @ingroup Ydin
  */
 class PiiSimpleProcessor : public PiiOperationProcessor
 {
@@ -50,34 +49,34 @@ public:
 
   /**
    * Invoked when a new object appears on any input socket. This
-   * function first calls @ref PiiFlowController::prepareProcess() and
-   * then the parent operation's @ref PiiDefaultOperation::process()
+   * function first calls [PiiFlowController::prepareProcess()] and
+   * then the parent operation's [PiiDefaultOperation::process()]
    * "process()" function, if necessary. Thus, the operation is
    * processed in the context of the thread that emitted the object to
-   * @a sender.
+   * *sender*.
    */
   bool tryToReceive(PiiAbstractInputSocket* sender, const PiiVariant& object) throw ();
 
   /**
-   * Sets the state to @p Running.
+   * Sets the state to `Running`.
    */
   void start();
 
   /**
-   * Sets the state to @p Stopped.
+   * Sets the state to `Stopped`.
    */
   void interrupt();
 
   /**
-   * If the operation has connected inputs, sets the state to @p
-   * Pausing. Otherwise sets the state to @p Paused and sends a pause
+   * If the operation has connected inputs, sets the state to 
+   * `Pausing`. Otherwise sets the state to `Paused` and sends a pause
    * tag.
    */
   void pause();
 
   /**
-   * If the operation has connected inputs, sets the state to @p
-   * Stopping. Otherwise sets the state to @p Stopped and sends a stop
+   * If the operation has connected inputs, sets the state to 
+   * `Stopping`. Otherwise sets the state to `Stopped` and sends a stop
    * tag.
    */
   void stop();

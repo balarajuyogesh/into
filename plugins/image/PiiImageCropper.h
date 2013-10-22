@@ -27,7 +27,8 @@
  * the configured coordinates exceed image boundaries, a smaller area
  * will be extracted.
  *
- * @inputs
+ * Inputs
+ * ------
  *
  * @in image - the input image
  *
@@ -37,42 +38,42 @@
  * input location. The location is expected to be a PiiMatrix<int>
  * with one row and at least two columns. The first two elements of
  * the matrix are treated as the (x,y) coordinates of the upper left
- * corner. This input is always coupled with the @a image input.
+ * corner. This input is always coupled with the *image* input.
  *
  * @in area - an optional input framing the rectangle to extract. If
- * this input is connected, the #area property will be ignored. The
+ * this input is connected, the [area] property will be ignored. The
  * input must be a PiiMatrix<int> with four columns (x, y, width,
- * height). If #mode is @p OneToOne, the matrix must have at least one
- * row. In @p OneToMany and @p ManyToMany modes the matrix may have
- * zero to N rows. In @p ManyToMany mode any number of @p
- * area inputs may be read for each @p image input.
+ * height). If [mode] is `OneToOne`, the matrix must have at least one
+ * row. In `OneToMany` and `ManyToMany` modes the matrix may have
+ * zero to N rows. In `ManyToMany` mode any number of 
+ * `area` inputs may be read for each `image` input.
  *
  * @in transform - an optional input that specifies a transform
  * between area and image coordinates. If this input is connected, the
- * crop area given either as a property or in the @p area input is
+ * crop area given either as a property or in the `area` input is
  * first transformed to image coordinates using the given
  * transformation matrix for homogeneous image coordinates. The matrix
  * must be 3-by-3. This makes it possible to crop non-rectangular
  * areas out of the image. If the area to be extracted out of the
  * input image exceeds input boundaries, there will be black areas in
- * the output image. If this input is connected, the #transform
+ * the output image. If this input is connected, the [transform]
  * property will be ignored.
  *
- * In @p ManyToMany mode either @p area or @p transform must be
+ * In `ManyToMany` mode either `area` or `transform` must be
  * connected.
  *
- * @outputs
+ * Outputs
+ * -------
  *
- * @out image - a smaller portion of the input image. In @p OneToMany
- * and @p ManyToMany modes, an image will be emitted for each row in
- * the matrix read from the @p location input.
+ * @out image - a smaller portion of the input image. In `OneToMany`
+ * and `ManyToMany` modes, an image will be emitted for each row in
+ * the matrix read from the `location` input.
  *
  * @out location - the location of the sub-image. A 1-by-4
  * PiiMatrix<int> that stores the location (x, y, width, height) of
- * the sub-image. If the @p transform input is connected, this matrix
+ * the sub-image. If the `transform` input is connected, this matrix
  * will store the bounding box of the transformed rectangle.
  *
- * @ingroup PiiImagePlugin
  */
 class PiiImageCropper : public PiiDefaultOperation
 {
@@ -84,7 +85,7 @@ class PiiImageCropper : public PiiDefaultOperation
   Q_PROPERTY(QRect area READ area WRITE setArea);
 
   /**
-   * Controls how cropped images are emitted. In @p OneToOne mode (the
+   * Controls how cropped images are emitted. In `OneToOne` mode (the
    * default), one cropped image is always emitted per each input
    * image. In the other modes, 0 to N images are emitted per each
    * incoming image. Note that the flow level of the output is higher
@@ -95,15 +96,15 @@ class PiiImageCropper : public PiiDefaultOperation
 
   /**
    * The width of the cropped image. If a negative value is given, the
-   * right edge of the cropped image will be always positioned @p
-   * width pixels from that of the input image.
+   * right edge of the cropped image will be always positioned 
+   * `width` pixels from that of the input image.
    */
   Q_PROPERTY(int width READ width WRITE setWidth STORED false);
   
   /**
    * The height of the cropped image. If a negative value is given,
-   * the bottom edge of the cropped image will be always positioned @p
-   * width pixels from that of the input image.
+   * the bottom edge of the cropped image will be always positioned 
+   * `width` pixels from that of the input image.
    */
   Q_PROPERTY(int height READ height WRITE setHeight STORED false);
 
@@ -124,8 +125,8 @@ class PiiImageCropper : public PiiDefaultOperation
   /**
    * A 3-by-3 PiiMatrix<float> that specifies the transformation
    * between area and image coordinates. If this matrix is empty, or
-   * the variant is invalid, no transformation will be made. The @p
-   * transform input overrides this value.
+   * the variant is invalid, no transformation will be made. The 
+   * `transform` input overrides this value.
    *
    * @see PiiImage::crop()
    */
@@ -137,15 +138,15 @@ public:
   /**
    * Modes of operation.
    *
-   * @lip OneToOne - one image will be emitted for each incoming image
+   * - `OneToOne` - one image will be emitted for each incoming image
    *
-   * @lip OneToMany - 0-N images will be emitted for each
+   * - `OneToMany` - 0-N images will be emitted for each
    * incoming image, determined by the number of rows in the matrix
-   * read from the @p area input.
+   * read from the `area` input.
    *  
-   * @lip ManyToMany - 0-N images will be emitted for each incoming
+   * - `ManyToMany` - 0-N images will be emitted for each incoming
    * image. Any number of crop areas may be received for each incoming
-   * image. The @p area and @p transform inputs are assumed to receive
+   * image. The `area` and `transform` inputs are assumed to receive
    * objects at a higher flow level.
    */
   enum Mode { OneToOne, OneToMany, ManyToMany };

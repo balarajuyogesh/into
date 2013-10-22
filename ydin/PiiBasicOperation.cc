@@ -42,30 +42,6 @@ PiiBasicOperation::~PiiBasicOperation()
                 metaObject()->className(), piiPrintable(objectName()));
 }
 
-QVariant PiiBasicOperation::socketProperty(PiiAbstractSocket* socket, const char* name) const
-{
-  const PII_D;
-  PiiInputSocket* pInput = static_cast<PiiInputSocket*>(socket->socket());
-  if (d->lstInputs.contains(pInput))
-    {
-      if (PiiYdin::isNameProperty(name))
-        return pInput->objectName();
-      else
-        return pInput->property(name);
-    }
-
-  PiiOutputSocket* pOutput = static_cast<PiiOutputSocket*>(socket->socket());
-  if (d->lstOutputs.contains(pOutput))
-    {
-      if (PiiYdin::isNameProperty(name))
-        return pOutput->objectName();
-      else
-        return pOutput->property(name);
-    }
-
-  return QVariant();
-}
-
 void PiiBasicOperation::check(bool reset)
 {
   PII_D;
@@ -147,7 +123,7 @@ PiiInputSocket* PiiBasicOperation::input(const QString& name) const
 
 PiiInputSocket* PiiBasicOperation::inputAt(int index) const
 {
-  return _d()->lstInputs[index];
+  return index >=0 && index < _d()->lstInputs.size() ? _d()->lstInputs[index] : 0;
 }
 
 PiiOutputSocket* PiiBasicOperation::output(const QString& name) const
@@ -157,7 +133,7 @@ PiiOutputSocket* PiiBasicOperation::output(const QString& name) const
 
 PiiOutputSocket* PiiBasicOperation::outputAt(int index) const
 {
-  return _d()->lstOutputs[index];
+  return index >=0 && index < _d()->lstOutputs.size() ? _d()->lstOutputs[index] : 0;
 }
 
 PiiVariant PiiBasicOperation::readInput(int index) const

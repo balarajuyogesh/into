@@ -22,18 +22,16 @@
  * A list that maintains its elements in sorted order. The interface
  * of this class is identical to QList except that there are no
  * functions that would allow inserting elements in arbitrary order. 
- * One can insert elements using the #insert() function or the += and
+ * One can insert elements using the [insert()] function or the += and
  * << operators.
  *
  * PiiSortedList uses binary search to quickly locate items in the
  * list. This guarantees O(log(N)) look-up complexity in functions
- * such as #indexOf() and #lastIndexOf(). Inserting elements to the
+ * such as [indexOf()] and [lastIndexOf()]. Inserting elements to the
  * middle of the list is an O(N) operation.
  *
- * @note Be careful in modifying the elements of the list. Doing so
- * may invalidate the sort order.
- *
- * @ingroup Core
+ * ! Be careful when modifying the elements of the list. Doing so may
+ *   invalidate the sort order.
  */
 template <class T, class Less = std::less<T>, class Equals = std::equal_to<T> >
 class PiiSortedList : private QList<T>

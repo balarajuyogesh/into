@@ -33,7 +33,6 @@
 /**
  * Utility functions for dealing with matrices.
  *
- * @ingroup Matrix
  */
 namespace Pii
 {
@@ -41,7 +40,7 @@ namespace Pii
    * Print matrix in a user-defined format.
    *
    * @param out an output stream to write the matrix to. Any class
-   * implementing @p operator<<(Separator) and @p operator<<(T) can act as
+   * implementing `operator`<<(Separator) and `operator`<<(T) can act as
    * the output stream. Examples of such classes are stl output
    * streams (std::cout and relatives) and QTextStream. Even a
    * QVariantList works in most cases.
@@ -52,7 +51,7 @@ namespace Pii
    *
    * @param rowSeparator separate each row with this
    *
-   * @code
+   * ~~~(c++)
    *
    * PiiMatrix<double> mat(4,4,
    *                       1.0, 2.3, 5.4, 8.0,
@@ -66,7 +65,7 @@ namespace Pii
    *  2.3, 5.4, 8, 1
    *  5.4, 8, 1, 2.3
    *  8, 1, 2.3, 5.4
-   * @endcode
+   * ~~~
    */
   template <class Stream, class Matrix, class ColSeparator, class RowSeparator>
   void printMatrix(Stream& out,
@@ -95,10 +94,10 @@ namespace Pii
    * optional. Separate elements with commas or spaces and rows with
    * semicolons.
    *
-   * @code
+   * ~~~(c++)
    * PiiMatrix<double> mat1 = matlabParse("[1 2 3; 4 5 6; 7 8 9]");
    * PiiMatrix<double> mat2 = matlabParse("1.0, 2.0, 3.5; ...\n 4 5 6.8");
-   * @endcode
+   * ~~~
    */
   PII_CORE_EXPORT PiiMatrix<double> matlabParse(const QString& str);
 
@@ -107,11 +106,11 @@ namespace Pii
    * before applying a filtering operation to them to retain the
    * original size.
    *
-   * @lip ExtendZeros - pad with zeros
-   * @lip ExtendReplicate - replicate the value on the border
-   * @lip ExtendSymmetric - symmetrically mirror boundary values
-   * @lip ExtendPeriodic - take values from the opposite border
-   * @lip ExtendNot - do not extend
+   * - `ExtendZeros` - pad with zeros
+   * - `ExtendReplicate` - replicate the value on the border
+   * - `ExtendSymmetric` - symmetrically mirror boundary values
+   * - `ExtendPeriodic` - take values from the opposite border
+   * - `ExtendNot` - do not extend
    */
   enum ExtendMode { ExtendZeros, ExtendReplicate, ExtendSymmetric, ExtendPeriodic, ExtendNot };
 
@@ -165,7 +164,7 @@ namespace Pii
    *
    * @param mode the extension mode
    *
-   * @return the extended matrix. If @p mode is @p ExtendNot, the
+   * @return the extended matrix. If `mode` is `ExtendNot`, the
    * input matrix will be returned.
    */
   template <class Matrix>
@@ -184,7 +183,7 @@ namespace Pii
    *
    * @param dc double precision column coordinate
    *
-   * @code
+   * ~~~(c++)
    * PiiMatrix<int> mat(3,3,
    *                    1,1,2,
    *                    2,1,3,
@@ -194,7 +193,7 @@ namespace Pii
    *  float b = Pii::valueAt(mat,1.0,0.5);
    *  float c = Pii::valueAt(mat,1.0,1.5);
    *  //a = 1.25 b = 1.5 c = 2.0
-   * @endcode
+   * ~~~
    */
   template <class T>
   inline typename Pii::ToFloatingPoint<T>::Type valueAt(const PiiMatrix<T>& img, double dr, double dc)
@@ -219,9 +218,8 @@ namespace Pii
   }
 
   /**
-   * @overload
    *
-   * Returns @a img(r,c). This function is provided for convenience
+   * Returns *img*(r,c). This function is provided for convenience
    * to allow %valueAt() to be easily used in template code.
    */
   template <class T>
@@ -259,11 +257,11 @@ namespace Pii
    *
    * @return a row matrix with lst.size() columns.
    *
-   * @code
+   * ~~~(c++)
    * QList<double> lst = QList<double>() << 1.0 << 2.0;
    * PiiMatrix<double> mat = Pii::listToMatrix<double>(lst);
    * // mat = [ 1.0 2.0 ]
-   * @endcode
+   * ~~~
    */
   template <class T, class Collection> PiiMatrix<T> listToMatrix(const Collection& lst,
                                                                  Pii::MatrixDirection direction = Pii::Horizontally);
@@ -275,11 +273,11 @@ namespace Pii
    *
    * @param row row index (positive value)
    *
-   * @code
+   * ~~~(c++)
    * PiiMatrix<int> mat(2,2, 1,2, 3,4);
    * QList<int> lst = Pii::rowToList<QList<int> >(mat, 1);
    * // lst = { 3, 4 }
-   * @endcode
+   * ~~~
    */
   template <class Collection, class T> Collection rowToList(const PiiMatrix<T>& matrix, int row);
 
@@ -290,50 +288,50 @@ namespace Pii
    *
    * @param column column index (positive value)
    *
-   * @code
+   * ~~~(c++)
    * PiiMatrix<int> mat(2,2, 1,2, 3,4);
    * QList<int> lst = Pii::columnToList<QList<int> >(mat, 0);
    * // lst = { 1, 3 }
-   * @endcode
+   * ~~~
    */
   template <class Collection, class T> Collection columnToList(const PiiMatrix<T>& matrix, int column);
 
   /**
-   * Find the first occurrence of an element that matches @p Rule. 
-   * Stores the row and column coordinates to @p r and @p c. If no
+   * Find the first occurrence of an element that matches `Rule`. 
+   * Stores the row and column coordinates to `r` and `c`. If no
    * such value is not found, both coordinates will be set to -1.
    *
-   * @code
+   * ~~~(c++)
    * PiiMatrix<int> mat(2,2,
    *                    1,2,
    *                    3,4);
    * int r,c;
    * Pii::findFirst<std::equal_to<int> >(mat,5, r, c);
    * // r = -1, c = -1
-   * @endcode
+   * ~~~
    */
   template <class Rule, class T> void findFirst(const PiiMatrix<T>& matrix, T value, int &r, int& c);
 
   /**
-   * Find the last occurrence of an element that matches @p Rule. 
-   * Stores the row and column coordinates to @p r and @p c. If no
+   * Find the last occurrence of an element that matches `Rule`. 
+   * Stores the row and column coordinates to `r` and `c`. If no
    * such value is not found, both coordinates will be set to -1.
    *
-   * @code
+   * ~~~(c++)
    * PiiMatrix<int> mat(2,2,
    *                    1,2,
    *                    3,4);
    * int r,c;
    * Pii::findLast<std::greater<int> >(mat, 2, r, c);
    * // r = 1, c = 0
-   * @endcode
+   * ~~~
    */
   template <class Rule, class T> void findLast(const PiiMatrix<T>& matrix, T value, int &r, int& c);
 
   /**
-   * Find the first occurrence (top to bottom, left to right) of @p
-   * value in @p matrix. Stores the row and column coordinates to @p r
-   * and @p c. If the value is not found, both coordinates will be set
+   * Find the first occurrence (top to bottom, left to right) of 
+   * `value` in `matrix`. Stores the row and column coordinates to `r`
+   * and `c`. If the value is not found, both coordinates will be set
    * to -1.
    */
   template <class T> inline void findFirst(const PiiMatrix<T>& matrix, T value, int &r, int& c)
@@ -342,9 +340,9 @@ namespace Pii
   }
 
   /**
-   * Find the last occurrence (bottom to top, right to left) of @p
-   * value in @p matrix. Stores the row and column coordinates to @p r
-   * and @p c. If the value is not found, both coordinates will be set
+   * Find the last occurrence (bottom to top, right to left) of 
+   * `value` in `matrix`. Stores the row and column coordinates to `r`
+   * and `c`. If the value is not found, both coordinates will be set
    * to -1.
    */
   template <class T> void findLast(const PiiMatrix<T>& matrix, T value, int &r, int& c)
@@ -353,14 +351,14 @@ namespace Pii
   }
 
   /**
-   * Concatenate two matrices. The rows/columns of @p mat2 are
-   * appended to those of @p mat1. If either matrix is empty, the
+   * Concatenate two matrices. The rows/columns of `mat2` are
+   * appended to those of `mat1`. If either matrix is empty, the
    * other one is returned.
    *
-   * @param direction @p Vertically means that @p mat2 will be added
-   * to the bottom of @p mat1. In this case the number of columns in
-   * the matrices must be the same. @p Horizontally means @p mat2 will
-   * be added to the right side of @p mat1. In this case the number of
+   * @param direction `Vertically` means that `mat2` will be added
+   * to the bottom of `mat1`. In this case the number of columns in
+   * the matrices must be the same. `Horizontally` means `mat2` will
+   * be added to the right side of `mat1`. In this case the number of
    * rows must be equal in both matrices.
    *
    * @exception PiiMathException& if matrix sizes don't match
@@ -371,10 +369,10 @@ namespace Pii
                                                       Pii::MatrixDirection direction = Pii::Horizontally);
 
   /**
-   * Replicate a matrix @p vertical times vertically and @p horizontal
+   * Replicate a matrix `vertical` times vertically and `horizontal`
    * times horizontally.
    *
-   * @code
+   * ~~~(c++)
    * PiiMatrix<int> mat(2,2,
    *                    1,0,
    *                    0,1);
@@ -383,7 +381,7 @@ namespace Pii
    * //        010101
    * //        101010
    * //        010101
-   * @endcode
+   * ~~~
    */
   template <class T> PiiMatrix<T> replicate(const PiiMatrix<T>& matrix, int vertical, int horizontal);
 
@@ -394,12 +392,12 @@ namespace Pii
   template <class T> struct MatrixRowAdder
   {
     /**
-     * Constructs a function object that inserts new rows to @p mat.
+     * Constructs a function object that inserts new rows to `mat`.
      */
     MatrixRowAdder(PiiMatrix<T>& mat) : matrix(mat) {}
     
     /**
-     * Add @p row to @p matrix.
+     * Add `row` to `matrix`.
      */
     void operator() (const T* row) const { matrix.appendRow(row); }
 
@@ -409,9 +407,9 @@ namespace Pii
 
   /**
    * Sort matrix rows into ascending order based on the value on the
-   * specified column. Use @p predicate as the comparison function.
+   * specified column. Use `predicate` as the comparison function.
    * 
-   * @code
+   * ~~~(c++)
    * PiiMatrix<int> mat(3,3,
    *                    -1,2,3,
    *                    -2,1,3,
@@ -420,7 +418,7 @@ namespace Pii
    * //  3 0 3
    * // -1 2 3
    * // -2 1 3
-   * @endcode
+   * ~~~
    *
    * @param matrix the input matrix
    *
@@ -435,7 +433,7 @@ namespace Pii
    * Sort matrix rows into ascending order based on the value on the
    * specified column.
    *
-   * @code
+   * ~~~(c++)
    * PiiMatrix<int> mat(3,3,
    *                    -1,2,3,
    *                    -2,1,3,
@@ -452,7 +450,7 @@ namespace Pii
    * //  3 0 3
    * // -2 1 3
    * // -1 2 3
-   * @endcode
+   * ~~~
    *
    * @param matrix the input matrix
    *
@@ -469,7 +467,7 @@ namespace Pii
   }
 
   /**
-   * Sort matrix rows. Same as above but for @p const input.
+   * Sort matrix rows. Same as above but for `const` input.
    */
   template <class T> inline PiiMatrix<T> sortedRows(const PiiMatrix<T>& matrix, int column = 0)
   {
@@ -479,7 +477,7 @@ namespace Pii
   }
 
   /**
-   * Sort matrix rows. Same as above but for @p const input.
+   * Sort matrix rows. Same as above but for `const` input.
    */
   template <class T, class LessThan>
   inline PiiMatrix<T> sortedRows(const PiiMatrix<T>& matrix,
@@ -492,16 +490,16 @@ namespace Pii
   }
 
   /**
-   * Set random elements from range specified by parameters @p lowerBound and
-   * @p upperBound to matrix.
-   * @note Might not handle limits properly for integer types.
+   * Set random elements from range specified by parameters `lowerBound` and
+   * `upperBound` to matrix.
+   * ! Might not handle limits properly for integer types.
    */
   template <class T> void randomizeMatrix(PiiMatrix<T>& mat, const T& lowerBound, const T& upperBound);
 
   /**
-   * Flip @a matrix in place either horizontally, vertically or both.
+   * Flip *matrix* in place either horizontally, vertically or both.
    *
-   * @code
+   * ~~~(c++)
    * PiiMatrix<int> mat(3, 3,
    *                    1, 2, 3,
    *                    4, 5, 6,
@@ -512,12 +510,11 @@ namespace Pii
    * // mat = [ 9 8 7; 6 5 4; 3 2 1 ]
    * Pii::flip(mat, Pii::Horizontally | Pii::Vertically);
    * // mat = [ 1 2 3; 4 5 6; 7 8 9 ]
-   * @endcode
+   * ~~~
    */
   template <class T> void flip(PiiMatrix<T>& matrix, Pii::MatrixDirections directions);
 
   /**
-   * @overload
    *
    * This function doesn't modify the source matrix, but returns a
    * copy.

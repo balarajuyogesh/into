@@ -27,7 +27,7 @@
  * This handler can be used with PiiHttpProtocol to serve static
  * files.
  *
- * @code
+ * ~~~(c++)
  * PiiFileSystemUriHandler* pFileServer = new PiiFileSystemUriHandler("/var/www/");
  * _pFileServer->setIndexFile("index.html");
  * _pHttpServer = PiiHttpServer::addServer("KideServer", address);
@@ -38,11 +38,11 @@
  *     _pHttpServer->protocol()->registerUriHandler("/", _pFileServer);
  *     _pHttpServer->start();
  *   }
- * @endcode
+ * ~~~
  *
  * PiiFileSystemUriHandler supports GET, HEAD, PUT, DELETE and MKCOL
  * methods. Methods allowed for clients are defined by the
- * #allowedMethods property.
+ * [allowedMethods] property.
  *
  * Files uploaded with the PUT method will be initially placed to a
  * temporary directory, whose location is controlled by an environment
@@ -50,7 +50,6 @@
  * file uploads, this directory should be on the same mounted file
  * system as the target directory.
  *
- * @ingroup Network
  */
 class PII_NETWORK_EXPORT PiiFileSystemUriHandler :
   public QObject,
@@ -65,7 +64,7 @@ class PII_NETWORK_EXPORT PiiFileSystemUriHandler :
   Q_PROPERTY(QString fileSystemRoot READ fileSystemRoot WRITE setFileSystemRoot);
 
   /**
-   * The name of a directory index file. If @p indexFile is set to a
+   * The name of a directory index file. If `indexFile` is set to a
    * non-empty string, automatic directory lists will be disabled and
    * the contents of the specified file will be sent to the client
    * instead. If the requested folder doesn't contain an index file,
@@ -75,7 +74,7 @@ class PII_NETWORK_EXPORT PiiFileSystemUriHandler :
 
   /**
    * The default format for automatically generated directory lists,
-   * if #indexFile is not set. The format can be changed by the client
+   * if [indexFile] is not set. The format can be changed by the client
    * by adding "?format=xxx" to the GET request. Supported formats are
    * "text", "html", and "json".
    */
@@ -84,23 +83,23 @@ class PII_NETWORK_EXPORT PiiFileSystemUriHandler :
   Q_ENUMS(DirectoryListFormat);
 
   /**
-   * If this flag is @p false (the default), hidden files will not be
+   * If this flag is `false` (the default), hidden files will not be
    * shown in directory listings and clients will not be able to
-   * access them. Setting the property to @p true reveals hidden
+   * access them. Setting the property to `true` reveals hidden
    * files.
    */
   Q_PROPERTY(bool showHiddenFiles READ showHiddenFiles WRITE setShowHiddenFiles);
   
   /**
-   * If this flag is @p true (the default), symbolic links in the
+   * If this flag is `true` (the default), symbolic links in the
    * directory structure are followed. Otherwise not.
    */
   Q_PROPERTY(bool followSymLinks READ followSymLinks WRITE setFollowSymLinks);
 
   /**
-   * Controls advisory file locking on Linux. If this flag is @p true,
+   * Controls advisory file locking on Linux. If this flag is `true`,
    * a shared lock will be acquired for a file being read. The default
-   * is @p false.
+   * is `false`.
    */
   Q_PROPERTY(bool lockFiles READ lockFiles WRITE setLockFiles);
 
@@ -109,10 +108,10 @@ class PII_NETWORK_EXPORT PiiFileSystemUriHandler :
    * allowed. PiiFileSystemUriHandler also supports PUT, MKCOL and
    * DELETE requests.
    *
-   * @code
+   * ~~~(c++)
    * handler->setProperty("allowedMethods",
    *                      QStringList() << "GET" << "HEAD" << "PUT");
-   * @endcode
+   * ~~~
    */
   Q_PROPERTY(QStringList allowedMethods READ allowedMethods WRITE setAllowedMethods);
 
@@ -120,11 +119,11 @@ public:
   /**
    * Supported automatic directory list formats.
    *
-   * @lip TextFormat - plain text.
+   * - `TextFormat` - plain text.
    *
-   * @lip HtmlFormat - HTML4 with links to files.
+   * - `HtmlFormat` - HTML4 with links to files.
    *
-   * @lip JsonFormat - JSON object for easy integration with JavaScript.
+   * - `JsonFormat` - JSON object for easy integration with JavaScript.
    */
   enum DirectoryListFormat
     {

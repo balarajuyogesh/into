@@ -28,7 +28,6 @@ class PiiModbusIoChannel;
  * An implementation of the PiiIoChannel-interface for Modbus I/O
  * driver.
  *
- * @ingroup PiiModbusIoDriverPlugin
  */
 class PII_MODBUSIODRIVER_EXPORT PiiModbusIoDriver : public PiiDefaultIoDriver
 {
@@ -44,16 +43,16 @@ public:
    * Possibilities include, for example, network addresses and numeric
    * board indices.
    *
-   * @return @p true if the selection was successful, @p false
+   * @return `true` if the selection was successful, `false`
    * otherwise.
    */
   bool selectUnit(const QString& unit);
 
   /**
-   * Close an initialized driver. After @p close(), #initialize() must
+   * Close an initialized driver. After `close`(), [initialize()] must
    * be called again before the driver is functional.
    *
-   * @return @p true on success, @p false otherwise
+   * @return `true` on success, `false` otherwise
    */
   bool close();
 
@@ -61,7 +60,7 @@ public:
    * Initialize the driver. This function is must be called before the
    * driver can be accessed
    *
-   * @return @p true if the initialization was successful, @p false
+   * @return `true` if the initialization was successful, `false`
    * otherwise.
    */
   bool initialize();
@@ -77,7 +76,7 @@ protected:
   /**
    * Create a new PiiIoChannel.
    *
-   * @param channel the channel number, 0 to #channelCount() - 1.
+   * @param channel the channel number, 0 to [channelCount()] - 1.
    */
   PiiIoChannel* createChannel(int channel);
 

@@ -24,12 +24,12 @@ namespace Pii
    * Unpacking styles for QR decomposition. Assume the input matrix A
    * is m-by-n.
    *
-   * @lip UnpackEconomyQR - Either Q or R is m-by-n, and the other one
-   * is a o-by-o matrix, where o = min(m,n). If m >= n: Q will be
-   * m-by-n, R n-by-n. If m <= n: Q will be m-by-m, R m-by-n.
+   * - `UnpackEconomyQR` - Either Q or R is m-by-n, and the other one
+   *   is a o-by-o matrix, where o = min(m,n). If m >= n: Q will be
+   *   m-by-n, R n-by-n. If m <= n: Q will be m-by-m, R m-by-n.
    *
-   * @lip UnpackFullQR - Q will be m-by-m, R m-by-n. If m is large,
-   * this style easily eats up all memory. Use with care.
+   * - `UnpackFullQR` - Q will be m-by-m, R m-by-n. If m is large,
+   *   this style easily eats up all memory. Use with care.
    */
   enum QrUnpackStyle
     {
@@ -49,13 +49,13 @@ namespace Pii
    *
    * @param tau a pointer to the beginning of the tau vector
    *
-   * @param T an output-value matrix. This must be a square matrix (@a
-   * columns by @a columns).
+   * @param T an output-value matrix. This must be a square matrix (
+   * *columns* by *columns*).
    *
    * @param gram a temporary storage for a Gram matrix. Same size as
    * T.
    *
-   * @param bfr a temporary storage of at least @a columns entries.
+   * @param bfr a temporary storage of at least *columns* entries.
    *
    * @see unpackColumns()
    */
@@ -81,26 +81,26 @@ namespace Pii
 
   /**
    * Unpacks the result of QR decomposition. Given a set of elementary
-   * reflectors in @a A and the @a tau array, this function calculates
+   * reflectors in *A* and the *tau* array, this function calculates
    * the reflector matrix Q as follows:
    *
-   * @f[
+   * \[
    * Q = H_0  H_1  \ldots H_k,
-   * @f]
+   * \]
    *
    * where k is either the number of rows or columns in A, whichever
    * is smaller.
    *
    * Each H matrix can be represented as
    *
-   * @f[
+   * \[
    * H_i = I - \tau_i v_i v_i^T,
-   * @f]
+   * \]
    *
-   * where @f$v_i@f$ represents the ith elementary reflector vector. 
-   * The elementary reflectors are stored in @a A under the main
-   * diagonal as columns, and the corresponding values of @f$\tau@f$
-   * are in @a tau.
+   * where \(v_i\) represents the ith elementary reflector vector. 
+   * The elementary reflectors are stored in *A* under the main
+   * diagonal as columns, and the corresponding values of \(\tau\)
+   * are in *tau*.
    *
    * @param A QR decomposed matrix in compact form (m-by-n). This
    * matrix will be modified so that it only contains the reflector
@@ -155,8 +155,8 @@ namespace Pii
   }
 
   /**
-   * QR decomposition. This function factorizes @a A into Q and R
-   * using a series of Householder reflections. Upon return, @a A will
+   * QR decomposition. This function factorizes *A* into Q and R
+   * using a series of Householder reflections. Upon return, *A* will
    * be modified so that it holds both Q and R in a compact form.
    *
    * @param A a m-by-n matrix to be decomposed. Upon return, this
@@ -227,7 +227,7 @@ namespace Pii
 
   /**
    * QR decomposition. The QR algorighm is used to decompose a matrix
-   * @a A into two matrices @a Q and @a R so that A = QR. If A is
+   * *A* into two matrices *Q* and *R* so that A = QR. If A is
    * m-by-n, Q is a m-by-m orthogonal matrix, and R is a m-by-n upper
    * triangular matrix.
    *
@@ -243,20 +243,20 @@ namespace Pii
    * The non-zero elements of R will be stored on and above the main
    * diagonal of A. The lower triangle of A will store a set of
    * elementary reflector vectors (see householderTransform()) that
-   * can be used to form Q together with the @a tau vector. Each
+   * can be used to form Q together with the *tau* vector. Each
    * column represents one of the vectors, excluding the first
    * dimension, which is always one.
    *
-@verbatim
-m >= n                          m < n
-
-(  r   r   r   r   r  )         (  r   r   r   r   r   r  )
-(  v1  r   r   r   r  )         (  v1  r   r   r   r   r  )
-(  v1  v2  r   r   r  )         (  v1  v2  r   r   r   r  )
-(  v1  v2  v3  r   r  )         (  v1  v2  v3  r   r   r  )
-(  v1  v2  v3  v4  r  )         (  v1  v2  v3  v4  r   r  )
-(  v1  v2  v3  v4  v5 )
-@endverbatim
+   * ~~~
+   * m >= n                          m < n
+   * 
+   * (  r   r   r   r   r  )         (  r   r   r   r   r   r  )
+   * (  v1  r   r   r   r  )         (  v1  r   r   r   r   r  )
+   * (  v1  v2  r   r   r  )         (  v1  v2  r   r   r   r  )
+   * (  v1  v2  v3  r   r  )         (  v1  v2  v3  r   r   r  )
+   * (  v1  v2  v3  v4  r  )         (  v1  v2  v3  v4  r   r  )
+   * (  v1  v2  v3  v4  v5 )
+   * ~~~
    *
    * @see qrUnpack()
    */
@@ -388,9 +388,8 @@ m >= n                          m < n
   }
 
   /**
-   * @overload
    *
-   * This version does not modify the input @a A, and returns the Q
+   * This version does not modify the input *A*, and returns the Q
    * matrix unpacked. Optionally, the R matrix will also be filled.
    */
   template <class Matrix>

@@ -15,11 +15,32 @@
 
 #include "PiiSocket.h"
 
+PiiSocket::Data::Data(Type t) :
+  type(t)
+{}
 
-PiiSocket::PiiSocket()
-{
-}
+PiiSocket::Data::~Data() {}
+
+PiiSocket::PiiSocket(Data* d) :
+  d(d)
+{}
 
 PiiSocket::~PiiSocket()
 {
+  delete d;
+}
+
+bool PiiSocket::isProxy() const
+{
+  return d->type >= ProxyInput;
+}
+
+bool PiiSocket::isInput() const
+{
+  return (d->type & 1) == 0;
+}
+
+bool PiiSocket::isOutput() const
+{
+  return (d->type & 1) == 1;
 }

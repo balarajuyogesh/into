@@ -26,6 +26,7 @@ class TestPiiResourceDatabase : public QObject
 private slots:
   void initTestCase();
   void select();
+  void subselect();
 
 private:
   PiiResourceDatabase db;

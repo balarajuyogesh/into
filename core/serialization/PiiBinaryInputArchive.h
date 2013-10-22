@@ -24,10 +24,9 @@
 #include "PiiBinaryArchive.h"
 
 /**
- * %PiiBinaryInputArchive reads raw binary data. The binary format is
+ * PiiBinaryInputArchive reads raw binary data. The binary format is
  * platform-dependent.
  *
- * @ingroup Serialization
  */
 class PII_SERIALIZATION_EXPORT PiiBinaryInputArchive :
   public PiiInputArchive<PiiBinaryInputArchive>,

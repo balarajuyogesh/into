@@ -26,7 +26,6 @@
  * to and from a remote object server. The inputs and outputs of the
  * operation are defined by the server object.
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiRemoteOperation :
   public PiiRemoteQObject<PiiOperation>

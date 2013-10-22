@@ -30,7 +30,6 @@ class PiiAbstractInputSocket;
  * PiiDefaultOperation must be able to handle synchronization tags and
  * stop tags.
  *
- * @ingroup Ydin
  */
 class PII_YDIN_EXPORT PiiInputController
 {
@@ -46,16 +45,16 @@ public:
    *
    * @param object the object that was received
    *
-   * @return @p true if the object was accepted, @p false otherwise.
+   * @return `true` if the object was accepted, `false` otherwise.
    * Typically, an object is accepted if there is no blocking object
-   * in @p sender by calling @ref PiiInputSocket::receive(). Note that
-   * @p true should be returned whenever the object is accepted for
+   * in `sender` by calling [PiiInputSocket::receive()]. Note that
+   * `true` should be returned whenever the object is accepted for
    * processing, even if the processing itself will fail.
    *
    * Note that the function may not throw exceptions. If your
    * implementation passes the incoming objects right away, you must
-   * catch the exceptions thrown by @ref
-   * PiiOutputSocket::emitObject(), for example.
+   * catch the exceptions thrown by 
+   * [PiiOutputSocket::emitObject()], for example.
    */
   virtual bool tryToReceive(PiiAbstractInputSocket* sender, const PiiVariant& object) throw () = 0;
 };

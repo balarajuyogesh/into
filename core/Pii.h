@@ -16,7 +16,6 @@
 #ifndef _PII_H
 #define _PII_H
 
-/** @file */
 
 #include <QObject>
 #include "PiiGlobal.h"
@@ -26,7 +25,6 @@
  * definitions, and data structures that are independent of other
  * modules and plug-ins.
  *
- * @ingroup Core
  */
 #ifdef Q_MOC_RUN
 class Pii
@@ -44,9 +42,9 @@ public:
   
   /**
    * Pointer ownership modes. If the ownership of a pointer is
-   * released to the receiver in a function or constructor call, @p
-   * ReleaseOwnership is used. If the ownership is retained by the
-   * caller, this is indicated by @p RetainOwnership.
+   * released to the receiver in a function or constructor call, 
+   * `ReleaseOwnership` is used. If the ownership is retained by the
+   * caller, this is indicated by `RetainOwnership`.
    */
   enum PtrOwnership { ReleaseOwnership, RetainOwnership };
 
@@ -55,10 +53,10 @@ public:
    * are sampled at arbitrary positions. Many operations work with
    * multiple interpolation modes.
    *
-   * @li @p NearestNeighborInterpolation means that the interpolated
+   * - `NearestNeighborInterpolation` means that the interpolated
    * value is that of the nearest discretized neighbor.
    *
-   * @li @p LinearInterpolation means that the interpolated value is
+   * - `LinearInterpolation` means that the interpolated value is
    * built by a weighted sum of the nearest neighbors. With
    * two-dimensional signals, linear interpolation is in fact
    * bi-linear.
@@ -75,7 +73,7 @@ public:
   
 }; // namespace Pii
 
-/// @cond null
+/// @hide
 Q_DECLARE_OPERATORS_FOR_FLAGS(Pii::MatrixDirections);
 
 #endif //_PII_H

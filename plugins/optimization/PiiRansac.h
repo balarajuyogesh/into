@@ -30,7 +30,7 @@
  * the models that are consistent with it. Among all possible subsets,
  * it selects the one that results in a model that matches the most
  * samples. RANSAC evaluates the selected model by measuring how well
- * it matches all observed data. @e Inlying data are those that match
+ * it matches all observed data. *Inlying* data are those that match
  * the model with an error less than a given threshold.
  *
  * RANSAC is a generic algorithm that has many uses in computer vision
@@ -39,10 +39,9 @@
  * describes the arrangement of points with respect to each other.
  *
  * This algorithm assumes that the mathematical model can be described
- * by N @p doubles. Therefore, models are represented as row matrices
+ * by N `doubles`. Therefore, models are represented as row matrices
  * with N columns.
  *
- * @ingroup PiiOptimization
  */
 class PII_OPTIMIZATION_EXPORT PiiRansac
 {
@@ -55,19 +54,19 @@ public:
    * define the actual model that is matched to the data, and the type
    * of data actually used.
    *
-   * @return @p true on success, @p false if no suitable model could
+   * @return `true` on success, `false` if no suitable model could
    * be found.
    */
   bool findBestModel();
 
   /**
-   * Returns the best model found by the last #findBestModel() call.
+   * Returns the best model found by the last [findBestModel()] call.
    * The returned value is a 1-by-N matrix that contains the
    * parameters of the estimated mathematical model.
    *
    * Note that the best model found by the RANSAC algorithm is based
    * on the minimum number of points necessary to solve the model
-   * parameters (#minSamples()). As a result, the model that is
+   * parameters ([minSamples()]). As a result, the model that is
    * returned by this function by default may be a rather rough
    * estimate. Subclasses may override this function in order to
    * refine the model.
@@ -76,7 +75,7 @@ public:
 
   /**
    * Returns the indices of inlying samples found by the last
-   * #findBestModel() call.
+   * [findBestModel()] call.
    */
   QVector<int> inlyingPoints() const;
 
@@ -122,7 +121,7 @@ public:
    * the fit is measured as a squared geometric distance between a
    * model and a query point, but the measure may also be different
    * depending on the type of the model. Default value is 16. See
-   * #fitToModel().
+   * [fitToModel()].
    */
   void setFittingThreshold(double fittingThreshold);
   /**
@@ -176,14 +175,14 @@ protected:
    * model. For example, a plane needs at least three points. This
    * function may return a number that is less than the amount of
    * samples required to uniquely determine the model, if
-   * #findPossibleModels() is written so that it can find all possible
+   * [findPossibleModels()] is written so that it can find all possible
    * models.
    */
   virtual int minSamples() const = 0;
   
   /**
    * Returns all models that can describe the given point
-   * configuration. If #minSamples() returns a value that is less than
+   * configuration. If [minSamples()] returns a value that is less than
    * the the amount of samples required to uniquely determine the
    * model, this function returns all models consistent with the given
    * points. For example, up to three fundamental matrices can be
@@ -197,11 +196,11 @@ protected:
    *
    * @param dataIndices an array of indices that refer to the samples
    * that should be used in constructing the model. The number of
-   * indices is always #minSamples(). For example, if the samples at
-   * indices 0, 5, and 9 should be used to form the model, @p
-   * dataIndices would contain 0, 5, and 9. It is up to the model
+   * indices is always [minSamples()]. For example, if the samples at
+   * indices 0, 5, and 9 should be used to form the model, 
+   * `dataIndices` would contain 0, 5, and 9. It is up to the model
    * implementation to handle the data associated with the given
-   * indices. Possible indices range from 0 to #totalSampleCount() -
+   * indices. Possible indices range from 0 to [totalSampleCount()] -
    * 1.
    *
    * @return a matrix in which each row represents a model that
@@ -211,9 +210,9 @@ protected:
   virtual PiiMatrix<double> findPossibleModels(const int* dataIndices) = 0;
 
   /**
-   * Fit the sample at @a dataIndex to the given @a model. The
-   * function should return zero when the sample at @a dataIndex is in
-   * perfect agreement with @a model. The value should grow as the
+   * Fit the sample at *dataIndex* to the given *model*. The
+   * function should return zero when the sample at *dataIndex* is in
+   * perfect agreement with *model*. The value should grow as the
    * agreement becomes worse.
    *
    * @param dataIndex the index of a sample to be tested in the
@@ -224,7 +223,7 @@ protected:
    *
    * @return the fit of the sample with respect to the model. Usually
    * a squared geometric distance, but other measures can also be
-   * used. Remember to set @p fittingThreshold correspondingly.
+   * used. Remember to set `fittingThreshold` correspondingly.
    *
    * @see setFittingThreshold()
    */

@@ -27,7 +27,6 @@ class QUndoCommand;
  * functionality provided by diverse software components into a global
  * undo/redo function.
  *
- * @ingroup Core
  */
 class PII_GUI_EXPORT PiiUndoCommandProducer
 {
@@ -47,7 +46,7 @@ public:
      * @param sender the object that performed the action
      *
      * @param command the action that was performed. The receiver @b
-     * must take the ownership of this pointer. Typically, it will be
+     * **must** take the ownership of this pointer. Typically, it will be
      * placed on a QUndoStack.
      */
     virtual void undoCommandPerformed(PiiUndoCommandProducer* sender, QUndoCommand* command) = 0;
@@ -80,7 +79,7 @@ public:
    * ensures that no overlapping ids will be used by independent
    * components.
    *
-   * @code
+   * ~~~(c++)
    * // MyCommand.h
    * class MyCommand : public QUndoCommand
    * {
@@ -93,7 +92,7 @@ public:
    *
    * // MyCommand.cc
    * int MyCommand::iCommandId = PiiUndoCommandProducer::generateId();
-   * @endcode
+   * ~~~
    */
   static int generateId();
 
@@ -102,7 +101,7 @@ protected:
    * Called by subclasses to indicate that an undoable command has
    * been performed. The caller must release the ownership of the
    * pointer. If there is a listener, the command will be passed to
-   * its @p undoCommandPerformed() function. If there is no listener,
+   * its `undoCommandPerformed`() function. If there is no listener,
    * the command will be deleted.
    */
   void undoCommandPerformed(QUndoCommand* command);

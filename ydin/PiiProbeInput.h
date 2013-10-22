@@ -22,93 +22,103 @@
 /**
  * An input socket that works without a controlling operation. The
  * socket works like a measurement probe that emits the
- * #objectReceived() signal whenever a new object is received. It also
- * saves the last received object.
- *
- * @ingroup Ydin
+ * [objectReceived()] signal whenever a new object is received. It
+ * also saves the last received object.
  */
 class PII_YDIN_EXPORT PiiProbeInput :
-  public PiiSocket,
   public PiiAbstractInputSocket,
   public PiiInputController
 {
   Q_OBJECT
 
+  /**
+   * The last received object. If no object has been received,
+   * contains an invalid variant.
+   */
+  Q_PROPERTY(PiiVariant savedObject READ savedObject WRITE setSavedObject);
+
+  /**
+   * Toggles filtering of control objects. The default value is
+   * `false`, which means every incoming object will be
+   * emitted. Turning this value to `true` blocks the saving and
+   * emitting of control objects.
+   */
+  Q_PROPERTY(bool discardControlObjects READ discardControlObjects WRITE setDiscardControlObjects);
+
+  /**
+   * The minimum time between successive objectReceived() signals in
+   * milliseconds. Setting this value to a positive value limits the
+   * rate of signals emitted. Note that the emission interval affects
+   * only outgoing signals; the last incoming object will be saved
+   * anyway. The default value is zero.
+   */
+  Q_PROPERTY(int signalInterval READ signalInterval WRITE setSignalInterval);
+
 public:
   /**
-   * Constructs a new probe input and sets its @p objectName property
-   * to @a name.
+   * Constructs a new probe input and sets its `objectName` property
+   * to *name*.
    */
   PiiProbeInput(const QString& name = "probe");
 
   /**
-   * Constructs a new probe input and connects it to @a output. 
-   * Connects the #objectReceived() signal to @a slot in @a receiver.
+   * Constructs a new probe input and connects it to *output*. 
+   * Connects the [objectReceived()] signal to *slot* in *receiver*.
    *
-   * @note If it is important that the objects are received in the
+   * ! If it is important that the objects are received in the
    * order they were emitted, use Qt::DirectConnection as the
    * connection type. The objects may be emitted from different
    * threads, and Qt's event loop doesn't guarantee chronological
    * ordering in such a case.
    *
-   * @code
+   * ~~~(c++)
    * PiiOperation* reader = engine.createOperation("PiiImageFileReader");
    * PiiImageDisplay* display = new PiiImageDisplay;
    * PiiProbeInput* probe = new PiiProbeInput(reader->output("image"),
    *                                          display, SLOT(setImage(PiiVariant)));
-   * @endcode
+   * ~~~
    */
   PiiProbeInput(PiiAbstractOutputSocket* output, const QObject* receiver,
                 const char* slot, Qt::ConnectionType = Qt::AutoConnection);
 
+
   /**
-   * Returns @p Input.
-   */
-  PiiSocket::Type type() const;
-  
-  /**
-   * Emits #objectReceived() and saves the received object.
+   * Emits [objectReceived()] and saves the received object.
    */
   bool tryToReceive(PiiAbstractInputSocket* sender, const PiiVariant& object) throw ();
 
-  /**
-   * Returns the last received object. If no object has been received,
-   * returns an invalid variant.
-   */
   PiiVariant savedObject() const;
-  /**
-   * Sets the saved object to @a obj.
-   */
-  void setSavedObject(const PiiVariant& obj);
-
+  void setSavedObject(const PiiVariant& obj);  
   /**
    * Returns true if an object has been saved into this socket.
    */
-  bool hasSavedObject() const;
+  Q_INVOKABLE bool hasSavedObject() const;
+
+  void setDiscardControlObjects(bool discardControlObjects);
+  bool discardControlObjects() const;
+
+  void setSignalInterval(int signalInterval);
+  int signalInterval() const;
 
   PiiInputController* controller() const;
-
-  PiiProbeInput* socket();
-  PiiAbstractInputSocket* asInput();
-  PiiAbstractOutputSocket* asOutput();
 
 signals:
   /**
    * Emitted whenever an object is received in this input socket. Note
-   * that all objects, including control objects, will be emitted. The
-   * slot receiving the objects can filter the objects based on their
-   * type.
+   * that all objects, including control objects, will be emitted by
+   * default. The slot receiving the objects can filter the objects
+   * based on their type. Additionally, the [discardControlObjects]
+   * property can be used to filter out control objects.
    *
    * @see PiiYdin::isControlType()
    */
-  void objectReceived(const PiiVariant& obj);
+  void objectReceived(const PiiVariant& obj, PiiProbeInput* sender);
 
+protected:
+  void timerEvent(QTimerEvent*);
+  
 private:
-  class Data : public PiiAbstractInputSocket::Data
-  {
-  public:
-    PiiVariant varSavedObject;
-  };
+  class Data;
   PII_UNSAFE_D_FUNC;
 };
 

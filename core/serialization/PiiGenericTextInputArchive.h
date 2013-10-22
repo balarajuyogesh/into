@@ -16,7 +16,6 @@
 #ifndef _PIIGENERICTEXTINPUTARCHIVE_H
 #define _PIIGENERICTEXTINPUTARCHIVE_H
 
-/** @file */
 
 #include "PiiTextInputArchive.h"
 #include "PiiGenericInputArchive.h"
@@ -25,7 +24,6 @@
  * A shorthand for a text input archive derived from
  * PiiGenericInputArchive.
  *
- * @ingroup Serialization
  */
 typedef PiiGenericInputArchive::Impl<PiiTextInputArchive> PiiGenericTextInputArchive;
 

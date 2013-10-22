@@ -41,7 +41,6 @@
  *
  * In classification, the SOM works as a vector quantizer.
  *
- * @ingroup PiiClassificationPlugin
  */
 template <class SampleSet> class PiiSom :
   public PiiVectorQuantizer<SampleSet>,
@@ -57,7 +56,7 @@ public:
    * @param width the number of nodes in horizontal direction
    *
    * @param height the number of nodes in vertical direction. If set
-   * to a value less than one, a @a width-by-@a width map will be
+   * to a value less than one, a *width*-by-*width* map will be
    * created.
    */
   PiiSom(int width = 10, int height = 0);
@@ -174,7 +173,7 @@ public:
    * learning rate and the size of the neighborhood. Set this value to
    * zero to restart learning.
    *
-   * @b Note. If you want to restart learning at an index other than
+   * **Note**. If you want to restart learning at an index other than
    * zero, set the iteration number to zero first to ensure all
    * necessary initialization is done.
    */
@@ -213,7 +212,7 @@ public:
   void setHeight(int height);
 
   /**
-   * Set the initialization mode to @p mode. The default
+   * Set the initialization mode to `mode`. The default
    * initialization mode is SomSampleInit.
    */
   void setInitMode(PiiClassification::SomInitMode mode);
