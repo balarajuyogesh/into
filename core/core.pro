@@ -2,7 +2,7 @@
 
 TEMPLATE        = lib
 TARGET          = piicore
-HEADERS         = *.h
+HEADERS         = *.h serialization/*.h matrix/*.h
 SOURCES         = *.cc serialization/*.cc matrix/*.cc
 
 !contains(DISABLE,network) {
