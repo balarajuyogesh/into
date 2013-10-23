@@ -81,6 +81,7 @@ public:
   PiiProbeInput(PiiAbstractOutputSocket* output, const QObject* receiver,
                 const char* slot, Qt::ConnectionType = Qt::AutoConnection);
 
+  ~PiiProbeInput();
 
   /**
    * Emits [objectReceived()] and saves the received object.

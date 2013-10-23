@@ -54,6 +54,9 @@ PiiProbeInput::PiiProbeInput(PiiAbstractOutputSocket* output, const QObject* rec
   QObject::connect(this, SIGNAL(objectReceived(PiiVariant,PiiProbeInput*)), receiver, slot, type);
 }
 
+PiiProbeInput::~PiiProbeInput()
+{}
+
 void PiiProbeInput::timerEvent(QTimerEvent*)
 {
   PII_D;
