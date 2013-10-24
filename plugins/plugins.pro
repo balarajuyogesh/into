@@ -30,15 +30,16 @@ enabled(opencv) {
   calibration.depends += opencv
 }
 
+image.depends += dsp
+geometry.depends += dsp
 video.depends += image
 colors.depends += image
-geometry.depends += dsp
-transforms.depends += image
-image.depends += dsp
-matching.depends += geometry classification optimization
-camera.depends += image geometry
+classification.depends += image
 texture.depends += image
-calibration.depends += image classification optimization
+transforms.depends += image
+camera.depends += image geometry
+matching.depends += geometry classification optimization
+calibration.depends += classification optimization
 
 # Camera drivers
 CAMERADRIVERS = emulator webcam
