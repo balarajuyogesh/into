@@ -18,6 +18,7 @@
 
 #include <QMutexLocker>
 #include <PiiDelay.h>
+#include <QDir>
 
 #define CLEAR(x) memset (&(x), 0, sizeof (x))
 
@@ -31,20 +32,21 @@ static bool xioctl(int fd, int request, void  *arg)
   return r == 0;
 }
 
-PiiWebcamDriver::PiiWebcamDriver() : _bOpen(false),
-                                     _bCapturingRunning(false),
-                                     _strBaseDir(""),
-                                     _strCameraId(""),
-                                     _strDevice(""),
-                                     _iFrameBufferCount(10),
-                                     _pCapturingThread(0),
-                                     _iFrameIndex(-1),
-                                     _iMaxFrames(0),
-                                     _iHandledFrameCount(0),
-                                     _bCroppingSupported(false),
-                                     _iPixelFormat(V4L2_PIX_FMT_YUYV),
-                                     _resolution(0,0),
-                                     _iBitsPerPixel(8)
+PiiWebcamDriver::PiiWebcamDriver() :
+  _bOpen(false),
+  _bCapturingRunning(false),
+  _strBaseDir(""),
+  _strCameraId(""),
+  _strDevice(""),
+  _iFrameBufferCount(10),
+  _pCapturingThread(0),
+  _iFrameIndex(-1),
+  _iMaxFrames(0),
+  _iHandledFrameCount(0),
+  _bCroppingSupported(false),
+  _iPixelFormat(V4L2_PIX_FMT_YUYV),
+  _resolution(0,0),
+  _iBitsPerPixel(8)
 {
   _lstCriticalProperties << "frameBufferCount"
                          << "imageFormat"
@@ -57,7 +59,6 @@ PiiWebcamDriver::PiiWebcamDriver() : _bOpen(false),
     _strBaseDir = "/dev/v4l/by-id";
   else
     _strBaseDir = "/dev";
-  
 }
 
 PiiWebcamDriver::~PiiWebcamDriver()
@@ -587,7 +588,7 @@ int PiiWebcamDriver::imageFormat() const
 {
   struct v4l2_format fmt;
   CLEAR(fmt);
-  fmt.type           = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+  fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 
   if (xioctl(_fileDevice.handle(), VIDIOC_G_FMT, &fmt))
     {
@@ -600,7 +601,7 @@ int PiiWebcamDriver::imageFormat() const
         case V4L2_PIX_FMT_RGB24: return PiiCamera::RgbFormat;
         case V4L2_PIX_FMT_BGR24: return PiiCamera::BgrFormat;
         default:
-          piiWarning(tr("Doesn't understand image format."));
+          piiWarning(tr("Unrecognized image format."));
           return (int)PiiCamera::InvalidFormat;
         }
     }

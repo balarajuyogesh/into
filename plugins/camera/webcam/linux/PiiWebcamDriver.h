@@ -23,6 +23,7 @@
 
 #include <QThread>
 #include <QMutex>
+#include <QFile>
 
 #include <unistd.h>
 #include <errno.h>

@@ -232,7 +232,7 @@ template <class T> void PiiCameraOperation::convert(void *frameBuffer, Pii::PtrO
     }
   else
     {
-      switch(d->imageFormat)
+      switch (d->imageFormat)
         {
         case PiiCamera::Yuv411Format:
           {
