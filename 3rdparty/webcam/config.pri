@@ -1,5 +1,4 @@
-#unix:EXT_ENABLED
+EXT_ENABLED = true
 win32 {
-  EXT_ENABLED=true
   LIBS += -lstrmiids -lole32 -loleaut32 -luuid
 }
