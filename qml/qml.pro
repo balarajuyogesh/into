@@ -19,16 +19,22 @@ for (dir, privateDirs) {
   INCLUDEPATH += $$(QTDIR)/include/$$dir/$$QT_VERSION/$$dir
 }
 
+# qml install
+
+
 defined(QML_INSTALL_PATH, var) {
-  INSTALL_PATH = $$PLUGIN_INSTALL_PATH/Into
+  QML_INSTALL_PATH = $$QML_INSTALL_PATH/Into
 } else {
   !defined(INSTALL_PATH, var) {
-    INSTALL_PATH = /usr/lib/into/qml/Into
+    QML_INSTALL_PATH = /usr/lib/into/qml/Into
   } else {
-    INSTALL_PATH = $$INSTALL_PATH/qml/Into
+    QML_INSTALL_PATH = $$INSTALL_PATH/qml/Into
   }
 }
 
-target.path = $$INSTALL_PATH
-target.files += qmldir
+qml.path = $$QML_INSTALL_PATH
+qml.files += qmldir
+INSTALLS += qml
+
+target.path = $$QML_INSTALL_PATH
 INSTALLS += target
