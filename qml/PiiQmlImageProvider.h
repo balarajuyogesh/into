@@ -76,12 +76,12 @@ public:
 public slots:
   /**
    * Stores *image* to the given *slot*. If the slot doesn't exist
-   * yet, creates a new slot.  If *image* is invalid, the image will
-   * be cleared. If the slot has an associated listener, storing an
-   * image always invokes the listener's `updateImage()` function. In
-   * other words, [setUpdateInterval()] has no effect when this
-   * function is called directly. If the type of *image* cannot be
-   * recognized, returns `false`.
+   * yet, creates a new slot. If *image* is invalid, the slot will be
+   * cleared. If the slot has an associated listener, storing an image
+   * always invokes the listener's `updateImage()` function. In other
+   * words, [setUpdateInterval()] has no effect when this function is
+   * called directly. If the type of *image* cannot be recognized,
+   * returns `false`.
    */
   bool storeImage(const QString& slot, const PiiVariant& image);
 

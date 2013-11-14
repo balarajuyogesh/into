@@ -187,7 +187,9 @@ bool PiiQmlImageProvider::connectOutput(PiiAbstractOutputSocket* socket, const Q
   Data::SlotMap::iterator it = d->mapSlots.find(slot);
   if (it != d->mapSlots.end())
     delete it->pProbe;
-  PiiProbeInput* pProbe = new PiiProbeInput(socket, this, SLOT(storeImage(PiiVariant,PiiProbeInput*)), Qt::DirectConnection);
+  PiiProbeInput* pProbe = new PiiProbeInput(socket,
+                                            this, SLOT(storeImage(PiiVariant,PiiProbeInput*)),
+                                            Qt::DirectConnection);
   pProbe->setDiscardControlObjects(true);
   pProbe->setObjectName(slot);
   d->mapSlots[slot].pProbe = pProbe;
@@ -236,10 +238,13 @@ bool PiiQmlImageProvider::storeImage(const QString& slot, const PiiVariant& imag
 {
   if (image.type() member_of<uint> PII_ALL_IMAGE_TYPES)
     {
+      QMutexLocker lock(&d->slotMutex);
       Slot& s = d->mapSlots[slot];
       s.varImage = image;
       if (s.pListener)
-        s.pListener->metaObject()->method(s.iMethodIndex).invoke(s.pListener, Q_ARG(QVariant, slot));
+        s.pListener->metaObject()->method(s.iMethodIndex).invoke(s.pListener,
+                                                                 Qt::AutoConnection,
+                                                                 Q_ARG(QVariant, slot));
       return true;
     }
   return false;
