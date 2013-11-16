@@ -114,7 +114,8 @@ private:
   bool _bOpen, _bCapturingRunning;
   QString _strBaseDir, _strCameraId, _strDevice;
 
-  struct WebcamBuffer {
+  struct WebcamBuffer
+  {
     v4l2_buffer v4l2Buffer;
     void *frameStart;
   };

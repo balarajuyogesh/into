@@ -221,11 +221,14 @@ void PiiCameraOperation::frameCaptured(int frameIndex, void *frameBuffer, qint64
     d->waitCondition.wakeOne();
 }
 
-template <class T> void PiiCameraOperation::convert(void *frameBuffer, Pii::PtrOwnership ownership, int frameIndex, qint64 elapsedTime)
+template <class T> void PiiCameraOperation::convert(void *frameBuffer,
+                                                    Pii::PtrOwnership ownership,
+                                                    int frameIndex,
+                                                    qint64 elapsedTime)
 {
   PII_D;
 
-  if (d->imageType == Original)
+  if (d->imageType == Original && d->imageFormat member_of (PiiCamera::MonoFormat, PiiCamera::RgbFormat)))
     {
       PiiMatrix<T> image(d->iImageHeight, d->iImageWidth, frameBuffer, ownership);
       emitImage(image, ownership, frameIndex, elapsedTime);

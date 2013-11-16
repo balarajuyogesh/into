@@ -19,6 +19,9 @@
 #include <QMutexLocker>
 #include <PiiDelay.h>
 #include <QDir>
+#include <sys/prctl.h>
+#include <poll.h>
+#include <PiiDelay.h>
 
 #define CLEAR(x) memset (&(x), 0, sizeof (x))
 
@@ -38,7 +41,7 @@ PiiWebcamDriver::PiiWebcamDriver() :
   _strBaseDir(""),
   _strCameraId(""),
   _strDevice(""),
-  _iFrameBufferCount(10),
+  _iFrameBufferCount(4),
   _pCapturingThread(0),
   _iFrameIndex(-1),
   _iMaxFrames(0),
@@ -256,6 +259,7 @@ void PiiWebcamDriver::stopCapturing()
 
 void PiiWebcamDriver::capture()
 {
+  prctl(PR_SET_NAME, "V4L2Capture", 0, 0, 0);
   _pCapturingThread->setPriority(QThread::HighestPriority);
   
   QVector<void*> lstBuffers;
@@ -269,7 +273,10 @@ void PiiWebcamDriver::capture()
       if (bSoftwareTrigger)
         _triggerWaitCondition.wait();
       else
-        QThread::yieldCurrentThread();
+        {
+          //QThread::yieldCurrentThread();
+          //PiiDelay::msleep(10);
+        }
       
       if (!_bCapturingRunning)
         break;
@@ -279,7 +286,7 @@ void PiiWebcamDriver::capture()
           void* pBuffer = 0;
 
           //Grab frame
-          grabFrame(_fileDevice.handle(), &pBuffer, 0);
+          grabFrame(_fileDevice.handle(), &pBuffer, 10);
             
           if (pBuffer == 0) break;
           lstBuffers << pBuffer;
@@ -336,46 +343,27 @@ void PiiWebcamDriver::capture()
 
 void PiiWebcamDriver::grabFrame(int fd, void **buffer, int timeout)
 {
-  fd_set fds;
-  timeval tv;
-  int r;
-  v4l2_buffer buf;
-
-  FD_ZERO (&fds);
-  FD_SET (fd, &fds);
   *buffer = 0;
   
-  /* Timeout. */
-  tv.tv_sec = timeout;
-  tv.tv_usec = 0;
-  
-  r = select(fd + 1, &fds, NULL, NULL, &tv);
+  pollfd pfd = { fd, POLLIN, 0 };
+  int r = poll(&pfd, 1, timeout);
   
   if (r == -1)
     {
       QString strReason;
-      switch(errno)
+      switch (errno)
         {
-        case EBADF:
-          strReason = tr("File descriptor is not open");
-          break;
-        case EBUSY:
-          strReason = tr("The driver does not support multiple read or "
-                         "write streams and the device is already in use.");
-          break;
         case EFAULT:
-          strReason = tr("The readfds, writefds, exceptfds or timeout pointer "
-                         "references an inaccessible memory area.");
+          strReason = tr("Illegal memory address.");
           break;
         case EINTR:
-          strReason = tr("The call was interrupted by a signal.");
-          break;
-        case EINVAL:
-          strReason = tr("The nfds argument is less than zero"
-                         "or greater than FD_SETSIZE.");
+          strReason = tr("Grabbing was interrupted by a signal.");
           break;
         default:
-          strReason = tr("Error in grabbing image");
+          if (pfd.revents & POLLNVAL)
+            strReason = tr("Video device is not open.");
+          else
+            strReason = tr("Unknown error in grabbing image");
           break;
         }
       
@@ -383,9 +371,15 @@ void PiiWebcamDriver::grabFrame(int fd, void **buffer, int timeout)
       return;
     }
 
-  if (0 == r) // select timeout
-    return;
-  
+  if (r == 0) // select timeout
+    {
+      qDebug("Timeout");
+      return;
+    }
+  else
+    qDebug("No timeout");
+
+  v4l2_buffer buf;
   CLEAR (buf);
   
   buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -450,7 +444,7 @@ bool PiiWebcamDriver::registerFrameBuffers(int fd)
   
   if (!xioctl (fd, VIDIOC_REQBUFS, &req))
     {
-      piiWarning(tr("Does not support memory mapping"));
+      piiWarning(tr("Kernel video driver does not support memory mapping"));
       return false;
     }
 
@@ -460,9 +454,9 @@ bool PiiWebcamDriver::registerFrameBuffers(int fd)
       return false;
     }
 
-  if ((int)req.count != _iFrameBufferCount)
+  if (int(req.count) != _iFrameBufferCount)
     {
-      piiWarning(tr("Does not support %1 frame buffers").arg(_iFrameBufferCount));
+      piiWarning(tr("Unable to reserve %1 frame buffers").arg(_iFrameBufferCount));
       return false;
     }
 
@@ -483,14 +477,14 @@ bool PiiWebcamDriver::registerFrameBuffers(int fd)
         }
       
       WebcamBuffer *wBuffer = new WebcamBuffer;
-      wBuffer->frameStart = mmap (NULL /* start anywhere */,
+      wBuffer->frameStart = mmap(NULL /* start anywhere */,
                                  buf.length,
                                  PROT_READ | PROT_WRITE /* required */,
                                  MAP_SHARED /* recommended */,
                                  fd, buf.m.offset);
       wBuffer->v4l2Buffer = buf;
       
-      if (MAP_FAILED == wBuffer->frameStart)
+      if (wBuffer->frameStart == MAP_FAILED)
         PII_THROW(PiiCameraDriverException, tr("Error in mmap buffers"));
 
       _vecBuffers << wBuffer;
@@ -504,7 +498,7 @@ bool PiiWebcamDriver::deregisterFrameBuffers()
   // munmap buffers
   for (int i=0; i<_vecBuffers.size(); i++)
     {
-      if (-1 == munmap (_vecBuffers[i]->frameStart, _vecBuffers[i]->v4l2Buffer.length))
+      if (munmap (_vecBuffers[i]->frameStart, _vecBuffers[i]->v4l2Buffer.length) == -1)
         piiWarning(tr("Error in unmap buffers"));
       delete _vecBuffers[i];
     }
@@ -518,7 +512,7 @@ bool PiiWebcamDriver::deregisterFrameBuffers()
 int PiiWebcamDriver::frameIndex(int frameIndex) const
 {
   int iFrameIndex = frameIndex % _iFrameBufferCount;
-  if(iFrameIndex < 0)
+  if (iFrameIndex < 0)
     iFrameIndex += _iFrameBufferCount;
 
   return iFrameIndex;
@@ -557,7 +551,7 @@ QSize PiiWebcamDriver::frameSize() const
 {
   struct v4l2_format fmt;
   CLEAR(fmt);
-  fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+  fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
   
   if (!xioctl(_fileDevice.handle(), VIDIOC_G_FMT, &fmt))
     {
@@ -735,10 +729,10 @@ bool PiiWebcamDriver::setImageFormat(int value)
   struct v4l2_format fmt;
   CLEAR(fmt);
   fmt.type           = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-  // driver change these for the nearest supported values
+  // Driver changes these to the nearest supported values
   fmt.fmt.pix.width  = 99999;
   fmt.fmt.pix.height = 99999;
-  switch((PiiCamera::ImageFormat)value)
+  switch (PiiCamera::ImageFormat(value))
     {
     case PiiCamera::MonoFormat:
       _iPixelFormat = V4L2_PIX_FMT_GREY;
