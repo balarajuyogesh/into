@@ -272,11 +272,6 @@ void PiiWebcamDriver::capture()
     {
       if (bSoftwareTrigger)
         _triggerWaitCondition.wait();
-      else
-        {
-          //QThread::yieldCurrentThread();
-          //PiiDelay::msleep(10);
-        }
       
       if (!_bCapturingRunning)
         break;
@@ -371,13 +366,8 @@ void PiiWebcamDriver::grabFrame(int fd, void **buffer, int timeout)
       return;
     }
 
-  if (r == 0) // select timeout
-    {
-      qDebug("Timeout");
+  if (r == 0) // poll() timeout
       return;
-    }
-  else
-    qDebug("No timeout");
 
   v4l2_buffer buf;
   CLEAR (buf);
