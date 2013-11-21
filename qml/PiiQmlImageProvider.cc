@@ -241,9 +241,18 @@ bool PiiQmlImageProvider::storeImage(const QString& slot, const PiiVariant& imag
       QMutexLocker lock(&d->slotMutex);
       Slot& s = d->mapSlots[slot];
       s.varImage = image;
+      
+      /* Always pass the signal through the event queue even if the
+       * listener was in the same thread. This way the listener will
+       * always call requestImage() from its own thread and we don't
+       * need a recursive mutex there. In almost all cases, this
+       * function will be called from a different thread, and the call
+       * would have to be queued through the main thread's event loop
+       * anyway.
+       */
       if (s.pListener)
         s.pListener->metaObject()->method(s.iMethodIndex).invoke(s.pListener,
-                                                                 Qt::AutoConnection,
+                                                                 Qt::QueuedConnection,
                                                                  Q_ARG(QVariant, slot));
       return true;
     }
