@@ -228,7 +228,7 @@ template <class T> void PiiCameraOperation::convert(void *frameBuffer,
 {
   PII_D;
 
-  if (d->imageType == Original && d->imageFormat member_of (PiiCamera::MonoFormat, PiiCamera::RgbFormat)))
+  if (d->imageType == Original && d->imageFormat member_of (PiiCamera::MonoFormat, PiiCamera::RgbFormat))
     {
       PiiMatrix<T> image(d->iImageHeight, d->iImageWidth, frameBuffer, ownership);
       emitImage(image, ownership, frameIndex, elapsedTime);
