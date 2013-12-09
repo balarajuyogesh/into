@@ -32,7 +32,7 @@
  * operations. That is, the size of the managed memory has no effect
  * on allocation/deallocation time. If you need to allocate lots of
  * small memory chunks, all of which are about the same size, chances
- * are that PiiSimpleMemoryManager is faster than `malloc`() or 
+ * are that PiiSimpleMemoryManager is faster than `malloc()` or 
  * `new`. This may be attributed not only to faster
  * allocation/deallocation but also slightly better cache hit ratios.
  *
@@ -82,7 +82,6 @@
  * // pointer. You must just make the destructor of the base class
  * // virtual as usual.
  * ~~~
- *
  */
 class PII_CORE_EXPORT PiiSimpleMemoryManager
 {
@@ -95,7 +94,7 @@ public:
    * whole memory manager from the heap. The memory manager will not
    * ensure that the memory is large enough to hold a single block. If
    * you set this value to low, chances are that [allocate()] returns
-   * 0. This constructor uses malloc() to allocate memory.
+   * 0. This constructor uses `malloc()` to allocate memory.
    *
    * @param blockSize the desired size of memory blocks. The actual
    * size may be somewhat larger because PiiSimpleMemoryManager always
@@ -105,8 +104,8 @@ public:
    * at least `blockSize` + `sizeof`(void*). Using 16*N -
    * `sizeof(void*)` (N is an integer) bytes as a block size wastes no
    * memory for alignment, except possibly at the beginning, if your
-   * `malloc`() implementation returns an unaligned pointer
-   * (which is highly unlikely).
+   * `malloc()` implementation returns an unaligned pointer (which is
+   * highly unlikely).
    *
    * Note that the initial values cannot be changed once the memory
    * manager has been constructed.
