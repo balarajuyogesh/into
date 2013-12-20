@@ -21,6 +21,7 @@
 #include <PiiDistanceMeasure.h>
 #include <PiiKdTree.h>
 #include <PiiClassification.h>
+#include <PiiSharedD.h>
 
 #include <QList>
 #include <QVector>

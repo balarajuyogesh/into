@@ -203,7 +203,7 @@ public:
    * Returns the element at *index*, if the wrapped pointer is an
    * array.
    */
-  inline T operator[] (int index) const
+  inline const T& operator[] (int index) const
   {
     return elementAt(this, index);
   }

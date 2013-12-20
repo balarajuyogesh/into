@@ -118,7 +118,6 @@ template <class Matrix> struct PiiMatrixTraits<PiiTransposedMatrix<Matrix> >
  * PiiMatrix<int> mat(5,4);
  * mat = Pii::transpose(mat) * mat;
  * ~~~
- *
  */
 template <class Matrix> class PiiTransposedMatrix :
   public PiiConceptualMatrix<PiiTransposedMatrix<Matrix> >
@@ -133,7 +132,7 @@ public:
     _matrix = other._matrix;
     return *this;
   }
-#ifdef PII_CXX0X
+#ifdef PII_CXX11
   PiiTransposedMatrix(PiiTransposedMatrix&& other) : _matrix(std::move(other._matrix)) {}
   PiiTransposedMatrix& operator= (PiiTransposedMatrix&& other)
   {

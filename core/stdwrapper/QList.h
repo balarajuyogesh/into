@@ -13,25 +13,15 @@
  * refer to LICENSE.AGPL3 for details.
  */
 
-#ifndef _PIIKERNELFUNCTION_H
-#define _PIIKERNELFUNCTION_H
+#ifndef _QLIST_H
+#define _QLIST_H
 
-#include "PiiDistanceMeasure.h"
+#include <deque>
 
 #ifdef PII_CXX11
-template <class SampleSet> using PiiKernelFunction = PiiDistanceMeasure<SampleSet>
+template <class T> using QList = std::deque<T>;
 #else
-#  define PiiKernelFunction PiiDistanceMeasure
+#  define QList std::deque
 #endif
 
-/**
- * Type definition for a polymorphic implementation of the function
- * object *KERNEL*.
- *
- * ~~~(c++)
- * PiiKernelFunction<ConstFeatureIterator>* pKernel = new PII_POLYMORPHIC_KERNEL(PiiGaussianKernel);
- * ~~~
- */
-#define PII_POLYMORPHIC_KERNEL(KERNEL) typename PiiKernelFunction<ConstFeatureIterator>::template Impl<KERNEL<ConstFeatureIterator> >
-
-#endif //_PIIKERNELFUNCTION_H
+#endif //_QLIST_H

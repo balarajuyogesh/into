@@ -20,6 +20,7 @@
 #include <QBrush>
 #include <QVariantMap>
 #include "PiiGui.h"
+#include <PiiSharedD.h>
 
 class PII_GUI_EXPORT PiiImageListModelItem
 {

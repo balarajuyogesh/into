@@ -271,11 +271,11 @@ void PiiBasicOperation::operationResumed()
               // It must contain a resume tag.
               PiiSocketState state = d->lstInputs[j]->firstObject().valueAs<PiiSocketState>();
               // Find maximum delay in this group of inputs.
-              int iDelay = QATOMICINT_LOAD(state.delay);
+              int iDelay = state.delay.load();
               if (iDelay > iMaxDelay)
                 iMaxDelay = iDelay;
               // The flow levels should all be the same...
-              iFlowLevel = QATOMICINT_LOAD(state.flowLevel);
+              iFlowLevel = state.flowLevel.load();
             }
         }
 

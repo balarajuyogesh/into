@@ -20,6 +20,7 @@
 #include <numeric>
 #include <algorithm>
 #include <functional>
+#include <QCoreApplication>
 #include "PiiIeeeFloat.h"
 #include "PiiTransposedMatrix.h"
 

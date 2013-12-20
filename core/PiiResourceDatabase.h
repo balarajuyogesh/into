@@ -66,7 +66,6 @@
  * *reify* statements in RDF style. In RDF terminology, reification
  * means staments about statements. Resource ids of the form "[123]"
  * (a hash followed by an integer) are reserved for statements.
- *
  */
 class PII_CORE_EXPORT PiiResourceDatabase
 {

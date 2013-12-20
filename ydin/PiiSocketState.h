@@ -18,13 +18,13 @@
 
 #include "PiiYdin.h"
 #include "PiiVariant.h"
+#include <PiiAtomicInt.h>
 
 /**
  * A structure that stores information about a socket's state at run
  * time.
  *
  * @internal
- *
  */
 struct PII_YDIN_EXPORT PiiSocketState
 {
@@ -36,26 +36,26 @@ struct PII_YDIN_EXPORT PiiSocketState
   {}
 
   /// The current flow level.
-  QAtomicInt flowLevel;
+  PiiAtomicInt flowLevel;
   /// The number of delayed objects.
-  QAtomicInt delay;
+  PiiAtomicInt delay;
 
 private:
   friend struct PiiSerialization::Accessor;
   PII_SEPARATE_SAVE_LOAD_MEMBERS
   template <class Archive> void save(Archive& archive, const unsigned int)
   {
-    archive << PII_NVP("flowLevel", QATOMICINT_LOAD(flowLevel));
-    archive << PII_NVP("delay", QATOMICINT_LOAD(delay));
+    archive << PII_NVP("flowLevel", flowLevel.load());
+    archive << PII_NVP("delay", delay.load());
   }
 
   template <class Archive> void load(Archive& archive, const unsigned int)
   {
     int iTmp;
     archive >> PII_NVP("flowLevel", iTmp);
-    flowLevel = QAtomicInt(iTmp);
+    flowLevel = iTmp;
     archive >> PII_NVP("delay", iTmp);
-    delay = QAtomicInt(iTmp);
+    delay = iTmp;
   }
 };
 

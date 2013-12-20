@@ -17,7 +17,7 @@
 #define _PIIFILEINFO_H
 
 #include "PiiNetwork.h"
-
+#include <PiiSharedD.h>
 #include <QDateTime>
 
 class PII_NETWORK_EXPORT PiiFileInfo

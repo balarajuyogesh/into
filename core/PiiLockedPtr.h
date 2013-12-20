@@ -17,6 +17,7 @@
 #define _PIILOCKEDPTR_H
 
 #include "PiiGlobal.h"
+#include "PiiSharedD.h"
 
 /**
  * PiiLockedPtr is a wrapper class that can be used as an exclusively

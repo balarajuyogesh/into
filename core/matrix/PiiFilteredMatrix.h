@@ -90,7 +90,7 @@ public:
   {
   }
 
-#ifdef PII_CXX0X
+#ifdef PII_CXX11
   PiiFilteredMatrix(PiiFilteredMatrix&& other) :
     _begin(other._begin),
     _end(other._end),
@@ -129,7 +129,7 @@ public:
 
 private:
   PiiFilteredMatrix& operator= (const PiiFilteredMatrix& other);
-#ifdef PII_CXX0X
+#ifdef PII_CXX11
   PiiFilteredMatrix(const PiiFilteredMatrix& other);
 #endif
   

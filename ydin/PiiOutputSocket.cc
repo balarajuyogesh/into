@@ -325,8 +325,8 @@ void PiiOutputSocket::resume(PiiSocketState state)
            (int)state.flowLevel, (int)state.delay,
            (int)d->state.flowLevel, (int)d->state.delay);
   */
-  emitObject(PiiSocketState(QATOMICINT_LOAD(state.flowLevel) + QATOMICINT_LOAD(d->state.flowLevel),
-                            QATOMICINT_LOAD(state.delay) + QATOMICINT_LOAD(d->state.delay)));
+  emitObject(PiiSocketState(state.flowLevel.load() + d->state.flowLevel.load(),
+                            state.delay.load() + d->state.delay.load()));
 }
 
 void PiiOutputSocket::startDelay()

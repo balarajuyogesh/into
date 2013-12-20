@@ -17,10 +17,10 @@
 #define _PIISHAREDOBJECT_H
 
 #include "PiiGlobal.h"
+#include "PiiAtomicInt.h"
 #include <PiiSerialization.h>
 #include <PiiNameValuePair.h>
 #include <PiiTrackedPointerHolder.h>
-#include <QAtomicInt>
 
 /**
  * A shared object. Shared objects are useful when multiple pointers
@@ -97,7 +97,7 @@ public:
    */
   int references() const
   {
-    return QATOMICINT_LOAD(_ref);
+    return _ref.load();
   }
 
   /**
@@ -105,7 +105,7 @@ public:
    */
   void setReferences(int cnt)
   {
-    QATOMICINT_STORE(_ref, cnt);
+    _ref.store(cnt);
   }
 
 private:

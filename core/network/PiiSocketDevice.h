@@ -21,6 +21,7 @@
 #include "PiiNetwork.h"
 #include <PiiTimer.h>
 #include <PiiDelay.h>
+#include <PiiSharedD.h>
 
 class PiiProgressController;
 class QIODevice;

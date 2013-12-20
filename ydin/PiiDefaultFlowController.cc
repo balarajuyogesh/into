@@ -101,16 +101,16 @@ void PiiDefaultFlowController::SyncGroup::resume()
 {
   // Sanity check: all flow levels must match.
   PiiSocketState firstState = at(0)->firstObject().valueAs<PiiSocketState>();
-  int iFirstDelay = QATOMICINT_LOAD(firstState.delay);
+  int iFirstDelay = firstState.delay.load();
   bool bDelayedObjects = iFirstDelay > 0; //false;
-  int iFlowLevel = QATOMICINT_LOAD(firstState.flowLevel);
+  int iFlowLevel = firstState.flowLevel.load();
   //piiDebug("PiiDefaultFlowController::SyncGroup[%d].resume(%d, %d)", _iGroupId, iFlowLevel, iFirstDelay);
   for (int i=1; i<size(); ++i)
     {
       PiiSocketState state = at(i)->firstObject().valueAs<PiiSocketState>();
-      if (QATOMICINT_LOAD(state.delay) > 0) //!= iFirstDelay)
+      if (state.delay.load() > 0) //!= iFirstDelay)
         bDelayedObjects = true;
-      if (state.flowLevel != iFlowLevel)
+      if (state.flowLevel.load() != iFlowLevel)
         PII_THROW(PiiExecutionException,
                   PiiDefaultFlowController::tr("Synchronization error: mismatched flow levels in input group %1 while resuming.")
                   .arg(_iGroupId));

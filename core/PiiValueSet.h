@@ -56,9 +56,9 @@
  */
 #define not_member_of != Pii::valueSet
 
-// No docs
 /// @hide
 
+#ifndef PII_NO_QT
 namespace std
 {
   template <class T> struct iterator_traits<QList<T> >
@@ -70,6 +70,7 @@ namespace std
     typedef typename QList<T>::reference             reference;
   };
 }
+#endif
 
 namespace Pii
 {

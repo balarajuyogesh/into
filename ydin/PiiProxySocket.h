@@ -68,6 +68,7 @@ public:
 
 private:
   friend class PiiOperationCompound;
+  friend class TestPiiSocket;
   PiiProxySocket(QObject* parent = 0);
   PiiProxySocket(const QString& inputName, const QString& outputName, QObject* parent = 0);
   void reset();
