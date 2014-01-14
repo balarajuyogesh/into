@@ -59,8 +59,8 @@ template <class T> void PiiMatrixNormalizer::normalize(const PiiVariant& obj)
   double scale = 1.0, preShift = 0.0, postShift = 0.0;
   if (d->normalizationMode == NormalizeMinMax)
     {
-      T minimum;
-      T maximum;
+      T minimum(0);
+      T maximum(0);
       Pii::minMax(mat, &minimum, &maximum);
 
       preShift = -double(minimum);

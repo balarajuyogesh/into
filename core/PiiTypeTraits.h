@@ -387,6 +387,10 @@ namespace Pii
     static Type apply(T* value) { return *value; }
   };
 
+  template <class T> struct ToValue { typedef T Type; };
+  template <class T> struct ToValue<T*> { typedef typename ToNonConst<T>::Type Type; };
+  template <class T> struct ToValue<T&> { typedef typename ToNonConst<T>::Type Type; };
+
   /**
    * Converts a type to a corresponding floating-point type. The 
    * `Type` member of this structure is `float` for all primitive types
@@ -570,17 +574,17 @@ namespace Pii
    * larger number of bits. For example (`double`, `float`) maps to
    * `double`.
    *
-   * - If one of the types is floating-point and the other is
-   * integer, the floating-point type will be used. For example (
-   * `float`, `int`) maps to `float`.
+   * - If one of the types is floating-point and the other is integer,
+   * the floating-point type will be used. For example (`float`,
+   * `int`) maps to `float`.
    *
    * - If both types are integers, and either of them is signed, the
    * result is a signed version of the type with larger number of
-   * bits. For example (`unsigned` `long`, `char`) maps to `long`.
+   * bits. For example (`unsigned long`, `char`) maps to `long`.
    *
    * - If both types are unsigned integers, the result is the type
-   * with larger number of bits. For example (`unsigned` `int`, 
-   * `unsigned` `char`) maps to `unsigned` `int`.
+   * with larger number of bits. For example (`unsigned int`, 
+   * `unsigned char`) maps to `unsigned int`.
    *
    * ~~~(c++)
    * template <class T, class U> void calculate(T a, U b)
@@ -610,7 +614,7 @@ namespace Pii
                              // "Call" CombineFloats
                              typename CombineFloats<T,U>::Type >::Type Type;
   };
-
+  
   /// @endgroup
 }
 

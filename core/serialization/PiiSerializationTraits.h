@@ -260,7 +260,7 @@ namespace PiiSerializationTraits
 #undef PII_NAME_TYPE
 
 #define PII_NAME_TYPE(TYPE) \
-  template <> struct ClassName<unsigned TYPE> { static const char* get() { return "unsigned "PII_STRINGIZE(TYPE); } };
+  template <> struct ClassName<unsigned TYPE> { static const char* get() { return "unsigned " PII_STRINGIZE(TYPE); } };
 
   PII_NAME_TYPE(char);
   PII_NAME_TYPE(short);

@@ -16,9 +16,9 @@
 #ifndef _PIIEXCEPTION_H
 #define _PIIEXCEPTION_H
 
-#include <QString>
-#include <QCoreApplication>
 #include "PiiGlobal.h"
+#include <QString>
+
 #ifndef _DEBUG
 // Release builds save memory by not storing error location.
 #  define PII_MAKE_EXCEPTION(EXCEPTION, MESSAGE) EXCEPTION(MESSAGE)
@@ -66,9 +66,11 @@ class PiiMetaObject;
  */
 class PII_CORE_EXPORT PiiException
 {
+#ifndef PII_NO_QT
   friend struct PiiSerialization::Accessor;
   template <class Archive> void serialize(Archive& archive, const unsigned version);
   virtual const PiiMetaObject* piiMetaObject() const;
+#endif
 public:
   /**
    * Constructs an empty exception.
@@ -171,6 +173,7 @@ protected:
   /// @endhide
 };
 
+#ifndef PII_NO_QT
 #include <PiiVirtualMetaObject.h>
 #include <PiiSerializationUtil.h>
 #include <PiiNameValuePair.h>
@@ -186,5 +189,6 @@ template <class Archive> void PiiException::serialize(Archive& archive, const un
 #define PII_BUILDING_LIBRARY PII_BUILDING_CORE
 
 #include "PiiSerializableRegistration.h"
+#endif
 
 #endif //_PIIEXCEPTION_H

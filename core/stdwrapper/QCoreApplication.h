@@ -13,38 +13,17 @@
  * refer to LICENSE.AGPL3 for details.
  */
 
-#include "PiiEmulatorIoDriver.h"
+#ifndef _QCOREAPPLICATION_H
+#define _QCOREAPPLICATION_H
 
-PiiEmulatorIoDriver::PiiEmulatorIoDriver()
-{
-}
+#include "QString.h"
 
-PiiEmulatorIoDriver::~PiiEmulatorIoDriver()
+namespace QCoreApplication
 {
-  PiiEmulatorIoDriver::close();
-}
+  inline QString translate(const char* /*context*/, const char* text)
+  {
+    return QString(text);
+  }
+};
 
-bool PiiEmulatorIoDriver::initialize()
-{
-  return true;
-}
-
-bool PiiEmulatorIoDriver::selectUnit(const QString& /*unit*/)
-{
-  return true;
-}
-
-bool PiiEmulatorIoDriver::close()
-{
-  return true;
-}
-
-int PiiEmulatorIoDriver::channelCount() const
-{
-  return 8;
-}
-
-PiiIoChannel* PiiEmulatorIoDriver::createChannel(int channel)
-{
-  return new PiiEmulatorIoChannel(this,channel);
-}
+#endif //_QCOREAPPLICATION_H

@@ -16,6 +16,7 @@
 #ifndef _PIIQML_H
 #define _PIIQML_H
 
+#include <QCoreApplication>
 #include <private/qqmlglobal_p.h>
 
 // Declares FUNCTION as a v8-callable function.

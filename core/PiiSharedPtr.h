@@ -100,7 +100,6 @@
  * one in inheritance order.
  *
  * @see PiiSharedObject
- *
  */
 template <class T> class PiiSharedPtr
 {
@@ -123,6 +122,7 @@ template <class T> class PiiSharedPtr
 public:
   /// @internal
   template <class U> struct OnlyDerived : Pii::IfClass<Pii::IsBaseOf<T,U>, Pii::Id<int>, Pii::Empty>::Type {};
+  template <class U> struct OnlyArray : Pii::IfClass<Pii::IsArray<U>, Pii::Id<int>, Pii::Empty>::Type {};
 
 #define PII_IS_FIRST_BASE(BASE, DERIVED)                                \
   (reinterpret_cast<void*>(static_cast<BASE*>(reinterpret_cast<DERIVED*>((void*)1))) == (void*)1)
@@ -203,7 +203,7 @@ public:
    * Returns the element at *index*, if the wrapped pointer is an
    * array.
    */
-  inline T operator[] (int index) const
+  inline const T& operator[] (int index) const
   {
     return elementAt(this, index);
   }
@@ -282,8 +282,6 @@ private:
     Q_ASSERT(PII_IS_FIRST_BASE(T,U)); // traps multiple inheritance problems
     reassign(other._ptr);
   }
-
-  template <class U> struct OnlyArray : Pii::IfClass<Pii::IsArray<U>, Pii::Id<int>, Pii::Empty>::Type {};
 
   template <class U> static inline T& elementAt(U* thisPtr, typename OnlyArray<U>::Type index)
   {

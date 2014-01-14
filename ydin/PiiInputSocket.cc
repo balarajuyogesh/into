@@ -19,6 +19,7 @@
 
 #include <QStringList>
 #include <QThread>
+#include <QCoreApplication>
 
 using namespace PiiYdin;
 

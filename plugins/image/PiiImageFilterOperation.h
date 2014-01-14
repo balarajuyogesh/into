@@ -72,9 +72,9 @@ class PiiImageFilterOperation : public PiiDefaultOperation
    * PiiOperation* op = engine.createOperation("PiiImageFilter");
    * op->setProperty("filter",
    *                 PiiVariant(new PiiMatrix<int>(3, 3,
-   *                                                       1, 2, 1,
-   *                                                       2, 4, 2,
-   *                                                       1, 2, 1));
+   *                                               1, 2, 1,
+   *                                               2, 4, 2,
+   *                                               1, 2, 1));
    * ~~~
    */
   Q_PROPERTY(PiiVariant filter READ filter WRITE setFilter);

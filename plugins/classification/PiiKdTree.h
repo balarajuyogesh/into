@@ -24,6 +24,7 @@
 #include "PiiSquaredGeometricDistance.h"
 #include <PiiSerialization.h>
 #include <PiiNameValuePair.h>
+#include <PiiSharedD.h>
 
 /**
  * K-dimensional tree. The kd-tree is a binary tree in which every

@@ -19,6 +19,7 @@
 #include "PiiNetwork.h"
 #include <PiiPreprocessor.h>
 #include <PiiLockedPtr.h>
+#include <PiiAtomicInt.h>
 
 #include <QVector>
 #include <QVariant>
@@ -234,7 +235,7 @@ protected:
     volatile bool bChannelRunning;
     int iRetryCount;
     int iRetryDelay;
-    QAtomicInt iFailureCount;
+    PiiAtomicInt iFailureCount;
     QStringList lstConnectedSources;
     int iMaxFailureCount;
   } *d;

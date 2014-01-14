@@ -17,6 +17,7 @@
 #define _PIIMIMEHEADER_H
 
 #include "PiiNetworkGlobal.h"
+#include <PiiSharedD.h>
 #include <QByteArray>
 #include <QCoreApplication>
 
@@ -31,7 +32,6 @@
  * and "CONTENT-TYPE" are equivalent. If you first set a header in
  * capital letters, and later replace its value with setValue() using
  * a lowercase key, the capitalized key will remain.
- *
  */
 class PII_NETWORK_EXPORT PiiMimeHeader
 {

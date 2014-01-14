@@ -35,7 +35,6 @@ class PII_YDIN_EXPORT PiiProxySocket :
   Q_OBJECT
 
 public:
-  PiiProxySocket(QObject* parent = 0);
   ~PiiProxySocket();
 
   Q_INVOKABLE PiiAbstractInputSocket* input() const;
@@ -69,6 +68,9 @@ public:
 
 private:
   friend class PiiOperationCompound;
+  // Probably an unortohodox solution, but hey, tests are important.
+  friend class TestPiiSocket;
+  PiiProxySocket(QObject* parent = 0);
   PiiProxySocket(const QString& inputName, const QString& outputName, QObject* parent = 0);
   void reset();
   class Data;

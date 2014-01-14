@@ -80,7 +80,7 @@ PiiRemoteObject::HttpDevicePtr PiiRemoteObject::openConnection()
 {
   HttpDevicePtr pDev(&d->deviceMutex);
 
-  if (unsigned(QATOMICINT_LOAD(d->iFailureCount)) > unsigned(d->iMaxFailureCount))
+  if (unsigned(d->iFailureCount.load()) > unsigned(d->iMaxFailureCount))
     PII_THROW(PiiNetworkException, tr("Maximum number of failures reached."));
   
   QIODevice* pSocket = 0;
@@ -528,7 +528,7 @@ int PiiRemoteObject::retryDelay() const { return d->iRetryDelay; }
 
 void PiiRemoteObject::serverUriChanged(const QString&) {}
 
-int PiiRemoteObject::failureCount() const { return QATOMICINT_LOAD(d->iFailureCount); }
+int PiiRemoteObject::failureCount() const { return d->iFailureCount.load(); }
 void PiiRemoteObject::resetFailureCount() { d->iFailureCount = 0; }
 void PiiRemoteObject::addFailure() { d->iFailureCount.ref(); }
 

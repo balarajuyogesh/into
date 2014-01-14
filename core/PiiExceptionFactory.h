@@ -46,8 +46,10 @@ PII_EXCEPTION_NS_START
 
 class PII_EXCEPTION_EXPORT PII_EXCEPTION_CLASS : public PII_EXCEPTION_BASE
 {
+#ifndef PII_NO_QT
   PII_DEFAULT_SERIALIZATION_FUNCTION(PII_EXCEPTION_BASE)
   PII_VIRTUAL_METAOBJECT_FUNCTION;
+#endif
 public:
   PII_EXCEPTION_CLASS(const QString& message = "", const QString& location = "");
   PII_EXCEPTION_CLASS(const PII_EXCEPTION_CLASS& other);
@@ -60,15 +62,19 @@ protected:
 
 PII_EXCEPTION_NS_END
 
-#define PII_SERIALIZABLE_CLASS PII_EXCEPTION_NS_SCOPE PII_EXCEPTION_CLASS
-#define PII_VIRTUAL_METAOBJECT
+#ifndef PII_NO_QT
+#  define PII_SERIALIZABLE_CLASS PII_EXCEPTION_NS_SCOPE PII_EXCEPTION_CLASS
+#  define PII_VIRTUAL_METAOBJECT
 
-#include "PiiSerializableRegistration.h"
+#  include "PiiSerializableRegistration.h"
+#endif
 
 #ifdef PII_EXCEPTION_DEFINITION
 
-#include "PiiSerializableExport.h"
+#  ifndef PII_NO_QT
+#    include "PiiSerializableExport.h"
 PII_SERIALIZABLE_EXPORT(PII_EXCEPTION_NS_SCOPE PII_EXCEPTION_CLASS);
+#  endif
 
 PII_EXCEPTION_NS_START
 
@@ -96,7 +102,7 @@ void PII_EXCEPTION_CLASS::throwThis() { throw *this; }
 
 PII_EXCEPTION_NS_END
 
-#endif
+#endif // PII_EXCEPTION_DEFINITION
 
 #undef PII_EXCEPTION_CLASS
 #undef PII_EXCEPTION_BASE

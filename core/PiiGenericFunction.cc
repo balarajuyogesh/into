@@ -16,6 +16,7 @@
 #include "PiiGenericFunction.h"
 #include "PiiMetaTypeUtil.h"
 #include "PiiInvalidArgumentException.h"
+#include <QCoreApplication>
 
 PiiGenericFunction::Data::Data() :
   iReturnType(QMetaType::Void)
@@ -26,8 +27,7 @@ PiiGenericFunction::Data::~Data()
 
 PiiGenericFunction::PiiGenericFunction() :
   d(new Data)
-{
-}
+{}
 
 PiiGenericFunction::PiiGenericFunction(Data* data) : d(data)
 {}

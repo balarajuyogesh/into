@@ -248,7 +248,6 @@ namespace PiiColors
   {
     typedef typename Clr::Type T;
     typedef HsvScalingTraits<T> Traits;
-    typedef typename Traits::CalculationType Real;
     
     T r = rgbColor.rgbR, g = rgbColor.rgbG, b = rgbColor.rgbB,
       min = qMin(qMin(r,g),b), max = qMax(qMax(r,g),b), delta = max - min,

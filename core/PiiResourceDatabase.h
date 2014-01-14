@@ -66,7 +66,6 @@
  * *reify* statements in RDF style. In RDF terminology, reification
  * means staments about statements. Resource ids of the form "[123]"
  * (a hash followed by an integer) are reserved for statements.
- *
  */
 class PII_CORE_EXPORT PiiResourceDatabase
 {
@@ -501,6 +500,11 @@ namespace Pii
   struct Object : SelectorBase<Object, QString>
   {
     QString operator() (const PiiResourceStatement& statement) const { return statement.object(); }
+  };
+
+  template <class T> struct ObjectPtr : SelectorBase<ObjectPtr<T>, T*>
+  {
+    T* operator() (const PiiResourceStatement& statement) const { return reinterpret_cast<T*>(statement.objectPtr()); }
   };
 
   // Special selector for attributes. The operator(QString) returns

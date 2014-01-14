@@ -19,7 +19,7 @@ template <class T> int fast9_corner_score(const T* p,
   CalcType b = (bmax + bmin)/2;
     
   /*Compute the score using binary search*/
-	for (;;)
+  for (;;)
     {
       CalcType cb = *p + b;
       CalcType c_b = *p - b;
@@ -2926,15 +2926,15 @@ template <class T> int fast9_corner_score(const T* p,
         else
           goto is_not_a_corner;
 
-		is_a_corner:
-			bmin=b;
-			goto end_if;
+    is_a_corner:
+      bmin=b;
+      goto end_if;
 
-		is_not_a_corner:
-			bmax=b;
-			goto end_if;
+    is_not_a_corner:
+      bmax=b;
+      goto end_if;
 
-		end_if:
+    end_if:
 
       if (bmin == bmax - 1 || bmin == bmax)
         return bmin;
@@ -2949,12 +2949,12 @@ template <class T> QVector<int> fast9_score(const PiiMatrix<T>& image,
                                             typename Pii::Combine<T,int>::Type threshold)
 {
   const int iRows = corners.rows();
-	QVector<int> vecScores(iRows);
+  QVector<int> vecScores(iRows);
   
   for (int n=0; n < iRows; n++)
     vecScores[n] = fast9_corner_score(image[corners(n,1)] + corners(n,0), pixel, threshold);
   
-	return vecScores;
+  return vecScores;
 }
 
 
@@ -2965,14 +2965,14 @@ template <class T> PiiMatrix<int> fast9_detect(const PiiMatrix<T>& image,
   typedef typename Pii::Combine<T,int>::Type CalcType;
   const int iRows = image.rows(), iCols = image.columns();
 
-	PiiMatrix<int> matCorners(0,2);
+  PiiMatrix<int> matCorners(0,2);
   matCorners.reserve(512);
 
-	for (int y=3; y < iRows - 3; y++)
-		for (int x=3; x < iCols - 3; x++)
+  for (int y=3; y < iRows - 3; y++)
+    for (int x=3; x < iCols - 3; x++)
       {
         const T* p = image[y] + x;
-		
+                
         CalcType cb = *p + threshold;
         CalcType c_b= *p - threshold;
         if (FAST_PIXEL_AT(0) > cb)
@@ -5878,6 +5878,6 @@ template <class T> PiiMatrix<int> fast9_detect(const PiiMatrix<T>& image,
             continue;
         matCorners.appendRow(x,y);
       }
-	
-	return matCorners;
+        
+  return matCorners;
 }

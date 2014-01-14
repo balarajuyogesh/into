@@ -16,20 +16,21 @@
 #ifndef _PIISYNCHRONIZED_H
 #define _PIISYNCHRONIZED_H
 
-#include "PiiGlobal.h"
 #include "PiiPreprocessor.h"
 #include <QMutex>
 
+/// @hide
 
-/// @internal
 struct PII_CORE_EXPORT PiiMutexLocker
 {
-  explicit inline PiiMutexLocker(const QMutex& mutex) : pMutex(const_cast<QMutex*>(&mutex)), bLocked(true)
+  explicit inline PiiMutexLocker(const QMutex& mutex) :
+    pMutex(const_cast<QMutex*>(&mutex)), bLocked(true)
   {
     pMutex->lock();
   }
     
-  explicit inline PiiMutexLocker(const QMutex* mutex) : pMutex(const_cast<QMutex*>(mutex)), bLocked(true)
+  explicit inline PiiMutexLocker(const QMutex* mutex) :
+    pMutex(const_cast<QMutex*>(mutex)), bLocked(true)
   {
     pMutex->lock();
   }
@@ -44,8 +45,9 @@ struct PII_CORE_EXPORT PiiMutexLocker
   bool bLocked;
 };
 
-/// @internal
 #define PII_SYNCHRONIZED(LOCK,MUTEX) for (PiiMutexLocker LOCK(MUTEX); LOCK; LOCK.setUnlocked())
+
+/// @endhide
 
 /**
  * Declares a critical section in which mutual exclusion is handled by

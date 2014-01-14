@@ -16,8 +16,10 @@
 #ifndef _PII_H
 #define _PII_H
 
+#ifndef PII_NO_QT
+#  include <QObject>
+#endif
 
-#include <QObject>
 #include "PiiGlobal.h"
 
 /**
@@ -38,7 +40,9 @@ namespace Pii
   Q_ENUMS(Interpolation);
 public:
 #endif
+#ifndef PII_NO_QT
   extern PII_CORE_EXPORT const QMetaObject staticMetaObject;
+#endif
   
   /**
    * Pointer ownership modes. If the ownership of a pointer is

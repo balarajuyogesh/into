@@ -481,7 +481,7 @@ public:
    */
   PiiMatrix(int rows, int columns, VaArgType firstElement, ...);
 
-#ifdef PII_CXX0X
+#ifdef PII_CXX11
   /**
    * Moves the contents of *other* to `this` and leaves *other*
    * with null data.
@@ -1247,24 +1247,23 @@ private:
  * values from [PiiMatrix::operator()](int,int,int,int). 
  * Sub-matrices cannot be copied. Unfortunately, there is no elegant
  * way of making a movable but non-copyable type in C++ prior to
- * C++0x. Therefore, this class uses a bit of hackery to implement
+ * C++11. Therefore, this class uses a bit of hackery to implement
  * move semantics with the old C++ standard.
  *
  * ~~~(c++)
  * PiiMatrix<int> mat(5,5);
  * // Constructing a copy of a PiiSubmatrix is possible prior to
- * // C++0x. This is however strongly discouraged. The following
- * // won't compile if C++0x is enabled.
+ * // C++11. This is however strongly discouraged. The following
+ * // won't compile if C++11 is enabled.
  * PiiSubMatrix<int> sub(mat(1,1,2,2)); // WRONG!
  * PiiSubMatrix<int> sub2(sub); // WRONG!
  * // As a result, sub will be left in an empty state.
  *
- * // The following is legal in both old C++ and C++0x
+ * // The following is legal in both old C++ and C++11
  * PiiMatrix<int> sub(mat(1,1,2,2)); // immutable shallow copy
  * // Modifies the central portion of mat
  * mat(1,1,3,3) *= 5;
  * ~~~
- *
  */
 template <class T> class PiiSubmatrix :
   public PiiConceptualMatrix<PiiSubmatrix<T> >
@@ -1272,7 +1271,7 @@ template <class T> class PiiSubmatrix :
 public:
   typedef PiiMatrixTraits<PiiSubmatrix<T> > Traits;
   
-#ifdef PII_CXX0X
+#ifdef PII_CXX11
   /**
    * Moves the contents of *other* to this and leaves *other* with
    * null data.
