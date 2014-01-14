@@ -444,7 +444,7 @@ public:
    *
    * ~~~(c++)
    * PiiOperation* op = ...;
-   * op->setProperty("property", Pii::createVariant(PiiMatrix<int>(4,4)));
+   * op->setProperty("property", PiiVariant(PiiMatrix<int>(4,4)));
    * ~~~
    */
   bool setProperty(const char* name, const PiiVariant& value);

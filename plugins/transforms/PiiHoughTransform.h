@@ -20,6 +20,7 @@
 #include <PiiMatrix.h>
 #include <PiiMathDefs.h>
 #include <PiiFunctional.h>
+#include <PiiSharedD.h>
 
 /**
  * Linear Hough transform. The linear Hough transform is used in

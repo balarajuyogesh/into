@@ -17,6 +17,7 @@
 #include "PiiEngine.h"
 #include "PiiProbeInput.h"
 #include <PiiSerializableExport.h> // MSVC
+#include <QCoreApplication>
 #include <PiiDelay.h>
 #include <QDebug>
 

@@ -13,25 +13,18 @@
  * refer to LICENSE.AGPL3 for details.
  */
 
-#ifndef _PIIKERNELFUNCTION_H
-#define _PIIKERNELFUNCTION_H
-
-#include "PiiDistanceMeasure.h"
+#ifndef _QMUTEX_H
+#define _QMUTEX_H
 
 #ifdef PII_CXX11
-template <class SampleSet> using PiiKernelFunction = PiiDistanceMeasure<SampleSet>
+#  include <mutex>
+typedef std::mutex QMutex;
 #else
-#  define PiiKernelFunction PiiDistanceMeasure
+// If C++11 support is not available, you need to have another class
+// that implements the mutex interface in a file called mutex.h. You
+// must also have a typedef that aliases your type as QMutex (see
+// above).
+#  include <atomic.h>
 #endif
 
-/**
- * Type definition for a polymorphic implementation of the function
- * object *KERNEL*.
- *
- * ~~~(c++)
- * PiiKernelFunction<ConstFeatureIterator>* pKernel = new PII_POLYMORPHIC_KERNEL(PiiGaussianKernel);
- * ~~~
- */
-#define PII_POLYMORPHIC_KERNEL(KERNEL) typename PiiKernelFunction<ConstFeatureIterator>::template Impl<KERNEL<ConstFeatureIterator> >
-
-#endif //_PIIKERNELFUNCTION_H
+#endif //_QMUTEX_H

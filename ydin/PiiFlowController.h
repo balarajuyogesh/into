@@ -19,6 +19,7 @@
 #include "PiiExecutionException.h"
 #include "PiiYdinTypes.h"
 
+#include <QCoreApplication>
 #include <QList>
 
 class PiiInputSocket;

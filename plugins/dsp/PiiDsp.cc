@@ -106,7 +106,7 @@ namespace PiiDsp
                 
                 //qDebug("max: %lf, position: %lf", peak.height, peak.position);
               }
-            lstResult << peak;
+            lstResult.push_back(peak);
           }
       }
     return lstResult;

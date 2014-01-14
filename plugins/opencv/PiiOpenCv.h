@@ -125,7 +125,6 @@ protected:
  * PiiIplImage<int> iplImage2(iplImage); // moves data from iplImage to iplImage2
  * cvFunction(iplImage); // Crash, the data is null.
  * ~~~
- *
  */
 template <class T, bool isConst=false> class PiiIplImage :
   public PiiMatrix<T>,
@@ -148,7 +147,7 @@ public:
                                  PiiOpenCv::IplImageChannelsTrait<T>::intValue))
   {}
 
-#ifdef PII_CXX0X
+#ifdef PII_CXX11
   PiiIplImage(PiiIplImage&& other) :
     PiiMatrix<T>(other),
     BaseType(0)
@@ -180,7 +179,6 @@ private: PiiIplImage& operator= (const PiiIplImage& other);
  * A class that makes it possible to reuse the data in a PiiMatrix in
  * an CvMat. Works similarly to PiiIplImage, but stores the data in a
  * CvMat.
- *
  */
 template <class T, bool isConst=false> class PiiCvMat :
   public PiiMatrix<T>,
@@ -197,7 +195,7 @@ public:
     BaseType(cvCreateMatHeader(matrix.rows(), matrix.columns(), PiiOpenCv::CvMatTraits<T>::matrixType))
   {}
 
-#ifdef PII_CXX0X
+#ifdef PII_CXX11
   PiiCvImage(PiiCvImage&& other) :
     PiiMatrix<T>(other),
     BaseType(0)

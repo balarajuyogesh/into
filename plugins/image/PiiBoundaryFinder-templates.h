@@ -34,7 +34,7 @@ QList<PiiMatrix<int> > PiiBoundaryFinder::findBoundaries(const PiiMatrix<T>& obj
       // No more boundariesx
       if (boundary.isEmpty())
         break;
-      result << boundary;
+      result.push_back(boundary);
     }
   
   return result;

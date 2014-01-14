@@ -16,8 +16,8 @@
 #ifndef _PIIMATRIXDATA_H
 #define _PIIMATRIXDATA_H
 
-#include <QAtomicInt>
-#include "PiiGlobal.h"
+#include <PiiGlobal.h>
+#include <PiiAtomicInt.h>
 
 /// @internal
 struct PII_CORE_EXPORT PiiMatrixData
@@ -47,10 +47,10 @@ struct PII_CORE_EXPORT PiiMatrixData
     pSourceData(0)
   {}
   
-  QAtomicInt iRefCount;
-  // Destroy data when iRefCount reaches this value. Default is zero.
-  // Setting this value to one and increasing iRefCount by one makes
-  // referenced data immutable.
+  PiiAtomicInt iRefCount;
+  // Destroy data when iRefCount goes below this value. Default is
+  // one. Setting this value to two and increasing iRefCount by one
+  // makes referenced data immutable.
   int iLastRef;
   int iRows, iColumns;
   // Number of bytes between beginnings of successive rows.
@@ -73,7 +73,7 @@ struct PII_CORE_EXPORT PiiMatrixData
   char* bufferAddress() { return reinterpret_cast<char*>(this) + sizeof(*this); }
 
   void reserve() { iRefCount.ref(); }
-  void release() { if (iRefCount.fetchAndAddRelaxed(-1) == iLastRef) destroy(); }
+  void release() { if (iRefCount-- == iLastRef) destroy(); }
 
   PiiMatrixData* clone(int capacity, size_t bytesPerRow);
 

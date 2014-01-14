@@ -17,6 +17,8 @@
 # error "Never use <PiiMatrix-templates.h> directly; include <PiiMatrix.h> instead."
 #endif
 
+#include <cstddef>
+
 /**** Iterators ****/
 
 template <class T> class PiiMatrixIterator

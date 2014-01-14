@@ -19,6 +19,7 @@
 #include <QImageReader>
 #include <QMessageBox>
 #include <QToolTip>
+#include <QCoreApplication>
 
 #include <PiiLoadException.h>
 

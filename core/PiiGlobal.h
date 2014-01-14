@@ -22,7 +22,6 @@
 #define INTO_VERSION 0x02000003
 
 #include <QtGlobal>
-#include <QAtomicInt>
 
 #if defined(_WIN32)
 #  define PII_DECL_EXPORT __declspec(dllexport)
@@ -54,20 +53,6 @@
   inline const Data* _d() const { return static_cast<const Data*>(this->d); } \
   friend class Data
 
-#define PII_SHARED_D_FUNC \
-  inline Data* _d() { return static_cast<Data*>(this->d = static_cast<Data*>(this->d->detach())); } \
-  inline const Data* _d() const { return static_cast<const Data*>(this->d); } \
-  friend class Data
-
-#define PII_SHARED_D_FUNC_DECL \
-  inline Data* _d(); \
-  inline const Data* _d() const; \
-  friend class Data
-
-#define PII_SHARED_D_FUNC_DEF(CLASS) \
-  CLASS::Data* CLASS::_d() { return static_cast<Data*>(this->d = static_cast<Data*>(this->d->detach())); } \
-  const CLASS::Data* CLASS::_d() const { return static_cast<const Data*>(this->d); }
-
 // reinterpret_cast must be used instead of (the safer) static_cast if
 // the Data class is defined outside of the containing class. In this
 // case the compiler does not know if static_cast can be performed.
@@ -88,15 +73,11 @@
 
 #define PII_D Data* const d = _d()
 
-#define PII_SERIALIZATION_D Data* d = Archive::InputArchive ? \
-  static_cast<Data*>(this->d = static_cast<Data*>(this->d->detach())) : \
-  static_cast<Data*>(this->d)
-
 #define PII_Q(CLASS) CLASS* const q = owner()
 
 #define PII_DISABLE_COPY(CLASS) private: CLASS(const CLASS&); CLASS& operator= (const CLASS& other)
 
-#ifdef PII_CXX0X
+#ifdef PII_CXX11
 #  define PII_MOVE std::move
 #else
 #  define PII_MOVE
@@ -114,51 +95,15 @@
 
 #if QT_VERSION >= 0x050000
 #  define QMETAMETHOD_SIGNATURE methodSignature
-#  define QATOMICINT_LOAD(x) (x).load()
-#  define QATOMICINT_STORE(a, b) (a).store(b)
-inline bool operator!= (const QAtomicInt& i1, int i2) { return i1.load() != i2; }
 #else
 #  define QMETAMETHOD_SIGNATURE signature
-#  define QATOMICINT_LOAD(x) static_cast<int>(x)
-#  define QATOMICINT_STORE(a,b) (a) = b
 #endif
 
-template <class Derived> struct PiiSharedD
-{
-  typedef PiiSharedD<Derived>* RefCountedPtrType; // see PiiInputArchive.h
-
-  PiiSharedD() : iRefCount(1) {}
-
-  Derived* self() { return static_cast<Derived*>(this); }
-  const Derived* self() const { return static_cast<const Derived*>(this); }
-
-  void assignTo(Derived*& d) { reserve(); d->release(); d = self(); }
-  void reserve() { iRefCount.ref(); }
-  Derived* reserved() { reserve(); return self(); }
-  void release() { if (!iRefCount.deref()) delete self(); }
-
-  Derived* detach()
-  {
-    if (iRefCount != 1)
-      {
-        Derived* pData = self()->clone();
-        release();
-        return pData;
-      }
-    return self();
-  }
-
-  Derived* clone() const
-  {
-    return new Derived(*self());
-  }
-    
-  QAtomicInt iRefCount;
-};
-
+#ifndef PII_NO_QT
+#  include "PiiLog.h"
+#  include "PiiSynchronized.h"
+#endif
 #include "PiiValueSet.h"
-#include "PiiLog.h"
-#include "PiiSynchronized.h"
 /// @endhide
 
 namespace Pii

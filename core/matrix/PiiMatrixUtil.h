@@ -20,7 +20,6 @@
 #include "PiiMath.h"
 #include "Pii.h"
 #include <functional>
-#include <QtAlgorithms>
 
 #ifdef min
 #  undef min
@@ -32,7 +31,6 @@
 
 /**
  * Utility functions for dealing with matrices.
- *
  */
 namespace Pii
 {

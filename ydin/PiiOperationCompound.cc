@@ -19,7 +19,7 @@
 #include <PiiUtil.h>
 #include <PiiDelay.h>
 #include <QTime>
-#include <QtDebug>
+#include <QCoreApplication>
 #include <PiiYdinUtil.h>
 #include <PiiYdinResources.h>
 #include <PiiSerializableExport.h>

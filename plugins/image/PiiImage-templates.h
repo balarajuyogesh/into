@@ -72,8 +72,6 @@ namespace PiiImage
                                                   int channel,
                                                   typename ColorType::Type value)
   {
-    typedef typename ColorType::Type T;
-
     // Reverse color indexing
     channel = (2-channel) & 3;
     const int iRows = image.rows(), iCols = image.columns();
@@ -170,7 +168,7 @@ namespace PiiImage
    */
   template <class T, class U> inline void copyCastRow(T* target, U* source, int columns)
   {
-    for (int c=columns; c--; )
+    for (int c=0; c<columns; ++c)
       target[c] = Rounder<T>::round(source[c]);
   }
 
@@ -278,7 +276,7 @@ namespace PiiImage
                   }
                 double fraction = currentRow - iRow;
                 T* resultRow = result.row(r);
-                for (int c=columns; c--; )
+                for (int c=0; c<columns; ++c)
                   resultRow[c] = Rounder<T>::round(ptr1[c] * Real(1.0-fraction) + ptr2[c] * Real(fraction));
               }
             // last row isn't vertically interpolated
@@ -461,7 +459,7 @@ namespace PiiImage
       {
         // Initialize the rows that will be affected when filtering a
         // single row of image.
-        for (int fr=windowRows; fr--; )
+        for (int fr=0; fr<windowRows; ++fr)
           rowPtrs[fr] = result.row(r+fr);
 
         for (int c=0; c<=result.columns()-windowColumns; ++c)

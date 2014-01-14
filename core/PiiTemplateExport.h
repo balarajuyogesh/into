@@ -27,7 +27,7 @@
  * is actually not supported by most compilers.
  *
  * - GCC, MinGW: The `DECLARE` macros declare an `extern` explicit
- * instance of a template as per C++0x. The `DEFINE` macros create an
+ * instance of a template as per C++11. The `DEFINE` macros create an
  * explicit instance.
  *
  * - MSVC: The `DECLARE` macros expand to nothing if building a

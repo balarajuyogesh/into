@@ -17,6 +17,7 @@
 #define _PIIRESOURCESTATEMENT_H
 
 #include "PiiGlobal.h"
+#include "PiiSharedD.h"
 #include <QString>
 
 /**
@@ -27,7 +28,6 @@
  * predicate describes which trait or aspect of the subject is being
  * described, and object specifies the value of the aspect. The value
  * may be either a string literal or a reference to another resource.
- *
  */
 class PII_CORE_EXPORT PiiResourceStatement
 {
