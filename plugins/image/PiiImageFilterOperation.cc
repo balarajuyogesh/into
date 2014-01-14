@@ -230,13 +230,13 @@ template <class T> void PiiImageFilterOperation::floatColorFilter(const PiiVaria
     case Custom:
       if (d->bSeparableFilter)
         emitObject(PiiImage::filter<T>(img,
-                                                       PiiMatrix<PrimitiveType>(d->matHorzFilter),
-                                                       PiiMatrix<PrimitiveType>(d->matVertFilter),
-                                                       d->borderHandling));
+                                       PiiMatrix<PrimitiveType>(d->matHorzFilter),
+                                       PiiMatrix<PrimitiveType>(d->matVertFilter),
+                                       d->borderHandling));
       else
         emitObject(PiiImage::filter<T>(img,
-                                                       PiiMatrix<PrimitiveType>(d->matActiveFilter),
-                                                       d->borderHandling));
+                                       PiiMatrix<PrimitiveType>(d->matActiveFilter),
+                                       d->borderHandling));
       break;
     case Median:
       PiiMatrix<PrimitiveType> ch2 = PiiImage::medianFilter(PiiImage::colorChannel(img,2), d->iFilterSize, d->iFilterSize, d->borderHandling);
