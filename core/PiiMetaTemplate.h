@@ -180,34 +180,34 @@ namespace Pii
   struct BuildIndices<0, Indices...> : IndexList<Indices...> {};
   
   template <class Function, class Tuple, std::size_t... Indices>
-  inline std::result_of<Function>::type callWithIndexedTuple(Function function,
-                                                             Tuple&& t,
-                                                             IndexList<Indices...>)
+  inline typename std::result_of<Function>::type callWithIndexedTuple(Function function,
+                                                                      Tuple&& t,
+                                                                      IndexList<Indices...>)
   {
     return function(std::get<Indices>(std::forward<Tuple>(t))...);
   }
 
   template <class Object, class Function, class Tuple, std::size_t... Indices>
-  inline std::result_of<Function>::type callWithIndexedTuple(Object object,
-                                                             Function function,
-                                                             Tuple&& t,
-                                                             IndexList<Indices...>)
+  inline typename std::result_of<Function>::type callWithIndexedTuple(Object object,
+                                                                     Function function,
+                                                                     Tuple&& t,
+                                                                     IndexList<Indices...>)
   {
     return (object.*function)(std::get<Indices>(std::forward<Tuple>(t))...);
   }
 
   template <class Object, class Function, class Tuple, std::size_t... Indices>
-  inline std::result_of<Function>::type callWithIndexedTuple(Object* object,
-                                                             Function function,
-                                                             Tuple&& t,
-                                                             IndexList<Indices...>)
+  inline typename std::result_of<Function>::type callWithIndexedTuple(Object* object,
+                                                                      Function function,
+                                                                      Tuple&& t,
+                                                                      IndexList<Indices...>)
   {
     return (object->*function)(std::get<Indices>(std::forward<Tuple>(t))...);
   }
   
   template <class Function, class... Args>
-  static inline std::result_of<Function> call(Function function,
-                                              std::tuple<Args...>&& tuple)
+  static inline typename std::result_of<Function>::type call(Function function,
+                                                             std::tuple<Args...>&& tuple)
   {
     return callWithIndexedTuple(function,
                                 std::forward<std::tuple<Args...>>(tuple),
