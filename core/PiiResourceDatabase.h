@@ -503,6 +503,11 @@ namespace Pii
     QString operator() (const PiiResourceStatement& statement) const { return statement.object(); }
   };
 
+  template <class T> struct ObjectPtr : SelectorBase<ObjectPtr<T>, T*>
+  {
+    T* operator() (const PiiResourceStatement& statement) const { return reinterpret_cast<T*>(statement.objectPtr()); }
+  };
+
   // Special selector for attributes. The operator(QString) returns
   // another Attribute structure with its strPredicate member set to
   // the given predicate name.
