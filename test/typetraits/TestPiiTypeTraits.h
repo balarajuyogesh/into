@@ -23,7 +23,7 @@ class TestPiiTypeTraits : public QObject
   Q_OBJECT
 
 private slots:
-  void isTests();
+  void IsX();
 };
 
 

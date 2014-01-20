@@ -22,12 +22,16 @@
 struct Base {};
 struct Derived : Base {};
 
-void TestPiiTypeTraits::isTests()
+using namespace Pii;
+
+void TestPiiTypeTraits::IsX()
 {
 #define TEST(TRAIT, TRUETYPE, FALSETYPE) \
-  QVERIFY(Pii::TRAIT<TRUETYPE>::boolValue);     \
-  QVERIFY(!Pii::TRAIT<FALSETYPE>::boolValue)
+  QVERIFY(TRAIT<TRUETYPE>::boolValue); \
+  QVERIFY(!TRAIT<FALSETYPE>::boolValue)
 
+  TEST(IsVoid, void, int);
+  TEST(IsVoid, void, void*);
   TEST(IsPointer, int*, int);
   TEST(IsReference, int&, int);
   TEST(IsArray, int[], int);
@@ -39,14 +43,26 @@ void TestPiiTypeTraits::isTests()
   TEST(IsPrimitive, bool, Base);
   TEST(IsConst, const Derived, Derived);
 
-  #define DERIVED_TEST(NOT, BASE,DERIVED)                         \
-    typedef Pii::IsBaseOf<BASE,DERIVED> IsBaseOf ## BASE ## DERIVED;  \
-    QVERIFY(NOT IsBaseOf ## BASE ## DERIVED::boolValue)
+#define DERIVED_TEST(NOT, BASE,DERIVED)                               \
+  typedef Pii::IsBaseOf<BASE,DERIVED> IsBaseOf ## BASE ## DERIVED;    \
+  QVERIFY(NOT IsBaseOf ## BASE ## DERIVED::boolValue)
 
   DERIVED_TEST(, Base, Derived);
   DERIVED_TEST(, Base, Base);
   DERIVED_TEST(, Derived, Derived);
   DERIVED_TEST(!, Derived, Base);
+
+#define TO_TEST(CONVERT, TYPE, RESULT) \
+  QVERIFY((IsSame<RESULT, typename CONVERT<TYPE >::Type>::boolValue))
+
+  TO_TEST(ToValue, int*, int);
+  TO_TEST(ToValue, int, int);
+  TO_TEST(ToValue, void*, void);
+  TO_TEST(ToValue, const double*, const double);
+  TO_TEST(ToValue, int&, int);
+  TO_TEST(ToValue, const double&, const double);
+  TO_TEST(ToValue, int* const&, int const);
 }
 
 QTEST_MAIN(TestPiiTypeTraits)
+
