@@ -16,6 +16,8 @@
 #ifndef _PIIFUNCTIONAL_H
 #define _PIIFUNCTIONAL_H
 
+#include "PiiMetaTemplate.h"
+#include "PiiTypeTraits.h"
 
 namespace Pii
 {
@@ -431,6 +433,223 @@ namespace Pii
     bool operator()(const T&) const { return false; }
   };
 
+#ifdef PII_CXX11
+  /// @internal
+  template <class ReturnType, class Object, class... Args> struct MemberFunction
+  {
+    typedef typename IfClass<IsConst<Object>,
+                             ReturnType (Object::*)(Args...),
+                             ReturnType (Object::*)(Args...) const>::Type MemberType;
+      
+    MemberFunction(Object* object, MemberType member) :
+      pObject(object), pMember(member) {}
+    MemberFunction(Object& object, MemberType member) :
+      pObject(&object), pMember(member) {}
+
+    template <class... Params>
+    ReturnType operator() (Params&&... params) const { return (pObject->*pMember)(std::forward<Params>(params)...); }
+    //ReturnType operator() (Args&&... args) const { return (pObject->*pMember)(std::forward<Args>(args)...); }
+  
+    Object* pObject;
+    MemberType pMember;
+  };
+
+  /**
+   * Returns a wrapper object that stores a pointer or a reference to
+   * object and a pointer to a member function. The wrapper is a
+   * function object that binds the *this* argument to a member
+   * function and can thus be called as if it was an ordinary
+   * function.
+   *
+   * ~~~(c++)
+   * struct A
+   * {
+   *   int sum(int a, int b) { return a+b; }
+   * };
+   * // ...
+   *
+   * A a;
+   * auto sum = Pii::memberFunction(a, &A::sum);
+   * std::cout << sum(1, 2);
+   * // Outputs "3"
+   * ~~~
+   */
+  template <class ReturnType, class Instance, class Object, class... Args>
+  MemberFunction<ReturnType, Object, Args...>
+  memberFunction(Instance instance,
+                 ReturnType (Object::* member)(Args...))
+  {
+    return MemberFunction<ReturnType, Object, Args...>(instance, member);
+  }
+
+  template <class ReturnType, class Instance, class Object, class... Args>
+  MemberFunction<ReturnType, Object, Args...>
+  memberFunction(const Instance instance,
+                 ReturnType (Object::* member)(Args...) const)
+  {
+    return MemberFunction<ReturnType, Object, Args...>(instance, member);
+  }
+
+  template <std::size_t... Indices> struct IndexList {};
+  
+  template <std::size_t N, std::size_t... Indices>
+  struct BuildIndices : BuildIndices<N-1, N-1, Indices...> {};
+  
+  template <std::size_t... Indices>
+  struct BuildIndices<0, Indices...> : IndexList<Indices...> {};
+
+  template <class... TupleArgs, class... Args>
+  BuildIndices<sizeof...(TupleArgs)> buildIndices(std::tuple<TupleArgs...>, Args...)
+  {
+    return BuildIndices<sizeof...(TupleArgs)>{};
+  }
+
+  template <class Function, class Tuple, std::size_t... Indices>
+  inline auto callWithIndexedTuple(Function function,
+                                   Tuple&& tuple,
+                                   IndexList<Indices...>)
+    -> decltype(function(std::get<Indices>(std::forward<Tuple>(tuple))...))
+  {
+    return function(std::get<Indices>(std::forward<Tuple>(tuple))...);
+  }
+
+  /**
+   * Calls *function* with the parameters packed into *tuple*.
+   *
+   * ~~~(c++)
+   * int func(double, int, const char*);
+   * // ...
+   *
+   * int result = Pii::callWithTuple(func, std::make_tuple(1.0, 2, "abc"));
+   * // Equivalent to func(1.0, 2, "abc")
+   * ~~~
+   */
+  template <class Function, class Tuple>
+  inline auto callWithTuple(Function function,
+                            Tuple&& tuple)
+    -> decltype(callWithIndexedTuple(function,
+                                     std::forward<Tuple>(tuple),
+                                     buildIndices(tuple)))
+  {
+    return callWithIndexedTuple(function,
+                                std::forward<Tuple>(tuple),
+                                buildIndices(tuple));
+  }
+
+  template <class ReturnType, class... Args, class Tuple>
+  inline ReturnType callWithTuple(ReturnType (*function)(Args...),
+                                  Tuple&& tuple)
+  {
+    return callWithIndexedTuple(std::function<ReturnType(Args...)>(function),
+                                std::forward<Tuple>(tuple),
+                                buildIndices(tuple));
+  }
+
+  /**
+   * Calls the *member* of *object* with the given *args* and an
+   * unpacked *tuple*.
+   */
+  template <class Object, class ReturnType, class... Args>
+  inline ReturnType callWithTuple(Object object,
+                                  ReturnType (ToValue<Object>::Type::* member)(Args...),
+                                  std::tuple<Args...>&& tuple)
+  {
+    return callWithTuple(memberFunction(object, member),
+                         std::forward<std::tuple<Args...>>(tuple),
+                         BuildIndices<sizeof...(Args)>{});
+  }
+
+  template <std::size_t I, class Function, class... Tuples>
+  void callWithIthMember(Function function, Tuples&&... tuples)
+  {
+    function(std::get<I>(std::forward<Tuples>(tuples))...);
+  }
+  
+  template <class Function, class... Tuples, std::size_t... Indices>
+  void callWithIndexedTuples(Function function,
+                             IndexList<Indices...>,
+                             Tuples&&... tuples)
+  {
+    PII_FOREACH_TEMPARG(callWithIthMember<Indices>(function,
+                                                   std::forward<Tuples>(tuples)...));
+      
+  }
+
+  /**
+   * Calls *function* as many times as there are elements in the
+   * tuples given as parameters. The parameters for the first call are
+   * formed by taking the first element of each tuple and so on. Each
+   * tuple must have the same number of elements.
+   *
+   * ~~~(c++)
+   * struct Func
+   * {
+   *   template <class T, class U> void operator() (T t, U u);
+   * };
+   *
+   * auto t1 = std::make_tuple(1, 2.0, "abc");
+   * auto t2 = std::make_tuple(0, true, 1.0f);
+   *
+   * Pii::callWithTuples(Func(), t1, t2);
+   * // Calls Func::operator() with (1, 0), (2.0, true) and ("abc", 1.0f)
+   *
+   * // You can fix any of the parameters using Pii::makeTuple()
+   * Pii::callWithTuples(Func(), Pii::makeTuple<3>(1), std::make_tuple(1, 2, 3));
+   * // Calls Func::operator() with (1, 1), (1, 2) and (1, 3)
+   * ~~~
+   *
+   * @see makeTuple()
+   */
+  template <class Function, class... Tuples>
+  inline void callWithTuples(Function function,
+                             Tuples&&... tuples)
+  {
+    callWithIndexedTuples(function,
+                          buildIndices(tuples...),
+                          std::forward<Tuples>(tuples)...);
+  }
+
+  template <int N, class Arg1, class... Args> struct MakeTupleHelper;
+
+  template <class Arg1, class... Args>
+  struct MakeTupleHelper<1, Arg1, Args...>
+  {
+    typedef std::tuple<Arg1, Args...> Type;
+    static Type create(Arg1 arg1, Args&&... args)
+    {
+      return Type{std::forward<Arg1>(arg1), std::forward<Args>(args)...};
+    }
+  };
+
+  template <int N, class Arg1, class... Args>
+  struct MakeTupleHelper : MakeTupleHelper<N-1, Arg1, Arg1, Args...>
+  {
+    typedef MakeTupleHelper<N-1, Arg1, Arg1, Args...> SuperType;
+    typedef typename SuperType::Type Type;
+    
+    static typename SuperType::Type create(Arg1&& arg1, Args&&... args)
+    {
+      return SuperType::create(std::forward<Arg1>(arg1),
+                               std::forward<Arg1>(arg1),
+                               std::forward<Args>(args)...);
+    }
+  };
+
+  /**
+   * Creates a tuple that repeats *value* *N* times.
+   *
+   * ~~~(c++)
+   * auto threeOnes = Pii::makeTuple<3>(1);
+   * // threeOnes == std::tuple<int,int,int>{1, 1, 1}
+   * ~~~
+   */
+  template <std::size_t N, class T>
+  typename MakeTupleHelper<N,T>::Type makeTuple(T&& value)
+  {
+    return MakeTupleHelper<N,T>::create(std::forward<T>(value));
+  }
+  
+#endif
   /// @endgroup
 };
 
