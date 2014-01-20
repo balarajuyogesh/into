@@ -305,6 +305,7 @@ namespace Pii
    */
   template <class T> struct ToNonConst { typedef T Type; };    
   template <class T> struct ToNonConst<const T> { typedef T Type; };
+
   
   /**
    * A static functor that converts pointers to references and keeps
@@ -388,8 +389,8 @@ namespace Pii
   };
 
   template <class T> struct ToValue { typedef T Type; };
-  template <class T> struct ToValue<T*> { typedef typename ToNonConst<T>::Type Type; };
-  template <class T> struct ToValue<T&> { typedef typename ToNonConst<T>::Type Type; };
+  template <class T> struct ToValue<T*> { typedef T Type; };
+  template <class T> struct ToValue<T&> { typedef T Type; };
 
   /**
    * Converts a type to a corresponding floating-point type. The 
