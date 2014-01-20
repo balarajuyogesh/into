@@ -256,7 +256,7 @@ signals:
   void objectReceived(const QString& name, const PiiVariant& obj);
 
 private slots:
-  void emitObject(const PiiVariant& obj);
+  void emitObject(const PiiVariant& obj, PiiProbeInput* sender);
   void deleteOutput(QObject* input);
   void deleteProbe(QObject* output);
 

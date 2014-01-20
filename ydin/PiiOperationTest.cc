@@ -183,7 +183,7 @@ PiiProbeInput* PiiOperationTest::createProbe(PiiAbstractOutputSocket* output, co
 {
   PiiProbeInput* pProbe = new PiiProbeInput(name);
   output->connectInput(pProbe);
-  connect(pProbe, SIGNAL(objectReceived(PiiVariant)), SLOT(emitObject(PiiVariant)), Qt::DirectConnection);
+  connect(pProbe, SIGNAL(objectReceived(PiiVariant,PiiProbeInput*)), SLOT(emitObject(PiiVariant,PiiProbeInput*)), Qt::DirectConnection);
   connect(output, SIGNAL(destroyed(QObject*)), SLOT(deleteProbe(QObject*)), Qt::DirectConnection);
   return pProbe;
 }
@@ -226,10 +226,9 @@ bool PiiOperationTest::stop()
   return false;
 }
 
-void PiiOperationTest::emitObject(const PiiVariant& obj)
+void PiiOperationTest::emitObject(const PiiVariant& obj, PiiProbeInput* sender)
 {
-  if (sender() != 0)
-    emit objectReceived(sender()->objectName(), obj);
+  emit objectReceived(sender->objectName(), obj);
 }
 
 QStringList PiiOperationTest::outputsWithData() const
