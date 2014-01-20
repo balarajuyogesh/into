@@ -16,6 +16,19 @@
 #ifndef _PIIMETATEMPLATE_H
 #define _PIIMETATEMPLATE_H
 
+/**
+ * Repeats a function call for all arguments in a template argument
+ * pack.
+ *
+ * ~~~(c++)
+ * template <class... Args> void func(Args... args)
+ * {
+ *   PII_FOREACH_TEMPARG(args.member());
+ *   PII_FOREACH_TEMPARG(plus(args,2));
+ * }
+ * ~~~
+ */
+#define PII_FOREACH_TEMPARG(FUNC) ::Pii::Pass::pass(::Pii::Pass{((FUNC),1)...})
 
 namespace Pii
 {
@@ -150,82 +163,19 @@ namespace Pii
   
   template <int a, int b> struct MaxInt : If<(a >= b), IntIdentity<a>, IntIdentity<b> >::Type
   {};
-  
-#define PII_FOREACH_TEMPARG(FUNC) ::Pii::Pass::pass(::Pii::Pass{(FUNC,1)...})
-  
+
 #ifdef PII_CXX11
   /*
    * A helper for handling variadic template arguments in function
    * calls.
-   *
-   * ~~~(c++)
-   * template <class... Args> void func(Args... args)
-   * {
-   *   PII_FOREACH_TEMPARG(args.func());
-   * }
-   * ~~~
    */
   struct Pass
   {
     template <class... Args> Pass(Args&&...) {}
     static void pass(const Pass&) {}
   };
-  
-  template <std::size_t... Indices> struct IndexList {};
-  
-  template <std::size_t N, std::size_t... Indices>
-  struct BuildIndices : BuildIndices<N-1, N-1, Indices...> {};
-  
-  template <std::size_t... Indices>
-  struct BuildIndices<0, Indices...> : IndexList<Indices...> {};
-  
-  template <class Function, class Tuple, std::size_t... Indices>
-  inline typename std::result_of<Function>::type callWithIndexedTuple(Function function,
-                                                                      Tuple&& t,
-                                                                      IndexList<Indices...>)
-  {
-    return function(std::get<Indices>(std::forward<Tuple>(t))...);
-  }
-
-  template <class Object, class Function, class Tuple, std::size_t... Indices>
-  inline typename std::result_of<Function>::type callWithIndexedTuple(Object object,
-                                                                     Function function,
-                                                                     Tuple&& t,
-                                                                     IndexList<Indices...>)
-  {
-    return (object.*function)(std::get<Indices>(std::forward<Tuple>(t))...);
-  }
-
-  template <class Object, class Function, class Tuple, std::size_t... Indices>
-  inline typename std::result_of<Function>::type callWithIndexedTuple(Object* object,
-                                                                      Function function,
-                                                                      Tuple&& t,
-                                                                      IndexList<Indices...>)
-  {
-    return (object->*function)(std::get<Indices>(std::forward<Tuple>(t))...);
-  }
-  
-  template <class Function, class... Args>
-  static inline typename std::result_of<Function>::type call(Function function,
-                                                             std::tuple<Args...>&& tuple)
-  {
-    return callWithIndexedTuple(function,
-                                std::forward<std::tuple<Args...>>(tuple),
-                                BuildIndices<sizeof...(Args)>{});
-  }
-  
-  template <class Object, class Function, class... Args>
-  static inline std::result_of<Function> call(Object object,
-                                              Function function,
-                                              std::tuple<Args...>&& tuple)
-  {
-    return callWithIndexedTuple(object,
-                                function,
-                                std::forward<std::tuple<Args...>>(tuple),
-                                BuildIndices<sizeof...(Args)>{});
-  }
 #endif
-
+  
   /// @endgroup
 }
 
