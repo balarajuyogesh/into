@@ -19,6 +19,7 @@
 #ifdef PII_CXX11
 
 #include "PiiDefaultOperation.h"
+#include <PiiFunctional.h>
 #include <type_traits>
 #include <functional>
 #include <tuple>
