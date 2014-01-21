@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -25,7 +25,7 @@ class TestPiiImage : public QObject
 
 public:
   TestPiiImage();
-  
+
 private slots:
 
   // Basic image handling
@@ -43,19 +43,19 @@ private slots:
   void intFilter();
   void maxFilter();
   void minFilter();
-  
+
   // Thresholding
   void threshold();
   void inverseThreshold();
   void cut();
-  void inverseCut();  
+  void inverseCut();
   void zeroAbove();
   void zeroBelow();
   void twoLevelThreshold();
   void inverseTwoLevelThreshold();
   void hysteresisThreshold();
   void adaptiveThreshold();
-  
+
   // Morphology
   void createMask();
 
@@ -92,7 +92,7 @@ private slots:
   void sweepLine();
   void crop();
   void xorMatch();
-  
+
 private:
   template <class TernaryFunction, class T>
   PiiMatrix<typename TernaryFunction::result_type> apply(const PiiMatrix<T>& mat,

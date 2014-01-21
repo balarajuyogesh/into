@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -23,7 +23,7 @@
 #include <QVector>
 
 /**
- * An implementation of the self-organizing map (Kohonen map). 
+ * An implementation of the self-organizing map (Kohonen map).
  * Typically, SOM is trained in two phases. First, a "rough"
  * training is made with a relatively large learning rate (~0.05), a
  * relatively large radius (e.g. 10, depending on the size of the
@@ -34,7 +34,7 @@
  *
  * Each training sample is fed to the SOM sequentially. The same
  * samples can be (and usually are) used multiple times until a
- * sufficient number of iterations (e.g. 10000) has been performed. 
+ * sufficient number of iterations (e.g. 10000) has been performed.
  * Each sample tunes the code book according to the then current
  * learning parameters. The class modifies a code book that is given
  * upon construction of the class.
@@ -48,7 +48,7 @@ template <class SampleSet> class PiiSom :
 {
 public:
   typedef typename PiiSampleSet::Traits<SampleSet>::ConstFeatureIterator ConstFeatureIterator;
-  
+
   /**
    * Create a new SOM with the number of nodes in horizontal and
    * vertical directions.
@@ -75,7 +75,7 @@ public:
   void learn(const SampleSet& samples,
              const QVector<double>& labels,
              const QVector<double>& weights = QVector<double>());
-  
+
   /**
    * Train the SOM with the given feature vector.
    *
@@ -158,7 +158,7 @@ public:
    * the value is large enough.
    */
   void setLearningLength(int length);
-  
+
   /**
    * Get the type of learning rate change in training.
    */
@@ -182,7 +182,7 @@ public:
    * Get the current iteration number.
    */
   int iterationNumber() const;
-  
+
   /**
    * Get the width of the SOM.
    */
@@ -198,13 +198,13 @@ public:
    * vectors always matches the size of the map (width*height).
    */
   void setSize(int width, int height);
-  
+
   /**
    * Set the width of the som. This will invalidate the internal code
    * book.
    */
   void setWidth(int width);
-  
+
   /**
    * Set the height of the som. This will invalidate the internal code
    * book.
@@ -236,7 +236,7 @@ public:
 
   QVector<double> findMostDistantNeighbors(int* vector1Index = 0, int* vector2Index = 0) const;
   double findMostDistantNeighbor(int row, int *vector2Index = 0 ) const;
-  
+
 private:
   /// @internal
   class Data : public PiiVectorQuantizer<SampleSet>::Data
@@ -267,7 +267,7 @@ private:
     const PII_D;
     return (d->dLearningRate * (double) (d->iLearningLength - iter) / (double) d->iLearningLength);
   }
-    
+
   double inverseAlpha(int iter) const
   {
     const PII_D;

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
   // Intialize engine.
   initEngine();
-  
+
   // Initialize ui
   init();
 
@@ -35,7 +35,7 @@ void MainWindow::init()
 {
   setupUi(this);
   setWindowTitle(demoName());
-  
+
   // Update info text
   QStringList lstFileNames = _pFileSystemWatcher->property("directories").toStringList();
   QString strPath = lstFileNames.size() > 0 ? lstFileNames[0] : "";

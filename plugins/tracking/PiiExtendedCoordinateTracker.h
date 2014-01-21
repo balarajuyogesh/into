@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -59,7 +59,7 @@ public:
     _iMaximumStopTime(1),
     _iMaximumPredictionLength(1)
   {}
-  
+
   /**
    * Set the threshold for good fitness. "Good fitness" is a level of
    * fitness that indicates a measurement is pretty close to the
@@ -93,7 +93,7 @@ public:
    *
    * @param maximumStopTime the maximum amount of time a trajectory
    * stays alive without measurements connected to it. The time is
-   * expressed in the units given as the `t` parameter to 
+   * expressed in the units given as the `t` parameter to
    * `addMeasurements`(). The default value is 1.
    */
   void setMaximumStopTime(int maximumStopTime) { _iMaximumStopTime = maximumStopTime; }
@@ -118,14 +118,14 @@ public:
    * Get the current maximum prediction length.
    */
   int maximumPredictionLength() const { return _iMaximumPredictionLength; }
-  
+
   void addMeasurements(const QList<MeasurementType>& measurements, int t);
 
 protected:
   MeasurementType* predict(TrajectoryType* trajectory, int t);
   double measureFit(TrajectoryType** trajectory, const MeasurementType& measurement, int t) const;
   double measureFit(const MeasurementType& measurement, int t) const;
-  
+
   /**
    * Called when the tracker decides to get rid of a set of
    * trajectories. Subclasses may perform any functionality needed to
@@ -145,7 +145,7 @@ protected:
     Q_UNUSED(t);
     qDeleteAll(trajectories);
   }
-  
+
 private:
   double _dGoodFitnessThreshold;
   double* _pMaximumMeasurementFitness, *_pMaximumTrajectoryFitness;
@@ -169,7 +169,7 @@ void PiiExtendedCoordinateTracker<T,D>::addMeasurements(const QList<MeasurementT
 
   // Store old trajectories
   QList<TrajectoryType*> oldTrajectories = *this;
-  
+
   // Run the tracking algorithm
   ParentType::addMeasurements(measurements, t);
 
@@ -191,7 +191,7 @@ void PiiExtendedCoordinateTracker<T,D>::addMeasurements(const QList<MeasurementT
             this->append(oldTrajectories[i]);
         }
     }
-  
+
   // If the end point of a trajectory is old enough, we discard of the
   // trajectory.
   QList<TrajectoryType*> deletedTrajectories;
@@ -225,7 +225,7 @@ double PiiExtendedCoordinateTracker<T,D>::measureFit(TrajectoryType** trajectory
     {
       // Store the maximum fitness for the current measurement
       _pMaximumMeasurementFitness[this->currentMeasurementIndex()] = qMax(score, _pMaximumMeasurementFitness[this->currentMeasurementIndex()]);
-      
+
       // Store the maximum fitness for the current trajectory
       _pMaximumTrajectoryFitness[this->currentTrajectoryIndex()] = qMax(score, _pMaximumTrajectoryFitness[this->currentTrajectoryIndex()]);
     }

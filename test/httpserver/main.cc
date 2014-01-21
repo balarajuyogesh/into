@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -88,9 +88,9 @@ void TestPiiHttpServer::httpRequest()
       QCOMPARE(PiiNetwork::readFile("file://" + _strBase + "/test/test2.txt"), aFileContents);
 
       PiiNetwork::deleteFile(address + "/test.txt");
-      
+
       QVERIFY(!QFileInfo(_strBase + "/test.txt").exists());
-      
+
       PiiNetwork::deleteFile(address + "/test");
 
       QVERIFY(!QFileInfo(_strBase + "/test/test2.txt").exists());

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@ public:
   PiiFileInfo(const PiiFileInfo& other);
   PiiFileInfo(const QString& uri);
   ~PiiFileInfo();
-  
+
   PiiFileInfo& operator= (const PiiFileInfo& other);
 
   bool exists() const;
@@ -36,14 +36,14 @@ public:
   void refresh();
 
   void setUri(const QString& uri);
-  
+
 private:
   class Data : public PiiSharedD<Data>
   {
   public:
     Data();
     Data(const QString& uri);
-    
+
     QString strUri;
     bool bExists;
     QDateTime lastModifiedTime;

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -56,7 +56,7 @@ void PiiEdgeDetector::check(bool reset)
       d->matFilterY = PiiImage::prewittY;
       break;
     }
-  
+
   d->bDirectionConnected = outputAt(2)->isConnected();
 }
 
@@ -105,7 +105,7 @@ template <class T> void PiiEdgeDetector::detectEdges(const PiiMatrix<T>& gradien
       // Use the famous two-sigma rule (TM) as a threshold.
       threshold = T(fMean + fStd * 2);
     }
-  
+
   if (d->detector == CannyDetector)
     cannyThreshold(gradientX, gradientY, matMagnitude, threshold);
   else

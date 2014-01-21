@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -170,7 +170,7 @@ namespace Pii
       }
     return rotation;
   }
-   
+
   /**
    * Creates a matrix that, when applied as a similarity transform,
    * zeroes a pair of off-diagonal entries in a Hermitian (or

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
   _lstColors << QColor(Qt::red) << QColor(Qt::blue) << QColor(Qt::green)
              << QColor(Qt::yellow) << QColor(Qt::cyan) << QColor(Qt::magenta);
-  
+
   // Initialize engine
   initEngine();
 
@@ -49,7 +49,7 @@ void MainWindow::init()
   _pResultImageDisplay->setProperty("displayType", "AutoScale");
   _pResultImageDisplay->imageViewport()->setProperty("fitMode", "FitToView");
   _pResultImageDisplay->imageViewport()->setShowOverlayColoring(false);
-  
+
   _pNextImageButton->setIconMode(PushButton::IconRight);
 
   // Get model images and make tool buttons
@@ -63,7 +63,7 @@ void MainWindow::init()
       QPalette pal = pToolButton->palette();
       pal.setColor(QPalette::Button, _lstColors[i]);
       pToolButton->setPalette(pal);
-      
+
       _pModelLayout->addWidget(pToolButton);
     }
   _pModelLayout->addStretch(1);
@@ -79,7 +79,7 @@ PiiEngine* MainWindow::createEngine()
   PiiEngine *pEngine = new PiiEngine;
 
   QString strPath = QString("%1/shapematching").arg(defaultImageDirPath());
-  
+
   // Create operations
   QStringList lstModelNames;
   for (int i=0; i<5; ++i)
@@ -102,13 +102,13 @@ PiiEngine* MainWindow::createEngine()
 
   pImageSource->connectOutput("filename", pObjectCapturer, "sync");
   pBoundaryFinder->connectOutput("boundary", pObjectCapturer, "input0");
-  
+
   connect(pObjectCapturer, SIGNAL(objectsCaptured(PiiVariant, QVariantList)),
           this, SLOT(updateModels(PiiVariant, QVariantList)));
 
   PiiOperation *pShapeContextOperation = pEngine->createOperation("PiiShapeContextOperation", "shapeContextOperation");
   pShapeContextOperation->setProperty("shapeJoiningMode", "JoinNestedShapes");
-  
+
   PiiOperation *pRigidPlaneMatcher = pEngine->createOperation("PiiRigidPlaneMatcher", "rigidPlaneMatcher");
   pRigidPlaneMatcher->setProperty("learningBatchSize", -1);
   // Minimum number of matched points for an accepted detection
@@ -117,7 +117,7 @@ PiiEngine* MainWindow::createEngine()
   pRigidPlaneMatcher->setProperty("angleToleranceDeg", 15);
   pRigidPlaneMatcher->setProperty("translationTolerance", 60);
   pRigidPlaneMatcher->setProperty("scaleTolerance", 0.2);
-  
+
   // Connect operations
   pImageSource->connectOutput("image", pThresholding, "image");
   pThresholding->connectOutput("image", pBoundaryFinder, "image");
@@ -127,7 +127,7 @@ PiiEngine* MainWindow::createEngine()
 
   pShapeContextOperation->connectOutput("points", pRigidPlaneMatcher, "points");
   pShapeContextOperation->connectOutput("features", pRigidPlaneMatcher, "features");
-    
+
   // Train classifier
   try
     {
@@ -147,12 +147,12 @@ PiiEngine* MainWindow::createEngine()
 
   PiiOperation* pSwitch = pEngine->createOperation("PiiSwitch", "switch");
   pSwitch->setProperty("operationMode", "AsynchronousMode");
-  
+
   PiiOperation *pSequenceGenerator = pEngine->createOperation("PiiSequenceGenerator", "sequenceGenerator");
   pSequenceGenerator->setProperty("sequenceStart", 0);
   pSequenceGenerator->setProperty("sequenceEnd", 2*M_PI - M_PI/12);
   pSequenceGenerator->setProperty("step", M_PI / 12);
-    
+
   PiiOperation *pRotation = pEngine->createOperation("PiiImageRotationOperation", "rotation");
   pRotation->setProperty("transformedSize", "PiiImage::RetainOriginalSize");
   pRotation->setProperty("backgroundColor", QColor(Qt::white));
@@ -166,24 +166,24 @@ PiiEngine* MainWindow::createEngine()
   PiiOperation *pTriggerSource = pEngine->createOperation("PiiTriggerSource", "triggerSource");
   connect(this, SIGNAL(trigImage(int)), pTriggerSource, SLOT(trigger(int)));
   pTriggerSource->connectOutput("trigger", pImageSource, "trigger");
-  
+
   // init image file names
   QStringList lstImageNames;
   for (int i=0; i<3; ++i)
     lstImageNames << QString("%1/test%2.png").arg(strPath).arg(i);
   pImageSource->setProperty("fileNames", lstImageNames);
-  
+
   pObjectCapturer->setProperty("dynamicInputCount", 2);
   pRotation->connectOutput("image", pObjectCapturer, "sync");
-  
+
   pRigidPlaneMatcher->connectOutput("model index", pObjectCapturer, "input0");
   pRigidPlaneMatcher->connectOutput("transform", pObjectCapturer, "input1");
-  
+
   disconnect(pObjectCapturer, SIGNAL(objectsCaptured(PiiVariant, QVariantList)),
              this, SLOT(updateModels(PiiVariant, QVariantList)));
   connect(pObjectCapturer, SIGNAL(objectsCaptured(PiiVariant, QVariantList)),
           this, SLOT(updateImage(PiiVariant, QVariantList)));
-  
+
   return pEngine;
 }
 
@@ -204,7 +204,7 @@ void MainWindow::updateModels(const PiiVariant& name, const QVariantList& inform
       Model model;
       model.strFileName = name.valueAs<QString>();
       model.color = _lstColors[_lstModels.size() % _lstColors.size()];
-      
+
       QVariantList lstModelBoundaries = information[0].toList();
       QList<PiiMatrix<int> > lstBoundaries;
 
@@ -227,7 +227,7 @@ void MainWindow::updateImage(const PiiVariant& image, const QVariantList& inform
     {
       QVariantList lstModelIndices = information[0].toList();
       QVariantList lstTransforms = information[1].toList();
-      
+
       if (lstModelIndices.size() == lstTransforms.size())
         {
           for (int i=0; i<lstModelIndices.size(); i++)
@@ -248,7 +248,7 @@ void MainWindow::updateImage(const PiiVariant& image, const QVariantList& inform
                           QPainterPath path(QPointF(matTransformedPoints(0,0), matTransformedPoints(0,1)));
                           for (int j=1; j<matTransformedPoints.rows(); j++)
                             path.lineTo(matTransformedPoints(j,0), matTransformedPoints(j,1));
-                          
+
                           PiiPolygonOverlay *pOverlay = new PiiPolygonOverlay(path);
                           pOverlay->setPen(pen);
                           _lstOverlays << pOverlay;

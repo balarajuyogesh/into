@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -40,7 +40,7 @@ public:
   /**
    * Get the number of branches originating from (that is, references
    * to) this node. If this is the head of a list, the value will be
-   * 0. If there is just one link, the value will be one and so on. 
+   * 0. If there is just one link, the value will be one and so on.
    * A node can only be deleted when its branch count reaches zero.
    */
   int branches() const { return _iRefCount; }
@@ -77,7 +77,7 @@ public:
   {
     return _iTime == other._iTime && _measurement == other._measurement;
   }
-  
+
 protected:
   /**
    * Create an empty trajectory node.
@@ -94,7 +94,7 @@ protected:
   {
     if (_pNext) ++_pNext->_iRefCount;
   }
-  
+
   /**
    * Create a new node of a trajectory.
    *
@@ -110,7 +110,7 @@ protected:
   PiiTrackerTrajectoryNode(const MeasurementType& measurement, int t, Node* next) :
     _measurement(measurement), _iTime(t), _pNext(next), _iRefCount(0),
     // If next node exists, length is previous plus one
-    _iLength(next ? next->_iLength + 1 : 1) 
+    _iLength(next ? next->_iLength + 1 : 1)
   {
     if (_pNext) ++_pNext->_iRefCount;
   }
@@ -137,7 +137,7 @@ protected:
    * The current time instant.
    */
   int _iTime;
-  
+
   /**
    * A pointer to the next node in chain.
    */

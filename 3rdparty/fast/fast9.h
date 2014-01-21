@@ -17,7 +17,7 @@ template <class T> int fast9_corner_score(const T* p,
   CalcType bmin = bstart;
   CalcType bmax = PiiImage::Traits<T>::max();
   CalcType b = (bmax + bmin)/2;
-    
+
   /*Compute the score using binary search*/
   for (;;)
     {
@@ -2950,10 +2950,10 @@ template <class T> QVector<int> fast9_score(const PiiMatrix<T>& image,
 {
   const int iRows = corners.rows();
   QVector<int> vecScores(iRows);
-  
+
   for (int n=0; n < iRows; n++)
     vecScores[n] = fast9_corner_score(image[corners(n,1)] + corners(n,0), pixel, threshold);
-  
+
   return vecScores;
 }
 
@@ -2972,7 +2972,7 @@ template <class T> PiiMatrix<int> fast9_detect(const PiiMatrix<T>& image,
     for (int x=3; x < iCols - 3; x++)
       {
         const T* p = image[y] + x;
-                
+
         CalcType cb = *p + threshold;
         CalcType c_b= *p - threshold;
         if (FAST_PIXEL_AT(0) > cb)
@@ -5878,6 +5878,6 @@ template <class T> PiiMatrix<int> fast9_detect(const PiiMatrix<T>& image,
             continue;
         matCorners.appendRow(x,y);
       }
-        
+
   return matCorners;
 }

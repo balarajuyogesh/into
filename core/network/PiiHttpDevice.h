@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -76,7 +76,7 @@ class PiiProgressController;
  * utilizes the buffer by automatically setting the Content-Length
  * header.
  *
- * In `Client` mode, the I/O device must be created first. 
+ * In `Client` mode, the I/O device must be created first.
  * PiiNetworkClient can be used to easily create a suitable I/O
  * device:
  *
@@ -96,7 +96,7 @@ class PiiProgressController;
 class PII_NETWORK_EXPORT PiiHttpDevice : public QIODevice, public PiiStreamFilter
 {
   Q_OBJECT
-  
+
 public:
   /**
    * Connection types, specified by the `Connection` request header.
@@ -135,7 +135,7 @@ public:
    * filters.
    */
   ~PiiHttpDevice();
-  
+
   /**
    * Returns the request method. Typically, the answer is either "GET" or
    * "POST", but HTTP extensions may use arbitrary request methods.
@@ -144,7 +144,7 @@ public:
 
   /**
    * Returns the connection type. If either the request or the
-   * response header specifies "Connection: close" returns 
+   * response header specifies "Connection: close" returns
    * `CloseConnection`. Otherwise returns `KeepAliveConnection`.
    */
   ConnectionType connectionType() const;
@@ -250,7 +250,7 @@ public:
   /**
    * Returns the path part of the request URI.
    *
-   * @param basePath strip this path from the beginning of the path. 
+   * @param basePath strip this path from the beginning of the path.
    * This is useful if you want to find the relative path of a URI
    * handler.
    *
@@ -308,7 +308,7 @@ public:
   PiiHttpResponseHeader responseHeader() const;
 
   /**
-   * Sets the request method to *method* and request URI to *uri*. 
+   * Sets the request method to *method* and request URI to *uri*.
    * The *uri* will not be parsed; you can give anything (including
    * invalid data) as the request uri.
    *
@@ -345,7 +345,7 @@ public:
   QVariant formValue(const QString& name) const;
 
   /**
-   * Returns all form-encoded values in the message body as a map. 
+   * Returns all form-encoded values in the message body as a map.
    * Parameter values are automatically decoded (see
    * [decodeVariant()]).
    *
@@ -375,7 +375,7 @@ public:
   /**
    * Returns all request parameters (either GET parameters in the URI
    * or form values in the message body) as a map. If the same
-   * variable is found in both, the request URI takes precedence. 
+   * variable is found in both, the request URI takes precedence.
    * Parameter values are automatically decoded (see
    * [decodeVariant()]).
    */
@@ -422,11 +422,11 @@ public:
    * or 0 if no filters have been added.
    */
   PiiStreamFilter* outputFilter() const;
-  
+
   /**
    * Pops an output filter from the filter stack. This function will
    * collapse the filter stack until it finds *filter* and tell each
-   * filter to finish its job. The removed filters will be deleted. 
+   * filter to finish its job. The removed filters will be deleted.
    * The next filter below *filter* on the stack (if any) will be
    * activated.
    *
@@ -499,7 +499,7 @@ public:
    * otherwise.
    */
   bool headerRead() const;
-  
+
   /**
    * Set the maximum number of bytes an HTTP request header is allowed
    * to contain. This value is used to prevent exhaustive memory
@@ -553,7 +553,7 @@ public:
    * [readHeader()] does the same.
    */
   void restart();
-  
+
   /**
    * Returns `true` if the low-level socket device is still
    * connected, `false` otherwise.
@@ -569,7 +569,7 @@ public:
   /**
    * Prints text to the device. This function is equivalent to
    * QIODevice::write(), but it converts the unicode input text using
-   * the encoding style defined with the `Content`-Encoding header. 
+   * the encoding style defined with the `Content`-Encoding header.
    * If no encoding has been set, UTF-8 will be used.
    */
   qint64 print(const QString& data);
@@ -581,7 +581,7 @@ public:
   QByteArray encode(const QString& msg) const;
 
   qint64 filterData(const char* data, qint64 maxSize);
-  
+
   bool isSequential() const;
   qint64 bytesAvailable() const;
 
@@ -611,7 +611,7 @@ public:
    * Discards the whole message body. This is the same as readBody(0).
    */
   void discardBody();
-  
+
   /**
    * Reads request/response header. This function checks that the
    * header has not been read and calls the protected [decodeHeader()]
@@ -634,7 +634,7 @@ public:
 
   /**
    * Returns the number of bytes in the message body. This value is
-   * known only if the header contains a Content-Length field. 
+   * known only if the header contains a Content-Length field.
    * Otherwise -1 will be returned.
    */
   qint64 bodyLength() const;
@@ -694,7 +694,7 @@ public:
    * @exception PiiInvalidArgumentException& if *device* is null.
    */
   void setDevice(const PiiSocketDevice& device);
-  
+
   /**
    * Returns the communication device. Note that writing to the device
    * directly may break the HTTP protocol. Use the underlying device
@@ -707,11 +707,11 @@ public:
 
   void setDataTimeout(int dataTimeout);
   int dataTimeout() const;
-  
+
 protected:
   qint64 readData(char* data, qint64 maxSize);
   qint64 writeData(const char * data, qint64 maxSize);
-  
+
 private:
   void clearBuffer(QIODevice* device);
   void parseQueryValues(const QString& uri);
@@ -725,7 +725,7 @@ private:
   void checkCodec(const QString& key, const QString& value);
 
   void destroyOutputFilters();
-  
+
   void readFormValues();
 
   void createQueryString();
@@ -739,16 +739,16 @@ private:
   {
   public:
     Data(PiiHttpDevice* owner, const PiiSocketDevice& device, Mode mode);
-    
+
     Mode mode;
-    
+
     QVariantMap mapQueryValues;
     QStringList lstQueryItems;
     QVariantMap mapFormValues;
     QStringList lstFormItems;
     PiiHttpRequestHeader requestHeader;
     PiiHttpResponseHeader responseHeader;
-    
+
     PiiSocketDevice pSocket;
     PiiProgressController* pController;
     PiiStreamFilter* pActiveOutputFilter;

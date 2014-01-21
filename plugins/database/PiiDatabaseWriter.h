@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -23,7 +23,7 @@ class QFile;
 class QSqlQuery;
 
 /**
- * An operation that writes rows into SQL databases and flat files. 
+ * An operation that writes rows into SQL databases and flat files.
  * The operation has a user-configurable number of inputs that accept
  * primitive values and strings. Whenever all inputs have an incoming
  * object, a new row is created into a database table. The incoming
@@ -89,7 +89,7 @@ class PiiDatabaseWriter : public PiiDatabaseOperation
    * not affected by rounding.
    */
   Q_PROPERTY(int decimalsShown READ decimalsShown WRITE setDecimalsShown);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 
 public:
@@ -97,7 +97,7 @@ public:
   ~PiiDatabaseWriter();
 
   PiiInputSocket* input(const QString& name) const;
-  
+
   void check(bool reset);
 
 protected:
@@ -122,20 +122,20 @@ protected:
 
   void setDecimalsShown(int decimalsShown);
   int decimalsShown() const;
-  
+
   QString tableName() const;
   void setTableName(const QString& tableName);
 
 private:
   void initializeDefaults();
-  
+
   /// @internal
   class Data : public PiiDatabaseOperation::Data
   {
   public:
     Data();
     ~Data();
-    
+
     QStringList lstColumnNames;
     QVariantMap mapDefaultValues;
     QVector<QVariant> vecDefaultValues;

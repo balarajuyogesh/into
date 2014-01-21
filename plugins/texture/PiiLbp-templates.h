@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -33,7 +33,7 @@ template <class MatrixClass, class T, class Roi, class UnaryFunction>
 PiiMatrix<int> PiiLbp::genericLbp(const PiiMatrix<T>& image, Roi roi, UnaryFunction centerFunc)
 {
   typedef typename UnaryFunction::result_type C;
-  
+
   if (d->mode == Symmetric)
     return genericSymmetricLbp<MatrixClass>(image, roi);
 
@@ -64,7 +64,7 @@ PiiMatrix<int> PiiLbp::genericLbp(const PiiMatrix<T>& image, Roi roi, UnaryFunct
         {
           // Tell our matrix that we're about to handle a new row.
           result.changeRow(r);
-          
+
           // Initialize pointers to center and neighbors at the start
           // of each row sweep
           for (bit=0; bit<iSamples; ++bit)
@@ -85,7 +85,7 @@ PiiMatrix<int> PiiLbp::genericLbp(const PiiMatrix<T>& image, Roi roi, UnaryFunct
                       value |= Pii::signBit(center, C(*neighborPtr[bit])) >> bit;
                       ++neighborPtr[bit];
                     }
-              
+
                   // Update the result matrix.
                   if (bStandardMode)
                     result.modify(c, static_cast<unsigned int>(value >> iFinalShift));
@@ -98,7 +98,7 @@ PiiMatrix<int> PiiLbp::genericLbp(const PiiMatrix<T>& image, Roi roi, UnaryFunct
                   for (bit=0; bit<iSamples; ++bit)
                     ++neighborPtr[bit];
                 }
-              
+
               ++centerPtr;
             }
         }
@@ -149,7 +149,7 @@ PiiMatrix<int> PiiLbp::genericLbp(const PiiMatrix<T>& image, Roi roi, UnaryFunct
                       INTERPOLATE_NEIGHBOR(neighbor, bit);
                       value |= Pii::floatSignBit(center, neighbor) >> bit;
                     }
-              
+
                   // Update the result matrix.
                   if (bStandardMode)
                     result.modify(c, static_cast<unsigned int>(value >> iFinalShift));
@@ -165,7 +165,7 @@ PiiMatrix<int> PiiLbp::genericLbp(const PiiMatrix<T>& image, Roi roi, UnaryFunct
                       ++neighborPtr2[bit];
                     }
                 }
-              
+
               ++centerPtr;
             }
         }
@@ -202,7 +202,7 @@ template <class MatrixClass, class T, class Roi> PiiMatrix<int> PiiLbp::genericS
         {
           // Tell our matrix that we're about to handle a new row.
           result.changeRow(r);
-          
+
           // Initialize pointers to neighbors at the start of each row
           for (bit=0; bit<iSamples; ++bit)
             neighborPtr[bit] = image.row(r+d->pPoints[bit].nearestY) + (d->pPoints[bit].nearestX + iMargin);
@@ -222,7 +222,7 @@ template <class MatrixClass, class T, class Roi> PiiMatrix<int> PiiLbp::genericS
                       ++neighborPtr[bit];
                       ++neighborPtr[secondBit];
                     }
-              
+
                   // Update the result matrix.
                   result.modify(c, static_cast<unsigned int>(value >> iFinalShift));
                 }
@@ -305,23 +305,23 @@ template <class MatrixClass, class T, class Roi, class UnaryFunction>
 PiiMatrix<int> PiiLbp::basicLbp(const PiiMatrix<T>& image, Roi roi, UnaryFunction centerFunc)
 {
   typedef typename UnaryFunction::result_type C;
-  
+
   const T *r0, *r1, *r2;
   register unsigned int value;
   int r, c;
   C center;
   MatrixClass result(image.rows(), image.columns(), 1, 256);
-  
+
   for (r=1; r<image.rows()-1; ++r)
     {
       result.changeRow(r);
-      
+
       //Initialize row pointers to the beginning of three successive
       //rows.
       r0 = image.row(r-1);
       r1 = image.row(r);
       r2 = image.row(r+1);
-      
+
       for (c=1; c<image.columns()-1; ++c)
         {
           if (roi(r,c))
@@ -354,17 +354,17 @@ template <class MatrixClass, class T, class Roi> PiiMatrix<int> PiiLbp::basicSym
   register unsigned int value;
   int r, c;
   MatrixClass result(image.rows(), image.columns(), 1, 16);
-  
+
   for (r=1; r<image.rows()-1; ++r)
     {
       result.changeRow(r);
-      
+
       // Initialize row pointers to the beginning of three successive
       // rows.
       r0 = image.row(r-1);
       r1 = image.row(r);
       r2 = image.row(r+1);
-      
+
       for (c=1; c<image.columns()-1; ++c)
         {
           if (roi(r,c))

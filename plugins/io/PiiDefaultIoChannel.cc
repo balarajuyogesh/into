@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -39,7 +39,7 @@ PiiDefaultIoChannel::PiiDefaultIoChannel(Data *data, PiiDefaultIoDriver *driver,
 {
   d->iChannelIndex = channelIndex;
   d->pDriver = driver;
-  
+
   setParent(driver);
 }
 
@@ -47,7 +47,7 @@ PiiDefaultIoChannel::PiiDefaultIoChannel(PiiDefaultIoDriver *driver, int channel
 {
   d->iChannelIndex = channelIndex;
   d->pDriver = driver;
-  
+
   setParent(driver);
 }
 
@@ -90,10 +90,10 @@ void PiiDefaultIoChannel::checkInputState()
     }
   if (d->iPreviousInputState == int(bState))
     return;
-    
+
   d->iPreviousInputState = int(bState);
   bool bActive = d->bActiveState ? bState : !bState;
-      
+
   if (d->bSignalFallingEdge || bActive)
     emit inputStateChanged(bActive);
 }

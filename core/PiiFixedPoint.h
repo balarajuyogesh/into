@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -41,7 +41,7 @@ template <> struct PiiFixedPointTraits<long> { typedef long long WiderType; };
  * point number back to a float costs a division. Therefore, consider
  * your requirements carefully.
  *
- * The `decimals` template parameter tell the number of decimal bits. 
+ * The `decimals` template parameter tell the number of decimal bits.
  * Typically, half of the data type is used (16 for int on PC). Use
  * the number to tune the trade-off between precision and range.
  *
@@ -58,7 +58,7 @@ public:
    *
    * @param value the value as an integer
    *
-   * @param shift the number of decimal bits to add to the number. 
+   * @param shift the number of decimal bits to add to the number.
    * `value` will be shifted this many times to the left.
    */
   PiiFixedPoint(T value, int shift = decimals) : _value(value << shift) {}
@@ -67,14 +67,14 @@ public:
    */
   PiiFixedPoint(const PiiFixedPoint& other) : _value(other._value) {}
   /**
-   * Initialize the fixed point number with a floating point value. 
+   * Initialize the fixed point number with a floating point value.
    * This may result in rounding errors.
    */
   PiiFixedPoint(double value) : _value(value * (1 << decimals)) {}
 
   operator float () const { return (float)_value / (1 << decimals); }
-  operator double () const { return (double)_value / (1 << decimals); }  
-  
+  operator double () const { return (double)_value / (1 << decimals); }
+
   void operator+= (const PiiFixedPoint& other) { _value += other._value; }
   void operator-= (const PiiFixedPoint& other) { _value -= other._value; }
   void operator*= (const PiiFixedPoint& other) { _value = T(PiiFixedPointTraits<T>::WiderType(_value * other._value) >> decimals); }

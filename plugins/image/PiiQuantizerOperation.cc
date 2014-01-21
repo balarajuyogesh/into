@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -118,7 +118,7 @@ template <class T> void PiiQuantizerOperation::quantize(const PiiVariant& obj)
       return;
     }
 trainingFinished:
-  
+
   // If 8 bits is enough...
   if (d->iLevels <= 256)
     quantize<unsigned char>(img);

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@
  * and the [Support Vector Machine](PiiSvm). The objective of the
  * KA algorithm is to find a maximal margin hyperplane just like in
  * SVM. The solution algorithm does not however involve quadratic
- * programming, which makes the KA much faster to train than the SVM. 
+ * programming, which makes the KA much faster to train than the SVM.
  * It has been proven that the KA converges toward the optimal
  * solution (the maximal margin hyperplane) with an exponentially fast
  * rate of convergence. The predictive power of the KA is practically
@@ -43,7 +43,7 @@
  * \end{cases}
  * \]
  *
- * In the equation, M is the number of *support vectors*, i.e. 
+ * In the equation, M is the number of *support vectors*, i.e.
  * the number of training samples with a non-zero weight &alpha;
  * after training. &theta; is a desicion threshold, *k*()
  * denotes the kernel function, and *y* is the binary classification
@@ -56,7 +56,7 @@ template <class SampleSet> class PiiKernelAdatron :
 {
 public:
   typedef typename PiiSampleSet::Traits<SampleSet>::ConstFeatureIterator ConstFeatureIterator;
-  
+
   /// Constructs a new Kernel Adatron
   PiiKernelAdatron();
   /// Destroys the Kernel Adatron.
@@ -103,7 +103,7 @@ public:
    * kernel is a Gaussian kernel with unit variance.
    */
   void setKernelFunction(PiiKernelFunction<ConstFeatureIterator>* kernel);
-  
+
   /**
    * Returns the number of features in each feature vector. If the
    * adatron has not been trained, zero will be returned.
@@ -151,14 +151,14 @@ public:
    * Returns the learning rate.
    */
   double learningRate() const;
-  
+
   /**
    * Returns the maximum number of learning iterations. The default
    * value is 100.
    */
   int maxIterations() const;
   /**
-   * Sets the maximum number of iterations the algorithm will take. 
+   * Sets the maximum number of iterations the algorithm will take.
    * This value limits the number of times the whole sample set is
    * iterated over.
    */
@@ -166,10 +166,10 @@ public:
 
   /**
    * Sets the convergence threshold. The objective of the Kernel
-   * Adatron is to maximize the margin between two classes. 
+   * Adatron is to maximize the margin between two classes.
    * Internally, the margin is calculated so that its maximum value is
    * one. The learning algorithm will stop once the margin is close
-   * enough to the optimum, i.e. when (1-margin) <= 
+   * enough to the optimum, i.e. when (1-margin) <=
    * *convergenceThreshold*. The default value is 0.01.
    */
   void setConvergenceThreshold(double convergenceThreshold);
@@ -177,7 +177,7 @@ public:
    * Returns the convergence threshold.
    */
   double convergenceThreshold() const;
-  
+
 private:
   class Data : public PiiLearningAlgorithm<SampleSet>::Data
   {

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -276,7 +276,7 @@ bool PiiOutputSocket::tryEmit(const PiiVariant& object)
     return d->pFirstController->tryToReceive(d->pFirstInput, object);
   else if (iCnt == 0)
     return true;
-  
+
   bool bAllCompleted = true;
   for (int i=0; i<iCnt; ++i)
     {
@@ -289,10 +289,10 @@ bool PiiOutputSocket::tryEmit(const PiiVariant& object)
       Pii::fillN(d->pbInputCompleted, d->lstInputs.size(), false);
       d->freeInputCondition.wakeAll();
     }
-  
+
   return bAllCompleted;
 }
-  
+
 void PiiOutputSocket::emitNonThreaded(const PiiVariant& object)
 {
   PII_D;

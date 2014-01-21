@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -55,7 +55,7 @@ public:
      * handled before the next object in the parent group.
      */
     enum Type { StartInput, EndInput };
-    
+
     SyncEvent(Type type = StartInput, int groupId = 0) : _type(type), _iGroupId(groupId) {}
 
     /**
@@ -67,12 +67,12 @@ public:
      * activated.
      */
     int groupId() const { return _iGroupId; }
-    
+
   private:
     Type _type;
     int _iGroupId;
   };
-  
+
   /**
    * An interface for objects that receive synchronization events from
    * the flow controller.
@@ -124,9 +124,9 @@ public:
   private:
     QList<int> _lstStartedGroups;
   };
-  
+
   virtual ~PiiFlowController();
-  
+
   /**
    * Flow states.
    *
@@ -139,7 +139,7 @@ public:
    * be processed, and the caller should send sync events, process the
    * objects and try [prepareProcess()] again.
    *
-   * - `SynchronizedState` - the operation received a start/end tag. 
+   * - `SynchronizedState` - the operation received a start/end tag.
    * There is nothing to be processed now, but the caller should try
    * [prepareProcess()] again as with `ProcessableState`.
    *
@@ -214,7 +214,7 @@ public:
    * Builds a binary mask of input object types in a group of
    * synchronized input sockets.
    *
-   * @param begin an interator to the first input to be checked. 
+   * @param begin an interator to the first input to be checked.
    * Typically, this value is returned by
    * QVector<PiiInputSocket*>::begin(). The iterator must point to a
    * PiiInputSocket*.
@@ -226,7 +226,7 @@ public:
    * the group's synchronization is in error.
    *
    * ! In some rare occasions, it may happen that the type mask is
-   * (legally) a composition of `PauseTag` and `NormalObject`, or 
+   * (legally) a composition of `PauseTag` and `NormalObject`, or
    * `ResumeTag` and `NormalObject`. This function automatically
    * resolves such situations by modifying the object queues in input
    * sockets, if possible. If a resolution is found, the function
@@ -239,8 +239,8 @@ public:
    * A utility function that creates a textual dump of incoming
    * objects in a group of sockets. Can be used to create descriptive
    * error messages for synchronization errors.
-   *   
-   * @param begin an interator to the first input to be checked. 
+   *
+   * @param begin an interator to the first input to be checked.
    * Typically, this value is returned by
    * QVector<PiiInputSocket*>::begin(). The iterator must point to a
    * PiiInputSocket*.
@@ -251,10 +251,10 @@ public:
    */
    template <class InputIterator>
    static QString dumpInputObjects(InputIterator begin, InputIterator end, int queueIndex = 0);
-  
+
   /**
    * Prepares sockets for processing. This function is called by
-   * PiiOperationProcessor just before it starts a processing round. 
+   * PiiOperationProcessor just before it starts a processing round.
    * If processing can be performed, this function places the
    * necessary objects into the input sockets.
    *
@@ -265,19 +265,19 @@ public:
    * an object, `IncompleteState` must be returned.
    *
    * - If all inputs contain sync tags, they need to be passed to
-   * synchronized outputs ([PiiOutputSocket::emitObject()]) and 
+   * synchronized outputs ([PiiOutputSocket::emitObject()]) and
    * `SynchronizedState` must be returned. The input queues must be
    * shifted ([PiiInputSocket::shift()]).
    *
    * - If all inputs contain a stop/pause/resume/reconfiguration
    * tag, the operation must be either stopped, paused, resumed, or
-   * reconfigured. The function must return `FinishedState`, 
+   * reconfigured. The function must return `FinishedState`,
    * `PausedState`, `ResumedState`, or `ReconfigurableState`,
    * respectively. The caller is responsible for passing the control
    * objects in these cases. PiiOperationProcessor uses
    * PiiBasicOperation::operationStopped(),
    * PiiBasicOperation::operationPaused(), and
-   * PiiBasicOperation::operationResumed() helper functions for this. 
+   * PiiBasicOperation::operationResumed() helper functions for this.
    * The input queues must be shifted. If the tag is a reconfiguration
    * tag, its value (QString) must be stored with
    * [setPropertySetName()].
@@ -287,11 +287,11 @@ public:
    * incoming to outgoing slots with PiiInputSocket::shift() and
    * return `ProcessableState`. Only one group can be processed
    * at once. The caller is responsible for re-invoking this function
-   * to make sure all processable groups will be handled. Set the 
+   * to make sure all processable groups will be handled. Set the
    * [active group](setActiveInputGroup()) to the group id of the
    * active group.
    *
-   * - If a group of synchronized inputs contains mixed inputs (e.g. 
+   * - If a group of synchronized inputs contains mixed inputs (e.g.
    * ordinary objects and sync tags), a PiiExecutionException must be
    * thrown.
    *
@@ -300,11 +300,11 @@ public:
    *
    * @return If all inputs contain stop, pause, resume, or reconfigure
    * tags, either `FinishedState` or `PausedState`, `ResumedState`,
-   * or `ReconfigurableState` will be returned. Otherwise, returns 
-   * `ProcessableState` when a processing round can be performed and 
+   * or `ReconfigurableState` will be returned. Otherwise, returns
+   * `ProcessableState` when a processing round can be performed and
    * `IncompleteState` when not. Processing can be performed if a group
    * of synchronized sockets is filled with ordinary objects. If a
-   * group is filled with synchronization objects, 
+   * group is filled with synchronization objects,
    * `SynchronizedState` will be returned.
    *
    * @exception PiiExecutionException& if a synchronization error
@@ -318,7 +318,7 @@ public:
    * `false`.
    */
   virtual bool hasSyncEvents() const;
-  
+
   /**
    * Sends queued sync events to `listener` and empties the event
    * queue. The default implementation does nothing.
@@ -338,7 +338,7 @@ public:
    * prepareProcess() returns `ReconfigurableState`.
    */
   QString propertySetName() const;
-  
+
 protected:
   /// @internal
   class Data
@@ -346,14 +346,14 @@ protected:
   public:
     Data();
     virtual ~Data();
-    
+
     /// The ID of the currently active sync group.
     int iActiveInputGroup;
     QString strPropertySetName;
   } *d;
   /// @internal
   PiiFlowController(Data* data);
-  
+
   /**
    * Constructs a new flow controller.
    */
@@ -463,7 +463,7 @@ int PiiFlowController::inputGroupTypeMask(InputIterator begin, InputIterator end
         return ReconfigurationTag;
       return NoObject;
     }
-  
+
   return typeMask;
 }
 

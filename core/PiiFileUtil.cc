@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -23,10 +23,10 @@ namespace Pii
   QStringList fileList(const QString& pattern, QDir::Filters filters, QDir::SortFlags sort)
   {
     QStringList result;
-    
+
     QDir directory = QFileInfo(pattern).dir();
     QString glob = QFileInfo(pattern).fileName();
-    
+
     // Take the names of matching file names relative to "directory"
     QStringList names = directory.entryList(QStringList() << glob, //take all matching entries
                                             filters,
@@ -44,7 +44,7 @@ namespace Pii
 
 #ifdef Q_OS_MAC
     strPath.remove(QRegExp("(/(debug|release)/[^/]+.app/Contents)?/MacOS$"));
-#else    
+#else
     if (strPath.endsWith("/debug"))
       strPath.chop(6);
     else if (strPath.endsWith("/release"))

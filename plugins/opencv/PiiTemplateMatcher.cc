@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -110,7 +110,7 @@ template <class T> void PiiTemplateMatcher::match(const PiiMatrix<T>& image)
       outputAt(1)->emitObject(PiiMatrix<bool>());
       return;
     }
-  
+
   PiiMatrix<float> matResult(image.rows() - d->pTemplate->rows() + 1,
                              image.columns() - d->pTemplate->columns() + 1);
 
@@ -144,7 +144,7 @@ template <class T> void PiiTemplateMatcher::match(const PiiMatrix<T>& image)
           else
             outputMask(r, c, d->pMask->rows(), d->pMask->columns()) << *((PiiMatrix<bool>*)d->pMask);
         }
-      
+
       //qDebug("Maximum correlation value: %f", Pii::max(*result));
       outputAt(1)->emitObject(outputMask);
     }

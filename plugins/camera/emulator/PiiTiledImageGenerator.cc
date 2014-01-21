@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -22,7 +22,7 @@ PiiTiledImageGenerator::PiiTiledImageGenerator() : _iRowCounter(0),
                                                    _iDirection(1),
                                                    _pImage(0),
                                                    _strTileFileName("")
-                                                   
+
 {
 }
 
@@ -39,7 +39,7 @@ void PiiTiledImageGenerator::generateTexture(PiiMatrix<unsigned char>& buffer,
   if (_pImage != 0)
     {
       int iColumns = qMin(_pImage->columns(), buffer.columns());
-      
+
       for (int r=0; r<rows; r++ )
         {
           for (int c=0; c<iColumns; c++)

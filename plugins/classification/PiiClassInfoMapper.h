@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -32,7 +32,7 @@
  *
  * @in data - data to be coupled with the class index. Optional if
  * [training] mode is `false`.
- * 
+ *
  * Outputs
  * -------
  *
@@ -44,7 +44,7 @@
 class PiiClassInfoMapper : public PiiDefaultOperation
 {
   Q_OBJECT
-  
+
   /**
    * If `true`, the operation collects incoming data. If `false`,
    * the collected data is used as output.
@@ -57,7 +57,7 @@ class PiiClassInfoMapper : public PiiDefaultOperation
    * maxClasses-1.
    */
   Q_PROPERTY(int maxClasses READ maxClasses WRITE setMaxClasses);
-  
+
   /**
    * Default value for classes that we haven't learned yet. The
    * default value is `null`. Therefore, one must almost always set

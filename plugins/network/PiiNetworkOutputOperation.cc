@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -51,10 +51,10 @@ void PiiNetworkOutputOperation::check(bool reset)
   QUrl url(d->strServerUri);
   if (!url.isValid())
     PII_THROW(PiiExecutionException, tr("The supplied server URI is not valid."));
-    
+
   d->strHost = url.host();
   d->strUri = url.path();
-    
+
   delete d->pNetworkClient;
   d->pNetworkClient = new PiiNetworkClient(d->strServerUri);
   d->pNetworkClient->setConnectionTimeout(d->iResponseTimeout);
@@ -122,7 +122,7 @@ void PiiNetworkOutputOperation::sendPostRequest()
                   d->strContentType);
 
       h.print(PiiYdin::convertToQString(d->pBodyInput));
-      
+
       h.finish();
 
       readResponse(h);
@@ -164,7 +164,7 @@ void PiiNetworkOutputOperation::sendPostRequest()
               h.print(obj.valueAs<QString>());
             }
           h.finish();
-          
+
           readResponse(h);
         }
     }
@@ -182,7 +182,7 @@ void PiiNetworkOutputOperation::readResponse(PiiHttpDevice& h)
         return;
       PII_THROW(PiiExecutionException, tr("Error in reading HTTP response headers."));
     }
-  
+
   if (h.status() != 200)
     {
       // Cannot ignore errors if we need outputs

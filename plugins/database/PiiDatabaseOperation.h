@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,7 +24,7 @@ class QSqlQuery;
 class QSqlDriver;
 
 /**
- * An abstract superclass for operations that read/write databases. 
+ * An abstract superclass for operations that read/write databases.
  * This class provides functionality for maintaining the database
  * connection.
  *
@@ -126,7 +126,7 @@ protected:
   {
   public:
     Data();
-    
+
     QString strConnectionId;
     QString strDatabaseUri, strDatabaseName;
 
@@ -162,14 +162,14 @@ protected:
    * database is always accessed from the same thread. This is a
    * limitation of the low-level SQL drivers.
    *
-   * @return `true` if the connection was successfully opened, 
+   * @return `true` if the connection was successfully opened,
    * `false` otherwise.
    *
    * @exception PiiExecutionException& if the connection cannot be
    * opened and [ignoreErrors] is `false`.
    */
   bool openConnection();
-  
+
   /**
    * Closes the database connection.
    */
@@ -193,7 +193,7 @@ protected:
   bool isConnected() const;
 
   /**
-   * Returns a pointer to a newly allocated QSqlDatabase object. 
+   * Returns a pointer to a newly allocated QSqlDatabase object.
    * Subclasses may override this function to provide new connection
    * schemes and to perform additional initialization.
    */
@@ -218,7 +218,7 @@ protected:
   /**
    * Checks an executed *query* for errors. Returns `true` if the
    * query was successfully executed, `false` otherwise. Throws a
-   * PiiExecutionException if the query failed and [ignoreErrors] is 
+   * PiiExecutionException if the query failed and [ignoreErrors] is
    * `false`.
    */
   bool checkQuery(QSqlQuery& query);

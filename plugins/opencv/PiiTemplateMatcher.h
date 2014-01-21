@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,7 +30,7 @@
  * ------
  *
  * @in image - the input image. Any gray-scale image.
- * 
+ *
  * Outputs
  * -------
  *
@@ -41,7 +41,7 @@
  * larger values mean better matches. If the size of the input image
  * is R x C, and the size of the template is r x c, the size of the
  * correlation matrix will be R-r+1 x C-c+1. If the input image is
- * smaller than the template, an empty matrix will be emitted. 
+ * smaller than the template, an empty matrix will be emitted.
  * (PiiMatrix<float>)
  *
  * @out mask - a binary matrix in which a mask ([maskFile]) is placed
@@ -74,17 +74,17 @@ class PiiTemplateMatcher : public PiiDefaultOperation
    * threshold are considered matches. The default is 1.0.
    */
   Q_PROPERTY(double threshold READ threshold WRITE setThreshold);
-  
+
   /**
    * Matching method. The default is `SquaredDiff`.
    */
   Q_PROPERTY(MatchingMethod matchingMethod READ matchingMethod WRITE setMatchingMethod);
   Q_ENUMS(MatchingMethod);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   /**
-   * Different matching methods. Names should stand for themselves. 
+   * Different matching methods. Names should stand for themselves.
    * *Diff methods produce small values for good matches. Others
    * produce large values for good matches.
    */
@@ -119,7 +119,7 @@ private:
   {
   public:
     Data();
-    
+
     int iMatchingMethod;
     PiiMatrix<unsigned char> *pTemplate, *pMask;
     double dThreshold;

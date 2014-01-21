@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,7 +30,7 @@ class ContentWidget : public QWidget, private Ui_ContentWidget
 public:
 
   enum Mode { Release, Debug, Production };
-  
+
   ContentWidget(QWidget *parent = 0, Qt::WindowFlags flags = 0);
   ~ContentWidget();
 
@@ -52,7 +52,7 @@ public:
 
 signals:
   void quit();
-  
+
 private slots:
   void quitButtonClicked();
   void demoButtonClicked();
@@ -76,7 +76,7 @@ private:
   void updateInfo(Document *document);
   Document* getCurrentDocument();
   Document* createNewDocument(const QDir& directory);
-  
+
   QDir _demoDir, _currentDir, _demoRootDir;
   QList<PushButton*> _lstDemoButtons;
   QList<Document*> _lstDocuments;

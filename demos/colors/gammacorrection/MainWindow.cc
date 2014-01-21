@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -43,7 +43,7 @@ void MainWindow::init()
 
   _pSourceImageDisplay->imageViewport()->setProperty("fitMode", "FitToView");
   _pResultImageDisplay->imageViewport()->setProperty("fitMode", "FitToView");
-  
+
   // Make ui-connections
   connect(_pPreviousImageButton, SIGNAL(clicked()), this, SLOT(prevButtonClicked()));
   connect(_pNextImageButton, SIGNAL(clicked()), this, SLOT(nextButtonClicked()));
@@ -67,7 +67,7 @@ PiiEngine* MainWindow::createEngine()
   // Create probe input for source and result image display
   _pSourceProbeInput = new PiiProbeInput;
   _pResultProbeInput = new PiiProbeInput;
-  
+
   // Create image source
   _pImageFileReader = pEngine->createOperation("PiiImageFileReader");
   _pImageFileReader->setProperty("imageType", "Color");
@@ -79,20 +79,20 @@ PiiEngine* MainWindow::createEngine()
   _pSwitch->setProperty("operationMode", "AsynchronousMode");
   _pSwitch->setProperty("dynamicInputCount", 1);
   _pSwitch->setProperty("passThrough", true);
-  
+
   // Create color converter
   _pColorConverter = pEngine->createOperation("PiiColorConverter");
   _pColorConverter->setProperty("colorConversion", "GammaCorrection");
-  
+
   // Make operation connections
   connect(this, SIGNAL(selectImage(int)), pImageTrigger, SLOT(trigger(int)));
   connect(this, SIGNAL(updateImage(int)), pSwitchTrigger, SLOT(trigger(int)));
-  
+
   pImageTrigger->connectOutput("trigger", _pImageFileReader, "trigger");
   pSwitchTrigger->connectOutput("trigger", _pSwitch, "trigger");
   _pImageFileReader->connectOutput("image", _pSwitch, "input0");
   _pSwitch->connectOutput("output0", _pColorConverter, "image");
-  
+
   _pSourceProbeInput->connectOutput(_pImageFileReader->output("image"));
   _pResultProbeInput->connectOutput(_pColorConverter->output("image"));
 
@@ -106,7 +106,7 @@ void MainWindow::setGamma(int value)
   double dValue = dMinGamma +
     double(value - _pGammaSlider->minimum()) / (_pGammaSlider->maximum() - _pGammaSlider->minimum()) *
     (dMaxGamma - dMinGamma);
-  
+
   // Change gamma
   _pColorConverter->setProperty("gamma",dValue);
 

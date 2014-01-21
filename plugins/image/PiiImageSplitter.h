@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,7 +28,7 @@
  * extracted on the upper left corner of the large image (but may be
  * offset by a predefined amount). The next sub-image is extracted on
  * the right side of the first one, until the whole large image has
- * been covered. The process is repeated for each row of sub-images. 
+ * been covered. The process is repeated for each row of sub-images.
  * Each sub-image is accompanied with a point that determines the
  * location of the upper left corner of the sub-image with respect to
  * that of the large image.
@@ -67,11 +67,11 @@ class PiiImageSplitter : public PiiDefaultOperation
    * The number of rows of equally sized image pieces. If the height
    * (in pixels) of the large image is not a multiple of `rows`,
    * empty pixels are left at the bottom of the large image. For
-   * example, if the height of the large image is 10 pixels and 
+   * example, if the height of the large image is 10 pixels and
    * `rows` equals to 3, one pixel will be left over.
    *
    * If a fixed number of rows or columns is used, the size of the
-   * small images may vary, if [width] is set to a non-positive value. 
+   * small images may vary, if [width] is set to a non-positive value.
    * If this value is zero or negative, [width] determines the number
    * of sub-image rows. The default value is 0.
    */
@@ -91,7 +91,7 @@ class PiiImageSplitter : public PiiDefaultOperation
    * determine the width. The default value is 32.
    */
   Q_PROPERTY(int width READ width WRITE setWidth);
-  
+
   /**
    * The height of the extracted sub-images in pixels.
    *
@@ -106,7 +106,7 @@ class PiiImageSplitter : public PiiDefaultOperation
    * to be horizontally centered into the image.
    */
   Q_PROPERTY(int xOffset READ xOffset WRITE setXOffset);
-  
+
   /**
    * The number of pixels the upper left corner of the first extracted
    * sub-image is vertically offset with respect to that of the input
@@ -173,7 +173,7 @@ public:
 
   int ySpacing() const;
   void setYSpacing(int spacing);
-  
+
   void setRandomize(bool randomize);
   bool randomize() const;
 
@@ -189,7 +189,7 @@ private:
   template <class T> void split(const PiiVariant& obj);
   void checkHeight(int height, int imageHeight, int yOffset);
   void checkWidth(int width, int imageWidth, int xOffset);
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {
@@ -199,7 +199,7 @@ private:
     bool bRandomize;
     int iCurrentIndex;
     int iSubimageCount;
-    
+
     PiiInputSocket *pImageInput, *pLocationInput;
     PiiOutputSocket *pImageOutput, *pSubImageOutput, *pLocationOutput;
   };

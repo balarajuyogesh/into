@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -38,7 +38,7 @@
  * Outputs
  * -------
  *
- * @out model index - the index of the closest code vector (int). 
+ * @out model index - the index of the closest code vector (int).
  * This value equals `classification` if [classLabels] are not set.
  *
  * @out distance - distance to the closest code vector. (double)
@@ -99,7 +99,7 @@ class PII_CLASSIFICATION_EXPORT PiiVectorQuantizerOperation : public PiiClassifi
   Q_PROPERTY(PiiClassification::DistanceCombinationMode distanceCombinationMode
              READ distanceCombinationMode
              WRITE setDistanceCombinationMode);
-  
+
   /**
    * Set a distance threshold for rejecting samples. If the distance
    * of an unknown sample to the closest code vector is above this
@@ -118,14 +118,14 @@ class PII_CLASSIFICATION_EXPORT PiiVectorQuantizerOperation : public PiiClassifi
   Q_PROPERTY(PiiVariant models READ models WRITE setModels);
 
   /**
-   * Class labels for code vectors. If this list is non-empty, the 
+   * Class labels for code vectors. If this list is non-empty, the
    * `classification` output will emit the label corresponding to the
-   * closest code vector instead of the index of the code vector. 
+   * closest code vector instead of the index of the code vector.
    * Otherwise the `classification` and `vector` `index` outputs
    * will both emit the index of the closest code vector.
    */
   Q_PROPERTY(QVariantList classLabels READ classLabels WRITE setClassLabels);
-  
+
 public:
   ~PiiVectorQuantizerOperation();
 
@@ -190,7 +190,7 @@ protected:
 
   /**
    * Configures *classifier* for running. This function must be
-   * called by a subclass' implementation of the check() function. 
+   * called by a subclass' implementation of the check() function.
    * This function configures *classifier* with the samples given as
    * the [models] property, and creates an instance of the requested
    * distance measure.
@@ -243,8 +243,8 @@ protected:
                                              int* vectorIndex = 0, double* distance = 0);
 
   /**
-   * Returns the class label corresponding to the sample at *index*. 
-   * If the label list is empty, returns *index* (or `NaN` if 
+   * Returns the class label corresponding to the sample at *index*.
+   * If the label list is empty, returns *index* (or `NaN` if
    * *index* is -1). If there is no label for *index*, returns *NAN*.
    */
   double labelForIndex(int index) const;

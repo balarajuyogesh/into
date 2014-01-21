@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -92,7 +92,7 @@ public:
       UnrecognizedArchiveFormat,
       ArchiveVersionMismatch
     };
-  
+
   /**
    * Construct a new PiiSerializationException with the given error
    * code. The exception message will be automatically generated with
@@ -119,7 +119,7 @@ public:
   PiiSerializationException& operator= (const PiiSerializationException& other);
 
   ~PiiSerializationException();
-  
+
   /**
    * Convert a numerical error code into human-readable text.
    */
@@ -130,7 +130,7 @@ public:
    * "message".
    */
   QString message() const;
-  
+
   /**
    * Get the error code.
    */

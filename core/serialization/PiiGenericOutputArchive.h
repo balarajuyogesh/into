@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -37,7 +37,7 @@ public:
 
   virtual int majorVersion() const = 0;
   virtual int minorVersion() const = 0;
-  
+
   virtual PiiGenericOutputArchive& operator<<(unsigned char value) = 0;
   virtual PiiGenericOutputArchive& operator<<(unsigned short value) = 0;
   virtual PiiGenericOutputArchive& operator<<(unsigned int value) = 0;
@@ -64,12 +64,12 @@ private:
 };
 
 /**
- * Default implementation of the generic output archive interface. 
+ * Default implementation of the generic output archive interface.
  * This class takes the actual archive implementation as a template
  * parameter. For example, an implementation with a binary output
  * archive can be created simply with
  * PiiGenericOutputArchive::Impl<PiiBinaryOutputArchive>. The library
- * contains convenient typedefs for known archive types (e.g. 
+ * contains convenient typedefs for known archive types (e.g.
  * PiiGenericBinaryOutputArchive).
  *
  */
@@ -82,7 +82,7 @@ public:
 
   int majorVersion() const { return Archive::majorVersion(); }
   int minorVersion() const { return Archive::minorVersion(); }
-  
+
 #define PII_STREAM_OP(Type) PiiGenericOutputArchive& operator<<(Type value) { Archive::operator<< (value); return *this; }
   PII_STREAM_OP(unsigned char)
   PII_STREAM_OP(unsigned short)

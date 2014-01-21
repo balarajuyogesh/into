@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -63,7 +63,7 @@ template <class Derived> struct PiiSharedD
   {
     return new Derived(*self());
   }
-    
+
   PiiAtomicInt iRefCount;
 };
 

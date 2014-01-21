@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,7 +26,7 @@ PiiMatrix<float> PiiOrientationEstimator::_gradientFilterY(3, 3,
                                                            M_SQRT1_2 , 1.0 , M_SQRT1_2,
                                                            0.0       , 0.0 , 0.0,
                                                            -M_SQRT1_2, -1.0, -M_SQRT1_2);
-                                                           
+
 
 
 PiiOrientationEstimator::Data::Data() :
@@ -238,7 +238,7 @@ void PiiOrientationEstimator::emitHistogram(PiiMatrix<float>& histogram)
     }
   if (d->bNormalized)
     histogram /= Pii::sum<float>(histogram);
-  
+
   d->pHistogramOutput->emitObject(histogram);
 }
 

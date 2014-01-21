@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -138,7 +138,7 @@ class PII_WEBCAMDRIVER_EXPORT PiiWebcamDriver : public PiiCameraDriver
    * frameSizes description
    */
   Q_PROPERTY(QVariantList frameSizes READ frameSizes);
-  
+
 public:
   /**
    * Construct a new PiiWebcamDriver.
@@ -173,7 +173,7 @@ public:
 
 private:
   friend class Callback;
-  
+
   int frameIndex(int frameIndex) const;
   void capture();
   void stopCapturing();
@@ -188,7 +188,7 @@ private:
   bool initCamera(const QString& id);
   bool startAcquisition();
   bool stopAcquisition();
-  
+
   // General variables
   bool _bInitialized;
   IGraphBuilder *_pGraphBuilder;
@@ -198,7 +198,7 @@ private:
   ISampleGrabber *_pSampleGrabber;
   IPin *_pGrabberIn;
   unsigned char *_pFrame;
-  
+
   // Device variables
   IBaseFilter *_pSourceFilter;
   IPin *_pSourceFilterOut;
@@ -209,7 +209,7 @@ private:
   QList<PiiCamera::ImageFormat> _lstImageFormats;
   QSize _resolution, _frameSize;
   PiiCamera::ImageFormat _imageFormat;
-  
+
   QStringList _lstCriticalProperties;
   bool _bOpen, _bCapturingRunning;
   QString _strCameraId;

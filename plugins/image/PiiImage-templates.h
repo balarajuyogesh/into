@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -51,7 +51,7 @@ namespace PiiImage
   {
     if (image.rows() != values.rows() || image.columns() != values.columns())
       return;
-    
+
     typedef typename ColorType::Type T;
 
     // Reverse color indexing
@@ -61,7 +61,7 @@ namespace PiiImage
       {
         ColorType* target = image.row(r);
         const T *source = values.row(r);
-      
+
         for (int c=0; c<iCols; ++c)
           target[c].channels[channel] = source[c];
       }
@@ -93,7 +93,7 @@ namespace PiiImage
     typedef typename ColorType::Type T;
 
     channels = qBound(3, channels, 4);
-    
+
     const int iRows = image.rows(), iColumns = image.columns();
     for (int i=0; i<channels; ++i)
       channelImages[i].resize(iRows, iColumns);
@@ -106,7 +106,7 @@ namespace PiiImage
             T *row0 = channelImages[0].row(r),
               *row1 = channelImages[1].row(r),
               *row2 = channelImages[2].row(r);
-        
+
             for (int c=0; c<iColumns; ++c)
               {
                 row0[c] = row[c].c0;
@@ -124,7 +124,7 @@ namespace PiiImage
               *row1 = channelImages[1].row(r),
               *row2 = channelImages[2].row(r),
               *row3 = channelImages[3].row(r);
-        
+
             for (int c=0; c<iColumns; ++c)
               {
                 row0[c] = row[c].c0;
@@ -181,7 +181,7 @@ namespace PiiImage
     // No scaling needed...
     if (rows == image.rows() && columns == image.columns())
       return image;
-    
+
     PiiMatrix<T> result(PiiMatrix<T>::uninitialized(rows, columns));
     if (interpolation == Pii::NearestNeighborInterpolation)
       {
@@ -215,7 +215,7 @@ namespace PiiImage
          */
         double stepX = image.columns() >= columns ? (double)image.columns() / columns : (double)(image.columns()-1) / (columns-1);
         double stepY = image.rows() >= rows ? (double)image.rows() / rows : (double)(image.rows()-1) / (rows-1);
-        
+
         typedef typename Pii::ToFloatingPoint<T>::Type Real;
         PiiMatrix<Real> scaledRow(1,columns);
 
@@ -308,7 +308,7 @@ namespace PiiImage
   {
     typedef typename Pii::ToFloatingPoint<T>::Type Real;
     typedef typename Pii::ToFloatingPoint<T>::PrimitiveType RealScalar;
-    
+
     if (step == 1)
       copyCastRow(targetRow, sourceRow, sourceColumns);
     // Scale down -> calculate average over successive pixels on this row.
@@ -345,7 +345,7 @@ namespace PiiImage
         Func::operate(targetRow[c], sourceRow[sourceColumns-1]);
       }
   }
-  
+
   template <class T> PiiMatrix<T> rotate(const PiiMatrix<T>& image, double theta,
                                          PiiImage::TransformedSize handling,
                                          T backgroundColor)
@@ -418,7 +418,7 @@ namespace PiiImage
       return matResult;
     const int iRows = image.rows(), iCols = image.columns();
     float fX, fY;
-    
+
     for (int iY=0; iY<height; ++iY)
       {
         T* pResultRow = matResult[iY];
@@ -494,7 +494,7 @@ namespace PiiImage
     if (windowColumns <= 0) windowColumns = windowRows;
     if (windowRows > iRows) windowRows = iRows;
     if (windowColumns > iCols) windowColumns = iCols;
-    
+
     const int iLeftCols = windowColumns / 2, iRightCols = windowColumns - iLeftCols;
     for (int r=0; r<iRows; ++r)
       {
@@ -512,12 +512,12 @@ namespace PiiImage
           for (int c2=c-iLeftCols; c2<iCols; ++c2)
             takeExtremum(greater, pTargetRow[c], pSourceRow[c2]);
       }
-    
+
     const int iTopRows = windowRows / 2, iBottomRows = windowRows - iTopRows;
     // Cyclic temporary buffer for data that cannot be written to the
     // result matrix yet.
     QVarLengthArray<T,8> tmpBfr(iTopRows);
-    
+
     for (int c=0; c<iCols; ++c)
       {
         typename PiiMatrix<T>::column_iterator pTargetCol = matResult.columnBegin(c);
@@ -596,7 +596,7 @@ namespace PiiImage
         return PiiMatrix<T>(makeLoGaussian(size));
       default:
         return PiiMatrix<T>();
-      }        
+      }
   }
 
   template <class T> bool separateFilter(const PiiMatrix<T>& filter,
@@ -606,14 +606,14 @@ namespace PiiImage
     // First check that filter is a rank 1 matrix.
     if (Pii::rank(PiiMatrix<double>(filter)) != 1)
       return false;
-    
+
     const int iRows = filter.rows(), iCols = filter.columns();
     horizontalFilter.resize(1, iCols);
     verticalFilter.resize(iRows, 1);
 
     T minNorm = Pii::Numeric<T>::maxValue();
     int iMinRow = 0;
-    
+
     // Initialize vertical filter by the sum of absolute values on
     // each filter row. This determines the scaling factors (but not
     // the sign) of the row vectors (remember that the vectors are all
@@ -665,7 +665,7 @@ namespace PiiImage
   {
     if (horizontalFilter.rows() != 1 || verticalFilter.columns() != 1)
       return PiiMatrix<ResultType>(image);
-    
+
     if (mode == Pii::ExtendZeros)
       return PiiDsp::filter<ResultType>(PiiDsp::filter<ResultType>(image, horizontalFilter, PiiDsp::FilterOriginalSize),
                                         verticalFilter, PiiDsp::FilterOriginalSize);
@@ -731,7 +731,7 @@ namespace PiiImage
     // Direction vectors for eight gradient angles
     int directions[8][2] = { {1,0}, {1,1}, {0,1}, {-1,1},
                              {-1,0}, {-1,-1}, {0,-1}, {1,-1} };
-    
+
     // Leave borders unhandled. Unless the gradient is exactly
     // vertical or horizontal, it is impossible to find the ridge.
     for (int r=1; r < rows-1; ++r)
@@ -767,7 +767,7 @@ namespace PiiImage
             // Only accept horizontal gradients
             if ((angle & 3) != 0) // faster than (angle != 0 || angle != 4)
               continue;
-            
+
             T currentMag = magRow[c];
             // Same stuff as above, but only applies to horizontal gradient
             if (magnitude(r, c + directions[angle][0]) < currentMag &&
@@ -787,7 +787,7 @@ namespace PiiImage
             // Only accept vertical gradients
             if ((angle & 3) != 2) // faster than (angle != 2 || angle != 6)
               continue;
-            
+
             T currentMag = magRow[c];
             // Same stuff as above, but only applies to vertical gradient
             if (magnitude(r + directions[angle][1], c) < currentMag &&
@@ -812,7 +812,7 @@ namespace PiiImage
 
     int iMinX = Pii::Numeric<int>::maxValue(), iMinY = Pii::Numeric<int>::maxValue(),
       iMaxX = Pii::Numeric<int>::minValue(), iMaxY = Pii::Numeric<int>::minValue();
-    
+
     if (handling == ExpandAsNecessary)
       {
 #define PII_CHECK_EXTREMA_WITH_POINT \
@@ -853,7 +853,7 @@ namespace PiiImage
 
     int lastX = image.columns()-1, lastY = image.rows()-1;
 
-    // Loop through all pixels in the transformed domain    
+    // Loop through all pixels in the transformed domain
     for (y=iMinY; y<=iMaxY; ++y)
       {
         // Row pointer is out of bound on purpose.
@@ -868,7 +868,7 @@ namespace PiiImage
       }
     return result;
   }
-  
+
   template <class T> PiiMatrix<int> detectEdges(const PiiMatrix<T>& image,
                                                 int smoothWidth,
                                                 T lowThreshold, T highThreshold)
@@ -881,7 +881,7 @@ namespace PiiImage
 
     PiiMatrix<T> matGradientX = filter<T>(matSource, SobelXFilter, Pii::ExtendZeros);
     PiiMatrix<T> matGradientY = filter<T>(matSource, SobelYFilter, Pii::ExtendZeros);
-    PiiMatrix<T> matMagnitude = gradientMagnitude(matGradientX, matGradientY);                                 
+    PiiMatrix<T> matMagnitude = gradientMagnitude(matGradientX, matGradientY);
 
     // Automatic threshold if not explicitly given
     if (highThreshold == 0)
@@ -943,7 +943,7 @@ namespace PiiImage
     *transformedX = transformHomogeneousPoint(transform[0], sourceX, sourceY);
     *transformedY = transformHomogeneousPoint(transform[1], sourceX, sourceY);
   }
-  
+
   template <class T, class U> PiiMatrix<U> transformHomogeneousPoints(const PiiMatrix<T>& transform,
                                                                       const PiiMatrix<U>& points)
   {
@@ -967,7 +967,7 @@ namespace PiiImage
       iSum += int(a[i] ^ b[i]);
     return iSum;
   }
-  
+
   template <class T> double xorMatch(const PiiMatrix<T>& a, const PiiMatrix<T>& b)
   {
     const int
@@ -1024,7 +1024,7 @@ namespace PiiImage
     const int iRowShift = (iRows - iResultRows*4)/2,
       iColShift = (iCols - iResultCols*4)/2;
     const int iStride = image.stride();
-    
+
     PiiMatrix<T> matResult(PiiMatrix<T>::uninitialized(iResultRows, iResultCols));
     typedef typename Pii::Combine<T,int>::Type U;
     for (int r=0; r<iResultRows; ++r)
@@ -1033,7 +1033,7 @@ namespace PiiImage
           *pSource2 = reinterpret_cast<const T*>(reinterpret_cast<const char*>(pSource1) + iStride),
           *pSource3 = reinterpret_cast<const T*>(reinterpret_cast<const char*>(pSource2) + iStride),
           *pSource4 = reinterpret_cast<const T*>(reinterpret_cast<const char*>(pSource3) + iStride);
-        
+
         T* pResultRow = matResult[r];
         for (int c=0; c<iResultCols; ++c)
           {

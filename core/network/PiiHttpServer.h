@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -47,14 +47,14 @@ public:
    * A shorthand for networkServer()->start().
    */
   bool start();
-  
+
   /**
    * A shorthand for networkServer()->stop().
    */
   bool stop(PiiNetwork::StopMode mode = PiiNetwork::WaitClients);
 
   /**
-   * Adds a new server to the list of HTTP servers using the given 
+   * Adds a new server to the list of HTTP servers using the given
    * `serverName` and the binding address `address`. I there already
    * exists a server with the same name, the old one will be
    * destroyed. If there are no servers, the first one will be set as
@@ -98,7 +98,7 @@ public:
    * Same as addServer("", address).
    */
   static PiiHttpServer* addServer(const QString& address) { return addServer("", address); }
-  
+
   /**
    * Creates a new instance of PiiHttpServer at the given address. See
    * [addServer()] for valid addresses. This function does not add the
@@ -108,7 +108,7 @@ public:
    * This function is thread-safe.
    */
   static PiiHttpServer* createServer(const QString& address);
-  
+
   /**
    * Returns the server called `serverName`. The server must have
    * been previously added with [addServer()]. If `serverName` is
@@ -150,7 +150,7 @@ private:
   } *d;
 
   static void deleteServer(const QString& serverName);
-  
+
   static ServerMap* serverMap();
   static QMutex _mapLock;
   static PiiHttpServer* _pDefaultServer;

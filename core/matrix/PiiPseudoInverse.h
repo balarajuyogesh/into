@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -21,9 +21,9 @@
 namespace Pii
 {
   /**
-   * Returns the Moore-Penrose pseudoinverse of an m-by-n matrix. 
+   * Returns the Moore-Penrose pseudoinverse of an m-by-n matrix.
    * Pseudoinverse is the optimal solution (in least squares sense)
-   * for an over-determined system of linear equations (i.e. m > n). 
+   * for an over-determined system of linear equations (i.e. m > n).
    * The Moore-Penrose pseudoinverse of a matrix A has the following
    * properties:
    *
@@ -45,7 +45,7 @@ namespace Pii
     // S is m by n -> S+ is n by m
     // V is n by n
     // VS+ is n by m
-    
+
     PiiMatrix<T> U, V;
     PiiMatrix<T> S = svDecompose(A, &U, &V);
     const T* pSingularValues = S[0];
@@ -60,7 +60,7 @@ namespace Pii
     for (; iNonZeroSVs<iColumns && pSingularValues[iNonZeroSVs] > zeroTolerance; ++iNonZeroSVs) ;
 
     // The rightmost part will be zeroed out in multiplication anyway.
-    V.resize(V.rows(), iColumns); 
+    V.resize(V.rows(), iColumns);
     // Calculate V*S+
     for (int r=0; r<V.rows(); ++r)
       {

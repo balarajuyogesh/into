@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -21,7 +21,7 @@
 
 namespace PiiDsp
 {
-  
+
   template <class ResultType, class T, class U>
   PiiMatrix<ResultType> filter(const PiiMatrix<T>& a,
                                const PiiMatrix<U>& b,
@@ -30,7 +30,7 @@ namespace PiiDsp
     PiiMatrix<U> func(Pii::flipped(b, Pii::Horizontally | Pii::Vertically));
     return convolution<ResultType>(a, func, mode);
   }
-  
+
   template <class ResultType, class T, class U>
   PiiMatrix<ResultType> correlation(const PiiMatrix<T>& a,
                                     const PiiMatrix<U>& b,
@@ -45,7 +45,7 @@ namespace PiiDsp
   {
     T operator() (T op1, T op2) const { return op2 != 0 ? op1 / op2 : 0; }
   };
-  
+
   template <class ResultType, class T, class U>
   PiiMatrix<ResultType> normalizedCorrelation(const PiiMatrix<T>& a,
                                               const PiiMatrix<U>& b,
@@ -80,14 +80,14 @@ namespace PiiDsp
       {
         rr = ar+br-1, rc = ac+bc-1;
         PiiMatrix<ResultType> result(rr,rc);
-    
+
         for (int brr=0; brr<br; ++brr)
           for (int arr=0; arr<ar; ++arr)
             {
               rdata = result.row(brr+arr);
               bdata = b.row(brr);
               adata = a.row(arr);
-              
+
               for (int i=0; i<bc; ++i)
                 for (int j=0; j<ac; ++j)
                   rdata[i+j] += ResultType(adata[j]) * ResultType(bdata[i]);
@@ -116,7 +116,7 @@ namespace PiiDsp
               {
                 adata = a.row(rrr + brr);
                 bdata = b.row(br-brr-1) - 1 + bc;
-                
+
                 for (int i = 0; i<rc; ++i)
                   for (int j = 0; j<bc; ++j)
                     rdata[i] += ResultType(adata[i+j]) * ResultType(bdata[-j]);
@@ -137,9 +137,9 @@ namespace PiiDsp
         if (rows & 1)
           rows2++;
       }
-    
+
     int cols1 = cols - cols2, rows1 = rows - rows2;
-    
+
     PiiMatrix<T> result(PiiMatrix<T>::uninitialized(rows, cols));
 
     // Top left, top right, bottom left, bottom right

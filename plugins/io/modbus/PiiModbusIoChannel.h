@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -33,7 +33,7 @@ class PII_MODBUSIODRIVER_EXPORT PiiModbusIoChannel : public PiiDefaultIoChannel
    * modbus.
    */
   Q_PROPERTY(int address READ address WRITE setAddress);
-  
+
 public:
   PiiModbusIoChannel(PiiModbusIoDriver *parent, int channelIndex);
 
@@ -41,7 +41,7 @@ public:
    * Change output state.
    */
   void setOutputState(bool state);
-  
+
   /**
    * Returns the current state of the channel.
    */

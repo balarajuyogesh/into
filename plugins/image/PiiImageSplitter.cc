@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -45,7 +45,7 @@ PiiImageSplitter::PiiImageSplitter() :
 void PiiImageSplitter::check(bool reset)
 {
   PII_D;
-  
+
   PiiDefaultOperation::check(reset);
 
   if (d->iWidth <= 0 && d->iHeight <= 0 && d->iColumns <= 0 && d->iRows <= 0)
@@ -78,9 +78,9 @@ template <class T> void PiiImageSplitter::split(const PiiVariant& obj)
   bool bUseXOffset = d->iXOffset >= 0, bUseYOffset = d->iYOffset >= 0;
   int iXOffset = bUseXOffset ? d->iXOffset : 0;
   int iYOffset = bUseYOffset ? d->iYOffset : 0;
-  
+
   d->iCurrentIndex = 0;
-  
+
   if (d->pLocationInput->isConnected())
     {
       PiiVariant obj = d->pLocationInput->firstObject();
@@ -166,7 +166,7 @@ template <class T> void PiiImageSplitter::split(const PiiVariant& obj)
 void PiiImageSplitter::checkHeight(int height, int imageHeight, int yOffset)
 {
   PII_D;
-  
+
   if (height < 1 || height <= -d->iYSpacing)
     PII_THROW(PiiExecutionException,
               tr("The height of a sub-image would be less than one pixel "
@@ -180,7 +180,7 @@ void PiiImageSplitter::checkHeight(int height, int imageHeight, int yOffset)
 void PiiImageSplitter::checkWidth(int width, int imageWidth, int xOffset)
 {
   PII_D;
-  
+
   if (width < 1 || width <= -d->iXSpacing)
     PII_THROW(PiiExecutionException,
               tr("The width of a sub-image would be less than one pixel "
@@ -189,7 +189,7 @@ void PiiImageSplitter::checkWidth(int width, int imageWidth, int xOffset)
   if (width > imageWidth - xOffset)
     PII_THROW(PiiExecutionException,
               tr("The input image does not have a sufficient number of columns."));
-  
+
 
 }
 

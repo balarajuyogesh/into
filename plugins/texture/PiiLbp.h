@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -35,7 +35,7 @@
  *
  * Usually, the local neighborhood in LBP is circular, parameterized
  * by the number of samples and the neighborhood radius as shown in
- * the picture below. (There are other alternatives, such as 
+ * the picture below. (There are other alternatives, such as
  * [random neighborhood](PiiRandomLbp).) Each pixel in the neighborhood
  * is compared to another pixel in the neighborhood. Depending on the
  * result of the comparison, one bit of a binary number is set to
@@ -52,7 +52,7 @@ class PII_TEXTURE_EXPORT PiiLbp
 public:
   class Histogram;
   class Image;
-  
+
   /**
    * The operation mode of the LBP. Possible values are:
    *
@@ -62,7 +62,7 @@ public:
    *
    * - `Uniform` - only "uniform" binary codes are accepted. Others
    * build up a single "miscellaneous" bin. This reduces the number of
-   * bins significantly and increases robustness in some applications. 
+   * bins significantly and increases robustness in some applications.
    * Uniform binary codes are binary numbers that have at most two
    * 1-to-0 or 0-to-1 transitions in their circularly interpreted
    * binary representation. For example, the 8-bit binary number
@@ -71,7 +71,7 @@ public:
    * - `RotationInvariant` - each code is rotated to its minimum
    * value so that rotation of the image does not (ideally) change the
    * result. This reduces the number of codes. For example, the 8-bit
-   * codes 11100000, 01110000, and 00111000 would all become 00000111. 
+   * codes 11100000, 01110000, and 00111000 would all become 00000111.
    *
    * - `UniformRotationInvariant` - like `RotationInvariant`, but
    * only uniform codes are accepted. This results in a short,
@@ -80,12 +80,12 @@ public:
    * - `Symmetric` - An LBP operator that compares opposing pairs of
    * pixels in a circular neighborhood and ignores the center. The
    * advantage is that only N/2 comparisons per pixel are needed
-   * compared to N comparisons in the original LBP operator. 
+   * compared to N comparisons in the original LBP operator.
    * Furthermore, the length of the (standard) feature vector will be
    * \(2^{N/2}\) instead of \(2^N\), which makes classification
    * faster. Unfortunately, there is no free lunch. The symmetric
    * version cannot be made rotation invariant as easily as the basic
-   * LBP. Its classification accuracy may also be somewhat worse. 
+   * LBP. Its classification accuracy may also be somewhat worse.
    * Uniform patterns and rotation invariance loose their meaning with
    * the symmetric LBP.
    */
@@ -116,7 +116,7 @@ public:
    * Destroy the LBP operator.
    */
   ~PiiLbp();
-  
+
   /**
    * Sets LBP parameters. Calling this function will update mapping
    * tables and interpolation coefficients.
@@ -132,9 +132,9 @@ public:
    * @param mode the operation mode.
    *
    * @param interpolation the type of interpolation. Due to the
-   * circular neighborhood, not all samples fall exactly on pixels. 
+   * circular neighborhood, not all samples fall exactly on pixels.
    * For such samples, interpolation is needed. Supported
-   * interpolation types are `NearestNeighborInterpolation` and 
+   * interpolation types are `NearestNeighborInterpolation` and
    * `LinearInterpolation`. The default is nearest neighbor.
    */
   void setParameters(int samples, double radius, Mode mode, Pii::Interpolation interpolation);
@@ -165,7 +165,7 @@ public:
    * function is an entry point that selects the appropriate optimized
    * LBP implementation based on the current mode.
    *
-   * The template parameter `T` is for the primitive type. 
+   * The template parameter `T` is for the primitive type.
    * `MatrixClass` is a special class derived from PiiMatrix<int> that
    * has a known structure. By changing this class one can use the LBP
    * operator to create either histograms or feature images. See
@@ -320,14 +320,14 @@ private:
   public:
     Data(int samples, double radius, Mode mode, Pii::Interpolation interpolation);
     ~Data();
-    
+
     int iSamples;
     double dRadius;
     Mode mode;
     Pii::Interpolation interpolation;
     unsigned short *pLookup;
     InterpolationPoint *pPoints;
-    
+
     void update();
   } *d;
 };

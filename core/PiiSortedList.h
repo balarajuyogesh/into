@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -21,7 +21,7 @@
 /**
  * A list that maintains its elements in sorted order. The interface
  * of this class is identical to QList except that there are no
- * functions that would allow inserting elements in arbitrary order. 
+ * functions that would allow inserting elements in arbitrary order.
  * One can insert elements using the [insert()] function or the += and
  * << operators.
  *
@@ -46,7 +46,7 @@ public:
   typedef typename QList<T>::difference_type difference_type;
   typedef typename QList<T>::size_type size_type;
   typedef typename QList<T>::value_type value_type;
-  
+
   PiiSortedList() {}
   PiiSortedList(Less less, Equals equals) : less(less), equals(equals) {}
   PiiSortedList(const PiiSortedList& other) : QList<T>(other) {}
@@ -81,7 +81,7 @@ public:
 
   template <class U> bool endsWith(const U& value) const { return !isEmpty() && equals(last(), value); }
   template <class U> bool startsWith(const U& value) const { return !isEmpty() && equals(first(), value); }
-  
+
   QList<T> toList() const { return QList<T>(*this); }
   PiiSortedList mid(int pos, int length=-1)
   {
@@ -131,7 +131,7 @@ public:
   {
     insert(static_cast<QList<T>&>(other));
   }
-  
+
   template <class U> int lastIndexOf(const U& value, int from = -1) const
   {
     if (isEmpty()) return -1;
@@ -183,7 +183,7 @@ public:
   bool operator!= (const QList<T>& other) const { return !*this == other; }
   bool operator== (const PiiSortedList<T>& other) const {  return other == static_cast<const QList<T>&>(this); }
   bool operator!= (const PiiSortedList<T>& other) const {  return other != static_cast<const QList<T>&>(this); }
-  
+
 private:
   PiiSortedList(const QList<T>& other, Less less, Equals equals) :
     QList<T>(other),

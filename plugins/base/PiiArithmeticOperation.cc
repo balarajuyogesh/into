@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -32,7 +32,7 @@ PiiArithmeticOperation::PiiArithmeticOperation() :
   addSocket(d->pInput0 = new PiiInputSocket("input0"));
   addSocket(d->pInput1 = new PiiInputSocket("input1"));
   d->pInput1->setOptional(true);
-  
+
   addSocket(d->pOutput = new PiiOutputSocket("output"));
 }
 
@@ -47,7 +47,7 @@ void PiiArithmeticOperation::check(bool reset)
 {
   PiiDefaultOperation::check(reset);
   PII_D;
-  
+
   // If the second input is not connected and constant is not set, we
   // cannot do anything.
   d->bInput1Connected = d->pInput1->isConnected();
@@ -78,7 +78,7 @@ void PiiArithmeticOperation::process()
     PII_THROW(PiiExecutionException, tr("Cannot perform arithmetic with boolean values."));
 
   int iResultType = iPrimitive0;
-  
+
   // If both types are the same, no conversion is needed.
   if (iPrimitive0 != iPrimitive1)
     {
@@ -181,7 +181,7 @@ template <class T> void PiiArithmeticOperation::calculate(const PiiMatrix<T>& ob
   catch (PiiMathException& ex)
     {
       PII_THROW(PiiExecutionException, ex.message());
-    }  
+    }
 }
 
 template <class T, class U> void PiiArithmeticOperation::calculate(const T& obj0, const U& obj1)

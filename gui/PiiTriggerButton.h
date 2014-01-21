@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,15 +28,15 @@ class QToolButton;
  */
 class PII_GUI_EXPORT PiiTriggerButton : public QWidget
 {
-  Q_OBJECT  
+  Q_OBJECT
 
   /**
-   * Determines the buttons to display. The default `Left` | 
+   * Determines the buttons to display. The default `Left` |
    * `Right`, which means that both arrow buttons will be shown.
    */
   Q_PROPERTY(Buttons buttons READ buttons WRITE setButtons);
   Q_FLAGS(Buttons);
-  
+
 public:
   /**
    * Buttons to show.
@@ -46,7 +46,7 @@ public:
    */
   enum Button { Left = 1, Right = 2 };
   Q_DECLARE_FLAGS(Buttons, Button);
-  
+
   PiiTriggerButton(Buttons buttons = QFlags<Button>(Left) | Right);
   ~PiiTriggerButton();
 

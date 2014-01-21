@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -46,7 +46,7 @@ namespace PiiSerialization
 
     if (iRows < 0 || iCols < 0)
       PII_SERIALIZATION_ERROR(InvalidDataFormat);
-    
+
     mat.resize(iRows, iCols);
 
     unsigned int uiBytes = iCols*sizeof(T);

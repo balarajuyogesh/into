@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -71,7 +71,7 @@ public:
   PiiVersionNumber(const PiiVersionNumber& other);
 
   ~PiiVersionNumber();
-  
+
   /**
    * Parse a version number string and set the version number fields
    * accordingly.
@@ -163,7 +163,7 @@ private:
   public:
     Data();
     Data(const Data& other);
-    
+
     QVector<int> vecParts;
     QString strRevision;
     QStringList lstRevisionParts;

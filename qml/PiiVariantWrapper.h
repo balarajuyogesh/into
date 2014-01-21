@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,19 +24,19 @@
 class PiiVariantValueType : public QQmlValueTypeBase<PiiVariant>
 {
   Q_OBJECT
-  
+
 public:
   PiiVariantValueType(QObject* parent = 0) :
     QQmlValueTypeBase<PiiVariant>(qMetaTypeId<PiiVariant>(), parent)
   {}
-  
+
   virtual QString toString() const { return PiiYdin::convertToQString(v); }
   virtual bool isEqual(const QVariant& /*other*/) const
   {
     // TODO: implement this
     return false;
   }
-  
+
 public slots:
   int toInt() const
   {

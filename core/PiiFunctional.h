@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -68,7 +68,7 @@ namespace Pii
      */
     typedef Result result_type;
   };
-  
+
   /**
    * An stl-compatible model for an adaptable binary function.
    */
@@ -188,14 +188,14 @@ namespace Pii
   };
 
   /**
-   * An adaptable unary function that casts its argument from type 
+   * An adaptable unary function that casts its argument from type
    * `From` to type `To`.
    */
   template <class From, class To> struct Cast : public UnaryFunction<From,To>
   {
     To operator() (const From& value) const { return To(value); }
   };
-  
+
   /**
    * A unary function adaptor that makes the result of one unary
    * function the argument of another. If function 1 is f(x) and
@@ -281,7 +281,7 @@ namespace Pii
     public BinaryFunction<typename AdaptableUnaryFunction1::argument_type,
                           typename AdaptableUnaryFunction2::argument_type,
                           typename AdaptableBinaryFunction::result_type>
-    
+
   {
   public:
     /**
@@ -322,7 +322,7 @@ namespace Pii
     AdaptableUnaryFunction2 thirdOp;
   };
 
-  
+
   /**
    * Construct a composed unary function (BinaryCompose) out of an
    * adaptable binary function and two adaptable unary functions.
@@ -377,7 +377,7 @@ namespace Pii
      * Set the value of the internal counter.
      */
     void setCount(int count) { _iCount = count; }
-    
+
     /**
      * Get value of the increment.
      */
@@ -416,7 +416,7 @@ namespace Pii
   {
     U operator()(const T&, const U& value2) const { return value2; }
   };
-  
+
   /**
    * A unary function (predicate) that always returns `true`.
    */
@@ -424,7 +424,7 @@ namespace Pii
   {
     bool operator()(const T&) const { return true; }
   };
-  
+
   /**
    * A unary function (predicate) that always returns `false`.
    */
@@ -440,7 +440,7 @@ namespace Pii
     typedef typename IfClass<IsConst<Object>,
                              ReturnType (Object::*)(Args...),
                              ReturnType (Object::*)(Args...) const>::Type MemberType;
-      
+
     MemberFunction(Object* object, MemberType member) :
       pObject(object), pMember(member) {}
     MemberFunction(Object& object, MemberType member) :
@@ -449,7 +449,7 @@ namespace Pii
     template <class... Params>
     ReturnType operator() (Params&&... params) const { return (pObject->*pMember)(std::forward<Params>(params)...); }
     //ReturnType operator() (Args&&... args) const { return (pObject->*pMember)(std::forward<Args>(args)...); }
-  
+
     Object* pObject;
     MemberType pMember;
   };
@@ -491,10 +491,10 @@ namespace Pii
   }
 
   template <std::size_t... Indices> struct IndexList {};
-  
+
   template <std::size_t N, std::size_t... Indices>
   struct BuildIndices : BuildIndices<N-1, N-1, Indices...> {};
-  
+
   template <std::size_t... Indices>
   struct BuildIndices<0, Indices...> : IndexList<Indices...> {};
 
@@ -564,7 +564,7 @@ namespace Pii
   {
     function(std::get<I>(std::forward<Tuples>(tuples))...);
   }
-  
+
   template <class Function, class... Tuples, std::size_t... Indices>
   void callWithIndexedTuples(Function function,
                              IndexList<Indices...>,
@@ -572,7 +572,7 @@ namespace Pii
   {
     PII_FOREACH_TEMPARG(callWithIthMember<Indices>(function,
                                                    std::forward<Tuples>(tuples)...));
-      
+
   }
 
   /**
@@ -626,7 +626,7 @@ namespace Pii
   {
     typedef MakeTupleHelper<N-1, Arg1, Arg1, Args...> SuperType;
     typedef typename SuperType::Type Type;
-    
+
     static typename SuperType::Type create(Arg1&& arg1, Args&&... args)
     {
       return SuperType::create(std::forward<Arg1>(arg1),
@@ -648,7 +648,7 @@ namespace Pii
   {
     return MakeTupleHelper<N,T>::create(std::forward<T>(value));
   }
-  
+
 #endif
   /// @endgroup
 };

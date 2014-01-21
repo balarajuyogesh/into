@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -51,7 +51,7 @@ namespace Pii
 
     if (iMaxCols == 0)
       return PiiMatrix<double>();
-    
+
     // Store values into the result matrix
     PiiMatrix<double> result(dlstRows.size(), iMaxCols);
     for (int r=0; r<dlstRows.size(); r++)

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -167,9 +167,9 @@ namespace PiiClassification
     if (k == 0) // empty set
       return NAN;
     PiiSmartPtr<double[]> pClosestLabels = new double[k];
-    
+
     int iMaxMatches = 0, iBestLabel = -1;
-    
+
     // Store class labels corresponding to the closest samples.
     for (int i=0; i<k; ++i)
       pClosestLabels[i] = labels[lstClosest[i].second];
@@ -218,13 +218,13 @@ namespace PiiClassification
     SampleSet resultSet(PiiSampleSet::create<SampleSet>(0, iFeatures));
     if (int(k) >= iSamples)
       return resultSet;
-    
+
     // First initialize the centroids by random selection
     for (int i=k; i--; )
       // OK, this is a bad thing, but we don't need a really good random
       // number here.
       PiiSampleSet::append(resultSet, PiiSampleSet::sampleAt(samples,rand() % iSamples));
-    
+
     // Allocate storage for temporary mean vectors
     SampleSet centroidSet(resultSet);
 
@@ -257,7 +257,7 @@ namespace PiiClassification
         ++iterationCount;
       }
     return resultSet;
-  } 
+  }
 
   template <class SampleSet> SampleSet createRandomSampleSet(int samples,
                                                              int features,
@@ -269,7 +269,7 @@ namespace PiiClassification
     double dScale = dRange/RAND_MAX;
 
     SampleSet result = PiiSampleSet::create<SampleSet>(samples, features);
-    
+
     for (int s=0; s<samples; ++s)
       {
         typename PiiSampleSet::Traits<SampleSet>::FeatureIterator sample =

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,7 +26,7 @@ namespace PiiYdin
   {
     return PiiColorQImage::create(obj.valueAs<PiiMatrix<T> >());
   }
-  
+
   template <class T> QImage* createGrayQImage(const PiiVariant& obj)
   {
     return PiiGrayQImage::create(obj.valueAs<PiiMatrix<T> >());

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,19 +24,19 @@
 class MainWindow : public DemoMainWindow, private Ui::MainWindow
 {
   Q_OBJECT
-  
+
 public:
   MainWindow(QWidget *parent = 0);
 
 signals:
   void imageChanged(PiiVariant);
-  
+
 private slots:
   void updateValues();
 
 private:
   void init();
-  
+
   PiiCloudFractalGenerator _fractalGenerator;
 };
 

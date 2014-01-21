@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2014.
  * All rights reserved.
  *
@@ -114,7 +114,7 @@ namespace PiiFuncOpPrivate
       else
         value = (obj->*getter)();
     }
-    
+
     void emitValue(typename ParamTraits<T>::ValueType&) {}
 
     T (Object::* getter)();
@@ -152,7 +152,7 @@ namespace PiiFuncOpPrivate
 
   template <class ReturnType, class T, class... Args>
   ReturnType resolveType(ReturnType (T::*)(Args...));
-  
+
   template <class T>
   decltype(resolveReturnType(&T::operator())) resolveReturnType(T);
 
@@ -228,12 +228,12 @@ protected:
   /// @hide
   typedef PiiFunctionOperation<Function, Args...> ThisType;
   typedef Function FunctionType;
-  
+
   template <class T> struct ParamHolder
   {
     typedef typename PiiFuncOpPrivate::ParamHolder<ThisType, T>::Type Type;
   };
-  
+
   typedef std::tuple<typename ParamHolder<Args>::Type...> HolderPack;
   typedef std::tuple<typename PiiFuncOpPrivate::ParamTraits<Args>::ValueType...> ValuePack;
   typedef typename PiiFuncOpPrivate::ResultOf<Function,Args...>::Type ReturnType;
@@ -250,7 +250,7 @@ protected:
     {}
 
     void addReturnOutput(ThisType* op) const { op->addSocket(pReturnOutput); }
-    
+
     void callAndEmit(typename PiiFuncOpPrivate::ParamTraits<Args>::ValueType&... values) const
     {
       pReturnOutput->emitObject(function(PiiFuncOpPrivate::ParamTraits<Args>::toParam(values)...));
@@ -264,7 +264,7 @@ protected:
     PiiOutputSocket* pReturnOutput;
     HolderPack holderPack;
   };
-  
+
   class VoidData : public PiiDefaultOperation::Data
   {
   public:
@@ -280,7 +280,7 @@ protected:
     {
       function(PiiFuncOpPrivate::ParamTraits<Args>::toParam(values)...);
     }
-    
+
     // If "Function" is a function pointer type, store it as a
     // pointer. Otherwise store the callable object.
     typename std::conditional<std::is_function<Function>::value,
@@ -316,17 +316,17 @@ protected:
                         Pii::makeTuple<sizeof...(Args)>(this),
                         d->holderPack,
                         values);
-    
+
     // Call the actual function and emit its return value (if any).
     // TODO: const handling
     Pii::callWithTuple(Pii::memberFunction(d, &Data::callAndEmit), values);
-    
+
     // Emit all other output arguments.
     Pii::callWithTuples(PiiFuncOpPrivate::ValueEmitter(),
                         d->holderPack,
                         values);
   }
-  
+
 private:
   friend class PiiFuncOpPrivate::SocketAdder;
 };
@@ -346,7 +346,7 @@ namespace PiiFuncOpPrivate
   // callable object resolver below.
   template <class ReturnType, class T, class... Args>
   PiiFunctionOperation<T, Args...> resolveType(ReturnType (T::*)(Args...));
-  
+
   // Resolves any other callable object type. Uses the object type as
   // "Function".
   template <class T>

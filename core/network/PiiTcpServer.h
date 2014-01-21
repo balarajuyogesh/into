@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -66,7 +66,7 @@ class PII_NETWORK_EXPORT PiiTcpServer : public PiiNetworkServer
   Q_PROPERTY(int port READ port WRITE setPort);
 
   /**
-   * The number of milliseconds the server will wait for client input. 
+   * The number of milliseconds the server will wait for client input.
    * If nothing has been received within the time-out period, the
    * socket device (see [createSocket()]) will return with zero bytes
    * read. It is up to the protocol implementation to deal with
@@ -81,7 +81,7 @@ class PII_NETWORK_EXPORT PiiTcpServer : public PiiNetworkServer
    */
   Q_PROPERTY(Encryption encryption READ encryption WRITE setEncryption);
   Q_ENUMS(Encryption);
- 
+
 public:
   /**
    * Supported encryption modes.
@@ -91,7 +91,7 @@ public:
    * - `SslEncryption` - the connection will be encrypted with SSLv3.
    */
   enum Encryption { NoEncryption = 0, SslEncryption };
-  
+
   /**
    * Create a new TCP server that communicates with its clients with
    * the given application layer protocol and encryption mode.
@@ -99,13 +99,13 @@ public:
   PiiTcpServer(PiiNetworkProtocol* protocol, Encryption = NoEncryption);
 
   ~PiiTcpServer();
-  
+
   /**
-   * Creates a new QTcpSocket or QSslSocket and assigns 
+   * Creates a new QTcpSocket or QSslSocket and assigns
    * `socketDescriptor` to it.
    */
   QIODevice* createSocket(PiiGenericSocketDescriptor socketDescriptor);
-  
+
   void setBindAddress(const QString& bindAddress);
   QString bindAddress() const;
   void setPort(int port);
@@ -131,7 +131,7 @@ protected:
    * @see QTcpServer::listen()
    */
   bool startListening();
-  
+
   void stopListening();
 
 private:
@@ -139,23 +139,23 @@ private:
   {
   public:
     EntryPoint(PiiTcpServer* owner);
-    
+
   protected:
     /// Calls PiiTcpServer::incomingConnection().
     void incomingConnection(PiiNetwork::SocketDescriptorType sockedDescriptor);
-    
+
   private:
     PiiTcpServer* _pOwner;
   };
-  
+
   friend class EntryPoint;
-  
+
   /// @internal
   class Data : public PiiNetworkServer::Data
   {
   public:
     Data(PiiNetworkProtocol* protocol, PiiTcpServer* owner, Encryption encryption);
-    
+
     EntryPoint server;
     QString strBindAddress;
     int iPort;

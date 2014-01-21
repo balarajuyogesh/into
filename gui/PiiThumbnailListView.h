@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,11 +24,11 @@
 class PII_GUI_EXPORT PiiThumbnailListView : public QListView
 {
   Q_OBJECT
-  
+
 public:
   PiiThumbnailListView(QWidget *parent = 0);
   ~PiiThumbnailListView();
-  
+
   /**
    * Sets the model for the view present.
    */
@@ -39,18 +39,18 @@ public:
    * is no any item selected, return empty string.
    */
   QString currentThumbnail() const;
-  
+
 signals:
   void removeThumbnail(const QModelIndex&);
   void thumbnailActivated(const QString&);
-  
+
 protected:
   void mousePressEvent(QMouseEvent *e);
 
 private slots:
   void removeCurrent();
   void itemSelected(const QModelIndex& index);
-  
+
 private:
   void showMenu(const QPoint& point);
 

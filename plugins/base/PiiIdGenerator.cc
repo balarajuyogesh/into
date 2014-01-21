@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,11 +26,11 @@ PiiIdGenerator::PiiIdGenerator() :
 {
   PII_D;
   d->pTriggerInput = new PiiInputSocket("trigger");
-  addSocket(d->pTriggerInput);  
+  addSocket(d->pTriggerInput);
 
 
   d->pIdOutput = new PiiOutputSocket("id");
-  addSocket(d->pIdOutput);  
+  addSocket(d->pIdOutput);
 }
 
 void PiiIdGenerator::process()

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -74,7 +74,7 @@ void PiiNetworkInputOperation::stop()
     {
       setState(d->bNeedToWaitResponse ? Stopping : Stopped);
       sendTag(PiiYdin::createStopTag());
-    }  
+    }
 }
 
 void PiiNetworkInputOperation::pause()
@@ -96,10 +96,10 @@ void PiiNetworkInputOperation::check(bool reset)
   PiiNetworkOperation::check(reset);
 
   d->bNeedToWaitResponse = d->bBodyConnected || d->lstInputNames.size() > 0;
-  
+
   if (d->lstOutputNames.size() == 0)
     PII_THROW(PiiExecutionException, tr("At least one output must be configured."));
-  
+
   QString strUri = d->strUri.isEmpty() ? "/" + objectName() : d->strUri;
   if (strUri.isEmpty())
     PII_THROW(PiiExecutionException, tr("The URI cannot be empty."));
@@ -185,7 +185,7 @@ void PiiNetworkInputOperation::handleRequest(const QString& /*uri*/,
           emitOutputValues();
 
           bool bTimedOut = false;
-          
+
           // If there are connected inputs, must wait for response now
           if (d->bNeedToWaitResponse)
             {
@@ -244,7 +244,7 @@ void PiiNetworkInputOperation::replyToClient(PiiHttpDevice* h)
 {
   PII_D;
   h->setStatus(d->iStatusCode);
-  
+
   if (d->bBodyConnected)
     {
       h->startOutputFiltering(new PiiStreamBuffer);
@@ -256,13 +256,13 @@ void PiiNetworkInputOperation::replyToClient(PiiHttpDevice* h)
     {
       h->startOutputFiltering(new PiiStreamBuffer);
       h->setHeader(pContentNameHeader, d->lstInputNames[0]);
-      
+
       // Everything but QStrings are marshalled with the standard
       // serialization mechanism.
       if (d->lstResponseValues[0].type() != PiiYdin::QStringType)
         {
           h->setHeader("Content-Type", PiiNetwork::pTextArchiveContentType);
-          
+
           PiiGenericTextOutputArchive outputArchive(h);
           outputArchive << d->lstResponseValues[0];
         }
@@ -277,7 +277,7 @@ void PiiNetworkInputOperation::replyToClient(PiiHttpDevice* h)
     {
       QString strBoundary("243F6A8885A308D31319");
       h->setHeader("Content-Type", "multipart/mixed; boundary=\"" + strBoundary + "\"");
-      
+
       for (int i=0; i<d->lstResponseValues.size(); ++i)
         {
           PiiMultipartStreamBuffer* bfr = new PiiMultipartStreamBuffer(strBoundary);

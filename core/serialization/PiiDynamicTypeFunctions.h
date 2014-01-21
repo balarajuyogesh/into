@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -150,7 +150,7 @@ template <class T> bool PiiSerializer<Archive>::serialize(const char* className,
     }
   else
     PiiSerialization::serialize(archive, const_cast<typename Pii::ToNonConst<T>::Type &>(value), version);
-  
+
   return true;
 }
 

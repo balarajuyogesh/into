@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@
  * ------
  *
  * @in inputX - any number of input matrices. X is a zero-based index.
- * 
+ *
  * Outputs
  * -------
  *
@@ -52,7 +52,7 @@ class PiiMatrixCombiner : public PiiDefaultOperation
    * The number of input sockets. Default is 2.
    */
   Q_PROPERTY(int dynamicInputCount READ dynamicInputCount WRITE setDynamicInputCount);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiMatrixCombiner();

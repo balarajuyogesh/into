@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -31,7 +31,7 @@ public:
     iSignalInterval(0),
     iTimerId(-1)
   {}
-  
+
   PiiVariant varSavedObject;
   bool bDiscardControlObjects;
   int iSignalInterval;

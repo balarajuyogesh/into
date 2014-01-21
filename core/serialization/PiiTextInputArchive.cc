@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -40,7 +40,7 @@ PiiTextInputArchive::PiiTextInputArchive(QIODevice* d) : QTextStream(d)
     {
       if (iVersion > PII_ARCHIVE_VERSION)
         PII_SERIALIZATION_ERROR(ArchiveVersionMismatch);
-        
+
       setMajorVersion(iVersion);
       // Read text archive version
       *this >> iVersion;

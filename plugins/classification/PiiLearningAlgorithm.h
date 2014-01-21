@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -31,7 +31,7 @@
  * separating classes (PiiPerceptron), or clustering data (PiiSom).
  *
  * Learning algorithms can be categorized in a number of ways. This
- * interface makes a distinction between on-line and batch algorithms. 
+ * interface makes a distinction between on-line and batch algorithms.
  * Algorithms that don't require all training samples to be present at
  * once as a batch (so-called on-line algorithms such as sequential
  * SOM) only need to implement the [learnOne()] function. If the
@@ -49,7 +49,7 @@ template <class SampleSet> class PiiLearningAlgorithm
 {
 public:
   typedef SampleSet SampleSetType;
-  
+
   /**
    * Create a new learning algorithm instance.
    */
@@ -72,7 +72,7 @@ public:
    * number of samples in *samples*.
    *
    * @param weights weights for individual samples. This value is used
-   * only if the learning algorithm is capable of weighted learning. 
+   * only if the learning algorithm is capable of weighted learning.
    * If this value is given, the length of the list must be equal to
    * the number of samples in *samples*.
    *
@@ -84,7 +84,7 @@ public:
                      const QVector<double>& labels = QVector<double>(),
                      const QVector<double>& weights = QVector<double>());
 
-  
+
   /**
    * Feeds a feature vector to the learning algorithm. The learning
    * algorithm adapts its internal state according to the feature
@@ -103,7 +103,7 @@ public:
    * @return classification for the sample. Some classifiers are able
    * to classify samples during the learning process with no
    * additional computational effort. They return the current
-   * classification of the feture vector. Others should return `NaN`. 
+   * classification of the feture vector. Others should return `NaN`.
    * The default implementation returns `NaN`.
    */
   virtual double learnOne(typename PiiSampleSet::Traits<SampleSet>::ConstFeatureIterator featureVector,

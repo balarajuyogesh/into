@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -38,7 +38,7 @@
  * (x,y,w,h) whose width and height are used as the mask size. If the
  * size is 1-by-2, the input is treated as a size (w,h). Either this
  * or `trigger` needs to be connected.
- * 
+ *
  * Outputs
  * -------
  *
@@ -74,7 +74,7 @@ public:
   QSize maskSize() const;
 
   void check(bool reset);
-  
+
 protected:
   void process();
 

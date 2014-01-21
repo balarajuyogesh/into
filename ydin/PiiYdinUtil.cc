@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -72,7 +72,7 @@ namespace PiiYdin
           iMaxQueueLength = pSocket->queueLength();
       }
     ++iMaxQueueLength;
-    
+
     for (int i=0; i<outputs.size(); i++)
       {
         QString name = outputs[i]->objectName();
@@ -128,7 +128,7 @@ namespace PiiYdin
     result += QString("%0+%1+\n").arg("", iMaxQueueLength).arg('-', iMaxSize+3, QChar('-'));
     return result;
   }
-  
+
   void dumpOperation(PiiOperation *op, IllustrationFlags flags, int level)
   {
     PiiOperationCompound* compound = qobject_cast<PiiOperationCompound*>(op);
@@ -141,11 +141,11 @@ namespace PiiYdin
           strHeader += QString(" ") + PiiOperation::stateName(op->state());
 
         qDebug("%s>>>>>>>> %s\n", qPrintable(padding), qPrintable(strHeader));
-        
+
         QList<PiiOperation*> kids = compound->childOperations();
         for (int i=0; i<kids.size(); ++i)
           dumpOperation(kids[i], flags, level + 1);
-        
+
         qDebug("%s<<<<<<<< %s\n", qPrintable(padding), qPrintable(strHeader));
       }
     else

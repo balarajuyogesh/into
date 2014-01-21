@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -32,7 +32,7 @@ namespace PiiDsp
    * @return the filter coefficients as a row matrix
    **/
   PII_DSP_EXPORT PiiMatrix<double> daubechiesScalingFilter(int index);
-  
+
   /**
    * Known wavelet families. Families currently known are:
    *
@@ -42,7 +42,7 @@ namespace PiiDsp
    * - Daubechies - Daubechies wavelet family
    */
   enum WaveletFamily { Haar, Daubechies };
-  
+
   /**
    * Compute a quadrature mirror filter for a filter. The qmf is a
    * reversed version of the input filter with every second item
@@ -107,7 +107,7 @@ namespace PiiDsp
   template <class T> QList<PiiMatrix<T> > dwt(const PiiMatrix<T>& mat,
                                               WaveletFamily wavelet = Haar,
                                               int familyMember = 1);
-  
+
   /**
    * Get the wavelet scaling filter for a certain mother wavelet.
    *
@@ -117,7 +117,7 @@ namespace PiiDsp
    * discrete wavelet families are supported.
    */
   PII_DSP_EXPORT PiiMatrix<double> scalingFilter(WaveletFamily wavelet, int member = 1);
-    
+
   /**
    * Perform a dyadic downsampling on the input matrix.
    *

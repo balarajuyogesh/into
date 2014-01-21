@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -25,7 +25,7 @@ class TestPiiReadWriteLock : public QObject
 
 public:
   TestPiiReadWriteLock();
-  
+
 private slots:
   void threaded();
   void recursive();

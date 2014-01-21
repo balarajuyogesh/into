@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -46,7 +46,7 @@ void TestPiiDsp::fft()
     QVERIFY(Pii::almostEqual(Pii::real(fft.inverseFft(fft.forwardFft(input))),
                              input,
                              1e-100));
-  } 
+  }
   {
     PiiFft<double> fft;
     PiiMatrix<double> input(4, 4,
@@ -72,7 +72,7 @@ void TestPiiDsp::fft()
                            8.0, 7.0, 6.0, 5.0,
                            -1.0, 2.0, -4.0, -8.0,
                            -9.0, -6.0, -3.0, 0.0);
-    
+
     QVERIFY(Pii::almostEqual(Pii::real(fft.inverseFft(fft.forwardFft(input))),
                                  input,
                                  1e-50));
@@ -157,7 +157,7 @@ void TestPiiDsp::findPeaks()
       -0.0014534,0.0048911,0.0080175,-0.0074851,0.0042732,8.6256e-05,0.0010314,-0.0027769,-0.0032541,-0.015478,
       0.011456,-0.01045,0.0071717,-0.021191,-0.0084446,-0.020149,0.016979,0.0072331,-0.015741,-0.010742
     };
-  
+
   PiiMatrix<double> matData(1,200, (void*)aData, Pii::RetainOwnership);
 
   QList<PiiDsp::Peak> lstPeaks = PiiDsp::findPeaks(matData,
@@ -181,7 +181,7 @@ void TestPiiDsp::findPeaks()
   QVERIFY(Pii::abs(lstPeaks[2].height - 1.65) < 1e-2);
 
   double dStep = 0.2;
-  
+
   PiiMatrix<double> matX(1,200);
   for (int i=0; i<200; ++i)
     matX(0,i) = dStep * i;
@@ -191,7 +191,7 @@ void TestPiiDsp::findPeaks()
                                1e-3, // slopeThreshold
                                5,    // smoothWidth
                                25);  // windowWidth
-  
+
   QCOMPARE(lstPeaks.size(), 3);
 
   QCOMPARE(lstPeaks[0].dataIndex, 44);

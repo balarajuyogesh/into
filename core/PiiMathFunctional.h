@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -56,7 +56,7 @@ namespace Pii
   {
     T operator() (const std::complex<T>& value) const { return std::norm(value); }
   };
-  
+
   /**
    * An adaptable unary function that returns the complex conjugate of
    * a real number (which is the argument itself) or a complex number.
@@ -65,7 +65,7 @@ namespace Pii
   {
     T operator() (const T& value) const { return ::Pii::conj(value); }
   };
-  
+
   /**
    * An adaptable binary function that raises the absolute value of its
    * first argument to the power of the second argument.
@@ -344,10 +344,10 @@ namespace Pii
   {
     T operator() (const T& value) const { return floor(value); }
   };
-  
+
   /**
    * An adaptable unary function that rounds its argument to the closest
-   * integer. Template parameter `T` determines the input type and 
+   * integer. Template parameter `T` determines the input type and
    * `U` the output type. The output type can be omitted as it defaults
    * to the input type.
    */
@@ -404,7 +404,7 @@ namespace Pii
      * the given value.
      */
     Mean(U initialValue = 0) : _accumulator(initialValue), _iInvocations(0) {}
-    
+
     /**
      * Increment the invocation count and returns the current sum of
      * values.
@@ -432,7 +432,7 @@ namespace Pii
      * Returns the sum of all values so far.
      */
     U sum() const { return _accumulator; }
-    
+
   private:
     mutable U _accumulator;
     mutable int _iInvocations;
@@ -446,7 +446,7 @@ namespace Pii
   {
     T operator() (const T& arg) const { return arg; }
   };
-  
+
   /**
    * A unary function that returns the real part of its argument. This
    * specialization returns the real part of a complex number.
@@ -457,16 +457,16 @@ namespace Pii
   };
 
   /**
-   * A unary function that returns the imaginary part of its argument. 
+   * A unary function that returns the imaginary part of its argument.
    * The default implementation returns zero.
    */
   template <class T> struct Imag : public Pii::UnaryFunction<T>
   {
     T operator() (const T&) const { return 0; }
   };
-  
+
   /**
-   * A unary function that returns the imaginary part of its argument. 
+   * A unary function that returns the imaginary part of its argument.
    * This specialization returns the imaginary part of a complex
    * number.
    */
@@ -523,9 +523,9 @@ namespace Pii
       : _fuItem(fItem), _fuMem(fMem), _Mem(initMem) {}
 
     /**
-     * Calls unary functor FuItem on (matrix) element, and passes its return value to 
+     * Calls unary functor FuItem on (matrix) element, and passes its return value to
      * second argument of binary functor FuMemory, whose return value in turn is set as
-     * internal memory. 
+     * internal memory.
      */
     void operator()(const typename FuItem::argument_type& val) {_Mem = _fuMem(_Mem, _fuItem(val));}
 

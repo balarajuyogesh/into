@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -48,7 +48,7 @@ public:
   PiiRemoteMetaObject(QObject* object, const QString& serverUri);
 
   ~PiiRemoteMetaObject();
-  
+
   /// @hide
   void connectSignal(const char* signal);
   void disconnectSignal(const char* signal);
@@ -92,10 +92,10 @@ protected:
 
   void decodePushedData(const QString& sourceId, const QByteArray& data);
   void serverUriChanged(const QString& serverUri);
-  
+
 private:
   inline static QString tr(const char* s) { return QCoreApplication::translate("PiiRemoteMetaObject", s); }
-  
+
   int metaCall(QMetaObject::Call call, int id, void** arguments);
   void createMetaObject();
   void collectProperties();

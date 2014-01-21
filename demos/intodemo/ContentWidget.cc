@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,14 +30,14 @@ static QPixmap createShadow(const QPixmap& pixmap, const QColor& backgroundColor
 {
   int iWidth = pixmap.width();
   int iHeight = pixmap.height()/2;
-  
+
   QImage shadowImage(pixmap.toImage().mirrored(false, true).copy(0,0,iWidth, iHeight));
-  
+
   QColor color1 = backgroundColor;
   QColor color2 = backgroundColor;
   color1.setAlpha(230);
   color2.setAlpha(245);
-  
+
   QLinearGradient gradient(QPointF(0,0), QPointF(0,iHeight));
   gradient.setColorAt(0, color1);
   gradient.setColorAt(0.3, color2);
@@ -57,7 +57,7 @@ ContentWidget::ContentWidget(QWidget *parent, Qt::WindowFlags flags) :
   _bMacOS(false)
 {
   setupUi(this);
-  
+
   connect(_pQuitButton, SIGNAL(clicked()), this, SLOT(quitButtonClicked()));
   connect(_pLaunchButton, SIGNAL(clicked()), this, SLOT(executeCurrentDemo()));
   connect(_pDocumentationButton, SIGNAL(clicked()), this, SLOT(openCurrentDocumentation()));
@@ -70,7 +70,7 @@ ContentWidget::ContentWidget(QWidget *parent, Qt::WindowFlags flags) :
     _mode = Debug;
   else
     _mode = Production;
-    
+
   _bMacOS = applicationDirPath.dirName() == "MacOS";
   if (_mode == Production)
     {
@@ -98,7 +98,7 @@ ContentWidget::ContentWidget(QWidget *parent, Qt::WindowFlags flags) :
   settings.setValue("imageDirectory", QString("%1/images").arg(_demoRootDir.path()));
   settings.setValue("defaultImageDirectory", QString("%1/images").arg(_demoRootDir.path()));
   settings.setValue("defaultVideoDirectory", QString("%1/videos").arg(_demoRootDir.path()));
-  
+
   _currentDir = _demoRootDir;
   _demoDir = _demoRootDir;
 
@@ -132,13 +132,13 @@ void ContentWidget::initDirectory()
   if (bSubDemos)
     {
       _currentDir = _demoDir;
-      
+
       //get subdirs
       QStringList lstDirectories = _currentDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
 
       //Remove dirs where is not README-file
       lstDirectories = removeExtraDirectories(_demoDir, lstDirectories);
-      
+
       //remove/delete old demo buttons
       while (_lstDemoButtons.size() > 0)
         {
@@ -148,12 +148,12 @@ void ContentWidget::initDirectory()
         }
 
       QString path = _currentDir.path();
-      
+
       //create new demo buttons
       for (int i=0; i<lstDirectories.size(); i++)
         {
           QDir tempDir(QString("%1/%2").arg(path, lstDirectories[i]));
-          
+
           PushButton *pDemoButton = new PushButton;
           pDemoButton->setName(getTitle(path, lstDirectories[i]));
           pDemoButton->setDirname(lstDirectories[i]);
@@ -161,10 +161,10 @@ void ContentWidget::initDirectory()
 
           _lstDemoButtons << pDemoButton;
           _pDirectoryLayout->insertWidget(_pDirectoryLayout->count()-1, pDemoButton);
-          
+
           connect(pDemoButton, SIGNAL(clicked()), this, SLOT(demoButtonClicked()));
         }
-      
+
       //update text of the quit/back button
       if (_currentDir == _demoRootDir)
         {
@@ -190,15 +190,15 @@ void ContentWidget::executeCurrentDemo()
 {
   QString strFileName = QString("%1/").arg(_demoDir.path());
   QString strDemoName = _demoDir.dirName();
-  
+
   if (_mode != Production)
     strFileName.append(QString("%1").arg(_mode == Release ? "release/" : "debug/"));
-  
+
   if (_bMacOS)
     strFileName.append(QString("%1.app/Contents/MacOS/").arg(strDemoName));
 
   strFileName.append(strDemoName);
-  
+
 #ifdef Q_OS_WIN
   strFileName += ".exe";
 #endif
@@ -227,7 +227,7 @@ void ContentWidget::resizeEvent(QResizeEvent *e)
 void ContentWidget::updateImageSize()
 {
   QSize scaledSize(_pMainFrame->width() / 3, _pTextBrowser->height() / 2);
-  
+
   double dScaleRatio = qMin(scaledSize.width() / (double)_imageRefSize.width(), scaledSize.height() / (double)_imageRefSize.height());
   int w = (int)(dScaleRatio * _imageRefSize.width() + 0.5);
   int h = (int)(dScaleRatio * _imageRefSize.height() + 0.5);
@@ -268,7 +268,7 @@ void ContentWidget::quitButtonClicked()
 QStringList ContentWidget::removeExtraDirectories(const QDir& dir, const QStringList& directories)
 {
   QStringList retDirectories;
-  
+
   for (int i=0; i<directories.size(); i++)
     {
       QString fileName = QString("%1/%2/README").arg(dir.path()).arg(directories[i]);
@@ -290,7 +290,7 @@ bool ContentWidget::isThereSubDemoDirectories(const QDir& dir)
       if (QFile::exists(fileName))
         return true;
     }
-  
+
 
   return false;
 }
@@ -310,7 +310,7 @@ QString ContentWidget::getTitle(const QString& path, const QString& dirname)
 ContentWidget::Document* ContentWidget::getCurrentDocument()
 {
   QString key = _demoDir.path();
-  
+
   //check if the document has already created
   for (int i=0; i<_lstDocuments.size(); i++)
     {
@@ -337,7 +337,7 @@ ContentWidget::Document* ContentWidget::createNewDocument(const QDir& directory)
     pixmap = QPixmap(info.absoluteFilePath());
 
   pDocument->pixmap = pixmap.isNull() ? QPixmap(":/images/default.png") : pixmap;
-  
+
   //store descriptions
   QFile file(QString("%1/README").arg(directory.path()));
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text))

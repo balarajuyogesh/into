@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -122,7 +122,7 @@ void PiiObjectServer::handleChannelCommand(const QString& uri, PiiHttpDevice* de
                                            QMutexLocker* lock)
 {
   PII_REQUIRE_HTTP_METHOD("GET");
-  
+
   int iSlashIndex = uri.indexOf('/');
   // No slash -> the request was to /channels/id -> reconnect to channel
   if (iSlashIndex == -1)
@@ -147,7 +147,7 @@ void PiiObjectServer::handleChannelCommand(const QString& uri, PiiHttpDevice* de
 
       connectToChannel(pChannel, strSourceId);
       pChannel->lstSources << strSourceId;
-    }      
+    }
   else if (strFunction == "disconnect")
     {
       QString strSourceId = dev->queryString();
@@ -370,7 +370,7 @@ QVariant PiiObjectServer::call(const QString& function, QVariantList& params)
           return pFunction->call(params);
         }
     }
-  
+
   if (errorCode == PiiNetwork::FunctionNameNotFound)
     PII_THROW_HTTP_ERROR(NotFoundStatus);
   //else if (errorCode == OverloadNotFound)
@@ -569,7 +569,7 @@ void PiiObjectServer::ChannelImpl::push(PiiHttpDevice* dev,
      In all cases we just drop the old connection and move the channel
      to the new thread.
   */
-     
+
   if (_bPushing)
     {
       quit();
@@ -578,9 +578,9 @@ void PiiObjectServer::ChannelImpl::push(PiiHttpDevice* dev,
     }
   _bPushing = true;
   _idleTimer.stop();
-  
+
   lock->unlock();
-  
+
   controller->setMaxTime(-1);
   dev->setHeader("Content-Type", QString("multipart/mixed-replace; boundary=\"%1\"").arg(pBoundary+2));
   dev->write(pBoundary);
@@ -591,7 +591,7 @@ void PiiObjectServer::ChannelImpl::push(PiiHttpDevice* dev,
   dev->endOutputFiltering();
   // Flush the socket too.
   dev->flushFilter();
-  
+
   _queueMutex.lock();
 
   forever
@@ -628,21 +628,21 @@ void PiiObjectServer::ChannelImpl::push(PiiHttpDevice* dev,
 
       _queueCondition.wait(&_queueMutex, 50);
     }
-  
+
   _bKilled = false;
   _bPushing = false;
   _idleTimer.restart();
 
   _pushEndCondition.wakeAll();
   _queueMutex.unlock();
-  
+
   dev->setHeader("Connection", "close");
 }
 
 void PiiObjectServer::CallbackFunction::call(void** args)
 {
   QByteArray aData = PiiNetwork::toByteArray(Pii::argsToList(d->lstParamTypes, args), PiiNetwork::BinaryFormat);
-  
+
   for (int i=0; i<lstChannels.size(); ++i)
     lstChannels[i]->enqueuePushData(_strSourceId, aData);
 }

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -36,17 +36,17 @@ namespace Pii
 {
 #ifdef Q_MOC_RUN
   Q_GADGET
-    
+
   Q_ENUMS(Interpolation);
 public:
 #endif
 #ifndef PII_NO_QT
   extern PII_CORE_EXPORT const QMetaObject staticMetaObject;
 #endif
-  
+
   /**
    * Pointer ownership modes. If the ownership of a pointer is
-   * released to the receiver in a function or constructor call, 
+   * released to the receiver in a function or constructor call,
    * `ReleaseOwnership` is used. If the ownership is retained by the
    * caller, this is indicated by `RetainOwnership`.
    */
@@ -74,7 +74,7 @@ public:
   enum MatrixDirection { Horizontally = 1, Vertically = 2 };
   Q_DECLARE_FLAGS(MatrixDirections, MatrixDirection);
   Q_FLAGS(MatrixDirection MatrixDirections);
-  
+
 }; // namespace Pii
 
 /// @hide

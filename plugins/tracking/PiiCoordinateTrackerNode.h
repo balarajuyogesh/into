@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -60,7 +60,7 @@ public:
     _dTrajectoryFitness(other._dTrajectoryFitness),
     _pPrediction(other._pPrediction ? new MeasurementType(*other._pPrediction) : 0)
   {}
-  
+
   /**
    * Create a new node with all values initialized to zeros.
    */
@@ -81,7 +81,7 @@ public:
    */
   MeasurementType* prediction() const { return _pPrediction; }
   /**
-   * Set the prediction. The node takes the ownership of 
+   * Set the prediction. The node takes the ownership of
    * `prediction`.
    */
   void setPrediction(MeasurementType* prediction) { _pPrediction = prediction; }
@@ -120,7 +120,7 @@ private:
    * The fitness of the whole trajectory up to this point.
    */
   double _dTrajectoryFitness;
-  
+
   /**
    * Prediction for the next measurement point.
    */

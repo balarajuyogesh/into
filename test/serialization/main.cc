@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,7 +24,7 @@ struct Base
 {
   enum ConstructionType { ConstructedBySerialization, ConstructedByUser };
   ConstructionType constructionType;
-  
+
   Base(ConstructionType type) : constructionType(type) {}
   virtual ~Base() {}
   virtual int type() const { return 0; }
@@ -99,7 +99,7 @@ class SharedObj : public PiiSharedObject
   {
     ar & iValue;
   }
-  
+
 public:
   SharedObj(int i = 0) : iValue(i) { ++iRefCount; }
   ~SharedObj() { --iRefCount; }
@@ -113,7 +113,7 @@ typedef PiiSharedPtr<SharedObj> SharedPtr;
 
 TestPiiSerialization::TestPiiSerialization() : _dMat(3,3), _iMat(3,3), _cMat(3,3), _pDMat(0)
 {
-  //Adjust tests objects to correct state 
+  //Adjust tests objects to correct state
   _pDMat = new PiiMatrix<double>(20,1);
   for ( int i=0; i<_pDMat->rows(); i++ )
     (*_pDMat)(i,0) = i;
@@ -187,11 +187,11 @@ void TestPiiSerialization::anyArchive()
       QVariantList lst2;
       lst2 << QVariant::fromValue(VariantTester(0));
       lst2 << QVariant::fromValue(VariantTester(1));
-      
+
       {
         buffer.open(QIODevice::ReadWrite);
         OutputArchive oa(&buffer);
-        
+
         oa << sourceStr;
         oa << sourcePtr;
         oa << 1;
@@ -202,7 +202,7 @@ void TestPiiSerialization::anyArchive()
         oa << lst;
         oa << lst2;
       }
-      
+
       /*for (int i=0; i<array.size(); ++i)
         std::cout << array[i];
       std::cout << "\n";
@@ -240,7 +240,7 @@ void TestPiiSerialization::anyArchive()
         //QDebug d = qDebug();
         //Pii::matlabPrint(d, matrix2);
         QVERIFY(Pii::equals(matrix, matrix2));
-        
+
         delete resultStrPtr;
         delete[] resultPtr;
 
@@ -281,4 +281,4 @@ void TestPiiSerialization::binaryArchive()
 }
 
 QTEST_MAIN(TestPiiSerialization)
-  
+

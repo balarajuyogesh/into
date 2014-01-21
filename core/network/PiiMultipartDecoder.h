@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -34,29 +34,29 @@
  *
  * ~~~
  * Content-Type: multipart/form-data; boundary=AaB03x
- * 
+ *
  * --AaB03x
  * Content-Disposition: form-data; name="submit-name"
- * 
+ *
  * Larry
  * --AaB03x
  * Content-Disposition: form-data; name="files"
  * Content-Type: multipart/mixed; boundary=BbC04y
- * 
+ *
  * --BbC04y
  * Content-Disposition: file; filename="text.txt"
  * Content-Type: text/plain
- * 
+ *
  * ... contents of text.txt ...
  * --BbC04y
  * Content-Disposition: file; filename="image.png"
  * Content-Type: image/png
  * Content-Transfer-Encoding: binary
- * 
+ *
  * ...contents of image.png...
  * --BbC04y--
  * --AaB03x--
- * 
+ *
  * ~~~
  *
  * The code to read the message is as follows:
@@ -121,7 +121,7 @@ public:
   PiiMultipartDecoder(QIODevice* device, const PiiMimeHeader& header);
 
   ~PiiMultipartDecoder();
-  
+
   /**
    * Returns the header of a nested body part. The bottommost header
    * in the stack is either the one given in the constructor or the
@@ -133,7 +133,7 @@ public:
    * Since a multipart message can contain another multipart message,
    * the depth of the header stack can be arbitrary. The `level`
    * parameter can be used to obtain information about enclosing
-   * messages. If there are no more body parts, or an incorrect 
+   * messages. If there are no more body parts, or an incorrect
    * `level` is given, an invalid header will be returned.
    *
    * @param level the stacking level. 0 refers to the body part the
@@ -166,7 +166,7 @@ public:
 
   bool isSequential() const;
   qint64 bytesAvailable() const;
-  
+
 protected:
   /**
    * Reads data from the underlying device. Stops at message
@@ -178,18 +178,18 @@ protected:
    * completeness. Decoders aren't often used for writing.
    */
   qint64 writeData(const char* data, qint64 maxSize);
-  
+
 private:
   void popHeader();
   void updateBodyPartInfo();
   bool readPreamble();
-  
+
   /// @internal
   class Data
   {
   public:
     Data(QIODevice* device);
-    
+
     QIODevice* pDevice;
     bool bHeadersRead;
     QStack<PiiMimeHeader> stkHeaders;

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,7 +24,7 @@ class PiiSampleBalancer::Histogram
 public:
   Histogram() : _iLevels(256), _iCount(0), _iLearningBatchSize(_iLevels), _dpHistogram(0), _dpNormalizedWeights(0), _ipHistogram(0)
   {}
-  
+
   ~Histogram()
   {
     /*
@@ -68,7 +68,7 @@ public:
       base *= base;
     return base;
   }
-  
+
   // mu is the "learning constant", i.e. adaptation ratio
   void addToWeights(int emphasis, double mu)
   {
@@ -206,7 +206,7 @@ template <class T> void PiiSampleBalancer::balance(const PiiVariant& obj)
     }
   else if (features.columns() != d->iFeatureCnt)
     PII_THROW_WRONG_SIZE(inputAt(0), features, "1-N", d->iFeatureCnt);
-  
+
   const T* pFeatures = features.row(0);
   double dWeight = weight((int)pFeatures[0], 0);
   for (int f=1; f<d->iFeatureCnt; f++)

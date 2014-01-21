@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -51,7 +51,7 @@ class PII_CLASSIFICATION_EXPORT PiiSomOperation : public PiiVectorQuantizerOpera
    * `true`. The default map size is 10-by-10.
    */
   Q_PROPERTY(QSize size READ size WRITE setSize);
-  
+
   /**
    * The number of nodes in horizontal direction.
    */
@@ -71,11 +71,11 @@ class PII_CLASSIFICATION_EXPORT PiiSomOperation : public PiiVectorQuantizerOpera
    * Learning rate function.
    */
   Q_PROPERTY(PiiClassification::SomRateFunction rateFunction READ rateFunction WRITE setRateFunction);
-  
+
   /**
    * The (zero-based) index of the current training iteration. This
    * property is useful when one needs to retrain a SOM map. Setting
-   * the `iterationNumber` property to zero (together with the 
+   * the `iterationNumber` property to zero (together with the
    * `training` property set to `true`) makes the map strongly adapt to
    * incoming data. The effect is that the map is trained again, but
    * the training is not started from a random state. If only
@@ -113,13 +113,13 @@ class PII_CLASSIFICATION_EXPORT PiiSomOperation : public PiiVectorQuantizerOpera
   Q_PROPERTY(double currentRadius READ currentRadius);
 
   /**
-   * Initialization mode. The default value is 
+   * Initialization mode. The default value is
    * `PiiClassification::SomSampleInit`.
    */
   Q_PROPERTY(PiiClassification::SomInitMode initMode READ initMode WRITE setInitMode);
 
   /**
-   * The learning algorithm. The default value is 
+   * The learning algorithm. The default value is
    * `PiiClassification::SomSequentialAlgorithm`.
    */
   Q_PROPERTY(PiiClassification::SomLearningAlgorithm learningAlgorithm READ learningAlgorithm WRITE setLearningAlgorithm);

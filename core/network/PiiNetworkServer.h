@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -55,7 +55,7 @@ class PII_NETWORK_EXPORT PiiNetworkServer :
   Q_PROPERTY(int minWorkers READ minWorkers WRITE setMinWorkers);
 
   /**
-   * The maximum number of worker threads ever running concurrently. 
+   * The maximum number of worker threads ever running concurrently.
    * If the number of concurrent connections exceeds this value,
    * subsequent connection attempts will be stored as pending
    * connections. The upper bound for this value is 1000. The default
@@ -89,7 +89,7 @@ class PII_NETWORK_EXPORT PiiNetworkServer :
    * socket or a pipe.
    */
   Q_PROPERTY(QString serverAddress READ serverAddress WRITE setServerAddress);
- 
+
   /**
    * The message sent to the client when the server cannot handle more
    * connections. The default value is "Server busy\\n".
@@ -101,7 +101,7 @@ public:
    * Interrupts all open connections and destroys the server.
    */
   ~PiiNetworkServer();
-  
+
   /**
    * Starts the server. This function initializes the server's thread
    * pool and calls [startListening()] to allow actual server implementations
@@ -118,7 +118,7 @@ public:
    * [stopListening()].
    *
    * @param mode InterruptClients: the worker threads will be
-   * interrupted even if they are not done with their clients yet. 
+   * interrupted even if they are not done with their clients yet.
    * WaitClients: the threads will wait until all clients finish
    * cleanly.
    *
@@ -168,18 +168,18 @@ protected:
   public:
     Data(PiiNetworkProtocol* protocol);
     virtual ~Data();
-    
+
     int iMinWorkers;
     int iMaxWorkers;
     int iWorkerMaxIdleTime;
     int iMaxPendingConnections;
     QByteArray aBusyMessage;
-    
+
     QMutex threadListLock;
     QList<PiiNetworkServerThread*> lstFreeThreads, lstAllThreads, lstFinishedThreads;
     QQueue<PiiGenericSocketDescriptor> lstPendingConnections;
     PiiNetworkProtocol* pProtocol;
-    
+
     State state;
     QString strServerAddress;
   } *d;
@@ -189,7 +189,7 @@ protected:
 
   /// @internal
   void timerEvent(QTimerEvent*);
-  
+
   /**
    * Initializes the server with a communication protocol.
    *
@@ -210,7 +210,7 @@ protected:
    * otherwise.
    */
   virtual bool startListening() = 0;
-  
+
   /**
    * This function is called by [stop()] after the thread pool has been
    * destroyed. Typically, a listening socket is be closed. The server
@@ -219,7 +219,7 @@ protected:
    * again.
    */
   virtual void stopListening() = 0;
-  
+
   /**
    * Handles an incoming connection. This function tries the following,
    * in the order of precedence:
@@ -250,7 +250,7 @@ protected:
    * @see [setBusyMessage()]
    */
   virtual void serverBusy(PiiGenericSocketDescriptor socketDescriptor);
-  
+
   /**
    * Create a new worker thread. Subclasses may override this function
    * to set thread priorities etc. The default implementation creates
@@ -269,11 +269,11 @@ protected:
 private:
   friend class PiiNetworkServerThread;
   void threadAvailable(PiiNetworkServerThread* thread);
-  void threadFinished(PiiNetworkServerThread* tread);  
+  void threadFinished(PiiNetworkServerThread* tread);
 
   void deleteFinishedThreads();
   void waitAll(const QList<PiiNetworkServerThread*>& threads);
-  
+
   PII_DISABLE_COPY(PiiNetworkServer);
 };
 

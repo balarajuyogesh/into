@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -32,14 +32,14 @@ PiiObjectPropertyExtractor::PiiObjectPropertyExtractor() :
   d->pLabeledImageInput = new PiiInputSocket("image");
   d->pLabelsInput = new PiiInputSocket("labels");
   d->pLabelsInput->setOptional(true);
-  
+
   d->pAreasOutput = new PiiOutputSocket("areas");
   d->pCentroidsOutput = new PiiOutputSocket("centroids");
   d->pBoundingBoxOutput = new PiiOutputSocket("boundingboxes");
 
   addSocket(d->pLabeledImageInput);
   addSocket(d->pLabelsInput);
-  
+
   addSocket(d->pAreasOutput);
   addSocket(d->pCentroidsOutput);
   addSocket(d->pBoundingBoxOutput);
@@ -61,7 +61,7 @@ void PiiObjectPropertyExtractor::process()
       PII_INTEGER_MATRIX_CASES_M(operate, (obj, objects));
     default:
       PII_THROW_UNKNOWN_TYPE(d->pLabeledImageInput);
-    }  
+    }
 }
 
 template <class T> void PiiObjectPropertyExtractor::operate(const PiiVariant& img, int labels)

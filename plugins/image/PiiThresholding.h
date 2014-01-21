@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -217,7 +217,7 @@ namespace PiiImage
   {
     U operator() (T value, T threshold) const { return value < threshold ? U(value) : U(0); }
   };
-  
+
   /**
    * DropFunction compares `value` to a `threshold` and outputs
    * either `value` - `threshold` or 0 based on the comparison
@@ -256,7 +256,7 @@ namespace PiiImage
     {
       return _func(pixel, _relativeThreshold * mean + _absoluteThreshold);
     }
-    
+
     ThresholdFunc _func;
     float _relativeThreshold, _absoluteThreshold;
   };
@@ -268,7 +268,7 @@ namespace PiiImage
   {
     return AdaptiveThresholdFunction<ThresholdFunc>(func, relativeThreshold, absoluteThreshold);
   }
-  
+
   /**
    * Thresholds an image.
    *
@@ -346,7 +346,7 @@ namespace PiiImage
   /**
    * Performs hysteresis thresholding on image. This is a convenience
    * function that uses [labelImage()] to find connected components in
-   * which the gray level of all pixels is greater than or equal to 
+   * which the gray level of all pixels is greater than or equal to
    * `lowThreshold` and and at least one pixel is greater than or equal
    * to `highThreshold`.
    *
@@ -435,7 +435,7 @@ namespace PiiImage
    * window
    *
    * @param windowColumns the number of columns in the local averaging
-   * window. If this value is non-positive, a `windowRows` - by - 
+   * window. If this value is non-positive, a `windowRows` - by -
    * `windowRows` square window will be used.
    *
    * ! Window size has no effect on processing time.
@@ -469,7 +469,7 @@ namespace PiiImage
                                                                     BinaryFunction func,
                                                                     int windowRows, int windowColumns);
   /**
-   * entry in *roiMask* evaluates to `true`. The *image* and 
+   * entry in *roiMask* evaluates to `true`. The *image* and
    * *roiMask* matrices must match in size.
    */
   template <class Matrix, class BinaryFunction>
@@ -477,7 +477,7 @@ namespace PiiImage
                                                                     const PiiMatrix<bool>& roiMask,
                                                                     BinaryFunction func,
                                                                     int windowRows, int windowColumns);
-  
+
   /**
    * A function that calculates a local threshold *t* as \(t = \mu + r
    * \sigma\), where *r* stands for `relativeThreshold`. The output of
@@ -552,7 +552,7 @@ namespace PiiImage
       _dR(relativeThreshold),
       _dMaxStd(maxStd)
     {}
-    
+
     typename BinaryFunction::result_type operator() (typename UnaryFunction::argument_type pixel,
                                                      double mu,
                                                      double var) const
@@ -560,7 +560,7 @@ namespace PiiImage
       return _thresholdFunc(_transformFunc(pixel),
                             typename BinaryFunction::second_argument_type(mu * (1 + _dR * (sqrt(var)/_dMaxStd - 1))));
     }
-    
+
   private:
     const BinaryFunction& _thresholdFunc;
     const UnaryFunction& _transformFunc;
@@ -572,13 +572,13 @@ namespace PiiImage
   {
     struct Int { static double value() { return 128; } };
     struct Float { static double value() { return 0.5; } };
-    
+
     static double value()
     {
       return Pii::IfClass<Pii::IsInteger<T>, Int, Float>::Type::value();
     }
   };
-  
+
   /**
    * Creates a threshold function.
    *
@@ -605,7 +605,7 @@ namespace PiiImage
   {
     return SauvolaThresholdFunction<BinaryFunction, UnaryFunction>(threshold, transform, r, maxStd);
   }
-  
+
   /**
    * Thresholds an image adaptively. This function calculates local
    * mean and local variance for each pixel, and uses `func` as the
@@ -623,7 +623,7 @@ namespace PiiImage
    * window
    *
    * @param windowColumns the number of columns in the local averaging
-   * window. If this value is non-positive, a `windowRows` - by - 
+   * window. If this value is non-positive, a `windowRows` - by -
    * `windowRows` square window will be used.
    *
    * ~~~(c++)

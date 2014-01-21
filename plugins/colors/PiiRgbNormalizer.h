@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -19,14 +19,14 @@
 #include <PiiDefaultOperation.h>
 
 /**
- * An operation that converts images to normalized RGB. See 
+ * An operation that converts images to normalized RGB. See
  * [PiiColors::normalizedRgb()] for details.
  *
  * Inputs
  * ------
  *
  * @in image - any color image
- * 
+ *
  * Outputs
  * -------
  *
@@ -47,16 +47,16 @@ class PiiRgbNormalizer : public PiiDefaultOperation
   Q_PROPERTY(double maxValue READ maxValue WRITE setMaxValue);
 
   /**
-   * The normalized color channels the operation will emit through 
+   * The normalized color channels the operation will emit through
    * `channel0` and `channel1`.
    */
   Q_PROPERTY(ChannelPair channels READ channels WRITE setChannels);
   Q_ENUMS(ChannelPair);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   /**
-   * Allowed channel pairs. 
+   * Allowed channel pairs.
    *
    * - `RedGreen` - normalized RG. `channel0` will emit the red
    * channel and `channel1` the green channel.
@@ -66,7 +66,7 @@ public:
    * - `GreenBlue` - normalized GB
    */
   enum ChannelPair { RedGreen, RedBlue, GreenBlue };
-  
+
   PiiRgbNormalizer();
 
   void setMaxValue(double maxValue);

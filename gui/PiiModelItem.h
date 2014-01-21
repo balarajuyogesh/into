@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -82,22 +82,22 @@ public:
   QMap<int,QVariant> dataMap() const;
 
   /**
-   * A utility function for setting the data associated with the 
+   * A utility function for setting the data associated with the
    * `Qt::DisplayRole`.
    */
   void setText(const QString& text);
   /**
-   * A utility function for getting the data associated with the 
+   * A utility function for getting the data associated with the
    * `Qt::DisplayRole`.
    */
   QString text() const;
   /**
-   * A utility function for setting the data associated with the 
+   * A utility function for setting the data associated with the
    * `Qt::DecorationRole`.
    */
   void setIcon(const QIcon& icon);
   /**
-   * A utility function for getting the data associated with the 
+   * A utility function for getting the data associated with the
    * `Qt::DecorationRole`.
    */
   QIcon icon() const;

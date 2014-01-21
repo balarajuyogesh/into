@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -49,7 +49,7 @@ void PiiClassifierOperation::init()
 
   addSocket(d->pWeightInput = new PiiInputSocket("weight"));
   d->pWeightInput->setOptional(true);
-  
+
   addSocket(d->pClassificationOutput = new PiiOutputSocket("classification"));
 
   d->pLearningThread = Pii::createAsyncCall(this, &PiiClassifierOperation::learningThread);
@@ -112,7 +112,7 @@ void PiiClassifierOperation::process()
       else
         collectSample(dInputLabel, dInputWeight);
     }
-  
+
   // Emit classification result.
   classify();
 }
@@ -120,7 +120,7 @@ void PiiClassifierOperation::process()
 bool PiiClassifierOperation::learningThread()
 {
   _d()->strLearningError.clear();
-  
+
   if (learnBatch())
     {
       QMutexLocker lock(&_d()->learningMutex);
@@ -209,7 +209,7 @@ bool PiiClassifierOperation::canContinue(double progressPercentage) const
       emit const_cast<PiiClassifierOperation*>(this)->progressed(progressPercentage);
       d->dCurrentProgress = progressPercentage;
     }
-  
+
   return d->bThreadRunning;
 }
 

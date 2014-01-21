@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -44,7 +44,7 @@ template <class FeatureIterator> double NAME<FeatureIterator>::operator() (Featu
 #define PII_POLYMORPHIC_MEASURE(MEASURE) typename PiiDistanceMeasure<ConstFeatureIterator>::template Impl<MEASURE<ConstFeatureIterator> >
 
 /**
- * A polymorphic implementation of the 
+ * A polymorphic implementation of the
  * [distance measure](classification_distance_measures) concept.
  *
  */
@@ -70,15 +70,15 @@ public:
   virtual double operator() (FeatureIterator sample,
                              FeatureIterator model,
                              int length) const throw() = 0;
-  
+
 
   virtual PiiDistanceMeasure* clone() const = 0;
-  
+
   template <class Measure> class Impl;
 
 protected:
   PiiDistanceMeasure();
-  
+
   PII_DISABLE_COPY(PiiDistanceMeasure);
 };
 
@@ -95,7 +95,7 @@ template <class FeatureIterator> PiiDistanceMeasure<FeatureIterator>::~PiiDistan
 /**
  * A template that implements the PiiDistanceMeasure interface by
  * using `Measure` as the distance measure implementation. The
- * virtual measure() function just passes the call to the given 
+ * virtual measure() function just passes the call to the given
  * `Measure` class.
  *
  */
@@ -111,7 +111,7 @@ public:
   {
     return Measure::operator() (sample, model, length);
   }
-  
+
   Impl* clone() const
   {
     return new Impl;

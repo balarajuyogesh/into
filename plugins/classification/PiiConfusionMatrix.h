@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -66,7 +66,7 @@ public:
    * Copy a confusion matrix.
    */
   PiiConfusionMatrix(const PiiConfusionMatrix& mat);
-  
+
   /**
    * Use an existing matrix as a confusion matrix. If `mat` is not
    * square, only a square portion of its top left corner will be
@@ -78,7 +78,7 @@ public:
    * Copy the contents of another matrix.
    */
   PiiConfusionMatrix& operator= (const PiiConfusionMatrix& other);
-  
+
   /**
    * Add a classification result to the confusion matrix. This
    * function is equal to `mat(correctClass,
@@ -199,7 +199,7 @@ template <class Stream> void PiiConfusionMatrix::print(Stream& out, const QStrin
             wrong += *ptr;
           else
             correct += *ptr;
-            
+
           if (!*ptr)
             strcpy(bfr,".");
           else
@@ -250,6 +250,6 @@ template <class Stream> void PiiConfusionMatrix::print(Stream& out, const QStrin
       << "Correctly classified    : " << correct << "\n"
       << "Incorrectly classified  : " << wrong << "\n"
       << "Total error             : " << (double(wrong*100)/double(wrong+correct)) << " %\n";
-}  
+}
 
 #endif //_PIICONFUSIONMATRIX_H

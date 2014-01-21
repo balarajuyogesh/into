@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -56,7 +56,7 @@ public:
    * Default constructor.
    */
   PiiUndoCommandProducer();
-  
+
   /**
    * Virtual destructor. Does nothing.
    */
@@ -72,7 +72,7 @@ public:
   Listener* undoCommandListener() const;
 
   /**
-   * Generate a unique id number for a class of undoable commands. 
+   * Generate a unique id number for a class of undoable commands.
    * Unique id numbers can be utilized by Qt's undo system in merging
    * successive commands. Using the technique described in the example
    * below ensures application-wide unique command identifiers and
@@ -105,7 +105,7 @@ protected:
    * the command will be deleted.
    */
   void undoCommandPerformed(QUndoCommand* command);
-  
+
 private:
   Listener* _pUndoCommandListener;
 };

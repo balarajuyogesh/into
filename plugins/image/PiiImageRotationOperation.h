@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -31,7 +31,7 @@
  * @in angle - rotation angle (radians, clockwise). This input is
  * optional. If it is not connected, the `angle` property will be
  * used.
- * 
+ *
  * Outputs
  * -------
  *
@@ -65,7 +65,7 @@ class PiiImageRotationOperation : public PiiDefaultOperation
    * of the input image. The default color is black.
    */
   Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiImageRotationOperation();

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -33,7 +33,7 @@ PushButton::PushButton(QWidget *parent) :
 void PushButton::paintEvent(QPaintEvent *event)
 {
   QPushButton::paintEvent(event);
-  
+
   QPainter p(this);
   int h = height();
   int w = width();
@@ -49,12 +49,12 @@ void PushButton::setName(const QString& name)
   _strName = name;
 
   int iHeight = height();
-  
+
   // Calculate font size
   QFont f = font();
   f.setPixelSize(iHeight/3*2);
   setFont(f);
-  
+
   repaint();
 }
 

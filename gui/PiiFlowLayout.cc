@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -35,7 +35,7 @@ bool PiiFlowLayout::move(int from, int to)
       invalidate();
       return true;
     }
-  
+
   return false;
 }
 
@@ -150,7 +150,7 @@ int PiiFlowLayout::doLayout(const QRect &rect, bool testOnly) const
 
       if (!testOnly)
         item->setGeometry(QRect(QPoint(x, y), item->sizeHint()));
-      
+
       x = nextX;
       lineHeight = qMax(lineHeight, item->sizeHint().height());
     }

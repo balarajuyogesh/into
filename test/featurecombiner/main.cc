@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -53,7 +53,7 @@ void TestPiiFeatureCombiner::process()
    */
 
   QVERIFY(start(ExpectFail));
-  
+
   QVERIFY(connectInput("features0"));
   QVERIFY(connectInput("features1"));
   QVERIFY(connectInput("features2"));

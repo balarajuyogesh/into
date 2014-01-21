@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -29,19 +29,19 @@ PiiModbusIoChannel::PiiModbusIoChannel(PiiModbusIoDriver *driver, int channel) :
 bool PiiModbusIoChannel::currentState() const
 {
   const PII_D;
-  
+
   ChannelMode mode = channelMode();
   if (mode == NoMode)
     channelError(tr("Cannot read current state (mode == NoMode)"));
-  
+
   uint8_t bits;
 
   int res = 0;
   if (mode == Input)
     res = driver()->readInputBits(d->iAddress, 1, &bits);
-  else 
+  else
     res = driver()->readBits(d->iAddress, 1, &bits);
-  
+
   if (res == -1)
     channelError(tr("Cannot read current state (channel = %1): %2")
                  .arg(channelIndex()).arg(modbus_strerror(errno)));
@@ -52,7 +52,7 @@ bool PiiModbusIoChannel::currentState() const
 void PiiModbusIoChannel::setOutputState(bool active)
 {
   PII_D;
-  
+
   if (channelMode() member_of (Input, NoMode))
     channelError(tr("Cannot set output state (channelMode is wrong)"));
 

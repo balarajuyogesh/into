@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@
  * ------
  *
  * @in input - the input matrix. Any numeric matrix.
- * 
+ *
  * Outputs
  * -------
  *
@@ -40,12 +40,12 @@ class PiiMatrixNormalizer : public PiiDefaultOperation
   Q_OBJECT
 
   /**
-   * The minimum value in the output matrix. Used in 
+   * The minimum value in the output matrix. Used in
    * `NormalizeMinMax` mode. Default is zero.
    */
   Q_PROPERTY(double min READ min WRITE setMin);
   /**
-   * The minimum value in the output matrix. Used in 
+   * The minimum value in the output matrix. Used in
    * `NormalizeMinMax` mode. Default is one.
    */
   Q_PROPERTY(double max READ max WRITE setMax);
@@ -61,18 +61,18 @@ class PiiMatrixNormalizer : public PiiDefaultOperation
    */
   Q_PROPERTY(double variance READ variance WRITE setVariance);
   /**
-   * The output type. See [PiiYdin::MatrixTypeId] for valid values. 
-   * Only numeric matrix types are allowed. The default is 
+   * The output type. See [PiiYdin::MatrixTypeId] for valid values.
+   * Only numeric matrix types are allowed. The default is
    * `PiiYdin::DoubleMatrixType`.
    */
   Q_PROPERTY(int outputType READ outputType WRITE setOutputType);
-  
+
   /**
    * Normalization mode. Default is `NormalizeMinMax`.
    */
   Q_PROPERTY(NormalizationMode normalizationMode READ normalizationMode WRITE setNormalizationMode);
   Q_ENUMS(NormalizationMode);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   /**
@@ -85,11 +85,11 @@ public:
    * variance.
    */
   enum NormalizationMode { NormalizeMinMax, NormalizeMeanVar };
-  
+
   PiiMatrixNormalizer();
 
   void check(bool reset);
-  
+
   void setMin(double min);
   double min() const;
   void setMax(double max);
@@ -131,7 +131,7 @@ private:
   {
     emitObject(PiiMatrix<T>(matrix));
   }
-  
+
   void throwOutputTypeError()
   {
     PII_THROW(PiiExecutionException, tr("Only numeric matrices are allowed as the output type."));

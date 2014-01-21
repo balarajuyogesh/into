@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,7 +30,7 @@
  * ------
  *
  * @in image - Any gray-level image.
- * 
+ *
  * Outputs
  * -------
  *
@@ -38,7 +38,7 @@
  * which each row represents a detected peak. The stored values are
  * (in this order): horizontal location of the peak in the spectrum in
  * pixels, vertical location, relative strength of the peak, wave
- * length in pixels, and angle with respect to the y axis in radians. 
+ * length in pixels, and angle with respect to the y axis in radians.
  * The angle is measured clockwise. (PiiMatrix<double>)
  *
  * @out composition - an image composed of the detected peaks. This
@@ -77,7 +77,7 @@ class PiiSpectralPeakDetector : public PiiDefaultOperation
    * will be ignored. The default value is infinity.
    */
   Q_PROPERTY(double maxWaveLength READ maxWaveLength WRITE setMaxWaveLength);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiSpectralPeakDetector();
@@ -99,7 +99,7 @@ private:
   void markPeak(PiiMatrix<float>& powerSpectrum,
                 int row, int column, double aspectRatio,
                 PiiMatrix<double>& peaks);
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {

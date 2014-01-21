@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -51,13 +51,13 @@ public:
    * implementation returns `false`.
    */
   virtual bool contains(const QPoint& p);
-  
+
   void setToolTipText(const QString& text);
   QString toolTipText() const;
 
   void setEnabled(bool enabled);
   bool enabled() const;
-  
+
 protected:
   /// @internal
   class Data
@@ -85,7 +85,7 @@ public:
   PiiGeometricOverlay();
   PiiGeometricOverlay(const QBrush& bg, const QPen& border);
   ~PiiGeometricOverlay();
-  
+
   void setBrush(const QBrush& brush);
   QBrush brush() const;
   void setPen(const QPen& pen);
@@ -98,7 +98,7 @@ protected:
   public:
     Data();
     Data(const QBrush& bg, const QPen& border);
-    
+
     QBrush brush;
     QPen pen;
   };
@@ -113,9 +113,9 @@ public:
   PiiRectangleOverlay();
   PiiRectangleOverlay(const QRect& rectangle);
   ~PiiRectangleOverlay();
-  
+
   void paint(QPainter* p, bool filled = true);
-  
+
   void setRectangle(const QRect& rectangle);
   QRect rectangle() const;
   QRect& rectangle();
@@ -142,12 +142,12 @@ public:
   PiiPolygonOverlay();
   PiiPolygonOverlay(const QPainterPath& s);
   ~PiiPolygonOverlay();
-  
-  void paint(QPainter* p, bool filled = true);   
+
+  void paint(QPainter* p, bool filled = true);
 
   void setShape(const QPainterPath& shape);
   QPainterPath shape() const;
-  
+
   bool intersects(const QRect& r);
   bool contains(const QPoint& r);
 
@@ -169,7 +169,7 @@ public:
   PiiEllipseOverlay();
   PiiEllipseOverlay(const QRect& rectangle);
   ~PiiEllipseOverlay();
-  
+
   void paint(QPainter* p, bool filled = true);
 
   bool intersects(const QRect& r);
@@ -183,7 +183,7 @@ public:
   PiiCrossOverlay();
   PiiCrossOverlay(const QPoint& point);
   ~PiiCrossOverlay();
-  
+
   void paint(QPainter* p, bool filled = true);
 
   void setPen(const QPen& pen);
@@ -243,13 +243,13 @@ public:
   void setFont(const QFont& font);
   void setTextFlags(int flags);
   void setShowBorders(bool show);
-  
+
   void setPen(const QPen& pen);
   QPen pen() const;
 
   bool intersects(const QRect& r);
   bool contains(const QPoint& r);
-  
+
 private:
   /// @internal
   class Data : public PiiImageOverlay::Data

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -54,7 +54,7 @@ PiiTextOutputArchive& PiiTextOutputArchive::operator<< (const QString& value)
     }
   return *this;
 }
-  
+
 PiiTextOutputArchive& PiiTextOutputArchive::operator<< (const char* value)
 {
   int len = std::strlen(value);

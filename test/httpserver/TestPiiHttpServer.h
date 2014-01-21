@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -34,7 +34,7 @@ private slots:
 
 private:
   void serverThread(const QString& address);
-  
+
   QString _strBase;
   QThread* _pServerThread;
   PiiWaitCondition _serverCondition;

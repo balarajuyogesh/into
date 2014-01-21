@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -35,9 +35,9 @@ public:
   PiiImageScrollArea(QImage *image, QWidget* parent = 0);
   PiiImageScrollArea(const QImage& image, QWidget* parent = 0);
   PiiImageScrollArea(QWidget *parent = 0);
-  
+
   ~PiiImageScrollArea();
-  
+
   void setDisplayType(int type);
   int displayType();
 
@@ -65,21 +65,21 @@ protected:
     virtual ~Data();
 
     QList<QImage*> lstImages;
-    
+
     PiiImageViewport* pImageViewport;
-    
+
     // A flag, which determines, if the image display can be moved, if
     // the values of the scrollbars changes.
     bool bCanMoveDisplay;
-    
+
     // Contains the dragging (moving the scrolls with the middle mouse
     // button) state of the display.
     bool bDragging;
-    
+
     // This member variable is used in dragging functionality (moving
     // the image when the mouse middle button is pressed.
     QPoint mouseCurrPoint;
-    
+
     // The display type.
     int displayType;
 
@@ -92,17 +92,17 @@ protected:
   PiiImageScrollArea(Data *d, const QImage& image, QWidget* parent = 0);
   /// @internal
   PiiImageScrollArea(Data *d, QWidget *parent = 0);
-  
+
 signals:
   /**
    * Refer to the documentation of the corresponding signal in the class
-   * PiiImageViewport. 
+   * PiiImageViewport.
    */
   void areaSelected(const QRect&,int);
 
   /**
    * Refer to the documentation of the corresponding signal in the class
-   * PiiImageViewport. 
+   * PiiImageViewport.
    */
   void clicked(const QPoint&,int);
 
@@ -129,7 +129,7 @@ private:
   template <class T> void colorImage(const PiiVariant& obj, int layer);
   template <class T> void scaledImage(const PiiMatrix<T>& image, int layer);
   template <class T> void view(const PiiMatrix<T>& image, int layer);
-  
+
   /**
    * Initialize a viewport widget and variables.
    */

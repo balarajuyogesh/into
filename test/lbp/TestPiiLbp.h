@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@ private slots:
   void basicLbp();
   void genericLbp();
   void thresholdedLbp();
-  
+
 private:
   template <class T> PiiMatrix<T> createRandomImage();
   template <class T> void basicLbp();

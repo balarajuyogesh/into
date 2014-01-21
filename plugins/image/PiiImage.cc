@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -43,7 +43,7 @@ namespace PiiImage
                           -1,-1,-1,
                           0, 0, 0,
                           1, 1, 1);
-  
+
   PiiMatrix<double> makeGaussian(unsigned int size)
   {
     size |= 1; // make odd
@@ -83,7 +83,7 @@ namespace PiiImage
           mean += val;
           result(r+center,c+center) = val;
         }
-                                               
+
     result -= mean/(size*size);
     return result;
   }
@@ -105,7 +105,7 @@ namespace PiiImage
         if (dMax != 0)
           scale = 256.0 / dMax;
       }
-    
+
     PiiMatrix<int> integerFilter(Pii::round<int>(doubleFilter * scale));
     int iSum = Pii::sum<int>(integerFilter);
     double dSum = Pii::sum<double>(doubleFilter);
@@ -131,7 +131,7 @@ namespace PiiImage
     double hMax = Pii::maxAbs(horizontalFilter), vMax = Pii::maxAbs(verticalFilter);
     if (hMax == 0) hMax = 1;
     if (vMax == 0) vMax = 1;
-      
+
     double dHScale = scale == 0 ? 64.0 / hMax : scale;
     double dVScale = scale == 0 ? 64.0 / vMax : scale;
 
@@ -185,7 +185,7 @@ namespace PiiImage
                             fSin, fCos, 0.0,
                             0.0, 0.0, 1.0);
   }
-  
+
   PiiMatrix<float> createRotationTransform(float theta, float centerX, float centerY)
   {
     // Move origin to the new center, rotate, and move back

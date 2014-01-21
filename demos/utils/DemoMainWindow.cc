@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -62,7 +62,7 @@ DemoMainWindow::DemoMainWindow(QWidget *parent) :
 
   // Set window title
   _strDemoName = QString("Into demo");
-  
+
   QFile file(QString("%1/README").arg(_strApplicationPath));
   if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -85,7 +85,7 @@ void DemoMainWindow::initEngine()
 {
   // Load all necessary plugins
   loadPlugins();
-  
+
   // Create an engine.
   _pEngine = createEngine();
   dumpingEngine = _pEngine;
@@ -142,7 +142,7 @@ QStringList DemoMainWindow::getImageFiles(QFileDialog::FileMode mode)
   dialog.setNameFilters(QStringList() << filterStr);
 
   QStringList lstFileNames;
-  
+
   // If all is okay, set file names
   if (dialog.exec())
     {

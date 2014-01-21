@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,7 +30,7 @@ PiiFreqOutputEmitter::PiiFreqOutputEmitter(PiiFrequencyCounter *parent) :
 {
   //qDebug("PiiFreqOutputEmitter, constructor, _pParent->_iMeasurementInterval = %d", _pParent->_iMeasurementInterval);
   _iSleepDuration = qMin(_pParentData->iMeasurementInterval , (unsigned int)FREQOUTPUTEMITTTER_MAX_SLEEP_TIME);
-  
+
   //qDebug("PiiFreqOutputEmitter, constructor, _iSleepDuration = %d", _iSleepDuration);
 }
 
@@ -77,7 +77,7 @@ void PiiFreqOutputEmitter::emitFrequency(int elapsed)
       _pParentData->iFrequencyCounter = 0;
       //qDebug("PiiFreqOutputEmitter::emitFrequency(),  hitsPerSecond = %d", hitsPerSecond);
     }
-  
+
   //qDebug("PiiFreqOutputEmitter::emitFrequency(), END");
 }
 
@@ -92,7 +92,7 @@ PiiFrequencyCounter::Data::Data(PiiFrequencyCounter*) :
   bFrequencyOutputConnected(false)
 {
 }
-  
+
 PiiFrequencyCounter::PiiFrequencyCounter() :
   PiiDefaultOperation(new Data(this))
 {
@@ -104,9 +104,9 @@ PiiFrequencyCounter::PiiFrequencyCounter() :
   setMeasurementFrequency(1);
 
   d->iStaticOutputCount = outputCount();
-  
+
   setDynamicInputCount(1);
-  
+
   connect(this, SIGNAL(stateChanged(int)), this, SLOT(stateChangeOccured(int)));
   d->pEmitter = new PiiFreqOutputEmitter(this);
 }
@@ -128,7 +128,7 @@ void PiiFrequencyCounter::setDynamicInputCount(int inputCount)
 
   setNumberedInputs(inputCount);
   setNumberedOutputs(inputCount, d->iStaticOutputCount);
-  
+
   //qDebug("PiiFrequencyCounter::setInputCount() END");
 }
 
@@ -137,7 +137,7 @@ void PiiFrequencyCounter::setMaxFrequency(double frequency)
   PII_D;
   // d->iFilterInterval is the inverse of d->dMaxFrequency in
   // milliseconds. The exception is the value zero. If d->dMaxFrequency
-  // is zero, d->iFilterInterval is also zero. 
+  // is zero, d->iFilterInterval is also zero.
   d->dMaxFrequency = frequency;
   //qDebug("PiiFrequencyCounter::setMaxFrequency(), d->dMaxFrequency set to %f", d->dMaxFrequency);
   if (frequency == 0)
@@ -158,7 +158,7 @@ void PiiFrequencyCounter::setMaxFrequency(double frequency)
       // Large learning rate rapidly decreases the mean -> multiply by
       // learning rate
       d->dMaxMeanInterval = d->iFilterInterval + frequency*FREQCOUNTER_NEW_WEIGHT;
-      
+
     }
   //qDebug("PiiFrequencyCounter::setMaxFrequency(), d->iFilterInterval set to %d", d->iFilterInterval);
   //qDebug("PiiFrequencyCounter::setMaxFrequency(), d->dMaxMeanInterval set to %f", d->dMaxMeanInterval);
@@ -169,11 +169,11 @@ void PiiFrequencyCounter::setMeasurementFrequency(double frequency)
   PII_D;
   // d->iMeasurementInterval is the inverse of d->dMeasurementFrequency in
   // milliseconds. The exception is the value zero. If d->dMeasurementFrequency
-  // is zero, d->iFilterInterval is also zero. 
+  // is zero, d->iFilterInterval is also zero.
   d->dMeasurementFrequency = frequency;
   if ( d->dMeasurementFrequency < 0 )
     d->dMeasurementFrequency = 0;
-  
+
   //qDebug("PiiFrequencyCounter::setMaxFrequency(), d->dMeasurementFrequency set to %f", d->dMeasurementFrequency);
   if (d->dMeasurementFrequency <= 0)
     d->iMeasurementInterval = 0;
@@ -187,7 +187,7 @@ void PiiFrequencyCounter::process()
   PII_D;
   //qDebug("PiiFrequencyCounter::process() BEGIN");
   d->iFrequencyCounter++;
-  
+
   bool bSendObject = true;
   if (d->iFilterInterval > 0)
     {
@@ -212,11 +212,11 @@ void PiiFrequencyCounter::process()
         {
           // It is assumed, that there is corresponding output for
           // each intput.
-          //qDebug("PiiFrequencyCounter::process(), sending output%d", i);  
+          //qDebug("PiiFrequencyCounter::process(), sending output%d", i);
           emitObject(readInput(i), i + d->iStaticOutputCount);
         }
     }
-  //qDebug("PiiFrequencyCounter::process() END");  
+  //qDebug("PiiFrequencyCounter::process() END");
 }
 
 void PiiFrequencyCounter::start()
@@ -237,7 +237,7 @@ void PiiFrequencyCounter::check(bool reset)
       d->filterTime.start();
       d->measurementTime.start();
     }
-  
+
   PiiDefaultOperation::check(reset);
 
   d->bFrequencyOutputConnected = d->pFreqOutput->isConnected();

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -142,13 +142,13 @@ public:
     load(value);
     return *self();
   }
-  
+
   template <class T> Archive& operator>> (const T& value)
   {
     load(const_cast<T&>(value));
     return *self();
   }
-  
+
   template <class T> void load(T& value)
   {
     // If T is a pointer, load it as a pointer
@@ -178,7 +178,7 @@ public:
   {
     Pii::IfClass<Pii::IsPointer<T>, PointerMover, ObjectMover>::Type::move(*self(), from, to);
   }
-  
+
 private:
   /**
    * Update all references to the memory address `from` to `to`.
@@ -189,7 +189,7 @@ private:
       {
         if (_lstPointers[i].ptr != from)
           continue;
-        
+
         for (int j=_lstPointers[i].addresses.size(); j--; )
           *_lstPointers[i].addresses[j] = to;
 
@@ -213,10 +213,10 @@ private:
         value = 0;
         return true;
       }
-    
+
     if (ptrIndex > _lstPointers.size() || ptrIndex < 0)
       PII_SERIALIZATION_ERROR(InvalidDataFormat);
-    
+
     // We already restored this one
     if (ptrIndex < _lstPointers.size())
       {
@@ -235,15 +235,15 @@ private:
     // Read the pointer index from the archive
     int ptrIndex;
     *self() >> ptrIndex;
-    
+
     if (ptrIndex > _lstPointers.size() || ptrIndex < 0)
       PII_SERIALIZATION_ERROR(InvalidDataFormat);
-    
+
     // We already restored this one
     if (ptrIndex < _lstPointers.size())
       {
         value = (T*)_lstPointers[ptrIndex].ptr;
-        
+
         // Give the outer world a possibility to do refcounting.
         PiiSerialization::rereferencePointer(value);
 
@@ -259,12 +259,12 @@ private:
     // Not restored yet
     else
       {
-        // Store object address (later coming ones may refer to this). 
+        // Store object address (later coming ones may refer to this).
         // The address list is empty, because there are no pointers to
         // this object yet. "true" means the object has been saved by
         // reference.
         _lstPointers << PiiArchivePointerInfo(value, QList<void**>(), true);
-        
+
         // value == 0 means that the object wasn't stored yet
         value = 0;
       }
@@ -274,8 +274,8 @@ private:
     // "value"
     return false;
   }
-  
-  
+
+
   template <class T> void loadPointer(T*& value, bool tracked = false)
   {
     // Read object name
@@ -296,7 +296,7 @@ private:
     Pii::IfClass<PiiSerializationTraits::IsPrimitive<T>, PrimitivePointerLoader, ComplexPointerLoader>::Type
       ::loadPointer(*self(), name, value, tracked);
   }
-  
+
   template <class T> void loadComplexPointer(const char* name, T*& value, bool tracked = false)
   {
     // Create an instance of the named class
@@ -319,7 +319,7 @@ private:
     // be available, if virtual meta objects are in use.)
     if (version > metaObject.version())
       PII_SERIALIZATION_ERROR_INFO(ClassVersionMismatch, name);
-    
+
     // Store the pointer and its address to the list of deserialized
     // objects.
     if (tracked)
@@ -361,7 +361,7 @@ private:
       {
         // In either case, we must restore the object (again)
         loadObject(value);
-        
+
         if (ptr != 0)
           {
             // The object has already been restored through a pointer
@@ -428,7 +428,7 @@ template <class Archive> struct PiiInputArchive<Archive>::ObjectMover
 {
   template <class T> static void move(Archive& archive, T& from, T& to) { archive.moveObject(&from, &to); }
 };
-  
+
 template <class Archive> struct PiiInputArchive<Archive>::PointerMover
 {
   template <class T> static void move(Archive& /*archive*/, T* /*from*/, T* /*to*/) {}

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,7 +30,7 @@ namespace PiiMatching
 {
 #ifdef Q_MOC_RUN
   Q_GADGET
-    
+
   Q_ENUMS(ModelMatchingMode);
   Q_FLAGS(InvarianceFlag InvarianceFlags);
 public:
@@ -98,13 +98,13 @@ public:
    * polar histogram. Typically, 12 quantization levels are used.
    *
    * @param distances quantization boundaries for distance in the
-   * polar histogram. The values must be in ascending order. 
+   * polar histogram. The values must be in ascending order.
    * Everything closer than the first distance limit will be put to
    * distance bin 0 and so on. For best performance, logarithmically
    * growing distances should be used. The last distance limit may be
    * infinity, in which case everything beyond the second-to-last
    * distance will be put into the same bin. Usually, five bins are
-   * used. Note that the algorithm uses squared distances for speed. 
+   * used. Note that the algorithm uses squared distances for speed.
    * Thus, the distance limits must also be given as squares.
    *
    * @param boundaryDirections boundary directions at key points. If
@@ -125,13 +125,13 @@ public:
                                                               InvarianceFlags invariance = NonInvariant);
 
   /**
-   * Returns the direction of the boundary for each point in 
+   * Returns the direction of the boundary for each point in
    * *boundaryPoints*. Boundary direction at a point is the angle (in
    * radians) of the vector that connects the points before and after
-   * it. Note that there must be at least three points in 
+   * it. Note that there must be at least three points in
    * *boundaryPoints*. Otherwise, all angles will be zero. If the first
    * and last boundary points are equal, the length of the returned
-   * vector will be one less than the number of rows in 
+   * vector will be one less than the number of rows in
    * *boundaryPoints*.
    */
   PII_MATCHING_EXPORT QVector<double> boundaryDirections(const PiiMatrix<int>& boundaryPoints);

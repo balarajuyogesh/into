@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,7 +28,7 @@ namespace Pii
 {
   /*
    * Finds a "pivot" in a matrix. The "pivot" of a column is the
-   * element that has the largest absolute value. This function 
+   * element that has the largest absolute value. This function
    * looks the pivot only from diagonal and below.
    *
    * @return the index of the row with the largest element or -1 if
@@ -64,7 +64,7 @@ namespace Pii
     return (abs(determinant(mat)) <= Numeric<T>::tolerance());
   }
 
-  
+
   template <class T> bool isDiagonal(const PiiMatrix<T>& mat)
   {
     if (mat.rows() != mat.columns())
@@ -146,13 +146,13 @@ namespace Pii
 
     if (iSize == 2)
       return determinant2x2(mat);
-    
+
     if (iSize == 3)
       return determinant3x3(mat);
 
     T det(1);
     PiiMatrix<T> tmp(mat);
-    
+
     for (int r=0; r<iSize; ++r)
       {
         int index = pivot(tmp.columnBegin(r) + r, iSize - r);
@@ -211,13 +211,13 @@ namespace Pii
             resultRow[c] *= pivotVal;
             tmpRow[c] *= pivotVal;
           }
-        
+
         // Subtract this row from others to make the rest of column r1 zero
         for(int r2=0; r2<iSize; r2++)
           {
             T* tmpRow2 = tmp.row(r2);
             T scale = tmpRow2[r1];
-            
+
             // skip rows that are already zero
             if ((r1 != r2) && scale != 0)
               {
@@ -232,7 +232,7 @@ namespace Pii
       }
     return result;
   }
-  
+
   template <class T> PiiMatrix<T> crossProduct(const PiiMatrix<T>& m1, const PiiMatrix<T>& m2)
   {
     PII_MATRIX_CHECK_EQUAL_SIZE(m1,m2);
@@ -313,9 +313,9 @@ namespace Pii
     typedef typename UnaryFunction::result_type U;
     typedef typename OutputMatrix::row_iterator OutputRow;
     typedef typename InputMatrix::const_row_iterator InputRow;
-    
+
     const int iRows = matrix.rows(), iCols = matrix.columns();
-    
+
     // Handle first row specially
     InputRow pSource = matrix.rowBegin(0);
     OutputRow pTarget = result[int(mode)] + int(mode);
@@ -325,7 +325,7 @@ namespace Pii
 
     // Pointer to the previous row. pTarget points to the current one.
     OutputRow pPrevTarget = pTarget;
-    
+
     // Next rows add to the previous one
     for (int r=1; r<iRows; ++r)
       {
@@ -368,7 +368,7 @@ namespace Pii
     cumulativeSum(matrix, matResult, func, mode);
     return matResult;
   }
-  
+
   template <class U, class Matrix> PiiMatrix<U> cumulativeSum(const Matrix& mat,
                                                               MatrixDirection direction)
   {
@@ -379,7 +379,7 @@ namespace Pii
       {
         U* resultRow = result[0], *resultRow2;
         Iterator sourceRow = mat.rowBegin(0);
-        
+
         for (int c=0; c<iCols; ++c)
           resultRow[c] = sourceRow[c];
         for (int r=1; r<iRows; ++r)
@@ -412,7 +412,7 @@ namespace Pii
   {
     // Calculate average with enough precision
     typedef typename Combine<T,U>::Type AvgType;
-    
+
     // Initialize result matrix
     PiiMatrix<U> matResult(PiiMatrix<U>::uninitialized(cumulativeSum.rows()-1, cumulativeSum.columns()-1));
 
@@ -477,7 +477,7 @@ namespace Pii
     *pSum = T(*input);
     for (int i=1; i<n; ++i)
       pSum[i] = pSum[i-1] + T(input[i]);
-    
+
     // 1 2 3 4 5 6 7 8 9
     T boundaryAvg = pSum[iLeftWindow-1] / iLeftWindow;
     int i = 0;
@@ -493,7 +493,7 @@ namespace Pii
         for (; i<n; ++i)
           output[i] = boundaryAvg;
       }
-    
+
     delete[] pSum;
   }
 
@@ -507,7 +507,7 @@ namespace Pii
       *average = avg;
     return sum != 0 ? (sum / (mat.rows() * mat.columns())) : 0;
   }
-  
+
   template <class U, class Matrix> PiiMatrix<U> var(const Matrix& mat, MatrixDirection direction)
   {
     PiiMatrix<U> matMean(mean<U>(mat, direction));
@@ -567,7 +567,7 @@ namespace Pii
     return result;
   }
 
-  
+
   template <class T, class BinaryPredicate>
   PiiMatrix<T> minOrMax(const PiiMatrix<T>& mat, MatrixDirection direction,
                         BinaryPredicate compare)
@@ -644,9 +644,9 @@ namespace Pii
       {
         if (step >= mat.columns())
           return PiiMatrix<T>(mat.rows(), 0);
-        
+
         PiiMatrix<T> result(PiiMatrix<T>::uninitialized(mat.rows(), mat.columns()-step));
-    
+
         for (int r=mat.rows(); r--; )
           {
             T* target = result.row(r);
@@ -662,9 +662,9 @@ namespace Pii
       {
         if (step >= mat.rows())
           return PiiMatrix<T>(0, mat.columns());
-        
+
         PiiMatrix<T> result(PiiMatrix<T>::uninitialized(mat.rows()-step, mat.columns()));
-    
+
         for (int r=step; r<mat.rows(); ++r)
           {
             T* target = result.row(r-step);
@@ -673,7 +673,7 @@ namespace Pii
             for (int c=mat.columns(); c--; )
               target[c] = source1[c] - source2[c];
           }
-    
+
         // Recurse if order is larger than one
         return order == 1 ? result : diff(result, step, order-1, direction);
       }
@@ -687,7 +687,7 @@ namespace Pii
       {
         if (mat.columns() < 2)
           return matResult;
-        
+
         for (int r=mat.rows(); r--; )
           {
             T* pResultRow = matResult[r];
@@ -703,7 +703,7 @@ namespace Pii
         if (mat.rows() < 2)
           return matResult;
 
-        
+
         const U* pSourceRow1 = mat[0], *pSourceRow2 = mat[1];
         T* pTargetRow = matResult[0];
 
@@ -724,7 +724,7 @@ namespace Pii
         for (int c=0; c<mat.columns(); ++c)
           pTargetRow[c] = (T(pSourceRow2[c]) - T(pSourceRow1[c]));
       }
-    
+
     return matResult;
   }
 
@@ -801,28 +801,28 @@ namespace Pii
       }
     heap.sort();
   }
-    
+
   template <class T> T kthSmallest(T* data,int size, int k)
   {
     if(size <= 6)
       {
         //Case when there is not so many elements we just sort data
-        //and take k:th element. 
-        
+        //and take k:th element.
+
         insertionSort(data,size);
         return data[k];
-       
+
       }
-    else 
+    else
       {
-        
-        //Lets divide data to to five element groups. 
+
+        //Lets divide data to to five element groups.
 
         int overElements = size % 5;
         int groups = size / 5;
 
         //Here we go through data and divide it to groups (which
-        //contains five elements) and we search median value to each group. 
+        //contains five elements) and we search median value to each group.
         //after that we will swap median value to begin of each data.
 
         for (int i = 0; i < groups; ++i)
@@ -845,7 +845,7 @@ namespace Pii
               }
             ++groups;
           }
-                
+
         //Then we will search median of medians.
 
         T m = medianN(data, groups);
@@ -853,7 +853,7 @@ namespace Pii
         //Now we will use partition function to divide data so that at
         //position x there will be median of medians (m) and on
         //position 0 to x-1 there will be smaller values and at x+1 to
-        //groups there will be greater values. 
+        //groups there will be greater values.
 
         int index = 0;
         for(int p = 0; p < size; ++p)
@@ -865,7 +865,7 @@ namespace Pii
               }
           }
 
-        int x = partition(data, size, index); 
+        int x = partition(data, size, index);
 
         if (k == x)
           return m;
@@ -873,8 +873,8 @@ namespace Pii
           return kthSmallest(data, x, k);
         else
           return kthSmallest(data + x+1, size-x-1, k-x-1);
-          
-        
+
+
       }
   }
   template <class T> int partition(T* data, int size, int pivot)
@@ -896,7 +896,7 @@ namespace Pii
     qSwap(data[storePos], data[elements]);
 
     return storePos;
-        
+
   }
 
   // template <class Iterator, class Comparator> void
@@ -931,9 +931,9 @@ namespace Pii
     double a = 1.0/(sigma*2.506628275);
     double b = (x-mu)*(x-mu);
     return static_cast<T>(a*exp(-b/(2.0*(sigma*sigma))));
-    
+
   }
-  
+
   /*
    * This median routine is based on the algorithm described in
    * "Numerical recipes in C", Second Edition,
@@ -1191,7 +1191,7 @@ namespace Pii
     for (int i=n; i--; storage[i] = i) {}
 
     permutations<UnaryOp,int*>(n, unaryOp, storage);
-    
+
     delete[] storage;
   }
 
@@ -1208,7 +1208,7 @@ namespace Pii
   public:
     typedef U InputType;
     typedef T OutputType;
-    
+
     Averager(const PiiMatrix<U>& mat) : _matInput(mat) {}
     PiiMatrix<T> averageMatrix() const { return _matAverage; }
 
@@ -1216,7 +1216,7 @@ namespace Pii
     const PiiMatrix<U>& _matInput;
     PiiMatrix<T> _matAverage;
   };
-  
+
   template <class T, class U> class RowAverager : public Averager<T,U>
   {
   public:
@@ -1253,7 +1253,7 @@ namespace Pii
   private:
     int _iCurrentColumn;
   };
-  
+
   template <class Iterator, class UnaryFunction> void windowSum(Iterator begin, Iterator end, int width,
                                                                 UnaryFunction function)
   {
@@ -1280,7 +1280,7 @@ namespace Pii
             sum -= bfr[bfrIndex];
             bfrIndex = (bfrIndex+1) % width;
           }
-        
+
 
         if (center != end)
           {
@@ -1295,7 +1295,7 @@ namespace Pii
       }
     delete[] bfr;
   }
-  
+
   template <class Averager> PiiMatrix<typename Averager::OutputType> movingAverage(Averager avg,
                                                                                    int width,
                                                                                    EndPointHandling endPointHandling)
@@ -1303,7 +1303,7 @@ namespace Pii
     // Force width to be odd in this mode
     if (endPointHandling == ShrinkWindowSymmetrically)
       width |= 1;
-    
+
     if (!avg.isValidWidth(width))
       {
         avg.initAverageMatrix(0);
@@ -1344,7 +1344,7 @@ namespace Pii
               {
                 if (endPointHandling == ShrinkWindowSymmetrically)
                   first += last - avg.signalLength();
-                last = avg.signalLength(); 
+                last = avg.signalLength();
               }
             // Sum up
             for (int i=first; i<last; ++i)
@@ -1356,7 +1356,7 @@ namespace Pii
               avg.setAverage(t, localAverage/(last-first));
           }
       }
-    
+
     return avg.averageMatrix();
   }
 
@@ -1437,13 +1437,13 @@ namespace Pii
 
         Real* tmpRow = tmp.row(r);
         mapN(tmpRow, iCols, std::bind2nd(std::multiplies<Real>(), Real(1.0)/tmp(r,c)));
-        
+
         // Subtract this row from others to make the rest of column r1 zero
         for (int r2=r+1; r2<iRows; ++r2)
           {
             Real* tmpRow2 = tmp.row(r2);
             Real scale = tmpRow2[c];
-            
+
             // skip rows that are already zero
             if (abs(scale) < tolerance)
               for (int c2=0; c2<iCols; ++c2)
@@ -1454,7 +1454,7 @@ namespace Pii
     //std::cout << r << "\n";
     //matlabPrint(std::cout, tmp);
     return r;
- 
+
     /*
     PiiMatrix<Real> singularValues = svd(mat);
 

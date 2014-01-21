@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -80,7 +80,7 @@ public:
   PiiRemoteObject(const QString& serverUri);
 
   ~PiiRemoteObject();
-  
+
   /**
    * Sets the server URI. The URI must contain a protocol, a host
    * name, and a path (a single slash at a minimum). Other components
@@ -122,12 +122,12 @@ public:
   int retryCount() const;
 
   /**
-   * Sets the number of milliseconds between reconnection attempts. 
+   * Sets the number of milliseconds between reconnection attempts.
    * The default is 1000. The maximum is 2000 to avoid hangs.
    */
   void setRetryDelay(int retryDelay);
   int retryDelay() const;
-  
+
   /**
    * Requests *path* relative to the server's root and returns the
    * reply as a list of strings split at each newline character.
@@ -206,14 +206,14 @@ public:
   void resetFailureCount();
 
   /**
-   * Sets the maximum number of failures accepted. Once 
+   * Sets the maximum number of failures accepted. Once
    * *maxFailureCount* errors have occured, every remote call will fail
    * immediately with a PiiNetworkException. This value can be used to
    * speed up recovery. The default value is -1, which disables this
    * feature.
    */
   void setMaxFailureCount(int maxFailureCount);
-  int maxFailureCount() const;  
+  int maxFailureCount() const;
 
 protected:
   /// @internal
@@ -245,7 +245,7 @@ protected:
   PiiRemoteObject(Data*, const QString&);
 
   typedef PiiLockedPtr<PiiHttpDevice> HttpDevicePtr;
-  
+
   /**
    * Adds the given *sourceId* to the resources pushed from the
    * server.
@@ -254,7 +254,7 @@ protected:
    * remote function call failed.
    */
   void connectToChannel(const QString& sourceId);
-  
+
   /**
    * Removes the given *sourceId* from the resources pushed from the
    * server.
@@ -280,10 +280,10 @@ protected:
    * @see PiiObjectServer::enqueuePushData()
    */
   virtual void decodePushedData(const QString& sourceId, const QByteArray& data);
-  
+
   /**
-   * Tries [retryCount()] times to open a connection to [serverUri()]. 
-   * Returns an exclusive pointer to a connected HTTP device. 
+   * Tries [retryCount()] times to open a connection to [serverUri()].
+   * Returns an exclusive pointer to a connected HTTP device.
    * PiiRemoteObject owns the returned pointer.
    *
    * @exception PiiNetworkException& if the connection cannot be
@@ -303,7 +303,7 @@ protected:
 
 private:
   inline static QString tr(const char* s) { return QCoreApplication::translate("PiiRemoteObject", s); }
-  
+
   void manageChannel(const QString& operation, const QString& sourceId);
   void openChannel();
   void closeChannel();

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,7 +24,7 @@
 class PiiPluginValueType : public QQmlValueTypeBase<PiiEngine::Plugin>
 {
   Q_OBJECT
-  
+
   Q_PROPERTY(QString resourceName READ resourceName);
   Q_PROPERTY(QString libraryName READ libraryName);
   Q_PROPERTY(QString version READ version);
@@ -33,14 +33,14 @@ public:
   PiiPluginValueType(QObject* parent = 0) :
     QQmlValueTypeBase<PiiEngine::Plugin>(qMetaTypeId<PiiEngine::Plugin>(), parent)
   {}
-  
+
   virtual QString toString() const { return QString("%0 %1 (%2)").arg(resourceName(), version(), libraryName()); }
   virtual bool isEqual(const QVariant& other) const
   {
     return (other.userType() == qMetaTypeId<PiiEngine::Plugin>()) &&
       (v == other.value<PiiEngine::Plugin>());
   }
-  
+
   QString resourceName() const { return v.resourceName(); }
   QString libraryName() const { return v.libraryName(); }
   QString version() const { return v.version().toString(); }

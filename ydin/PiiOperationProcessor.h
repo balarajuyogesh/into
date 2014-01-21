@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -52,7 +52,7 @@ public:
   virtual bool wait(unsigned long time = ULONG_MAX) = 0;
 
   /**
-   * Set the processing priority of this processor to `priority`. 
+   * Set the processing priority of this processor to `priority`.
    */
   virtual void setProcessingPriority(QThread::Priority priority) = 0;
 
@@ -66,7 +66,7 @@ public:
    * calling thread.
    */
   virtual int activeInputGroup() const = 0;
-  
+
   /**
    * Set the flow controller that prepares the operation for
    * processing. This function is called by

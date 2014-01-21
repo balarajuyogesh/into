@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -126,7 +126,7 @@ void PiiImageScrollArea::leaveEvent(QEvent *e)
 void PiiImageScrollArea::mouseMoveEvent(QMouseEvent *event)
 {
   QPoint newPoint = event->pos();
-  
+
   // Middle button is for dragging the image
   if (d->bDragging && (event->buttons() & Qt::MidButton))
     {
@@ -199,7 +199,7 @@ void PiiImageScrollArea::visibleAreaChanged(int x, int y, int width, int height)
 {
   d->dStartX = x;
   d->dStartY = y;
-  
+
   emit horizontalStartPosChanged(x);
   emit verticalStartPosChanged(y);
 
@@ -207,7 +207,7 @@ void PiiImageScrollArea::visibleAreaChanged(int x, int y, int width, int height)
   // correct position in the image viewport. That's why we set the
   // value of this member variable temporary to false.
   d->bCanMoveDisplay = false;
-  
+
   int xPageStep = qMin(width, d->pImageViewport->image()->width());
   int yPageStep = qMin(height, d->pImageViewport->image()->height());
   int xVal = qMax(0, x);
@@ -221,7 +221,7 @@ void PiiImageScrollArea::visibleAreaChanged(int x, int y, int width, int height)
 
   horizontalScrollBar()->setValue(xVal);
   verticalScrollBar()->setValue(yVal);
-  
+
   d->bCanMoveDisplay = true;
 }
 
@@ -248,7 +248,7 @@ void PiiImageScrollArea::setImage(const PiiVariant& image, int layer)
   // Ensure we have a pointer for each displayed layer.
   for (int i=d->lstImages.size(); i<d->pImageViewport->layerCount(); ++i)
     d->lstImages << 0;
-  
+
   if (!image.isValid())
     {
       d->pImageViewport->setImage(0, layer);

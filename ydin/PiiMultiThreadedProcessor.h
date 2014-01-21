@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -53,7 +53,7 @@ private:
   friend class PiiMultiProcessorThread;
 
   void finish(Qt::HANDLE callingThreadId, PiiOperation::State finalState);
-  
+
   void startEmit(Qt::HANDLE threadId);
   void endEmit(Qt::HANDLE threadId);
   void assignInputs(int groupId, Qt::HANDLE threadId);
@@ -69,7 +69,7 @@ private:
   void waitAllThreadsToStop();
 
   inline void process() { _pParentOp->processLocked(); }
-  
+
   volatile bool _bReset;
   bool _bBlocked;
   QMutex* _pStateMutex;

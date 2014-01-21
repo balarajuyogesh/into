@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -29,7 +29,7 @@
  * \[
  * B_{t+1} = B_t + (\alpha_1 * (1 - I_t) + \alpha_2 * I_t) * (I_t - B_t),
  * \]
- * 
+ *
  * where \(B_t\) is the background model at the time moment *t* and
  * \(I_t\) the current intensity of a pixel. \(\alpha_1\) and
  * \(\alpha_2\) are learning weights that control the speed at which
@@ -89,11 +89,11 @@ class PiiBackgroundExtractor : public PiiDefaultOperation
    * value is 1.
    */
   Q_PROPERTY(double movementThreshold READ movementThreshold WRITE setMovementThreshold);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiBackgroundExtractor();
-  
+
   double threshold() const;
   void setThreshold(double threshold);
   double alpha1() const;
@@ -104,13 +104,13 @@ public:
   int maxStillTime() const;
   void setMovementThreshold(double movementThreshold);
   float movementThreshold() const;
-  
+
 protected:
   void process();
 
 private:
   template <class T> void operate(const PiiVariant& obj);
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {
@@ -123,7 +123,7 @@ private:
     PiiMatrix<int> matStillCounter;
     PiiMatrix<float> matBackground;
     PiiMatrix<float> matForeground;
-    
+
     int iMaxStillTime;
     double dMovementThreshold;
   };

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -25,7 +25,7 @@
  * ------
  *
  * @in input - any object
- * 
+ *
  * Outputs
  * -------
  *
@@ -50,7 +50,7 @@ class PiiObjectCounter : public PiiDefaultOperation
    * default value is `true`.
    */
   Q_PROPERTY(bool autoReset READ autoReset WRITE setAutoReset);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiObjectCounter();
@@ -61,7 +61,7 @@ public:
   int count() const;
   void setAutoReset(bool autoReset);
   bool autoReset() const;
-  
+
 protected:
   void process();
 

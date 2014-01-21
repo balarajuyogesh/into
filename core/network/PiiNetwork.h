@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -70,7 +70,7 @@ namespace PiiNetwork
   template <class T> inline T returnValue(const QVariant& ret) { return ret.value<T>(); }
   /// @internal
   template <> inline void returnValue<void>(const QVariant&) {}
-  
+
   /**
    * Encoding formats for data passed over network.
    *
@@ -112,7 +112,7 @@ namespace PiiNetwork
    * @param responseHeader if this parameter is non-zero, the server's
    * response headers will be returned in it.
    *
-   * @param maxRedirects the maximum number of redirections to accept. 
+   * @param maxRedirects the maximum number of redirections to accept.
    * -1 means any number.
    *
    * @exception PiiInvalidArgumentException& if *uri* is incorrectly
@@ -206,9 +206,9 @@ namespace PiiNetwork
                                         const PiiMimeHeader& requestHeaders,
                                         PiiHttpResponseHeader* header = 0);
   PII_NETWORK_EXPORT void makeDirectory(const QString& uri);
-  
+
   /// @hide
-  extern PII_NETWORK_EXPORT const char* pFormContentType;  
+  extern PII_NETWORK_EXPORT const char* pFormContentType;
   extern PII_NETWORK_EXPORT const char* pDeviceIsNotConnectedMessage;
   extern PII_NETWORK_EXPORT const char* pErrorReadingResponseHeader;
   extern PII_NETWORK_EXPORT const char* pServerRepliedWithStatus;
@@ -220,7 +220,7 @@ namespace PiiNetwork
                                       const QString& name,
                                       const QVariantList& params,
                                       ResolutionError* errorCode = 0);
-  
+
   PII_NETWORK_EXPORT qint64 passData(QIODevice* from, QIODevice* to, qint64 bytes = 0, PiiProgressController* controller = 0);
   PII_NETWORK_EXPORT PiiHttpDevice* openHttpConnection(PiiNetworkClient& client,
                                                        const QString& method,

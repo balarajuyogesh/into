@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -87,7 +87,7 @@ namespace Pii
   {};
 
   /**
-   * A structure whose constant `boolValue` member evaluates to 
+   * A structure whose constant `boolValue` member evaluates to
    * `true`.
    */
   struct True
@@ -96,7 +96,7 @@ namespace Pii
   };
 
   /**
-   * A structure whose constant `boolValue` member evaluates to 
+   * A structure whose constant `boolValue` member evaluates to
    * `false`.
    */
   struct False
@@ -130,7 +130,7 @@ namespace Pii
   {
     enum { boolValue = !T::boolValue };
   };
-  
+
   /**
    * A template that performs a logical AND operation on its boolean
    * template parameters. The `boolValue` member evaluates to `true`
@@ -157,10 +157,10 @@ namespace Pii
   {
     enum { intValue = i };
   };
-  
+
   template <int a, int b> struct MinInt : If<(a <= b), IntIdentity<a>, IntIdentity<b> >::Type
   {};
-  
+
   template <int a, int b> struct MaxInt : If<(a >= b), IntIdentity<a>, IntIdentity<b> >::Type
   {};
 
@@ -175,7 +175,7 @@ namespace Pii
     static void pass(const Pass&) {}
   };
 #endif
-  
+
   /// @endgroup
 }
 

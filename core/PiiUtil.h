@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -49,11 +49,11 @@ namespace Pii
     out << str.toLocal8Bit().constData();
     return out;
   }
-  
+
   /**
    * Find the intersection of two lists. The result contains the
    * elements that are present in both lists, or an empty list if the
-   * intersection is empty. Any collection defining `size`(), 
+   * intersection is empty. Any collection defining `size`(),
    * `contains`(), and `append`() functions can be used as a parameter.
    */
   template <class Collection> Collection intersect(const Collection& list1, const Collection& list2)
@@ -82,7 +82,7 @@ namespace Pii
 
   /**
    * Create a list that consists of the elements of `list1` that are
-   * not present in `list2`. Any collection defining `size`(), 
+   * not present in `list2`. Any collection defining `size`(),
    * `contains`(), and `append`() functions can be used as a parameter.
    */
   template <class Collection> Collection subtract(const Collection& list1, const Collection& list2)
@@ -119,15 +119,15 @@ namespace Pii
   {
     lst.append(qMakePair(QString(name), value));
   }
-  
+
   /**
    * Returns the properties of a QObject as a `Collection`.
    *
    * @param obj the object whose properties are queried
    *
-   * @param propertyOffset skip this many properties in the beginning. 
-   * This value can be used to skip the properties of superclasses. 
-   * For example, using one as the *propertyOffset* skips the 
+   * @param propertyOffset skip this many properties in the beginning.
+   * This value can be used to skip the properties of superclasses.
+   * For example, using one as the *propertyOffset* skips the
    * [QObject::objectName] property.
    *
    * @param flags a logical or of property types to be included in the
@@ -148,7 +148,7 @@ namespace Pii
     Collection result;
 
     const QMetaObject* pMetaObject = obj->metaObject();
-    // Loop through the properties 
+    // Loop through the properties
     for (int i=propertyOffset; i<pMetaObject->propertyCount(); ++i)
       {
         // Store only properties that match our flags
@@ -171,7 +171,7 @@ namespace Pii
             appendPropertyTo(result, pName, obj->property(pName));
           }
       }
-    
+
     return result;
   }
 
@@ -185,7 +185,7 @@ namespace Pii
   template <class Iterator> inline QString propertyNameFrom(Iterator i) { return i->first; }
   template <class Iterator> inline QVariant propertyValueFrom(Iterator i) { return i->second; }
   /// @endhide
-  
+
   /**
    * Sets many properties in a bunch. Properties will be set in
    * the order *collection* gives them when iterating over it.
@@ -208,7 +208,7 @@ namespace Pii
    * Converts a C-style argument list to a QStringList.
    */
   PII_CORE_EXPORT QStringList argsToList(int argc, char* argv[]);
-  
+
   /**
    * Converts a list of QVariant objects into a QList of type `T`.
    *
@@ -287,9 +287,9 @@ namespace Pii
     shuffle(lst.begin(), lst.end());
   }
 
-  
+
   /**
-   * Select randomly *n* distinct integers that are smaller than 
+   * Select randomly *n* distinct integers that are smaller than
    * *max*. This function can be used to take a random sample of a
    * collection.
    *
@@ -335,7 +335,7 @@ namespace Pii
    for (int i=0; i<indices.size(); ++i)
      target.append(source[indices[i]]);
   }
-  
+
   /**
    * Find all parent objects of `obj` up to `maxParents` parent
    * objects. By default, all parents are returned. If a template
@@ -415,7 +415,7 @@ namespace Pii
    * don't have a common parent.
    */
   PII_CORE_EXPORT QObject* findCommonParent(const QObject* obj1, const QObject* obj2, int* parentIndex = 0);
-  
+
   /**
    * Delete all members of a collection. This function works for any
    * stl or Qt collection. It goes through all members of the
@@ -429,7 +429,7 @@ namespace Pii
     for (typename Collection::iterator i = c.begin(); i != c.end(); i++)
       delete i.operator*();
   }
-  
+
   /**
    * Hash function for null-terminated C strings.
    */
@@ -440,7 +440,7 @@ namespace Pii
    * stamp. Each string in `list` represents a rule with a syntax
    * similar but not equivalent to crontab (man crontab). Each rule
    * contains six fields separated by spaces. The fields are (in this
-   * order): minute, hour, day, month, day of week, and week number. 
+   * order): minute, hour, day, month, day of week, and week number.
    * Each field may contain a comma-separated list of values or value
    * ranges, or an asterisk (*) that denotes "all". A rule matches if
    * all of its fields match. A set of rules matches if any of its
@@ -479,7 +479,7 @@ namespace Pii
    * end of property value.
    *
    * - `RemoveQuotes` - remove double quotes around property
-   * names/values. Implies `TrimPropertyName` and 
+   * names/values. Implies `TrimPropertyName` and
    * `TrimPropertyValue`.
    *
    * - `DowncasePropertyName` - convert all property names to lower
@@ -498,7 +498,7 @@ namespace Pii
   Q_DECLARE_OPERATORS_FOR_FLAGS(PropertyDecodingFlags)
 
   /**
-   * Returns the index of the first occurrence of *separator* in 
+   * Returns the index of the first occurrence of *separator* in
    * `str`, starting at *startIndex*. This function ignores occurrences
    * that are preceded by an odd number of *escape* characters. If
    * the separator is not found, returns -1.
@@ -518,7 +518,7 @@ namespace Pii
    */
   PII_CORE_EXPORT QStringList splitQuoted(const QString& str, QChar separator = QChar(','), QChar quote = QChar('"'),
                                           QString::SplitBehavior behavior = QString::KeepEmptyParts);
-  
+
   /**
    * Decode string-encoded properties into a variant map. This
    * function can be used to parse ini files, css-style properties or
@@ -744,7 +744,7 @@ namespace Pii
    * Converts a variant to a string suitable for use as a value in
    * many programming languages. If *value* is a string, it will be
    * quoted and converted to ASCII-only characters. Numeric and
-   * boolean values will be converted with QVariant::toString(). If 
+   * boolean values will be converted with QVariant::toString(). If
    * *value* is not any of the supported types, a null string will be
    * returned.
    */

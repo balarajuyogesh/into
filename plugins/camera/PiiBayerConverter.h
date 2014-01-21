@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -133,7 +133,7 @@ namespace PiiCamera
      */
     I11 interpolatorB11;
   };
-  
+
   /**
    * An interpolation functor that calculates the value of a color
    * channel by averaging the four straight neighbors of a pixel.
@@ -196,7 +196,7 @@ namespace PiiCamera
 
   /**
    * An interpolation functor that calculates the value of a color
-   * channel by averaging the two horizontal neighbors of a pixel. 
+   * channel by averaging the two horizontal neighbors of a pixel.
    * Each of the funtions performs the interpolation at some special
    * point of the image (corners, borders). The [center()] function is
    * used elsewhere.
@@ -287,20 +287,20 @@ namespace PiiCamera
   template <class T = unsigned char> struct RgbPixel
   {
     /**
-     * The output type. Each pixel type must have a typedef for 
+     * The output type. Each pixel type must have a typedef for
      * `Type`. This functor uses PiiColor<T>.
      */
     typedef PiiColor<T> Type;
     /**
      * How are the interpolated color channel values converted to the
-     * output type? This operator must be present in all pixel types. 
+     * output type? This operator must be present in all pixel types.
      * This function returns PiiColor<T>(r,g,b).
      */
     Type operator()(int r, int g, int b) const { return Type(r,g,b); }
   };
 
   /**
-   * Four-channel rgb color pixel type functor for Bayer decoding. 
+   * Four-channel rgb color pixel type functor for Bayer decoding.
    * Uses PiiColor4 as output type.
    */
   template <class T = unsigned char> struct Rgb4Pixel
@@ -318,7 +318,7 @@ namespace PiiCamera
     typedef T Type;
     Type operator()(int r, int, int) const { return Type(r); }
   };
-  
+
   /**
    * A Bayer decoding functor that extracts the green channel only. T
    * is the output type.
@@ -328,7 +328,7 @@ namespace PiiCamera
     typedef T Type;
     Type operator()(int, int g, int) const { return Type(g); }
   };
- 
+
   /**
    * A Bayer decoding functor that extracts the blue channel only. T
    * is the output type.
@@ -409,14 +409,14 @@ namespace PiiCamera
              Pixel pixel)
   {
     typedef typename Pixel::Type U;
-    
+
     // Cannot handle too small input
     if (encoded.rows() < 2 || encoded.columns() < 2)
       return PiiMatrix<U>(encoded.rows(), encoded.columns());
 
     // PENDING all loops could be optimized to step two pixels at a
     // time. The c & 1 or r & 1 comparison could be avoided.
-    
+
     PiiMatrix<U> result(PiiMatrix<T>::uninitialized(encoded.rows(), encoded.columns()));
     U* resultRow = result.row(0);
 
@@ -455,8 +455,8 @@ namespace PiiCamera
       resultRow[c] = pixel(decoder.interpolatorR00.topRight(row1, row2),
                            decoder.interpolatorG00.topRight(row1, row2),
                            decoder.interpolatorB00.topRight(row1, row2));
-      
-    
+
+
     // Handle all but the top and bottom rows
     int r = 1;
     for (;r<encoded.rows()-1; ++r)
@@ -568,7 +568,7 @@ namespace PiiCamera
         resultRow[0] = pixel(decoder.interpolatorR00.bottomLeft(row0, row1),
                              decoder.interpolatorG00.bottomLeft(row0, row1),
                              decoder.interpolatorB00.bottomLeft(row0, row1));
-        
+
         // Bottom Row
         for (c = 1; c<encoded.columns()-1; ++c, ++row0, ++row1)
           {

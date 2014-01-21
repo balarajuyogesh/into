@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,12 +26,12 @@
  * ------
  *
  * @in input - any scalar or matrix
- * 
+ *
  * Outputs
  * -------
  *
  * @out output - the result of applying a mathematical function to the
- * input. The output type depends both on the input and the function. 
+ * input. The output type depends both on the input and the function.
  * For example, the absolute value for a complex number is real. The
  * input type will be preserved whenever possible.
  *
@@ -67,7 +67,7 @@ public:
    * - `Square` - square. Output type equals input type. Beware of
    * overflows!
    *
-   * - `Sin` - sine of angle. Output type is `double` except for 
+   * - `Sin` - sine of angle. Output type is `double` except for
    * `float` input, for which it is `float`. Complex numbers cause
    * run-time exception.
    *
@@ -79,7 +79,7 @@ public:
    * `float` input, for which it is `float`. Complex numbers cause
    * run-time exception.
    *
-   * Functions that calculate a value over all elements in a matrix. 
+   * Functions that calculate a value over all elements in a matrix.
    * In all these cases the output type is `double`. Scalars and
    * complex-valued matrices as input cause run-time exception:
    *
@@ -93,7 +93,7 @@ public:
     Abs, Log, Sqrt, Square, Sin, Cos, Tan,
     Var, Std, Mean
   };
-  
+
   PiiMathematicalFunction();
 
   void setFunction(Function function);
@@ -122,7 +122,7 @@ private:
 
 #undef EMIT
 #undef FUNC_DEF
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {

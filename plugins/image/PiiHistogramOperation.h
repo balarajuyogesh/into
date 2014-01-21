@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,7 +30,7 @@
  *
  * @in image - the input image, any gray-scale or color image.
  *
- * @in roi - region-of-interest. See [PiiImagePlugin] for details. 
+ * @in roi - region-of-interest. See [PiiImagePlugin] for details.
  * Optional.
  *
  * Outputs
@@ -61,7 +61,7 @@ class PiiHistogramOperation : public PiiDefaultOperation
   /**
    * Output normalization. If set to `false` (the default), the
    * output will be a PiiMatrix<int> in which each column represents
-   * the number of times the specific color was encountered. If 
+   * the number of times the specific color was encountered. If
    * `true`, output histograms will be normalized so that they always
    * sum up to unity and represented by PiiMatrix<float>.
    */
@@ -79,7 +79,7 @@ public:
 
 protected:
   void process();
-  
+
   void aboutToChangeState(State state);
 
   void setNormalized(bool normalize);
@@ -104,10 +104,10 @@ private:
   public:
     Data();
     ~Data();
-    
+
     int iLevels;
     PiiInputSocket* pImageInput, *pRoiInput;
-    
+
     bool bNormalized;
     PiiImage::RoiType roiType;
     PiiImage::HistogramHandler* pHistogram;

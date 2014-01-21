@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -96,7 +96,7 @@ public:
 
   int norm() const;
   void setNorm(int norm);
-  
+
 protected:
   void process();
 
@@ -113,7 +113,7 @@ private:
     int iLevels, iFeaturesPerLevel, iNorm;
     PiiDsp::WaveletFamily waveletFamily;
     int iWaveletIndex;
-    
+
     PiiInputSocket *pImageInput;
     PiiOutputSocket *pFeatureOutput;
   };

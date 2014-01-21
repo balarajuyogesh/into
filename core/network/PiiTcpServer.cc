@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -45,7 +45,7 @@ void PiiTcpServer::stopListening()
 {
   _d()->server.close();
 }
-  
+
 void PiiTcpServer::incomingConnection(PiiNetwork::SocketDescriptorType socketDescriptor)
 {
   PiiNetworkServer::incomingConnection(PiiGenericSocketDescriptor(socketDescriptor));
@@ -87,7 +87,7 @@ bool PiiTcpServer::setServerAddress(const QString& serverAddress)
   int colonIndex = serverAddress.lastIndexOf(':');
   if (colonIndex == -1)
     return false;
-  
+
   QHostAddress address;
   if (!address.setAddress(serverAddress.left(colonIndex)))
     return false;

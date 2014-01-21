@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -113,7 +113,7 @@ void PiiBoostClassifier<SampleSet>::learn(const SampleSet& samples,
   d->iFeatureCount = PiiSampleSet::featureCount(samples);
   double dMaxError = (double(d->iClassCount) - 1.0) / d->iClassCount;
   double dLogClassesMinus1 = 0.5 * log(double(d->iClassCount-1)); // zero in binary classification
-  
+
   QVector<double> vecWeights;
   if (weights.size() == iSamples)
     vecWeights = weights;
@@ -162,7 +162,7 @@ void PiiBoostClassifier<SampleSet>::learn(const SampleSet& samples,
        * SammeBoost.
        */
       d->lstClassifierWeights << 0.5 * log(dErrorRatio);
-      
+
       // Update sample weights
       double dCorrectWeight = 1, dIncorrectWeight = 1;
       switch (d->algorithm)
@@ -178,7 +178,7 @@ void PiiBoostClassifier<SampleSet>::learn(const SampleSet& samples,
           break;
         case PiiClassification::AdaBoost:
           dIncorrectWeight = dErrorRatio; // = exp(log(dErrorRatio))
-          break;          
+          break;
         case PiiClassification::SammeBoost:
           // exp(0.5*(ln(dErrorRatio) + ln(iClassCount-1)))
           // = exp(ln(dErrorRatio * (iClassCount-1)))^0.5
@@ -199,7 +199,7 @@ void PiiBoostClassifier<SampleSet>::learn(const SampleSet& samples,
           break;
         }
       double dWeightSum = updateWeights(samples, labels, vecHypotheses, vecWeights, dCorrectWeight, dIncorrectWeight);
-          
+
       // Start backtracking when three weak classifiers have been
       // selected.
       if (d->algorithm == PiiClassification::FloatBoost)
@@ -218,7 +218,7 @@ void PiiBoostClassifier<SampleSet>::learn(const SampleSet& samples,
               else
                 break;
             }
-          if (bClassifierExcluded)  
+          if (bClassifierExcluded)
             dWeightSum = updateWeights(samples, labels, vecHypotheses, vecWeights, dCorrectWeight, dIncorrectWeight);
           // if (dWeightSum < J*) break;
         } // FloatBoost

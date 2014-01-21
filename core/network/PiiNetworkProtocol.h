@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -33,7 +33,7 @@ class PII_NETWORK_EXPORT PiiNetworkProtocol
 {
 public:
   virtual ~PiiNetworkProtocol();
-  
+
   /**
    * The implementation of a network protocol. This function should
    * handle all the communication with a client. It is called by a
@@ -78,7 +78,7 @@ protected:
   } *d;
   /// @internal
   PiiNetworkProtocol(Data* data);
-  
+
   PiiNetworkProtocol();
 };
 

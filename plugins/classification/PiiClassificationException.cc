@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -43,5 +43,5 @@ PiiClassificationException::PiiClassificationException(Code code, const QString&
 PiiClassificationException::PiiClassificationException(const QString& message, const QString& location) :
   PiiException(new Data(message, location))
 {}
-  
+
 PiiClassificationException::Code PiiClassificationException::code() const { return _d()->code; }

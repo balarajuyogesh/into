@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -61,9 +61,9 @@ template <class SampleSet> QVector<double> PiiSom<SampleSet>::findMostDistantNei
   const int iSamples = this->sampleCount();
   if (iSamples < d->iSizeX * d->iSizeY)
     return QVector<double>(iSamples, -1);
-    
+
   double distance = 0;
-  
+
   QVector<double> distances(iSamples);
   for (int i=0; i<iSamples; ++i)
     {
@@ -86,7 +86,7 @@ template <class SampleSet> double PiiSom<SampleSet>::findMostDistantNeighbor(int
   const int iSamples = this->sampleCount(), iFeatures = this->featureCount();
   if (iSamples < d->iSizeX * d->iSizeY)
     return QVector<double>(iSamples, -1);
-  
+
   int hX = vector1Index % d->iSizeX;
   int hY = vector1Index / d->iSizeX;
 
@@ -255,7 +255,7 @@ template <class SampleSet> int PiiSom<SampleSet>::adaptTo(ConstFeatureIterator v
   int iVectorIndex = this->findClosestMatch(vector, &distance);
   if (iVectorIndex == -1)
     return -1;
-  
+
   // Its coordinates ...
   int hX = iVectorIndex % d->iSizeX;
   int hY = iVectorIndex / d->iSizeX;
@@ -296,7 +296,7 @@ template <class SampleSet> void PiiSom<SampleSet>::adaptNeighborhood(int hitX, i
     case PiiClassification::SomSequentialAlgorithm:
       alpha = currentLearningRate();
       break;
-      
+
     case PiiClassification::SomBalancedAlgorithm:
       {
         // Iterative calculation of average sample
@@ -309,7 +309,7 @@ template <class SampleSet> void PiiSom<SampleSet>::adaptNeighborhood(int hitX, i
           }
         else
           PiiClassification::adaptVector(sampleAt(d->meanSample, 0), vector, iFeatures, w);
-    
+
         // Iterative calculation of mean distance between samples
         if (sampleCount(d->previousSample) != 0)
           {
@@ -330,11 +330,11 @@ template <class SampleSet> void PiiSom<SampleSet>::adaptNeighborhood(int hitX, i
             d->previousSample = create<SampleSet>(1, iFeatures);
             alpha = currentLearningRate();
           }
-        
+
         setSampleAt(d->previousSample, 0, vector);
       }
       break;
-      
+
     case PiiClassification::SomQErrAlgorithm:
       {
         // Learning constant is determined by the sample's distance to
@@ -349,7 +349,7 @@ template <class SampleSet> void PiiSom<SampleSet>::adaptNeighborhood(int hitX, i
             d->dMaxQErr = distance;
             d->dQErrRange = d->dMaxQErr - d->dMinQErr;
           }
-        
+
         alpha = (distance - d->dMinQErr) / d->dQErrRange;
       }
       break;

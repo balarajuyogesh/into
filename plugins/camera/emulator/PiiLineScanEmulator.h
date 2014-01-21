@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -40,7 +40,7 @@ class PII_CAMERAEMULATOR_EXPORT PiiLineScanEmulator : public PiiCameraDriver
    * The rect of the frame.
    */
   Q_PROPERTY(QRect frameRect READ frameRect WRITE setFrameRect);
-  
+
   /**
    * This property tells how many frames we will keep on buffer.
    */
@@ -162,7 +162,7 @@ public:
   QVariant property(const char* name) const;
   bool setProperty(const char* name, const QVariant& value);
 
-  
+
   QStringList cameraList() const;
   int cameraType() const { return (int)PiiCamera::LineScan; }
   void initialize(const QString& cameraId);
@@ -228,7 +228,7 @@ public:
 
 protected:
   bool requiresInitialization(const char* name) const;
-  
+
 private:
   void buffer();
   void capture();
@@ -238,7 +238,7 @@ private:
 
   QStringList _lstCriticalProperties;
   bool _bOpen, _bCapturingRunning, _bBufferingRunning;
-  
+
   int _iSkippingLimit, _iFrameSizeInBytes;
   PiiMatrix<unsigned char> _frameBuffer;
   QVector<unsigned char*> _vecBufferPointers;
@@ -266,13 +266,13 @@ private:
   int _iExposureTime;
   int _iBaseExposureTime;
   double _dTriggerRate, _dInputPulseFrequency, _dOutputPulseFrequency;
-  
+
   // Is this the first scan-line?
   bool _bFirstScanLine;
-  
+
   QVariantMap _mapGeneratorProperties;
   PiiTextureGenerator* _pTextureGenerator;
-  
+
   bool loadImages();
   void lineAdded();
 
@@ -312,7 +312,7 @@ private:
   double _dLeftEdgePos, _dRightEdgePos;
   QPoint _leftTargetPoint, _rightTargetPoint;
 
-  bool newDefect();  
+  bool newDefect();
   int getRandomImage();
   QPoint getRandomCoord(const QImage& image);
   void generateLine();

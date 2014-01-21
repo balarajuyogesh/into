@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,7 +30,7 @@
  * 0 & \text{otherwise}
  * \end{cases}
  * \]
- * 
+ *
  * The vector **w** in the equation is known as the *weight
  * vector*, which defines the direction of the hyperplane
  * separating the two classes. (The weight vector is perpendicular to
@@ -80,7 +80,7 @@ template <class SampleSet> class PiiPerceptron :
 {
 public:
   typedef typename PiiSampleSet::Traits<SampleSet>::ConstFeatureIterator ConstFeatureIterator;
-  
+
   PiiPerceptron();
   ~PiiPerceptron();
 
@@ -153,12 +153,12 @@ public:
    */
   int maxIterations() const;
   /**
-   * Sets the maximum number of iterations the algorithm will take. 
+   * Sets the maximum number of iterations the algorithm will take.
    * This value limits the number of times the whole sample set is
    * iterated over.
    */
   void setMaxIterations(int maxIterations);
-  
+
 private:
   class Data : public PiiLearningAlgorithm<SampleSet>::Data
   {

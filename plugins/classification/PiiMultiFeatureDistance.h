@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -21,11 +21,11 @@
 #include <PiiMath.h>
 
 /**
- * A distance measure that combines many distance measures into one. 
+ * A distance measure that combines many distance measures into one.
  * PiiMultiFeatureDistance calculates distances between feature
  * vectors that are composed of many feature vectors by concatenating
  * them into one long vector. It is configured with an index matrix
- * that tells the boundaries of sub-vectors within this long vector. 
+ * that tells the boundaries of sub-vectors within this long vector.
  * For each sub-vector, a different distance measure may be used. By
  * default, PiiMultiFeatureDistance sums the separate distance
  * together to get the final distance. Other options are minimum,
@@ -117,7 +117,7 @@ template <class FeatureIterator> double PiiMultiFeatureDistance<FeatureIterator>
   // Loop through all sub-vectors
   for (int i=0; i<_matBoundaries.columns(); ++i)
     {
-      // If we have a distance measure for this sub-vector, we use it. 
+      // If we have a distance measure for this sub-vector, we use it.
       // Otherwise use the last one.
       if (i < iSize)
         measure = this->at(i);
@@ -125,7 +125,7 @@ template <class FeatureIterator> double PiiMultiFeatureDistance<FeatureIterator>
       if (end > length) break; // Error
 
       double weight = (i < _lstWeights.size() ? _lstWeights[i] : 1);
-        
+
       distances(0,i) = weight * (*measure)(sample + start, model + start, end-start);
       start = end;
     }
@@ -142,7 +142,7 @@ template <class FeatureIterator> double PiiMultiFeatureDistance<FeatureIterator>
       }
     case PiiClassification::DistanceMin: return Pii::min(distances);
     case PiiClassification::DistanceMax: return Pii::max(distances);
-      
+
     default: return Pii::sum<double>(distances);
     }
   return 0;

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -170,7 +170,7 @@ void PiiMeasureBar::updateStepList()
   // Protect from stupid users.
   if (d->lstTickScales.isEmpty() || d->lstTickNames.size() != d->lstTickScales.size())
     return;
-  
+
   // Initialize the big scale index to -1 meaning that it doesn't
   // contain any real value. If the new big scale that meet
   // the requirements, is not found (e.g. d->lstTickScales is empty) -1
@@ -179,7 +179,7 @@ void PiiMeasureBar::updateStepList()
 
   // Find out the greatest scale
   for (int j = 0; j<d->lstTickScales.size(); ++j)
-    {      
+    {
       if (d->lstTickScales[j] / d->dPixelSize > d->lstMinTickDistances.last() &&
           (d->lstTickNames.isEmpty() || !d->lstTickNames[j].isEmpty()))
         {
@@ -212,7 +212,7 @@ void PiiMeasureBar::updateStepList()
               bool bIsSmaller = true; //
                                //tells, if this tick is smaller than
                                //all previous ticks
-              bool bIsDivisible = true; // 
+              bool bIsDivisible = true; //
                                         // tell, if this tick is
                                         // divisible with all stored steps.
               for (int k=0; k<d->lstSteps.size(); k++)
@@ -248,7 +248,7 @@ void PiiMeasureBar::updateStepList()
     }
 
   d->iCurrBigScaleIndex = tempBigScaleIndex;
-  
+
   updateUnitIndex();
 }
 
@@ -260,13 +260,13 @@ void PiiMeasureBar::updateUnitIndex()
   // Negative value as a unit index means that
   // no unit will be shown.
   d->iCurrUnitIndex = -1;
-  
+
   // Make sure that the big scale index is valid and initialized (not -1).
   if (d->iCurrBigScaleIndex<0 || d->iCurrBigScaleIndex >= d->lstTickNames.size())
     return;
 
   int tempUnitIndex = d->iCurrBigScaleIndex;
-  
+
   // Find out the unit index.
   if (!d->lstTickNames[tempUnitIndex].isEmpty())
     {
@@ -334,7 +334,7 @@ void PiiMeasureBar::paintEvent(QPaintEvent* event)
   QFrame::paintEvent(event);
 
   QRect cRect = contentsRect();
-  
+
   QPainter p(this);
 
   QStyleOptionFrame option;
@@ -348,7 +348,7 @@ void PiiMeasureBar::paintEvent(QPaintEvent* event)
   int iBarSize;
   int iBarLength;
   int iLineWidth = lineWidth();
-  
+
   if (d->orientation == Qt::Horizontal)
     {
       iBarSize = cRect.height();
@@ -371,7 +371,7 @@ void PiiMeasureBar::paintEvent(QPaintEvent* event)
   int iTextHeight = iBarSize - iFirstTextMargin - iSecondTextMargin;
 
   double dStartPos = d->dStartPos * d->dPhysicalPixelSize;
-  
+
   // Draw all steps
   for (int s=0; s<d->lstSteps.size(); ++s)
     {
@@ -380,7 +380,7 @@ void PiiMeasureBar::paintEvent(QPaintEvent* event)
       double dMod = fmod(dStartPos, dStep);
       double dFirstTick = dStartPos + (Pii::almostEqualRel(dMod,0.0) ? 0 : -dMod);
       bool bDrawText = s == d->lstSteps.size()-1;
-      
+
       // Draw all ticks
       for (int t=0; t<=iTickCount; ++t)
         {
@@ -417,7 +417,7 @@ void PiiMeasureBar::paintEvent(QPaintEvent* event)
             }
         }
     }
-  
+
   if (d->bDrawMouseLocation)
     {
       p.setBrush(foregroundColor);
@@ -429,7 +429,7 @@ void PiiMeasureBar::paintEvent(QPaintEvent* event)
       int iTextHeight = h - step;
       if (d->tickPosition == TicksTopOrRight)
         step = -step;
-      
+
       QPolygon pol;
       pol << QPoint(x-step, h-step) << QPoint(x+step, h-step) << QPoint(x, h);
       p.drawPolygon(pol);
@@ -459,12 +459,12 @@ void PiiMeasureBar::paintEvent(QPaintEvent* event)
 
           if (d->bShowAbsoluteValues)
             dPos = qAbs(dPos);
-          
+
           QString strPosText = tr("%1").arg(QString::number(dPos, 'f', iDecimals));
 
           if (d->bDrawUnitNames)
             strPosText.append(tr(" %1").arg(strSuffix));
-                              
+
           QRectF textRect(x-30, iTextY, 60, iTextHeight);
           p.setBrush(QBrush(QColor(20,20,20,200)));
           p.drawRect(textRect);
@@ -503,7 +503,7 @@ class DefaultNumberFormatter : public PiiMeasureBar::NumberFormatter
 {
 public:
   ~DefaultNumberFormatter() {}
-  
+
   QString formatNumber(double value, double /*scale*/, const QString& unit) const
   {
     QString strResult = QString::number(value);

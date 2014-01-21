@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@
  * ------
  *
  * @in trigger - an optional trigger input. (any)
- * 
+ *
  * Outputs
  * -------
  *
@@ -53,7 +53,7 @@ class PiiSampleRandomizer : public PiiDefaultOperation
    * ~~~
    */
   Q_PROPERTY(QVariantList sampleNames READ sampleNames WRITE setSampleNames);
-  
+
   /**
    * Relative weights for each of the classes. The random selection of
    * each class will be weighted according to its relative weight in
@@ -86,7 +86,7 @@ class PiiSampleRandomizer : public PiiDefaultOperation
    * The zero-based index of the next sample to be emitted.
    */
   Q_PROPERTY(int currentSampleIndex READ currentSampleIndex);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiSampleRandomizer();
@@ -111,7 +111,7 @@ protected:
 
 private:
   void emitFromClass(int classIndex);
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {

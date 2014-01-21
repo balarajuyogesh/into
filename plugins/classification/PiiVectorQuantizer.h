@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -42,21 +42,21 @@ public:
    * distance measure.
    */
   PiiVectorQuantizer();
-  
+
   /**
    * Create a new vector quantizer with the given distance measure.
    *
-   * @param measure the way of measuring distances between vectors. 
+   * @param measure the way of measuring distances between vectors.
    * PiiVectorQuantizer takes the ownership of the pointer. The
    * distance measure must be set before calling [classify()].
    */
   PiiVectorQuantizer(PiiDistanceMeasure<ConstFeatureIterator>* measure);
-  
+
   /**
    * Destroy the vector quantizer. Also deletes the distance measure.
    */
   ~PiiVectorQuantizer();
-  
+
   /**
    * Returns the index of the closest vector in the model set. If two
    * vectors are equally close, the one first in the model set will
@@ -82,14 +82,14 @@ public:
    * Get the reject threshold.
    */
   double rejectThreshold() const;
-  
+
   /**
    * Returns the distance measure.
    */
   PiiDistanceMeasure<ConstFeatureIterator>* distanceMeasure() const;
 
   /**
-   * Sets the distance measure. This class takes the ownership of 
+   * Sets the distance measure. This class takes the ownership of
    * *measure*. The old distance measure will be deleted.
    */
   void setDistanceMeasure(PiiDistanceMeasure<ConstFeatureIterator>* measure);
@@ -98,7 +98,7 @@ public:
    * Returns a modifiable reference to the model set.
    */
   SampleSet& models();
-  
+
   /**
    * Returns the model sample set.
    */
@@ -129,7 +129,7 @@ public:
    * *index*.
    */
   ConstFeatureIterator modelAt(int index) const;
-  
+
 protected:
   /// @internal
   class Data

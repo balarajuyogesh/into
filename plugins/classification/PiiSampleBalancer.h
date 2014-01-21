@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -21,7 +21,7 @@
 /**
  * An operation that balances training sets by giving more weight to
  * rare samples. The weighting is based on the distribution of
- * individual feature values. The balancer works in two modes: 
+ * individual feature values. The balancer works in two modes:
  * `ProbabilitySelection` and `WeightCalculation`. In the former mode,
  * the operation either passes feature vectors to the `features`
  * output or does nothing, based on the estimated weight of the
@@ -45,7 +45,7 @@
  *
  * @in features - feature vector. Each component must be quantized to
  * the number of quantization levels determined by [levels].
- * 
+ *
  * Outputs
  * -------
  *
@@ -72,7 +72,7 @@ class PiiSampleBalancer : public PiiDefaultOperation
    */
   Q_PROPERTY(Mode mode READ mode WRITE setMode);
   Q_ENUMS(Mode);
-  
+
   /**
    * A list of quantization levels for each feature value. For
    * three-dimensional feature vectors, the default can be changed as
@@ -100,7 +100,7 @@ class PiiSampleBalancer : public PiiDefaultOperation
    * operation will raise the weight estimate to this power.
    */
   Q_PROPERTY(int emphasis READ emphasis WRITE setEmphasis);
-  
+
   /**
    * The speed of adaptation to changing conditions. The operation
    * initially assumes a uniform feature distribution. The estimate of
@@ -118,7 +118,7 @@ class PiiSampleBalancer : public PiiDefaultOperation
    * is 25600 (100 samples / histogram bin).
    */
   Q_PROPERTY(int learningBatchSize READ learningBatchSize WRITE setLearningBatchSize);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   /**
@@ -131,7 +131,7 @@ public:
    * with selection probability.
    */
   enum Mode { ProbabilitySelection, WeightCalculation };
-  
+
   PiiSampleBalancer();
   ~PiiSampleBalancer();
 
@@ -158,7 +158,7 @@ private:
   inline double weight(int feature, int index);
   void allocateHistograms();
   template <class T> void balance(const PiiVariant& obj);
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {

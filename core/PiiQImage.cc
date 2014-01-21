@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -78,13 +78,13 @@ namespace Pii
     else
       return false;
   }
-  
+
   void setQImageData(QImage* image, uchar* data)
   {
     PrivateQImageData* d = ((PrivateQImage*)image)->d;
     d->data = data;
   }
-  
+
   void setQImageWidth(QImage* image, int width)
   {
     PrivateQImageData* d = ((PrivateQImage*)image)->d;
@@ -105,7 +105,7 @@ namespace Pii
     PrivateQImageData *d = ((PrivateQImage*)image)->d;
     d->format = format;
   }
-  
+
   uchar* releaseQImageBits(QImage* image)
   {
     PrivateQImageData* d = reinterpret_cast<PrivateQImage*>(image)->d;
@@ -126,7 +126,7 @@ namespace Pii
   {
     if (img.depth() == 8 && img.isGrayscale())
       return;
-    
+
     const int iRows = img.height(), iCols = img.width();
     QImage gsImg(iCols, iRows, QImage::Format_Indexed8);
     QRgb color;
@@ -148,11 +148,11 @@ namespace Pii
   {
     if (img.format() == QImage::Format_RGB32)
       return;
-    
+
     const int iRows = img.height(), iCols = img.width();
     QImage rgbImg(iCols, iRows, QImage::Format_RGB32);
     QRgb *rgbData;
-    
+
     for (int r=0; r<iRows; ++r)
       {
         rgbData = (QRgb*)rgbImg.scanLine(r);
@@ -167,11 +167,11 @@ namespace Pii
     QImage img;
     if (!img.load(fileName))
       return 0;
-    
+
     convertToGray(img);
     return PiiGrayQImage::create(img);
   }
-  
+
   PiiColorQImage* readColorImage(const QString& fileName)
   {
     QImage img;

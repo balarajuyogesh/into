@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,7 +30,7 @@
 #include "PiiCornerDetector.h"
 #include "PiiAdaptiveImageNormalizer.h"
 
-//Histograms 
+//Histograms
 #include "PiiHistogramOperation.h"
 #include "PiiQuantizerOperation.h"
 #include "PiiHistogramBackProjector.h"
@@ -89,4 +89,4 @@ Q_IMPORT_PLUGIN(piiraw)
 #else
 Q_IMPORT_PLUGIN(PiiRawImagePlugin)
 #endif
-  
+

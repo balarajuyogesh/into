@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -53,10 +53,10 @@ public:
    * created internally.
    */
   PiiSampleSetCollector(SampleSet* sampleSet, QVector<double>* labels);
-  
+
   /**
    * Creates a new sample set collector that appends samples to the
-   * given sample set, label list and weight list. 
+   * given sample set, label list and weight list.
    * PiiSampleSetCollector doesn't take the ownership of the
    * pointers, and they must remain valid during the lifetime of this
    * object.
@@ -77,7 +77,7 @@ public:
   /**
    * Appends *sample* to the sample set. If label collection is
    * enabled, *label* will be added to the label set. If weight
-   * collection is enabled, *weight* will be added to the weight set. 
+   * collection is enabled, *weight* will be added to the weight set.
    * If *length* doesn't match the current number of features, the
    * current sample set will be cleared first. Returns the index of
    * the just added sample in the sample set.
@@ -186,7 +186,7 @@ public:
    * so that at most *samples* entries are be retained.
    */
   void resize(int samples);
-  
+
 private:
   class Data : public PiiLearningAlgorithm<SampleSet>::Data
   {
@@ -195,7 +195,7 @@ private:
     Data(SampleSet* samples);
     Data(SampleSet* samples, QVector<double>* labels);
     Data(SampleSet* samples, QVector<double>* labels, QVector<double>* weights);
-    
+
     SampleSet* pSampleSet;
     QVector<double>* pvecLabels, *pvecWeights;
     bool bOwnSamples, bOwnLabels, bOwnWeights;
@@ -385,7 +385,7 @@ double PiiSampleSetCollector<SampleSet>::learnOne(ConstFeatureIterator featureVe
       d->pvecLabels->clear();
       d->pvecWeights->clear();
       d->iSampleIndex = 0;
-      
+
       // If batch size is known, reserve enough memory now to
       // avoid reallocations altogether.
       if (d->iBatchSize != -1)

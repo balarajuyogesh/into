@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -32,7 +32,7 @@ public:
                                 PiiMatrix<value_type>&>::Type MatrixRef;
   typedef T* pointer;
   typedef T& reference;
-    
+
   PiiMatrixIterator(pointer firstRow, pointer row, int columns, size_t stride) :
     _pFirstRow(firstRow), _pRow(row), _iColumn(0), _iColumns(columns), _iStride(stride)
   {}
@@ -56,7 +56,7 @@ public:
 
   reference operator* () const { return _pRow[_iColumn]; }
   pointer operator-> () const { return _pRow + _iColumn; }
-    
+
   PiiMatrixIterator& operator= (const PiiMatrixIterator& other)
   {
     _pFirstRow = other._pFirstRow;
@@ -159,7 +159,7 @@ public:
                                 PiiMatrix<value_type>&>::Type MatrixRef;
   typedef T* pointer;
   typedef T& reference;
-    
+
   PiiMatrixColumnIterator(pointer ptr, size_t stride) :
     _ptr(ptr), _iStride(stride)
   {}

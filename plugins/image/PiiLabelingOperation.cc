@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -35,17 +35,17 @@ PiiLabelingOperation::PiiLabelingOperation() :
   d->pBinaryImageInput = new PiiInputSocket("image");
   d->pLabeledImageOutput = new PiiOutputSocket("image");
   d->pLabelsOutput = new PiiOutputSocket("labels");
-  
+
   addSocket(d->pBinaryImageInput);
   addSocket(d->pLabeledImageOutput);
   addSocket(d->pLabelsOutput);
 }
-  
+
 
 void PiiLabelingOperation::process()
 {
   PII_D;
-  
+
   PiiVariant obj = d->pBinaryImageInput->firstObject();
 
   switch (obj.type())
@@ -53,7 +53,7 @@ void PiiLabelingOperation::process()
       PII_GRAY_IMAGE_CASES(operate, obj);
     default:
       PII_THROW_UNKNOWN_TYPE(d->pBinaryImageInput);
-    }  
+    }
 }
 
 

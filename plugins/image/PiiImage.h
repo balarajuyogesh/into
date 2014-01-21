@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -107,7 +107,7 @@ namespace PiiImage
   {
     return PiiMatrix<unsigned char>(image * 255.0);
   }
-  
+
   /**
    * Extract a channel from a color image. This is a generic template
    * function that works with any color type.
@@ -182,7 +182,7 @@ namespace PiiImage
   template <class ColorType> void separateChannels(const PiiMatrix<ColorType>& image,
                                                    PiiMatrix<typename ColorType::Type>* channelImages,
                                                    int channels = 3);
-  
+
   /**
    * Predefined filter masks for the x and y components of the Sobel
    * edge finder.
@@ -198,9 +198,9 @@ namespace PiiImage
    * edge finder.
    */
   PII_IMAGE_EXPORT extern PiiMatrix<int> prewittX, prewittY;
-  
+
   /**
-   * Create a size-by-size Gaussian low-pass filter. Size must be odd. 
+   * Create a size-by-size Gaussian low-pass filter. Size must be odd.
    * The filter is cut at approximately \(3\sigma\) and normalized
    * so that it sums up to unity.
    */
@@ -212,7 +212,7 @@ namespace PiiImage
    * normalized so that it sums up to zero.
    */
   PII_IMAGE_EXPORT PiiMatrix<double> makeLoGaussian(unsigned int size);
-  
+
   /**
    * Create an image filter. This function can be used to create
    * well-known filters for many image processing tasks.
@@ -281,7 +281,7 @@ namespace PiiImage
   template <class T> bool separateFilter(const PiiMatrix<T>& filter,
                                          PiiMatrix<T>& horizontalFilter,
                                          PiiMatrix<T>& verticalFilter);
-  
+
   /**
    * Calculate gradient angle from gradient magnitude components.
    *
@@ -345,8 +345,8 @@ namespace PiiImage
   };
 
   /**
-   * Thin edge detection result. This function checks each pixel in 
-   * `magnitude` to see if it is a local maximum. It searches up to 
+   * Thin edge detection result. This function checks each pixel in
+   * `magnitude` to see if it is a local maximum. It searches up to
    * `radius` pixels to the direction of the gradient. Only the maximum
    * pixels are retained in the result image; others are set to zero.
    *
@@ -403,7 +403,7 @@ namespace PiiImage
   template <class T> PiiMatrix<int> detectEdges(const PiiMatrix<T>& image,
                                                 int smoothWidth = 0,
                                                 T lowThreshold = 0, T highThreshold = 0);
-  
+
   /**
    * Filter an image with the given filter. This is equivalent to
    * PiiDsp::filter(), except for the `mode` parameter.
@@ -545,7 +545,7 @@ namespace PiiImage
    *
    * @param horizontalFilter horizontal component of a decomposed
    * filter
-   * 
+   *
    * @param verticalFilter vertical component of a decomposed filter
    *
    * @param mode how to deal with borders
@@ -642,7 +642,7 @@ namespace PiiImage
   template <class T> PiiMatrix<T> quarterSize(const PiiMatrix<T>& image);
 
   /**
-   * Quickly scales an image to one sixteenth of its original size. 
+   * Quickly scales an image to one sixteenth of its original size.
    * This function divides both dimensions of the image by four and
    * calculates the average og each 4-by-4 block of pixels. If the
    * size of the input image is not divisible by four, extra pixels
@@ -690,7 +690,7 @@ namespace PiiImage
    * @see transform()
    */
   PII_IMAGE_EXPORT PiiMatrix<float> createRotationTransform(float theta);
-  
+
   /**
    * Creates a transform that rotates a coordinate system `theta`
    * radians around the specified center point.
@@ -711,7 +711,7 @@ namespace PiiImage
   PII_IMAGE_EXPORT PiiMatrix<float> createRotationTransform(float theta, float centerX, float centerY);
 
   /**
-   * Creates a transform that shears a coordinate system by 
+   * Creates a transform that shears a coordinate system by
    * `shearX` horizontally and by `shearY` vertically.
    *
    * @see transform()
@@ -785,7 +785,7 @@ namespace PiiImage
                                             const PiiMatrix<float>& transform,
                                             TransformedSize handling = ExpandAsNecessary,
                                             T backgroundColor = T(0));
-  
+
   /**
    * Rotates image clockwise `theta` radians around its center.
    *
@@ -874,7 +874,7 @@ namespace PiiImage
 
   /**
    * Transforms *image* according to the given coordinate *map*. The
-   * size of the resulting image will be equal to the size of the 
+   * size of the resulting image will be equal to the size of the
    * *map*. Each pixel in the result image will be sampled from *image*
    * according to map. For example, if map(0,0) is (1,2), the pixel at
    * (0,0) in the result image will be taken from image(1,2). If the
@@ -891,26 +891,26 @@ namespace PiiImage
   {
     const int iRows = image.rows();
     const int iCols = image.columns();
-    
+
     // Collect matching points
     PiiMatrix<T> matXY(0, 2);
     matXY.reserve(128);
-    
+
     for (typename Matrix::const_iterator i=image.begin();
          i != image.end(); ++i)
       if (decisionRule(*i))
         matXY.appendRow(i.column(), i.row());
-    
+
     return matXY;
   }
 
   /**
-   * Matches *templ* to *image* with a xor correlation technique. 
+   * Matches *templ* to *image* with a xor correlation technique.
    * Unlike standard correlation, xor correlation gives negative
    * weight to non-matching pixels. If both image and template are
    * binary, the operation is functionally equivalent to
    * (image-0.5)*(templ-0.5), where * denotes correlation. The
-   * function returns a value in [0,1], where 1 means a perfect match. 
+   * function returns a value in [0,1], where 1 means a perfect match.
    * If *templ* is larger than *image*, zero will be returned.
    */
   template <class T> double xorMatch(const PiiMatrix<T>& image, const PiiMatrix<T>& templ);

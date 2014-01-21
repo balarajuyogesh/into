@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -36,10 +36,10 @@ class PII_MODBUSIODRIVER_EXPORT PiiModbusIoDriver : public PiiDefaultIoDriver
 public:
   PiiModbusIoDriver();
   ~PiiModbusIoDriver();
-  
+
   /**
    * Select the I/O unit to use. The driver may be able to handle many
-   * I/O boards. The active unit is selected by a generic unit id. 
+   * I/O boards. The active unit is selected by a generic unit id.
    * Possibilities include, for example, network addresses and numeric
    * board indices.
    *
@@ -71,7 +71,7 @@ public:
    * Returns the handle of the modbus driver.
    */
   modbus_t* handle() const;
-  
+
 protected:
   /**
    * Create a new PiiIoChannel.
@@ -100,7 +100,7 @@ private:
     {
       lstDriverInstances << driver;
     }
-    
+
     bool operator== (const QString& unit) const { return strUnit == unit; }
     bool operator== (PiiModbusIoDriver* d) const { return lstDriverInstances.contains(d); }
 
@@ -113,7 +113,7 @@ private:
   int readInputBits(int addr, int nb, uint8_t *dest);
   int readBits(int addr, int nb, uint8_t *dest);
   int writeBit(int addr, int status);
-  
+
   typedef QList<Instance> InstanceList;
   template <class T> static InstanceList::iterator findInstance(const T& value);
   static InstanceList _lstInstances;

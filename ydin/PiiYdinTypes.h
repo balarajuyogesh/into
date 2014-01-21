@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,7 +30,7 @@
 #include "PiiSocketState.h"
 #include <complex>
 
-/** 
+/**
  * @group piiydintypes_h Common Types
  *
  * Contains a number of preprocessor macros to facilitate handling of
@@ -71,13 +71,13 @@
  * }
  * ~~~
  *
- * @param func a template function that takes one or no parameters. 
+ * @param func a template function that takes one or no parameters.
  * The function template is instantiated with the primitive type
  * corresponding to the type id given in the switch statement. For
  * example, if obj.type() in the above example equals
  * PiiVariant::CharType, func<char>(obj) will be called.
  *
- * @param param the function parameter. Can be omitted. (e.g. 
+ * @param param the function parameter. Can be omitted. (e.g.
  * PII_INTEGER_CASES(myFunc,);)
  */
 #define PII_INTEGER_CASES(func, param) PII_DO_INTEGER_CASES(func, (param))
@@ -105,7 +105,7 @@
  * }
  * ~~~
  *
- * @param func a template function that takes one or no parameters. 
+ * @param func a template function that takes one or no parameters.
  * The function template is instantiated with the primitive type
  * corresponding to the type id given in the switch statement. For
  * example, if obj.type() in the above example equals
@@ -250,7 +250,7 @@
  */
 #define PII_INTEGER_MATRIX_CASES(func, param) PII_DO_INTEGER_MATRIX_CASES(func, (param))
 /**
- * Case clauses for integer matrices and multiple function parameters. 
+ * Case clauses for integer matrices and multiple function parameters.
  * See [PII_ALL_MATRIX_CASES_M] for more information.
  */
 #define PII_INTEGER_MATRIX_CASES_M(func, params) PII_DO_INTEGER_MATRIX_CASES(func, params)
@@ -303,7 +303,7 @@
 */
 
 /**
- * Case clauses for floating-point matrices. See 
+ * Case clauses for floating-point matrices. See
  * [PII_ALL_MATRIX_CASES] for more information.
  */
 #define PII_FLOAT_MATRIX_CASES(func, param) PII_DO_FLOAT_MATRIX_CASES(func, (param))
@@ -320,7 +320,7 @@
   PII_DO_FLOAT_MATRIX_CASES(func, param)
 
 /**
- * Case clauses for all numeric matrices. See 
+ * Case clauses for all numeric matrices. See
  * [PII_ALL_MATRIX_CASES] for more information.
  */
 #define PII_NUMERIC_MATRIX_CASES(func, param) PII_DO_NUMERIC_MATRIX_CASES(func, (param))
@@ -339,7 +339,7 @@
     break
 
 /**
- * Case clauses for all primitive matrix types. See 
+ * Case clauses for all primitive matrix types. See
  * [PII_ALL_MATRIX_CASES] for more information.
  */
 #define PII_PRIMITIVE_MATRIX_CASES(func, param) PII_DO_PRIMITIVE_MATRIX_CASES(func, (param))
@@ -349,7 +349,7 @@
  */
 #define PII_PRIMITIVE_MATRIX_CASES_M(func, params) PII_DO_PRIMITIVE_MATRIX_CASES(func, params)
 
-  
+
 /// @internal
 #define PII_DO_COMPLEX_MATRIX_CASES(func, param)       \
   case PiiYdin::FloatComplexMatrixType:                \
@@ -369,14 +369,14 @@
  */
 #define PII_COMPLEX_MATRIX_CASES(func, param) PII_DO_COMPLEX_MATRIX_CASES(func, (param))
 /**
- * Case clauses for complex matrices and multiple function parameters. 
+ * Case clauses for complex matrices and multiple function parameters.
  * See [PII_ALL_MATRIX_CASES_M] for more information.
  */
 #define PII_COMPLEX_MATRIX_CASES_M(func, params) PII_DO_COMPLEX_MATRIX_CASES(func, params)
 
 /**
  * All cases for primitive matrices. This is a macro that saves you a
- * lot of typing if you need to support many different matrix types. 
+ * lot of typing if you need to support many different matrix types.
  * You only need to create a template function that works for all
  * types. Typically, a PiiVariant is passed as its only argument.
  *
@@ -406,7 +406,7 @@
  * parameter. The function may be a class method, if the macro is used
  * within a class method. If the function returns a value, you may
  * also use the syntax "var = func". For example,
- * `PII_ALL_MATRIX_CASES(myInt = myFunction, obj)`. The 
+ * `PII_ALL_MATRIX_CASES(myInt = myFunction, obj)`. The
  * [PiiYdin::matrixAs()] function template is a utility function
  * often used as the `func` parameter.
  *
@@ -468,7 +468,7 @@
  */
 #define PII_INT_GRAY_IMAGE_CASES_M(func, params) PII_DO_INT_GRAY_IMAGE_CASES(func, params)
 
-/// @internal 
+/// @internal
 #define PII_DO_GRAY_IMAGE_CASES(func, param)      \
   PII_DO_INT_GRAY_IMAGE_CASES(func, param);       \
   case PiiYdin::FloatMatrixType:                  \
@@ -476,7 +476,7 @@
     break
 
 /**
- * Case clauses for all gray-scale image types. See 
+ * Case clauses for all gray-scale image types. See
  * [PII_ALL_MATRIX_CASES] for more information.
  */
 #define PII_GRAY_IMAGE_CASES(func, param) PII_DO_GRAY_IMAGE_CASES(func, (param))
@@ -499,7 +499,7 @@
     break
 
 /**
- * Case clauses for integer-valued color image types. See 
+ * Case clauses for integer-valued color image types. See
  * [PII_ALL_MATRIX_CASES] for more information.
  */
 #define PII_INT_COLOR_IMAGE_CASES(func, param) PII_DO_INT_COLOR_IMAGE_CASES(func, (param))
@@ -519,7 +519,7 @@
     break
 
 /**
- * Case clauses for all color image types. See 
+ * Case clauses for all color image types. See
  * [PII_ALL_MATRIX_CASES] for more information.
  */
 #define PII_COLOR_IMAGE_CASES(func, param) PII_DO_COLOR_IMAGE_CASES(func, (param))
@@ -536,7 +536,7 @@
  */
 #define PII_ALL_IMAGE_CASES(func, param)     \
   PII_GRAY_IMAGE_CASES(func, param);         \
-  PII_COLOR_IMAGE_CASES(func, param) 
+  PII_COLOR_IMAGE_CASES(func, param)
 
 /**
  * Case clauses for all gray scale and color image types, and multiple
@@ -563,7 +563,7 @@ namespace PiiYdin
 {
 #ifdef Q_MOC_RUN
   Q_GADGET
-    
+
   Q_ENUMS(MatrixTypeId);
   Q_ENUMS(ColorTypeId);
   Q_ENUMS(ComplexTypeId);
@@ -572,7 +572,7 @@ public:
 #endif
   /// @internal
   extern PII_YDIN_EXPORT const QMetaObject staticMetaObject;
-  
+
   /**
    * A traits structure that converts primitive types to those
    * supported by QVariant.
@@ -588,7 +588,7 @@ public:
    * synchronization purposes. The ID numbers 0x20-0x3f
    * (network/netmask: 0x20/~0x1f) are reserved for control objects.
    *
-   * - `SynchronizationTagType` - synchronization tag. 
+   * - `SynchronizationTagType` - synchronization tag.
    * Synchronization tags either raise or lower the current flow level
    * in a synchronous socket group. The value of a synchronization tag
    * is a signed `int` that will be added to the current flow level.
@@ -599,7 +599,7 @@ public:
    * - `PauseTagType` - a tag that suspends the execution of an
    * operation when received.
    *
-   * - `ResumeTagType` - used to restore flow levels after pausing. 
+   * - `ResumeTagType` - used to restore flow levels after pausing.
    * Works almost equally to a synchronization tag, but informs the
    * receiver that partial content may follow. The value of a resume
    * tag is a PiiSocketState.
@@ -648,7 +648,7 @@ public:
       DoubleMatrixType,
       //LongDoubleMatrixType,
       BoolMatrixType = 0x40 + PiiVariant::BoolType,
-       
+
       UnsignedCharColorMatrixType,
       UnsignedCharColor4MatrixType,
       UnsignedShortColorMatrixType,
@@ -661,7 +661,7 @@ public:
     };
 
   /**
-   * Returns `true` if *type* is in the matrix type id range, 
+   * Returns `true` if *type* is in the matrix type id range,
    * `false` otherwise.
    */
   inline bool isMatrixType(int type)
@@ -725,7 +725,7 @@ public:
   {
     return static_cast<typename QVariantTraits<T>::Type>(obj.valueAs<T>());
   }
-  
+
   /**
    * A utility function template that returns a reference to
    * PiiMatrix<T> held by the variant argument. This can be used with
@@ -757,7 +757,7 @@ public:
   }
 
   /**
-   * Converts the primitive value held by *obj* to `T`, if possible. 
+   * Converts the primitive value held by *obj* to `T`, if possible.
    * If the value cannot be converted, returns a default-constructed
    * value.
    */
@@ -794,7 +794,7 @@ public:
     PiiVariant obj = input->firstObject();
     if (obj.type() == Pii::typeId<T>())
       return obj.valueAs<T>();
-    
+
     switch (obj.type())
       {
         PII_PRIMITIVE_CASES(return (T)primitiveAs, obj);
@@ -906,7 +906,7 @@ public:
    * ~~~(c++)
    * double dValue = PiiYdin::convertPrimitiveTo<double>(input(0));
    * ~~~
-   *   
+   *
    * @exception PiiExecutionException& if the received object cannot
    * be converted to `T`.
    */
@@ -943,7 +943,7 @@ public:
    * ~~~(c++)
    * PiiMatrix<double> m = PiiYdin::convertMatrixTo<double>(input(0));
    * ~~~
-   *   
+   *
    * @exception PiiExecutionException& if the received object cannot
    * be converted to PiiMatrix<T>.
    */
@@ -961,7 +961,7 @@ public:
 
   /**
    * Reads an object from *input* as the type specified by the
-   * template parameter `T`. If the object is not an instance of 
+   * template parameter `T`. If the object is not an instance of
    * `T`, a PiiExecutionException& will be thrown.
    */
   template <class T> T& readInputAs(PiiInputSocket* input)
@@ -971,7 +971,7 @@ public:
       PII_THROW_UNKNOWN_TYPE(input);
     return obj.valueAs<T>();
   }
-  
+
 }; // namespace PiiYdin
 
 // complex numbers
@@ -995,7 +995,7 @@ PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<float>, PiiYdin::FloatMatrixType, PII_
 PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<double>, PiiYdin::DoubleMatrixType, PII_BUILDING_YDIN);
 //PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<long double>, PiiYdin::LongDoubleMatrixType, PII_BUILDING_YDIN);
 PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<bool>, PiiYdin::BoolMatrixType, PII_BUILDING_YDIN);
-  
+
 // colors
 PII_DECLARE_SHARED_VARIANT_TYPE(PiiColor<unsigned char>, PiiYdin::UnsignedCharColorType, PII_BUILDING_YDIN);
 PII_DECLARE_SHARED_VARIANT_TYPE(PiiColor4<unsigned char>, PiiYdin::UnsignedCharColor4Type, PII_BUILDING_YDIN);

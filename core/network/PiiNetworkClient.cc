@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -89,7 +89,7 @@ PiiSocketDevice PiiNetworkClient::connectToServer()
         }
       return pSocket;
     }
-#ifndef QT_NO_OPENSSL  
+#ifndef QT_NO_OPENSSL
   else if (strScheme member_of<QString> ("ssl", "https", "ftps"))
     {
       if (iPort == -1)
@@ -115,7 +115,7 @@ PiiSocketDevice PiiNetworkClient::connectToServer()
         }
       return pSocket;
     }
-  
+
   return PiiSocketDevice();
 }
 

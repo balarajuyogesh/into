@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
   // Initialize engine
   initEngine();
-  
+
   // Initialize ui
   init();
 }
@@ -50,22 +50,22 @@ PiiEngine* MainWindow::createEngine()
   // Create trigger timer
   PiiOperation *pClock = pEngine->createOperation("PiiClock");
   pClock->setProperty("interval",200); //200 msec -> 5 fps
-  
+
   // Create probe input video display
   _pProbeInput = new PiiProbeInput;
-  
+
   // Create video reader
   PiiOperation *pVideoFileReader = pEngine->createOperation("PiiVideoFileReader");
   pVideoFileReader->setProperty("imageType", "Color");
   pVideoFileReader->setProperty("fileName", QString("%1/source.avi").arg(defaultVideoDirPath()));
-  
+
   // Make operation connections
   pClock->connectOutput("time", pVideoFileReader, "trigger");
-  
+
   _pProbeInput->connectOutput(pVideoFileReader->output("image"));
 
   connect(pEngine, SIGNAL(stateChanged(int)), this, SLOT(updateButtonStates(int)));
-  
+
   return pEngine;
 }
 

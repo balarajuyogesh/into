@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -41,7 +41,7 @@ public:
    * distances between samples. The value for k is initialized to 5.
    */
   PiiKnnClassifier(PiiDistanceMeasure<SampleSet>* measure);
-  
+
   ~PiiKnnClassifier();
 
   /**
@@ -90,7 +90,7 @@ private:
   public:
     Data();
     Data(PiiDistanceMeasure<SampleSet>* measure);
-    
+
     QVector<double> vecClassLabels;
     int k;
   };

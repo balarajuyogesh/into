@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -29,10 +29,10 @@
 class PII_YDIN_EXPORT PiiBasicOperation : public PiiOperation
 {
   Q_OBJECT
-  
+
 public:
   ~PiiBasicOperation();
-  
+
   /**
    * Check the operation for execution. If any non-optional sockets is
    * not connected, an exception is thrown.
@@ -75,16 +75,16 @@ public:
   bool hasConnectedInputs() const;
 
   int inputCount() const;
-  
+
   PiiInputSocket* input(const QString& name) const;
-  
+
   /**
    * Returns the input a `index`. No overflow checking will be performed.
    */
   PiiInputSocket* inputAt(int index = 0) const;
 
   int outputCount() const;
-  
+
   PiiOutputSocket* output(const QString& name) const;
 
   /**
@@ -99,17 +99,17 @@ protected:
   public:
     Data();
     virtual ~Data();
-    
+
     /**
      * The current state.
      */
     State state;
-    
+
     /**
      * Pointers to input sockets.
      */
     QList<PiiInputSocket*> lstInputs;
-    
+
     /**
      * Pointers to output sockets.
      */
@@ -225,9 +225,9 @@ protected:
   {
     emitObject(PiiYdin::createVariant(value), index);
   }
-  
+
   /**
-   * Sets the state to `state`. If the current state is equal to 
+   * Sets the state to `state`. If the current state is equal to
    * `state`, does nothing. Otherwise, the current state will be set to
    * `state` and a [stateChanged](PiiOperation::stateChanged())
    * signal will be emitted.
@@ -244,7 +244,7 @@ protected:
    * interrupt().
    */
   void interruptOutputs();
-  
+
   /**
    * Signals that this operation has finished execution for example
    * due to end of data. This function informs all connected
@@ -261,10 +261,10 @@ protected:
    * a `Finished` exception.
    */
   virtual void operationStopped();
-  
+
   /**
    * Signals that this operation has paused because it has received a
-   * pause tag from a previous operation in the processing pipeline. 
+   * pause tag from a previous operation in the processing pipeline.
    * This function informs all connected operations that the operation
    * has paused by sending a pause tag to all outputs. It finally
    * throws an exception (PiiExecutionException::Paused).
@@ -279,7 +279,7 @@ protected:
 
   /**
    * Signals that this operation has resumed from `Paused` state
-   * because it has received a resume tag to all connected inputs. 
+   * because it has received a resume tag to all connected inputs.
    * This function resolves the state of all input groups and resumes
    * the corresponding synchronized outputs by calling
    * PiiOutputSocket::resume().
@@ -297,18 +297,18 @@ protected:
    * function to capture synchronous reconfiguration events.
    */
   void applyPropertySet(const QString& name);
-  
+
   /**
    * Sends a control tag to all outputs.
    *
    * @param ptr the control object
    */
   void sendTag(const PiiVariant& ptr);
-  
+
   /**
    * Maintains a set of numbered inputs at the end of the input list.
    *
-   * @param count the number of inputs, numbered sequentially from 
+   * @param count the number of inputs, numbered sequentially from
    * *firstIndex* to *firstIndex* + *count* - 1.
    *
    * @param staticInputs retain this many inputs at the beginning.
@@ -335,16 +335,16 @@ protected:
   void setNumberedOutputs(int count, int staticOutputs = 0, const QString& prefix = "output", int firstIndex = 0);
 
   /**
-   * Sends a start tag to outputs between (and including) 
+   * Sends a start tag to outputs between (and including)
    * *firstOutput* and *lastOutput*.
    */
   void startMany(int firstOutput = 0, int lastOutput = -1);
   /**
-   * Sends an end tag to outputs between (and including) 
+   * Sends an end tag to outputs between (and including)
    * *firstOutput* and *lastOutput*.
    */
   void endMany(int firstOutput = 0, int lastOutput = -1);
-  
+
   /**
    * Called by [setState()] just before the operation changes to a new
    * state. The function will be called independent of the cause of

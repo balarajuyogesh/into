@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -62,7 +62,7 @@ public:
   PiiProbeInput(const QString& name = "probe");
 
   /**
-   * Constructs a new probe input and connects it to *output*. 
+   * Constructs a new probe input and connects it to *output*.
    * Connects the [objectReceived()] signal to *slot* in *receiver*.
    *
    * ! If it is important that the objects are received in the
@@ -89,7 +89,7 @@ public:
   bool tryToReceive(PiiAbstractInputSocket* sender, const PiiVariant& object) throw ();
 
   PiiVariant savedObject() const;
-  void setSavedObject(const PiiVariant& obj);  
+  void setSavedObject(const PiiVariant& obj);
   /**
    * Returns true if an object has been saved into this socket.
    */
@@ -117,7 +117,7 @@ signals:
 
 protected:
   void timerEvent(QTimerEvent*);
-  
+
 private:
   class Data;
   PII_UNSAFE_D_FUNC;

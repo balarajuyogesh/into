@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -33,12 +33,12 @@ void MainWindow::updateButtonStates(int state)
 {
   _pStopButton->setEnabled(state != PiiOperation::Stopped);
   _pStartButton->setEnabled(state == PiiOperation::Stopped);
-  
+
   _pRadioImageFile->setEnabled(state == PiiOperation::Stopped);
   _pImageFile->setEnabled(state == PiiOperation::Stopped);
   _pRadioImageUrl->setEnabled(state == PiiOperation::Stopped);
   _pImageUrlCombo->setEnabled(state == PiiOperation::Stopped);
-  
+
   _pDistortionSlider->setEnabled(state != PiiOperation::Stopped);
   _pspnFocalLength->setEnabled(state != PiiOperation::Stopped);
 }
@@ -56,7 +56,7 @@ void MainWindow::init()
   connect(_pProbeInput1, SIGNAL(objectReceived(PiiVariant)), _pImageDisplay1, SLOT(setImage(PiiVariant)));
   connect(_pProbeInput2, SIGNAL(objectReceived(PiiVariant)), _pImageDisplay2, SLOT(setImage(PiiVariant)));
 
-  
+
   // Init button states
   updateButtonStates(engine()->state());
 
@@ -71,11 +71,11 @@ PiiEngine* MainWindow::createEngine()
   // Create engine
   PiiEngine* pEngine = new PiiEngine;
   connect(pEngine, SIGNAL(stateChanged(int)), this, SLOT(updateButtonStates(int)));
-  
+
   // Create probe inputs for image display
   _pProbeInput1 = new PiiProbeInput;
   _pProbeInput2 = new PiiProbeInput;
-  
+
   _pUndistortOperation = pEngine->createOperation("PiiUndistortOperation", "undistortOperation");
   _pUndistortOperation->setProperty("radial2nd", -0.3);
   _pUndistortOperation->setProperty("interpolation", "Pii::NearestNeighborInterpolation");
@@ -84,7 +84,7 @@ PiiEngine* MainWindow::createEngine()
   _pProbeInput2->connectOutput(_pUndistortOperation->output("image"));
 
   createImageReaderOperations(pEngine);
-                                  
+
   return pEngine;
 }
 
@@ -115,7 +115,7 @@ void MainWindow::removeImageReaderOperations(PiiEngine *engine)
   PiiOperation *pImageFileReader = engine->findChild<PiiOperation*>("imageFileReader");
   PiiOperation *pSwitchTrigger = engine->findChild<PiiOperation*>("switchTrigger");
   PiiOperation *pSwitch = engine->findChild<PiiOperation*>("switch");
-  
+
   engine->removeOperation(pImageTrigger);
   engine->removeOperation(pImageFileReader);
   engine->removeOperation(pSwitchTrigger);
@@ -133,9 +133,9 @@ void MainWindow::updateImage()
   // because undistortOperation calculate transformations in
   // check-function
   pauseProcessing();
-  
+
   startProcessing();
-  
+
   if (_pRadioImageFile->isChecked())
     emit updateImage(0);
 }
@@ -153,7 +153,7 @@ void MainWindow::changeDistortion(int value)
   _pUndistortOperation->setProperty("radial2nd", double(value)/100);
 
   updateImage();
-  
+
   showSliderValue(_pDistortionSlider, QString::number(double(value)/100, 'f', 2));
 }
 
@@ -165,7 +165,7 @@ void MainWindow::startButtonClicked()
   PiiOperation *pNetworkCameraOperation = pEngine->findChild<PiiOperation*>("networkCameraOperation");
 
   bool bReadImage = false;
-  
+
   if (_pRadioImageFile->isChecked())
     {
       bReadImage = true;
@@ -181,7 +181,7 @@ void MainWindow::startButtonClicked()
           createImageReaderOperations(pEngine);
           pImageFileReader = pEngine->findChild<PiiOperation*>("imageFileReader");
         }
-      
+
       // update file name
       pImageFileReader->setProperty("fileNames", QStringList() << _pImageFile->text());
     }
@@ -194,7 +194,7 @@ void MainWindow::startButtonClicked()
         {
           pNetworkCameraOperation = pEngine->createOperation("PiiNetworkCameraOperation", "networkCameraOperation");
           pNetworkCameraOperation->setProperty("imageType", "Color");
-          
+
           pNetworkCameraOperation->connectOutput("image", _pUndistortOperation, "image");
           _pProbeInput1->connectOutput(pNetworkCameraOperation->output("image"));
         }
@@ -202,7 +202,7 @@ void MainWindow::startButtonClicked()
       //update image url
       pNetworkCameraOperation->setProperty("imageUrl", _pImageUrlCombo->currentText());
     }
-  
+
 
   // Start processing
   startProcessing();

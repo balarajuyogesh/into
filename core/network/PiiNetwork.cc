@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -109,7 +109,7 @@ namespace PiiNetwork
     strResult += " ]";
     return strResult;
   }
-  
+
   QString toJson(const QVariant& value)
   {
     switch (int(value.type()))
@@ -150,7 +150,7 @@ namespace PiiNetwork
     int iPort = url.port();
     if (iPort != -1)
       strHost += QString(":%1").arg(iPort);
-    
+
     PiiHttpDevice* pHttpDev = new PiiHttpDevice(pDev, PiiHttpDevice::Client);
     pHttpDev->setRequest(method, strPath);
     pHttpDev->setHeader("Host", strHost);
@@ -196,7 +196,7 @@ namespace PiiNetwork
           readLocalFile(uri.mid(7), device, maxSize, controller);
         return;
       }
-    
+
     PiiNetworkClient client;
     PiiSmartPtr<PiiHttpDevice> pDev(openHttpConnection(client, method, uri, requestHeaders));
     pDev->setController(controller);
@@ -207,7 +207,7 @@ namespace PiiNetwork
       {
         pDev->finish();
         readHttpResponse(pDev, client);
-        
+
         switch (pDev->status())
           {
           case PiiHttpProtocol::OkStatus:
@@ -256,7 +256,7 @@ namespace PiiNetwork
                 pDev->setRequestUri(strNewLocation);
               else // Relative to the current location... This is already too much.
                 PII_THROW(PiiNetworkException, tr("Server provided a relative \"Location\"."));
-            
+
               --maxRedirects;
               pDev->discardBody();
             } // if redirected
@@ -396,7 +396,7 @@ namespace PiiNetwork
     QFileInfo info(path);
     if (!info.exists())
       PII_THROW_HTTP_ERROR(NotFoundStatus);
-    
+
     if (info.isDir() && !info.isSymLink())
       {
         if (!Pii::deleteDirectory(path))
@@ -432,7 +432,7 @@ namespace PiiNetwork
         PII_THROW_DEV_STATUS;
       }
   }
-  
+
   void deleteFile(const QString& uri)
   {
     deleteFile(uri, PiiMimeHeader());
@@ -448,7 +448,7 @@ namespace PiiNetwork
     if (!dir.mkdir(strName))
       PII_THROW_HTTP_ERROR(ForbiddenStatus);
   }
-  
+
   void makeDirectory(const QString& uri,
                      const PiiMimeHeader& requestHeaders,
                      PiiHttpResponseHeader* header)
@@ -475,12 +475,12 @@ namespace PiiNetwork
         PII_THROW_DEV_STATUS;
       }
   }
-  
+
   void makeDirectory(const QString& uri)
   {
     makeDirectory(uri, PiiMimeHeader());
   }
-  
+
   qint64 passData(QIODevice* from,
                   QIODevice* to,
                   qint64 bytes,

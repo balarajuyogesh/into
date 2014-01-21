@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,7 +26,7 @@
 class PiiProbeInput;
 
 /**
- * A class that makes it easier to write unit tests for operations. 
+ * A class that makes it easier to write unit tests for operations.
  * PiiOperationTest attaches [probes](PiiProbeInput) to the
  * outputs of an operation to be tested. A derived class can then
  * selectively connect inputs of the operation and send arbitrary data
@@ -50,7 +50,7 @@ class PiiProbeInput;
  * // In main.cc
  * #include "TestMyOperation.h"
  * #include <QtTest>
- * 
+ *
  * void TestMyOperation::initTestCase()
  * {
  *   QVERIFY(createOperation("myplugin", "TestMyOperation"));
@@ -71,7 +71,7 @@ class PiiProbeInput;
  *   // Verify outputs
  *   QCOMPARE(outputValue("output", 0), 1);
  * }
- * 
+ *
  * QTEST_MAIN(TestMyOperation)
  * ~~~
  *
@@ -82,7 +82,7 @@ class PII_YDIN_EXPORT PiiOperationTest : public QObject
 
 public:
   ~PiiOperationTest();
-  
+
 protected slots:
   /**
    * Clears all collected output values by calling
@@ -98,7 +98,7 @@ protected:
   enum FailMode { ExpectSuccess, ExpectFail };
 
   PiiOperationTest();
-  
+
   /**
    * Creates the operation to be tested.
    *
@@ -125,8 +125,8 @@ protected:
 
   /**
    * Starts the tester. If the `mode` flag is `ExpectSuccess`, this
-   * function ensures that the tester was successfully started. If 
-   * `mode` is `ExpectFail`, it ensures that the startup fails. 
+   * function ensures that the tester was successfully started. If
+   * `mode` is `ExpectFail`, it ensures that the startup fails.
    * `ExpectFail` is useful when one needs to check that the operation
    * correctly identifies unconnected inputs, missing configuration
    * etc. One needs to stop the tester (stop()) once the
@@ -137,7 +137,7 @@ protected:
    * start-up fails, and `false` otherwise.
    */
   bool start(FailMode mode = ExpectSuccess);
-  
+
   /**
    * Makes the named input connected. This function connects the named
    * input into an output socket that is not attached to any
@@ -195,15 +195,15 @@ protected:
    * Automatically converts const char* to QString.
    */
   bool sendObject(const QString& name, const char* value);
-  
+
   /**
-   * Stops the execution of the operation. This function calls 
-   * [PiiOperation::interrupt()] on the internal operation. Returns 
+   * Stops the execution of the operation. This function calls
+   * [PiiOperation::interrupt()] on the internal operation. Returns
    * `true` if the operation finished within a second, `false`
    * otherwise.
    */
   bool stop();
-  
+
   /**
    * Returns the names of outputs that have received output.
    */
@@ -220,7 +220,7 @@ protected:
    * object. Otherwise return `defaultValue`.
    */
   template <class T> T outputValue(const QString& name, const T& defaultValue);
-  
+
   /**
    * A utility function that checks if any output has an object.
    */
@@ -241,7 +241,7 @@ protected:
    * Clears all stored output values.
    */
   void clearAllOutputValues();
-  
+
 signals:
   /**
    * Emitted whenever an object is emitted through any of the output

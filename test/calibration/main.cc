@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,7 +30,7 @@ void TestPiiCalibration::rotationVectors()
 {
   QFETCH(double, extremum);
   QFETCH(double, step);
-    
+
   for (double x = -extremum; x<=extremum; x+=step)
     for (double y = -extremum; y<=extremum; y+=step)
       for (double z = -extremum; z<=extremum; z+=step)
@@ -124,7 +124,7 @@ void TestPiiCalibration::init()
                         246.36, 190.37,
                         247.38, 222.25,
                         248.85, 253.61);
-                        
+
 
 
   PiiMatrix<double> x_2(54,2,
@@ -182,9 +182,9 @@ void TestPiiCalibration::init()
                         254.35, 308.87,
                         255.25, 334.46,
                         256.21, 357.18);
-                        
-                        
-  
+
+
+
   PiiMatrix<double>x_3 (54,2,
                         603.74, 168.38,
                         595.50, 208.17,
@@ -241,7 +241,7 @@ void TestPiiCalibration::init()
                         205.89, 217.07,
                         187.27, 257.46);
 
-  
+
   PiiMatrix<double> x_4(54,2,
                         514.57, 109.20,
                         517.53, 152.17,
@@ -361,9 +361,9 @@ void TestPiiCalibration::init()
   _lstLeftCameraImageCoordinates.append(x_4);
   _lstLeftCameraImageCoordinates.append(x_5);
 
-  
+
   //Corresponding world-coordinates
-  
+
   PiiMatrix<double> X_1(54,3,
                         0.00, 240.00,0.00,
                         30.00, 240.00,0.00,
@@ -420,7 +420,7 @@ void TestPiiCalibration::init()
                         120.00,   0.00,   0.00,
                         150.00,   0.00,   0.00);
 
-  
+
   PiiMatrix<double> X_2(54,3,
                         0.00,150.00,0.00,
                         30.00,150.00,0.00,
@@ -476,7 +476,7 @@ void TestPiiCalibration::init()
                         180.00,0.00,0.00,
                         210.00,0.00,0.00,
                         240.00,0.00,0.00);
-  
+
   PiiMatrix<double> X_3(54,3,
                         0.00,240.00,0.00,
                         30.00,240.00,0.00,
@@ -532,8 +532,8 @@ void TestPiiCalibration::init()
                         90.00,0.00,0.00,
                         120.00,0.00,0.00,
                         150.00,0.00,0.00);
-  
-  
+
+
   PiiMatrix<double> X_4(54,3,
                         0.00,240.00,0.00,
                         30.00,240.00,0.00,
@@ -589,8 +589,8 @@ void TestPiiCalibration::init()
                         90.00,0.00,0.00,
                         120.00,0.00,0.00,
                         150.00,0.00,0.00);
-  
-  
+
+
   PiiMatrix<double> X_5(54,3,
                         0.00,150.00,0.00,
                         30.00,150.00,0.00,
@@ -677,11 +677,11 @@ void TestPiiCalibration::calibrateCameras()
 ;
 
   */
- 
-  
+
+
   PiiCalibration::CameraParameters intrinsic(640,480);
   QList<PiiCalibration::RelativePosition> extrinsic;
- 
+
   try
     {
       calibrateCamera(_lstLeftCameraWorldCoordinates, _lstLeftCameraImageCoordinates, intrinsic, &extrinsic);
@@ -715,7 +715,7 @@ void TestPiiCalibration::calibrateCameras()
   QVERIFY(Pii::abs(intrinsic.p2 +0.000668739) < 0.001); // -0.00668739
 
   _bVerbose = false;
-  
+
   int size = extrinsic.size();
   QCOMPARE(size,5);
   for(int i = 0; i  < size; ++i)
@@ -729,7 +729,7 @@ void TestPiiCalibration::calibrateCameras()
         }
       QVERIFY(extrinsic[i].rotationMatrix().rows() > 0);
       QVERIFY(extrinsic[i].translationMatrix().columns() > 0);
-      
+
     }
 #endif
 }
@@ -772,7 +772,7 @@ void TestPiiCalibration::calculateCameraPosition()
 
   PiiCalibration::CameraParameters intrinsic(400,400);
   intrinsic.focalLength = PiiPoint<double>(600, 600);
-  
+
   PiiMatrix<double> imagePoints = PiiCalibration::cameraToPixelCoordinates(PiiCalibration::worldToCameraCoordinates(worldPoints, extrinsic), intrinsic);
 
   //Pii::matlabPrint(std::cout, imagePoints(0,0,5,-1));
@@ -855,7 +855,7 @@ void TestPiiCalibration::worldToCameraCoordinates()
   bool verbose = false;
   PiiCalibration::CameraParameters intrinsic(640,480);
   QList<PiiCalibration::RelativePosition> extrinsic;
- 
+
   try
     {
       calibrateCamera(_lstLeftCameraWorldCoordinates, _lstLeftCameraImageCoordinates, intrinsic, &extrinsic);
@@ -870,10 +870,10 @@ void TestPiiCalibration::worldToCameraCoordinates()
   PiiMatrix<double> imageCoordinates = _lstLeftCameraImageCoordinates[0];
   QVERIFY(worldCoordinates.rows() > 0);
   QVERIFY(imageCoordinates.rows() > 0);
-  
+
   PiiMatrix<double> res = PiiCalibration::worldToCameraCoordinates(worldCoordinates,extrinsic[0]);
   QVERIFY(res.rows() > 0 );
-  
+
   if (verbose)
     {
       qDebug()<<"Result: ";
@@ -905,12 +905,12 @@ void TestPiiCalibration::cameraToWorldCoordinates()
   SKIPTEST;
 #else
   _bVerbose = false;
-  
+
   bool verbose = false;
 
   PiiCalibration::CameraParameters intrinsic(640,480);
   QList<PiiCalibration::RelativePosition> extrinsic;
- 
+
   try
     {
       calibrateCamera(_lstLeftCameraWorldCoordinates, _lstLeftCameraImageCoordinates, intrinsic, &extrinsic);
@@ -925,12 +925,12 @@ void TestPiiCalibration::cameraToWorldCoordinates()
   PiiMatrix<double> res = PiiCalibration::cameraToWorldCoordinates(testData,extrinsic[0]);
 
 
-  
+
   if (verbose)
     {
       qDebug()<<"Transformed random data";
       Pii::matlabPrint(std::cout,res);
-    }  
+    }
 #endif
 }
 
@@ -941,12 +941,12 @@ void TestPiiCalibration::unDistort()
   SKIPTEST;
 #else
   _bVerbose = false;
-  
+
   bool verbose = false;
 
   PiiCalibration::CameraParameters intrinsic(640,480);
   QList<PiiCalibration::RelativePosition> extrinsic;
- 
+
   try
     {
       calibrateCamera(_lstLeftCameraWorldCoordinates, _lstLeftCameraImageCoordinates, intrinsic, &extrinsic);
@@ -968,7 +968,7 @@ void TestPiiCalibration::unDistort()
       qDebug()<<"center: "<<intrinsic.center.x<<" "<<intrinsic.center.y<<" " <<intrinsic.focalLength.x<<" "<<
         intrinsic.focalLength.y << intrinsic.k1 << intrinsic.k2 << intrinsic.p1 << intrinsic.p2;
     }
-  
+
   try
     {
       testNormalizedCameraCoordinates = undistort(_lstLeftCameraImageCoordinates[0],intrinsic);
@@ -978,7 +978,7 @@ void TestPiiCalibration::unDistort()
       QFAIL(qPrintable(ob.message()));
     }
 
-  
+
   if (verbose)
     {
       qDebug()<<"Normalized coordinates";
@@ -988,7 +988,7 @@ void TestPiiCalibration::unDistort()
   PiiMatrix<double> cameraCoord = PiiCalibration::worldToCameraCoordinates(_lstLeftCameraWorldCoordinates[0],extrinsic[0]);
 
 
-  
+
   for(int i = 0; i<cameraCoord.rows(); ++i)
     {
       for(int j = 0; j  < cameraCoord.columns()-1; ++j)
@@ -996,15 +996,15 @@ void TestPiiCalibration::unDistort()
           cameraCoord(i,j) = cameraCoord(i,j)/cameraCoord(i,2);
         }
     }
-  
-  QCOMPARE(cameraCoord.rows(),testNormalizedCameraCoordinates.rows()); 
+
+  QCOMPARE(cameraCoord.rows(),testNormalizedCameraCoordinates.rows());
 
   for(int i = 0; i < cameraCoord.rows(); ++i)
     {
       QVERIFY(Pii::abs(cameraCoord(i,0) - testNormalizedCameraCoordinates(i,0)) < 0.001);
       QVERIFY(Pii::abs(cameraCoord(i,1) - testNormalizedCameraCoordinates(i,1)) < 0.001);
     }
-#endif  
+#endif
 }
 
 void TestPiiCalibration::normalizedToPixelCoordinates()
@@ -1035,5 +1035,5 @@ void TestPiiCalibration::normalizedToPixelCoordinates()
 }
 
 
-QTEST_MAIN(TestPiiCalibration) 
+QTEST_MAIN(TestPiiCalibration)
 

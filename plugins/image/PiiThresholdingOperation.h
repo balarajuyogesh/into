@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -33,7 +33,7 @@
  *
  * @in threshold - an optional threshold input. Any numeric type. The
  * final threshold will be calculated by multiplying the input value
- * by [relativeThreshold] and adding [absoluteThreshold], except if 
+ * by [relativeThreshold] and adding [absoluteThreshold], except if
  * `HysteresisThreshold` is used. In this case the input will be used as
  * the upper threshold, [absoluteThreshold] will be ignored and
  * [relativeThreshold] will be added to the input to get the lower
@@ -65,9 +65,9 @@ class PiiThresholdingOperation : public PiiDefaultOperation
    * [thresholdType]. Default value is 1.0.
    */
   Q_PROPERTY(double relativeThreshold READ relativeThreshold WRITE setRelativeThreshold);
-  
+
   /**
-   * How to determine the threshold. Default is `StaticThreshold`. 
+   * How to determine the threshold. Default is `StaticThreshold`.
    * This value has no effect if the threshold input is connected.
    */
   Q_PROPERTY(ThresholdType thresholdType READ thresholdType WRITE setThresholdType);
@@ -77,7 +77,7 @@ class PiiThresholdingOperation : public PiiDefaultOperation
    * Inversion flag. If this value is set to `true`, the result will
    * be inverted. In all cases but with `HysteresisThreshold` the
    * "inverted" result will be same as the normal thresholding result
-   * except that zeros and ones are exchanged. See 
+   * except that zeros and ones are exchanged. See
    * [PiiImage::inverseHysteresisThreshold()] for details on hysteresis
    * thresholding.
    */
@@ -88,7 +88,7 @@ class PiiThresholdingOperation : public PiiDefaultOperation
    * default is 15-by-15.
    */
   Q_PROPERTY(QSize windowSize READ windowSize WRITE setWindowSize);
- 
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 
 public:
@@ -114,7 +114,7 @@ public:
    * - `RelativeToMaxThreshold` - the threshold is calculated by
    * multiplying the maximum gray level of the input image by
    * [relativeThreshold] and adding [absoluteThreshold] to the result.
-   
+
    * - `RelativeToMinThreshold` - the threshold is calculated by
    * multiplying the minimum gray level of the input image by
    * [relativeThreshold] and adding [absoluteThreshold] to the result.
@@ -142,14 +142,14 @@ public:
    * value will work as seeds. The result will contain all pixels with
    * a gray level higher than [absoluteThreshold] - [relativeThreshold]
    * that are connected to at least one seed pixel. The `threshold`
-   * output will emit the value of [absoluteThreshold]. The 
+   * output will emit the value of [absoluteThreshold]. The
    * `threshold` input will be ignored.
    *
-   * - `RelativeToMeanAdaptiveThreshold` - same as 
+   * - `RelativeToMeanAdaptiveThreshold` - same as
    * `RelativeToMeanThreshold`, but the threshold is calculated
    * separately for each pixel in a local window. The size of the
    * local window is determined by [windowSize]. The `threshold`
-   * output will emit the value of [absoluteThreshold]. The 
+   * output will emit the value of [absoluteThreshold]. The
    * `threshold` input will be ignored.
    *
    * - `MeanStdAdaptiveThreshold` - same as `MeanStdThreshold`, but
@@ -185,7 +185,7 @@ public:
     MeanStdAdaptiveThreshold,
     SauvolaAdaptiveThreshold
   };
-  
+
   PiiThresholdingOperation();
 
   double absoluteThreshold() const;
@@ -203,10 +203,10 @@ public:
   bool isInverse() const;
   void setWindowSize(const QSize& windowSize);
   QSize windowSize() const;
-  
+
 protected:
   void process();
-  
+
 private:
   template <class T> void thresholdColor(const PiiVariant& obj);
   template <class T> void thresholdGray(const PiiVariant& obj);
@@ -221,7 +221,7 @@ private:
     double dRelativeThreshold;
     ThresholdType thresholdType;
     bool bThresholdConnected;
-    
+
     PiiInputSocket* pImageInput, *pThresholdInput;
     PiiOutputSocket* pBinaryImageOutput, *pThresholdOutput;
     bool bInverse;

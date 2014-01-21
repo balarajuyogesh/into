@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,8 +27,8 @@ namespace PiiSerialization { \
 }
 
 /**
- * Declare all instances of `CLASS_NAME` template as a dynamic types. 
- * This overrides the default isDynamicType() function to return 
+ * Declare all instances of `CLASS_NAME` template as a dynamic types.
+ * This overrides the default isDynamicType() function to return
  * `true` for `CLASS_NAME` instances and all derived types.
  */
 #define PII_SERIALIZATION_DYNAMIC_TEMPLATE(CLASS_NAME) \
@@ -121,7 +121,7 @@ template <> const PiiMetaObject* CLASS_NAME::Template<TYPE >::piiMetaObject() co
   PII_DEFINE_SPECIALIZED_VIRTUAL_METAOBJECT_FUNCTION_NAMED(CLASS_NAME, TYPE, TYPE)
 
 /**
- * Declare and define a virtual piiMetaObject() function for a class. 
+ * Declare and define a virtual piiMetaObject() function for a class.
  * This macro is used within a class declaration. It returs a pointer
  * to an instance of PiiDefaultMetaObject instantiated for the type of
  * this object.

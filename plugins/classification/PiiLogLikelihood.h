@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -19,7 +19,7 @@
 #include "PiiDistanceMeasure.h"
 
 /**
- * Log-likelihood dissimilarity. Measures difference between two 
+ * Log-likelihood dissimilarity. Measures difference between two
  * `distributions` as a log-likelihood ratio: \( d = -\sum S_i
  * \log(M_i) \), where *S* and *M* represent the sample and model
  * distributions, respectively. Input features are assumed to be

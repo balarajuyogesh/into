@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -110,7 +110,7 @@ void PiiHistogramOperation::aboutToChangeState(State state)
       d->uiPreviousType = PiiVariant::InvalidType;
     }
 }
-  
+
 void PiiHistogramOperation::process()
 {
   PII_D;
@@ -140,12 +140,12 @@ template <class T> void PiiHistogramOperation::histogram(const PiiVariant& obj)
 
   Histogram<T>& hist = *static_cast<Histogram<T>*>(d->pHistogram);
   hist.initialize(d->iLevels, d->bNormalized);
-  
+
   PiiImage::handleRoiInput(d->pRoiInput, d->roiType, image, hist);
-  
+
   if (d->bNormalized)
     hist.normalize();
-  
+
   hist.send();
 }
 

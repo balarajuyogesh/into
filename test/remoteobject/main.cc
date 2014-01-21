@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -38,7 +38,7 @@ void TestPiiRemoteObject::serverThread()
   _pHttpServer = PiiHttpServer::addServer("PiiObjectServer", "tcp://0.0.0.0:3142");
   _pObjectServer = new PiiQObjectServer(&_serverObject);
   _pHttpServer->protocol()->registerUriHandler("/", _pObjectServer);
-  
+
   _bServerStarted = _pHttpServer->start();
 
   if (_bServerStarted)
@@ -154,7 +154,7 @@ void TestPiiRemoteObject::functionSignatures()
   QCOMPARE(pMetaObject->indexOfMethod("test1()"), iFirstSlotIndex);
   QCOMPARE(pMetaObject->indexOfMethod("test1(int)"), iFirstSlotIndex + 1);
   QCOMPARE(pMetaObject->indexOfMethod("test2()"), iFirstSlotIndex + 2);
-  QCOMPARE(pMetaObject->indexOfMethod("test2(QString)"), iFirstSlotIndex + 3); 
+  QCOMPARE(pMetaObject->indexOfMethod("test2(QString)"), iFirstSlotIndex + 3);
   QCOMPARE(pMetaObject->indexOfMethod("plus(int,int)"), iFirstSlotIndex + 4);
   QCOMPARE(pMetaObject->indexOfMethod("thrower(int)"), iFirstSlotIndex + 5);
 }

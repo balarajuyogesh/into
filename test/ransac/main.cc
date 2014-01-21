@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -45,7 +45,7 @@ void TestPiiRansac::RigidPlaneRansac()
     QVERIFY(Pii::abs(matModel(2) - matEstModel(2)) < 2);
     QVERIFY(Pii::abs(matModel(3) - matEstModel(3)) < 2);
   }
-  
+
   // Add 50% outliers and some noise
   for (int i=0; i<matPoints2.rows(); ++i)
     {
@@ -78,7 +78,7 @@ void TestPiiRansac::RigidPlaneRansac()
     QVERIFY(Pii::abs(matModel(2) - matEstModel(2)) < 2);
     QVERIFY(Pii::abs(matModel(3) - matEstModel(3)) < 2);
   }
-  
+
 #if 0
   {
     PiiTimer timer;

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -32,7 +32,7 @@ PiiColorCorrelogramOperation::PiiColorCorrelogramOperation() :
 {
   setThreadCount(1);
   PII_D;
-  
+
   addSocket(d->pInput = new PiiInputSocket("image"));
   addSocket(d->pOutput = new PiiOutputSocket("correlogram"));
 }
@@ -44,7 +44,7 @@ PiiColorCorrelogramOperation::~PiiColorCorrelogramOperation()
 void PiiColorCorrelogramOperation::check(bool reset)
 {
   PII_D;
-  
+
   if (d->iLevels < 2)
     PII_THROW(PiiExecutionException, tr("The number of quantization levels must be at least two."));
   PiiDefaultOperation::check(reset);
@@ -61,7 +61,7 @@ bool PiiColorCorrelogramOperation::quantize() const { return _d()->bQuantize; }
 void PiiColorCorrelogramOperation::process()
 {
   PII_D;
-  
+
   PiiVariant obj = d->pInput->firstObject();
 
   switch (obj.type())
@@ -76,7 +76,7 @@ void PiiColorCorrelogramOperation::process()
 template <class Clr> void PiiColorCorrelogramOperation::processColor(const PiiVariant& obj)
 {
   PII_D;
-  
+
   const PiiMatrix<Clr> img = obj.valueAs<PiiMatrix<Clr> >();
   if (d->bQuantize)
     {
@@ -107,7 +107,7 @@ template <class Clr> void PiiColorCorrelogramOperation::processColor(const PiiVa
 template <class T> void PiiColorCorrelogramOperation::processGray(const PiiVariant& obj)
 {
   PII_D;
-  
+
   const PiiMatrix<T> img = obj.valueAs<PiiMatrix<T> >();
   if (d->bQuantize)
     {

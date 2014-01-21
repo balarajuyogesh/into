@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -91,7 +91,7 @@
  *
  * @in class index - Input class index (any primitive type, converted
  * to an int)
- * 
+ *
  * Outputs
  * -------
  *
@@ -108,7 +108,7 @@
 class PiiClassIndexMapper : public PiiDefaultOperation
 {
   Q_OBJECT
-  
+
   /**
    * Additional information for classes. The info map contains a
    * number of QVariantLists that provide additional information for
@@ -144,17 +144,17 @@ class PiiClassIndexMapper : public PiiDefaultOperation
    * ~~~
    */
   Q_PROPERTY(QVariantList classIndexMap READ classIndexMap WRITE setClassIndexMap);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiClassIndexMapper();
-  
+
   void setClassInfoMap(const QVariantMap& classInfoMap);
   QVariantMap classInfoMap() const;
- 
+
   void setClassIndexMap(const QVariantList& classIndexMap);
   QVariantList classIndexMap() const;
-  
+
 protected:
   void process();
 
@@ -164,7 +164,7 @@ private:
   {
   public:
     QVariantMap classInfoMap;
-    
+
     QList<int> lstClassIndices;
     QList<int> lstListIndices;
     QStringList lstClassNames;

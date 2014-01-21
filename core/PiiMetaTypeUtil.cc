@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -117,13 +117,13 @@ namespace Pii
       return *reinterpret_cast<QVariant*>(args[1]);
     return QVariant(type, args[0]);
   }
-  
+
   int scoreOverload(const QVariantList& params, const QList<int>& types)
   {
     // Overload resolution 1: parameter count must match
     if (params.size() != types.size())
       return -1;
-    
+
     // Overload resolution 2: count matches on parameter types
     int iMatchCount = 0;
     for (int j=0; j<params.size(); ++j)

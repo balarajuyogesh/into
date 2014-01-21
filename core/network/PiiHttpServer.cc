@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -115,7 +115,7 @@ PiiHttpServer* PiiHttpServer::createServer(const QString& address)
   int schemeIndex = address.indexOf("://");
   if (schemeIndex == -1)
     return 0;
-  
+
   QString strScheme = address.left(schemeIndex);
   PiiHttpProtocol* pProtocol = new PiiHttpProtocol;
   PiiNetworkServer* pServer = 0;

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -39,7 +39,7 @@ namespace PiiImage
         bbox(i,0) = iCols-1;
         bbox(i,1) = iRows-1;
       }
-  
+
     //calculate areas, centroids and bounding box-values
     const T* data;
     for (int r=0; r<iRows; ++r)
@@ -72,7 +72,7 @@ namespace PiiImage
                   bbox(label,2) = c;
                 if (r > bbox(label,3)) //bottom
                   bbox(label,3) = r;
-              
+
                 areas(label,0)++;
                 matTmpCentroids(label,0) += c;
                 matTmpCentroids(label,1) += r;
@@ -86,7 +86,7 @@ namespace PiiImage
         bbox(i,2) = bbox(i,2) - bbox(i,0) + 1;
         bbox(i,3) = bbox(i,3) - bbox(i,1) + 1;
       }
-  
+
     for (int i=0; i<labels; i++)
       {
         centroids(i,0) = (int)(matTmpCentroids(i,0) / (double)areas(i,0) + 0.5);
@@ -103,7 +103,7 @@ namespace PiiImage
   {
     return calculateDirection(mat, std::bind2nd(std::equal_to<T>(), label), length, width, pixels);
   }
-  
+
   template <class T, class UnaryFunction>
   PiiMatrix<double> calculateDirection(const PiiMatrix<T>& mat,
                                        UnaryFunction decisionRule,
@@ -113,11 +113,11 @@ namespace PiiImage
   {
     const int iRows = mat.rows();
     const int iCols = mat.columns();
-    
+
     // Collect matching points
     PiiMatrix<double> matXY(0, 2);
     matXY.reserve(128);
-    
+
     double dWeightr = 0.0, dWeightc = 0.0;
     for (int r=0; r<iRows; ++r)
       {
@@ -132,17 +132,17 @@ namespace PiiImage
       }
 
     int iArea = matXY.rows();
-    
+
     if (pixels != 0)
       *pixels = iArea;
-    
+
     if (iArea < 2)
       {
         if (length != 0) *length = 0;
         if (width != 0) *width = 0;
         return PiiMatrix<double>::identity(2);
       }
-      
+
     double aCenter[] = { dWeightc / iArea, dWeightr / iArea };
     Pii::transformRows(matXY, aCenter, std::minus<double>());
 
@@ -154,36 +154,36 @@ namespace PiiImage
 
     return matBase;
   }
-  
+
   template <class ImageType, class SweepFunction>
   SweepFunction sweepLine(const PiiMatrix<ImageType>& image,
                           const PiiMatrix<double>& coordinates,
                           SweepFunction function,
                           int radius)
-  { 
+  {
     double xBegin = coordinates(0,0), yBegin = coordinates(0,1), xEnd = coordinates(0,2), yEnd = coordinates(0,3);
-    
+
     // Calculate directional unit vector
     double diffX = xEnd - xBegin;
     double diffY = yEnd - yBegin;
-    
+
     double length = sqrt(diffX*diffX + diffY*diffY);
     diffX /= length, diffY /= length;
 
     //qDebug()<<" Direct vec : x: "<<diffX<<" y: "<<diffY;
     double curPosX = xBegin, curPosY = yBegin;
-    
-    
+
+
     //.. and normal unit vector.
     double dXnormal = diffY;
     double dYnormal = -diffX;
 
     //qDebug()<<" curPosX : "<<curPosX<<" curPosY : "<<curPosY<<" dXnormal: "<<dXnormal<<" dYnormal: "<<dYnormal;
-       
+
     // Now x,y goes in line coordinates and sampleX and sampleY goes
-    // in image coordinates!! 
+    // in image coordinates!!
     int x = 0;
-    
+
     do
       {
         for (int y = -radius; y<=radius; ++y)
@@ -206,11 +206,11 @@ namespace PiiImage
                && curPosY >= 0
                && curPosX < image.columns()
                && curPosY < image.rows());
-        
-    return function; 
+
+    return function;
   }
-  
-  
+
+
 }
 
 

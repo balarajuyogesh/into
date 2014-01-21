@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,7 +26,7 @@
 class MainWindow : public DemoMainWindow, private Ui::MainWindow
 {
   Q_OBJECT
-  
+
 public:
   MainWindow(QWidget *parent = 0);
 
@@ -37,14 +37,14 @@ protected:
 signals:
   void selectImage(int);
   void updateImage(int);
-  
+
 private slots:
   void selectImage();
   void setThreshold(int th);
   void setInverseThreshold(bool inverse);
   void setMorphologyType(int value);
   void setMorphologySize(int size);
-  
+
 private:
   void init();
 

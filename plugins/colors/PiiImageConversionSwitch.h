@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -20,7 +20,7 @@
 
 /**
  * PiiImageConversionSwitch is an operation which convert a receiving
- * image from the color/gray to the gray/color type if necessary. 
+ * image from the color/gray to the gray/color type if necessary.
  *
  * Inputs
  * ------
@@ -42,7 +42,7 @@ class PiiImageConversionSwitch : public PiiDefaultOperation
   Q_OBJECT
 
   /**
-   * The type of color conversion. The default value is 
+   * The type of color conversion. The default value is
    * `RgbToGrayMean`.
    */
   Q_PROPERTY(ColorConversion colorConversion READ colorConversion WRITE setColorConversion);
@@ -53,7 +53,7 @@ public:
   /**
    * Supported color conversion schemes.
    *
-   * - `RgbToGrayMean` - calculate the mean of three color channels. 
+   * - `RgbToGrayMean` - calculate the mean of three color channels.
    * Retains the type of color channels, but outputs a gray-level
    * image.
    */
@@ -82,7 +82,7 @@ private:
    * to PiiUnsignedCharMatrixType for gray output if it is connected.
    */
   void operateColorImage(const PiiVariant& obj);
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {
@@ -91,7 +91,7 @@ private:
     PiiInputSocket *pImageInput;
     PiiOutputSocket *pGrayImageOutput, *pColorImageOutput;
     bool bGrayImageOutputConnected, bColorImageOutputConnected;
-    
+
     ColorConversion colorConversion;
   };
   PII_D_FUNC;

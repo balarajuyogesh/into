@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -35,7 +35,7 @@ namespace PiiOptimization
 
 static void lmCallbackFunction(double *par, int /*m_dat*/, double *fvec,
                                       void *data, int* /*info*/)
-/* 
+/*
  *	par is an input array. At the end of the minimization, it contains
  *        the approximate solution vector.
  *
@@ -96,7 +96,7 @@ namespace PiiOptimization
       int info;			// status of minimization.
       } lm_control_type;
     */
-    
+
     lm_control_type control;
     control.ftol = ftol;
     control.xtol = xtol;
@@ -110,7 +110,7 @@ namespace PiiOptimization
     // spend time estimating it but let the callback function do the
     // task.
     lm_jacobian_ftype* jacobianCallback = function->hasJacobian() ? lmCallbackJacobianFunction : 0;
-      
+
     lm_minimize(function->functionCount(),
                 initialParams.columns(),
                 params.row(0),
@@ -145,7 +145,7 @@ namespace PiiOptimization
                   info,
                   lbfgsCallbackFunction,
                   (void*)function);
-    
+
     PiiMatrix<double> res(1,initialParams.columns());
     for(int i = initialParams.columns(); i--;)
       {

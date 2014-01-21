@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -45,7 +45,7 @@
  * input must be a PiiMatrix<int> with four columns (x, y, width,
  * height). If [mode] is `OneToOne`, the matrix must have at least one
  * row. In `OneToMany` and `ManyToMany` modes the matrix may have
- * zero to N rows. In `ManyToMany` mode any number of 
+ * zero to N rows. In `ManyToMany` mode any number of
  * `area` inputs may be read for each `image` input.
  *
  * @in transform - an optional input that specifies a transform
@@ -96,14 +96,14 @@ class PiiImageCropper : public PiiDefaultOperation
 
   /**
    * The width of the cropped image. If a negative value is given, the
-   * right edge of the cropped image will be always positioned 
+   * right edge of the cropped image will be always positioned
    * `width` pixels from that of the input image.
    */
   Q_PROPERTY(int width READ width WRITE setWidth STORED false);
-  
+
   /**
    * The height of the cropped image. If a negative value is given,
-   * the bottom edge of the cropped image will be always positioned 
+   * the bottom edge of the cropped image will be always positioned
    * `width` pixels from that of the input image.
    */
   Q_PROPERTY(int height READ height WRITE setHeight STORED false);
@@ -114,7 +114,7 @@ class PiiImageCropper : public PiiDefaultOperation
    * default value is 0. Negative value counts from the right edge.
    */
   Q_PROPERTY(int xOffset READ xOffset WRITE setXOffset STORED false);
-  
+
   /**
    * The number of pixels the top edge of the crop area is vertically
    * offset with respect to that of the input image. The default value
@@ -125,7 +125,7 @@ class PiiImageCropper : public PiiDefaultOperation
   /**
    * A 3-by-3 PiiMatrix<float> that specifies the transformation
    * between area and image coordinates. If this matrix is empty, or
-   * the variant is invalid, no transformation will be made. The 
+   * the variant is invalid, no transformation will be made. The
    * `transform` input overrides this value.
    *
    * @see PiiImage::crop()
@@ -143,14 +143,14 @@ public:
    * - `OneToMany` - 0-N images will be emitted for each
    * incoming image, determined by the number of rows in the matrix
    * read from the `area` input.
-   *  
+   *
    * - `ManyToMany` - 0-N images will be emitted for each incoming
    * image. Any number of crop areas may be received for each incoming
    * image. The `area` and `transform` inputs are assumed to receive
    * objects at a higher flow level.
    */
   enum Mode { OneToOne, OneToMany, ManyToMany };
-  
+
   PiiImageCropper();
 
   void setMode(Mode mode);
@@ -169,7 +169,7 @@ public:
   PiiVariant transform() const;
 
   void check(bool reset);
-  
+
 protected:
   void process();
   void syncEvent(SyncEvent* event);
@@ -178,7 +178,7 @@ private:
   void readLocation();
   void startMany();
   void endMany();
-    
+
   void crop(const PiiVariant& imageObj,
             const PiiVariant& areaObj,
             const PiiVariant& transformObj);
@@ -193,8 +193,8 @@ private:
   public:
     Data();
     QRect area;
-    Mode mode;  
-    
+    Mode mode;
+
     PiiInputSocket *pImageInput, *pAreaInput, *pLocationInput, *pTransformInput;
     PiiOutputSocket *pImageOutput, *pLocationOutput;
 

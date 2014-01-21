@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -44,7 +44,7 @@ void PiiKernelPerceptron<SampleSet>::learn(const SampleSet& samples,
   PII_D;
   const int iSamples = PiiSampleSet::sampleCount(samples),
     iFeatures = PiiSampleSet::featureCount(samples);
-  
+
   PiiMatrix<double> matKernel(PiiClassification::calculateDistanceMatrix(samples,
                                                                          *d->pKernel,
                                                                          true, true));
@@ -52,7 +52,7 @@ void PiiKernelPerceptron<SampleSet>::learn(const SampleSet& samples,
   d->vecWeights.clear();
   d->supportVectors.clear();
   d->bConverged = false;
-  
+
   int iErrorCount, iIterations = 0;
   do
     {
@@ -84,7 +84,7 @@ void PiiKernelPerceptron<SampleSet>::learn(const SampleSet& samples,
   // Stop if everything was correctly classified
   while (iErrorCount > 0 &&
          ++iIterations < d->iMaxIterations);
-  
+
   d->bConverged = (iErrorCount == 0);
 
   // Retain only the samples with non-zero weights.

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -31,12 +31,12 @@ class QString;
  * Inputs
  * ------
  *
- * @in image - a color image the percentiles are extracted from. 
+ * @in image - a color image the percentiles are extracted from.
  * Accepts all image types. For gray-scale images, the color channels
  * are ignored. For example, the 90% percentile for any color channel
  * (R:90, B:90, G:90) is the same.
  *
- * @in roi - region-of-interest. See [PiiRoi] for a description. 
+ * @in roi - region-of-interest. See [PiiRoi] for a description.
  * Optional.
  *
  * Outputs
@@ -83,7 +83,7 @@ class PiiColorPercentiles : public PiiDefaultOperation
    */
   Q_PROPERTY(PrebuiltFeatureSet prebuiltFeatureSet READ prebuiltFeatureSet WRITE setPrebuiltFeatureSet);
   Q_ENUMS(PrebuiltFeatureSet);
-  
+
   /**
    * The number of quantization levels for the input images. If a
    * non-positive number is given, the maximum value of the
@@ -97,7 +97,7 @@ class PiiColorPercentiles : public PiiDefaultOperation
    * `AutoRoi`.
    */
   Q_PROPERTY(PiiImage::RoiType roiType READ roiType WRITE setRoiType);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
 
@@ -124,8 +124,8 @@ public:
    */
   enum PrebuiltFeatureSet { WoodDefectDetection, WoodDefectRecognition };
 
-  
-                    
+
+
   /**
    * Universal sets percentiles.
    *
@@ -152,7 +152,7 @@ public:
    * each color channel in 30 percentage unit steps. (30-10, 60-10,
    * 90-10). 9 percentiles in total.
    *
-   * - {Absolute,Difference}[123]0[RGB] (e.g. `Absolute10G` or 
+   * - {Absolute,Difference}[123]0[RGB] (e.g. `Absolute10G` or
    * `Difference30B`) - one-channel versions of the above. Percentiles
    * are calculated from the specified color channel only. The length
    * of the feature vector is one third of the corresponding
@@ -194,7 +194,7 @@ protected:
 
   void setRoiType(PiiImage::RoiType roiType);
   PiiImage::RoiType roiType() const;
-  
+
 private:
   template <class T> class ColorPercentiles;
   template <class T> class GrayPercentiles;
@@ -202,11 +202,11 @@ private:
   template <class T> friend class ColorPercentiles;
   template <class T> friend class GrayPercentiles;
   template <class T> friend class Percentiles;
-  
+
   void useUniversalFeatureSet(UniversalFeatureSet set);
   void usePrebuiltFeatureSet(PrebuiltFeatureSet set);
   void usePercentiles(const QStringList& percentiles);
-  
+
   QPair<int,int> createDef(QString str);
   template <class T> void percentiles(const PiiVariant& obj);
 
@@ -218,7 +218,7 @@ private:
     FeatureSetType featureSetType;
     UniversalFeatureSet universalFeatureSet;
     PrebuiltFeatureSet prebuiltFeatureSet;
-    
+
     QStringList lstPercentileNames;
     QList<QPair<int,int> > lstPercentiles;
     QList<QPair<int,int> > lstDiffs;

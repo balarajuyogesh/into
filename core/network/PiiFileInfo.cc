@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -83,7 +83,7 @@ void PiiFileInfo::refresh()
       d->lastModifiedTime = info.lastModified();
       return;
     }
-  
+
   d->bExists = false;
   d->lastModifiedTime = QDateTime();
 

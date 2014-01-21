@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -35,7 +35,7 @@ PiiFileSystemScanner::PiiFileSystemScanner() :
   addSocket(d->pPathInput = new PiiInputSocket("path"));
   d->pTriggerInput->setOptional(true);
   d->pPathInput->setOptional(true);
-  
+
   addSocket(new PiiOutputSocket("filename"));
 }
 

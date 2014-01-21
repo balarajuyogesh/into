@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -86,7 +86,7 @@ PiiColorPercentiles::~PiiColorPercentiles()
 void PiiColorPercentiles::usePercentiles(const QStringList& percentiles)
 {
   PII_D;
-  
+
   d->lstPercentileNames = percentiles;
   d->lstPercentiles.clear();
   d->lstDiffs.clear();
@@ -144,11 +144,11 @@ QPair<int,int> PiiColorPercentiles::createDef(QString str)
   // Each pair stores the channel and the percentile value
   return qMakePair(channel, percentile);
 }
-  
+
 void PiiColorPercentiles::check(bool reset)
 {
   PII_D;
-  
+
   PiiDefaultOperation::check(reset);
 
   switch(d->featureSetType)
@@ -191,14 +191,14 @@ void PiiColorPercentiles::process()
       PII_INT_COLOR_IMAGE_CASES(percentiles, obj);
     default:
       PII_THROW_UNKNOWN_TYPE(inputAt(0));
-    }  
+    }
 }
 
 template <class T> void PiiColorPercentiles::percentiles(const PiiVariant& obj)
 {
   PII_D;
   const PiiMatrix<T>& image = obj.valueAs<PiiMatrix<T> >();
-  
+
   if (d->uiPreviousType != Pii::typeId<T>())
     {
       delete d->pPercentiles;
@@ -208,7 +208,7 @@ template <class T> void PiiColorPercentiles::percentiles(const PiiVariant& obj)
 
   Percentiles<T>& percentiles = *static_cast<Percentiles<T>*>(d->pPercentiles);
   percentiles.initialize(d->iLevels, false);
-  
+
   PiiImage::handleRoiInput(d->pRoiInput, d->roiType, image, percentiles);
 
   emitObject(percentiles.calculate());
@@ -218,10 +218,10 @@ template <class T> PiiMatrix<int> PiiColorPercentiles::GrayPercentiles<T>::calcu
 {
   // Cumulative distribution of histogram
   PiiMatrix<int> cumulativeHist(PiiImage::cumulative<int>(this->varHistogram.template valueAs<PiiMatrix<int> >()));
-  
+
   PiiMatrix<int> matResult(PiiMatrix<int>::uninitialized(1,d->lstPercentiles.size()));
   int *pResult = matResult[0];
-  
+
   // Extract percentiles from the cumulative histogram
   for (int i=0; i<d->lstPercentiles.size(); ++i)
     {
@@ -232,7 +232,7 @@ template <class T> PiiMatrix<int> PiiColorPercentiles::GrayPercentiles<T>::calcu
       // Subtract the other one, if it is given
       if (d->lstDiffs[i].second >= 0)
         p -= PiiImage::percentile(cumulativeHist, (d->lstDiffs[i].second * this->iPixelCount) >> 8);
-      
+
       pResult[i] = p;
     }
   return matResult;
@@ -247,18 +247,18 @@ template <class ColorType> PiiMatrix<int> PiiColorPercentiles::ColorPercentiles<
 
   PiiMatrix<int> matResult(PiiMatrix<int>::uninitialized(1, d->lstPercentiles.size()));
   int *pResult = matResult[0];
-  
+
   for (int i=0; i<d->lstPercentiles.size(); ++i)
     {
       // Take the percentile from the correct channel histogram
       int p = PiiImage::percentile(channelHistograms[d->lstPercentiles[i].first],
                                    (d->lstPercentiles[i].second * this->iPixelCount) >> 8);
-      
+
       // Subtract the other one, if it is given
       if (d->lstDiffs[i].second >= 0)
         p -= PiiImage::percentile(channelHistograms[d->lstDiffs[i].first],
                                   (d->lstDiffs[i].second * this->iPixelCount) >> 8);
-      
+
       pResult[i] = p;
     }
   return matResult;

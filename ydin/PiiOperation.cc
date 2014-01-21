@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -245,14 +245,14 @@ PiiOperation* PiiOperation::clone() const
   // objectName() won't work for template classes, but we have the
   // serialization meta object...
   const char *className = PiiYdin::resourceName(this);
-  
+
   // Use the serialization factory to create an instance of the class
   PiiOperation *op = PiiYdin::createResource<PiiOperation>(className);
-  
+
   // Copy properties from the old to the new one
   if (op != 0)
     Pii::setProperties(op, Pii::propertyList(this, 0, Pii::WritableProperties | Pii::DynamicProperties));
-  
+
   return op;
 }
 

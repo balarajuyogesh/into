@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,17 +30,17 @@ namespace PiiMatching
     matTransformParams(transformParams),
     lstMatchedPoints(matchedPoints)
   {}
-  
+
   Match::Match() :
     d(new Data)
   {}
-  
+
   Match::Match(int modelIndex,
                const PiiMatrix<double> transformParams,
                const QList<QPair<int,int> >& matchedPoints) :
     d(new Data(modelIndex, transformParams, matchedPoints))
   {}
-      
+
   Match::Match(const Match& other) :
     d(other.d)
   {

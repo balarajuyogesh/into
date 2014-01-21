@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -47,7 +47,7 @@ class PII_CAMERAEMULATOR_EXPORT PiiNonWovenGenerator : public PiiTextureGenerato
    */
   Q_PROPERTY(ProductQuality productQuality READ getProductQuality WRITE setProductQuality);
   Q_ENUMS(ProductQuality);
-  
+
 public:
   /**
    * The quality of the non-woven product overall.
@@ -59,9 +59,9 @@ public:
    * - `LowQuality` - ragged, very cloudy surface
    */
   enum ProductQuality { HighQuality, MediumQuality, LowQuality };
-  
+
   PiiNonWovenGenerator();
-  
+
   void generateTexture(PiiMatrix<unsigned char>& buffer,
                        int row, int column,
                        int rows, int columns,

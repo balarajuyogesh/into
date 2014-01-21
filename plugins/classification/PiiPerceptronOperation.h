@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,9 +24,9 @@
  * is a supervised learning machine. Thus,
  * it does have a class label input. See the
  * description of input and output sockets in PiiClassifierOperation.
- * 
+ *
  * To instantiate the operation from an object registry, one must
- * specify the data type, e.g "PiiPerceptronOperation<double>". 
+ * specify the data type, e.g "PiiPerceptronOperation<double>".
  *
  * @see PiiClassifierOperation
  *
@@ -43,4 +43,4 @@ public:
 
 #include "PiiPerceptronOperation-templates.h"
 
-#endif // _PIIPERCEPTRONOPERATION_H 
+#endif // _PIIPERCEPTRONOPERATION_H

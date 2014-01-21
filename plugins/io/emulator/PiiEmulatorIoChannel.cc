@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -40,6 +40,6 @@ void PiiEmulatorIoChannel::setOutputState(bool state)
 
   if (channelMode() == NoMode)
     channelError(tr("Cannot set output state (mode == NoMode)"));
-  
+
   d->bCurrentState = state;
 }

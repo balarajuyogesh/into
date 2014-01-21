@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -19,7 +19,7 @@ uint qHash(const PiiConstCharWrapper& key)
 {
   uint h = 0;
   uint g;
-  
+
   const char* p = key.ptr;
   int n = strlen(p);
   while (n--)

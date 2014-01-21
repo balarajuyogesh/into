@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -23,7 +23,7 @@
 namespace Pii
 {
   /**
-   * Returns a color table with shades of gray from zero to 255. 
+   * Returns a color table with shades of gray from zero to 255.
    * PiiQImage uses this color table when initialized with a
    * PiiMatrix, because there is no color table in matrices.
    */

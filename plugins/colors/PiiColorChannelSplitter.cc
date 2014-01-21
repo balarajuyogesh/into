@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,7 +30,7 @@ PiiColorChannelSplitter::PiiColorChannelSplitter() :
 {
   setThreadCount(1);
   PII_D;
-  
+
   d->pImageInput = new PiiInputSocket("image");
   addSocket(d->pImageInput);
 
@@ -44,7 +44,7 @@ PiiColorChannelSplitter::~PiiColorChannelSplitter()
 void PiiColorChannelSplitter::process()
 {
   PII_D;
-  
+
   PiiVariant obj = d->pImageInput->firstObject();
 
   switch (obj.type())
@@ -71,10 +71,10 @@ template <class Color, int channels> void PiiColorChannelSplitter::splitChannels
   typedef typename Color::Type T;
   const PiiMatrix<Color> image = obj.valueAs<PiiMatrix<Color> >();
   PiiMatrix<T> channelImages[channels];
-  
+
   for (int i=0; i<channels; ++i)
     channelImages[i] = PiiMatrix<T>(PiiMatrix<T>::uninitialized(image.rows(), image.columns()));
-  
+
   const int iRows = image.rows(), iCols = image.columns();
   for (int r=0; r<iRows; ++r)
     {
@@ -86,7 +86,7 @@ template <class Color, int channels> void PiiColorChannelSplitter::splitChannels
 
       if (channels == 4)
         row3 = channelImages[3][r];
-      
+
       for (int c=0; c<iCols; ++c)
         {
           row0[c] = row[c].c0;

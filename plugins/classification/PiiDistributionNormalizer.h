@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -20,7 +20,7 @@
 #include <PiiMatrix.h>
 
 /**
- * An operation that divides incoming feature vectors by their sum. 
+ * An operation that divides incoming feature vectors by their sum.
  * This allows one to use differently scaled distributions in
  * classifying statistical features.
  *
@@ -76,7 +76,7 @@ private:
     PiiOutputSocket* pFeatureOutput;
   };
   PII_D_FUNC;
-  
+
   template <class T> void normalize(const PiiVariant& obj);
   template <class U, class T> void normalizePieces(const PiiMatrix<T>& vector, const PiiMatrix<int>& boundaries)
 ;

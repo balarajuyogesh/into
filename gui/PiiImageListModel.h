@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -25,11 +25,11 @@
 class PII_GUI_EXPORT PiiImageListModel : public QAbstractListModel
 {
   Q_OBJECT
-  
+
 public:
   PiiImageListModel(QObject *parent = 0);
   ~PiiImageListModel();
-  
+
   /**
    * Returns the number of rows under the given parent.
    */
@@ -48,7 +48,7 @@ public:
   void setData(const QModelIndex& index, int role, const QVariant& data);
 
   void setData(const QString& fileName, int role, const QVariant& data);
-  
+
   /**
    * Returns a map with values for all predefined roles in the model
    * for the item at the given index. There is also role Qt::UserRole
@@ -63,7 +63,7 @@ public:
    * appended.
    */
   bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex());
-  
+
   /**
    * Removes count rows starting with the given row. Returns true if
    * the rows were succesfully removed, other return false.
@@ -113,7 +113,7 @@ public slots:
    * Clear all items from the list.
    */
   void clear();
-  
+
 private:
   class Data
   {

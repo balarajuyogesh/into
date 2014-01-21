@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -224,7 +224,7 @@
 
 #ifndef _MSC_VER
 /**
- * Repeats *MACRO* for each of the *N* elements in *ELEMENTS*. 
+ * Repeats *MACRO* for each of the *N* elements in *ELEMENTS*.
  * *MACRO* will be called with two parameters: the (zero-based) index of
  * the current element and the element.
  *

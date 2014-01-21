@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -45,7 +45,7 @@ namespace PiiImage
    */
   template <class T> void calculateProperties(const PiiMatrix<T>& mat, int labels, PiiMatrix<int>& areas,
                                               PiiMatrix<int>& centroids, PiiMatrix<int>& bbox);
-  
+
 
   /**
    * Calculates the dominant orientation of an object in `mat`. This
@@ -65,7 +65,7 @@ namespace PiiImage
    * @param pixels an output parameter that will store the number of
    * pixels used for estimation
    *
-   * @return a 2-by-2 matrix consisting of orthonormal row vectors. 
+   * @return a 2-by-2 matrix consisting of orthonormal row vectors.
    * The first one is aligned to the most prominent direction. For
    * example (1,0) means right and (0,1) up. If there are less than
    * two pixels that match the label, the matrix will be [1 0; 0 1],
@@ -115,7 +115,7 @@ namespace PiiImage
      *
      * @param pixelX is a corresponding x-point on image coordinate
      * system.
-     * 
+     *
      * @param pixelY is a corresponding y-point on image coordinate
      * system.
      *
@@ -137,10 +137,10 @@ namespace PiiImage
 
   /**
    * A Functional that collects points which intensity is
-   * higher then given threshold.   
+   * higher then given threshold.
    *
    */
-  
+
   template <class ResultType, class ImageType> struct SweepCollectorFunction
   {
     SweepCollectorFunction(double  thres = 0) : threshold(thres) { matCoordinates.resize(0,5);}
@@ -150,7 +150,7 @@ namespace PiiImage
     /**
      * Operator()-which is called for each sweeped pixel. Operator
      * saves pixel coordinates if intensity value at pixel is higher
-     * then given threshold. 
+     * then given threshold.
      *
      * @param image is a gray-level image
      *
@@ -160,7 +160,7 @@ namespace PiiImage
      *
      * @param pixelX is a x-point in image coordinate system.
      *
-     * @param pixelY is a y-point in image coordinate system. 
+     * @param pixelY is a y-point in image coordinate system.
      */
     virtual void operator()(const PiiMatrix<ImageType>& image,
                             int x,
@@ -174,7 +174,7 @@ namespace PiiImage
           if(Pii::almostEqualRel(threshold,0.0))
             if(Pii::almostEqualRel(Pii::valueAt(image, pixelY, pixelX), threshold,1e-3))
               return;
-         */   
+         */
          ResultType* row = matCoordinates.insertRow(-1);
           row[0] = x, row[1] = y, row[2] = pixelX, row[3] = pixelY, row[4] = Pii::valueAt(image, pixelY, pixelX);
         }
@@ -185,22 +185,22 @@ namespace PiiImage
 
     double threshold;
   };
-  
-  
+
+
   /**
    * A Line sweeper. Function goes through given segment of a line
    * and sweeps line from both side going through line perpendicular
    * vector. For each point which is inside of given radius, function
    * calls type (note this is done also for line point) object
-   * operator(), with params point coordinates (x,y) and intensity. 
+   * operator(), with params point coordinates (x,y) and intensity.
    *
    * @param image a gray-level image.
    *
    * @param coordinates is a row matrix which contains line segment begin and end
-   * point (x1,y1,x2,y2).  
+   * point (x1,y1,x2,y2).
    *
-   * @param radius is length of perpendicular vector. 
-   * 
+   * @param radius is length of perpendicular vector.
+   *
    * @param function is a object which operator() is called with point
    * coordinates (x,y) and intensity and which returns value which is
    * saved in result matrix.
@@ -209,7 +209,7 @@ namespace PiiImage
   SweepFunction sweepLine(const PiiMatrix<ImageType>& image,
                           const PiiMatrix<double>& coordinates,
                           SweepFunction function,
-                          int radius = 0);              
+                          int radius = 0);
 }
 
 #include "PiiObjectProperty-templates.h"

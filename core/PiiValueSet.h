@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -81,7 +81,7 @@ namespace Pii
 template <class T, int N> struct PiiValueSet
 {
   typedef typename Pii::VaArg<T>::Type VaArgType;
-  
+
   PiiValueSet(VaArgType firstValue, ...)
   {
     values[0] = firstValue;

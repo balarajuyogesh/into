@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -45,13 +45,13 @@ namespace Pii
   PiiMatrix<double> fitPolynomial(unsigned int order, const PiiMatrix<double>& x, const PiiMatrix<double>& y)
   {
     int iMeasurements = y.isEmpty() ? x.rows() : x.columns();
-    
+
     // Sanity check
     if (iMeasurements <= int(order) ||
         (y.isEmpty() &&  x.columns() != 2) ||
         (!y.isEmpty() && x.columns() != y.columns()))
       PII_THROW(PiiInvalidArgumentException, QCoreApplication::translate("PiiMath", "Input arguments to fitPolynomial() are malformed."));
-    
+
     // Initialize estimation matrices
     PiiMatrix<double> matH(iMeasurements, order+1);
     PiiMatrix<double> matZ(1, iMeasurements);
@@ -141,7 +141,7 @@ namespace Pii
         2.445134137142996e+00,
         3.754408661907416e+00
       };
-    
+
     if (p < 0 || p > 1)
       return NAN;
     else if (p == 0)

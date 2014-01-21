@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -58,7 +58,7 @@ bool PiiModbusIoDriver::initialize(const QString& unit)
   PII_D;
   QString strAddress = "127.0.0.1";
   int iPort = MODBUS_TCP_DEFAULT_PORT;
-  
+
   if (!unit.isEmpty())
     {
       QStringList lstUnit = unit.split(":");
@@ -91,7 +91,7 @@ bool PiiModbusIoDriver::initialize(const QString& unit)
       responseTimeout.tv_usec = 0;
       modbus_set_response_timeout(d->pHandle, &responseTimeout);
       modbus_set_error_recovery(d->pHandle, MODBUS_ERROR_RECOVERY_PROTOCOL);
-          
+
       if (modbus_connect(d->pHandle) == -1)
         {
           piiWarning(tr("Cannot connect to modbus device (%1:%2). %3")
@@ -110,7 +110,7 @@ bool PiiModbusIoDriver::initialize(const QString& unit)
 
       _lstInstances.append(Instance(unit, this));
     }
-  
+
   piiDebug(tr("Modbus connected to %1:%2.").arg(strAddress).arg(iPort));
 
   //modbus_set_debug(d->pHandle, TRUE);
@@ -147,12 +147,12 @@ bool PiiModbusIoDriver::reset()
               }
           return false;
         }
-      
+
       QString strUnit = it->strUnit;
       modbus_flush(d->pHandle);
       modbus_close(d->pHandle);
       modbus_free(d->pHandle);
-              
+
       for (int i=0; i<it->lstDriverInstances.size(); ++i)
         it->lstDriverInstances[i]->_d()->pHandle = 0;
       _lstInstances.erase(it);
@@ -187,7 +187,7 @@ bool PiiModbusIoDriver::close()
         }
       d->pHandle = 0;
     }
-  
+
   return true;
 }
 

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -34,7 +34,7 @@ namespace PiiDsp
    * convolution between matrices A and B whose sizes are denoted by a
    * and b is a+b-1 (A*B -> a+b-1).
    *
-   * - `FilterOriginalSize` - retain the size of the original matrix. 
+   * - `FilterOriginalSize` - retain the size of the original matrix.
    * (A*B -> a)
    *
    * - `FilterValidPart` - return only those parts that can be
@@ -71,13 +71,13 @@ namespace PiiDsp
   PiiMatrix<ResultType> convolution(const PiiMatrix<T>& a,
                                     const PiiMatrix<U>& b,
                                     FilterMode mode = FilterFull);
-  
-  
+
+
   /**
    * Two-dimensional correlation of two matrices. The
    * size of the resulting matrix will be (M+O-1)x(N+P-1) if
    * the input matrices are of sizes MxN and OxP. Make sure
-   * that b is smaller than a. 
+   * that b is smaller than a.
    *
    * @param a source matrix
    *
@@ -117,7 +117,7 @@ namespace PiiDsp
    * @param b convolution filter
    *
    * @param mode filtering mode
-   */ 
+   */
   template <class ResultType, class T, class U>
   PiiMatrix<ResultType> filter(const PiiMatrix<T>& a,
                                const PiiMatrix<U>& b,
@@ -136,7 +136,7 @@ namespace PiiDsp
     Peak() :
       dataIndex(0), position(0), height(0), width(0)
     {}
-    
+
     /**
      * Construct a new peak with the given data index, estimate
      * position, height, and width.
@@ -163,7 +163,7 @@ namespace PiiDsp
      */
     double width;
   };
-  
+
   /**
    * Find peaks in noisy one-dimensional data. This function locates
    * and measures positive peaks in a noisy sequence of measurements

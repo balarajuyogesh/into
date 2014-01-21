@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -44,7 +44,7 @@ class PiiFileSystemWatcher : public PiiDefaultOperation
 
   /**
    * Sets the name filters used in watching new files. Each name
-   * filter is a wildcard (globbing) filter that understands * and ? 
+   * filter is a wildcard (globbing) filter that understands * and ?
    * wildcards. The operation will only report files whose names match
    * the one of the filters. If the filter list is empty, all changed
    * files will be reported. An example:
@@ -57,7 +57,7 @@ class PiiFileSystemWatcher : public PiiDefaultOperation
   Q_PROPERTY(QStringList nameFilters READ nameFilters WRITE setNameFilters);
 
   /**
-   * Delay the emission of a file name for this many seconds. If 
+   * Delay the emission of a file name for this many seconds. If
    * `watchDelay` is non-zero, added and modified files will not be
    * reported until they remain unchanged at least `watchDelay`
    * seconds. This can be used delay the handling of a large file
@@ -65,7 +65,7 @@ class PiiFileSystemWatcher : public PiiDefaultOperation
    * value is zero.
    */
   Q_PROPERTY(int watchDelay READ watchDelay WRITE setWatchDelay);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiFileSystemWatcher();
@@ -89,7 +89,7 @@ private slots:
    */
   void directoryChanged(const QString& path);
   void emitNotModifiedFileNames();
-  
+
 private:
   void emitAllFileNames();
   int indexOf(const QStringList& paths, const QString& path);
@@ -102,11 +102,11 @@ private:
     // List of watched dirs and their last check times
     QStringList lstDirectories;
     QList<QDateTime> lstPreviousCheckTimes;
-    
+
     QFileSystemWatcher fileSystemWatcher;
     QStringList lstNameFilters;
     int iWatchDelay;
-    
+
     // List of modified files pending emission
     QStringList lstModifiedFiles;
     // Lists of modified files found during the last check, per folder.

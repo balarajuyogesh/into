@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -67,7 +67,7 @@ PiiRemoteObject::~PiiRemoteObject()
         closeChannel();
         try { call<void>(QString("channels/%1/delete").arg(d->strChannelId)); } catch (...) {}
       }
-  
+
   delete d->pHttpDevice;
   for (int i=0; i<d->lstCallbacks.size(); ++i)
     delete d->lstCallbacks[i].second;
@@ -82,7 +82,7 @@ PiiRemoteObject::HttpDevicePtr PiiRemoteObject::openConnection()
 
   if (unsigned(d->iFailureCount.load()) > unsigned(d->iMaxFailureCount))
     PII_THROW(PiiNetworkException, tr("Maximum number of failures reached."));
-  
+
   QIODevice* pSocket = 0;
   for (int iTry=0; iTry<=d->iRetryCount; ++iTry)
     {
@@ -102,7 +102,7 @@ PiiRemoteObject::HttpDevicePtr PiiRemoteObject::openConnection()
     d->pHttpDevice = new PiiHttpDevice(pSocket, PiiHttpDevice::Client);
   else if (d->pHttpDevice->device() != pSocket)
     d->pHttpDevice->setDevice(pSocket);
-  
+
   pDev = d->pHttpDevice;
   return pDev;
 }
@@ -136,7 +136,7 @@ QList<QByteArray> PiiRemoteObject::readDirectoryList(const QString& path)
           addFailure();
           PII_THROW(PiiNetworkException, tr("Server responded with status code %1.").arg(pDev->status()));
         }
-      
+
       return pDev->readBody().split('\n');
     }
   return QList<QByteArray>();
@@ -153,7 +153,7 @@ QString PiiRemoteObject::addCallback(const QString& name, PiiGenericFunction* fu
       delete function; // PENDING ?
       throw;
     }
-  
+
   d->lstCallbacks << qMakePair(name, function);
   return function->signature(name);
 }
@@ -169,7 +169,7 @@ void PiiRemoteObject::removeCallback(const QString& signature)
             addFailure();
             piiWarning(ex.message());
           }
-        
+
         delete d->lstCallbacks[i].second;
         d->lstCallbacks.removeAt(i);
         return;
@@ -217,10 +217,10 @@ void PiiRemoteObject::openChannel()
 
   if (d->bChannelRunning)
     return;
-  
+
   closeChannel();
   d->strChannelId.clear();
-  
+
   d->pChannelThread = Pii::createAsyncCall(this, &PiiRemoteObject::readChannel);
   d->pChannelThread->start();
   // PENDING tämä aukaisee channelMutexin, jolloin openChannel() voi tulla päälle.
@@ -263,7 +263,7 @@ bool PiiRemoteObject::requestNewChannel(PiiHttpDevice& dev)
 
   if (!dev.readHeader() || !checkChannelResponse(dev))
     return false;
-    
+
   // Read preamble (should contain the channel ID)
   QByteArray aChannelId = dev.readLine();
   while (aChannelId.size() > 0 && char(aChannelId[aChannelId.size()-1]) member_of ('\n', '\r'))
@@ -302,13 +302,13 @@ void PiiRemoteObject::readChannel()
 
   PiiNetworkClient networkClient(d->networkClient.serverAddress());
   PiiSocketDevice pSocket = networkClient.openConnection();
-  
+
   if (pSocket == 0)
     {
       d->channelUpCondition.wakeOne();
       return;
     }
-  
+
   PiiHttpDevice dev(pSocket, PiiHttpDevice::Client);
   // We are going to accept any number of bytes
   dev.setMessageSizeLimit(0);
@@ -318,14 +318,14 @@ void PiiRemoteObject::readChannel()
       d->channelUpCondition.wakeOne();
       return;
     }
-  
+
   dev.setController(this);
 
   // Now we are finally up and running
   d->bChannelRunning = true;
   d->channelUpCondition.wakeOne();
   lock.unlock();
-  
+
   forever
     {
       PiiMultipartDecoder decoder(&dev, dev.responseHeader());
@@ -336,13 +336,13 @@ void PiiRemoteObject::readChannel()
               // Fetch next message
               if (!decoder.nextMessage()) // may throw
                 continue;
-                  
+
               // Read and decode body contents
               QByteArray aBody = decoder.readAll();
               /*piiDebug("Received message (%d bytes), read %d to %s",
                        decoder.header().contentLength(),
                        aBody.size(), piiPrintable(decoder.header().value("X-ID")));
-              */  
+              */
               decodePushedData(decoder.header().value("X-ID"), aBody);
             }
           catch (PiiException& ex)
@@ -364,11 +364,11 @@ void PiiRemoteObject::readChannel()
             {
               if (iTry != 0)
                 PiiDelay::msleep(d->iRetryDelay);
-              
+
               QMutexLocker channelLock(&d->channelMutex);
               networkClient.setServerAddress(d->networkClient.serverAddress());
               pSocket = networkClient.openConnection();
-                  
+
               if (pSocket != 0)
                 {
                   dev.setDevice(pSocket);
@@ -389,7 +389,7 @@ void PiiRemoteObject::readChannel()
               addFailure();
               break;
             }
-          
+
           // Couldn't reconnect to the lost channel. Try to create a
           // new one and reconnect all connected sources to it.
           if (!checkChannelResponse(dev))
@@ -431,7 +431,7 @@ bool PiiRemoteObject::checkChannelResponse(PiiHttpDevice& dev)
       piiWarning(tr("Cannot set up a channel. Unrecognized content type \"%1\".").arg(dev.responseHeader().contentType()));
       return false;
     }
-  
+
   return true;
 }
 
@@ -443,7 +443,7 @@ void PiiRemoteObject::decodePushedData(const QString& sourceId, const QByteArray
       QVariantList lstParams;
       if (!data.isEmpty())
         lstParams = PiiNetwork::fromByteArray<QVariantList>(data);
-      
+
       PiiNetwork::resolveFunction(d->lstCallbacks, sourceId.mid(10), lstParams)->call(lstParams);
     }
 }

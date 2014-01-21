@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -59,10 +59,10 @@ namespace Pii
    * @relates PiiQImage
    */
   PII_CORE_EXPORT void setQImageFormat(QImage* image, QImage::Format format);
-  
+
   /**
    * Makes *image* believe it no longer owns its internal buffer. The
-   * image works as usual but the buffer must be freed (with 
+   * image works as usual but the buffer must be freed (with
    * `free`()) by the caller.
    *
    * @relates PiiQImage
@@ -74,7 +74,7 @@ namespace Pii
    * Converts any color image (rgb/indexed) to gray scale.
    */
   PII_CORE_EXPORT void convertToGray(QImage& img);
-  
+
   /**
    * Converts any image to 32-bit rgb.
    */
@@ -99,7 +99,7 @@ namespace Pii
  * considered an ugly, dangerous hack. But it saves a lot of memory
  * and processing time by making conversions between PiiMatrix and
  * QImage unnecessary.
- * 
+ *
  * Since QImage supports 1, 8 and 32 bit images, and PiiMatrix cannot
  * go below 8 bits, the template type must be either 8 or 32 bits in
  * size. Use unsigned char for gray scale and indexed images, and
@@ -110,7 +110,7 @@ namespace Pii
  * original object, the internal data will be automatically duplicated
  * by either QImage or PiiMatrix. As a result, the inherited PiiQImage
  * ends up having two data buffers, and either one may change
- * depending on which function you call. (Now, stop here and re-read. 
+ * depending on which function you call. (Now, stop here and re-read.
  * Seriously.) There is no way PiiQImage could prevent this. To ease
  * things a bit make sure that PiiQImages are always passed as
  * pointers.
@@ -127,7 +127,7 @@ namespace Pii
  * If you construct a PiiQImage with a PiiMatrix, make sure
  * that the original goes out of scope or gets modified before you
  * modify the result.
- * 
+ *
  * ~~~(c++)
  * PiiMatrix<unsigned char> mat;
  * PiiGrayQImage* pImg = PiiGrayQImage::create(mat);
@@ -155,14 +155,14 @@ template <class T> class PiiQImage :
 public:
   /**
    * Returns a new PiiQImage that steals the data buffer from
-   * *image*. 
+   * *image*.
    *
    * One must ensure that the depth of the given image (image.depth())
    * equals to the size of the template type (sizeof(T)*8). Otherwise,
    * the behavior is undefined (read: your program will crash). The
    * QImage will still be valid after constructing a PiiQImage,
-   * but it has lost the ownership of its internal buffer. 
-   * PiiQImage will `free`() the buffer when deleted. If 
+   * but it has lost the ownership of its internal buffer.
+   * PiiQImage will `free`() the buffer when deleted. If
    * *image* doesn't own its data buffer (it is constructed with
    * external data), the external data must remain valid throughout
    * the lifetime of this object and will not be released upon
@@ -226,7 +226,7 @@ public:
     delete this;
     return pResult;
   }
-  
+
   /**
    * Returns a new matrix in the stack. This function can be used to
    * move the data from a QImage to a PiiMatrix in the stack:
@@ -245,12 +245,12 @@ public:
     delete this;
     return result;
   }
-  
+
 private:
   PiiQImage(void* data, int rows, int columns, size_t stride,
                   Pii::PtrOwnership ownership);
   PiiQImage(const PiiMatrix<T>& matrix);
-  
+
   PII_DISABLE_COPY(PiiQImage);
 };
 

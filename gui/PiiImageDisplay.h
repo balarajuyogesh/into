@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -56,7 +56,7 @@ class PII_GUI_EXPORT PiiImageDisplay : public QFrame
    */
   Q_PROPERTY(bool showHorizontalMeasureBar READ showHorizontalMeasureBar WRITE setShowHorizontalMeasureBar);
   Q_PROPERTY(bool showVerticalMeasureBar READ showVerticalMeasureBar WRITE setShowVerticalMeasureBar);
-  
+
 public:
   /**
    * Display types.
@@ -81,7 +81,7 @@ public:
 
   void setShowVerticalMeasureBar(bool show);
   bool showVerticalMeasureBar() const;
-  
+
   /**
    * Returns the horizontal measure bar.
    */
@@ -119,16 +119,16 @@ public:
 signals:
   /**
    * Refer to the documentation of the corresponding signal in the class
-   * PiiImageViewport. 
+   * PiiImageViewport.
    */
   void areaSelected(const QRect&,int);
 
   /**
    * Refer to the documentation of the corresponding signal in the class
-   * PiiImageViewport. 
+   * PiiImageViewport.
    */
   void clicked(const QPoint&,int);
-  
+
 public slots:
   /**
    * Sets the displayed image. If `image` is not of a recognized

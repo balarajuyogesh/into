@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -21,7 +21,7 @@
 
 /**
  * An algorithm that traverses object boundaries. The typical use of
- * this class is to detect the boundaries of objects in binary images. 
+ * this class is to detect the boundaries of objects in binary images.
  * The algorithm extacts both outer and inner boundaries in the order
  * they are first found in the image. Each boundary is represented as
  * a matrix in which each row stores the (x,y) coordinates of a pixel
@@ -69,7 +69,7 @@ public:
 
   /**
    * Finds the next unhandled boundary and stores its coordinates to
-   * *points*. Returns the number of boundary points appended to 
+   * *points*. Returns the number of boundary points appended to
    * *points*, or zero if no more boundaries can be found.
    */
   template <class T, class UnaryOp>
@@ -177,7 +177,7 @@ public:
   static QList<PiiMatrix<int> > findBoundaries(const PiiMatrix<T>& objects,
                                                UnaryOp rule,
                                                PiiMatrix<unsigned char>* boundaryMask = 0);
-  
+
 private:
   /// @internal
   class Data
@@ -199,7 +199,7 @@ private:
    * @param rule the decision rule to match object pixels.
    */
   template <class T, class UnaryOp> void findNextUnhandledPoint(const PiiMatrix<T>& objects,
-                                                                UnaryOp rule);  
+                                                                UnaryOp rule);
 };
 
 #include "PiiBoundaryFinder-templates.h"

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -44,9 +44,9 @@ public:
   {
   public:
     virtual ~Controller() {}
-    
+
     /**
-     * Called by the thread when the protocol has done its work. 
+     * Called by the thread when the protocol has done its work.
      */
     virtual void threadAvailable(PiiNetworkServerThread* thread) = 0;
 
@@ -70,7 +70,7 @@ public:
     virtual QIODevice* createSocket(PiiGenericSocketDescriptor socketDescriptor) = 0;
   };
 
-  
+
   /**
    * Create a new worker thread that uses `protocol` to communicate
    * with clients. If `protocol` is stateful (
@@ -95,8 +95,8 @@ public:
   /**
    * Get the controller.
    */
-  Controller* controller() const;  
-  
+  Controller* controller() const;
+
   /**
    * Start handling of an incoming network request. This function
    * stores the socket descriptor and either starts or wakes up the
@@ -118,7 +118,7 @@ public:
   void stop(PiiNetwork::StopMode mode = PiiNetwork::WaitClients);
 
   /**
-   * Returns `false` if the thread has been stopped with the 
+   * Returns `false` if the thread has been stopped with the
    * `interrupt` flag set to `true`. Otherwise returns `true`.
    */
   bool canContinue(double percentage) const;

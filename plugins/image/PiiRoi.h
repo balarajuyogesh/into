@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -62,7 +62,7 @@ namespace PiiImage
   template <class T> struct AlphaRoi<PiiColor4<T> >
   {
     AlphaRoi(const PiiMatrix<PiiColor4<T> >& img) : _image(img) {}
-    
+
     inline bool operator() (int r, int c) const { return _image(r,c).rgbaA != 0; }
 
   private:
@@ -90,7 +90,7 @@ namespace PiiImage
    * boundaries of the result image, it will be ignored.
    *
    * @return a *rows* -by- *columns* binary image in which all
-   * pixels that are in any of the *rectangles* will be set to 
+   * pixels that are in any of the *rectangles* will be set to
    * `true`.
    */
   PII_IMAGE_EXPORT PiiMatrix<bool> createRoiMask(int rows, int columns,
@@ -113,7 +113,7 @@ namespace PiiImage
    * mask.
    */
   template <class T> PiiMatrix<bool> alphaToMask(const PiiMatrix<PiiColor4<T> >& image);
-  
+
   /**
    * @internal
    *

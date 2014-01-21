@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -47,7 +47,7 @@ public:
   bool write(const QImage& image);
   bool supportsOption(ImageOption option) const;
   QVariant option(ImageOption option) const;
-  
+
   /**
    * Writes a frame into the device. `data` points to the beginning
    * of raw image data. `width*height*bytesPerPixel` bytes will
@@ -102,13 +102,13 @@ public:
    * (non-sequential) device.
    */
   bool endWriting();
-  
+
   /**
    * Seeks to the given frame index.
-   * 
+   *
    * @param frameIndex seek to the beginning of this frame. If
    * frameIndex is negative, seeks from the end of the sequence.
-   * 
+   *
    * @return true if seek was successful, false otherwise.
    */
   bool seekFrame(int frameIndex);
@@ -177,7 +177,7 @@ private:
   struct Header
   {
     enum { magicValue = 0x31415927 };
-    
+
     Header() :
       magic(magicValue),
       width(0), height(0),
@@ -185,7 +185,7 @@ private:
       imageFormat(PiiCamera::MonoFormat),
       frameCount(0)
     {}
-    
+
     /**
      * Magic number: 0x31415927.
      */

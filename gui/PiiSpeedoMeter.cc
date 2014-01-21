@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -168,13 +168,13 @@ void PiiSpeedoMeter::paintEvent(QPaintEvent *e)
         p.setPen(_outerBorderPen);
         p.setBrush(_outerBorderBrush);
         p.drawEllipse(d->rect);
-        
+
         double dInnerBorderAdjust = d->dMeterCap/2;
         p.setPen(_innerBorderPen);
         p.setBrush(_innerBorderBrush);
         p.drawEllipse(d->rect.adjusted(dInnerBorderAdjust,dInnerBorderAdjust,-dInnerBorderAdjust,-dInnerBorderAdjust));
       }
-    
+
     // Draw meter circle
     p.setPen(_meterPen);
     p.setBrush(_meterBrush);
@@ -216,7 +216,7 @@ void PiiSpeedoMeter::paintEvent(QPaintEvent *e)
         p.setBrush(_alarmBrush);
         p.drawPath(path);
       }
-    
+
     // Draw scale ticks and numbers
     p.setPen(_scalePen);
     p.setBrush(Qt::NoBrush);

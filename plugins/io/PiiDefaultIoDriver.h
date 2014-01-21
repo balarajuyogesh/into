@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -51,7 +51,7 @@ protected:
    * Create a PiiIoChannel depends on given channel-index.
    */
   virtual PiiIoChannel* createChannel(int channel) = 0;
-  
+
   class Data
   {
   public:
@@ -91,7 +91,7 @@ private:
    * Remove the input channel from the polling input list.
    */
   void removePollingInput(PiiIoChannel *input);
-  
+
   static int _iInstanceCounter;
   static PiiIoThread *_pSendingThread;
   static QMutex* instanceLock();

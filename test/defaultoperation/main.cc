@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -77,7 +77,7 @@ void TestPiiDefaultOperation::initTestCase()
 void TestPiiDefaultOperation::process()
 {
   QFETCH(int, threadCount);
-  
+
   _pBuffer->lstData.clear();
   _pCounter->setProperty("threadCount", threadCount);
   try

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -29,7 +29,7 @@ namespace PiiImage
    * compressed towards left and right borders). The image must
    * contain the full visible width of the cylinder and no background.
    *
-   * @param focalLength the focal length of the camera. See 
+   * @param focalLength the focal length of the camera. See
    * [calibration_intrinsic_parameters] for more information. Use a
    * large value to approximate a telecentric lens.
    *
@@ -50,7 +50,7 @@ namespace PiiImage
    * zero, it will be automatically calculated.
    *
    * @param radius an optional input/output parameter that specifies
-   * the physical radius of the cylinder, in the same units as 
+   * the physical radius of the cylinder, in the same units as
    * `cameraDistance`. If radius is a null pointer or zero, it will be
    * automatically calculated. If both cameraDistance and radius are
    * zero, 100 will be used as the radius because both cannot be

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
   QApplication app(argc, argv);
 
   Frame box;
-  
+
   //init view
   QRect screenRect = QApplication::desktop()->screenGeometry(QApplication::desktop()->primaryScreen());
   QRect windowRect(0, 0, 800, 600);
@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
   box.setWindowTitle("Into demos");
 
   box.show();
-  
-  return app.exec();    
+
+  return app.exec();
 }
 

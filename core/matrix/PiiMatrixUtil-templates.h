@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -83,7 +83,7 @@ namespace Pii
     typedef typename Matrix::value_type T;
     if (mode == ExtendNot)
       return Pii::matrix(mat);
-    
+
     int oldR = mat.rows(), oldC = mat.columns();
     int newR = oldR+topRows+bottomRows, newC = oldC+leftCols+rightCols;
 
@@ -96,7 +96,7 @@ namespace Pii
 
     // Copy inner contents
     result(topRows, leftCols, oldR, oldC) << mat;
-    
+
     switch (mode)
       {
       case ExtendSymmetric:
@@ -109,12 +109,12 @@ namespace Pii
           int upLimit = oldR + topRows - 1;
           for (int r=topRows; r--; )
             result(r, 0, 1, -1) << result(Pii::min(doubleRows-r, upLimit), 0, 1, -1);
-          upLimit = oldR + topRows - bottomRows; 
+          upLimit = oldR + topRows - bottomRows;
           for (int r=bottomRows; r--; )
             result(-r-1, 0, 1, -1) << result(Pii::max(upLimit+r, topRows), 0, 1, -1);
         }
         break;
-        
+
       case ExtendPeriodic:
         {
           int upLimit = oldC - leftCols;
@@ -251,18 +251,18 @@ namespace Pii
       {
         if (mat1.columns() != mat2.columns())
           PII_MATRIX_SIZE_MISMATCH;
-        
+
         PiiMatrix<T> result(PiiMatrix<T>::uninitialized(mat1.rows() + mat2.rows(), mat1.columns()));
         result(0, 0, mat1.rows(), -1) << mat1;
         result(mat1.rows(), 0, -1, -1) << mat2;
-        
+
         return result;
       }
     else
       {
         if (mat1.rows() != mat2.rows())
           PII_MATRIX_SIZE_MISMATCH;
-        
+
         PiiMatrix<T> result(PiiMatrix<T>::uninitialized(mat1.rows(), mat1.columns() + mat2.columns()));
         result(0, 0, -1, mat1.columns()) << mat1;
         result(0, mat1.columns(), -1, -1) << mat2;
@@ -296,7 +296,7 @@ namespace Pii
             p2 = p1 + iCols-1;
             for (; p1 < p2; ++p1, --p2)
               qSwap(*p1, *p2);
-          }        
+          }
       }
     else if (directions == Pii::Horizontally)
       {
@@ -396,12 +396,12 @@ namespace Pii
         // equal.
         memcpy(matrix.rowBegin(lastRow), matrix.constRowBegin(iStartIndex), iBytesPerRow);
         memcpy(matrix.rowBegin(iStartIndex), pivotRow, iBytesPerRow);
-        
+
         sortRows(matrix, column, pivotRow, firstRow, iStartIndex-1, lessThan);
         sortRows(matrix, column, pivotRow, iStartIndex+1, lastRow, lessThan);
       }
   }
-  
+
   template <class T, class LessThan> void sortRows(PiiMatrix<T>& matrix, LessThan lessThan, int column)
   {
     if (matrix.isEmpty()) return;

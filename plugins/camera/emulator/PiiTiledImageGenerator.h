@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -33,12 +33,12 @@ class PII_CAMERAEMULATOR_EXPORT PiiTiledImageGenerator : public PiiTextureGenera
    * tileFileName description
    */
   Q_PROPERTY(QString tileFileName READ getTileFileName WRITE setTileFileName);
-  
-  
+
+
 public:
   PiiTiledImageGenerator();
   ~PiiTiledImageGenerator();
-  
+
   void generateTexture(PiiMatrix<unsigned char>& buffer,
                        int row, int column,
                        int rows, int columns,
@@ -51,7 +51,7 @@ public:
 private:
   void initImage();
   QImage convertColorToGray(QImage img);
-  
+
   int _iRowCounter, _iDirection;
   PiiMatrix<unsigned char> *_pImage;
   QString _strTileFileName;

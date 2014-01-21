@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -52,7 +52,7 @@ namespace PiiSampleSet
   };
 
   /**
-   * Creates a new sample set with *sampleCount* samples and 
+   * Creates a new sample set with *sampleCount* samples and
    * *featureCount* features.
    */
   template <class SampleSet> inline SampleSet create(int sampleCount, int featureCount)
@@ -70,7 +70,7 @@ namespace PiiSampleSet
    */
   template <class T> inline int featureCount(const PiiMatrix<T>& samples) { return samples.columns(); }
   /**
-   * Resizes a sample set to hold *sampleCount* samples with 
+   * Resizes a sample set to hold *sampleCount* samples with
    * *featureCount* features. If *featureCount* is -1, the number of
    * features will not be changed.
    */
@@ -107,7 +107,7 @@ namespace PiiSampleSet
   template <class T> inline T* sampleAt(PiiMatrix<T>& samples, int index) { return samples[index]; }
 
   /**
-   * Replaces the feature vector at *index* in *samples* with 
+   * Replaces the feature vector at *index* in *samples* with
    * *features*.
    */
   template <class T> inline void setSampleAt(PiiMatrix<T>& samples, int index, const T* features)
@@ -133,7 +133,7 @@ namespace PiiSampleSet
   {
     samples.removeRow(index);
   }
-  
+
   /**
    * Returns `true` if *set1* is equal to *set2*, and `false`
    * otherwise.

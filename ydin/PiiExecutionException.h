@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -50,7 +50,7 @@ public:
    * tag.
    */
   enum Code { Error, Finished, Interrupted, Paused };
-  
+
   /**
    * Constructs a new `Error` with the given message and location.
    */
@@ -73,7 +73,7 @@ public:
   PiiExecutionException(const PiiExecutionException& other);
 
   ~PiiExecutionException();
-  
+
   /**
    * Get the cause of the exception.
    */
@@ -115,7 +115,7 @@ protected:
 #include "PiiSerializableRegistration.h"
 
 /**
- * Thrown by PiiOperationCompound when errors occur during check(). 
+ * Thrown by PiiOperationCompound when errors occur during check().
  * This exception combines the possibly many error messages of all
  * child operations.
  *
@@ -137,7 +137,7 @@ public:
   PiiCompoundExecutionException(const PiiCompoundExecutionException& other);
 
   ~PiiCompoundExecutionException();
-  
+
   void addException(const QString& childName, const PiiExecutionException& exception);
 
   ExceptionList exceptions() const;

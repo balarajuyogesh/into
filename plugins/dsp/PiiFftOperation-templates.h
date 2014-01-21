@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -29,7 +29,7 @@ template <class T> class PiiFftOperation::Template : public PiiFftOperation
 
 public:
   Template() : PiiFftOperation(new Data) {}
-  
+
   void check(bool reset)
   {
     PiiFftOperation::check(reset);
@@ -41,7 +41,7 @@ protected:
   void process()
   {
     PiiVariant obj = readInput();
-    
+
     if (_d()->direction == Forward)
       {
         switch (obj.type())
@@ -89,7 +89,7 @@ template <class S> void PiiFftOperation::Template<T>::operateForward(const PiiVa
   PII_D;
   typedef PiiMatrix<std::complex<T> > ResultType;
   typedef typename Pii::ToFloatingPoint<S>::Type FloatType;
-  
+
   const PiiMatrix<S>& image = obj.valueAs<PiiMatrix<S> >();
 
   ResultType result = d->bSubtractMean ?
@@ -98,7 +98,7 @@ template <class S> void PiiFftOperation::Template<T>::operateForward(const PiiVa
 
   if (d->bShift)
     result = PiiDsp::fftShift(result);
-  
+
   emitObject(result);
 
   if (d->bPowerSpectrumConnected)

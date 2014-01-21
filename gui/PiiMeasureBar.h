@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -56,14 +56,14 @@ class PII_GUI_EXPORT PiiMeasureBar : public QFrame
    * Pixel size in logical units. This property is used as a scale
    * factor from pixel size on the display to logical units shown on
    * the measure bar. For example, if the size of the measure bar is
-   * 100 px and it spans a physical width of 3.14159 meters, 
+   * 100 px and it spans a physical width of 3.14159 meters,
    * `pixelSize` should be set to 0.0314159.
    */
   //Q_PROPERTY(double pixelSize READ pixelSize WRITE setPixelSize);
 
   Q_PROPERTY(double physicalPixelSize READ physicalPixelSize WRITE setPhysicalPixelSize);
   Q_PROPERTY(double scale READ scale WRITE setScale);
-  
+
   /**
    * The value of the topmost/leftmost pixel in the measure bar in
    * logical units.
@@ -136,13 +136,13 @@ class PII_GUI_EXPORT PiiMeasureBar : public QFrame
    * Default value of this property is false.
    */
   Q_PROPERTY(bool showAbsoluteValues READ showAbsoluteValues WRITE setShowAbsoluteValues);
-  
+
   /**
    * Tick positions. Ticks can be drawn on either or both sides of the
    * measure bar. The default is on both sides.
    */
   Q_PROPERTY(TickPosition tickPosition READ tickPosition WRITE setTickPosition);
-  
+
   /**
    * Enables or disables mouse location indicators. Use the
    * [setMouseLocation()] slot to change the location to which the
@@ -160,7 +160,7 @@ class PII_GUI_EXPORT PiiMeasureBar : public QFrame
 
   Q_ENUMS(UnitSystem);
   Q_FLAGS(TickPositionFlags);
-  
+
 public:
   /**
    * An interface for classes that format numbers for viewing.
@@ -175,7 +175,7 @@ public:
      *
      * @param value the value to be shown
      *
-     * @param scale the scale of the value, as given by [tickScales]. 
+     * @param scale the scale of the value, as given by [tickScales].
      * value*scale is the value in logical units.
      *
      * @param unit the unit for the value, as given by [tickNames]. If
@@ -184,7 +184,7 @@ public:
      */
     virtual QString formatNumber(double value, double scale, const QString& unit) const = 0;
   };
-  
+
   /**
    * Determines the side on which the ticks will be drawn. The
    * following values are possible:
@@ -205,7 +205,7 @@ public:
   };
   Q_DECLARE_FLAGS(TickPosition, TickPositionFlag);
 
-  
+
   PiiMeasureBar(QWidget* parent = 0);
   PiiMeasureBar(Qt::Orientation orientation, QWidget* parent = 0);
   ~PiiMeasureBar();
@@ -221,13 +221,13 @@ public:
 
   void setTickNames(const QStringList& tickNames);
   QStringList tickNames() const;
-  
+
   void setDrawUnitNames(bool status);
   bool drawUnitNames() const;
 
   void setShowAbsoluteValues(bool showAbsoluteValues);
   bool showAbsoluteValues() const;
-  
+
   TickPosition tickPosition() const;
   void setTickPosition(TickPosition tickPosition);
 
@@ -246,16 +246,16 @@ public:
    */
   void setNumberFormatter(NumberFormatter* formatter);
   NumberFormatter* numberFormatter() const;
-  
+
 public slots:
   void setPhysicalPixelSize(double size);
   void setScale(double scale);
-  
+
   void setStartPos(double length);
 
   void setDrawMouseLocation(bool drawMouseLocation);
   void setDrawMouseText(bool drawMouseText);
-  
+
   /**
    * Sets the location of the mouse cursor in pixels. This function
    * stores either the x or y coordinate of the mouse location
@@ -273,20 +273,20 @@ signals:
   void mouseOnMeasureBar(bool);
   void mouseLocationChanged(const QPoint&);
   void mouseClicked(const QPoint&);
-  
+
 protected:
   void enterEvent(QEvent *e);
   void leaveEvent(QEvent *e);
   void mouseMoveEvent(QMouseEvent *e);
   void mousePressEvent(QMouseEvent *e);
   void paintEvent(QPaintEvent *event);
-  
+
 private:
   class Data
   {
   public:
     Data(Qt::Orientation);
-    
+
     Qt::Orientation orientation;
     TickPosition tickPosition;
     double dPhysicalPixelSize, dPixelSize;
@@ -295,20 +295,20 @@ private:
     int iMouseLocation;
     bool bDrawMouseLocation;
     bool bDrawMouseText;
-    
+
     QVector<int> lstMinTickDistances;
     QVector<double> lstTickScales;
     QStringList lstTickNames;
     bool bDrawUnitNames;
     bool bShowAbsoluteValues;
-    
+
     QVector<int> lstLineLengths;
     QVector<double> lstSteps;
 
     // Contains the index of the biggest scale.
     int iCurrBigScaleIndex;
     // Contains the index of the basic unit. Cannot contain an empty
-    // string or unit starting with '-'- or '+'-sign. Has the 
+    // string or unit starting with '-'- or '+'-sign. Has the
     int iCurrUnitIndex;
     NumberFormatter* pFormatter;
   } *d;
@@ -318,7 +318,7 @@ private:
   void updateStepList();
   void updateUnitIndex();
   void updatePixelSize();
-  
+
   static NumberFormatter* defaultFormatter();
 };
 

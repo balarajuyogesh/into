@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -151,7 +151,7 @@ PiiMatrix<int> PiiHoughTransform::lineEnds(int row, int column) const
   const PII_D;
   double dTheta = angle(column) * M_PI/180;
   double dDistance = distance(row);
-  
+
   double dLeftY, dLeftX, dRightY, dRightX;
   // Vertical line
   if (Pii::almostEqualRel(dTheta, 0.0, 1e-4))
@@ -221,10 +221,10 @@ void PiiHoughTransform::initSinCosTables(int angles)
   d->iPreviousAngles = angles;
   d->iPreviousStartAngle = d->iStartAngle;
   d->dPreviousAngleResolution = d->dAngleResolution;
-  
+
   delete[] d->pCosTable;
   delete[] d->pSinTable;
-  
+
   d->pCosTable = new double[angles];
   d->pSinTable = new double[angles];
 

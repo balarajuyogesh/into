@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2014.
  * All rights reserved.
  *
@@ -49,13 +49,13 @@ class TestPiiFunctionOperation : public PiiOperationTest
 
 private slots:
   void initTestCase();
-  
+
 #ifdef PII_CXX11
   void sumOperation();
   void sum2Operation();
 
 protected:
-  void cleanup();  
+  void cleanup();
 #endif
 };
 

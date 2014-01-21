@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -54,7 +54,7 @@ namespace Pii
         rotation.c = T(1) / sqrt(abs2(u) + 1);
         rotation.s = rotation.c * u;
       }
-    
+
     rotation.rotateColumns(mat, 0, 1);
     rightRotation = jacobiRotation(mat(0,0), mat(0,1), mat(1,1));
     leftRotation = rotation * transpose(rightRotation);
@@ -126,10 +126,10 @@ namespace Pii
       }
 
     // Iterate until the work matrix is diagonal.
-    
+
     PiiMatrix<Real,2,2> mat2x2;
     PiiPlaneRotation<Real> leftRotation, rightRotation;
-    
+
     bool bDone = false;
     while (!bDone)
       {
@@ -221,7 +221,7 @@ namespace Pii
    * - S is a diagonal n-by-n matrix with the singular values on its
    * diagonal in descending order (the largest at (0,0)).
    * - V is an orthogonal n-by-n matrix.
-   * 
+   *
    * If \(m < n\)
    * - U is an orthogonal m-by-m matrix
    * - S is a diagonal m-by-m matrix with the singular values on its
@@ -256,7 +256,7 @@ namespace Pii
     int iMinSize = qMin(iRows, iCols);
     PiiMatrix<typename Matrix::value_type> matTmp(iMinSize, iMinSize);
     return svDecompose(A, matTmp, U, V, options);
-  }  
+  }
 }
 
 #endif //_PIISVDECOMPOSITION_H

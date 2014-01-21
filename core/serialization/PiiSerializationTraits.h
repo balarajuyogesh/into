@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -207,7 +207,7 @@ namespace PiiSerializationTraits
    */
   template <class T> struct IsAbstract : Pii::False {};
   template <class T> struct IsAbstract<const T> : IsAbstract<T> {};
-  
+
   /**
    * Pointer tracking trait. Tracking is enabled by default for all
    * complex types. Pointers to primitive types will also be tracked.
@@ -246,7 +246,7 @@ namespace PiiSerializationTraits
 
 #define PII_NAME_TYPE(TYPE) \
   template <> struct ClassName<TYPE> { static const char* get() { return PII_STRINGIZE(TYPE); } };
-  
+
   PII_NAME_TYPE(char);
   PII_NAME_TYPE(short);
   PII_NAME_TYPE(int);
@@ -267,7 +267,7 @@ namespace PiiSerializationTraits
   PII_NAME_TYPE(int);
   PII_NAME_TYPE(long);
   PII_NAME_TYPE(long long);
-  
+
 #undef PII_NAME_TYPE
 
   /// @internal

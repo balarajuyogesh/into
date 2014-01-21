@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -23,11 +23,11 @@ PiiVideoFileReader::Data::Data() :
 
 PiiVideoFileReader::PiiVideoFileReader() :
   PiiImageReaderOperation(new Data)
-  
+
 {
   PII_D;
   d->pVideoReader = new PiiVideoReader;
-  
+
   addSocket(d->pFileNameInput = new PiiInputSocket("filename"));
   d->pFileNameInput->setOptional(true);
 }
@@ -47,7 +47,7 @@ void PiiVideoFileReader::check(bool reset)
 
   d->bFileNameConnected = d->pFileNameInput->isConnected();
   d->bTriggered = d->pTriggerInput->isConnected();
-  
+
   if (d->strFileName.isEmpty() && !d->bFileNameConnected)
     PII_THROW(PiiExecutionException, tr("Video source cannot start because filename is empty."));
 
@@ -87,7 +87,7 @@ void PiiVideoFileReader::process()
       d->pImageOutput->endMany();
       return;
     }
-  
+
   // maxImages is in effect only if trigger isn't connected
   if (!d->bTriggered && // trigger suspends auto-finish
       d->iMaxImages >= 0  && // images are limited
@@ -97,7 +97,7 @@ void PiiVideoFileReader::process()
     }
 
   int iFrameStep = d->iFrameStep;
-  
+
   if (d->bTriggered)
     {
       PiiVariant obj = d->pTriggerInput->firstObject();
@@ -145,7 +145,7 @@ template <class T> void PiiVideoFileReader::emitFrame(int iFrameStep)
   if (!tryToEmitFrame<T>(iFrameStep))
     {
       ++d->iVideoIndex;
-      
+
       if (d->bTriggered || (d->iRepeatCount < 1 || d->iVideoIndex < d->iRepeatCount))
         {
           // The video stream must be seek to the start or end.

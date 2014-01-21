@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -109,7 +109,7 @@ int PiiUniversalSlot::qt_metacall(QMetaObject::Call call, int id, void **argumen
   id = QObject::qt_metacall(call, id, arguments);
   if (id < 0 || call != QMetaObject::InvokeMetaMethod)
     return id;
-    
+
   return invokeSlot(id, arguments) ? -1 : id;
 }
 

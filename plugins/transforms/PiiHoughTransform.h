@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -32,7 +32,7 @@
  * transformation domain is user-specifiable.
  *
  * The number of rows in the result will always be odd. The row at the
- * middle always represents lines that intersect the origin (i.e. 
+ * middle always represents lines that intersect the origin (i.e.
  * distance zero). If `distanceResolution` is 1.0 (the default),
  * moving up or down from the middle row increases distance to the
  * origin by one pixel. The first column represents lines with a zero
@@ -97,7 +97,7 @@
  * // and each pixel with a value higher than or equal to three will
  * // be transformed. The angles will be quantized to 90 discrete
  * // levels (2 degrees each)
- *    
+ *
  * double distanceResolution = 1.0;
  * double angleResolution = 2.0;
  * PiiMatrix<int> result =
@@ -122,7 +122,7 @@ public:
   ~PiiHoughTransform();
 
   PiiHoughTransform& operator= (const PiiHoughTransform& other);
-  
+
   void setAngleResolution(double angleResolution);
   double angleResolution() const;
 
@@ -178,7 +178,7 @@ public:
    * @see Pii::findMaxima()
    */
   PiiMatrix<int> lineEnds(int row, int column) const;
-  
+
   /**
    * @param img the input image. The image will be scanned, and each
    * pixel that makes `rule` evaluate `true` will be added to
@@ -199,7 +199,7 @@ public:
   {
     return transform<T>(img, Pii::Identity<typename Matrix::value_type>());
   }
-  
+
 protected:
   /// @internal
   class Data : public PiiSharedD<Data>
@@ -214,7 +214,7 @@ protected:
          int endDistance);
     Data(const Data& other);
     ~Data();
-    
+
     double dAngleResolution;
     double dDistanceResolution;
     int iStartAngle;

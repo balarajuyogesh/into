@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -60,7 +60,7 @@ void TestPiiHeap::replace()
    *  6   7  1  4
    * 0 3 1
    */
-  
+
   int correct[] = { 9, 8, 5, 6, 7, 1, 4, 0, 3, 1 };
   for (int i=0; i<10; ++i)
     QCOMPARE(heap[i], correct[i]);

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -36,12 +36,12 @@ namespace PiiQml
       obj->Set(v8PropNames->Get(i),
                v8ConfigObj->Get(v8PropNames->Get(i)));
   }
-  
+
   static PII_DECLARE_V8_FUNCTION(createQObject)
   {
     if (!args.IsConstructCall())
       PII_V8_THROW_ERROR("Constructor called as function");
-    
+
     QV8Engine* pV8Engine = V8ENGINE();
     v8::Local<v8::Function> constructor(args.Callee());
     // The class name is usually the same as the constructor's name, but not always.
@@ -50,7 +50,7 @@ namespace PiiQml
     QObject* pObject = PiiYdin::createResource<QObject>(qPrintable(strName));
     if (pObject == 0)
       PII_V8_THROW_ERROR(QString("Cannot create an instance of %1.").arg(strName));
-    
+
     v8::Handle<v8::Object> v8Obj(v8::Handle<v8::Object>::Cast(pV8Engine->newQObject(pObject)));
     int iArgs = args.Length();
     int i = 0;
@@ -62,11 +62,11 @@ namespace PiiQml
       }
     for (; i<iArgs; ++i)
       configure(v8Obj, args[i]);
-    
+
     // Function objects created without an InstanceTemplate don't seem
     // to automatically apply the prototype to created objects.
     v8Obj->SetPrototype(constructor->Get(v8::String::New("prototype")));
-    
+
     return v8Obj;
   }
 
@@ -83,7 +83,7 @@ namespace PiiQml
 
     v8::Local<v8::FunctionTemplate> tmpl(v8::FunctionTemplate::New(createQObject, v8::External::New(engine)));
     tmpl->SetClassName(v8strClassName);
-    
+
     // Set enum values as properties to the function object
     for (int i=meta->enumeratorOffset(); i<meta->enumeratorCount(); ++i)
       {
@@ -106,7 +106,7 @@ namespace PiiQml
       {
         // Take "Class" from "Class<T>"
         v8::Local<v8::String> v8strClassBaseName(engine->toString(className.left(iTemplateIndex)));
-        
+
         if (globalObject->Get(v8strClassBaseName)->IsUndefined())
           globalObject->Set(v8strClassName, v8::Object::New());
 
@@ -120,7 +120,7 @@ namespace PiiQml
       }
 
     globalObject->Set(v8strClassName, constructor);
-    
+
     return constructor;
   }
 

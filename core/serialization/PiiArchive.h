@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -49,10 +49,10 @@ public:
    * is seldom necessary. Usually the version number of the type
    * itself is enough.
    */
-  int majorVersion() const { return _iMajorVersion; } 
+  int majorVersion() const { return _iMajorVersion; }
   /// Get the minor version number.
   int minorVersion() const { return _iMinorVersion; }
-  
+
 protected:
   /**
    * Set the major version number. This value must be stored and
@@ -64,7 +64,7 @@ protected:
    * retrieved by archive implementations.
    */
   void setMinorVersion(int minorVersion) { _iMinorVersion = minorVersion; }
-  
+
 private:
   int _iMajorVersion;
   int _iMinorVersion;

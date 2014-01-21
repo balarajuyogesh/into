@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -66,7 +66,7 @@ namespace Pii
      */
     typedef float Type;
   };
-  
+
   /**
    * Check if the absolute value of the difference between
    * corresponding elements in two matrices are within the given
@@ -109,7 +109,7 @@ namespace Pii
   }
 
   /**
-   * Sets diagonal entries in *matrix* to the values read from 
+   * Sets diagonal entries in *matrix* to the values read from
    * *vector*. If the matrix is non-square, the smaller of its two
    * dimensions will determine the length of the diagonal.
    *
@@ -126,11 +126,11 @@ namespace Pii
     for (int i=0; i<iMinSize; ++i)
       matrix(i,i) = vector[i];
   }
-  
+
   /**
    * Returns the determinant of a matrix.
    *
-   * ! This function can be used with floating-point types only. 
+   * ! This function can be used with floating-point types only.
    * Integer matrices can be used only if the size of the matrix is
    * either 2-by-2 or 3-by-3.
    *
@@ -155,7 +155,7 @@ namespace Pii
   /**
    * Invert a matrix. Only square, non-singular matrices can be
    * inverted. Gauss-Jordan elimination is used as the inversion
-   * algorithm. 
+   * algorithm.
    * ! Is not implemented properly for interger type matrix.
    *
    * @return the inverted matrix.
@@ -165,7 +165,7 @@ namespace Pii
   template <class T> PiiMatrix<T> inverse(const PiiMatrix<T>& mat);
 
   //TODO dot product for complex numbers
-  
+
   /**
    * Calculates the inner product of two vectors `m1` and `m2`. The
    * matrices must be vectors of the same size.
@@ -180,7 +180,7 @@ namespace Pii
 
   /**
    * Calculates the cross product of two vectors `m1` and `m2`. The
-   * matrices must be either 3-by-1 or 1-by-3 matrices, i.e. 
+   * matrices must be either 3-by-1 or 1-by-3 matrices, i.e.
    * 3-dimensional vectors. The function works with both row and
    * column vectors. The orientation of the result vector will be the
    * same as that of the inputs.
@@ -212,10 +212,10 @@ namespace Pii
     typedef PII_COMBINE_TYPES(typename Matrix1::value_type, typename Matrix2::value_type) R;
     return binaryMatrixTransform(m1, m2, std::multiplies<R>());
   }
-    
+
 
   /**
-   * Divides the elements in `m1` by the corresponding elements in 
+   * Divides the elements in `m1` by the corresponding elements in
    * `m2`.
    */
   template <class Matrix1, class Matrix2>
@@ -258,7 +258,7 @@ namespace Pii
   template <class T> bool isDiagonal(const PiiMatrix<T>& mat);
 
   /**
-   * Returns `true` if *mat* is symmetric about its diagonal and 
+   * Returns `true` if *mat* is symmetric about its diagonal and
    * `false` otherwise.
    */
   template <class T> bool isSymmetric(const PiiMatrix<T>& mat);
@@ -285,7 +285,7 @@ namespace Pii
    * (and column vectors respectively) form orthonormal basis, i.e. vectors
    * are mutually perpendicular and length of every vector is 1.
    *
-   * For non-square m*n matrices, returns true iff. either row vectors(m<n) or 
+   * For non-square m*n matrices, returns true iff. either row vectors(m<n) or
    * columns vectors(m>n) are orthonormal.
    * The former case implies \(A*A^T == I\), the latter case \(A^T*A == I\)
    *
@@ -301,13 +301,13 @@ namespace Pii
   template <class T> bool isOrthogonalLike(const PiiMatrix<T>& mat) {return isOrthogonalLike(mat, Numeric<T>::tolerance());}
 
   /**
-   * Returns the absolute value of the scalar argument 
+   * Returns the absolute value of the scalar argument
    * *value*. Specializations use fabs() derivatives for floating point
    * and abs() derivatives for integer types. For any other type, it
    * calls a class member function called `abs` and returns its
    * result.
    *
-   * ! This function retains the input type and its signedness. 
+   * ! This function retains the input type and its signedness.
    * Behavior is different from `std::abs` for some types.
    *
    * ~~~(c++)
@@ -353,7 +353,7 @@ namespace Pii
    * Returns the real part of a complex number.
    */
   template <class T> inline T real(const std::complex<T>& value) { return value.real(); }
-  
+
   /**
    * Returns the imaginary part of a real number, i.e. zero.
    */
@@ -380,7 +380,7 @@ namespace Pii
    * regardless of the type.
    */
   template <class T> inline std::complex<T> conj(const std::complex<T>& value) { return std::conj(value); }
-  
+
   /**
    * Find the greatest common divisor (gcd) for the given two numbers
    * using Euclid's algorithm. If either of the numbers is zero, the
@@ -388,14 +388,14 @@ namespace Pii
    * both arguments are zero.
    */
   template <class T> T gcd(T number1, T number2);
-  
+
   inline char abs(char value) { return (char)::abs(value); }
   inline short abs(short value) { return (short)::abs(value); }
   inline int abs(int value) { return ::abs(value); }
   inline long abs(long value) { return ::labs(value); }
   inline long long abs(long long value)
   {
-#ifdef __USE_ISOC99    
+#ifdef __USE_ISOC99
     return ::llabs(value);
 #else
     return value >= 0 ? value : -value;
@@ -639,7 +639,7 @@ namespace Pii
     return float(::ceil(value));
 #endif
   }
-  
+
   /**
    * Returns `floor`(*value*).
    */
@@ -668,10 +668,10 @@ namespace Pii
    */
   inline float mod(float d1, float d2) { return fmodf(d1, d2); }
   inline double mod(double d1, double d2) { return fmod(d1, d2); }
-  
+
   /**
-   * Calculates the sum of matrix elements in the specified direction. 
-   * If *direction* is `Pii::Horizontally`, returns a column matrix. 
+   * Calculates the sum of matrix elements in the specified direction.
+   * If *direction* is `Pii::Horizontally`, returns a column matrix.
    * If *direction* is `Pii::Vertically`, returns a row matrix. The
    * returned type can be different from the input type. For example,
    * the sum over unsigned char matrices may require an integer output
@@ -690,7 +690,7 @@ namespace Pii
    */
   template <class U, class Matrix> PiiMatrix<U> sum(const Matrix& mat,
                                                     MatrixDirection direction);
-  
+
   /**
    * Different ways of calculating 2-d cumulative sum.
    *
@@ -741,11 +741,11 @@ namespace Pii
                                                                CumulativeSumMode mode);
 
   /**
-   * Calculates two-dimensional cumulative sum of a matrix. In 
+   * Calculates two-dimensional cumulative sum of a matrix. In
    * `OrdinaryCumulativeSum`, the size of the returned matrix equals
    * that of the input. In `ZeroBorderCumulativeSum`, the output will
    * be larger. Each element stores the sum of all elements whose row
-   * and column coordinates are not larger than those of the element. 
+   * and column coordinates are not larger than those of the element.
    * The cumulative sum *X(r,c)* of an input matrix
    * *x(r,c)* can be formally defined as
    *
@@ -824,7 +824,7 @@ namespace Pii
                                                               MatrixDirection direction);
 
   /**
-   * Fast 2-D moving average. This function uses the 
+   * Fast 2-D moving average. This function uses the
    * [cumulativeSum(const PiiMatrix<T>&, CumulativeSumMode)]
    * "cumulative sum" of a matrix to calculate the moving average
    * over `mat`.
@@ -837,12 +837,12 @@ namespace Pii
    *
    * ~~~
    * Original   Cumulative sum (input)
-   * 
+   *
    *            0  0  0  0
-   * 1 2 3      0  1  3  6 
-   * 2 3 4  ->  0  3  8  15  
+   * 1 2 3      0  1  3  6
+   * 2 3 4  ->  0  3  8  15
    * 3 4 5      0  6  15 27
-   * 
+   *
    * Upper left:
    * (8 + 0 - 0 - 0) / 4 = 2
    * Lower right:
@@ -894,10 +894,10 @@ namespace Pii
    */
   template <class InputIterator, class OutputIterator>
   void fastMovingAverage(InputIterator input, int n, OutputIterator output, int windowSize);
-  
+
   /**
    * Returns the sum of all entries in a matrix. Returns the value as
-   * a (possibly) different type, denoted by the template parameter 
+   * a (possibly) different type, denoted by the template parameter
    * `U`.
    */
   template <class T, class Matrix> inline T sum(const Matrix& mat)
@@ -909,7 +909,7 @@ namespace Pii
 
   /**
    * Returns the mean of all entries in a matrix. Returns the value as
-   * a (possibly) different type, denoted by the template parameter 
+   * a (possibly) different type, denoted by the template parameter
    * `U`. The type U must be capable of storing the sum of all entries
    * in *mat*.
    *
@@ -958,7 +958,7 @@ namespace Pii
     return (U)std::sqrt(var(mat, mean));
   }
 
-  
+
   /**
    * Calculates the covariance matrix for a set of measurements. Each
    * measurement is represented as a row in the input matrix `mat`.
@@ -978,7 +978,7 @@ namespace Pii
   template <class T> PiiMatrix<double> covariance(const PiiMatrix<T>& mat, PiiMatrix<double>* mean = 0);
 
   /**
-   * Calculates the mean of matrix elements in the specified direction. 
+   * Calculates the mean of matrix elements in the specified direction.
    * If Pii::Horizontally is specified, a column matrix
    * returned and vice versa.
    */
@@ -1035,7 +1035,7 @@ namespace Pii
    * direction.
    */
   template <class Matrix> PiiMatrix<typename Matrix::value_type> min(const Matrix& mat, MatrixDirection direction);
-  
+
   /**
    * Finds the minimum and maximum elements in a matrix.
    *
@@ -1074,12 +1074,12 @@ namespace Pii
    * @param size is array size
    *
    * @param k is ordinal number. ! now k = 0 means smallest, k = 1
-   * second smallest etc. 
+   * second smallest etc.
    *
    * ~~~(c++)
    * int array[8] = {0,2,3,9,4,5,6,8};
    * int element = Pii::kthSmallest<int>(array, 8, 2);
-   * //now element is 3. 
+   * //now element is 3.
    * ~~~
    */
 
@@ -1091,14 +1091,14 @@ namespace Pii
    * which value is restricted to 0 <= k < size. Element
    * in array at index k is `pivot` value and all elements between
    * array begin to k-1 are smaller or equal as `pivot` value, and all elements between k+1 and
-   * array end are at least equal to `value` or bigger. 
+   * array end are at least equal to `value` or bigger.
    *
    * @param data the array which is to be arranged (partition).
    *
    * @param pivot is index to element which will be used in partition.
-   * 
-   * @param size array size. 
-   * 
+   *
+   * @param size array size.
+   *
    * @returns index to pivot value
    *
    * ~~~(c++)
@@ -1106,7 +1106,7 @@ namespace Pii
    * int value = 3;
    * int k = Pii::partition<int>(array, 10, 5);
    * //now at position k there exist value(3) and array is
-   * //rearranged.  
+   * //rearranged.
    * ~~~
    */
 
@@ -1115,7 +1115,7 @@ namespace Pii
   /**
    * Classical insertion sort. Sorts elements in array (in-place) to
    * ascending order. Complexity class is O(n^2) where, n is number of elements in
-   * array. 
+   * array.
    *
    * @param data is array which will be sorted.
    *
@@ -1131,7 +1131,7 @@ namespace Pii
 
   /**
    * A Gaussian function. Returns gaussian function value on given
-   * point x, with given expected value mu and variance sigma.  
+   * point x, with given expected value mu and variance sigma.
    *
    * @param x is point where gaussian function value is wanted to
    * calcualte.
@@ -1282,7 +1282,7 @@ namespace Pii
    * ~~~
    */
   template <class T, class U> PiiMatrix<T> centralDiff(const PiiMatrix<U>& mat, MatrixDirection direction = Horizontally);
-    
+
   /**
    * Find the row and column coordinates of all elements in `mat`
    * that match `predicate`. If `mat` is a row or column vector,
@@ -1373,7 +1373,7 @@ namespace Pii
   /**
    * A very fast approximation to four-quadrant arctan. This
    * implementation requires (at most) five comparisons, two
-   * subtractions, one addition, one multiplication and one division. 
+   * subtractions, one addition, one multiplication and one division.
    * The accuracy is 0.07 rad (about 4 degrees) at worst. The output
    * range is \([-\pi,\pi]\).
    */
@@ -1381,10 +1381,10 @@ namespace Pii
   {
     if (y == 0 && x == 0)
       return 0;
-    
+
     float angle = (float)M_PI_4;
     float absY = std::fabs(y);
-    
+
     if (x>=0) // quads I and IV
       {
         if (x != -absY) // prevent divzero
@@ -1418,14 +1418,14 @@ namespace Pii
   {
     if (y == 0 && x == 0)
       return 0;
-    
+
     float angle = (float)M_PI_4;
     float absY = std::fabs(y);
-    
+
     if (x>=0) // quads I and IV
       {
         if (x != -absY) // prevent divzero
-          { 
+          {
             float r = (x - absY) / (x + absY);
             angle = 0.1963 * r*r*r - 0.9817 * r + M_PI_4;
           }
@@ -1640,7 +1640,7 @@ namespace Pii
   /**
    * Subtracts sample mean from a data set.
    *
-   * @param matrix the data set to be moved to zero mean. If 
+   * @param matrix the data set to be moved to zero mean. If
    * *direction* is `Pii::Vertically`, each row represents an
    * observation vector. If *direction* is `Pii::Horizontally`, each
    * column represents an observation vector.
@@ -1661,7 +1661,7 @@ namespace Pii
   }
 
   /**
-   * Applies the unary function *func* to all elements of *matrix*. 
+   * Applies the unary function *func* to all elements of *matrix*.
    * Returns *matrix*.
    *
    * ~~~(c++)
@@ -1680,7 +1680,7 @@ namespace Pii
   }
 
   /**
-   * Applies the unary function *func* to all elements of *matrix*. 
+   * Applies the unary function *func* to all elements of *matrix*.
    * Returns a new matrix.
    */
   template <class Matrix, class UnaryFunction>
@@ -1693,7 +1693,7 @@ namespace Pii
   }
 
   /**
-   * Applies the unary function *func* to all elements of 
+   * Applies the unary function *func* to all elements of
    * *matrix* that match the given *predicate*. Analogous to
    * PiiMatrix::map() except for the *predicate* parameter. Returns
    * *matrix*.
@@ -1722,7 +1722,7 @@ namespace Pii
     mapIf(matrix.begin(), matrix.end(), predicate, func);
     return matrix;
   }
-  
+
   /**
    * Applies the unary function *func* to all elements of *matrix*
    * that match the given *predicate*. Same as [mapMatrixIf()], but
@@ -1768,7 +1768,7 @@ namespace Pii
    * will use `storage`'s operator[] to access the elements.
    */
   template <class UnaryFunction, class Storage> void combinations(int n, int k, UnaryFunction func, Storage storage);
-    
+
   /**
    * Calculates all `k`-element subsets out of `n` elements and apply
    * `func` to each. There will be
@@ -1896,7 +1896,7 @@ namespace Pii
    *
    * - `ShrinkWindowSymmetrically` - the size of the averaging window
    * will decrease towards the end points. The functioning is similar
-   * to `ShrinkWindow` except that the window shrinks on both sides. 
+   * to `ShrinkWindow` except that the window shrinks on both sides.
    * Both ends of the input signal will be retained as such. The value
    * next to the end point will be the average of the two border
    * values etc. The size of the input matrix will be retained. In
@@ -1925,7 +1925,7 @@ namespace Pii
    * @param function apply this function to the sum before storing to
    * the sequence
    *
-   * ! The data type used in calculating the local sum is the 
+   * ! The data type used in calculating the local sum is the
    * `argument_type` of the given unary function object.
    *
    * ~~~(c++)
@@ -1958,7 +1958,7 @@ namespace Pii
 
   /**
    * Calculates the moving average of a sequence bounded by `begin`
-   * and `end`. This is a utility function that uses [windowSum()]. 
+   * and `end`. This is a utility function that uses [windowSum()].
    * The `CalculationType` template parameter determines the
    * intermediate type used to calculate the sum.
    *
@@ -1974,7 +1974,7 @@ namespace Pii
     windowSum(begin, end, width, unaryCompose(Cast<CalculationType, T>(),
                                               std::bind2nd(std::divides<CalculationType>(), width)));
   }
-  
+
   /**
    * Calculates moving average over the rows/columns of a matrix.
    *
@@ -2061,7 +2061,7 @@ namespace Pii
     double dMultiplier = pow(10, decimals);
     return round(value * dMultiplier) / dMultiplier;
   }
-  
+
   /**
    * Returns the sign of *value*.
    *
@@ -2196,7 +2196,7 @@ namespace Pii
    * arithmetic fit calculated by this function can be used as an
    * initial guess for iterative optimization.
    *
-   * @param order the order of the polynomial. 
+   * @param order the order of the polynomial.
    *
    * @param x the x coordinates of measurements as row vectors or both
    * x and y coordinates as a N-by-2 matrix. The number of
@@ -2273,14 +2273,14 @@ namespace Pii
    * Calculates the distance from `abs`(value) to the next real
    * number larger in magnitude. The return value can be seen as the
    * accuracy of the number type at the given magnitude. A crude
-   * approximation of `ep3silon`(x) can be obtained with 
+   * approximation of `ep3silon`(x) can be obtained with
    * `epsilon(1.0)*abs(x)`.
    *
    * @param value the value whose accuracy is to be measured. If value
    * == 1.0, returns `std::numeric_limits`<Real>::epsilon().
    */
   template <class Real> Real epsilon(Real value = 1.0);
-  
+
   /**
    * Estimates the number of linearly independent rows or columns of a
    * matrix.
@@ -2344,7 +2344,7 @@ operator* (const PiiConceptualMatrix<Matrix1>& mat1,
   if (iCols1 != mat2.rows())
     PII_MATRIX_SIZE_MISMATCH;
   const int iRows1 = mat1.rows(), iCols2 = mat2.columns();
-  
+
   typedef PII_COMBINE_TYPES(typename Matrix1::value_type, typename Matrix2::value_type) T;
   PiiMatrix<T, Matrix1::staticRows, Matrix2::staticColumns> result(PiiMatrix<T>::uninitialized(iRows1, iCols2));
   for (int r=0; r<iRows1; ++r)
@@ -2362,7 +2362,7 @@ PiiMatrix<T>& operator*= (PiiMatrix<T>& mat1,
 {
   return mat1 = mat1 * mat2.selfRef();
 }
-  
+
 /**
  * Perform a matrix division operation.
  *
@@ -2376,7 +2376,7 @@ template <class T> inline PiiMatrix<T> operator/ (const PiiMatrix<T>& mat1, cons
 
 /**
  * Divide a matrix by another matrix in place.
- *   
+ *
  * @exception PiiMathException& if the dimensions of the matrices do
  * not match, `mat2` is not square or it cannot be inverted due to
  * singularity.
@@ -2432,7 +2432,7 @@ namespace Pii
         return mat;
       }
     };
-    
+
     static ResultType apply(const Matrix& mat)
     {
       return IfClass<IsComplex<T>, ComplexValue, RealValue>::Type::apply(mat);
@@ -2450,7 +2450,7 @@ namespace Pii
   {
     return ComplexTransform<Matrix, Real<typename Matrix::value_type> >::apply(mat.selfRef());
   }
-  
+
   /**
    * Returns a matrix whose elements are complex conjugates of the
    * corresponding elements in *mat*. Real matrices will be returned
@@ -2529,7 +2529,7 @@ namespace Pii
    * Calculates the `ceil`() of all elements in *mat*.
    */
   PII_MATH_MATRIX_TRANSFORM(ceil, Ceil);
-  
+
   /**
    * Calculates the `floor`() of all elements in *mat*.
    */
@@ -2687,7 +2687,7 @@ namespace Pii
    *
    * ! Sum is not calculated with double but with the datatype
    * given by the absolute value functor, which in most cases is
-   * the same as the matrix element type. Possible overflow 
+   * the same as the matrix element type. Possible overflow
    * issue.
    */
   template <class Matrix> inline double norm1(const Matrix& mat)
@@ -2719,7 +2719,7 @@ namespace Pii
                                                 std::plus<double>(), 0))());
     }
   };
-  
+
   /**
    * Calculates the L2 norm of all elements in a matrix. For
    * floating-point types, the norm is calculated by taking the
@@ -2790,7 +2790,7 @@ namespace Pii
     }
     else if (n == -1)
       return maxAbs(mat);
-    else 
+    else
       return pow(forEach(mat.begin(), mat.end(),
                          createForEachFunction(std::bind2nd(AbsPow<std::complex<T> >(), n), std::plus<T>(), 0))() , T(1.0)/n );
   }
@@ -2864,7 +2864,7 @@ namespace Pii
    *
    * @return a matrix that stores the distances between corresponding
    * row/column vectors. If `direction` is `Pii::Horizontally`, a
-   * column vector will be returned and vice versa. If the sizes of 
+   * column vector will be returned and vice versa. If the sizes of
    * `points1` and `points2` do not match, an empty matrix will be
    * returned.
    *
@@ -2890,7 +2890,7 @@ namespace Pii
   {
     return squaredDistance(points1, points2, direction).map(Sqrt<double>());
   }
-  
+
   /**
    * Returns the geometric distance between two vectors. Uses
    * [squaredDistance()].
@@ -2943,7 +2943,7 @@ namespace Pii
   {
     return binaryMatrixTransform(m1.selfRef(), m2.selfRef(), Max<typename Matrix1::value_type>());
   }
-  
+
   /**
    * Returns a matrix that contains either the original element in `a`
    * or `b`, whichever is smaller.
@@ -2974,7 +2974,7 @@ namespace Pii
    *
    * @param mat PiiMatrix from which to search the value.
    *
-   * @param op a binary predicate that compares values. Returns 
+   * @param op a binary predicate that compares values. Returns
    * `true` if current item return by `f` is "more special" than
    * currently "most special" value, `false` otherwise.
    *
@@ -3000,7 +3000,7 @@ namespace Pii
    */
   template <class Matrix, class UnaryFunction, class BinaryPredicate>
   typename UnaryFunction::result_type findSpecialValue(const PiiConceptualMatrix<Matrix>& mat,
-                                                       BinaryPredicate op, 
+                                                       BinaryPredicate op,
                                                        UnaryFunction f,
                                                        typename UnaryFunction::result_type defaultValue,
                                                        int* rowIndex = 0,
@@ -3021,7 +3021,7 @@ namespace Pii
   {
     typedef typename Matrix::value_type T;
     typedef PiiUnaryMatrixTransform<PiiTransposedMatrix<Matrix>, Conj<T> > Type;
-    
+
     static Type apply(const Matrix& mat)
     {
       return unaryMatrixTransform(transpose(mat), Conj<typename Matrix::value_type>());
@@ -3056,7 +3056,7 @@ namespace Pii
             ComplexAdjoint<Matrix>, RealAdjoint<Matrix> >::Type {};
 
   /// @endhide
-  
+
   /**
    * Returns the conjugate transpose of *mat*. The conjugate
    * transpose, Hermitian transpose, Hermitian conjugate, or adjoint

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -53,7 +53,7 @@ public:
   PiiMultipartStreamBuffer(const QString& boundary);
 
   ~PiiMultipartStreamBuffer();
-  
+
   /**
    * Sends all buffered data to the output device.
    */
@@ -63,7 +63,7 @@ public:
    * Set a header field.
    */
   void setHeader(const QString& name, const QString& value);
-  
+
   /**
    * Returns the number of bytes currently in the buffer, including
    * header information.

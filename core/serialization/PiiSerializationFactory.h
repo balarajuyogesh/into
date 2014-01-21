@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -261,7 +261,7 @@ public:
   {
     return map<Archive>()->value(className);
   }
-  
+
   /**
    *
    * This function returns a factory object from the default factory
@@ -289,13 +289,13 @@ public:
   {
     return keys(map<Archive>());
   }
-  
+
   /// @internal
   template <class T, class Archive> static T* create(const char* className, Archive& archive);
   // NOTE: the implementation of this function is in
   // PiiDynamicTypeFunctions.h due to restrictions on declaration
   // order.
-  
+
   /**
    * Creates an instance of the named object. If `T` has a virtual
    * metaobject function, a factory object will be fetched from the
@@ -307,7 +307,7 @@ public:
   {
     return create<T>(className, PiiSerialization::Void::instance);
   }
-  
+
   /**
    * Creates an instance of `T`. Returns `new T` for
    * instantiable types and 0 for abstract ones.
@@ -318,7 +318,7 @@ public:
   {
     return PiiSerialization::Constructor<T,Archive>::create(archive);
   }
-  
+
   /**
    * Subclasses override this function to create an instance of the
    * class this factory object represents. The newly created object is
@@ -339,7 +339,7 @@ public:
   virtual ~PiiSerializationFactory();
 
   template <class T, class Archive> class Template;
-  
+
 protected:
   typedef QHash<PiiConstCharWrapper, PiiSerializationFactory*> MapType;
   template <class Archive> static MapType* map();
@@ -359,7 +359,7 @@ template <class Archive> PiiSerializationFactory::MapType* PiiSerializationFacto
 PII_DECLARE_FACTORY_MAP(PiiSerialization::Void);
 
 /**
- * Default implementation of serialization factory for tracked types. 
+ * Default implementation of serialization factory for tracked types.
  * Static instances of this class are used in inserting factories to
  * the global factory map.
  *
@@ -382,7 +382,7 @@ public:
   {
     removeFrom(this->map<Archive>());
   };
-  
+
   /**
    * Returns a new `T`.
    */

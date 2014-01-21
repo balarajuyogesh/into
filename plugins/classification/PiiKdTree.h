@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -67,7 +67,7 @@ template <class SampleSet> class PiiKdTree
     archive & PII_NVP("features", d->iFeatureCount);
     archive & PII_NVP("models", d->modelSet);
   }
-  
+
 public:
   typedef typename PiiSampleSet::Traits<SampleSet>::ConstFeatureIterator Sample;
 
@@ -79,7 +79,7 @@ public:
    * Constructs a deep copy of another kd-tree.
    */
   PiiKdTree(const PiiKdTree& other);
-  
+
   /**
    * Constructs a kd-tree out of the given model samples.
    */
@@ -93,7 +93,7 @@ public:
    * Assigns *other* to `this`.
    */
   PiiKdTree& operator= (const PiiKdTree& other);
-  
+
   /**
    * Deletes the old kd-tree (if any) and rebuilds a new one based on
    * the given model samples.
@@ -107,14 +107,14 @@ public:
    * interrupted.
    */
   void buildTree(const SampleSet& modelSet, PiiProgressController* controller = 0);
-  
+
   /**
    * Returns the index of the nearest neighbor in the model set.
    *
    * @param sample input feature vector
    *
    * @param distance an optional output-value argument that will store
-   * the *squared* geometric distance to the closest neighbor of 
+   * the *squared* geometric distance to the closest neighbor of
    * *sample*.
    *
    * @return the index of the closest sample in the model set, or -1
@@ -122,11 +122,11 @@ public:
    */
   int findClosestMatch(Sample sample,
                        double* distance = 0) const;
-  
+
   /**
    * Returns the index of a probably nearest neighbor in the model
    * set. This version of the look-up algorithm may not return the
-   * exact nearest neighbor, but it does so with a high probability. 
+   * exact nearest neighbor, but it does so with a high probability.
    * Approximate NN search is useful in high-dimensional spaces where
    * the exact algorithm may be slower than exhaustive search.
    *
@@ -140,7 +140,7 @@ public:
    * exact nearest neighbor will be returned.
    *
    * @param distance an optional output-value argument that will store
-   * the *squared* geometric distance to the closest neighbor of 
+   * the *squared* geometric distance to the closest neighbor of
    * *sample*.
    *
    * @return the index of the closest sample in the model set, or -1
@@ -161,9 +161,9 @@ public:
    */
   PiiClassification::MatchList findClosestMatches(Sample sample,
                                                   int n) const;
-  
+
   /**
-   * Returns *n* matches that are probably the closest of *sample*. 
+   * Returns *n* matches that are probably the closest of *sample*.
    * This function stops after *maxEvaluations* most probable nodes
    * have been checked and may not return the exact nearest neighbors.
    *
@@ -176,7 +176,7 @@ public:
    * number of samples in the model set.
    *
    * @return the *n* closest matches. Note that if either the model
-   * data set or *maxEvaluations* is smaller than *n*, less than 
+   * data set or *maxEvaluations* is smaller than *n*, less than
    * *n* matches may be returned.
    */
   PiiClassification::MatchList findClosestMatches(Sample sample,
@@ -207,7 +207,7 @@ private:
       archive & PII_NVP("smaller", smaller);
       archive & PII_NVP("larger", larger);
     }
-    
+
     Node(int index=0, int dim = 0, T value = 0, Node* s = 0, Node* l = 0) :
       sampleIndex(index), splitDimension(dim), featureValue(value), smaller(s), larger(l)
     {}
@@ -219,13 +219,13 @@ private:
       smaller(other.smaller != 0 ? new Node(*other.smaller) : 0),
       larger(other.larger != 0 ? new Node(*other.larger) : 0)
     {}
-    
+
     ~Node()
     {
       delete larger;
       delete smaller;
     }
-    
+
     int sampleIndex, splitDimension;
     T featureValue;
     Node* smaller;
@@ -298,15 +298,15 @@ private:
   {
     pair.first = distance;
     pair.second = index;
-  } 
+  }
   static inline void updateLimit(double distance, int index, PiiClassification::MatchList& matches)
   {
     matches.put(qMakePair(distance, index));
   }
- 
+
   static inline double distanceLimit(const QPair<double,int>& pair) { return pair.first; }
   static inline double distanceLimit(const PiiClassification::MatchList& matches) { return matches[0].first; }
-  
+
   inline int sampleCount() const { return PiiSampleSet::sampleCount(d->modelSet); }
   inline Sample sampleAt(int index) const { return PiiSampleSet::sampleAt(const_cast<const SampleSet&>(d->modelSet), index); }
 };

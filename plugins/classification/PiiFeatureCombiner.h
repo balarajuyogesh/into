@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -25,7 +25,7 @@
  * a larger compound feature vector. This is useful when one wants to
  * use many different features together in classification. The
  * operation reads from 2 (the default) up to 64 feature vectors,
- * concatenates them into one compound vector and emits the result. 
+ * concatenates them into one compound vector and emits the result.
  * Since the incoming vectors may vary in length, the operation also
  * emits a vector that indicates the boundaries of the input vectors.
  *
@@ -92,11 +92,11 @@ class PiiFeatureCombiner : public PiiDefaultOperation
    * combine. Valid values are 1-64. The default is two.
    */
   Q_PROPERTY(int dynamicInputCount READ dynamicInputCount WRITE setDynamicInputCount);
-  
+
   /**
-   * The maximum number of training samples collected for learning. 
+   * The maximum number of training samples collected for learning.
    * Zero means that no training samples will be collected, and the
-   * operation will only join incoming feature vectors. If 
+   * operation will only join incoming feature vectors. If
    * `learningBatchSize` is set to N (N > 1), at most N samples will be kept in
    * memory. If `learningBatchSize` is -1, all incoming samples will be
    * buffered without limit. The buffered samples will be used to
@@ -117,7 +117,7 @@ class PiiFeatureCombiner : public PiiDefaultOperation
    */
   Q_PROPERTY(FullBufferBehavior fullBufferBehavior READ fullBufferBehavior WRITE setFullBufferBehavior);
   Q_ENUMS(FullBufferBehavior);
-  
+
   /**
    * The names of distance measures used in measuring inter-sample
    * distances in classification. See
@@ -161,12 +161,12 @@ public:
     OverwriteOldestSample,
     DiscardNewSample
   };
-  
+
   PiiFeatureCombiner();
   ~PiiFeatureCombiner();
 
   void check(bool reset);
-  
+
   void setDynamicInputCount(int cnt);
   int dynamicInputCount() const;
 
@@ -190,7 +190,7 @@ public slots:
    * Start the learning thread. If the number of buffered samples is
    * less than two or the learning thread is already running, this
    * function does nothing. Otherwise, it starts a thread that
-   * calculates the variances of distances between buffered samples. 
+   * calculates the variances of distances between buffered samples.
    * The thread can be interrupted by calling [stopLearningThread()].
    * The [progressed()] signal will be emitted every once in a while
    * during the calculation.
@@ -219,7 +219,7 @@ protected:
 
 private:
   typedef PiiDistanceMeasure<const double*> MeasureType;
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {

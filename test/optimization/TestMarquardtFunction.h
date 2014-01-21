@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -37,7 +37,7 @@ class TestMarquardtFunction : public PiiOptimization::ResidualFunction<double>
 public:
   TestMarquardtFunction() : _bHasJacobian(false) {}
   ~TestMarquardtFunction() {}
-  
+
   int functionCount() const;
   void residualValues(const double* params,
                       double* residuals) const;
@@ -46,7 +46,7 @@ public:
 
   bool hasJacobian() const { return _bHasJacobian; }
   void setHasJacobian(bool jacobian) { _bHasJacobian = jacobian; }
-  
+
 private:
   bool _bHasJacobian;
 };

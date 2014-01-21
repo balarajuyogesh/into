@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -42,7 +42,7 @@ class PII_CORE_EXPORT PiiAtomicInt
 {
 public:
   PiiAtomicInt(int value = 0) : _value(value) {}
-  
+
   void ref() { ++_value; }
   int deref() { return --_value; }
   int load() const { return _value.load(); }
@@ -58,7 +58,7 @@ public:
   bool operator== (int value) const { return _value.load() == value; }
   bool operator!= (int value) const { return _value.load() != value; }
   int operator= (int value) { return _value.operator= (value); }
-  
+
 private:
   PiiAtomicIntImpl _value;
 };
@@ -69,7 +69,7 @@ class PII_CORE_EXPORT PiiAtomicInt
 {
 public:
   PiiAtomicInt(int value = 0) : _value(value) {}
-  
+
   void ref() { _value.ref(); }
   int deref() { return _value.fetchAndAddOrdered(-1) - 1; }
 
@@ -81,7 +81,7 @@ public:
     return static_cast<int>(_value);
 #endif
   }
-  
+
   void store(int value)
   {
 #if QT_VERSION >= 0x050000
@@ -101,7 +101,7 @@ public:
   bool operator== (int value) const { return load() == value; }
   bool operator!= (int value) const { return load() != value; }
   int operator= (int value) { store(value); return value; }
-  
+
 private:
   QAtomicInt _value;
 };

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,7 +28,7 @@ struct PII_CORE_EXPORT PiiMutexLocker
   {
     pMutex->lock();
   }
-    
+
   explicit inline PiiMutexLocker(const QMutex* mutex) :
     pMutex(const_cast<QMutex*>(mutex)), bLocked(true)
   {

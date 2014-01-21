@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -152,7 +152,7 @@ void PiiQObjectServer::jsonProperties(PiiHttpDevice* dev, const QStringList& fie
       else if (*it == "name") iFields |= Name;
       else if (*it == "value") iFields |= Value;
     }
-  
+
   const PII_D;
   typedef QPair<int,QString> PropPair;
   QList<PropPair> lstProperties(properties<PropPair>());
@@ -194,7 +194,7 @@ void PiiQObjectServer::listProperties(PiiHttpDevice* dev) const
 {
   if (propertySafetyLevel() != AccessConcurrently)
     d->accessMutex.lock();
-  
+
   if (dev->queryValue("format").toString() == "json")
     {
       dev->setHeader("Content-Type", "application/javascript");
@@ -203,7 +203,7 @@ void PiiQObjectServer::listProperties(PiiHttpDevice* dev) const
   else
     // Default format is a plain text list
     dev->print(propertyDeclarations().join("\n"));
-  
+
   if (propertySafetyLevel() != AccessConcurrently)
     d->accessMutex.unlock();
 }
@@ -295,7 +295,7 @@ void PiiQObjectServer::handleRequest(const QString& uri, PiiHttpDevice* dev,
 
   if (!bPostRequest && dev->requestMethod() != "GET")
     PII_THROW_HTTP_ERROR(MethodNotAllowedStatus);
-  
+
   QString strRequestPath = dev->requestPath(uri);
 
   // Property list/get/set

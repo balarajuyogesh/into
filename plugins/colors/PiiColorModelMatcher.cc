@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -42,7 +42,7 @@ void PiiColorModelMatcher::process()
     default:
       PII_THROW_UNKNOWN_TYPE(inputAt(1));
     }
-  
+
   PiiVariant imageObj = readInput();
 
   switch (imageObj.type())

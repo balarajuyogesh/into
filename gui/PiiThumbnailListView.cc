@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -57,7 +57,7 @@ void PiiThumbnailListView::showMenu(const QPoint& point)
   QModelIndex ci = currentIndex();
   if (ci.isValid())
     {
-      
+
       QMenu *menu = new QMenu;
       menu->addAction(tr("Remove this thumbnail"), this, SLOT(removeCurrent()));
       menu->addSeparator();

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
   // Initialize engine
   initEngine();
-  
+
   // Initialize ui
   init();
 }
@@ -47,7 +47,7 @@ void MainWindow::init()
   // Make detectors and connect them
   QStringList lstDetectorNames = QStringList() << "Sobel" << "Roberts" << "Prewitt" << "Canny";
   QStringList lstDetectors = QStringList() << "SobelDetector" << "RobertsDetector" << "PrewittDetector" << "CannyDetector";
-  
+
   for (int i=0; i<lstDetectorNames.size(); i++)
     _pEdgeDetectorCombo->addItem(lstDetectorNames[i], lstDetectors[i]);
 
@@ -55,7 +55,7 @@ void MainWindow::init()
 
   // Set AutoScale to the result image display
   _pResultImageDisplay->setProperty("displayType", "AutoScale");
-  
+
   // Select default detector
   selectDetector("SobelDetector");
 }
@@ -71,7 +71,7 @@ PiiEngine* MainWindow::createEngine()
   // Create probe input for source and result image display
   _pSourceProbeInput = new PiiProbeInput;
   _pResultProbeInput = new PiiProbeInput;
-  
+
   // Create image source
   _pImageFileReader = pEngine->createOperation("PiiImageFileReader");
   _pImageFileReader->setProperty("imageType", "GrayScale");
@@ -79,13 +79,13 @@ PiiEngine* MainWindow::createEngine()
 
   // Create edge detector operation
   _pEdgeDetector = pEngine->createOperation("PiiEdgeDetector");
-  
+
   // Make operation connections
   connect(this, SIGNAL(selectImage(int)), pTriggerSource, SLOT(trigger(int)));
 
   pTriggerSource->connectOutput("trigger", _pImageFileReader, "trigger");
   _pImageFileReader->connectOutput("image", _pEdgeDetector, "image");
-  
+
   _pSourceProbeInput->connectOutput(_pImageFileReader->output("image"));
   _pResultProbeInput->connectOutput(_pEdgeDetector->output("edges"));
 
@@ -114,7 +114,7 @@ void MainWindow::selectDetector(const QString& detectorName)
 
   // Change detector name
   _pEdgeDetector->setProperty("detector", detectorName);
-  
+
   // Restart engine
   startProcessing();
 

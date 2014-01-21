@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -22,7 +22,7 @@
 #include <PiiTemplateExport.h>
 
 namespace PiiImage
-{ 
+{
   /**
    * Create a morphological mask. A template implementation that can
    * be used to create binary masks with any content type.
@@ -42,11 +42,11 @@ namespace PiiImage
    *
    * @param mask a matrix to be filled with the morphological mask.
    *
-   * ! The implementation writes only non-zero values to *mask*. 
+   * ! The implementation writes only non-zero values to *mask*.
    * One usually needs to make sure the mask is initially zeros.
    */
   template <class T> void createMask(MaskType type, PiiMatrix<T>& mask);
-  
+
   /**
    * Create a morphological mask. This is the default version of this
    * function with no template arguments that returns a
@@ -82,7 +82,7 @@ namespace PiiImage
    * `borderMasks[X][1]` the corresponding significance mask.
    */
   PII_IMAGE_EXPORT extern PiiMatrix<int> borderMasks[8][2];
-  
+
   /**
    * Perform a morphological operation on an image.
    *
@@ -95,20 +95,20 @@ namespace PiiImage
   template <class Matrix, class U>
   PiiMatrix<typename Matrix::value_type> morphology(const Matrix& image, const PiiMatrix<U>& mask,
                                                     MorphologyOperation type, bool handleBorders = false);
-  
+
 
   /**
-   * Perform a morphological erosion operation on a image. 
+   * Perform a morphological erosion operation on a image.
    *
    * @param image is orginal binary image.
    *
    * @param mask is structuring element.
    *
    * @param handleBorders is flag that determines whether image
-   * borders are handled with a padding technique. If this flag is 
+   * borders are handled with a padding technique. If this flag is
    * `false` (the default), zeros are assumed outside of the image.
    *
-   * @return the binary image which is result of erosion 
+   * @return the binary image which is result of erosion
    *
    * ~~~(c++)
    *
@@ -155,7 +155,7 @@ namespace PiiImage
    *                     1,1,1,
    *                     1,1,1,
    *                     1,1,1);
-   * 
+   *
    * PiiMatrix<int> result = PiiImage::erode(source, mask, true);
    * Pii::matlabPrint(std::cout, result);
    * //Output
@@ -181,9 +181,9 @@ namespace PiiImage
    * @param mask is structuring element.
    *
    * @return the binary image which is result of dilation.
-   * 
+   *
    * ~~~(c++)
-   *    
+   *
    * PiiMatrix<int> source(8,8,
    *                       0,0,0,0,0,0,0,0,
    *                       1,1,1,1,1,1,1,0,
@@ -198,7 +198,7 @@ namespace PiiImage
    *                     1,1,1,
    *                     1,1,1,
    *                     1,1,1);
-   * 
+   *
    * PiiMatrix<int> result = PiiImage::dilate(source, mask);
    * Pii::matlabPrint(std::cout,result);
    * //Output
@@ -209,7 +209,7 @@ namespace PiiImage
    * //0,1,1,1,1,1,1,1,
    * //0,1,1,1,1,1,1,1,
    * //0,1,1,1,1,1,1,1,
-   * //0,1,1,1,1,0,0,0   
+   * //0,1,1,1,1,0,0,0
    *
    * ~~~
    */
@@ -229,7 +229,7 @@ namespace PiiImage
   { return erode(dilate(image,mask), mask); }
 
   /**
-   * Bottom-hat transform. Also known as the black top-hat transform. 
+   * Bottom-hat transform. Also known as the black top-hat transform.
    * The bottom-hat transform extracts small dark elements from
    * images. It is defined as the difference between the closing of an
    * imput image and the input image itself.
@@ -239,7 +239,7 @@ namespace PiiImage
    * @param mask structuring element.
    *
    * @return bottom-hat transform
-   * 
+   *
    * ~~~(c++)
    * PiiMatrix<int> source(8,8,
    *                       0,0,0,0,0,0,0,0,
@@ -250,7 +250,7 @@ namespace PiiImage
    *                       0,0,0,1,1,1,1,0,
    *                       0,0,1,1,0,0,0,0,
    *                       0,0,0,0,0,0,0,0);
-   * 
+   *
    * PiiMatrix<int> mask(3,3,
    *                     1,1,1,
    *                     1,1,1,
@@ -292,7 +292,7 @@ namespace PiiImage
    * @param mask structuring element
    *
    * @param significance "significance" mask for the structuring
-   * element. Non-zero values in this mask mark the pixels in 
+   * element. Non-zero values in this mask mark the pixels in
    * `structure` that we should care about.
    *
    * @return transformed image

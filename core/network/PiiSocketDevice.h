@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -84,7 +84,7 @@ public:
    * as a disconnected socket with unread data in its receive buffer.
    */
   bool isReadable() const;
-  
+
   /**
    * Returns `true` if the socket can be written to and `false`
    * otherwise.
@@ -107,7 +107,7 @@ public:
   qint64 writeWaited(const char* data, qint64 maxSize, int waitTime = 5000, PiiProgressController* controller = 0);
 
   bool waitForConnected(int waitTime);
-  
+
   /**
    * Disconnects the socket if it is connected to a server.
    */
@@ -131,7 +131,7 @@ private:
     QIODevice* pDevice;
     Type type;
   } *d;
-  
+
   inline bool waitForDataAvailable(int waitTime, PiiProgressController* controller);
   inline bool waitForDataWritten(int waitTime, PiiProgressController* controller);
   static Type typeOf(QIODevice* device);

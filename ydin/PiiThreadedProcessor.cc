@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -53,7 +53,7 @@ void PiiThreadedProcessor::check(bool reset)
   // If the processor is being reset, we clear any pending signals.
   if (reset)
     _inputCondition.wakeAll();
-  
+
   _bMustReconfigure = false;
   _strPropertySetName = QString();
 }
@@ -224,7 +224,7 @@ void PiiThreadedProcessor::run()
                     _pParentOp->applyPropertySet(_strPropertySetName);
                     _bMustReconfigure = false;
                   }
-              
+
               // If this operation is a producer (not driven by input), it
               // needs to pause spontaneously
               if (_pParentOp->state() == PiiOperation::Pausing)
@@ -261,7 +261,7 @@ void PiiThreadedProcessor::run()
                     // Ensure that input queues will be emptied if
                     // something was there before pause.
                     _inputCondition.wakeOne();
-                  
+
                   _pParentOp->setState(PiiOperation::Running);
                 }
               _pStateMutex->unlock();

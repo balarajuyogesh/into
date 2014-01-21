@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -38,7 +38,7 @@ template <class T> class PiiFraction
 {
 public:
   /**
-   * Create a new fraction with the given numerator and denominator. 
+   * Create a new fraction with the given numerator and denominator.
    * The default denominator is one, which makes it possible to use a
    * fraction just like an integer.
    *
@@ -85,7 +85,7 @@ public:
         subFraction.invert();
         result += subFraction;
       }
-    
+
     return result;
   }
 
@@ -118,7 +118,7 @@ public:
     else
       return PiiFraction(numerator + other.numerator, denominator);
   }
-  
+
   PiiFraction operator- (const PiiFraction& other) const
   {
     if (other.denominator != denominator)
@@ -161,7 +161,7 @@ public:
     else
       numerator -= other.numerator;
   }
-  
+
   void operator*= (const PiiFraction& other)
   {
     numerator *= other.numerator;
@@ -220,7 +220,7 @@ public:
   OPERATOR(<=)
   OPERATOR(==)
   OPERATOR(!=)
-   
+
   /**
    * Reduce the fraction by dividing both components by the greatest
    * common divisor (gcd).
@@ -245,7 +245,7 @@ public:
    * Return the absolute value of this fraction.
    */
   PiiFraction abs() { return PiiFraction(Pii::abs(numerator), denominator); }
-  
+
   /**
    * Get an integer approximation of the fraction. If the denominator
    * is zero, 0 will be returned.

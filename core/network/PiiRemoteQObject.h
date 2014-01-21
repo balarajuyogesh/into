@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -47,12 +47,12 @@ public:
   {
     new SignalKiller(this);
   }
-  
+
   /// @internal
   const QMetaObject* metaObject() const { return PiiRemoteMetaObject::metaObject(); }
   /// @internal
   int qt_metacall(QMetaObject::Call call, int id, void** args) { return PiiRemoteMetaObject::qt_metacall(call, id, args); }
-  
+
 protected:
 #if QT_VERSION < 0x050000
   void connectNotify(const char* signal)
@@ -83,7 +83,7 @@ private:
       setParent(parent);
       startTimer(1000);
     }
-    
+
   protected:
     void timerEvent(QTimerEvent*)
     {
@@ -92,7 +92,7 @@ private:
     }
   };
   friend class SignalKiller;
-  
+
   void removeUnconnectedSignals();
 };
 

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -38,7 +38,7 @@ PiiOperationCompound::Data::Data() :
 
 PiiOperationCompound::Data::~Data()
 {}
-  
+
 PiiOperationCompound::PiiOperationCompound() :
   PiiOperation(new Data)
 {
@@ -88,7 +88,7 @@ void PiiOperationCompound::check(bool reset)
                .arg(objectName()));
 
   PiiCompoundExecutionException PII_MAKE_EXCEPTION(compoundEx, "");
-  
+
   d->vecChildStates.resize(d->lstOperations.size());
   bool bError = false;
   for (int i=0; i<d->lstOperations.size(); ++i)
@@ -246,7 +246,7 @@ void PiiOperationCompound::childStateChanged(int state)
   d->vecChildStates[iIndex].first = (State)state;
   if (state == Running)
     d->vecChildStates[iIndex].second = true;
-  
+
   switch (d->state)
     {
     case Stopped:
@@ -445,13 +445,13 @@ bool PiiOperationCompound::exposeOutput(PiiAbstractOutputSocket* socket)
     return false;
 
   d->lstOutputs.append(socket);
-  
+
   // Break connection when the socket is destroyed
   connect(socket,
           SIGNAL(destroyed(QObject*)),
           SLOT(removeExposedOutput(QObject*)),
           Qt::DirectConnection);
-  
+
   return true;
 }
 
@@ -517,7 +517,7 @@ PiiProxySocket* PiiOperationCompound::createOutputProxy(const QString& name, con
   pProxy->output()->connectInput(input(outputName));
   return pProxy;
 }
-  
+
 bool PiiOperationCompound::removeInput(PiiAbstractInputSocket* input)
 {
   return removeSocket(input, _d()->lstInputs);
@@ -671,11 +671,11 @@ bool PiiOperationCompound::replaceOperation(PiiOperation *oldOp, PiiOperation* n
   if (newOp != 0)
     {
       addOperation(newOp);
-  
+
       //get all inputs and outputs from the old operation
       QList<PiiAbstractInputSocket*> lstOldInputs = oldOp->inputs();
       QList<PiiAbstractOutputSocket*> lstOldOutputs = oldOp->outputs();
-  
+
       //get all inputs and outputs from the new operation
       QList<PiiAbstractInputSocket*> lstNewInputs = newOp->inputs();
       QList<PiiAbstractOutputSocket*> lstNewOutputs = newOp->outputs();
@@ -685,7 +685,7 @@ bool PiiOperationCompound::replaceOperation(PiiOperation *oldOp, PiiOperation* n
         lstNewInputs[i]->disconnectOutput();
       for (int i=0; i<lstNewOutputs.size(); ++i)
         lstNewOutputs[i]->disconnectInputs();
-  
+
       //connect all inputs
       for (int i=0; i<lstOldInputs.size(); ++i)
         {
@@ -693,7 +693,7 @@ bool PiiOperationCompound::replaceOperation(PiiOperation *oldOp, PiiOperation* n
           // This input is not connected
           if (pOutput == 0)
             continue;
-          
+
           // Try to find a socket with a matching name.
           PiiAbstractInputSocket* pInput = newOp->input(lstOldInputs[i]->objectName());
           if (pInput != 0)
@@ -711,7 +711,7 @@ bool PiiOperationCompound::replaceOperation(PiiOperation *oldOp, PiiOperation* n
           if (lstInputs.isEmpty())
             continue;
           lstOldOutputs[i]->disconnectInputs();
-          
+
           PiiAbstractOutputSocket* pOutput = newOp->output(lstOldOutputs[i]->objectName());
           if (pOutput != 0 && i < lstNewOutputs.size())
             pOutput = lstNewOutputs[i];
@@ -725,7 +725,7 @@ bool PiiOperationCompound::replaceOperation(PiiOperation *oldOp, PiiOperation* n
   d->lstOperations.removeAll(oldOp);
   oldOp->disconnect(this);
   oldOp->setParent(0);
-  
+
   return true;
 }
 
@@ -890,10 +890,10 @@ template <class Finder> typename Finder::Type PiiOperationCompound::find(Finder 
         return f.find(parentOp, rest);
       return 0;
     }
-  
+
   // Try to find the named (or indexed) child in our children
   PiiOperation* op = findChildOperation(childName);
-  
+
   if (op != 0) // we found the child -> let it parse the rest
     return f.find(op, rest);
 
@@ -979,11 +979,11 @@ PiiOperationCompound::buildEndPointList(PiiAbstractOutputSocket* output,
 
   /*
     Store all connection end points for the given output socket
-   
+
     We only look for internal connections between operations and
     proxies here. If the output socket is aliased, its external
     connections will be cloned/serialized by the parent operation.
-   */ 
+   */
   QList<PiiAbstractInputSocket*> lstInputs = output->connectedInputs();
   for (int i=0; i<lstInputs.size(); ++i)
     {
@@ -1017,7 +1017,7 @@ QString PiiOperationCompound::proxyInputName(PiiAbstractInputSocket* input) cons
   for (int i=0; i<d->lstInputs.size(); ++i)
     if (d->lstInputs[i]->isProxy() && d->lstInputs[i] == input)
       return d->lstInputs[i]->objectName();
-  
+
   return QString();
 }
 
@@ -1027,11 +1027,11 @@ PiiOperationCompound* PiiOperationCompound::clone() const
   // objectName() won't work for template classes, but we have the
   // serialization meta object...
   const char *className = PiiYdin::resourceName(this);
-  
+
   // Use the serialization factory to create an instance of the most
   // derived class.
   PiiOperationCompound* pResult = PiiYdin::createResource<PiiOperationCompound>(className);
-  
+
   if (pResult == 0) return 0;
 
   // Get rid of everything but the compound (sub-operations, sockets)
@@ -1052,7 +1052,7 @@ PiiOperationCompound* PiiOperationCompound::clone() const
         }
       pResult->addOperation(pChildClone);
     }
-  
+
   // Initialize inputs
   for (int i=0; i<d->lstInputs.size(); ++i)
     {
@@ -1075,7 +1075,7 @@ PiiOperationCompound* PiiOperationCompound::clone() const
 
   // This must be done in two phases because an input may be directly
   // connected to an output proxy and vice versa.
-  
+
   // Remap input aliases
   for (int i=0; i<d->lstInputs.size(); ++i)
     {
@@ -1083,7 +1083,7 @@ PiiOperationCompound* PiiOperationCompound::clone() const
       if (!pSocket->isProxy())
         pResult->_d()->lstInputs[i] = pResult->input(locateSocket(pSocket, this).second);
     }
-  
+
   // Remap output aliases
   for (int i=0; i<d->lstOutputs.size(); ++i)
     {
@@ -1100,13 +1100,13 @@ PiiOperationCompound* PiiOperationCompound::clone() const
     {
       // Find all output sockets
       QList<PiiAbstractOutputSocket*> lstOutputs = d->lstOperations[i]->outputs();
- 
+
       // Clone all connections starting from this operation
       for (int j=0; j<lstOutputs.size(); ++j)
         {
           // Find all internal end points for this output socket.
           EndPointListType lstInputs = buildEndPointList(lstOutputs[j], this);
-          
+
           for (int k=0; k<lstInputs.size(); ++k)
             {
               PiiAbstractInputSocket* target = pResult->input(lstInputs[k].second);
@@ -1147,7 +1147,7 @@ PiiOperationCompound* PiiOperationCompound::clone() const
             pResult->connectOutput(pSocket->objectName(), lstExposedInputs[j].second);
         }
     }
-  
+
   return pResult;
 }
 

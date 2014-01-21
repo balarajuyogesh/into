@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -68,7 +68,7 @@ void PiiDebugOperation::process()
   d->mapVariables["type"] = QString::number(obj.type(), 16);
 
   print();
-  
+
   emitObject(obj);
 }
 
@@ -76,10 +76,10 @@ void PiiDebugOperation::print()
 {
   PII_D;
   QString strMessage = Pii::replaceVariables(d->strFormat, d->mapVariables);
-  
+
   using std::cout;
   using std::cerr;
-  
+
   switch (d->outputStream)
     {
     case StdOut: cout << piiPrintable(strMessage); cout.flush(); break;

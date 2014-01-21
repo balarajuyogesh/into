@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -33,7 +33,7 @@ template <class T, int rowCount, int columnCount>
 struct PiiMatrixTraits<PiiMatrix<T, rowCount, columnCount> >
 {
   enum { staticRows = rowCount, staticColumns = columnCount };
-  
+
   typedef T value_type;
   typedef T& reference;
   typedef T* iterator;
@@ -56,7 +56,7 @@ public:
   {
     memset(_data, 0, byteCount());
   }
-  
+
   PiiMatrix(const PiiMatrix& other)
   {
     memcpy(_data, other._data, byteCount());
@@ -117,7 +117,7 @@ public:
   const T* begin() const { return _data; }
   T* end() { return row(rowCount); }
   const T* end() const { return row(rowCount); }
-  
+
   T* rowBegin(int r) { return row(r); }
   const T* rowBegin(int r) const { return row(r); }
   T* rowEnd(int r) { return row(r+1); }
@@ -147,7 +147,7 @@ public:
 
 private:
   static inline size_t byteCount() { return rowCount * columnCount * sizeof(T); }
-  
+
   T _data[rowCount * columnCount];
 };
 
@@ -212,9 +212,9 @@ protected:
   PiiTypelessMatrix() : d(PiiMatrixData::sharedNull()) { d->reserve(); }
 
   PiiTypelessMatrix(const PiiTypelessMatrix& other) : d(other.d) { d->reserve(); }
-  
+
   PiiTypelessMatrix(PiiMatrixData* data) : d(data) {}
-  
+
   PiiMatrixData* createReference(int rows, int columns, void* buffer) const;
   void cloneAndReplaceData(int capacity, size_t bytesPerRow);
 
@@ -326,7 +326,7 @@ template <class T> struct PiiMatrixTraits<PiiSubmatrix<T> > :
  * mat(1,5,6,3) = 'b';
  * mat(2,6,4,1) = 'c';
  * mat(6,0,2,1) = 'x';
- * 
+ *
  * //mat looks like this now:
  * + + + + + + + +
  * + + + + + b b b
@@ -380,7 +380,7 @@ public:
   {
     Pii::transform(other.begin(), other.end(), begin(), Pii::Cast<typename Matrix::value_type,T>());
   }
-  
+
   /**
    * Constucts a *rows*-by-*columns* matrix with all entries
    * initialized to zero.
@@ -416,7 +416,7 @@ public:
                                                          qMax(stride, sizeof(T)*columns),
                                                          const_cast<T*>(data))->makeImmutable())
   {}
-  
+
   /**
    * Constructs a *rows*-by-*columns* matrix that uses *data* as
    * its data buffer. This is an overloaded constructor that behaves
@@ -446,9 +446,9 @@ public:
     if (ownership == Pii::ReleaseOwnership)
       d->bufferType = PiiMatrixData::ExternalOwnBuffer;
   }
-  
+
   /**
-   * Constructs a matrix with the given number of *rows* and 
+   * Constructs a matrix with the given number of *rows* and
    * *columns*. Matrix contents are given as a variable-length parameter
    * list in a horizontal raster-scan order. It is handy if you know
    * what you do, but proper care must be taken to ensure correct
@@ -546,13 +546,13 @@ public:
   }
 
   /**
-   * Creates a deep copy of *other* and returns a reference to 
+   * Creates a deep copy of *other* and returns a reference to
    * `this`.
    */
   template <class Matrix> PiiMatrix& operator= (const PiiConceptualMatrix<Matrix>& other);
 
   PiiMatrix& operator= (T value) { return PiiConceptualMatrix<PiiMatrix<T,-1,-1> >::operator= (value); }
-  
+
   using PiiTypelessMatrix::rows;
   using PiiTypelessMatrix::columns;
 
@@ -576,7 +576,7 @@ public:
    * @see capacity()
    */
   void reserve(int rows) { PiiTypelessMatrix::reserve(rows, columns() * sizeof(T)); }
-  
+
   /**
    * Returns a random-access iterator to the start of the matrix data.
    */
@@ -587,28 +587,28 @@ public:
    */
   typename Traits::iterator end() { return typename Traits::iterator(*this, rows()); }
   typename Traits::const_iterator end() const { return typename Traits::const_iterator(*this, rows()); }
-  
+
   /**
-   * Returns a random-access iterator to the start of the row at 
+   * Returns a random-access iterator to the start of the row at
    * *rowIndex*.
    */
   typename Traits::row_iterator rowBegin(int rowIndex) { return row(rowIndex); }
   typename Traits::const_row_iterator rowBegin(int rowIndex) const { return row(rowIndex); }
   /**
-   * Returns a random-access iterator to the end of the row at 
+   * Returns a random-access iterator to the end of the row at
    * *rowIndex*.
    */
   typename Traits::row_iterator rowEnd(int rowIndex) { return row(rowIndex) + columns(); }
   typename Traits::const_row_iterator rowEnd(int rowIndex) const { return row(rowIndex) + columns(); }
 
   /**
-   * Returns a random-access iterator to the start of the column at 
+   * Returns a random-access iterator to the start of the column at
    * *colIndex*.
    */
   typename Traits::column_iterator columnBegin(int colIndex) { return typename Traits::column_iterator(*this, colIndex); }
   typename Traits::const_column_iterator columnBegin(int colIndex) const { return typename Traits::const_column_iterator(*this, colIndex); }
   /**
-   * Returns a random-access iterator to the end of the column at 
+   * Returns a random-access iterator to the end of the column at
    * *colIndex*.
    */
   typename Traits::column_iterator columnEnd(int colIndex) { return typename Traits::column_iterator(*this, rows(), colIndex); }
@@ -699,18 +699,18 @@ public:
    */
   T* operator[] (int r) { return row(r); }
   const T* operator[] (int r) const { return row(r); }
-  
+
   /**
    * Returns a mutable reference to a sub-matrix. Take care that the
    * dimensions of the matrix are not exceeded. If you modify the
-   * returned result, the data within this matrix will also change. 
+   * returned result, the data within this matrix will also change.
    * The const version returns a copy.
    *
    * @param r the row of the upper left column of the sub-matrix. If
    * this is negative, it is treated as a backwards index from the
    * last row. -1 means the last row and so on.
    *
-   * @param c the column of the upper left column of the sub-matrix. 
+   * @param c the column of the upper left column of the sub-matrix.
    * Negative index is relative to the last column.
    *
    * @param rows the number of rows to include. Negative value means
@@ -838,10 +838,10 @@ public:
    * @see insertRow(int, VaArgType, ...)
    */
   typename Traits::row_iterator appendRow(VaArgType firstElement, ...);
-  
+
   /**
    * Inserts a new at position *index* and moves all following rows
-   * forwards. The contents of the new row will be set to zero. 
+   * forwards. The contents of the new row will be set to zero.
    * Returns a row iterator to the beginning of the new row.
    *
    * @param index the row index of the new row. -1 means last.
@@ -866,7 +866,7 @@ public:
   typename Traits::row_iterator insertRow(int index, const T* row);
 
   /**
-   * Insert a row with the given data elements at the given row index. 
+   * Insert a row with the given data elements at the given row index.
    * The number of element arguments must be equal to the number of
    * columns in the matrix.
    *
@@ -887,7 +887,7 @@ public:
    * Appends the given vector (N-by-1 matrix) as a new column to the
    * right of the last column. The number of rows in this matrix must
    * be equal to the number of rows in *column*, unless this matrix
-   * is empty. In that case this matrix will be set equal to 
+   * is empty. In that case this matrix will be set equal to
    * *column*.
    *
    * @see insertColumn(int, const PiiMatrix&)
@@ -912,7 +912,7 @@ public:
   {
     return insertColumn(-1, column);
   }
-  
+
   /**
    * Appends the given elements as a new column to the right of the
    * last column.
@@ -957,7 +957,7 @@ public:
    *
    */
   typename Traits::column_iterator insertColumn(int index, const T* column);
-  
+
   /**
    * Inserts a column with the given data elements at the given column
    * index. Any subsequent columns will be shifted forwards. The
@@ -989,7 +989,7 @@ public:
     detach();
     PiiTypelessMatrix::removeRows(index, count, sizeof(T) * d->iColumns);
   }
-  
+
   /**
    * Removes a column from the matrix. All data right of *index* will
    * be moved left. The stride of the matrix will not change. If you
@@ -1015,7 +1015,7 @@ public:
     detach();
     PiiTypelessMatrix::removeColumns(index, count, sizeof(T));
   }
-  
+
   /**
    * Assigns the elements of *other* to the corresponding elements of
    * this.
@@ -1027,7 +1027,7 @@ public:
 
   /**
    * Applies the *adaptable binary function* `op` to all
-   * elements of this matrix and the corresponding elements in 
+   * elements of this matrix and the corresponding elements in
    * *other*. The matrices must be of equal size. The result is returned
    * in a new matrix. For example, to explicitly apply the addition
    * operation, do this:
@@ -1037,7 +1037,7 @@ public:
    * PiiMatrix<int> c(a.mapped(std::plus<int>(), b));
    * ~~~
    *
-   * @exception PiiMathException& if this matrix is not equal to 
+   * @exception PiiMathException& if this matrix is not equal to
    * *other* in size.
    */
   template <class BinaryFunc, class Matrix> PiiMatrix<typename BinaryFunc::result_type>
@@ -1062,7 +1062,7 @@ public:
    * a.map(std::minus<int>(), b);
    * ~~~
    *
-   * @exception PiiMathException& if this matrix is not equal to 
+   * @exception PiiMathException& if this matrix is not equal to
    * *other* in size.
    */
   template <class BinaryFunc, class Matrix>
@@ -1072,7 +1072,7 @@ public:
     Pii::map(begin(), end(), other.begin(), op);
     return *this;
   }
-  
+
   /**
    * Applies a binary function to all elements of this matrix and the
    * scalar *value*. The result is returned in a new matrix. An
@@ -1147,7 +1147,7 @@ public:
     Pii::transform(begin(), end(), result.begin(), op);
     return result;
   }
-  
+
   /**
    * Swaps the places of *row1* and *row2*.
    */
@@ -1226,10 +1226,10 @@ public:
                                                           columns * sizeof(T),
                                                           stride));
   }
-  
+
 private:
   friend class PiiSubmatrix<T>;
-  
+
   PiiMatrix(PiiMatrixData* d) : PiiTypelessMatrix(d) {}
 
   void fixIndices(int &r, int &c, int &rows, int &columns) const
@@ -1242,9 +1242,9 @@ private:
 };
 
 /**
- * A matrix that provides a mutable reference to a PiiMatrix. 
+ * A matrix that provides a mutable reference to a PiiMatrix.
  * Sub-matrices are temporary in nature; they only exist as return
- * values from [PiiMatrix::operator()](int,int,int,int). 
+ * values from [PiiMatrix::operator()](int,int,int,int).
  * Sub-matrices cannot be copied. Unfortunately, there is no elegant
  * way of making a movable but non-copyable type in C++ prior to
  * C++11. Therefore, this class uses a bit of hackery to implement
@@ -1270,7 +1270,7 @@ template <class T> class PiiSubmatrix :
 {
 public:
   typedef PiiMatrixTraits<PiiSubmatrix<T> > Traits;
-  
+
 #ifdef PII_CXX11
   /**
    * Moves the contents of *other* to this and leaves *other* with
@@ -1282,14 +1282,14 @@ public:
     std::swap(_matrix.d, other._matrix.d);
   }
   PII_DISABLE_COPY(PiiSubmatrix);
-#else 
+#else
   PiiSubmatrix(const PiiSubmatrix& other)
   {
     // HACK Same as above, but now we really have no way of ensuring
     // "other" is not going to be used later.
     std::swap(_matrix.d, const_cast<PiiSubmatrix&>(other)._matrix.d);
   }
-  
+
 private: PiiSubmatrix& operator= (const PiiSubmatrix& other);
 #endif
 public:
@@ -1297,7 +1297,7 @@ public:
    * Sets all elements to *value* and returns a reference to `this`.
    */
   PiiSubmatrix& operator= (typename Traits::value_type value) { return PiiConceptualMatrix<PiiSubmatrix<T> >::operator=(value); }
-  
+
   typename Traits::iterator begin() { return _matrix.begin(); }
   typename Traits::iterator end() { return _matrix.end(); }
   typename Traits::const_iterator begin() const { return _matrix.begin(); }
@@ -1313,7 +1313,7 @@ public:
 
   int rows() const { return _matrix.rows(); }
   int columns() const { return _matrix.columns(); }
-  
+
   T& operator() (int r, int c) { return _matrix(r,c); }
   T operator() (int r, int c) const { return _matrix(r,c); }
 
@@ -1373,7 +1373,7 @@ namespace Pii
    */
   template <class T, int rows, int cols>
   inline PiiMatrix<T,rows,cols> matrix(const PiiMatrix<T,rows,cols>& mat) { return mat; }
-  
+
   /**
    * Returns a deep copy of `mat` allocated from the heap.
    *

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -44,9 +44,9 @@ void MainWindow::init()
   _pRedChannelDisplay->imageViewport()->setProperty("fitMode", "FitToView");
   _pGreenChannelDisplay->imageViewport()->setProperty("fitMode", "FitToView");
   _pBlueChannelDisplay->imageViewport()->setProperty("fitMode", "FitToView");
-  
+
   _pNextImageButton->setIconMode(PushButton::IconRight);
-  
+
   // Make ui-connections
   connect(_pPreviousImageButton, SIGNAL(clicked()), this, SLOT(prevButtonClicked()));
   connect(_pNextImageButton, SIGNAL(clicked()), this, SLOT(nextButtonClicked()));
@@ -56,7 +56,7 @@ void MainWindow::init()
   connect(_pRedProbeInput, SIGNAL(objectReceived(PiiVariant)), _pRedChannelDisplay, SLOT(setImage(PiiVariant)));
   connect(_pGreenProbeInput, SIGNAL(objectReceived(PiiVariant)), _pGreenChannelDisplay, SLOT(setImage(PiiVariant)));
   connect(_pBlueProbeInput, SIGNAL(objectReceived(PiiVariant)), _pBlueChannelDisplay, SLOT(setImage(PiiVariant)));
-  
+
 }
 
 PiiEngine* MainWindow::createEngine()
@@ -72,21 +72,21 @@ PiiEngine* MainWindow::createEngine()
   _pRedProbeInput = new PiiProbeInput;
   _pGreenProbeInput = new PiiProbeInput;
   _pBlueProbeInput = new PiiProbeInput;
-  
+
   // Create image source
   _pImageFileReader = pEngine->createOperation("PiiImageFileReader");
   _pImageFileReader->setProperty("imageType", "Color");
   _pImageFileReader->setProperty("fileNamePattern", QString("%1/*.jpg").arg(defaultImageDirPath()));
-  
+
   // Create color channel splitter
   PiiOperation *pColorChannelSplitter = pEngine->createOperation("PiiColorChannelSplitter");
-  
+
   // Make operation connections
   connect(this, SIGNAL(selectImage(int)), pTriggerSource, SLOT(trigger(int)));
-  
+
   pTriggerSource->connectOutput("trigger", _pImageFileReader, "trigger");
   _pImageFileReader->connectOutput("image", pColorChannelSplitter, "image");
-  
+
   _pSourceProbeInput->connectOutput(_pImageFileReader->output("image"));
   _pRedProbeInput->connectOutput(pColorChannelSplitter->output("channel0"));
   _pGreenProbeInput->connectOutput(pColorChannelSplitter->output("channel1"));

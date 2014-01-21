@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -71,7 +71,7 @@ namespace PiiSocketWrapper
     input = static_cast<PiiAbstractInputSocket*>(pSocket);
     return QScriptValue();
   }
-  
+
   static QScriptValue connectInput(QScriptContext* context, QScriptEngine* engine)
   {
     PII_CHECK_ONE_ARGUMENT(connectInput);
@@ -124,7 +124,7 @@ void initPiiSocket(QScriptEngine* engine)
 
   PII_REGISTER_SCRIPT_TYPE_CONVERSION(PiiSocketWrapper, PiiInputSocketList);
   PII_REGISTER_SCRIPT_TYPE_CONVERSION(PiiSocketWrapper, PiiOutputSocketList);
-  
+
   QScriptValue socketObj = engine->newQMetaObject(&PiiSocket::staticMetaObject);
   engine->globalObject().setProperty("PiiSocket", socketObj);
 

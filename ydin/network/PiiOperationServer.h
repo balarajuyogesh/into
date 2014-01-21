@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -40,7 +40,7 @@ class PII_YDIN_EXPORT PiiOperationServer : public PiiQObjectServer
 {
 public:
   PiiOperationServer(PiiOperation* operation);
-  
+
   void handleRequest(const QString& uri, PiiHttpDevice* dev,
                      PiiHttpProtocol::TimeLimiter* controller);
 protected:
@@ -69,10 +69,10 @@ private:
   {
   public:
     ~ChannelImpl();
-    
+
     PiiAbstractInputSocket* createInput(const QString& outputName);
     void destroyInput(const QString& outputName);
-    
+
     bool tryToReceive(PiiAbstractInputSocket* sender, const PiiVariant& object) throw ();
 
   private:

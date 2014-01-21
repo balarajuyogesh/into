@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -45,7 +45,7 @@ void PiiVectorQuantizerOperation::init()
   //_pBoundaryInput->setDisplayName(tr("Feature boundaries for multi-feature vectors."));
 
   addSocket(d->pVectorIndexOutput = new PiiOutputSocket("model index"));
-  
+
   addSocket(d->pDistanceOutput = new PiiOutputSocket("distance"));
   d->pDistanceOutput->setProperty("min", -INFINITY);
   d->pDistanceOutput->setProperty("max", INFINITY);
@@ -79,7 +79,7 @@ void PiiVectorQuantizerOperation::setDistanceMeasure(const QString& name)
 {
   _d()->lstDistanceMeasures = QStringList() << name;
 }
-  
+
 QString PiiVectorQuantizerOperation::distanceMeasure() const
 {
   const PII_D;

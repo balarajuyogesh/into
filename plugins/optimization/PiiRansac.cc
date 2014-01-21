@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -51,7 +51,7 @@ bool PiiRansac::findBestModel()
 
   if (iSamples < iMinSamples)
     return false;
-  
+
   int iIterations = 0, iRequiredIterations = 1;
 
   d->vecBestInliers.clear();
@@ -101,7 +101,7 @@ bool PiiRansac::findBestModel()
         {
           // Clear the inlier list at the beginning of each round.
           vecInliers.resize(0);
-            
+
           // Match all points against the current model
           for (int iPoint=0; iPoint<iSamples; ++iPoint)
             {
@@ -110,7 +110,7 @@ bool PiiRansac::findBestModel()
               if (fitToModel(iPoint, matModels.constRowBegin(iModel)) < d->dFittingThreshold)
                 vecInliers << iPoint;
             }
-          
+
           // If the number of inliers is the best so far, store the
           // score.
           const int iInlierCount = vecInliers.size();
@@ -134,7 +134,7 @@ bool PiiRansac::findBestModel()
         }
       ++iIterations;
     }
-  
+
   return !d->matBestModel.isEmpty();
 }
 

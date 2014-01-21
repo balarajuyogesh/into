@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -31,13 +31,13 @@ class PiiRansac;
 class PII_MATCHING_EXPORT PiiRansacPointMatcher : public PiiPointMatchingOperation
 {
   Q_OBJECT
-  
+
   Q_PROPERTY(int maxIterations READ maxIterations WRITE setMaxIterations);
   Q_PROPERTY(int maxSamplings READ maxSamplings WRITE setMaxSamplings);
   Q_PROPERTY(int minInliers READ minInliers WRITE setMinInliers);
   Q_PROPERTY(double fittingThreshold READ fittingThreshold WRITE setFittingThreshold);
   Q_PROPERTY(double selectionProbability READ selectionProbability WRITE setSelectionProbability);
-  
+
 public:
   void setMaxIterations(int maxIterations);
   int maxIterations() const;
@@ -49,7 +49,7 @@ public:
   double fittingThreshold() const;
   void setSelectionProbability(double selectionProbability);
   double selectionProbability() const;
-  
+
 protected:
   /// @internal
   class Data : public PiiPointMatchingOperation::Data
@@ -57,7 +57,7 @@ protected:
   public:
     Data(int pointDimensions, PiiRansac* ransac);
     ~Data();
-    
+
     PiiRansac* pRansac;
   };
   PII_D_FUNC;

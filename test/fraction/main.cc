@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -71,7 +71,7 @@ void TestPiiFraction::operations()
   QVERIFY(f1 == f1Old*f2);
   QVERIFY(f1 == FracType(1, 54));
 
-  FracType f2Old = f2; 
+  FracType f2Old = f2;
   f2 -= f1;
   QVERIFY(f2 == f2Old - f1);
   QVERIFY(f2 == FracType(31, 270));

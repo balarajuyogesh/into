@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -55,7 +55,7 @@ void PiiHoughTransformOperation::check(bool reset)
 void PiiHoughTransformOperation::process()
 {
   PiiVariant obj = readInput();
-   
+
    switch (obj.type())
      {
        // For gray images do hough transform directly
@@ -73,15 +73,15 @@ template <class T> void PiiHoughTransformOperation::transform(const PiiVariant& 
   const PiiMatrix<T> image = obj.valueAs<PiiMatrix<T> >();
   typedef typename TransformTraits<T>::Type ResultType;
   PiiMatrix<ResultType> accumulator;
-   
+
   accumulator = d->hough.transform<ResultType>(image, Pii::Identity<T>());
-  
+
   if (d->bPeaksConnected)
     findPeaks(accumulator);
- 
+
   emitObject(accumulator);
 }
-  
+
 template <class T> void PiiHoughTransformOperation::findPeaks(const PiiMatrix<T>& accumulator)
 
 {
@@ -90,10 +90,10 @@ template <class T> void PiiHoughTransformOperation::findPeaks(const PiiMatrix<T>
                                                               d->dMinPeakDistance,
                                                               d->iMaxPeakCount,
                                                               T(d->dMinPeakMagnitude)));
-  
+
   PiiMatrix<double> matPeaks(0,2);
   PiiMatrix<int> matCoordinates(0,4);
-   
+
   for (int i=0; i<lstPeaks.size(); ++i)
     {
       matPeaks.appendRow(d->hough.distance(lstPeaks[i].row), d->hough.angle(lstPeaks[i].column));

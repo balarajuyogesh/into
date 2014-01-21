@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -41,7 +41,7 @@ public:
   {
     connect(this, SIGNAL(finished()), SLOT(deleteLater()), Qt::DirectConnection);
   }
-    
+
 protected:
   /**
    * Create a new asynchronous call thread that calls `function` on
@@ -101,7 +101,7 @@ protected:
       return call;                                                      \
     }                                                                   \
   }
-  
+
 
 PII_CREATE_ASYNCCALL(0, ());
 PII_CREATE_ASYNCCALL(1, (P1));
@@ -159,7 +159,7 @@ PII_CREATE_ASYNCCALL(8, (P1, P2, P3, P4, P5, P6, P7, P8));
  * @relates PiiAsyncCall
  */
 
- 
+
 /**
  * @decl template <class Object, class Function> QThread* Pii::createAsyncCall(Object object, Function function, ...)
  *

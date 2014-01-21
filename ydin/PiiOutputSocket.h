@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -35,7 +35,7 @@ class PiiInputSocket;
 class PiiInputController;
 
 namespace PiiYdin
-{ 
+{
   /// @internal
   template <class Matrix, class T>
   inline PiiVariant createVariant(const PiiConceptualMatrix<Matrix>*,
@@ -124,7 +124,7 @@ public:
 
   /**
    * Inform the synchronization system that the rate of the following
-   * emissions differs from that of the synchronized input socket. 
+   * emissions differs from that of the synchronized input socket.
    * This function must be called whenever you start sending more
    * objects than you receive (or no objects at all). To emit two
    * objects for each input, do something like this in the process()
@@ -185,7 +185,7 @@ public:
    * ~~~
    *
    * It is possible to delay emissions more than one processing round,
-   * but this function must be called once for each delayed object. 
+   * but this function must be called once for each delayed object.
    * Once the objects are finally sent, the same number of endDelay()
    * calls must be performed.
    *
@@ -211,7 +211,7 @@ public:
   void endDelay();
 
   /**
-   * Restores socket state after pause. This function will modify 
+   * Restores socket state after pause. This function will modify
    * *inputState* according to the current state of this socket and pass
    * the information to all connected input sockets.
    *
@@ -343,7 +343,7 @@ public:
    * If *listener* is zero, uses a default listener.
    */
   void setInputListener(PiiInputListener* listener = 0);
-  
+
 protected:
   /// @hide
   struct ThreadInfo
@@ -367,7 +367,7 @@ protected:
   public:
     Data();
     ~Data();
-    
+
     void inputReady(PiiAbstractInputSocket* input);
     bool setOutputConnected(bool connected);
 
@@ -377,7 +377,7 @@ protected:
     void inputDisconnected(PiiAbstractInputSocket* input);
     void inputUpdated(PiiAbstractInputSocket* input);
     void createFlagArray();
-  
+
     int iGroupId;
     bool bConnected;
     // A wait condition that is used when some inputs aren't ready to

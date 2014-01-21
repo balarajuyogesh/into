@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -48,12 +48,12 @@ void PiiTypeCastingOperation::process()
       PII_NUMERIC_MATRIX_CASES(operate, obj);
     case FloatComplexMatrixType:
       operateC<std::complex<float> >(obj);
-      break;                                           
-    case DoubleComplexMatrixType: 
-      operateC<std::complex<double> >(obj);              
-      break;                                           
-      /*case LongDoubleComplexMatrixType:  
-      operateC<std::complex<long double> >(obj);         
+      break;
+    case DoubleComplexMatrixType:
+      operateC<std::complex<double> >(obj);
+      break;
+      /*case LongDoubleComplexMatrixType:
+      operateC<std::complex<long double> >(obj);
       break;*/
 
       PII_COLOR_IMAGE_CASES(operateCI, obj);
@@ -65,7 +65,7 @@ void PiiTypeCastingOperation::process()
 template <class T> void PiiTypeCastingOperation::operate(const PiiVariant& obj)
 {
   PiiMatrix<T> matrix(obj.valueAs<PiiMatrix<T> >());
-  
+
   switch (_d()->outputType)
     {
       PII_NUMERIC_MATRIX_CASES(operateMatrix, matrix);
@@ -79,18 +79,18 @@ template <class T> void PiiTypeCastingOperation::operate(const PiiVariant& obj)
 template <class T> void PiiTypeCastingOperation::operateC(const PiiVariant& obj)
 {
   PiiMatrix<T> matrix(obj.valueAs<PiiMatrix<T> >());
-  
+
   switch (_d()->outputType)
     {
       PII_NUMERIC_MATRIX_CASES(operateComplex, matrix);
     case FloatComplexMatrixType:
       operateMatrix<std::complex<float> >(matrix);
-      break;                                           
-    case DoubleComplexMatrixType: 
-      operateMatrix<std::complex<double> >(matrix);              
-      break;                                           
-      /*case LongDoubleComplexMatrixType:  
-      operateMatrix<std::complex<long double> >(matrix);         
+      break;
+    case DoubleComplexMatrixType:
+      operateMatrix<std::complex<double> >(matrix);
+      break;
+      /*case LongDoubleComplexMatrixType:
+      operateMatrix<std::complex<long double> >(matrix);
       break;*/
     default:
       PII_THROW_UNKNOWN_TYPE(inputAt(0));
@@ -100,7 +100,7 @@ template <class T> void PiiTypeCastingOperation::operateC(const PiiVariant& obj)
 template <class T> void PiiTypeCastingOperation::operateCI( const PiiVariant& obj )
 {
   PiiMatrix<T> matrix(obj.valueAs<PiiMatrix<T> >());
-  
+
   switch (_d()->outputType)
     {
       PII_NUMERIC_MATRIX_CASES(operateColorToGray, matrix);
@@ -120,7 +120,7 @@ template <class T, class U> void PiiTypeCastingOperation::operateComplex(const P
   PiiMatrix<T> matResult(matrix.rows(), matrix.columns());
   T* ptrr;
   const U* ptrm;
-  
+
   for (int r=0; r<matrix.rows(); ++r)
     {
       ptrr = matResult.row(r);
@@ -128,7 +128,7 @@ template <class T, class U> void PiiTypeCastingOperation::operateComplex(const P
       for (int c=0; c<matrix.columns(); ++c)
         ptrr[c] = T(ptrm[c].real());
     }
-  
+
   emitObject(matResult);
 }
 
@@ -147,8 +147,8 @@ template <class T, class U> void PiiTypeCastingOperation::operateColorToGray(con
           //gray value is the average of r, g, and b.
           ptrr[c] = (T)((C(color.channels[0]) + C(color.channels[1]) + C(color.channels[2]))/3);
         }
-    } 
-  
+    }
+
   emitObject(matResult);
 }
 

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -49,7 +49,7 @@ namespace PiiLogWrapper
            "%s", context->argument(0).toString().toLocal8Bit().constData());
     return engine->undefinedValue();
   }
-  
+
 #define PII_SCRIPT_DEBUG_FUNCTION(TYPE) \
   static QScriptValue pii ## TYPE(QScriptContext* context, QScriptEngine* engine) \
   {                                                                     \
@@ -68,10 +68,10 @@ void initPiiLog(QScriptEngine* engine)
 {
 #define PII_LOG_WRAPPER_FUNC(NAME) \
   engine->globalObject().setProperty(#NAME, engine->newFunction(PiiLogWrapper::NAME));
-  
+
   PII_LOG_WRAPPER_FUNC(piiLog);
   PII_LOG_WRAPPER_FUNC(piiDebug);
   PII_LOG_WRAPPER_FUNC(piiWarning);
   PII_LOG_WRAPPER_FUNC(piiCritical);
-  PII_LOG_WRAPPER_FUNC(piiFatal);  
+  PII_LOG_WRAPPER_FUNC(piiFatal);
 }

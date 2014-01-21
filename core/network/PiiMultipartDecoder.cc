@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -62,7 +62,7 @@ qint64 PiiMultipartDecoder::readData(char* data, qint64 maxSize)
           // don't check it here but hope the next header will fail
           // anyway.
         }
-      
+
       return iBytesRead;
     }
   // Content-length is known, and no bytes can be read.
@@ -71,12 +71,12 @@ qint64 PiiMultipartDecoder::readData(char* data, qint64 maxSize)
   // We are out of luck. Must filter the input for the boundary
   // delimiter.
   else if (d->aBoundary.size() > 0)
-    { 
+    {
       // Read at most the size of the boundary bytes
       qint64 iBytesRead = d->pDevice->read(data, qMin(d->aBoundary.size(), int(maxSize)));
       if (iBytesRead <= 0)
         return iBytesRead;
-      
+
       // Check received data for the boundary marker
       int i = 0, iTailLength = 0, iPeekLength = 0;
       while (i < iBytesRead)
@@ -216,7 +216,7 @@ bool PiiMultipartDecoder::nextMessage()
       else
         break;
     }
-  
+
   d->bHeadersRead = true;
   return true;
 }
@@ -237,7 +237,7 @@ void PiiMultipartDecoder::updateBodyPartInfo()
     d->iContentLength = d->stkHeaders.top().contentLength();
   else
     d->iContentLength = -1;
-  
+
   // If the next body part is part of a multipart message, read until
   // a delimiter is found. The delimiter is that of the topmost
   // multipart message.
@@ -259,7 +259,7 @@ PiiMimeHeader PiiMultipartDecoder::header(int level)
 {
   if (level >= 0 && level < d->stkHeaders.size())
     return d->stkHeaders[d->stkHeaders.size()-1-level];
-  
+
   return PiiMimeHeader();
 }
 

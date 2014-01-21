@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -57,7 +57,7 @@ void PiiHistogramCollector::check(bool reset)
       d->matHistogram = PiiMatrix<int>::padded(1,0,d->iBinCount * sizeof(int));
       d->matX = PiiMatrix<int>::padded(1,0,d->iBinCount * sizeof(int));
     }
-  
+
   PiiDefaultOperation::check(reset);
 }
 
@@ -95,7 +95,7 @@ void PiiHistogramCollector::process()
   if (activeInputGroup() == inputAt(1)->groupId())
     {
       PiiVariant obj = inputAt(1)->firstObject();
-      
+
       switch (obj.type())
         {
           PII_PRIMITIVE_CASES(addPrimitive, obj);

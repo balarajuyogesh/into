@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@
  * ------
  *
  * @in signal - input signal. A row vector. (real-valued PiiMatrix)
- * 
+ *
  * Outputs
  * -------
  *
@@ -69,7 +69,7 @@ class PiiPeakDetector : public PiiDefaultOperation
    * over this many elements. The default value is 0.
    */
   Q_PROPERTY(int levelCorrectionWindow READ levelCorrectionWindow WRITE setLevelCorrectionWindow);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiPeakDetector();

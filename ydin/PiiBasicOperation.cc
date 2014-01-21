@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -50,7 +50,7 @@ void PiiBasicOperation::check(bool reset)
     piiWarning(tr("%1 (objectName %2) has no parent.")
                .arg(metaObject()->className())
                .arg(objectName()));
-  
+
   for (int i=d->lstInputs.size(); i--; )
     {
       if (!d->lstInputs[i]->isOptional() &&
@@ -63,7 +63,7 @@ void PiiBasicOperation::check(bool reset)
       if (reset)
         d->lstInputs[i]->reset();
     }
-  
+
   for (int i=d->lstOutputs.size(); i--; )
     d->lstOutputs[i]->reset();
 }
@@ -304,7 +304,7 @@ template <class T> void PiiBasicOperation::setNumberedSockets(QList<T*>& sockets
                                                               int firstIndex)
 {
   if (count < 0) return;
-  
+
   //Do we need to add new inputs?
   while (sockets.size() - staticSockets < count)
     {

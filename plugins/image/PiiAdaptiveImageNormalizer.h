@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -58,7 +58,7 @@ class PiiAdaptiveImageNormalizer : public PiiDefaultOperation
    * images.
    */
   Q_PROPERTY(double targetMean READ targetMean WRITE setTargetMean);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiAdaptiveImageNormalizer();
@@ -77,7 +77,7 @@ private:
   template <class T> void normalizeGray(const PiiVariant& obj);
   template <class T> PiiMatrix<T> normalize(const PiiMatrix<T>& obj);
   template <class T> struct Normalizer;
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {

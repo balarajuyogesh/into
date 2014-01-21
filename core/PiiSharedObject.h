@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@
  * to a single memory location are concurrently in use. With a shared
  * object, it is possible that the users of the memory location are
  * unaware of each other. Each user just calls reserve() when it
- * starts using the pointer and release() after it no longer needs it. 
+ * starts using the pointer and release() after it no longer needs it.
  * Each reserve() call increases and each release() call decreases a
  * reference counter. When the counter reaches zero, the object is
  * automatically deleted. This type of explicit sharing provides
@@ -75,15 +75,15 @@ public:
   {}
 
   virtual ~PiiSharedObject();
-  
+
   /**
    * Reserves the object for use. The reference counter will be
    * incremented by one.
    */
   void reserve() const { _ref.ref(); }
-  
+
   /**
-   * Releases the object. The reference counter is decremented by one. 
+   * Releases the object. The reference counter is decremented by one.
    * Once it reaches zero, the object will be deleted.
    */
   void release() const
@@ -124,7 +124,7 @@ public:
   ~PiiSharedObjectHolder()
   {
     reinterpret_cast<const PiiSharedObject*>(_pointer)->release();
-  }  
+  }
 };
 
 namespace PiiSerialization
@@ -133,7 +133,7 @@ namespace PiiSerialization
   {
     return new PiiSharedObjectHolder(ptr);
   }
-  
+
   /// A specialization that increases the refcount of `ptr` by one.
   inline void rereferencePointer(PiiSharedObject* ptr)
   {

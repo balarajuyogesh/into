@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -53,7 +53,7 @@ class PII_WEBCAMDRIVER_EXPORT PiiWebcamDriver : public PiiCameraDriver
    * frameSizes description
    */
   Q_PROPERTY(QVariantList frameSizes READ frameSizes);
-  
+
 public:
   /**
    * Construct a new PiiWebcamDriver.
@@ -82,7 +82,7 @@ public:
   int imageFormat() const;
   bool setImageFormat(int format);
   QSize resolution() const;
-  
+
   int frameBufferCount() const;
   QRect frameRect() const;
 
@@ -108,7 +108,7 @@ private:
   bool stopAcquisition(int fd);
   bool registerFrameBuffers(int fd);
   bool deregisterFrameBuffers();
-  
+
   QFile _fileDevice;
   QStringList _lstCriticalProperties;
   bool _bOpen, _bCapturingRunning;
@@ -119,12 +119,12 @@ private:
     v4l2_buffer v4l2Buffer;
     void *frameStart;
   };
-  
+
   int _iFrameBufferCount;
   QVector<WebcamBuffer*> _vecBuffers;
   QVector<v4l2_buffer> _vecReservedBuffers;
   QVector<void*> _vecBufferPointers;
-    
+
   QThread *_pCapturingThread;
   QMutex _frameBufMutex;
   unsigned int _iFrameIndex;

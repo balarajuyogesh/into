@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -37,9 +37,9 @@ namespace PiiClassification
   /*
   {
     typedef typename PiiSampleSet::Traits<SampleSet>::ConstFeatureIterator ConstFeatureIterator;
-    
+
     ConstFeatureIterator operator() (PiiInputSocket* input, int* featureCount)
-    { 
+    {
     }
   };
   */
@@ -71,7 +71,7 @@ namespace PiiClassification
      * PiiMatrix or if its size is not 1-by-*featureCount*.
      */
     ConstFeatureIterator operator() (PiiInputSocket* input, int* featureCount)
-    { 
+    {
       matFeatures = PiiYdin::convertMatrixTo<T>(input);
       if (matFeatures.rows() != 1 || (*featureCount > 0 && matFeatures.columns() != *featureCount))
         PII_THROW_WRONG_SIZE(input, matFeatures, 1, *featureCount);
@@ -92,7 +92,7 @@ namespace PiiClassification
  * PiiLearningAlgorithm) is started.
  *
  * Learning is usually an off-line process in which a batch of samples
- * is first collected and a learning algorithm is applied to it. 
+ * is first collected and a learning algorithm is applied to it.
  * Certain algorithms such as the SOM are also capable of incremental
  * (on-line) learning.
  *
@@ -120,7 +120,7 @@ namespace PiiClassification
  * PiiMatrix<double>), but subclasses are free to use any feature
  * representation appropriate for the task in hand.
  *
- * @in label - a label for the corresponding feature vector (double). 
+ * @in label - a label for the corresponding feature vector (double).
  * This input is ignored by non-supervised classifiers (such as the
  * SOM). In supervised classifiers (such as k-NN), the input can be
  * left unconnected in classification, but not in learning.
@@ -145,7 +145,7 @@ namespace PiiClassification
  * moc can't cope with template classes. This pattern is implemented,
  * for example, in PiiKnnClassifierOperation.
  *
- * The template classes are registered to the 
+ * The template classes are registered to the
  * [resource database](PiiYdin::resourceDatabase()) so that the
  * template type is a part of the name. For example,
  * PiiKnnClassifierOperation::Template<double> is registered as
@@ -171,12 +171,12 @@ class PII_CLASSIFICATION_EXPORT PiiClassifierOperation :
    * learning algorithm.
    */
   Q_PROPERTY(PiiClassification::LearnerCapabilities capabilities READ capabilities);
-  
+
   /**
-   * The maximum number of training samples collected for learning. 
-   * This property is also used as a training/classification switch. 
+   * The maximum number of training samples collected for learning.
+   * This property is also used as a training/classification switch.
    * Setting the value to zero means that no training samples will be
-   * collected, and the operation will only classify incoming samples. 
+   * collected, and the operation will only classify incoming samples.
    * If `learningBatchSize` is set to one and the learning algorithm
    * is capable of on-line learning, incoming samples will be used to
    * train the algorithm one by one. If `learningBatchSize` is set to
@@ -227,7 +227,7 @@ class PII_CLASSIFICATION_EXPORT PiiClassifierOperation :
   /**
    * A textual description of a learning error.
    */
-  Q_PROPERTY(QString learningError READ learningError);  
+  Q_PROPERTY(QString learningError READ learningError);
 
 public:
   /**
@@ -248,12 +248,12 @@ public:
    * function is called by learning algorithms to check if they are
    * still allowed to proceed. This function returns `true` if
    * [startLearningThread()] has been called and [stopLearningThread()]
-   * has not been called. It also emits the [progressed()] signal if 
+   * has not been called. It also emits the [progressed()] signal if
    * *progressPercentage* is not `NaN` and it is [progressStep] units
    * larger than the previous recorded progress.
    */
   bool canContinue(double progressPercentage) const;
-  
+
 public slots:
   /**
    * Starts the learning thread. If the number of buffered samples is
@@ -313,9 +313,9 @@ signals:
    * if the learning algorithm is not capable of estimating its
    * progress, this signal will not be emitted until it is done.
    *
-   * @param percentage the current progress of the learning algorithm. 
+   * @param percentage the current progress of the learning algorithm.
    * 0 means uninitialized, 1.0 means fully converged. Note that the
-   * learning thread may not finish immediately after signaling 1.0. 
+   * learning thread may not finish immediately after signaling 1.0.
    * use the [learningFinished()] signal to find out when it is done.
    */
   void progressed(double percentage);
@@ -328,19 +328,19 @@ signals:
    * property may provide a textual error message.
    */
   void learningFinished(bool success);
-  
+
 protected:
   /// @internal
   class PII_CLASSIFICATION_EXPORT Data : public PiiDefaultOperation::Data
   {
   public:
     Data(PiiClassification::LearnerCapabilities capabilities);
-    
+
     PiiInputSocket* pFeatureInput;
     PiiInputSocket* pLabelInput;
     PiiInputSocket* pWeightInput;
     PiiOutputSocket* pClassificationOutput;
-    
+
     PiiClassification::LearnerCapabilities capabilities;
     int iLearningBatchSize;
     PiiClassification::FullBufferBehavior fullBufferBehavior;
@@ -364,7 +364,7 @@ protected:
   PiiClassification::LearnerCapabilities capabilities() const;
   bool learningThreadRunning() const;
   QString learningError() const;
-  
+
   /**
    * Returns the number of samples currently in buffer. Must be
    * implemented by subclasses to return the number of samples
@@ -401,9 +401,9 @@ protected:
    * one. The default implementation returns `true`.
    */
   virtual bool needsThread() const;
-  
+
   /**
-   * Trains a learning algorithm with the collected set of samples. 
+   * Trains a learning algorithm with the collected set of samples.
    * This function is called by the learning thread and must be
    * overridden by subclasses to feed the buffered samples to the
    * learning algorithm. Typically, subclasses call the
@@ -467,7 +467,7 @@ protected:
    * @param weights an importance factor for each sample. May be
    * empty, in which case 1.0 will be used for all samples.
    *
-   * @return `true` if the algorithm was successfully trained, 
+   * @return `true` if the algorithm was successfully trained,
    * `false` otherwise.
    */
   template <class SampleSet> bool learnBatch(PiiLearningAlgorithm<SampleSet>& algorithm,
@@ -532,7 +532,7 @@ protected:
   virtual void collectSample(double label, double weight) = 0;
 
   /**
-   * Called when the operation stops after on-line learning. 
+   * Called when the operation stops after on-line learning.
    * Subclasses can override this function to clean up the resources
    * allocated by on-line learning.
    */
@@ -542,9 +542,9 @@ protected:
    * Sets the learning error message.
    */
   void setLearningError(const QString& learningError);
-  
+
   /**
-   * With supervised learning algorithms, this function reads the 
+   * With supervised learning algorithms, this function reads the
    * `label` input and returns the class label. With non-supervised
    * learning algorithms, `NaN` will be returned.
    *
@@ -572,13 +572,13 @@ protected:
    * for the incoming feature vectors.
    */
   PiiInputSocket* labelInput();
-    
+
   /**
    * Get a pointer to the (optional) input that receives weights
    * associated with incoming samples.
    */
   PiiInputSocket* weightInput();
-  
+
   /**
    * Get a pointer to the ouput that emits a class index for each
    * incoming feature vector (also in learning mode).
@@ -587,7 +587,7 @@ protected:
 
   /**
    * Reads a feature vector from the `features` input and calls
-   * algorithm.learnOne() using *label* as the class label and 
+   * algorithm.learnOne() using *label* as the class label and
    * *weight* as the importance.
    *
    * @exception PiiExecutionException& if the features are of
@@ -626,7 +626,7 @@ bool PiiClassifierOperation::learnBatch(PiiLearningAlgorithm<SampleSet>& algorit
                                         const QVector<double>& weights)
 {
   algorithm.setController(this);
-  
+
   try
     {
       algorithm.learn(samples, labels, weights);
@@ -636,7 +636,7 @@ bool PiiClassifierOperation::learnBatch(PiiLearningAlgorithm<SampleSet>& algorit
       setLearningError(ex.message());
       return false;
     }
-  
+
   return true;
 }
 

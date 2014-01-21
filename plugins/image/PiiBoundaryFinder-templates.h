@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -25,7 +25,7 @@ QList<PiiMatrix<int> > PiiBoundaryFinder::findBoundaries(const PiiMatrix<T>& obj
                                                          PiiMatrix<unsigned char>* boundaryMask)
 {
   PiiBoundaryFinder finder(objects, boundaryMask);
-    
+
   QList<PiiMatrix<int> > result;
   for (;;)
     {
@@ -36,7 +36,7 @@ QList<PiiMatrix<int> > PiiBoundaryFinder::findBoundaries(const PiiMatrix<T>& obj
         break;
       result.push_back(boundary);
     }
-  
+
   return result;
 }
 
@@ -114,11 +114,11 @@ template <class T, class UnaryOp> void PiiBoundaryFinder::findNextUnhandledPoint
                 goto nextRow;
               --d->iColumn;
             }
-          
-          
+
+
           // Store right edge position
           d->iRightEdge = d->iColumn;
-                     
+
           // Find the left edge
           while (d->iColumn >= 0 && rule(objectsRow[d->iColumn])) --d->iColumn;
 
@@ -128,7 +128,7 @@ template <class T, class UnaryOp> void PiiBoundaryFinder::findNextUnhandledPoint
     nextRow:;
     }
 }
- 
+
 template <class T, class UnaryOp> int PiiBoundaryFinder::findBoundary(const PiiMatrix<T>& objects,
                                                                       UnaryOp rule,
                                                                       int startR, int startC,
@@ -164,7 +164,7 @@ template <class T, class UnaryOp> int PiiBoundaryFinder::findBoundary(const PiiM
     {-1,  1, 4}, //SW
     {-1,  0, 8}  //W
   };
-  
+
   int r = startR, c = startC;
   int testR, testC;
   int iPoints = 0;
@@ -194,7 +194,7 @@ template <class T, class UnaryOp> int PiiBoundaryFinder::findBoundary(const PiiM
               ++iPoints;
 
               int turns = dirIndex - firstPossibleDir;
-              
+
               /* Add this edge to the boundary mask.
                *
                * If the direction turned too many steps, the pixel is
@@ -209,7 +209,7 @@ template <class T, class UnaryOp> int PiiBoundaryFinder::findBoundary(const PiiM
                */
 
               unsigned char& mark = (*d->pmatBoundaryMask)(r,c);
-              
+
               // These are the double edges
               if (turns >= directions[currentDir][2])
                 {
@@ -230,13 +230,13 @@ template <class T, class UnaryOp> int PiiBoundaryFinder::findBoundary(const PiiM
                      dirIndex & 0x7, r,c,
                      dirIndex - firstPossibleDir, directions[dirIndex][2],
                      int(mark));*/
-              
+
               // Update directions
               currentDir = dirIndex & 0x7;
               firstPossibleDir = (currentDir | 1) + 6;
 
               c = testC; r = testR;
-                
+
               // Found boundary. Go to next step.
               break;
             }
@@ -258,6 +258,6 @@ template <class T, class UnaryOp> int PiiBoundaryFinder::findBoundary(const PiiM
           points(iFirstRow+1,1) - points(iFirstRow,1) == 1)
         (*d->pmatBoundaryMask)(startR, startC) = 3;
     }
-  
+
   return iPoints;
 }

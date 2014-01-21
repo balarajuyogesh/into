@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -70,7 +70,7 @@ private: \
 
 /**
  * A default implementation of serialization functions. The default
- * function just passes serialization to the base object denoted by 
+ * function just passes serialization to the base object denoted by
  * *BASE*.
  *
  * ~~~(c++)
@@ -144,13 +144,13 @@ namespace PiiSerialization
    * @see QMetaClassInfo
    */
   PII_SERIALIZATION_EXPORT const PiiMetaObject* metaObjectPointer(const QObject* obj);
-  
+
   /**
    * Serializes a QObject. Does nothing but makes it possible to use
    * QObject as a base class when serializing objects.
    */
   template <class Archive> inline void serialize(Archive& /*ar*/, QObject& /*obj*/, const unsigned int /*version*/) {}
-  
+
   /**
    * Save the properties of a QObject. This function stores properties
    * so that they can be retrieved in any order. It serializes all
@@ -258,7 +258,7 @@ namespace PiiSerialization
   template <class T, class Archive, class Collection> void load(Archive& archive, Collection& lst, const unsigned int version);
 
   template <class Archive, class Collection, class T> inline void serialize(Archive& archive, Collection& lst, const unsigned int version);
-  
+
   /**
    * Serializes a QList.
    */
@@ -348,7 +348,7 @@ namespace PiiSerialization
    * Deserializes a QGradient.
    */
   template <class Archive> inline void load(Archive& /*archive*/, QGradient& /*gradient*/, const unsigned int version);
-  
+
   /**
    * Serializes a QBrush.
    */
@@ -362,7 +362,7 @@ namespace PiiSerialization
    * Serializes a QFont.
    */
   template <class Archive> inline void save(Archive& archive, const QFont& font, const unsigned int version);
-  
+
   /**
    * Deserializes a QFont.
    */
@@ -372,7 +372,7 @@ namespace PiiSerialization
    * Serializes a QTime.
    */
   template <class Archive> inline void save(Archive& archive, const QTime& time, const unsigned int version);
-  
+
   /**
    * Deserializes a QTime.
    */
@@ -382,7 +382,7 @@ namespace PiiSerialization
    * Serializes a QDate.
    */
   template <class Archive> inline void save(Archive& archive, const QDate& time, const unsigned int version);
-  
+
   /**
    * Deserializes a QDate.
    */
@@ -392,7 +392,7 @@ namespace PiiSerialization
    * Serializes a QDateTime.
    */
   template <class Archive> inline void save(Archive& archive, const QDateTime& time, const unsigned int version);
-  
+
   /**
    * Deserializes a QDateTime.
    */

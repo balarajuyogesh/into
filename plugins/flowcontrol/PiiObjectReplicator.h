@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -35,7 +35,7 @@
  * first. Otherwise, if there are no threaded operations in the
  * pipelines, and if the input queue in `trigger` becomes full before
  * `data` is received, the whole configuration may hang. The output
- * that sends data to the two branches should be first connected to 
+ * that sends data to the two branches should be first connected to
  * `data` and then to the other branch.
  *
  * Inputs

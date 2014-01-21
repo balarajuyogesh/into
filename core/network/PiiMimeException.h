@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -43,7 +43,7 @@ public:
    * - `InvalidFormat` - the MIME message has invalid format.
    */
   enum Code { HeaderTooLarge, InvalidFormat };
-  
+
   /**
    * Constructs a new PiiMimeException with the given code, error
    * message and location.
@@ -52,14 +52,14 @@ public:
   PiiMimeException(const PiiMimeException& other);
   ~PiiMimeException();
   PiiMimeException& operator= (const PiiMimeException& other);
-  
+
   /**
    * Get the cause of the exception.
    */
   Code code() const;
 
   /**
-   * Returns a textual representation of the error associated with 
+   * Returns a textual representation of the error associated with
    * *code*.
    */
   static const char* messageForCode(Code code);
@@ -67,7 +67,7 @@ public:
 protected:
   /// @internal
   void throwThis();
-  
+
 private:
   class Data : public PiiException::Data
   {

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -23,7 +23,7 @@
 #include <QVector>
 
 /**
- * Random Local Binary Patterns is a keypoint description technique. 
+ * Random Local Binary Patterns is a keypoint description technique.
  * Each RLBP consists of a randomly chosen set of N coordinate pairs,
  * bounded by a predefined window that is centered at the keypoint. A
  * keypoint descriptor is calculated by comparing pairs of pixels at
@@ -80,7 +80,7 @@ public:
    * would then increment bins 3, 26, 32, and 63 in *histogram*.
    */
   template <class T> void updateHistogram(int* histogram, const PiiMatrix<T>& image);
-  
+
 private:
   typedef QPair<PiiPoint<int>, PiiPoint<int> > PointPair;
   typedef QVector<PointPair> PointPairList;
@@ -88,7 +88,7 @@ private:
   {
   public:
     Data();
-    
+
     int iPatterns, iPairs;
     PointPairList vecPointPairs;
   } *d;

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -40,7 +40,7 @@ public:
   PiiTimer& operator= (const PiiTimer& other);
 
   ~PiiTimer();
-  
+
   /**
    * Restarts counting. Returns the number of microseconds elapsed
    * since the last restart or construction of the object, whichever
@@ -60,7 +60,7 @@ public:
    * in microseconds. If the timer is stopped, returns 0.
    */
   qint64 microseconds() const;
-  
+
   /**
    * Returns the elapsed time in milliseconds.
    */

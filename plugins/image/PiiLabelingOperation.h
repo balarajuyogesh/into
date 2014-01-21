@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -37,7 +37,7 @@
  * objects are marked with increasing ordinal numbers 1,2,...,N. The
  * background will be zero.
  *
- * @out labels - the number of distinct objects in the input image. 
+ * @out labels - the number of distinct objects in the input image.
  * (int)
  *
  */
@@ -58,7 +58,7 @@ class PiiLabelingOperation : public PiiDefaultOperation
   Q_PROPERTY(double threshold READ threshold WRITE setThreshold);
 
   /**
-   * A hysteresis for the thresholding. If this value is non-zero, 
+   * A hysteresis for the thresholding. If this value is non-zero,
    * `threshold` will decide the minimum value for a gray level that can
    * be a "seed" for a connected object. A all pixels surrounding the
    * seed that are brighter than `threshold` - `hysteresis` are
@@ -72,7 +72,7 @@ class PiiLabelingOperation : public PiiDefaultOperation
    * targets. The default value is `false`.
    */
   Q_PROPERTY(bool inverse READ inverse WRITE setInverse);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiLabelingOperation();
@@ -88,7 +88,7 @@ public:
 
 protected:
   void process();
-  
+
 private:
   template <class T> void operate(const PiiVariant& obj);
 
@@ -98,7 +98,7 @@ private:
   public:
     Data();
     PiiImage::Connectivity connectivity;
-    
+
     PiiInputSocket* pBinaryImageInput;
     PiiOutputSocket* pLabeledImageOutput;
     PiiOutputSocket* pLabelsOutput;

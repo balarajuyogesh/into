@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -22,7 +22,7 @@
 class LineEdit : public QLineEdit
 {
   Q_OBJECT
-  
+
 public:
   LineEdit(QWidget *parent = 0);
 
@@ -32,6 +32,6 @@ signals:
 protected:
   void mousePressEvent(QMouseEvent *e);
 };
-  
+
 
 #endif //_KIDELINEEDIT_H

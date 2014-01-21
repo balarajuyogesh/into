@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -42,7 +42,7 @@ public:
    * Creates a new PiiSmartPtr that takes the ownership of *ptr*.
    */
   PiiSmartPtr(T* ptr) : _ptr(ptr) {}
-  
+
   /**
    * Deletes the wrapped pointer.
    */
@@ -58,7 +58,7 @@ public:
     _ptr = ptr;
     return *this;
   }
-  
+
   /**
    * Releases the ownership of the pointer and returns it.
    */
@@ -70,7 +70,7 @@ public:
   }
 
   T*& ptrRef() { return _ptr; }
-  
+
 private:
   T* _ptr;
   PII_DISABLE_COPY(PiiSmartPtr);
@@ -89,7 +89,7 @@ public:
     _ptr = 0;
     return result;
   }
-  
+
 private:
   T* _ptr;
 };

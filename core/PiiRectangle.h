@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -49,7 +49,7 @@ template <class T> struct PiiRectangle
    * `false` otherwise.
    */
   bool isEmpty() const { return width <= 0 || height <= 0; }
-  
+
   /**
    * Returns true if the point (x,y) is within this rectangle.
    */

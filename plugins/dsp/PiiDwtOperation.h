@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,7 +26,7 @@
  * ------
  *
  * @in input - input matrix. Any integer or floating-point matrix.
- * 
+ *
  * Outputs
  * -------
  *
@@ -35,7 +35,7 @@
  *
  * @out horizontal - horizontal details (horizontal high-pass,
  * vertical low-pass)
- * 
+ *
  * @out vertical - vertical details (vertical high-pass, horizontal
  * low-pass)
  *
@@ -51,7 +51,7 @@ class PiiDwtOperation : public PiiDefaultOperation
    */
   Q_PROPERTY(WaveletFamily waveletFamily READ waveletFamily WRITE setWaveletFamily);
   Q_ENUMS(WaveletFamily);
-  
+
   /**
    * The index of the wavelet within the chosen family. This value is
    * ignored for the `Haar` "family". The operation supports members
@@ -59,7 +59,7 @@ class PiiDwtOperation : public PiiDefaultOperation
    * equal to `Haar`. The default value is 1.
    */
   Q_PROPERTY(int familyMember READ familyMember WRITE setFamilyMember);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   /**
@@ -91,7 +91,7 @@ private:
   {
   public:
     Data();
-    
+
     WaveletFamily waveletFamily;
     int iFamilyMember;
   };

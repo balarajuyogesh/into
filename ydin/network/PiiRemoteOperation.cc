@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -46,10 +46,10 @@ void PiiRemoteOperation::configure()
   if (d->bConfigured)
     return;
   d->bConfigured = true;
-  
+
   QList<QByteArray> lstInputNames = readDirectoryList("inputs/"); // may throw
   QList<QByteArray> lstOutputNames = readDirectoryList("outputs/"); // may throw
-  
+
   for (int i=0; i<lstInputNames.size(); ++i)
     d->lstInputs << new PiiRemoteInputSocket(lstInputNames[i]);
 

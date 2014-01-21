@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -45,7 +45,7 @@ class PII_GUI_EXPORT PiiTableModelControlWidget : public QWidget
    * set this flag to `false`.
    */
   Q_PROPERTY(bool moveButtonsVisible READ moveButtonsVisible WRITE setMoveButtonsVisible);
-   
+
 public:
   /**
    * Create a new PiiTableModelControlWidget with the given parent
@@ -69,13 +69,13 @@ public:
 
   void setMoveButtonsVisible(bool moveButtonsVisible);
   bool moveButtonsVisible() const;
-  
+
 private:
   struct Data
   {
     Data(PiiTableModelControlWidget* parent);
     static QString tr(const char* text);
-    
+
     QPushButton* pbtnAdd;
     QPushButton* pbtnDelete;
     QPushButton* pbtnMoveUp;

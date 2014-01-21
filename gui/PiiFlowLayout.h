@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -25,7 +25,7 @@
 class PII_GUI_EXPORT PiiFlowLayout : public QLayout
 {
   Q_OBJECT
-  
+
 public:
   PiiFlowLayout(QWidget *parent = 0, int margin = -1, int hSpacing = -1, int vSpacing = -1);
   ~PiiFlowLayout();
@@ -45,11 +45,11 @@ public:
   bool hasHeightForWidth() const;
   int heightForWidth(int) const;
   QSize minimumSize() const;
-  
+
 private:
   int doLayout(const QRect &rect, bool testOnly) const;
   int smartSpacing(QStyle::PixelMetric pm) const;
-  
+
   QList<QLayoutItem*> _lstItems;
   int _iHorizontalSpace;
   int _iVerticalSpace;

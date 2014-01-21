@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -25,7 +25,7 @@ namespace PiiDatabase
    * Create a database connection to `databaseUri`.
    *
    * @param databaseUri the URI of the database. The general syntax is
-   * `driver://user:password\@host:port/database`. E.g. 
+   * `driver://user:password\@host:port/database`. E.g.
    * `psql://me:secret\@localhost/mybase`
    *
    * @param connectionName the name of the connection. The database

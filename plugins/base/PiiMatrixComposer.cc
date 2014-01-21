@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -32,9 +32,9 @@ PiiMatrixComposer::PiiMatrixComposer() :
   addSocket(d->pSyncInput = new PiiInputSocket("sync"));
   d->pSyncInput->setOptional(true);
   setDynamicInputCount(1);
-  
+
   addSocket(new PiiOutputSocket("output"));
-  
+
   setProtectionLevel("dynamicInputCount", WriteWhenStoppedOrPaused);
 }
 
@@ -47,7 +47,7 @@ void PiiMatrixComposer::setDynamicInputCount(int cnt)
 {
   if (cnt < 1 || cnt > 2048)
     return;
-  
+
   setNumberedInputs(cnt, 1);
 
   for(int i = 1; i<inputCount(); ++i)
@@ -194,7 +194,7 @@ template <class T> void PiiMatrixComposer::operate()
       else
         matResult(i, iItemCount) = value;
     }
-  
+
   if (!d->pSyncInput->isConnected())
     {
       emitObject(matResult);

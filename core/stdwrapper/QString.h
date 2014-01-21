@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -23,7 +23,7 @@ class PII_CORE_EXPORT QString : public std::string
 {
 public:
   typedef std::string Super;
-  
+
   QString() {}
   QString(const Super::value_type* str) : Super(str) {}
   QString(const Super& other) : Super(other) {}

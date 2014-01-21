@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -52,7 +52,7 @@ void PiiIoOperation::check(bool reset)
   PiiDefaultOperation::check(reset);
 
   QMutexLocker lock(&d->channelMutex);
-  
+
   d->lstChannels.clear();
 
   if (reset)
@@ -70,18 +70,18 @@ void PiiIoOperation::check(bool reset)
             }
           else
             PII_THROW(PiiExecutionException, tr("I/O driver (%1) has not been set or is not available.").arg(d->strIoDriver));
-      
+
           if (d->pIoDriver)
             {
               connect(d->pIoDriver, SIGNAL(connectionLost()), SLOT(emitConnectionFailure()));
               d->pIoDriver->selectUnit(d->strIoUnit);
-          
+
               if (!d->pIoDriver->initialize())
                 PII_THROW(PiiExecutionException, tr("Cannot initialize I/O driver."));
             }
         }
     }
-  
+
   if (d->pIoDriver != 0)
     {
       // Create channels

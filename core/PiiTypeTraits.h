@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -56,7 +56,7 @@ namespace Pii
    * };
    * ~~~
    */
-  
+
   /**
    * An empty structure.
    */
@@ -73,7 +73,7 @@ namespace Pii
    */
   template <class T> struct IsVoid : False {};
   template <> struct IsVoid<void> : True {};
-  
+
   /**
    * A tester struct whose `boolValue` member evaluates statically to
    * `true` if the template parameter `T` is a pointer.
@@ -144,7 +144,7 @@ namespace Pii
                                            IsUnsigned<T>::boolValue,
                                            IsFloatingPoint<T>::boolValue>
   {};
-  
+
   /**
    * A tester struct whose `boolValue` member evaluates statically to
    * `true` if the template parameter `T` is a primitive type.
@@ -236,7 +236,7 @@ namespace Pii
   template <class T> struct IsNumericOrComplex : Or<IsNumeric<T>::boolValue,
                                                     IsComplex<T>::boolValue>
   {};
-  
+
   /**
    * A structure that has a nested type `Type` if and only if `T` is
    * a numeric primitive type or a complex number.
@@ -266,11 +266,11 @@ namespace Pii
    */
   template <class T, class U> struct IsSame : False {};
   template <class T> struct IsSame<T,T> : True {};
-  
+
   /**
-   * A structure whose `boolValue` member evaluates statically to 
+   * A structure whose `boolValue` member evaluates statically to
    * `true` if (and only if) `Base` is a base class of `Derived`. Note
-   * that instances of `Derived` are instances of `Base` also if 
+   * that instances of `Derived` are instances of `Base` also if
    * `Base` and `Derived` are the same type. Therefore, this trait will
    * be `true` if `Base` and `Derived` are the same type.
    */
@@ -279,7 +279,7 @@ namespace Pii
     /// @hide
     typedef char (&Yes)[1];
     typedef char (&No)[2];
-    
+
     template <class T> static Yes isBaseOf(Derived*, T);
     static No isBaseOf(Base*, int);
 
@@ -290,7 +290,7 @@ namespace Pii
     };
 
     // New GCC and MSVC versions provide __is_base_of() operator as an
-    // extension, but it is unfortunately not available everywhere. 
+    // extension, but it is unfortunately not available everywhere.
     // Thus, we need to resort to this ugly hack. The explanation is
     // too long to be written here. See
     // http://stackoverflow.com/questions/2910979/how-is-base-of-works
@@ -303,10 +303,10 @@ namespace Pii
    * A structure whose member type `Type` is a non-const version of
    * the template parameter `T`.
    */
-  template <class T> struct ToNonConst { typedef T Type; };    
+  template <class T> struct ToNonConst { typedef T Type; };
   template <class T> struct ToNonConst<const T> { typedef T Type; };
 
-  
+
   /**
    * A static functor that converts pointers to references and keeps
    * references as such.
@@ -363,7 +363,7 @@ namespace Pii
     typedef T Type;
     static T apply(T& value) { return value; }
   };
-  
+
   template <class T> struct RefToValue<T&>
   {
     typedef typename ToNonConst<T>::Type Type;
@@ -393,7 +393,7 @@ namespace Pii
   template <class T> struct ToValue<T&> { typedef T Type; };
 
   /**
-   * Converts a type to a corresponding floating-point type. The 
+   * Converts a type to a corresponding floating-point type. The
    * `Type` member of this structure is `float` for all primitive types
    * except `double` and `long` `double`, for which no conversion
    * will be made. Composed types such as PiiMatrix should specialize
@@ -462,9 +462,9 @@ namespace Pii
 
   // PENDING VaArg<enum> -> int
   // Requires an IsEnum trait.
-  
+
   /**
-   * The `Type` member typedef of this structure maps to the 
+   * The `Type` member typedef of this structure maps to the
    * `value_type` member type of the type given as the template
    * argument. The structure is specialized for pointers to return the
    * type pointed to.
@@ -472,12 +472,12 @@ namespace Pii
    * ~~~(c++)
    * using namespace Pii;
    * typedef ValueType<PiiMatrix<double>::column_iterator>::Type DoubleType1;
-   * typedef ValueType<PiiMatrix<double>::row_iterator>::Type DoubleType2; 
+   * typedef ValueType<PiiMatrix<double>::row_iterator>::Type DoubleType2;
    * ~~~
    */
   template <class T> struct ValueType { typedef typename T::value_type Type; };
   template <class T> struct ValueType<T*> { typedef T Type; };
-  
+
   /**
    * A trait whose `boolValue` member is `true` if type `T` has
    * less bits than type `U`.
@@ -486,7 +486,7 @@ namespace Pii
                                                           True,
                                                           False>::Type
   {};
-  
+
   /**
    * A trait whose `boolValue` member is `true` if type `T` has
    * more bits than type `U`.
@@ -497,13 +497,13 @@ namespace Pii
   {};
 
   /**
-   * A trait whose `Type` is `U` if `sizeof`(T) is less than 
+   * A trait whose `Type` is `U` if `sizeof`(T) is less than
    * `sizeof`(U) and `T` otherwise.
    */
   template <class T, class U> struct Larger { typedef typename IfClass<LessBits<T,U>, U, T>::Type Type; };
-  
+
   /**
-   * A trait whose `Type` is `T` if `sizeof`(T) is larger than 
+   * A trait whose `Type` is `T` if `sizeof`(T) is larger than
    * `sizeof`(U) and `T` otherwise.
    */
   template <class T, class U> struct Smaller { typedef typename IfClass<MoreBits<T,U>, U, T>::Type Type; };
@@ -518,7 +518,7 @@ namespace Pii
   template <> struct ToSigned<unsigned int> { typedef int Type; };
   template <> struct ToSigned<unsigned long> { typedef long Type; };
   template <> struct ToSigned<unsigned long long> { typedef long long Type; };
-  
+
   /**
    * Convert any integer type to its unsigned counterpart. For
    * example, ToSigned<char>::Type is `unsigned` `char`.
@@ -584,7 +584,7 @@ namespace Pii
    * bits. For example (`unsigned long`, `char`) maps to `long`.
    *
    * - If both types are unsigned integers, the result is the type
-   * with larger number of bits. For example (`unsigned int`, 
+   * with larger number of bits. For example (`unsigned int`,
    * `unsigned char`) maps to `unsigned int`.
    *
    * ~~~(c++)
@@ -615,7 +615,7 @@ namespace Pii
                              // "Call" CombineFloats
                              typename CombineFloats<T,U>::Type >::Type Type;
   };
-  
+
   /// @endgroup
 }
 

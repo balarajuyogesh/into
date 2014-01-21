@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -45,7 +45,7 @@ struct PiiQmlImageProvider::Slot
     pListener(other.pListener),
     iMethodIndex(other.iMethodIndex)
   {}
-  
+
   Slot& operator= (const Slot& other)
   {
     varImage = other.varImage;
@@ -65,7 +65,7 @@ class PiiQmlImageProvider::Data
 {
 public:
   typedef QMap<QString,Slot> SlotMap;
-  
+
   Data() {}
   ~Data()
   {
@@ -114,7 +114,7 @@ QImage PiiQmlImageProvider::requestImage(const QString& slot, QSize* size, const
     }
 
   *size = qImage.size();
-  
+
   if (requestedSize.isValid() && requestedSize != qImage.size())
     return qImage.scaled(requestedSize);
   return qImage;
@@ -179,7 +179,7 @@ QObject* PiiQmlImageProvider::listener(const QString& slot) const
     return it->pListener;
   return 0;
 }
-    
+
 bool PiiQmlImageProvider::connectOutput(PiiAbstractOutputSocket* socket, const QString& slot)
 {
   if (socket == 0) return false;
@@ -241,7 +241,7 @@ bool PiiQmlImageProvider::storeImage(const QString& slot, const PiiVariant& imag
       QMutexLocker lock(&d->slotMutex);
       Slot& s = d->mapSlots[slot];
       s.varImage = image;
-      
+
       /* Always pass the signal through the event queue even if the
        * listener was in the same thread. This way the listener will
        * always call requestImage() from its own thread and we don't

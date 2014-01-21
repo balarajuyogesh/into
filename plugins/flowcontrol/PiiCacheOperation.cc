@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -32,7 +32,7 @@ PiiCacheOperation::PiiCacheOperation() :
   addSocket(d->pKeyInput = new PiiInputSocket("key"));
   addSocket(d->pDataInput = new PiiInputSocket("data"));
   d->pDataInput->setOptional(true);
-  
+
   addSocket(d->pFoundOutput = new PiiOutputSocket("found"));
   addSocket(d->pKeyOutput = new PiiOutputSocket("key"));
   addSocket(d->pDataOutput = new PiiOutputSocket("data"));

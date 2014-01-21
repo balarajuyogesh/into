@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -35,8 +35,8 @@ namespace PiiTransforms
     if (r >= 0 && r < result.rows() && c >=0 && c < result.columns())
       Pii::setValueAt(magnitude, result, r, c);
   }
-  
- 
+
+
   template <class T, class Selector, class U>
   PiiMatrix<U> circularHough(const PiiMatrix<T>& gradientX,
                              const PiiMatrix<T>& gradientY,
@@ -61,14 +61,14 @@ namespace PiiTransforms
         dSinAlpha = sin(dAngleStep);
         dCosAlpha = cos(dAngleStep);
       }
-    
+
     PiiMatrix<U> matResult(iRows, iCols);
 
     for (int r=0; r<iRows; ++r)
       {
         const T* pX = gradientX[r];
         const T* pY = gradientY[r];
-        
+
         for (int c=0; c<iCols; ++c)
           {
             double dMagnitude = Pii::hypotenuse<double>(pX[c], pY[c]);
@@ -87,7 +87,7 @@ namespace PiiTransforms
               addPixel(magnitude, matResult, r + dY, c + dX);
             if (bNegative)
               addPixel(magnitude, matResult, r - dY, c - dX);
-            
+
             // If an estimate of the gradient error is given, draw two
             // arcs to the transformation domain.
             if (iArcLength > 1)
@@ -135,7 +135,7 @@ namespace PiiTransforms
       qSwap(startRadius, endRadius);
     if (radiusStep <= 0)
       radiusStep = endRadius - startRadius;
-    
+
     QList<PiiMatrix<U> > lstResult;
     PiiMatrix<GradType> matX(PiiImage::filter<GradType>(image, PiiImage::SobelXFilter));
     PiiMatrix<GradType> matY(PiiImage::filter<GradType>(image, PiiImage::SobelYFilter));
@@ -151,7 +151,7 @@ namespace PiiTransforms
 
   template <class T> inline void putValue(PiiHeap<T>& heap, T value) { heap.put(value); }
   template <class T> inline void putValue(QList<T>& lst, T value) { lst.append(value); }
-  
+
   template <class T, class PeakList, class Threshold>
   void findPeaks(const PiiMatrix<T>& mat, PeakList& lst, Threshold threshold)
   {
@@ -226,13 +226,13 @@ namespace PiiTransforms
         PiiMatrix<T> matFiltered(PiiImage::maxFilter(mat, qMax(int(minDistance*2+1), 3)));
         // Retain only local maxima
         matFiltered(matFiltered != mat) = 0;
-        
+
         if (threshold > 0)
           findPeaks(matFiltered, heap, std::bind2nd(std::greater<T>(), threshold));
         else
           findPeaks(matFiltered, heap, Pii::YesFunction<T>());
         heap.sort();
-        
+
         // Copy values to the result list
         lstResult.reserve(heap.size());
         for (int i=0; i<heap.size(); ++i)
@@ -265,7 +265,7 @@ namespace PiiTransforms
         if (minDistance > 1)
           removeDuplicates(lstResult, minDistance);
       }
-    
+
     return lstResult;
   }
 

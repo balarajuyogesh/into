@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,7 +24,7 @@ namespace PiiDsp
                         int windowWidth)
   {
     QList<Peak> lstResult;
-    
+
     if (data.columns() < qMax(windowWidth, qMax(smoothWidth, 3)))
       return lstResult;
 
@@ -103,7 +103,7 @@ namespace PiiDsp
                 peak.height = std::exp(a*dTopX*dTopX + b*dTopX + c) + dMinY;
                 // Magic equation. Believe this or not. It is taken from T.C. O'Haver's Matlab code.
                 peak.width = dStdX * 2.35703 / (M_SQRT2 * std::sqrt(-a));
-                
+
                 //qDebug("max: %lf, position: %lf", peak.height, peak.position);
               }
             lstResult.push_back(peak);

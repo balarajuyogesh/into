@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -42,7 +42,7 @@ PiiImageUnwarpOperation::PiiImageUnwarpOperation() :
   d->pRadiusInput->setOptional(true);
   d->pDistanceInput->setOptional(true);
   d->pCenterInput->setOptional(true);
-  
+
   addSocket(d->pImageOutput = new PiiOutputSocket("image"));
   addSocket(d->pRadiusOutput = new PiiOutputSocket("radius"));
   addSocket(d->pDistanceOutput = new PiiOutputSocket("distance"));

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -47,9 +47,9 @@ public:
   /**
    * Conversion modes.
    *
-   * - `ConvertToInt` - the input string will be converted to an 
+   * - `ConvertToInt` - the input string will be converted to an
    * `int`.
-   * - `ConvertToDouble` - the input string will be converted to a 
+   * - `ConvertToDouble` - the input string will be converted to a
    * `double`.
    */
   enum ConversionMode
@@ -57,7 +57,7 @@ public:
     ConvertToInt,
     ConvertToDouble
   };
-  
+
   PiiStringConverter();
 
   void setConversionMode(ConversionMode conversionMode);

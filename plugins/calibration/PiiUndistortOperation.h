@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -90,7 +90,7 @@ class PiiUndistortOperation : public PiiDefaultOperation
   Q_PROPERTY(PiiVariant cameraParameters READ cameraParameters WRITE setCameraParameters STORED false);
 
   /**
-   * The type of interpolation. The default value is 
+   * The type of interpolation. The default value is
    * `Pii::LinearInterpolation`, which results in better image quality
    * but slower operation. Set to `Pii::NearestNeighborInterpolation`
    * to speed up calculations at the expense of image quality.

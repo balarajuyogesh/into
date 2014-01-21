@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -79,7 +79,7 @@ void PiiLookupTable::check(bool reset)
       if (!d->lstOutputValues[i][j].isValid())
         PII_THROW(PiiExecutionException, tr("The provided look-up table contains invalid values."));
 }
- 
+
 void PiiLookupTable::process()
 {
   PII_D;

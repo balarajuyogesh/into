@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -33,7 +33,7 @@ class QSqlQuery;
  * Outputs
  * -------
  *
- * @out outputX - X ranges from 0 to the number of column names - 1. 
+ * @out outputX - X ranges from 0 to the number of column names - 1.
  * The outputs can also be retrieved with the column name using the
  * [output()] function. The type of data emitted through the output
  * depends on the type of the database column. With CSV input, the
@@ -113,7 +113,7 @@ private:
   public:
     Data();
     ~Data();
-    
+
     QStringList lstColumnNames;
     QVariantMap mapDefaultValues;
     QString strTableName;

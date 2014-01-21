@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -177,22 +177,22 @@ namespace PiiGeometry
    * double distance = PiiGeometry::lineToLineDistance(first, second);
    *
    * // distance is now 4.0
-   * ~~~ 
+   * ~~~
    *
    * @param first a 2-by-3 matrix whose first row is the direction of
    * the line and the second row any point on the line.
    *
    * @param second a 2-by-3 matrix whose first row is the direction of
    * the line and the second row any point on the line.
-   * 
+   *
    * @return the shortest distance between the two lines
    */
   template <class T> T lineToLineDistance(const PiiMatrix<T>& first, const PiiMatrix<T>& second)
   {
     PiiMatrix<T> w(1,first.columns());
-    
+
     T a = 0.0, b = 0.0, c = 0.0, d = 0.0, e = 0.0;
-    
+
     for (int i = 0; i < first.columns(); ++i)
       {
         a += first(0,i)*first(0,i);
@@ -205,7 +205,7 @@ namespace PiiGeometry
 
     T discriminant = a*c - b*b;
     T sc = 0, tc = 0;
-    
+
     if (Pii::almostEqualRel(discriminant,0.0))
       {
         // the lines are almost parallel
@@ -218,22 +218,22 @@ namespace PiiGeometry
         tc = (a*e - b*d) / discriminant;
       }
 
- 
+
     // get the difference of the two closest points
     // = L1(sc) - L2(tc)
-    
+
     PiiMatrix<double> p(w + (sc * PiiMatrix<T>(1,3,first.row(0))) -
-                        (tc * PiiMatrix<T>(1,3,second.row(0))));  
+                        (tc * PiiMatrix<T>(1,3,second.row(0))));
 
     // return the closest distance
-    return Pii::sqrt<T>(Pii::innerProduct(p,p)); 
+    return Pii::sqrt<T>(Pii::innerProduct(p,p));
   }
 
   /**
-   * Point distance from a line segment. 
+   * Point distance from a line segment.
    *
    * @param line a 2-by-3 (or 2-by-2) matrix which first row contains
-   * line segment begin point and second row end point.  
+   * line segment begin point and second row end point.
    *
    * @param point is a 1x3 or 1x2 matrix that represents point which
    * distance from line segment we want to calculate.
@@ -241,7 +241,7 @@ namespace PiiGeometry
    * @return point distance from a line segment, if there is anykind problem
    * NAN value will be returned.
    */
-  template <class T> T pointToLineSegmentDistance(const PiiMatrix<T> &line, const PiiMatrix<T> &point) 
+  template <class T> T pointToLineSegmentDistance(const PiiMatrix<T> &line, const PiiMatrix<T> &point)
   {
     /**
      * d = \frac{ |x_0 - x_1| \times | x_0 - x_2 |}{ | x_2 - x_1 |}
@@ -249,27 +249,27 @@ namespace PiiGeometry
 
     int iCols = line.columns();
     T distance = 0;
-    
+
     if ( iCols == point.columns() )
       {
         PiiMatrix<T> x1(1,iCols, line.row(0));
         PiiMatrix<T> x2(1,iCols, line.row(1));
-        
+
         PiiMatrix<T> diffX1(point - x1);
         PiiMatrix<T> diffX2(point - x2);
-        
+
         PiiMatrix<T> down(x1 - x2);
-        
+
         if ( iCols == 2 )
           {
             diffX1.insertColumn(-1, T(0));
             diffX2.insertColumn(-1, T(0));
             ++iCols;
           }
-        
+
         PiiMatrix<T> up = Pii::crossProduct(diffX1,
                                                 diffX2);
-                                
+
         double dUp = 0, dDown = 0;
 
         for ( int i = 0; i < iCols; ++i)
@@ -279,11 +279,11 @@ namespace PiiGeometry
           }
 
         distance = static_cast<T>(Pii::sqrt(dUp)/Pii::sqrt(dDown));
-        
+
       }
     else
       distance = NAN;
-      
+
 
     return distance;
   }
@@ -331,20 +331,20 @@ namespace PiiGeometry
 
     int iWindingNumber = 0;
     const int iRows = polygon.rows();
-  
+
     // Loop through all edges of the polygon.
     for (int i=0; i<iRows-1; i++)
       checkEdge(polygon.template rowAs<PiiPoint<T> >(i),
                 polygon.template rowAs<PiiPoint<T> >(i+1),
                 iWindingNumber,
                 x, y);
-    
+
     // Optimization: handle end points separately
     checkEdge(polygon.template rowAs<PiiPoint<T> >(iRows-1),
               polygon.template rowAs<PiiPoint<T> >(0),
               iWindingNumber,
               x, y);
-    
+
     return iWindingNumber != 0;
   }
 }

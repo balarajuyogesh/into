@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -77,12 +77,12 @@ public:
   {
     delete[] pbInputCompleted;
   }
-  
+
   void reset();
   void inputConnected(PiiAbstractInputSocket* input);
   void inputDisconnected(PiiAbstractInputSocket* input);
   void inputReady(PiiAbstractInputSocket*);
-  
+
   bool *pbInputCompleted;
   PiiProxyInputSocket* pInput;
   PiiProxyInputSocket::Data* pInputData;
@@ -106,7 +106,7 @@ public:
     delete pOutput;
     pOutput = 0;
   }
-  
+
   PiiProxyInputSocket* pInput;
   PiiProxyOutputSocket* pOutput;
 };

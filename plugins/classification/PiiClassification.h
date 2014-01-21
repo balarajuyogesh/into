@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,8 +28,8 @@
 
 /**
  * Training algorithms that take a long time to run must occassionally
- * call this macro to check if they are still allowed to continue. 
- * This function calls the *CONTROLLER*'s 
+ * call this macro to check if they are still allowed to continue.
+ * This function calls the *CONTROLLER*'s
  * [canContinue(*PROGRESS*)](PiiProgressController::canContinue())
  * function. If *CONTROLLER* non-zero and returns `false`, this
  * macro throws a PiiClassificationException. Otherwise it does
@@ -100,7 +100,7 @@ namespace PiiClassification
    * may be either a column or a row matrix.
    *
    * @param codeBook code vectors. The number of rows in this matrix
-   * should be greater than or equal to the number of columns in 
+   * should be greater than or equal to the number of columns in
    * `labels`.
    *
    * @param measure the measure used for distance estimation.
@@ -157,7 +157,7 @@ namespace PiiClassification
    * @param distance an optional output-value parameter that will
    * store the distance to the closest code book vector.
    *
-   * @return the index of the closest code model sample, or -1 if 
+   * @return the index of the closest code model sample, or -1 if
    * `modelSet` is empty.
    *
    * ~~~(c++)
@@ -181,7 +181,7 @@ namespace PiiClassification
    * the index of the sample in a model sample set.
    */
   typedef PiiHeap<QPair<double,int> > MatchList;
-  
+
   /**
    * Find the `n` closest matches for *sample* in *modelSet*.
    *
@@ -218,7 +218,7 @@ namespace PiiClassification
                                int n);
 
   /**
-   * Classify a sample using the *k nearest neighbors* rule. 
+   * Classify a sample using the *k nearest neighbors* rule.
    * This function compares *sample* to each model in *modelSet*, to
    * find the *k* closest ones. Then, it uses *labels* to find out
    * the class label that has the most occurrences within the *k*
@@ -266,7 +266,7 @@ namespace PiiClassification
    * will calculate the weighted average of code vector C and sample S
    * as \(C \gets \alpha S + (1-\alpha) C\).
    *
-   * @param code an iterator to the beginning of the code vector. 
+   * @param code an iterator to the beginning of the code vector.
    *
    * @param sample an iterator to the beginning of the vector to tune
    * the code vector towards.
@@ -279,7 +279,7 @@ namespace PiiClassification
                    ConstFeatureIterator sample,
                    int length,
                    double alpha);
-  
+
   /**
    * K-means clustering algorithm.
    *
@@ -293,7 +293,7 @@ namespace PiiClassification
    * error function
    *
    * \[
-   * V = \sum_{i=1}^{k} \sum_{x_j \in S_i} (x_j - \mu_i)^2, 
+   * V = \sum_{i=1}^{k} \sum_{x_j \in S_i} (x_j - \mu_i)^2,
    * \]
    *
    * where there are *k* clusters \(S_i\), \(i=1,2,\ldots,k\),
@@ -302,7 +302,7 @@ namespace PiiClassification
    * refinement heuristic known as Lloyd's algorithm to solve the
    * optimization problem.
    *
-   * @param samples a set of feature vectors to run the algorithm on. 
+   * @param samples a set of feature vectors to run the algorithm on.
    * Each row of this matrix represents a feature vector. The number
    * of samples must be greater than `k`.
    *
@@ -376,10 +376,10 @@ namespace PiiClassification
    * ! The label list may not contain NANs.
    */
   QVector<int> PII_CLASSIFICATION_EXPORT countLabelsInt(const QVector<double>& labels);
-  
+
   /**
    * Creates a non-linearly separable sample set in which two classes
-   * spiral around each other on a plane. In the picture below, 
+   * spiral around each other on a plane. In the picture below,
    * *samplesPerSet* = 2000 and *rounds* = 3.0. Samples with label 0
    * are shown in red, and the samples with label 1 in blue.
    *

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -33,7 +33,7 @@ namespace PiiYdin
 
   Q_DECLARE_FLAGS(IllustrationFlags, IllustrationFlag);
   Q_DECLARE_OPERATORS_FOR_FLAGS(IllustrationFlags);
-  
+
   /**
    * Creates an ascii-graphics illustration of an operation. The
    * result can be printed on a console. This function is mainly
@@ -50,7 +50,7 @@ namespace PiiYdin
    * @param flags options that control the appearance of dumped
    * operations
    *
-   * @param level nesting level, used in recursive calls 
+   * @param level nesting level, used in recursive calls
    */
   PII_YDIN_EXPORT void dumpOperation(PiiOperation *op, IllustrationFlags flags = ShowAll, int level = 0);
 
@@ -68,7 +68,7 @@ namespace PiiYdin
   {
     for (int i=indent; i--; )
       stream << ' ';
-    
+
     stream << op->metaObject()->className() << "(" << op->objectName() << "): " << PiiOperation::stateName(op->state()) << "\n";
     PiiOperationCompound* compound = qobject_cast<PiiOperationCompound*>(op);
     if (compound != 0)

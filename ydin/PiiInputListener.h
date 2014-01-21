@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -21,7 +21,7 @@
 class PiiAbstractInputSocket;
 
 /**
- * An interface for objects that receive events from input sockets. 
+ * An interface for objects that receive events from input sockets.
  * Instances of this interface are used in communications between
  * connected socket pairs.
  *
@@ -30,7 +30,7 @@ class PII_YDIN_EXPORT PiiInputListener
 {
 public:
   virtual ~PiiInputListener();
-  
+
   /**
    * Indicates this output socket that `input` is ready to receive
    * new objects.

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -50,7 +50,7 @@ bool PiiOperationTest::createOperation(const char* plugin,
       qWarning("%s", qPrintable(ex.message()));
       return false;
     }
- 
+
   d->pOperation = PiiSerializationFactory::create<PiiOperation>(operation);
   if (d->pOperation == 0)
     return false;
@@ -126,7 +126,7 @@ void PiiOperationTest::connectInput(PiiAbstractInputSocket* input)
   //qDebug("Connecting %s", qPrintable(input->objectName()));
   if (input->connectedOutput() != 0)
     return;
-  
+
   PiiOutputSocket* pOutput = new PiiOutputSocket("");
   pOutput->setParent(this);
   pOutput->connectInput(input);
@@ -238,7 +238,7 @@ QStringList PiiOperationTest::outputsWithData() const
        i != d->mapProbes.end(); ++i)
     if (i.value()->hasSavedObject())
       lstResult << i.key();
-  
+
   return lstResult;
 }
 

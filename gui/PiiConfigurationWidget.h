@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -39,7 +39,7 @@
 class PII_GUI_EXPORT PiiConfigurationWidget : public QWidget
 {
   Q_OBJECT
-  
+
 public:
   /**
    * Create a new PiiConfigurationWidget with the given parent.
@@ -70,7 +70,7 @@ public:
   /**
    * Check whether the component's state has changed since its
    * creation or the last acceptChanges() call. The default implementation
-   * returns the value set by setChanged(). The default value is 
+   * returns the value set by setChanged(). The default value is
    * `false`.
    */
   virtual bool hasChanged() const;
@@ -92,7 +92,7 @@ public slots:
    * Set the default values.
    */
   virtual void setDefaults();
-  
+
 signals:
   /**
    * This signal indicates that the contents of the widget have been
@@ -118,7 +118,7 @@ protected:
    * acceptStateChanged() signal.
    */
   void setAcceptable(bool acceptable);
-  
+
 private:
   class Data
   {

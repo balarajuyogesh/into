@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -40,7 +40,7 @@ public:
    */
   PiiOneInputFlowController(PiiInputSocket* input,
                             const QList<PiiOutputSocket*>& outputs);
-  
+
   PiiFlowController::FlowState prepareProcess();
 
 protected:

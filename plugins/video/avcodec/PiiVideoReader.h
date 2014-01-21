@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -43,10 +43,10 @@ extern "C"
  *   }
  * catch (PiiVideoException& ex)
  *   {
- *     // Handle exception. 
+ *     // Handle exception.
  *   }
  *
- * // When video contains color 
+ * // When video contains color
  *
  * PiiVideoReader reader("mycolorvideo.mpeg");
  *
@@ -57,7 +57,7 @@ extern "C"
  *   }
  * catch (PiiVideoException& ex)
  *   {
- *      // Handle exception.   
+ *      // Handle exception.
  *   }
  * ~~~
  *
@@ -75,10 +75,10 @@ public:
    * Get rid of the reader.
    */
   ~PiiVideoReader();
-  
+
   /**
    * Initialize the reader. If initialization was not succesful,
-   * initializate function will throw exception. 
+   * initializate function will throw exception.
    *
    * @exception PiiVideoException& if initialization fails.
    */
@@ -118,14 +118,14 @@ public:
    * Seek at end of the stream.
    */
   void seekToEnd();
-  
+
 private:
   /**
    * Reads one frame from video stream.
    *
    * @return true if reading was succesful false if end-of-file or in
    * case of a reading error.
-   */ 
+   */
   bool getFrame(AVFrame* frame, int skipFrames);
 
   static QString tr(const char* text) { return QCoreApplication::translate("PiiVideoReader", text); }
@@ -136,9 +136,9 @@ private:
   public:
     Data(const QString& fileName);
     ~Data();
-    
+
     // Stores information about video format.
-    AVFormatContext* pFormatCtx;  
+    AVFormatContext* pFormatCtx;
     // Index to current video stream.
     int iVideoStream;
     // Video codec information
@@ -156,7 +156,7 @@ private:
     // The flag which tell if iTargetPts has changed outside of the
     // getFrame()-function (for example seekToBegin() or seekToEnd())
     bool bTargetChanged;
-    
+
     QString strFileName;
   } *d;
 };

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -32,7 +32,7 @@
 class PII_CORE_EXPORT PiiFifoBuffer : public QIODevice
 {
   Q_OBJECT
-  
+
 public:
   /**
    * Creates a new fifo buffer.
@@ -81,7 +81,7 @@ public:
    * again.
    */
   void finishWriting();
-  
+
   /**
    * Returns true.
    */

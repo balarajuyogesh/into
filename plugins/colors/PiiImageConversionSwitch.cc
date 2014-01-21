@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -47,7 +47,7 @@ void PiiImageConversionSwitch::check(bool reset)
 void PiiImageConversionSwitch::process()
 {
   PiiVariant obj = readInput();
-  
+
   switch (obj.type())
     {
     case PiiYdin::UnsignedCharMatrixType:

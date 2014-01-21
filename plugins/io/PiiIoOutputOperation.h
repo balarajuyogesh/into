@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,16 +26,16 @@
  *
  * @in channel - the index of the output channel to be activated
  * (int). The index is not the physical index of the output channel in
- * the I/O device, but its index in the list of configured channels. 
+ * the I/O device, but its index in the list of configured channels.
  * Alternatively, a PiiMatrix<int> may be used to activate many
  * channels at once. The indices of the channels to be activated are
  * represented either as a row or a column vector.
  *
  * @in value - an optional boolean value (or an int) that determines
- * whether the specified channel should be activated or not. 
+ * whether the specified channel should be activated or not.
  * Connecting this input makes it possible to selectively
  * enable/disable I/O signals at run time.
- * 
+ *
  */
 class PiiIoOutputOperation : public PiiIoOperation
 {
@@ -46,7 +46,7 @@ class PiiIoOutputOperation : public PiiIoOperation
    * value for each output channel.
    */
   Q_PROPERTY(QVariantList pulseWidths READ pulseWidths);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiIoOutputOperation();
@@ -65,7 +65,7 @@ protected:
 
 private:
   void activateChannel(int channel);
-  
+
   /// @internal
   class Data : public PiiIoOperation::Data
   {

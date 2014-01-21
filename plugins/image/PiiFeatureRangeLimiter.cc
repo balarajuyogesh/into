@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -71,12 +71,12 @@ template <class T> void PiiFeatureRangeLimiter::calculateLimiterMatrix(const Pii
   PiiMatrix<T> mat = obj.valueAs<PiiMatrix<T> >();
   d->lstRows.clear();
   d->iRows = mat.rows();
-  
+
   for (int i=0; i<d->iRows; ++i)
     if ((!d->isLowerSelected || mat(i,0) >= d->dLowerLimit) &&
         (!d->isUpperSelected || mat(i,0) <= d->dUpperLimit))
       d->lstRows.append(i);
-  
+
   emitObject(d->lstRows.count());
 }
 
@@ -84,18 +84,18 @@ template <class T> void PiiFeatureRangeLimiter::operateMatrix(const PiiVariant& 
 {
   PII_D;
   const PiiMatrix<T>& mat = obj.valueAs<PiiMatrix<T> >();
-  
+
   if (mat.rows() != d->iRows)
     PII_THROW_WRONG_SIZE(inputAt(outputIndex-1), mat, d->lstRows.size(), mat.columns());
-              
+
   PiiMatrix<T> matResult(d->lstRows.size(), mat.columns());
   for (int r=0; r<d->lstRows.size(); r++)
     for (int c=0; c<mat.columns(); c++)
       matResult(r,c) = mat(d->lstRows.at(r),c);
-  
+
   outputAt(outputIndex)->emitObject(matResult);
 }
-        
+
 
 double PiiFeatureRangeLimiter::lowerLimit() const { return _d()->dLowerLimit; }
 void PiiFeatureRangeLimiter::setLowerLimit(double lowerLimit) { _d()->isLowerSelected = true; _d()->dLowerLimit = lowerLimit; }

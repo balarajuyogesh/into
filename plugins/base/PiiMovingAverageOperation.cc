@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -100,7 +100,7 @@ template <class T, class ResultType> void PiiMovingAverageOperation::averageTemp
       d->uiType = Pii::typeId<T>();
       return;
     }
-  
+
   if (obj.type() != d->uiType)
     PII_THROW(PiiExecutionException, tr("Cannot average objects of different type."));
 

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,17 +27,17 @@
 class PII_DEMOUTILS_EXPORT PushButton : public QPushButton
 {
   Q_OBJECT
-  
+
 public:
   enum IconMode { IconLeft, IconRight };
-  
+
   PushButton(QWidget *parent = 0);
-  
+
   /**
    * Set the place of the icon.
    */
   void setIconMode(IconMode mode);
-  
+
 protected:
   void paintEvent(QPaintEvent *event);
 

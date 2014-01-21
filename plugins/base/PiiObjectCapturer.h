@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -32,7 +32,7 @@
  *
  * @in inputX - reads in objects of any type. X ranges from 1 to
  * [dynamicInputCount] - 1. `input0` can also be accessed as `input`.
- * 
+ *
  */
 class PiiObjectCapturer : public PiiDefaultOperation
 {
@@ -56,23 +56,23 @@ public:
   /**
    * Different ways of collecting many objects to lists.
    *
-   * - `OneListPerInput` - one list is maintained for each input. 
+   * - `OneListPerInput` - one list is maintained for each input.
    * Objects related to one `sync` object are collected to
    * input-specific lists. These lists are put into a compound list
    * whose length becomes [dynamicInputCount].
    *
    * - `OneListPerCycle` - all input objects are collected to a list
-   * on each processing round so that the object received from 
+   * on each processing round so that the object received from
    * `input0` becomes the first element. Each list holds
    * [dynamicInputCount] elements. These lists are put into a compound
    * list whose length is the number of processing cycles related to
    * one `sync` object.
    */
   enum ListMode { OneListPerInput, OneListPerCycle };
-  
+
   PiiObjectCapturer();
   ~PiiObjectCapturer();
-    
+
   /**
    * Aliases `input` to `input0`.
    */
@@ -103,7 +103,7 @@ signals:
    * contain PiiVariants.
    */
   void objectsCaptured(const PiiVariant& syncObject, const QVariantList& objects);
-  
+
 protected:
   /// @internal
   class Data : public PiiDefaultOperation::Data

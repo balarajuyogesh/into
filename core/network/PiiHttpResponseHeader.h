@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,7 +30,7 @@ public:
 
   void setHttpVersion(const PiiVersionNumber& httpVersion);
   PiiVersionNumber httpVersion() const;
-  
+
   void setStatusCode(int statusCode);
   int statusCode() const;
 
@@ -42,7 +42,7 @@ public:
   bool isValid() const;
 
   QByteArray toByteArray() const;
-  
+
 protected:
   class Data : public PiiMimeHeader::Data
   {

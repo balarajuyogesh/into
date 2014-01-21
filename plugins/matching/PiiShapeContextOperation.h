@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -42,16 +42,16 @@
  *
  * @in limits - limits of separate boundaries in the matrix read from
  * `boundaries`. This input is optional. If it is connected, the flow
- * level of the outputs will be one higher than that of the input. 
+ * level of the outputs will be one higher than that of the input.
  * Otherwise, exacly one object will be emitted to each output for
  * each input object.
  *
  * @in image - an optional input that can be used as an alternative to
  * `boundaries` and `limits`. If this input is connected, the
  * operation treats each non-zero pixel in the image as an individual
- * boundary point. The points are not chained to boundaries. 
+ * boundary point. The points are not chained to boundaries.
  * Consequently, the operation works as if `SelectEveryNthPoint` and
- * `JoinAllShapes` were set. All gray-level image types are accepted. 
+ * `JoinAllShapes` were set. All gray-level image types are accepted.
  * If this input is connected, `boundaries` and `limits` must be
  * left unconnected, and vice versa.
  *
@@ -91,16 +91,16 @@ class PiiShapeContextOperation : public PiiDefaultOperation
 
   /**
    * The maximum number of points selected in `SelectEveryNthPoint`
-   * mode. If maxPoints is non-zero, it will override [samplingStep]. 
+   * mode. If maxPoints is non-zero, it will override [samplingStep].
    * If the number of points on the incoming boundary exceeds this
    * value, it will be (approximately) uniformly sampled to always
    * produce maxPoints features.
    */
   Q_PROPERTY(int maxPoints READ maxPoints WRITE setMaxPoints);
-  
+
   /**
    * Tolerance in `SelectImportantPoints` mode. The maximum allowed
-   * deviation between an original boundary point and a reduced edge. 
+   * deviation between an original boundary point and a reduced edge.
    * The tolerance is used in `SelectImportantPoints` mode to get rid
    * of approximately co-linear boundary points. For example, a value
    * of 5 will allow straightening an edge as far as the maximum
@@ -124,7 +124,7 @@ class PiiShapeContextOperation : public PiiDefaultOperation
 
   /**
    * The size of the first quantization bin for distance. Distance is
-   * quantized into growing bins. Everything closer than 
+   * quantized into growing bins. Everything closer than
    * `minDistance` will be put into the first distance bin. The default
    * value is five.
    */
@@ -134,8 +134,8 @@ class PiiShapeContextOperation : public PiiDefaultOperation
    * A scaling factor for the growing distance bins. The first
    * distance bin will be from zero to [minDistance]. The second one
    * will be from `minDistance` to `minDistance` * `distanceScale`
-   * and so on. The last bin will be from `minDistance` * 
-   * `distanceScale` ^ (`distances` - 2) to `minDistance` * 
+   * and so on. The last bin will be from `minDistance` *
+   * `distanceScale` ^ (`distances` - 2) to `minDistance` *
    * `distanceScale` ^ (`distances` - 1). The default value is 2.2.
    */
   Q_PROPERTY(double distanceScale READ distanceScale WRITE setDistanceScale);
@@ -147,11 +147,11 @@ class PiiShapeContextOperation : public PiiDefaultOperation
    * is "far away". If this flag is `true`, all these points will be
    * collected to the last distance bin. If the value is `false`, the
    * points will be discarded. This makes it possible to switch
-   * between a local and global descriptor. The default value is 
+   * between a local and global descriptor. The default value is
    * `false`.
    */
   Q_PROPERTY(bool collectDistantPoints READ collectDistantPoints WRITE setCollectDistantPoints);
-  
+
   /**
    * Invariance properties of the descriptor. The shape context
    * descriptor can be made invariant agains rotations (
@@ -160,11 +160,11 @@ class PiiShapeContextOperation : public PiiDefaultOperation
    * by normalizing the descriptors according to local boundary
    * orientation. Scale invariance is achieved by dividing distances
    * between points by their mean value. In scale invariant mode,
-   * [minDistance] must be set relative to the mean (squared) distance. 
+   * [minDistance] must be set relative to the mean (squared) distance.
    * The default value is `RotationInvariant`.
    */
   Q_PROPERTY(PiiMatching::InvarianceFlags invariance READ invariance WRITE setInvariance);
-  
+
   /**
    * Controls how key points are selected on the boundary curves. The
    * default value is `SelectEveryNthPoint`.
@@ -213,7 +213,7 @@ public:
    * a single object. The `limits` input is not used in this mode.
    */
   enum ShapeJoiningMode { DoNotJoinShapes, JoinNestedShapes, JoinAllShapes };
-  
+
   PiiShapeContextOperation();
 
   void check(bool reset);
@@ -260,17 +260,17 @@ private:
   PiiMatrix<int> readIntMatrix(PiiInputSocket* input);
   PiiMatrix<int> createBoundaries();
   template <class T> PiiMatrix<int> createBoundaries(const PiiVariant& obj);
-  
+
   template <class T> QVector<double> pickAngles(const PiiVariant& obj,
                                                 const PiiMatrix<int>& points);
   QVector<double> pickAngles(const PiiMatrix<int>& points);
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {
   public:
     Data();
-    
+
     int iSamplingStep;
     double dTolerance;
     int iAngles;

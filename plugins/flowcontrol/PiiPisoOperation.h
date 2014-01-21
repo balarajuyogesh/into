@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,7 +30,7 @@
  *
  * If [groupSize] is greater than one, inputs are divided into
  * synchronized groups. Input sockets from zero to `groupSize` - 1
- * will form the first group, sockets from `groupSize` to 2 * 
+ * will form the first group, sockets from `groupSize` to 2 *
  * `groupSize` - 1 the second one and so on. Every socket in a group
  * must contain an object before it is processed. Whenever this
  * happens, all objects will be simultaneously sent to the
@@ -63,7 +63,7 @@
  *
  * You can configure also the one default value with property map
  * (QVariantMap). Recognized property values are:
- * 
+ *
  * - `index` - the index of the input to configure. (int, default
  * value 0)
  *
@@ -92,7 +92,7 @@
  *
  * @in groupX inputY - alias for input number X * [groupSize] + Y. If
  * [groupSize] is 3, `group1` `input1` is an alias for `input4`.
- * 
+ *
  * At least one of the inputs must be connected. If any of the inputs
  * in a synchronous input group are connected, then all of them must
  * either be connected or have a default value assigned.
@@ -111,7 +111,7 @@
  * one. X ranges from 0 to [groupSize]-1. Whenever all sockets in a
  * synchronous group contain an object, the objects will be
  * simultaneously sent to the corresponding outputs. That is,
- * `groupX` `input0` will be redirected to `output0`, `groupX` 
+ * `groupX` `input0` will be redirected to `output0`, `groupX`
  * `input1` to `input` 1 etc.
  *
  */
@@ -156,7 +156,7 @@ class PiiPisoOperation : public PiiDefaultOperation
   Q_PROPERTY(PiiVariantList defaultValues READ defaultValues WRITE setDefaultValues);
 
   /**
-   * Configure a single input. The `index` property in the 
+   * Configure a single input. The `index` property in the
    * `defaultValue` map specifies the input to configure.
    *
    * ~~~(c++)
@@ -169,7 +169,7 @@ class PiiPisoOperation : public PiiDefaultOperation
   Q_PROPERTY(QVariantMap defaultValue WRITE setDefaultValue STORED false);
 
   /**
-   * Treatment of the [defaultValues] list. The default value is 
+   * Treatment of the [defaultValues] list. The default value is
    * `SameDefaultsForAllGroups`.
    */
   Q_PROPERTY(DefaultValueMode defaultValueMode READ defaultValueMode WRITE setDefaultValueMode);
@@ -180,7 +180,7 @@ class PiiPisoOperation : public PiiDefaultOperation
    */
   Q_PROPERTY(OperationMode operationMode READ operationMode WRITE setOperationMode);
   Q_ENUMS(OperationMode);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   /**
@@ -215,9 +215,9 @@ public:
    * PiiOutputSocket::endMany().)
    */
   enum OperationMode { AsynchronousMode, SynchronousMode };
-  
+
   PiiPisoOperation();
-  
+
   PiiInputSocket* input(const QString& name) const;
   PiiOutputSocket* output(const QString& name) const;
 
@@ -243,7 +243,7 @@ protected:
 private:
   bool hasDefaultValue(int inputIndex);
   void passObjectsInGroup(int groupId);
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {

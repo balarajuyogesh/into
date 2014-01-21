@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@
 class MainWindow : public DemoMainWindow, private Ui::MainWindow
 {
   Q_OBJECT
-  
+
 public:
   MainWindow(QWidget *parent = 0);
 
@@ -37,12 +37,12 @@ protected:
 
 signals:
   void updateImage(int);
-  
+
 private slots:
   void scaleChanged(int);
   void rotationChanged(int);
   void updateValues();
-  
+
 private:
   void init();
 

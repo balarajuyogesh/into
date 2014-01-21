@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@ public:
   bool bVoidCalled;
   int iSum;
   QString strValue;
-  
+
 protected:
   bool invokeSlot(int id, void** args)
   {

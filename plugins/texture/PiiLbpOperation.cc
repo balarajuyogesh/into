@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@ public:
     d(parent->_d()),
     vecResults(d->lstOperators.size())
   {}
-  
+
   virtual ~AnyLbp() {}
 
   void send();
@@ -52,7 +52,7 @@ template <class T, class LbpType> class PiiLbpOperation::Lbp : public AnyLbp
 {
 public:
   typedef typename PiiImage::ToGray<T>::Type GrayType;
-  
+
   Lbp(PiiLbpOperation* parent) : AnyLbp(parent) {}
 
   // Histograms can be summed up, LBP images not.
@@ -62,7 +62,7 @@ public:
 
   void operator() (const PiiMatrix<T>& image);
   template <class Roi> void operator() (const PiiMatrix<T>& image, const Roi& roi);
-  
+
 private:
   template <class Roi> void calculate(const PiiMatrix<GrayType>& image, const Roi& roi);
   // Use at least int for the cumulative sum
@@ -90,7 +90,7 @@ PiiLbpOperation::PiiLbpOperation() :
 {
   setThreadCount(1);
   PII_D;
-  
+
   addSocket(new PiiInputSocket("image"));
   addSocket(d->pRoiInput = new PiiInputSocket("roi"));
   d->pRoiInput->setOptional(true);
@@ -101,7 +101,7 @@ PiiLbpOperation::PiiLbpOperation() :
    * Insert ALL static outputs before the following line!
    */
   d->iStaticOutputCount = outputCount();
-  
+
   createOutput(8, 1, PiiLbp::Standard);
 }
 
@@ -118,7 +118,7 @@ QStringList PiiLbpOperation::parameters() const { return _d()->lstParameters; }
 void PiiLbpOperation::setParameters(const QStringList& parameters)
 {
   PII_D;
-  
+
   // Destroy old operators and parameter strings
   qDeleteAll(d->lstOperators);
   d->lstOperators.clear();
@@ -126,7 +126,7 @@ void PiiLbpOperation::setParameters(const QStringList& parameters)
   d->lstSmoothingWindows.clear();
   d->lstThresholds.clear();
   d->bMustSmooth = false;
-  
+
   // ... and create new ones based on the parameters
   for (int i=0; i<parameters.size(); i++)
     {
@@ -139,7 +139,7 @@ void PiiLbpOperation::setParameters(const QStringList& parameters)
       Pii::Interpolation interpolation = Pii::NearestNeighborInterpolation;
       bool bSmoothed = false;
       double dThreshold = 0;
-      
+
       if (parts.size() > 0)
         {
           int tmp = parts[0].toInt();
@@ -279,7 +279,7 @@ void PiiLbpOperation::process()
       PII_GRAY_IMAGE_CASES(calculate, obj);
       PII_COLOR_IMAGE_CASES(calculate, obj);
     default:
-      PII_THROW_UNKNOWN_TYPE(inputAt(0));      
+      PII_THROW_UNKNOWN_TYPE(inputAt(0));
     }
 }
 
@@ -381,7 +381,7 @@ void PiiLbpOperation::AnyLbp::send()
 {
   if (d->outputType == NormalizedHistogramOutput)
     normalize();
-  
+
   for (int i=0; i<d->lstOperators.size(); ++i)
     if (vecResults[i].isValid())
       pParent->emitObject(vecResults[i], i + d->iStaticOutputCount);

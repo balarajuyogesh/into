@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -58,7 +58,7 @@ void PiiMimeHeader::setPreamble(const QByteArray& preamble)
 {
   _d()->aPreamble = preamble;
 }
-  
+
 QByteArray PiiMimeHeader::preamble() const
 {
   return _d()->aPreamble;

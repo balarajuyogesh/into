@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -34,7 +34,7 @@ namespace PiiImage
     template <class U> static T fromFloat(U value) { return T(value * max()); }
     template <class U> static T fromInt(U value) { return T(value); }
   };
-  
+
   /**
    * Traits for floating-point images.
    */
@@ -46,7 +46,7 @@ namespace PiiImage
     template <class U> static T fromFloat(U value) { return T(value); }
     template <class U> static T fromInt(U value) { return T(value) / IntegerTraits<U>::max(); }
   };
-  
+
   /**
    * The Traits structure specifies default properties of different
    * image types.

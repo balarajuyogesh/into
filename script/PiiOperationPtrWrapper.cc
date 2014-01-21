@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -42,14 +42,14 @@ namespace PiiOperationPtrWrapper
                        PiiScript::defaultWrapOptions);
     return engine->undefinedValue();
   }
-  
+
   static QScriptValue convertPiiOperationPtrToScriptValue(QScriptEngine* engine, const PiiOperationPtr& ptr)
   {
     return engine->newQObject(PiiScriptObjectWrapper::create(ptr),
                               QScriptEngine::AutoOwnership,
                               PiiScript::defaultWrapOptions);
   }
-  
+
   static void convertScriptValueToPiiOperationPtr(const QScriptValue& scriptObj, PiiOperationPtr& ptr)
   {
     PiiScriptObjectWrapper* pWrapper = qobject_cast<PiiScriptObjectWrapper*>(scriptObj.toQObject());

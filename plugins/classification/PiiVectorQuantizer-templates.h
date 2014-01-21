@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -68,7 +68,7 @@ template <class SampleSet> double PiiVectorQuantizer<SampleSet>::rejectThreshold
 {
   return d->dRejectThreshold;
 }
-  
+
 template <class SampleSet>
 PiiDistanceMeasure<typename PiiSampleSet::Traits<SampleSet>::ConstFeatureIterator>* PiiVectorQuantizer<SampleSet>::distanceMeasure() const
 {

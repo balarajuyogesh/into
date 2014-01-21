@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -42,7 +42,7 @@ void TestPiiPlaneRotation::jacobiRotation()
 {
   PiiMatrix<double,2,2> matA(1.0, 2.0,
                              2.0, 5.0);
-  
+
   PiiPlaneRotation<double> rotation(Pii::jacobiRotation(1.0, 2.0, 5.0));
 
   // Two-sided rotation should null out the twos

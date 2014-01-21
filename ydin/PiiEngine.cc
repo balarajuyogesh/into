@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -42,7 +42,7 @@ public:
   Data();
   Data(QLibrary* lib, const QString& name, const PiiVersionNumber& version, int iRefCount = 1);
   Data(const Data& other);
-  
+
   QLibrary* pLibrary;
   QString strResourceName, strLibraryName;
   PiiVersionNumber version;
@@ -106,7 +106,7 @@ PiiEngine::Plugin PiiEngine::loadPlugin(const QString& name)
       ++_pluginMap[name].d->iRefCount;
       return _pluginMap[name];
     }
-  
+
   // Exception safety
   struct Unloader
   {
@@ -128,7 +128,7 @@ PiiEngine::Plugin PiiEngine::loadPlugin(const QString& name)
 
     QLibrary* pLib;
   };
-  
+
   // Load library
   Unloader unloader(new QLibrary(name));
 
@@ -136,7 +136,7 @@ PiiEngine::Plugin PiiEngine::loadPlugin(const QString& name)
   if (!unloader.pLib->load())
     PII_THROW(PiiLoadException, tr("Cannot load the shared library \"%1\".\n"
                                    "Error message: %2").arg(name).arg(unloader.pLib->errorString()));
-  
+
   // Resolve plug-in information functions
   pii_plugin_function pNameFunc = (pii_plugin_function)(unloader.pLib->resolve(PII_PLUGIN_NAME_FUNCTION_STR));
   if (pNameFunc == 0)
@@ -300,7 +300,7 @@ PiiEngine* PiiEngine::load(const QString& fileName,
 
   if (config != 0)
     *config = mapConfig;
-  
+
   return pEngine;
 }
 

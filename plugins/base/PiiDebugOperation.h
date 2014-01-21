@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -44,7 +44,7 @@ class PiiDebugOperation : public PiiDefaultOperation
   Q_ENUMS(OutputStream);
 
   /**
-   * Output format. The format may contain one or more variables. 
+   * Output format. The format may contain one or more variables.
    * Recognized variables are:
    *
    * - $count - the number of objects received since reset
@@ -63,11 +63,11 @@ class PiiDebugOperation : public PiiDefaultOperation
   Q_PROPERTY(QString format READ format WRITE setFormat);
 
   /**
-   * Enables/disables printing of control objects. The default is 
+   * Enables/disables printing of control objects. The default is
    * `false`.
    */
   Q_PROPERTY(bool showControlObjects READ showControlObjects WRITE setShowControlObjects);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   /**
@@ -80,7 +80,7 @@ public:
    * accordingly.
    */
   enum OutputStream { StdOut, StdErr, Debug };
-  
+
   PiiDebugOperation();
 
   void check(bool reset);
@@ -96,7 +96,7 @@ protected:
   QString format() const;
   void setShowControlObjects(bool showControlObjects);
   bool showControlObjects() const;
-  
+
 private:
   class Controller : public PiiOneInputFlowController
   {

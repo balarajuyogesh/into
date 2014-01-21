@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -87,7 +87,7 @@ void PiiConfusionMatrixBuilder::addDistance(int correctClass, int classification
   PII_D;
   if (correctClass < 0 || classification < 0)
     return;
-  
+
   int max = qMax(correctClass, classification) + 1;
   if (max > d->distanceMatrix.rows())
     d->distanceMatrix.resize(max,max);

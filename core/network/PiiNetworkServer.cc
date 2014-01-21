@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -53,7 +53,7 @@ PiiNetworkServer::~PiiNetworkServer()
 
   waitAll(lstThreads);
   qDeleteAll(lstThreads);
-  
+
   delete d;
 }
 
@@ -67,7 +67,7 @@ bool PiiNetworkServer::start()
     return false;
 
   d->lstPendingConnections.clear();
-  
+
   // Add threads to the pool.
   while (d->lstFreeThreads.size() < d->iMinWorkers)
     {
@@ -81,7 +81,7 @@ bool PiiNetworkServer::start()
       d->state = Running;
       return true;
     }
-  
+
   return false;
 }
 
@@ -100,17 +100,17 @@ bool PiiNetworkServer::stop(PiiNetwork::StopMode mode)
     {
       if (d->state != Running)
         return false;
-      
+
       d->state = Stopping;
       stopListening();
-      
+
       // Copy the thread list
       lstThreads = d->lstAllThreads;
       // Send stop signal to each
       for (int i=0; i<lstThreads.size(); ++i)
         lstThreads[i]->stop(mode);
     }
-  
+
   // Wait until all threads are done. We can't use d->lstAllThreads here
   // because it is modified by threadFinished().
   waitAll(lstThreads);

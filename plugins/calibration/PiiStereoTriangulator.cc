@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -58,7 +58,7 @@ PiiMatrix<double> PiiStereoTriangulator::calculate3DPoints(const QList<PiiMatrix
     return PiiMatrix<double>(0,3);
 
   int pointsPerView = imagePoints[0].rows();
-  
+
   // Unapply lens distortions and save normalized points in this list
   QList<PiiMatrix<double> > lstNormalized;
   for (int i=0; i<imagePoints.size(); ++i)
@@ -140,7 +140,7 @@ PiiMatrix<double> PiiStereoTriangulator::triangulate(int camera1, int camera2,
 
   // Result matrix is the same size as normalizedA.
   PiiMatrix<double> result(PiiMatrix<double>::uninitialized(normalizedA.rows(), normalizedA.columns()));
-  
+
   for (int row = 0; row < normalizedA.rows(); row++)
     {
       // Treat matrix rows as 3-dimensional vectors
@@ -165,7 +165,7 @@ PiiMatrix<double> PiiStereoTriangulator::triangulate(int camera1, int camera2,
       double NN2 = norm2A * dot_normalizedBT - dot_uT * dot_normalizedBu;
 
       double zA = NN1 / DD;
-      double zB = NN2 / DD;      
+      double zB = NN2 / DD;
 
       PiiVector<double,3> X1 = ptA * zA;
       PiiVector<double,3> X2;

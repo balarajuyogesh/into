@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -31,7 +31,7 @@
  * the value of the property [prefix] were "image", value of the
  * property [suffix] ".jpg" and the current value of the internal
  * index is 11, the generated id will be "image000011.jpg"
- * 
+ *
  *
  * Inputs
  * ------
@@ -41,7 +41,7 @@
  * Outputs
  * -------
  *
- * @out id - generated id as a string having a format [PREFIX]INDEX[SUFFIX] 
+ * @out id - generated id as a string having a format [PREFIX]INDEX[SUFFIX]
  *
  */
 
@@ -70,7 +70,7 @@ class PiiIdGenerator : public PiiDefaultOperation
   /**
    * Defines the minimum width for the INDEX section of the id. Extra
    * zeroes  are added before other numbers in order to fullfill the
-   * minimum width requirement. If for example the value of 
+   * minimum width requirement. If for example the value of
    * `indexWidth` were 4, and the value of the current index were 11,
    * the value of the property [prefix] "image" and value of the
    * property [suffix] ".jpg" the generated id would be
@@ -79,7 +79,7 @@ class PiiIdGenerator : public PiiDefaultOperation
    * can cause indeterminate results and should be avoided.
    */
   Q_PROPERTY(int indexWidth READ indexWidth WRITE setIndexWidth);
- 
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 
 public:
@@ -93,11 +93,11 @@ public:
   int nextIndex() const;
   void setIndexWidth(int indexWidth);
   int indexWidth() const;
-  
+
 protected:
   void process();
   void check(bool reset);
-  
+
 private:
   /// @internal
   class Data : public PiiDefaultOperation::Data
@@ -111,7 +111,7 @@ private:
     PiiOutputSocket *pIdOutput;
     int iIndexWidth;
   };
-  PII_D_FUNC;  
+  PII_D_FUNC;
 };
 
 #endif //_PIIIDGENERATOR_H

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -88,7 +88,7 @@ namespace PiiColors
                                         float multiplier = 255,
                                         int ch1Index = 0, int ch2Index = 1);
 
-  /** 
+  /**
    * Measure the distribution of colors in an image. This function
    * uses PCA to find the main axes of a three-dimensional color
    * distribution. As a result, it gives the centroid of the
@@ -108,7 +108,7 @@ namespace PiiColors
    * the color belongin to the model distribution.
    *
    * @param baseVectors a 3-by-3 matrix return-value matrix in which
-   * columns represent the three main axes of the color distribution. 
+   * columns represent the three main axes of the color distribution.
    * If the three vectors are used as a new base for the color
    * distribution, it'll have a unit variance in x, y, and z
    * directions in the new base.
@@ -158,7 +158,7 @@ namespace PiiColors
 
   /**
    * Match colors in an image to a precalculated model. This function
-   * compares colors in an image to a color model represented by 
+   * compares colors in an image to a color model represented by
    * `baseVectors` and `center`. The function tries to find the
    * likelihood of a color belonging to the model. A value of one is
    * given to a pixel whose color that is exactly at `center`. The
@@ -218,9 +218,9 @@ namespace PiiColors
    */
   template <class ColorType> PiiMatrix<int> toIndexed(const PiiMatrix<ColorType>& clrImage,
                                                       int redLevels, int greenLevels = 0, int blueLevels = 0);
-  
+
   /**
-   * Calculate the autocorrelogram of an indexed color image. 
+   * Calculate the autocorrelogram of an indexed color image.
    * Autocorrelogram describes the spatial distribution of colors in
    * image. Each entry (d,c) in the autocorrelogram represents the
    * probability that a pair of pixels, whose distance is d, both have
@@ -228,7 +228,7 @@ namespace PiiColors
    * must be normalized to obtain propabilities. The technique is
    * described in detail in *Jing Huang; Kumar, S.R.; Mitra, M.;
    * Wei-Jing Zhu; Zabih, R.: "Image indexing using color
-   * correlograms", Computer Vision and Pattern Recognition, 1997. 
+   * correlograms", Computer Vision and Pattern Recognition, 1997.
    * Proceedings., 1997 IEEE Computer Society Conference on, 1997,
    * Pages: 762 -768*. This implementation does not use the bogus
    * "optimization" technique reported in the paper.
@@ -272,7 +272,7 @@ namespace PiiColors
   PII_COLORS_EXPORT PiiMatrix<float> autocorrelogram(const PiiMatrix<int>& image,
                                                      const QList<int>& distances,
                                                      int levels = 0);
-  
+
   /**
    * Apply gamma correction to a color channel. Gamma correction is
    * defined as \(v_o = v_i^\gamma\), where `o` and `i` stand for
@@ -281,7 +281,7 @@ namespace PiiColors
    * approximation: LG flat panels, for example, measure closer to
    * 1.97.) Linear colors must thus be compressed with a gamma of
    * \(1/2.2 \approx 0.45\) to get linear *intensity* response on
-   * screen. Linear intensity response does not however mean linear 
+   * screen. Linear intensity response does not however mean linear
    * `lightness` (perceptual luminance) response; the human vision is
    * more sensitive to lower luminance.
    *
@@ -301,7 +301,7 @@ namespace PiiColors
     Q_UNUSED(dummy);
     return Pii::pow(value, T(gamma));
   }
-  
+
   /**
    * Apply gamma correction to a color channel. This version of the
    * function compresses the color channel to [0, 1] before applying
@@ -335,7 +335,7 @@ namespace PiiColors
   }
 
   /**
-   * Apply gamma correction to the first three color channels of 
+   * Apply gamma correction to the first three color channels of
    * `clr`. Note that the fourth color channel (e.g. alpha) will not be
    * touched. Color channels are assumed to be in [0, 1].
    */
@@ -358,7 +358,7 @@ namespace PiiColors
   }
 
   /**
-   * Apply gamma correction to the first three color channels of 
+   * Apply gamma correction to the first three color channels of
    * `clr`. Note that the fourth color channel (e.g. alpha) will not be
    * touched. Color channels are assumed to be in [0, `maximum`].
    */
@@ -406,7 +406,7 @@ namespace PiiColors
   {
     return image.mapped(CorrectGamma<T>(gamma));
   }
-  
+
   /**
    * Apply gamma correction to all pixels in `image`. The function
    * works with both gray-level and color images. Color channels are
@@ -420,7 +420,7 @@ namespace PiiColors
   }
 
   /**
-   * A unary function for converting color distances to "likelihoods". 
+   * A unary function for converting color distances to "likelihoods".
    * The function is defined as \(f(x) = e^{-x}\). As a result, zero
    * distance to the center of a color model maps to one, and infinity
    * distance to zero.
@@ -431,7 +431,7 @@ namespace PiiColors
   };
 
   /**
-   * Convert a color in an RGB color space into the HSV color space. 
+   * Convert a color in an RGB color space into the HSV color space.
    * HSV (hue, saturation, value) is a color space in which a
    * piecewise linear function is used as an approximation to the
    * (non-linear) hue channel value. See [QColor] for a detailed
@@ -481,7 +481,7 @@ namespace PiiColors
   template <class Clr> Clr rgbToHsv(const Clr& rgbColor);
 
   /**
-   * Convert a color in an HSV color space into an RGB color space. 
+   * Convert a color in an HSV color space into an RGB color space.
    * This function works inversely to [rgbToHsv()] and assumes the same
    * conventions on scaling color channels. The output color channels
    * will be in [0,1] with floating-point types and in [0,255] with
@@ -640,7 +640,7 @@ namespace PiiColors
   {
     return float(clr.rgbR * 0.2126 + clr.rgbG * 0.7152 + clr.rgbB * 0.0722);
   }
-  
+
   /**
    * An adaptable binary function that converts a *non*-linear RGB
    * color to Y709 luminance.
@@ -662,7 +662,7 @@ namespace PiiColors
   }
 
   /**
-   * Convert a *non*-linear (gamma-adjusted) RGB color into Y'PbPr. 
+   * Convert a *non*-linear (gamma-adjusted) RGB color into Y'PbPr.
    * Y'PbPr is the analog counterpart of Y'CbCr. The color channels in
    * Y'PbPr are not quantized and thus not suitable for digital
    * representation. Different encodings use different offsets and
@@ -748,7 +748,7 @@ namespace PiiColors
   }
 
   /**
-   * Convert a *non*-linear (gamma-adjusted) RGB color into Y'CbCr. 
+   * Convert a *non*-linear (gamma-adjusted) RGB color into Y'CbCr.
    * Y'CbCr is the same as Y'PbPr, but the chroma components are
    * offset to non-negative values.
    *
@@ -806,7 +806,7 @@ namespace PiiColors
                roundYcbcr<T>(dG, maximum),
                roundYcbcr<T>(dB, maximum));
   }
- 
+
   /**
    * An adaptable unary function for converting from non-linear RGB to
    * Y'CbCr.
@@ -869,7 +869,7 @@ namespace PiiColors
   };
 
   /**
-   * Convert all colors in an image with a generic conversion matrix. 
+   * Convert all colors in an image with a generic conversion matrix.
    * This function multiplies the three color channels by a 3-by-3
    * conversion matrix from left. The result type will always be
    * PiiColor<float>. The function makes no checks. The caller must
@@ -896,7 +896,7 @@ namespace PiiColors
   extern PII_COLORS_EXPORT PiiMatrix<float> ohtaKanadeMatrix;
   /**
    * A conversion matrix from RGB to XYZ, assuming that the RGB is CIE
-   * RGB, and that the scene is illuminated with a D65 light source. 
+   * RGB, and that the scene is illuminated with a D65 light source.
    * If either of these assumptions does not hold, please do not
    * pretend that you have XYZ.
    *

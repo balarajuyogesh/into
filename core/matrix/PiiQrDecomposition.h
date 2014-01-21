@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -36,7 +36,7 @@ namespace Pii
       UnpackEconomyQR = 0,
       UnpackFullQR = 1
     };
-  
+
   /**
    * Unpacks the result of QR decomposition. Given a set of elementary
    * reflectors in A, this function calculates the reflector matrix Q
@@ -97,7 +97,7 @@ namespace Pii
    * H_i = I - \tau_i v_i v_i^T,
    * \]
    *
-   * where \(v_i\) represents the ith elementary reflector vector. 
+   * where \(v_i\) represents the ith elementary reflector vector.
    * The elementary reflectors are stored in *A* under the main
    * diagonal as columns, and the corresponding values of \(\tau\)
    * are in *tau*.
@@ -125,7 +125,7 @@ namespace Pii
     int iSize = iCols;
     if (iRows < iCols)
       bMoreRows = false, iSize = iRows;
-    
+
     PiiMatrix<Real> matT(iSize, iSize), matGram(iSize, iSize);
     // If R is needed, copy the upper triangle from A.
     if (R != 0)
@@ -174,7 +174,7 @@ namespace Pii
   void qrDecompose(PiiConceptualMatrix<Matrix>& A, typename Matrix::value_type* tau, typename Matrix::value_type* bfr)
   {
     typedef typename Matrix::value_type Real;
-    
+
     const int iRows = A.rows(), iCols = A.columns(),
       iMinDimension = qMin(iRows, iCols);
 
@@ -183,11 +183,11 @@ namespace Pii
     for (int i = 0; i < iMinDimension; ++i)
       {
         typename Matrix::column_iterator column = A.columnBegin(i)+i;
-        
+
         /* Create a Householder transform out of the ith column of A
            (below diagonal) and store the resulting transform vector
            to its place.
-        
+
            Assume i is one. We'll store the reflection vector v to
            column number one, starting at the diagonal. The submatrix
            marked with o's will be transformed using the reflection
@@ -201,7 +201,7 @@ namespace Pii
            . v o o
            . v o o
         */
-           
+
         int iRowsLeft = iRows-i;
         Real beta;
         householderTransform(column, iRowsLeft, tau + i, &beta);
@@ -249,7 +249,7 @@ namespace Pii
    *
    * ~~~
    * m >= n                          m < n
-   * 
+   *
    * (  r   r   r   r   r  )         (  r   r   r   r   r   r  )
    * (  v1  r   r   r   r  )         (  v1  r   r   r   r   r  )
    * (  v1  v2  r   r   r  )         (  v1  v2  r   r   r   r  )
@@ -267,7 +267,7 @@ namespace Pii
     typedef typename Matrix::value_type Real;
     /* Iteratively partition A so that A11 is a square matrix. Once
        done, partition A22 similarly and so on.
-     
+
       +-----+---------+
       | A11 |   A12   |
       |     |         |
@@ -291,7 +291,7 @@ namespace Pii
       iMinDimension = qMin(iRows, iCols);
 
     if (iMinDimension == 0) return;
-    
+
     Real* pBfr = new Real[qMax(iRows, iCols)+1];
     tau.resize(1, iMinDimension);
 
@@ -310,7 +310,7 @@ namespace Pii
     PiiMatrix<Real> matT(iBlockSize, iBlockSize);
     // Temporary storage for block reflector calculation.
     PiiMatrix<Real> matGram(iBlockSize, iBlockSize);
-    
+
     int iBlockStart = 0;
     // Block-based QR
     while (iBlockStart < iMinDimension)
@@ -318,9 +318,9 @@ namespace Pii
         int iCurrentBlockSize = qMin(iMinDimension-iBlockStart, iBlockSize);
         int iRowsLeft = iRows-iBlockStart;
         Real* pTauRow = tau.row(0) + iBlockStart;
-      
+
         /* Decompose the current block (A1).
-          
+
            Alglib implementation suggests that the submatrix should be
            copied to a temporary storage to "solve some TLB issues
            arising from non-contiguous memory access pattern". We take
@@ -342,7 +342,7 @@ namespace Pii
                 /* Prepare a reflector matrix Q based on A1
                    Q = H1 * H2 * ... * Hn, where Hx are the elementary
                    reflectors calculated for A1.
-                   
+
                    It can be shown (they say) that Q = I + VTV', where
                    T is an upper triangular matrix and V has the
                    reflector vectors as its columns.
@@ -350,19 +350,19 @@ namespace Pii
                    This function converts A1 to V and fills T.
                 */
                 qrUnpack(matA1, pTauRow, matT, matGram);
-                
+
                 /* Multiply the rest of A (that is, A2) by Q'.
                    Since V is now actually in A1, we get:
-                
+
                    Q  = I + A1 T A1'
                    Q' = I + A1 T'A1'
 
                    We are doing this:
-                   
+
                    A2 <- (I + A1 T'A1') A2
                    A2 <- A2 + A1 T'A1'A2
                 */
-                
+
                 A.selfRef()(iBlockStart, iBlockStart + iCurrentBlockSize, -1, -1) +=      // A2  +=
                   matA1 *                                                       // A1  *
                   transpose(matT(0,0, iCurrentBlockSize, iCurrentBlockSize)) *  // T'  *
@@ -381,7 +381,7 @@ namespace Pii
                   }
               }
           }
-      
+
         iBlockStart += iCurrentBlockSize;
       }
     delete[] pBfr;

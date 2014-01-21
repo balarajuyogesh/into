@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -57,9 +57,9 @@ void TestPiiVideoFileReader::readVideo()
 
   operation()->setProperty("fileName", strVideo);
   operation()->setProperty("imageType", "Color");
-  
+
   QVERIFY(connectInput("trigger"));
-  
+
   QVERIFY(start());
   QVERIFY(sendObject("trigger", 1));
   QVERIFY(hasOutputValue("image"));
@@ -88,7 +88,7 @@ void TestPiiVideoFileWriter::writeVideo()
 {
 #ifndef PII_NO_AVCODEC
   QVERIFY(start(ExpectFail));
-    
+
   QString strVideoTmp =  "output/op_colorframe.avi";
   QString strVideo = "op_colorframe.avi";
 
@@ -97,24 +97,24 @@ void TestPiiVideoFileWriter::writeVideo()
 
   if (QFile::exists(strVideoTmp))
     QFile::remove(strVideoTmp);
-   
+
   operation()->setProperty("fileName",strVideo);
   operation()->setProperty("outputDirectory", "output");
- 
+
   connectAllInputs();
 
   QVERIFY(start());
-    
+
   QString strImages = "data/images/colorframe0.jpeg";
   QVERIFY(QFile::exists(strImages));
-  
-  PiiColorQImage *pImg = PiiImageFileReader::readColorImage(strImages); 
+
+  PiiColorQImage *pImg = PiiImageFileReader::readColorImage(strImages);
   QVERIFY(pImg != 0);
 
   QVERIFY(sendObject("image", pImg->toMatrix()));
   QVERIFY(hasOutputValue("image"));
   QVERIFY(QFile::exists(strVideoTmp));
-  
+
   stop();
 #else
   AVCODEC_SKIP;
@@ -127,9 +127,9 @@ void TestPiiVideo::getFrame()
   QString strVideo = "data/ov14c1.avi";
   if(QFile::exists(strVideo))
     {
-      
+
       PiiVideoReader reader(strVideo);
-      
+
       try
         {
           reader.initialize();
@@ -138,16 +138,16 @@ void TestPiiVideo::getFrame()
         {
           QFAIL("Unexcepted exception");
         }
-      
+
       PiiMatrix<PiiColor4<unsigned char> > frame;
-      
+
       for(int j = 0; j < 1; ++j)
         {
           frame = reader.getFrame<PiiColor4<unsigned char> >();
           QVERIFY(!frame.isEmpty());
-            
+
           PiiColor4<unsigned char> color;
-            
+
           int red = 0, b = 0, g = 0, a = 0;
           for(int r = 0; r < frame.rows(); ++r)
             {
@@ -164,7 +164,7 @@ void TestPiiVideo::getFrame()
                     ++a;
                 }
             }
-            
+
           QVERIFY(red!=0);
           QVERIFY(g!=0);
           QVERIFY(b!=0);
@@ -178,7 +178,7 @@ void TestPiiVideo::getFrame()
 #else
   AVCODEC_SKIP;
 #endif
-    
+
 }
 
 
@@ -187,9 +187,9 @@ void TestPiiVideo::saveNextColorFrame()
 #ifndef PII_NO_AVCODEC
   if(QFile::exists("output/colorframe.avi"))
     QFile::remove("output/colorframe.avi");
-  
+
   PiiVideoWriter writer("output/colorframe.avi",576,768);
-  
+
   try
     {
       writer.initialize();
@@ -199,7 +199,7 @@ void TestPiiVideo::saveNextColorFrame()
       qDebug()<<"Exception thrown: "<<ob.message();
       QVERIFY(false);
     }
-  
+
   for(int i = 0; i < 2; ++i)
     {
       QString file = "data/images/colorframe";
@@ -211,7 +211,7 @@ void TestPiiVideo::saveNextColorFrame()
       PiiColorQImage* pImg = PiiImageFileReader::readColorImage(file);
       QVERIFY(pImg != 0);
 
-      //Write into video. 
+      //Write into video.
       bool res =  writer.saveNextColorFrame(pImg->toMatrix());
       QVERIFY(res);
     }
@@ -225,9 +225,9 @@ void TestPiiVideo::saveNextGrayFrame()
 #ifndef PII_NO_AVCODEC
   if(QFile::exists("output/grayframe.avi"))
     QFile::remove("output/grayframe.avi");
-  
+
   PiiVideoWriter writer("output/grayframe.avi",656,491);
-  
+
   try
     {
       writer.initialize();
@@ -237,7 +237,7 @@ void TestPiiVideo::saveNextGrayFrame()
       qDebug()<<"Exception thrown: "<<ob.message();
       QVERIFY(false);
     }
-  
+
   for(int i = 0; i < 2; ++i)
     {
       QString file = "data/images/videoframe";
@@ -245,11 +245,11 @@ void TestPiiVideo::saveNextGrayFrame()
 
       QVERIFY(QFile::exists(file));
       // Read images.
-        
+
       PiiGrayQImage* pImg = PiiImageFileReader::readGrayImage(file);
       QVERIFY(pImg != 0);
 
-      //Write into video. 
+      //Write into video.
       bool res = writer.saveNextGrayFrame(pImg->toMatrix());
       QVERIFY(res);
     }
@@ -258,19 +258,19 @@ void TestPiiVideo::saveNextGrayFrame()
 #endif
 }
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
-  //Contains all video-namespace functions. 
+  //Contains all video-namespace functions.
   TestPiiVideoFileReader videoFileReader;
   QTest::qExec(&videoFileReader,argc, argv);
 
   //Contains all video-reader functions.
   TestPiiVideoFileWriter videoFileWriter;
   QTest::qExec(&videoFileWriter,argc, argv);
-  
+
   TestPiiVideo video;
   QTest::qExec(&video, argc, argv);
-  
+
   return 0;
 }
 

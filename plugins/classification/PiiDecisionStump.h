@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -43,7 +43,7 @@ public:
   typedef typename PiiSampleSet::Traits<SampleSet>::FeatureType FeatureType;
 
   PiiDecisionStump();
-  
+
   /**
    * Finds the feature that best separates the two classes present in
    * *samples* and an optimal threshold for it.
@@ -89,7 +89,7 @@ public:
 
   void setRightLabel(double rightLabel);
   double rightLabel() const;
-  
+
 private:
   /// @internal
   struct Feature
@@ -104,7 +104,7 @@ private:
     bool operator< (const Feature& other) const { return value < other.value; }
     bool operator> (const Feature& other) const { return value > other.value; }
   };
-  
+
   /// @internal
   class Data : public PiiLearningAlgorithm<SampleSet>::Data
   {

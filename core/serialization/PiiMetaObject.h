@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,7 +28,7 @@
 #define PII_GET_METAOBJECT(obj) PiiSerialization::piiMetaObject(obj)
 
 /**
- * Meta objects store information specific to a certain data type. 
+ * Meta objects store information specific to a certain data type.
  * Class meta information contains a unique class name and a version
  * number. The tracking flag is an application-wide static constant
  * and not included in the meta object (see

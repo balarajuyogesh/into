@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -36,7 +36,7 @@ void PiiClassInfoMapper::check(bool reset)
   PII_D;
   if (reset)
     d->pDataInput->setOptional(!d->bTraining);
-  
+
   PiiDefaultOperation::check(reset);
 
   if (!d->defaultValue.isValid())

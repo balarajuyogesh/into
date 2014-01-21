@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -39,7 +39,7 @@ public:
       Unknown,
       LearningInterrupted
     };
-  
+
   /**
    * Construct a new PiiClassificationException with the given error
    * code. The exception message will be automatically generated with
@@ -51,7 +51,7 @@ public:
    * Construct a `Unknown` exception with the given error message.
    */
   PiiClassificationException(const QString& message, const QString& location = "");
-  
+
   /**
    * Get the cause of the exception.
    */
@@ -61,7 +61,7 @@ public:
    * Convert a numerical error code into human-readable text.
    */
   static const char* messageForCode(Code code);
-  
+
 private:
   class Data : public PiiException::Data
   {

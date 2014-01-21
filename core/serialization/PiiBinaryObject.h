@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,7 +30,7 @@ template <class T> struct PiiBinaryObject
    * number of elements.
    */
   PiiBinaryObject(T*& p, unsigned int& s) : ptr(p), size(s) {}
-  
+
   /**
    * Creates a new binary data wrapper with the given pointer and
    * number of elements.
@@ -54,7 +54,7 @@ template <class T> struct PiiBinaryObject
   {
     archive.readArray(ptr, size);
   }
-  
+
   T*& ptr;
   unsigned int& size;
 };

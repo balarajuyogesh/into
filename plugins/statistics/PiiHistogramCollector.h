@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -40,16 +40,16 @@
  * Outputs
  * -------
  *
- * @out sync - the object received in the `sync` input. If the 
+ * @out sync - the object received in the `sync` input. If the
  * `sync` input is connected, the operation stores the object received
  * until the inputs are synchronized. It will then send the stored
  * object to this output before it sends the histogram.
  *
  * @out y - in `FixedLengthOutput` mode: the histogram as a
  * 1-by-[binCount] PiiMatrix<int>. Zero bins are present in the
- * histogram. Any value outside of [0, [binCount]-1] will be ignored. 
+ * histogram. Any value outside of [0, [binCount]-1] will be ignored.
  * In the output, the element at (0,0) is the number of zeros
- * collected, the element at (0,1) the number of ones etc. In 
+ * collected, the element at (0,1) the number of ones etc. In
  * `VariableLengthOutput` mode: bins with zero entries will not be
  * present in the output. The output value is a 1-by-N PiiMatrix<int>,
  * where N is the number of non-zero histogram bins. In this mode, the
@@ -68,13 +68,13 @@ class PiiHistogramCollector : public PiiDefaultOperation
 
   /**
    * The number of histogram bins. This property must be set to a
-   * non-zero value in `FixedLengthOutput` mode. In 
+   * non-zero value in `FixedLengthOutput` mode. In
    * `VariableLengthOutput` mode, this value works as an initial guess
    * to the number of distinct histogram bins. A good guess
    * (over-estimate) increases performance. The default value is 256.
    */
   Q_PROPERTY(int binCount READ binCount WRITE setBinCount);
-   
+
   /**
    * The output mode. Default is `FixedLengthOutput`.
    */
@@ -89,7 +89,7 @@ class PiiHistogramCollector : public PiiDefaultOperation
    * that it sums up to unity .
    */
   Q_PROPERTY(bool normalized READ normalized WRITE setNormalized);
-   
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 
 public:
@@ -99,17 +99,17 @@ public:
    * - `FixedLengthOutput` - the size of the output histogram is
    * determined by [binCount]. `x` output will always be the same.
    *
-   * - `VariableLengthOutput` - only non-zero bins will be output. 
+   * - `VariableLengthOutput` - only non-zero bins will be output.
    * The size of the output varies, and `x` records the indices of
    * non-zero bins.
    */
   enum OutputMode { FixedLengthOutput, VariableLengthOutput };
-  
+
   PiiHistogramCollector();
 
 
   void check(bool reset);
-  
+
 protected:
   void process();
   void syncEvent(SyncEvent* event);
@@ -126,7 +126,7 @@ private:
   template <class T> void addPrimitive(const PiiVariant& obj);
   template <class T> void addMatrix(const PiiVariant& obj);
   void emitHistogram();
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {

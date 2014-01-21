@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -31,7 +31,7 @@ namespace PiiImage
                        1,1,1,
                        0,1,0,
                        1,1,1)
-        
+
       },
       {
         // Corner detector no 0
@@ -56,7 +56,7 @@ namespace PiiImage
                        1,0,1,
                        1,1,1,
                        1,0,1)
-        
+
       },
       {
         // Corner detector no 1
@@ -80,7 +80,7 @@ namespace PiiImage
                        1,1,1,
                        0,1,0,
                        1,1,1)
-        
+
       },
       {
         // Corner detector 2
@@ -103,7 +103,7 @@ namespace PiiImage
                        1,0,1,
                        1,1,1,
                        1,0,1)
-        
+
       },
       {
         // Corner detector 2
@@ -115,7 +115,7 @@ namespace PiiImage
                        1,1,0,
                        1,1,1,
                        0,1,0)
-      }          
+      }
     };
 
   PiiMatrix<int> createMask(MaskType type, int rows, int columns)

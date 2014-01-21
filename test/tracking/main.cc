@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -61,7 +61,7 @@ void TestPiiTracking::testLinkedList()
   /* Current situation
    *
    * n1
-   *  |     
+   *  |
    *  +--> n3
    */
   QCOMPARE(n1->branches(), 1);
@@ -93,7 +93,7 @@ void TestPiiTracking::testConstantVelocityTracker()
    * 6|
    * 5|     . . .
    * 4|   .   . .
-   * 3|   . . 
+   * 3|   . .
    * 2| . .   .
    * 1| . . .   .
    * 0|__________________

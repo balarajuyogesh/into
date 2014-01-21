@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -44,7 +44,7 @@ void PiiSpectralPeakDetector::check(bool reset)
 
   if (d->dPeakThreshold <= 0)
     PII_THROW(PiiExecutionException, tr("Peak threshold must be greater than zero."));
-  
+
   d->bCompositionConnected = outputAt(1)->isConnected();
 }
 
@@ -105,7 +105,7 @@ void PiiSpectralPeakDetector::markPeak(PiiMatrix<float>& powerSpectrum,
     {
       double dAngle = dLocationX != 0 ? atan(aspectRatio*dLocationY/dLocationX) : M_PI_2;
       //qDebug("row = %d, col = %d, dSum = %lf, dLocationX = %lf, dLocationY = %lf, dAngle = %lf", row, column, dSum, dLocationX, dLocationY, dAngle/M_PI*180);
-      
+
       peaks.insertRow(-1, dLocationX, dLocationY, dPeakValue/(iCols*iRows), dWaveLength, dAngle);
     }
 }
@@ -131,7 +131,7 @@ template <class T> void PiiSpectralPeakDetector::findPeaks(const PiiVariant& obj
 
   PiiMatrix<double> matPeaks(0,5);
   matPeaks.reserve(32);
-  
+
   for (int r = 1; r < matPowerSpectrum.rows(); ++r)
     {
       pSpectrumRow = matPowerSpectrum[r];

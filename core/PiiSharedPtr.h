@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -128,7 +128,7 @@ public:
   (reinterpret_cast<void*>(static_cast<BASE*>(reinterpret_cast<DERIVED*>((void*)1))) == (void*)1)
 
   PiiSharedPtr() : _ptr(wrap(0)) {}
-  
+
   /**
    * Creates an implicitly shared pointer that holds the given pointer.
    *
@@ -158,7 +158,7 @@ public:
     if (_ptr != 0)
       _ptr->reserve();
   }
-  
+
   ~PiiSharedPtr()
   {
     if (_ptr != 0)
@@ -180,7 +180,7 @@ public:
   }
 
   /**
-   * Assigns a new value to this pointer and release the old pointer. 
+   * Assigns a new value to this pointer and release the old pointer.
    * This operator only accepts pointers to objects that are derived
    * from the template type `T` of this class.
    */
@@ -189,7 +189,7 @@ public:
     copy(other);
     return *this;
   }
-  
+
   /**
    * Returns a reference to the element at *index*, if the wrapped
    * pointer is an array.
@@ -224,7 +224,7 @@ public:
    * Compare the internal pointer to the given `ptr`.
    */
   bool operator== (const void* ptr) const { return ptr == _ptr; }
-  
+
   /**
    * Compare the internal pointer to the given `ptr`.
    */
@@ -258,7 +258,7 @@ private:
     static PiiSharedObject* wrap(T* ptr) { return new PiiPtrHolder<T>(ptr); }
     static T* unwrap(PiiSharedObject* ptr) { return static_cast<PiiPtrHolder<T>*>(ptr)->pointer; }
   };
-  
+
   // If T is already derived from PiiSharedObject, we don't need a
   // wrapper. Otherwise we do.
   typedef typename Pii::IfClass<Pii::IsBaseOf<PiiSharedObject, T>,

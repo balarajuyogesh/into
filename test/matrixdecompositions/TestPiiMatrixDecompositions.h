@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,7 +26,7 @@ private slots:
   void qrDecompose();
   void bdDecompose();
   void svDecompose();
-  
+
 private:
   void unpackRowReflectors(const PiiMatrix<double>& mat, int diagonal);
   void unpackColumnReflectors(const PiiMatrix<double>& mat, int diagonal);

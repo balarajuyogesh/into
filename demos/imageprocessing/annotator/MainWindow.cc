@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
   // Initialize engine
   initEngine();
-  
+
   // Initialize ui
   init();
 
@@ -71,10 +71,10 @@ PiiEngine* MainWindow::createEngine()
 
   PiiOperation *pSwitch = pEngine->createOperation("PiiSwitch", "switch");
   pSwitch->setProperty("operationMode", "AsynchronousMode");
-  
+
   // Create probe input for result image display
   _pResultProbeInput = new PiiProbeInput;
-  
+
   // Create image source
   PiiOperation *pImageFileReader = pEngine->createOperation("PiiImageFileReader");
   pImageFileReader->setProperty("imageType", "Color");
@@ -88,9 +88,9 @@ PiiEngine* MainWindow::createEngine()
   pImageFileReader->connectOutput("image", pSwitch, "input");
   pSwitch->connectOutput("output", _pImageAnnotator, "image");
   pUpdateImageTriggerSource->connectOutput("trigger", pSwitch, "trigger");
-  
+
   _pResultProbeInput->connectOutput(_pImageAnnotator->output("image"));
-  
+
   return pEngine;
 }
 
@@ -100,7 +100,7 @@ void MainWindow::clearAnnotations()
 
   // Change the annotations
   _pImageAnnotator->setProperty("annotations", _lstAnnotations);
-  
+
   // Trig the same image again
   emit updateImage(0);
 }
@@ -142,10 +142,10 @@ void MainWindow::updateAnnotations(const QRect& area, int modifiers)
 
   // Append annotation
   _lstAnnotations << annotation;
-  
+
   // Change the annotations
   _pImageAnnotator->setProperty("annotations", _lstAnnotations);
-  
+
   // Trig the same image again
   emit updateImage(0);
 }

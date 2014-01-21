@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,7 +28,7 @@ namespace PiiColors
                                                       int redLevels, int greenLevels, int blueLevels)
   {
     typedef PiiImage::Traits<ColorType> Traits;
-    
+
     PiiMatrix<int> result(PiiMatrix<int>::uninitialized(clrImage.rows(), clrImage.columns()));
     if (greenLevels == 0)
       greenLevels = redLevels;
@@ -50,7 +50,7 @@ namespace PiiColors
       }
     return result;
   }
-  
+
   template <class T> void normalizedRgb(const PiiMatrix<T>& image,
                                         PiiMatrix<typename T::Type>& ch1,
                                         PiiMatrix<typename T::Type>& ch2,
@@ -162,7 +162,7 @@ namespace PiiColors
                                                              UnaryFunction func)
   {
     typedef typename UnaryFunction::result_type ResultType;
-    
+
     PiiMatrix<ResultType> resultImg(PiiMatrix<int>::uninitialized(clrImage.rows(), clrImage.columns()));
     // Convert input arguments to floats.
     PiiMatrix<float> matBaseVectors(baseVectors);
@@ -248,7 +248,7 @@ namespace PiiColors
   {
     typedef typename Clr::Type T;
     typedef HsvScalingTraits<T> Traits;
-    
+
     T r = rgbColor.rgbR, g = rgbColor.rgbG, b = rgbColor.rgbB,
       min = qMin(qMin(r,g),b), max = qMax(qMax(r,g),b), delta = max - min,
       h = 0;
@@ -327,7 +327,7 @@ namespace PiiColors
     PII_LAB_F(yPerYn);
     PII_LAB_F(zPerZn);
 #undef PII_LAB_F
-    
+
     return Clr(116*yPerYn - 16,
                500*xPerXn - yPerYn,
                200*yPerYn - zPerZn);

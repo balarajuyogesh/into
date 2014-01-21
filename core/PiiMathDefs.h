@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -79,12 +79,12 @@ namespace Pii
    * Returns true if `f` equals Inf.
    */
   template <class T> inline bool isInf(T f) { return f == std::numeric_limits<T>::infinity(); }
-  
+
   /**
    * Returns true if `f` is NaN.
    */
   template <class T> inline bool isNan(T f) { return f != f; }
-  
+
   /**
    * Utility for miscellaneous numerical property definitions.
    */

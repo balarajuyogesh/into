@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -47,21 +47,21 @@ PiiImageFileWriter::PiiImageFileWriter() :
   PII_D;
   d->pImageInput = new PiiInputSocket("image");
   addSocket(d->pImageInput);
-  
+
   d->pNameInput = new PiiInputSocket("filename");
   d->pNameInput->setOptional(true);
   addSocket(d->pNameInput);
-  
+
   d->pKeyInput = new PiiInputSocket("key");
   d->pKeyInput->setOptional(true);
   d->pKeyInput->setGroupId(1);
   addSocket(d->pKeyInput);
-  
+
   d->pValueInput = new PiiInputSocket("value");
   d->pValueInput->setOptional(true);
   d->pValueInput->setGroupId(1);
   addSocket(d->pValueInput);
-  
+
   d->pNameOutput = new PiiOutputSocket("filename");
   addSocket(d->pNameOutput);
 
@@ -78,7 +78,7 @@ void PiiImageFileWriter::check(bool reset)
       d->iNextIndex = 0;
       clearKeyValues();
     }
-  
+
   if (d->pKeyInput->isConnected() != d->pValueInput->isConnected())
     PII_THROW(PiiExecutionException, tr("Key and value inputs must be connected or disconnected together."));
 
@@ -113,10 +113,10 @@ void PiiImageFileWriter::process()
       d->lstStaticMeta.clear();
       for (int i=0; i<d->lstMetaFields.size(); ++i)
         d->lstStaticMeta << inputAt(i + d->iStaticInputCount)->firstObject();
-      
+
       if (!d->bKeyValuesConnected)
         processImage();
-    }      
+    }
   else if (activeInputGroup() == 1)
     {
       PiiVariant keyObj = d->pKeyInput->firstObject();
@@ -126,7 +126,7 @@ void PiiImageFileWriter::process()
       PiiVariant valueObj = d->pValueInput->firstObject();
       if (valueObj.type() != PiiYdin::QStringType)
         PII_THROW_UNKNOWN_TYPE(d->pValueInput);
-      
+
       d->lstKeys << keyObj.valueAs<QString>();
       d->lstValues << valueObj.valueAs<QString>();
     }
@@ -145,7 +145,7 @@ void PiiImageFileWriter::processImage()
     }
 
   QString strFileName;
-      
+
   QString dir(d->strOutputDirectory.isEmpty() ? "." : d->strOutputDirectory);
   if (d->bNameInputConnected)
     {
@@ -153,7 +153,7 @@ void PiiImageFileWriter::processImage()
         PII_THROW_UNKNOWN_TYPE(d->pNameInput);
 
       QFileInfo info(d->nameObject.valueAs<QString>());
-      
+
       if (d->bStripPath)
         strFileName = QString("%1/%2%3").arg(dir).arg(d->strNamePrefix).arg(info.fileName());
       else
@@ -174,12 +174,12 @@ void PiiImageFileWriter::processImage()
     }
   else
     strFileName = QString("%1/%2%3.%4").arg(dir).arg(d->strNamePrefix).arg(d->iNextIndex, 6, 10, QChar('0')).arg(d->strExtension);
-      
+
   //trying to make directory if it is not available
   if (d->bAutoCreateDirectory)
     {
       QFileInfo fileNameInfo(strFileName);
-          
+
       QDir directory;
       if (!directory.exists(fileNameInfo.path()))
         {
@@ -190,7 +190,7 @@ void PiiImageFileWriter::processImage()
             }
         }
     }
-      
+
   switch (d->imageObject.type())
     {
       PII_GRAY_IMAGE_CASES_M(writeGrayImage, (d->imageObject, strFileName));
@@ -203,7 +203,7 @@ void PiiImageFileWriter::processImage()
     default:
       PII_THROW_UNKNOWN_TYPE(d->pImageInput);
     }
-      
+
   d->iNextIndex++;
   d->imageObject = PiiVariant();
   d->nameObject = PiiVariant();

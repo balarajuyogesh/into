@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -66,7 +66,7 @@ void PiiCalibrationPointFinder::operator()(int* combination)
       if (distance > d->dMaxDistance || distance < d->dMinDistance)
         return;
     }
-       
+
   // Insert selected rows into the current point matrix.
   d->matCurrentPoints.resize(0,2);
   for (int i=0; i<d->iPointCount; ++i)
@@ -109,7 +109,7 @@ void PiiCalibrationPointFinder::calculateProjectionError(const QVector<int>& ind
   d->matCurrentPoints.resize(0,2);
   for (int i=0; i<d->iPointCount; ++i)
     d->matCurrentPoints.appendRow(d->matImagePoints[indices[i]]);
-      
+
   // Assume that the currently selected points are the calibration
   // points. Find the camera's extrinsic parameters based on this
   // assumption.
@@ -135,12 +135,12 @@ void PiiCalibrationPointFinder::calculateProjectionError(const QVector<int>& ind
     }
 }
 
-    
+
 void PiiCalibrationPointFinder::createDistanceMatrix()
 {
   d->matDistances = PiiClassification::calculateDistanceMatrix(d->matImagePoints,
                                                                PiiSquaredGeometricDistance<const double*>());
- 
+
   // Find the closest neighbor for each point
   PiiMatrix<double> minDistance = Pii::min<double>(d->matDistances, Pii::Vertically);
   // Get rid of outlier points whose closest neighbor is already
@@ -164,8 +164,8 @@ void PiiCalibrationPointFinder::createCombinationMatrix()
   Pii::MatrixRowAdder<int> adder(d->matCombinations);
   Pii::combinations(d->iPointCount,2,adder);
 }
-    
-  
+
+
 PiiCalibration::RelativePosition PiiCalibrationPointFinder::calculateCameraPosition(const PiiMatrix<double>& worldPoints,
                                                                                     const PiiMatrix<double>& imagePoints,
                                                                                     const PiiCalibration::CameraParameters& intrinsic)
@@ -187,7 +187,7 @@ PiiCalibration::RelativePosition PiiCalibrationPointFinder::calculateCameraPosit
 
   d->matUndistorted = PiiCalibration::undistort(d->matImagePoints, intrinsic);
   d->dMinError = INFINITY;
-  
+
   // Take all possible combinations of N calibration points out of a
   // total of M detections. M >= N
   Pii::combinations<PiiCalibrationPointFinder&>(d->matImagePoints.rows(), d->matWorldPoints.rows(), *this);
@@ -196,7 +196,7 @@ PiiCalibration::RelativePosition PiiCalibrationPointFinder::calculateCameraPosit
     PII_THROW(PiiCalibrationException,
               QCoreApplication::translate("PiiCalibrationPointFinder",
                                           "No combination of calibration point candidates satisfies the given restrictions."));
-  
+
   return d->minPosition;
 }
 

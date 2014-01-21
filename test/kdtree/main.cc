@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -29,7 +29,7 @@ void TestPiiKdTree::initTestCase()
                                  3, -2,
                                  2, 1,
                                  2, 3);
-  
+
   _pTree = new PiiKdTree<PiiMatrix<int> >(matTrainingData);
   //_pTree->print(std::cout);
 }
@@ -66,7 +66,7 @@ void TestPiiKdTree::findClosestMatches()
       QCOMPARE(lstMatches.size(), 3);
       for (int j=0; j<3; ++j)
         QCOMPARE(lstMatches[j].second, aMatches[i][j]);
-      
+
       lstMatches = _pTree->findClosestMatches(matTestingData[i], 3, 8);
       QCOMPARE(lstMatches.size(), 3);
       for (int j=0; j<3; ++j)

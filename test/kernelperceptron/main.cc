@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -34,7 +34,7 @@ void TestPiiKernelPerceptron::learn()
       PiiClassification::createDartBoard(iSamplesInSmallSet,
                                          iRatio * iSamplesInSmallSet,
                                          matSamples, vecLabels);
-      
+
       kernelPerceptron.learn(matSamples, vecLabels);
 
       QVERIFY(kernelPerceptron.converged());

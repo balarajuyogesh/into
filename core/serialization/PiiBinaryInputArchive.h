@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -42,9 +42,9 @@ public:
    * or it cannot be read from, or the archive format is unknown
    */
   PiiBinaryInputArchive(QIODevice* d);
-  
+
   void readRawData(void* ptr, unsigned int size);
-  
+
   PiiBinaryInputArchive& operator>> (QString& value);
 
   PiiBinaryInputArchive& operator>> (char*& value);

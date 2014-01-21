@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -49,7 +49,7 @@ public:
    * Destroys the device.
    */
   ~PiiNetworkClient();
-  
+
   /**
    * Opens a connection to the server. The connection will be kept
    * alive if possible. Subsequent calls to this function check if the
@@ -102,7 +102,7 @@ public slots:
 
 private:
   PiiSocketDevice connectToServer();
-  
+
   /// @internal
   class Data
   {

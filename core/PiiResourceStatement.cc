@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -49,7 +49,7 @@ public:
         pObject = other.pObject;
       }
   }
-  
+
   Data(const char* s,
        const char* p,
        const char* o,
@@ -61,7 +61,7 @@ public:
     type(t),
     id(-1)
   {}
-  
+
   Data(const char* s,
        const char* p,
        void* o) :
@@ -72,7 +72,7 @@ public:
     type(Pointer),
     id(-1)
   {}
-  
+
   Data(const QString& s,
        const QString& p,
        const QString& o,
@@ -84,7 +84,7 @@ public:
     type(t),
     id(-1)
   {}
-  
+
   Data(const QString& s,
        const QString& p,
        void* o) :
@@ -95,13 +95,13 @@ public:
     type(Pointer),
     id(-1)
   {}
-  
+
   ~Data()
   {
     if (bStringData)
       deleteStrings();
   }
-  
+
   void deleteStrings()
   {
     delete reinterpret_cast<QString*>(pSubject);
@@ -109,7 +109,7 @@ public:
     if (type != Pointer)
       delete reinterpret_cast<QString*>(pObject);
   }
-  
+
   bool bStringData;
   union { void* pSubject; const void* pConstSubject; };
   union { void* pPredicate; const void* pConstPredicate; };

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -20,7 +20,7 @@
 
 /**
  * A class that calculates 3D world coordinates for objects seen from
- * 2 to N viewpoints. See [calibration_stereo] for an overview. 
+ * 2 to N viewpoints. See [calibration_stereo] for an overview.
  * PiiStereoTriangulator is able to compute accurate 3D measurements
  * by combining information from many cameras. It enhances the
  * accuracy of stereo triangulation by averaging triangulation results
@@ -37,7 +37,7 @@ public:
    */
   PiiStereoTriangulator();
   ~PiiStereoTriangulator();
-  
+
   /**
    * Add a new camera to the triangulator. The triangulator will
    * automatically calculate the relative positions of the cameras. To
@@ -84,7 +84,7 @@ private:
   PiiMatrix<double> triangulate(int camera1, int camera2,
                                 const PiiMatrix<double>& normalizedA,
                                 const PiiMatrix<double>& normalizedB);
-  
+
   /// @internal
   class Data
   {
@@ -99,7 +99,7 @@ private:
      * corresponding camera to that of the first camera.
      */
     QList<QList<PiiCalibration::RelativePosition> > lstRelativePositions;
-    
+
     /**
      * Intrinsic parameters of cameras added so far.
      */

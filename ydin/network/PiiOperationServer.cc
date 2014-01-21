@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -147,7 +147,7 @@ void PiiOperationServer::handleRequest(const QString& uri, PiiHttpDevice* dev,
       dev->print(operation()->outputNames().join("\n"));
     }
   else
-    PiiQObjectServer::handleRequest(uri, dev, controller);  
+    PiiQObjectServer::handleRequest(uri, dev, controller);
 }
 
 PiiOperationServer::ChannelImpl::~ChannelImpl()

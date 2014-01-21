@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -36,7 +36,7 @@ void TestBoosting::decisionStump()
   labels2 << 1 << 1 << 1 << 0 << 0 << 0;
   // Equal weights
   QVector<double> weights(6, 1.0/6);
-  
+
   PiiDecisionStump<PiiMatrix<int> > stumps;
 
   stumps.learn(features, labels1, weights);
@@ -63,7 +63,7 @@ void TestBoosting::decisionStump()
   // Sample 2 is weighted less than the others
   QVector<double> weights2(6, 2.0/11);
   weights2[2] = 1.0/11;
-  
+
   stumps.learn(features2, labels3, weights2);
   QCOMPARE(stumps.selectedFeature(), 0);
   QCOMPARE(stumps.threshold(), 3);
@@ -76,7 +76,7 @@ void TestBoosting::decisionStump()
 void TestBoosting::adaBoost()
 {
   QFETCH(int, algorithm);
-  
+
   PiiMatrix<int> features(8, 2,
                           1, 1,
                           5, 4,

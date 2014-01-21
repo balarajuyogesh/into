@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -31,7 +31,7 @@ class PII_NETWORK_EXPORT PiiLocalServer : public PiiNetworkServer
 
 public:
   PiiLocalServer(PiiNetworkProtocol* protocol);
-  ~PiiLocalServer();  
+  ~PiiLocalServer();
 
   /**
    * Set the name of the socket/pipe to bind to. On Unix, this is the
@@ -41,15 +41,15 @@ public:
    */
   bool setServerAddress(const QString& serverAddress);
   QString serverAddress() const;
-  
+
   /**
    * Creates a new QLocalSocket and assigns `socketDescriptor` to it.
    */
   QIODevice* createSocket(PiiGenericSocketDescriptor socketDescriptor);
 
-protected:  
+protected:
   bool startListening();
-  
+
   void stopListening();
 
 private:
@@ -57,11 +57,11 @@ private:
   {
   public:
     EntryPoint(PiiLocalServer* owner);
-    
+
   protected:
     /// Calls PiiLocalServer::incomingConnection().
     void incomingConnection(quintptr socketDescriptor);
-    
+
   private:
     PiiLocalServer* _pOwner;
   };
@@ -71,7 +71,7 @@ private:
   {
   public:
     Data(PiiLocalServer* owner, PiiNetworkProtocol* protocol);
-    
+
     EntryPoint server;
     QString strSocketName;
   };

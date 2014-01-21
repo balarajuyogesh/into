@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -39,7 +39,7 @@
  * Declares an explicit serializer instantiation for the given archive
  * type. One needs to call this macro for each archive type defined in
  * the serialization dll (in a header file). This ensures you'll only
- * have one instance of the serializer registry in your application. 
+ * have one instance of the serializer registry in your application.
  * If you are not going to provide archive types from shared
  * libraries, you don't need to use this macro.
  *
@@ -57,7 +57,7 @@
 #define PII_DEFINE_SERIALIZER(ARCHIVE) PII_DEFINE_EXPORTED_CLASS_TEMPLATE(class, PiiSerializer<ARCHIVE >)
 
 /**
- * Serializer is an object that takes care of serializing objects. 
+ * Serializer is an object that takes care of serializing objects.
  * Each archive type has a static registry of serializers stored in a
  * hash map. The reason serialization goes through PiiSerializer is
  * that this allows one to conveniently create a name-based dictionary
@@ -84,8 +84,8 @@ public:
 
   /**
    * Seializes an object of type `T`. If `T` is a dynamic type, this
-   * function fetches a serializer for the type denoted by 
-   * *className*. If no serializer is found, returns `false`. 
+   * function fetches a serializer for the type denoted by
+   * *className*. If no serializer is found, returns `false`.
    * Otherwise, it calls the virtual serialize() function of the found
    * serializer and returns `true`. If the type is not dynamic,
    * PiiSerialization::serialize() will be called directly.
@@ -107,7 +107,7 @@ public:
    * @param version the version of the class
    */
   virtual void serialize(Archive& archive, void* value, const unsigned int version) const = 0;
-  
+
   /**
    * Removes `this` from the archive's serializer map.
    */

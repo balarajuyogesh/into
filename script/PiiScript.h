@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -171,7 +171,7 @@ namespace PiiScript
    * engine->setDefaultPrototype(qMetaTypeId<MyOperation*>(), prototype);
    * // Place the constructor into the global scope
    * engine->globalObject().setProperty("MyOperation", constructor);
-   * ~~~   
+   * ~~~
    */
   PII_SCRIPT_EXPORT void setSuperclass(QScriptValue prototype, const char* superclass);
 

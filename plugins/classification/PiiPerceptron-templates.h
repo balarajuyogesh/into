@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -62,7 +62,7 @@ template <class SampleSet> void PiiPerceptron<SampleSet>::learn(const SampleSet&
   // maximum number of iterations.
   while (iErrorCount > 0 &&
          ++iIterations < d->iMaxIterations);
-  
+
   d->bConverged = (iErrorCount == 0);
 }
 

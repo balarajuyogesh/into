@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -20,7 +20,7 @@
 
 /**
  * Default implementation of PiiBoostClassifier::Factory. The type of
- * the classifier to be created by this factory is given by the 
+ * the classifier to be created by this factory is given by the
  * `Classifier` template parameter. `Classifier` must implement the
  * PiiLearningAlgorithm and PiiClassifier interfaces and it must
  * support weighted learning.
@@ -39,7 +39,7 @@ template <class Classifier> class PiiDefaultClassifierFactory :
 {
 public:
   typedef typename Classifier::SampleSetType SampleSet;
-  
+
   /**
    * Creates a new instance of `Classifier` (given as a template
    * parameter) using its default constructor and trains it using the

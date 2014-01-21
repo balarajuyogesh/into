@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,7 +28,7 @@
  * ------
  *
  * @in input - any row matrix
- * 
+ *
  * Outputs
  * -------
  *
@@ -43,7 +43,7 @@ class PiiMatrixDecomposer : public PiiDefaultOperation
    * Specifies the number of the output sockets.
    */
   Q_PROPERTY(int dynamicOutputCount READ dynamicOutputCount WRITE setDynamicOutputCount);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiMatrixDecomposer();

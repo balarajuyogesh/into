@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -44,7 +44,7 @@ void TestPiiSimpleMemoryManager::allocation()
   QVERIFY(!manager.deallocate(reinterpret_cast<void*>(1)));
   // Try to free null pointer
   QVERIFY(manager.deallocate(0));
-  QVERIFY(!manager.deallocate(static_cast<char*>(buffers[0]) + 10000));  
+  QVERIFY(!manager.deallocate(static_cast<char*>(buffers[0]) + 10000));
   // Try to allocate too large block, should return 0
   QCOMPARE(manager.allocate(128), static_cast<void*>(0));
   // Allocate a block that should just fit.

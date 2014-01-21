@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -19,7 +19,7 @@
 #include <QTextStream>
 #include <cstring>
 #include "PiiArchive.h"
-#include "PiiOutputArchive.h"  
+#include "PiiOutputArchive.h"
 #include "PiiArchiveMacros.h"
 #include "PiiTextArchive.h"
 
@@ -42,14 +42,14 @@ public:
    * or cannot be written to.
    */
   PiiTextOutputArchive(QIODevice* d);
-  
+
   /**
    * Writes raw binary data to the text archive. The data is base64
    * encoded before writing.
    */
   void writeRawData(const void* ptr, unsigned int size);
 
-  PiiTextOutputArchive& operator<< (const QString& value);  
+  PiiTextOutputArchive& operator<< (const QString& value);
   PiiTextOutputArchive& operator<< (const char* value);
 
   PiiTextOutputArchive& operator<< (char value) { return operator<<((short)value); }

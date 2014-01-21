@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -29,7 +29,7 @@
  *
  * @in image - the image to be filtered. Any image type. For color
  * images, the filter will be applied channel-wise.
- * 
+ *
  * Outputs
  * -------
  *
@@ -63,7 +63,7 @@ class PiiImageFilterOperation : public PiiDefaultOperation
    * created filters are always square. The default value is 3.
    */
   Q_PROPERTY(int filterSize READ filterSize WRITE setFilterSize);
-    
+
   /**
    * The filter as a matrix. This value is used only if [filterName] is
    * set to "custom".
@@ -80,7 +80,7 @@ class PiiImageFilterOperation : public PiiDefaultOperation
   Q_PROPERTY(PiiVariant filter READ filter WRITE setFilter);
 
   /**
-   * The method of handling image borders. The default value is 
+   * The method of handling image borders. The default value is
    * `ExtendZeros`.
    */
   Q_PROPERTY(ExtendMode borderHandling READ borderHandling WRITE setBorderHandling);
@@ -125,7 +125,7 @@ private:
   template <class T> void intColorFilter(const PiiVariant& obj);
   template <class T> void floatColorFilter(const PiiVariant& obj);
   template <class T> void setCustomFilter(const PiiVariant& obj);
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {
@@ -135,7 +135,7 @@ private:
     QString strFilterName;
     int iFilterSize;
     Pii::ExtendMode borderHandling;
-    
+
     PiiVariant pCustomFilter;
     PiiMatrix<double> matPrebuiltFilter;
     PiiMatrix<double> matCustomFilter;

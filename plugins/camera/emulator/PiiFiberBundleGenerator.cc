@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -43,7 +43,7 @@ public:
     delete[] _dpFiberThickness;
     delete[] _dpThicknessChange;
   }
-  
+
   void draw(unsigned char* line, int lineWidth)
   {
     // Draw fibers
@@ -82,7 +82,7 @@ public:
       }
     else
       ++_iLineCount;
-    
+
     // Update horizontal position
     _dStartPos += _dPosChange;
     if (_dStartPos < -_pParent->_iMaxMovement)
@@ -100,7 +100,7 @@ public:
           _dpFiberThickness[i] = _pParent->_iMaxThickness;
       }
   }
-  
+
 private:
   PiiFiberBundleGenerator* _pParent;
   int _iBundleWidth;
@@ -163,7 +163,7 @@ void PiiFiberBundleGenerator::generateTexture(PiiMatrix<unsigned char>& buffer,
                                                                   Pii::ShrinkWindow),
                                           3,
                                           Pii::Horizontally,
-                                          Pii::ShrinkWindow);          
+                                          Pii::ShrinkWindow);
     }
   else
     delete[] ppScanLines;

@@ -44,7 +44,7 @@ void lm_minimize(int m_dat, int n_par, double *par,
                  lm_jacobian_ftype * jacobian,
                  void *data, lm_control_type * control,
                  double* jacobianMatrix);
-                 
+
 
 double lm_enorm(int, double *);
 

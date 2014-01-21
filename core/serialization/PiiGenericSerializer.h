@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -38,7 +38,7 @@ template <class T> class PiiDefaultGenericSerializer
   {
     PiiSerialization::Accessor::load(archive, value, version);
   }
-  
+
   static PiiDefaultGenericSerializer instance;
 };
 

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -41,10 +41,10 @@ class PiiAbsoluteOperation : public PiiDefaultOperation
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiAbsoluteOperation();
-  
+
 protected:
   void process();
-  
+
 private:
   template <class T> void operatePrimitive( const PiiVariant& obj );
   template <class T> void operateMatrix( const PiiVariant& obj );

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -36,10 +36,10 @@
  * Outputs
  * -------
  *
- * @out areas - the number of pixels on each object. 
+ * @out areas - the number of pixels on each object.
  * PiiMatrix<int>(N,1).
  *
- * @out centroids - the center-of-mass point (x,y) for each object. 
+ * @out centroids - the center-of-mass point (x,y) for each object.
  * PiiMatrix<int>(N,2).
  *
  * @out boundingboxes - The bounding boxes of each object
@@ -57,7 +57,7 @@ public:
 
 protected:
   void process();
-  
+
 private:
   template <class T> void operate(const PiiVariant& img, int labels);
 

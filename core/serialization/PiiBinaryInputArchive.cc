@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -47,7 +47,7 @@ void PiiBinaryInputArchive::readRawData(void* ptr, unsigned int size)
   if (QDataStream::readRawData(static_cast<char*>(ptr), size) != int(size))
     PII_SERIALIZATION_ERROR(StreamError);
 }
-  
+
 PiiBinaryInputArchive& PiiBinaryInputArchive::operator>> (QString& value)
 {
   // Read the raw bytes

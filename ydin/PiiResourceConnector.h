@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -20,10 +20,10 @@
 #include <PiiSerializationTraits.h>
 
 /**
- * An interface for classes that connect resource instances together. 
+ * An interface for classes that connect resource instances together.
  * A "resource" can be an operation, a widget, or a distance measure,
  * to name a few examples. To establish a connection between two
- * resources one needs to first instantiate them and the connector. 
+ * resources one needs to first instantiate them and the connector.
  * Then, pointers to the two resources are passed to the connector to
  * bind the instances together.
  *
@@ -40,7 +40,7 @@ public:
    * specific to a pair of resources. Thus, it knows how to cast the
    * provided `void` pointers to the correct type.
    *
-   * @return `true` if the resources were successfully connected, 
+   * @return `true` if the resources were successfully connected,
    * `false` otherwise.
    */
   virtual bool connectResources(void* resource1, void* resource2, const QString& role) const = 0;

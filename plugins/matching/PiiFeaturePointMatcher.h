@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -149,7 +149,7 @@ namespace PiiMatching
  * QVector<int> vecModelIndices;
  * for (int i=0; i<20; ++i)
  *   vecModelIndices << i/10;
- * 
+ *
  * PiiFeaturePointMatcher<int, PiiMatrix<float> > pointMatcher.
  * pointMatcher.buildDatabase(matModelPoints,
  *                            matModelFeatures,
@@ -194,13 +194,13 @@ public:
 
   PiiFeaturePointMatcher();
   PiiFeaturePointMatcher(const PiiFeaturePointMatcher& other);
-  
+
   ~PiiFeaturePointMatcher();
 
   PiiFeaturePointMatcher& operator= (const PiiFeaturePointMatcher& other);
-  
+
   /**
-   * Builds the model database. This function either stores the 
+   * Builds the model database. This function either stores the
    * *features* for linear search or builds a [K-d tree](PiiKdtree),
    * which will be later used for quick queries. The most suitable
    * search technique is determined by the number of points and
@@ -238,7 +238,7 @@ public:
                      const QVector<int>& modelIndices = QVector<int>(),
                      PiiProgressController* controller = 0,
                      PiiDistanceMeasure<ConstFeatureIterator>* measure = 0);
-  
+
   /**
    * Matches a set of *points* with their corresponding feature
    * vectors in *features* to the database of models using *matcher*
@@ -259,7 +259,7 @@ public:
    *
    *     - Select the points in the query set that had the current
    *     candidate model in their list of closest matches.
-   *  
+   *
    *     - Run a matching algorithm such as RANSAC to see if this
    *     subset of points can be matched with the current model
    *     candidate.
@@ -298,7 +298,7 @@ public:
                                             Matcher& matcher) const;
 
   /**
-   * Sets the matching mode. If the matching mode is set to 
+   * Sets the matching mode. If the matching mode is set to
    * `MatchOneModel`, the search for matching models will be finished
    * immediately after the best match (if any) has been found.
    */
@@ -336,9 +336,9 @@ public:
   int closestMatchCount() const { return d->iClosestMatchCount; }
 
   /**
-   * Sets the maximum number of evaluations when searching a k-d tree. 
+   * Sets the maximum number of evaluations when searching a k-d tree.
    * This makes it possible to return correct matches for the majority
-   * of feature points while making the search much faster. Setting 
+   * of feature points while making the search much faster. Setting
    * *maxEvaluations* value to a non-positive value disables the
    * approximate nearest neighbor search optimization.
    */
@@ -404,7 +404,7 @@ private:
       this->release();
       return d;
     }
-    
+
     PiiMatrix<T> matModelPoints;
     PiiKdTree<SampleSet>* pKdTree;
     SampleSet modelFeatures;
@@ -422,10 +422,10 @@ private:
                      const PiiMatrix<T>& points,
                      PiiMatrix<T>& queryPoints,
                      PiiMatrix<T>& modelPoints) const;
-  
+
   static void removePoints(const QVector<int>& indices,
                            QList<QPair<int,int> >& matches);
-  
+
   static QList<QPair<int,int> > matchIndices(const QVector<int>& indices,
                                              const QList<QPair<int,int> >& matches);
 };

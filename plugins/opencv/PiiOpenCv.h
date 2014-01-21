@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -60,13 +60,13 @@ template <class Derived, class OpenCvType> class PiiConstCvArr
 {
 public:
   ~PiiConstCvArr() { PiiOpenCv::releaseCvArr(_pCvArr); }
-  
+
   operator const CvArr* () const { setData(); return reinterpret_cast<const CvArr*>(_pCvArr); }
   operator const OpenCvType* () const { setData(); return _pCvArr; }
-  
+
 protected:
   PiiConstCvArr(OpenCvType* ptr) : _pCvArr(ptr) {}
-  
+
   void setData()
   {
     if (_pCvArr != 0 && !PiiOpenCv::hasData(_pCvArr))
@@ -77,7 +77,7 @@ protected:
     if (_pCvArr != 0 && !PiiOpenCv::hasData(_pCvArr))
       cvSetData((CvArr*)this->_pCvArr, (void*)self()->row(0), self()->stride());
   }
-  
+
   OpenCvType* _pCvArr;
 
 private:
@@ -133,10 +133,10 @@ template <class T, bool isConst=false> class PiiIplImage :
   typedef typename Pii::If<isConst, PiiConstCvArr<PiiIplImage<T>,IplImage>, PiiCvArr<PiiIplImage<T>,IplImage> >::Type BaseType;
 public:
   /**
-   * Creates a new IplImage wrapper that shares the pixel data with 
+   * Creates a new IplImage wrapper that shares the pixel data with
    * *matrix*. If the `isConst` template parameter is `false`, the
    * shared data can be modified by OpenCV function calls. That is,
-   * the class can be casted to a non-const CvArr pointer. If 
+   * the class can be casted to a non-const CvArr pointer. If
    * `isConst` is `true`, a copy of the data will be created if it is
    * still shared when a pointer to a CvArr is requested.
    */
@@ -170,7 +170,7 @@ public:
   {
     std::swap(this->_pCvArr, const_cast<PiiIplImage&>(other)._pCvArr);
   }
-  
+
 private: PiiIplImage& operator= (const PiiIplImage& other);
 #endif
 };
@@ -202,7 +202,7 @@ public:
   {
     std::swap(this->_pCvArr, other._pCvArr);
   }
-  
+
   PiiCvImage(PiiMatrix&& matrix) :
     PiiMatrix<T>(matrix),
     BaseType(cvCreateMatHeader(matrix.rows(), matrix.columns(), PiiOpenCv::CvMatTraits<T>::matrixType))
@@ -214,7 +214,7 @@ public:
   {
     std::swap(this->_pCvArr, const_cast<PiiCvMat&>(other)._pCvArr);
   }
-  
+
 private: PiiCvMat& operator= (const PiiCvMat& other);
 #endif
 };
@@ -230,7 +230,7 @@ namespace PiiOpenCv
    *
    * @param columns the number of columns in the matrix
    *
-   * @return a newly allocated (one-channel) CvMat structure. 
+   * @return a newly allocated (one-channel) CvMat structure.
    * Deallocate with cvReleaseMat.
    */
   template <class T> inline CvMat* cvMat(int rows, int columns)
@@ -248,7 +248,7 @@ namespace PiiOpenCv
   {
     return PiiIplImage<T>(mat);
   }
-  
+
   /**
    * Creates a const wrapper for `mat` that can be used as an
    * IplImage in OpenCV function calls.
@@ -259,7 +259,7 @@ namespace PiiOpenCv
   {
     return PiiIplImage<T, true>(mat);
   }
-  
+
   /**
    * Creates a modifiable wrapper for `mat` that can be used as a
    * CvMat in OpenCV function calls.
@@ -270,7 +270,7 @@ namespace PiiOpenCv
   {
     return PiiCvMat<T>(mat);
   }
-  
+
   /**
    * Creates a const wrapper for `mat` that can be used as an
    * CvMat in OpenCV function calls.

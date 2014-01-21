@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,7 +26,7 @@ signals:
   void test();
   void test(int);
   void test(const QString&);
-  
+
 private slots:
   void invokeSlot();
 };

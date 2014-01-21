@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -51,7 +51,7 @@ template<class T>  void PiiMatrixDecomposer::operate(const PiiVariant& obj)
     PII_THROW_WRONG_SIZE(inputAt(0), matrix, 1, tr("N"));
   if (matrix.columns() != outputCount())
     PII_THROW_WRONG_SIZE(inputAt(0), matrix, 1, outputCount());
-  
+
   for (int i=outputCount(); i--; )
     emitObject(matrix(0,i), i);
 }

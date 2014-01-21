@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -49,7 +49,7 @@ class PiiContrastOperation : public PiiDefaultOperation
    * the center.
    */
   Q_PROPERTY(int radius READ radius WRITE setRadius);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION;
 public:
   PiiContrastOperation();

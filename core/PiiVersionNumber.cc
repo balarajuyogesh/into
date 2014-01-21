@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -188,7 +188,7 @@ int PiiVersionNumber::compare(const PiiVersionNumber& other) const
             return 1;
           continue;
         }
-      
+
       // Finally, try alphabetical ordering
       iPart1 = d->lstRevisionParts[i].compare(other.d->lstRevisionParts[i]);
       if (iPart1 != 0)
@@ -218,7 +218,7 @@ int PiiVersionNumber::compare(const PiiVersionNumber& other) const
       strTailPart.toInt(&bSuccess);
       return bSuccess ? iMultiplier : -iMultiplier;
     }
-  
+
   return 0;
 }
 

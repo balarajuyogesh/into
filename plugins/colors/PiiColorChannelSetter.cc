@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -43,7 +43,7 @@ PiiColorChannelSetter::PiiColorChannelSetter() : PiiDefaultOperation(new Data)
 
   for (int i=0; i<inputCount(); ++i)
     inputAt(i)->setOptional(true);
-  
+
   addSocket(new PiiOutputSocket("image"));
 }
 
@@ -62,7 +62,7 @@ void PiiColorChannelSetter::check(bool reset)
 void PiiColorChannelSetter::process()
 {
   PII_D;
-  
+
   // Image input connected -> copy image and modify it
   if (d->iFirstConnectedInput == 0)
     {

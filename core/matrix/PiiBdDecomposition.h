@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -38,7 +38,7 @@ namespace Pii
    *
    * ~~~
    * m >= n                       m < n
-   * 
+   *
    * ( d   e   u1  u1  u1 )      ( d   u1  u1  u1  u1  u1 )
    * ( v1  d   e   u2  u2 )      ( e   d   u2  u2  u2  u2 )
    * ( v1  v2  d   e   u3 )      ( v1  e   d   u3  u3  u3 )
@@ -88,7 +88,7 @@ namespace Pii
     tauQ.resize(1, iMinDimension);
     tauP.resize(1, iMinDimension);
     Real* pTauQ = tauQ[0], *pTauP = tauP[0];
-    
+
     if (iRows >= iCols)
       {
         // Reduce to upper bidiagonal using a two-sided series of
@@ -97,7 +97,7 @@ namespace Pii
           {
             // See qrDecompose() for an thorough explanation.
             typename PiiMatrix<Real>::column_iterator column = A.columnBegin(i)+i;
-        
+
             int iRowsLeft = iRows - i, iColsLeft = iCols - i - 1;
             Real beta;
             // This transform nulls out the current column vector
@@ -110,7 +110,7 @@ namespace Pii
                 reflectColumns((PiiMatrix<Real>&)A(i, i+1, -1, -1), column, pTauQ[i], pBfr);
                 // ... and this column.
                 *column = beta;
-                
+
                 typename PiiMatrix<Real>::row_iterator row = A.rowBegin(i)+i+1;
                 // This transform nulls out the current row vector
                 // right of superdiagonal.

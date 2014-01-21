@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,7 +24,7 @@
 #include <QRect>
 
 /**
- * An operation that combines adjacent sub-images to larger compounds. 
+ * An operation that combines adjacent sub-images to larger compounds.
  * This operation is used in situations where multiple sub-images are
  * extracted from a single large image and selected sub-images need to
  * be combined to form larger sub-images. The main use is in
@@ -48,7 +48,7 @@
  * corner. This input is always coupled with the *image* input.
  *
  * @in area - a rectangle bounding a sub-image within the large
- * image. Multiple rectangles may be read for each large image. 
+ * image. Multiple rectangles may be read for each large image.
  * (1-by-4 PiiMatrix<int>, interpreted as a PiiRectangle). This inputs
  * works in sync with `label` and assumes objects at a higher flow
  * level than `image`. Suitable input can be obtained for example
@@ -134,7 +134,7 @@ public:
 protected:
   void process();
   void syncEvent(SyncEvent* event);
-  
+
 private:
   void readLocation();
   void joinPieces();
@@ -152,14 +152,14 @@ private:
     Data();
     bool bTransparent;
     QColor clrBackground;
-    
+
     PiiVariant largeImage;
-    
+
     bool bDiscardDefault;
-    
+
     QList<QRect> rectList;
     QList<int> labelList;
-    
+
     PiiInputSocket* pImageInput, *pLocationInput, *pRectangleInput, *pLabelInput;
     PiiOutputSocket* pPieceOutput, *pRectangleOutput, *pLabelOutput;
 

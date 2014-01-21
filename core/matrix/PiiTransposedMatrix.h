@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,7 +30,7 @@ public:
   typedef typename std::iterator_traits<ColumnIterator>::value_type value_type;
   typedef typename std::iterator_traits<ColumnIterator>::pointer pointer;
   typedef typename std::iterator_traits<ColumnIterator>::reference reference;
-  
+
   PiiTransposedMatrixIterator(const Matrix* matrix) :
     _pMatrix(matrix),
     _columnBegin(matrix->columnBegin(0)),
@@ -84,7 +84,7 @@ public:
   bool operator!= (const PiiTransposedMatrixIterator& other) const { return _columnBegin != other._columnBegin; }
 
   value_type operator* () const { return *_columnBegin; }
-  
+
 private:
   const Matrix* _pMatrix;
   ColumnIterator _columnBegin, _columnEnd;
@@ -96,7 +96,7 @@ template <class Matrix> class PiiTransposedMatrix;
 template <class Matrix> struct PiiMatrixTraits<PiiTransposedMatrix<Matrix> >
 {
   enum { staticRows = Matrix::staticColumns, staticColumns = Matrix::staticRows };
-  
+
   typedef typename Matrix::value_type value_type;
   typedef typename Matrix::reference reference;
   typedef PiiTransposedMatrixIterator<Matrix> const_iterator;
@@ -140,10 +140,10 @@ public:
     return *this;
   }
 #endif
-  
+
   typename Traits::const_iterator begin() const { return typename Traits::const_iterator(&_matrix); }
   typename Traits::const_iterator end() const { return typename Traits::const_iterator(&_matrix, qMax(_matrix.columns()-1, 0)); }
-  
+
   typename Traits::const_column_iterator columnBegin(int index) const { return _matrix.rowBegin(index); }
   typename Traits::const_column_iterator columnEnd(int index) const { return _matrix.rowEnd(index); }
 

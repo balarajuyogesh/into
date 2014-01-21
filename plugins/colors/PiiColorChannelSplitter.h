@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -31,7 +31,7 @@
  * Outputs
  * -------
  *
- * @out channelX - color channel X as an intensity image. 
+ * @out channelX - color channel X as an intensity image.
  * `channel0` is for the red color channel, `channel1` for green, and
  * `channel2` for blue. If the input image has an alpha channel, it
  * is emitted from `channel3`.
@@ -46,13 +46,13 @@ class PiiColorChannelSplitter : public PiiDefaultOperation
 public:
   PiiColorChannelSplitter();
   ~PiiColorChannelSplitter();
-  
+
 protected:
   void process();
 
 private:
   template <class Color, int channels> void splitChannels(const PiiVariant& obj);
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {
