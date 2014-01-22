@@ -147,20 +147,6 @@ namespace PiiFuncOpPrivate
                                   OutputHolder<Object, T>>::Type Type;
   };
 
-  template <class ReturnType, class... Args>
-  ReturnType resolveReturnType(ReturnType(Args...));
-
-  template <class ReturnType, class T, class... Args>
-  ReturnType resolveType(ReturnType (T::*)(Args...));
-
-  template <class T>
-  decltype(resolveReturnType(&T::operator())) resolveReturnType(T);
-
-  template <class Function, class... Args> struct ResultOf
-  {
-    typedef decltype(resolveReturnType(std::declval<Function>())) Type;
-  };
-
   struct ValueReader
   {
     template <class Object, class Holder, class T>
@@ -236,7 +222,7 @@ protected:
 
   typedef std::tuple<typename ParamHolder<Args>::Type...> HolderPack;
   typedef std::tuple<typename PiiFuncOpPrivate::ParamTraits<Args>::ValueType...> ValuePack;
-  typedef typename PiiFuncOpPrivate::ResultOf<Function,Args...>::Type ReturnType;
+  typedef typename std::result_of<Function(Args...)>::type ReturnType;
 
   class NonVoidData : public PiiDefaultOperation::Data
   {
@@ -256,11 +242,7 @@ protected:
       pReturnOutput->emitObject(function(PiiFuncOpPrivate::ParamTraits<Args>::toParam(values)...));
     }
 
-    // If "Function" is a function pointer type, store it as a
-    // pointer. Otherwise store the callable object.
-    typename std::conditional<std::is_function<Function>::value,
-                              Function*, Function>::type function;
-
+    Function function;
     PiiOutputSocket* pReturnOutput;
     HolderPack holderPack;
   };
@@ -281,11 +263,7 @@ protected:
       function(PiiFuncOpPrivate::ParamTraits<Args>::toParam(values)...);
     }
 
-    // If "Function" is a function pointer type, store it as a
-    // pointer. Otherwise store the callable object.
-    typename std::conditional<std::is_function<Function>::value,
-                              Function*, Function>::type function;
-
+    Function function;
     HolderPack holderPack;
   };
   typedef typename Pii::IfClass<Pii::IsVoid<ReturnType>, VoidData, NonVoidData>::Type Data;
@@ -339,7 +317,7 @@ namespace PiiFuncOpPrivate
   // Resolves a function pointer. Uses the function type itself as
   // "Function" to PiiFunctionOperation.
   template <class ReturnType, class... Args>
-  PiiFunctionOperation<ReturnType(Args...), Args...> resolveType(ReturnType(Args...));
+  PiiFunctionOperation<ReturnType (*)(Args...), Args...> resolveType(ReturnType(Args...));
 
   // Resolves a member function pointer. Uses the object type as
   // "Function". Not used directly but just as a helper for the
