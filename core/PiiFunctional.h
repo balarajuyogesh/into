@@ -18,6 +18,10 @@
 
 #include "PiiMetaTemplate.h"
 #include "PiiTypeTraits.h"
+#ifdef PII_CXX11
+#  include <utility>
+#  include <functional>
+#endif
 
 namespace Pii
 {
@@ -437,9 +441,7 @@ namespace Pii
   /// @internal
   template <class ReturnType, class Object, class... Args> struct MemberFunction
   {
-    typedef typename IfClass<IsConst<Object>,
-                             ReturnType (Object::*)(Args...),
-                             ReturnType (Object::*)(Args...) const>::Type MemberType;
+    typedef ReturnType (Object::* MemberType)(Args...);
 
     MemberFunction(Object* object, MemberType member) :
       pObject(object), pMember(member) {}
@@ -448,7 +450,6 @@ namespace Pii
 
     template <class... Params>
     ReturnType operator() (Params&&... params) const { return (pObject->*pMember)(std::forward<Params>(params)...); }
-    //ReturnType operator() (Args&&... args) const { return (pObject->*pMember)(std::forward<Args>(args)...); }
 
     Object* pObject;
     MemberType pMember;
@@ -483,11 +484,11 @@ namespace Pii
   }
 
   template <class ReturnType, class Instance, class Object, class... Args>
-  MemberFunction<ReturnType, Object, Args...>
+  MemberFunction<ReturnType, const Object, Args...>
   memberFunction(const Instance instance,
                  ReturnType (Object::* member)(Args...) const)
   {
-    return MemberFunction<ReturnType, Object, Args...>(instance, member);
+    return MemberFunction<ReturnType, const Object, Args...>(instance, member);
   }
 
   template <std::size_t... Indices> struct IndexList {};
