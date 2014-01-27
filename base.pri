@@ -7,7 +7,7 @@
 # Use "qmake MODE=debug" or "qmake MODE=release" to switch between debug/release builds.
 
 INTO_LIB_VERSION = 2.0.0
-win32:LIBVER=2
+win32:INTO_LIBV=2
 
 isEmpty(MODE) { MODE = debug }
 
@@ -76,5 +76,6 @@ defineReplace(forcedLink) {
 PRO_FILE_BASENAME = $$basename(_PRO_FILE_)
 PRO_FILE_BASENAME = $$replace(PRO_FILE_BASENAME, .pro, "")
 
+include(c++11.pri)
 include(qt5.pri)
 include(extensions.pri)

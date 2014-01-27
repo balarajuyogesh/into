@@ -14,4 +14,4 @@ include($$INTODIR/libinstall.pri)
 VERSION         = $$INTO_LIB_VERSION
 
 DEFINES += PII_BUILD_YDIN
-LIBS += -lpiicore$$LIBVER
+LIBS += -lpiicore$$INTO_LIBV

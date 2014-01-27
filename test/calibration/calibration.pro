@@ -1,2 +1,2 @@
 include(../unit_test.pri)
-LIBS += -lpiigui$$LIBVER
+LIBS += -lpiigui$$INTO_LIBV

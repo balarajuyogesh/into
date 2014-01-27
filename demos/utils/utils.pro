@@ -9,6 +9,6 @@ INTODIR         = ../..
 include($$INTODIR/base.pri)
 
 DEFINES += PII_BUILD_DEMOUTILS
-LIBS += -lpiiydin$$LIBVER -lpiicore$$LIBVER
+LIBS += -lpiiydin$$INTO_LIBV -lpiicore$$LIBVER
 
 qt5: QT += widgets
