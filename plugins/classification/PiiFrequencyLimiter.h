@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,7 +28,7 @@
 
 class PiiFrequencyLimiter
 {
-  
+
 public:
   PiiFrequencyLimiter(double maxFrequency = 10);
 
@@ -44,7 +44,7 @@ public:
    */
   void setMaxFrequency(double maxFrequency);
   double maxFrequency() { return _dMaxFrequency; }
-  
+
 private:
   double _dMaxFrequency,_dMaxMeanInterval,_dFilterInterval,_dMeanInterval;
   QTime _filterTime;

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -52,7 +52,7 @@ void TestPiiImage::bottomHat()
                           0,0,0,1,1,1,1,0,
                           0,0,1,1,0,0,0,0,
                           0,0,0,0,0,0,0,0);
-    
+
     PiiMatrix<int> mask(3,3,
                         1,1,1,
                         1,1,1,
@@ -60,7 +60,7 @@ void TestPiiImage::bottomHat()
 
     //BottomHat is operation where first image goes through dilate
     //operation. After dilate operation result image is eroded and
-    //subtracted with orginal image 
+    //subtracted with orginal image
     //Output after dilate:
     // 1,1,1,1,1,1,1,1,
     // 1,1,1,1,1,1,1,1,
@@ -89,7 +89,7 @@ void TestPiiImage::bottomHat()
     // 0 0 0 0 0 0 0 0
     // 0 0 1 0 0 0 0 0
     // 0 0 0 0 0 0 0 0
-    // 0 0 0 0 0 0 0 0 
+    // 0 0 0 0 0 0 0 0
 
     PiiMatrix<int> result(PiiImage::bottomHat(source,mask));
 
@@ -104,7 +104,7 @@ void TestPiiImage::bottomHat()
                                                0,0,0,0,0,0,0,0,
                                                0,0,0,0,0,0,0,0)));
 
-    
+
   }
 }
 void TestPiiImage::calculateDirection()
@@ -134,7 +134,7 @@ void TestPiiImage::calculateDirection()
 
     double width = 0.0, length = 0.0;
     const int label = 1;
-    
+
     PiiMatrix<double> matEigenVectors =  PiiImage::calculateDirection(source, label, &length, &width);
     DO_CALCULATE_DIRECTION_ASSERTS();
     QVERIFY(length > width);
@@ -156,14 +156,14 @@ void TestPiiImage::calculateDirection()
 
     double width = 0.0, length = 0.0;
     const int label = 1;
-    
+
     PiiMatrix<double> matEigenVectors =  PiiImage::calculateDirection(source, label, &length, &width);
     DO_CALCULATE_DIRECTION_ASSERTS();
     QVERIFY(length > width);
     // Expecting most prominent orientation to be either (1,0) or (-1,0).
     QVERIFY( Pii::almostEqualRel(Pii::abs(matEigenVectors(0,0)), 1.0) );
     QVERIFY( Pii::almostEqualRel(matEigenVectors(0,1), 0.0) );
-    
+
   }
 
   {
@@ -180,16 +180,16 @@ void TestPiiImage::calculateDirection()
 
     double width = 0.0, length = 0.0;
     const int label = 1;
-    
+
     PiiMatrix<double> matEigenVectors =  PiiImage::calculateDirection(source, label, &length, &width);
     DO_CALCULATE_DIRECTION_ASSERTS();
     // Expecting length == width (at least almost).
     QVERIFY( Pii::almostEqualRel(length, width) );
-    // Expecting eigenvectors (+-1, 0) or (0,+-1) 
+    // Expecting eigenvectors (+-1, 0) or (0,+-1)
     QVERIFY( Pii::almostEqualRel(Pii::abs(matEigenVectors(0,0)), 1.0) || Pii::almostEqualRel(Pii::abs(matEigenVectors(0,1)), 1.0) );
     QVERIFY( Pii::almostEqualRel(Pii::abs(matEigenVectors(1,0)), 1.0) || Pii::almostEqualRel(Pii::abs(matEigenVectors(1,1)), 1.0) );
 
-    
+
   }
 
   {
@@ -205,9 +205,9 @@ void TestPiiImage::calculateDirection()
 
     double width = 0.0, length = 0.0;
     const int label = 0;
-    
+
     PiiMatrix<double> matEigenVectors =  PiiImage::calculateDirection(source, label, &length, &width);
- 
+
     DO_CALCULATE_DIRECTION_ASSERTS();
     QVERIFY(length > width);
     QVERIFY( Pii::almostEqualRel(Pii::abs(matEigenVectors(0,0)), 1.0/::sqrt(2.0)) );
@@ -215,7 +215,7 @@ void TestPiiImage::calculateDirection()
   }
 
   {
-    
+
     PiiMatrix<int> source(8,8,
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,
@@ -228,14 +228,14 @@ void TestPiiImage::calculateDirection()
 
     double width = 0.0, length = 0.0;
     const int label = 1;
-    
+
     PiiMatrix<double> matEigenVectors =  PiiImage::calculateDirection(source, label, &length, &width);
     DO_CALCULATE_DIRECTION_ASSERTS();
     QVERIFY(length > width);
     QVERIFY( Pii::abs(matEigenVectors(0,0)) > Pii::abs(matEigenVectors(0,1)) );
   }
 
-  { 
+  {
     PiiMatrix<int> source(8,8,
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,
@@ -248,14 +248,14 @@ void TestPiiImage::calculateDirection()
 
     double width = 0.0, length = 0.0;
     const int label = 1;
-    
+
     PiiMatrix<double> matEigenVectors =  PiiImage::calculateDirection(source, label, &length, &width);
     DO_CALCULATE_DIRECTION_ASSERTS();
     QVERIFY(length > width);
     QVERIFY( Pii::abs(matEigenVectors(0,0)) > Pii::abs(matEigenVectors(0,1)) );
   }
 
-  { 
+  {
     PiiMatrix<int> source(8,8,
                           0,0,1,0,0,0,0,0,
                           0,0,0,1,0,0,0,0,
@@ -268,22 +268,22 @@ void TestPiiImage::calculateDirection()
 
     double width = 0.0, length = 0.0;
     const int label = 1;
-    
+
     PiiMatrix<double> matEigenVectors =  PiiImage::calculateDirection(source, label, &length, &width);
     DO_CALCULATE_DIRECTION_ASSERTS();
     QVERIFY(length > width);
     QVERIFY( Pii::abs(matEigenVectors(0,0)) < Pii::abs(matEigenVectors(0,1)) );
   }
 
-  { 
+  {
     PiiMatrix<int> source(1,1,1);
 
     double width = 0.0, length = 0.0;
     const int label = 1;
-    
+
     PiiMatrix<double> matEigenVectors =  PiiImage::calculateDirection(source, label, &length, &width);
   }
-  
+
 }
 void TestPiiImage::calculateProperties()
 {
@@ -300,7 +300,7 @@ void TestPiiImage::calculateProperties()
                           0,0,0,0,0,3,0,0,0,0,
                           4,4,0,0,0,0,0,0,0,0,
                           4,4,0,0,0,0,0,0,0,0);
-    
+
     int nbLabels = 4;  // Labels 1,2,3,4
     PiiMatrix<int> areas;
     PiiMatrix<int> centroids;
@@ -322,28 +322,28 @@ void TestPiiImage::calculateProperties()
     //Note! that in centroids matrix first column is column position
     //starting from index zero. Second column is row position starting
     //from index zero.
-                        
+
     QVERIFY(Pii::equals(centroids,PiiMatrix<int>(4,2,
                                                  4,3,
                                                  9,3,
                                                  5,7,
                                                  1,9)));
-    
+
     QVERIFY(Pii::equals(bbox,PiiMatrix<int>(4,4,
                                             0,1,7,6,
                                             8,1,2,4,
                                             5,7,1,1,
                                             0,8,2,2)));
 
-   
-    
+
+
   }
 }
 
 void TestPiiImage::sweepLine()
 {
   {
-        
+
     PiiMatrix<int> source(10,10,
                           0,0,0,0,0,0,0,0,0,0,
                           0,0,1,0,0,0,0,0,0,0,
@@ -359,9 +359,9 @@ void TestPiiImage::sweepLine()
     PiiMatrix<double> coordinates(1,4,
                                   2.0,1.0,7.0,6.0);
 
-    
-    
-           
+
+
+
     PiiMatrix<double> result = PiiImage::sweepLine(source,
                                                    coordinates,
                                                    PiiImage::SweepCollectorFunction<double,int>(),
@@ -369,10 +369,10 @@ void TestPiiImage::sweepLine()
 
     QVERIFY(result.rows() != 0);
     QVERIFY(result.columns() != 0);
-      
-       
+
+
   }
-  
+
 
 }
 
@@ -405,7 +405,7 @@ void TestPiiImage::close()
                                               0,0,1,1,0,0,0,0,
                                               0,0,0,0,0,0,0,0)));
 
-  }  
+  }
 }
 
 void TestPiiImage::open()
@@ -437,7 +437,7 @@ void TestPiiImage::open()
                                               0,0,0,0,0,0,0,0,
                                               0,0,0,0,0,0,0,0)));
 
-  }  
+  }
 }
 
 void TestPiiImage::createMask()
@@ -473,14 +473,14 @@ void TestPiiImage::createMask()
   }
 
   /* Some masks for visual inspection.
-     { 
+     {
      Pii::printMatrix(std::cout, PiiImage::createMask(PiiImage::RectangularMask, 29, 29), " ", "\n");
      std::cout << std::endl;
      Pii::printMatrix(std::cout, PiiImage::createMask(PiiImage::EllipticalMask, 49, 29), " ", "\n");
      std::cout << std::endl;
      Pii::printMatrix(std::cout, PiiImage::createMask(PiiImage::DiamondMask, 29, 39), " ", "\n");
      }
-  */  
+  */
 }
 
 void TestPiiImage::erode()
@@ -503,8 +503,8 @@ void TestPiiImage::erode()
                                               0,0,1,1,0,0,
                                               0,0,0,0,0,0,
                                               0,0,0,0,0,0)));
-    
-    
+
+
   }
 
   {
@@ -522,7 +522,7 @@ void TestPiiImage::erode()
                         1,1,1,
                         1,1,1,
                         1,1,1);
-    
+
     PiiMatrix<int> result = PiiImage::erode(source, mask);
     QVERIFY(Pii::equals(result,PiiMatrix<int>(8,8,
                                               0,0,0,0,0,0,0,0,
@@ -551,7 +551,7 @@ void TestPiiImage::erode()
                         1,1,1,
                         1,1,1,
                         1,1,1);
-    
+
     PiiMatrix<int> result = PiiImage::erode(source, mask,true);
     QVERIFY(Pii::equals(result,PiiMatrix<int>(8,8,
                                               1,0,0,0,0,0,0,0,
@@ -582,10 +582,10 @@ void TestPiiImage::erode()
                         1,1,1,1,
                         1,1,1,1,
                         1,1,1,1); // origin (1,2)
-    
+
     PiiMatrix<int> result = PiiImage::erode(source, mask,false);
     //Pii::matlabPrint(std::cout, result);
-    
+
     QVERIFY(Pii::equals(result,PiiMatrix<int>(8,8,
                                               0,0,0,0,0,0,0,0,
                                               0,0,0,0,0,0,0,0,
@@ -595,18 +595,18 @@ void TestPiiImage::erode()
                                               0,0,0,0,0,0,0,0,
                                               0,0,0,0,0,0,0,0,
                                               0,0,0,0,0,0,0,0)));
-    
 
 
-    
+
+
 
     mask = PiiMatrix<int>(2,4,
                           1,1,1,1,
-                          1,1,1,1); // 
+                          1,1,1,1); //
                                     //
                                     //if first element is
                                     //0,0 then origin is (1,2)
-    
+
 
     result = PiiImage::erode(source, mask,false);
     QVERIFY(Pii::equals(result,PiiMatrix<int>(8,8,
@@ -638,7 +638,7 @@ void TestPiiImage::dilate()
                           0,0,1,1,0,0,
                           0,0,0,0,0,0,
                           0,0,0,0,0,0);
-    
+
     PiiMatrix<int> result = PiiImage::dilate(source, mask);
     QVERIFY(Pii::equals(result,PiiMatrix<int>(6,6,
                                               0,0,0,0,0,0,
@@ -649,8 +649,8 @@ void TestPiiImage::dilate()
                                               0,0,0,0,0,0)));
   }
   {
-   
-    
+
+
     PiiMatrix<int> source(8,8,
                           0,0,0,0,0,0,0,0,
                           1,1,1,1,1,1,1,0,
@@ -665,7 +665,7 @@ void TestPiiImage::dilate()
                         1,1,1,
                         1,1,1,
                         1,1,1);
-    
+
     PiiMatrix<int> result = PiiImage::dilate(source, mask);
     //Pii::matlabPrint(std::cout,result);
     QCOMPARE(result.rows(), source.rows());
@@ -680,11 +680,11 @@ void TestPiiImage::dilate()
                                               0,1,1,1,1,1,1,1,
                                               0,1,1,1,1,0,0,0)));
 
-    
+
   }
   {
-    
-   
+
+
     PiiMatrix<int> source(8,8,
                           0,0,0,0,0,0,0,0,
                           1,1,1,1,1,1,1,1,
@@ -694,12 +694,12 @@ void TestPiiImage::dilate()
                           0,0,0,1,1,1,1,1,
                           0,0,1,1,0,0,0,0,
                           0,0,0,0,0,0,0,0);
-    
+
     PiiMatrix<int> mask(3,4,
                         1,1,1,1,
                         1,1,1,1,
                         1,1,1,1); // origin (1,2)
-    
+
     PiiMatrix<int> result = PiiImage::dilate(source, mask);
     // Pii::matlabPrint(std::cout, result);
     QVERIFY(Pii::equals(result,PiiMatrix<int>(8,8,
@@ -711,7 +711,7 @@ void TestPiiImage::dilate()
                                               1,1,1,1,1,1,1,1,
                                               1,1,1,1,1,1,1,1,
                                               1,1,1,1,1,0,0,0)));
-    
+
   }
 }
 void TestPiiImage::scaleLinearInterpolation()
@@ -726,7 +726,7 @@ void TestPiiImage::scaleLinearInterpolation()
                       8,9,10,11,12,
                       11,12,13,14,15,
                       14,15,16,17,18);
-  
+
   QCOMPARE(Pii::sum<float>(PiiImage::scale(PiiMatrix<float>(input), 5,5) * 2 - temp), 0.0f);
 
   PiiMatrix<int> input2(4,4,
@@ -744,7 +744,7 @@ void TestPiiImage::scaleNearestNeighborInterpolation()
                        5,6,7,8,
                        9,10,11,12,
                        13,14,15,16);
-  
+
   QVERIFY(Pii::equals(PiiImage::scale(input, 0.5, Pii::NearestNeighborInterpolation),PiiMatrix<int>(2,2,
                                                                                                     1,3,
                                                                                                     9,11)));
@@ -758,7 +758,7 @@ void TestPiiImage::scaleNearestNeighborInterpolation()
   QVERIFY(Pii::equals(PiiImage::scale(input, 2,4, Pii::NearestNeighborInterpolation),PiiMatrix<int>(2,4,
                                                                                                     1,2,3,4,
                                                                                                     9,10,11,12)));
-  
+
   QVERIFY(Pii::equals(PiiImage::scale(input, 8,8, Pii::NearestNeighborInterpolation),PiiMatrix<int>(8,8,
                                                                                                     1,1,2,2,3,3,4,4,
                                                                                                     1,1,2,2,3,3,4,4,
@@ -797,7 +797,7 @@ void TestPiiImage::scaleColor()
   PiiMatrix<int> result(2,2,
                         0x01010101,0x03030303,
                         0x09090909,0x11111111);
-  
+
   PiiMatrix<PiiColor4<unsigned char> >* pInput = reinterpret_cast<PiiMatrix<PiiColor4<unsigned char> >*>(&input);
   PiiMatrix<PiiColor4<unsigned char> >* pResult = reinterpret_cast<PiiMatrix<PiiColor4<unsigned char> >*>(&result);
 
@@ -811,10 +811,10 @@ void TestPiiImage::scaleColor()
   PiiMatrix<int> result2(2,2,
                          0x01010102,0x02020402,
                          0x02030202,0x02010101);
-  
+
   PiiMatrix<PiiColor4<unsigned char> >* pInput2 = reinterpret_cast<PiiMatrix<PiiColor4<unsigned char> >*>(&input2);
   PiiMatrix<PiiColor4<unsigned char> >* pResult2 = reinterpret_cast<PiiMatrix<PiiColor4<unsigned char> >*>(&result2);
-  
+
   QVERIFY(Pii::equals(PiiImage::scale(*pInput2, 0.5),*pResult2));
 }
 
@@ -829,9 +829,9 @@ void TestPiiImage::rotate()
                               1,2,3,4,5,
                               6,7,8,9,10,
                               11,12,13,14,15);
-  
+
   QVERIFY(Pii::equals(PiiImage::rotate(mat, 0.0),mat));
-  
+
   QVERIFY(Pii::equals(PiiImage::rotate(mat, -M_PI/2),PiiMatrix<int>(3,3,
                                                                     3,6,9,
                                                                     2,5,8,
@@ -843,14 +843,14 @@ void TestPiiImage::rotate()
                                                                              3,8,13,
                                                                              2,7,12,
                                                                              1,6,11)));
-                                                              
-                                                          
-  
+
+
+
   QVERIFY(Pii::equals(PiiImage::rotate(mat, -M_PI),PiiMatrix<int>(3,3,
                                                                   9,8,7,
                                                                   6,5,4,
                                                                   3,2,1)));
-  
+
 
 
   QVERIFY(Pii::equals(PiiImage::rotate(mat, -3.0*M_PI/2),PiiMatrix<int>(3,3,
@@ -864,7 +864,7 @@ void TestPiiImage::rotate()
                       7,8);
 
   QVERIFY(Pii::equals(PiiImage::rotate(mat2, 0.0),mat2));
-  
+
   QVERIFY(Pii::equals(PiiImage::rotate(mat2, -M_PI/2),PiiMatrix<int>(2,3,
                                                                      2,5,8,
                                                                      1,4,7)));
@@ -935,7 +935,7 @@ void TestPiiImage::hysteresisThreshold()
                                      0,1,1,0,0,1,0,0,
                                      0,1,1,0,0,0,1,0,
                                      0,0,0,0,0,0,0,0)));
-  
+
 }
 
 void TestPiiImage::detectEdges()
@@ -979,7 +979,7 @@ PiiMatrix<typename TernaryFunction::result_type> TestPiiImage::apply(const PiiMa
 void TestPiiImage::adaptiveThreshold()
 {
   using namespace PiiImage;
-  
+
   const PiiMatrix<int> source(3,3,
                               1,2,3,
                               4,5,6,
@@ -1044,12 +1044,12 @@ void TestPiiImage::adaptiveThreshold()
   // 3.0 3.0 4.0
   // 3.8 3.7 N/A
   // 3.8 N/A N/A
-  
+
   QVERIFY(Pii::equals(result, PiiMatrix<int>(3,3,
                                              0,0,0,
                                              1,1,0,
                                              1,0,0)));
-                                             
+
 }
 
 void TestPiiImage::suppressNonMaxima()
@@ -1069,7 +1069,7 @@ void TestPiiImage::suppressNonMaxima()
   QVERIFY(Pii::equals(PiiImage::suppressNonMaxima(PiiImage::gradientMagnitude(gradientX, gradientY),
                                                   PiiImage::gradientDirection(gradientX, gradientY),
                                                   PiiImage::RadiansToPoints<float>())
-                      ,PiiMatrix<int>(8,8, 
+                      ,PiiMatrix<int>(8,8,
                                       0,0,0,0,0,0,0,0,
                                       0,0,6,6,6,6,0,0,
                                       0,6,0,0,0,0,6,0,
@@ -1078,14 +1078,14 @@ void TestPiiImage::suppressNonMaxima()
                                       0,6,0,0,0,0,6,0,
                                       0,0,6,6,6,6,0,0,
                                       0,0,0,0,0,0,0,0)));
-  
+
   PiiMatrix<int> source2(5,5,
                          1,2,3,0,0,
                          1,2,3,0,0,
                          1,2,3,0,0,
                          1,2,3,0,0,
                          1,2,3,0,0);
-  
+
   gradientX = PiiImage::filter<int>(source2, PiiImage::SobelXFilter);
   gradientY = PiiImage::filter<int>(source2, PiiImage::SobelYFilter);
 
@@ -1175,7 +1175,7 @@ void TestPiiImage::backProject()
                                    13,14,15,16);
 
     QVERIFY(Pii::equals(PiiImage::backProject(ch1, ch2, model),model));
-  }    
+  }
 }
 
 void TestPiiImage::equalize()
@@ -1211,7 +1211,7 @@ void TestPiiImage::histogram()
                        0, 1, 2, 3,
                        0, 1, 2, 3,
                        0, 1, 2, 3);
-  
+
   PiiMatrix<int> hist(PiiImage::histogram(image));
   QCOMPARE(hist.rows(),1);
   QCOMPARE(hist.columns(),4);
@@ -1222,8 +1222,8 @@ void TestPiiImage::histogram()
           QCOMPARE(hist(r,c), 4);
         }
     }
-  
- 
+
+
 }
 void TestPiiImage::cumulative()
 {
@@ -1241,12 +1241,12 @@ void TestPiiImage::cumulative()
             QCOMPARE(cum(r,c),4);
           else
             {
-              int val = c*4 + 4;	 
+              int val = c*4 + 4;	
               QCOMPARE(cum(r,c), val);
             }
         }
     }
-            
+
 
 }
 void TestPiiImage::normalize()
@@ -1331,7 +1331,7 @@ void TestPiiImage::labelImage()
 
   int count = 0;
   PiiMatrix<int> result = PiiImage::labelImage(mat, &count);
-  
+
   PiiMatrix<int> labels(8,8,
                         1,1,1,0,0,0,0,0,
                         0,1,0,2,2,2,0,2,
@@ -1356,7 +1356,7 @@ void TestPiiImage::labelImage()
                       0,1,0,1,0,1,0,1,0,1,
                       1,0,1,0,1,0,1,0,1,0,
                       0,1,0,1,0,1,0,1,0,1);
-  
+
   result = PiiImage::labelImage(mat2, &count);
   int index = 0;
   for (int r=0; r<result.rows(); r++)
@@ -1368,7 +1368,7 @@ void TestPiiImage::labelImage()
           QCOMPARE(result(r,c), 0);
       }
   QCOMPARE(count, 50);
-  
+
   result = PiiImage::labelLargerThan(mat, 5, &count);
   PiiMatrix<int> correct(labels);
   correct(correct != 2) = 0;
@@ -1411,7 +1411,7 @@ void TestPiiImage::labelImage()
                       0,3,0,3,0,0,0,0,0,0,
                       0,0,0,0,0,0,2,0,0,0,
                       0,0,0,1,0,2,0,1,0,0);
-  
+
   labelMat = PiiImage::labelImage(mat4,
                                   std::bind2nd(std::not_equal_to<int>(), 0),
                                   Pii::YesFunction<bool>(),
@@ -1484,7 +1484,7 @@ void TestPiiImage::labelLargerThan()
                                      1,0,0,0,0,
                                      0,0,0,0,0,
                                      0,0,0,0,0)));
-                        
+
   result = PiiImage::labelLargerThan(source, 2);
 
   QVERIFY(Pii::equals(result,
@@ -1531,7 +1531,7 @@ void TestPiiImage::thin()
                                             0,0,1,1,0,0,
                                             0,0,0,0,1,0,
                                             0,0,0,0,0,0)));
-  
+
   result = PiiImage::thin(source, -1);
   QVERIFY(Pii::equals(result,PiiMatrix<int>(6,6,
                                             0,0,0,0,0,0,
@@ -1665,9 +1665,9 @@ void TestPiiImage::findNextBoundary()
                            1,0,1,1,1,1,1,0,1,
                            1,0,0,0,0,0,0,0,1,
                            1,1,1,1,1,1,1,1,1);
-    
+
     PiiMatrix<int> result;
-    
+
     PiiMatrix<unsigned char> mask(9,9);
     PiiBoundaryFinder finder(objects, &mask);
 
@@ -1692,7 +1692,7 @@ void TestPiiImage::findNextBoundary()
 
     //QDebug d = qDebug();
     //Pii::matlabPrint(d, mask);
-    
+
     QVERIFY(Pii::equals(mask,PiiMatrix<unsigned char>(9,9,
                                                       2,3,3,3,3,3,3,3,1,
                                                       3,0,0,0,0,0,0,0,3,
@@ -1753,7 +1753,7 @@ void TestPiiImage::findNextBoundary()
                            0,1,0,0,1,0,1,0,
                            1,0,1,1,0,1,0,1,
                            0,0,0,0,0,0,0,0);
-    
+
     PiiBoundaryFinder finder(objects);
     finder.findNextBoundary(objects, std::bind2nd(std::not_equal_to<int>(), 0));
     //QDebug d = qDebug();
@@ -1849,7 +1849,7 @@ void TestPiiImage::findBoundaries()
                          0,2,2,2,2,3,1,0,
                          0,0,0,0,0,0,0,0,
                          0,0,0,0,0,0,0,0);
-  
+
   // Everything other than zero is an object
   QList<PiiMatrix<int> > coordinates(PiiBoundaryFinder::findBoundaries(objects, std::bind2nd(std::not_equal_to<int>(), 0)));
   QCOMPARE(coordinates.size(), 3);
@@ -1891,7 +1891,7 @@ void TestPiiImage::findBoundaries()
                                                     4,0,
                                                     5,0,
                                                     5,1)));
-  
+
   // Repeat with a boundary mask
   PiiMatrix<unsigned char> mask;
   PiiBoundaryFinder::findBoundaries(objects, std::bind2nd(std::greater_equal<int>(), 1), &mask);
@@ -1966,7 +1966,7 @@ void TestPiiImage::zeroAbove()
     PiiMatrix<int> a(3,3, 8, 4, 31,   4, 0, 3,  15,8, 8);
     QVERIFY(Pii::equals(PiiImage::zeroAbove(a, 8),PiiMatrix<int>(3,3, 0,4,0, 4,0,3 ,0,0,0)));
   }
-  
+
   {
     PiiMatrix<float> a(2,3, 8.0, 4.0, 31.0,   4.0, 7.9999, 1.0);
     QVERIFY(Pii::equals(PiiImage::zeroAbove(a, 7.99999f),PiiMatrix<float>(2,3, 0.0, 4.0, 0.0,  4.0, 7.9999, 1.0)));
@@ -1980,7 +1980,7 @@ void TestPiiImage::zeroBelow()
     PiiMatrix<int> a(3,3, 8, 4, 31,   4, 0, 3,  15,8, 8);
     QVERIFY(Pii::equals(PiiImage::zeroBelow(a, 8),PiiMatrix<int>(3,3, 8,0,31, 0,0,0, 15,8,8)) );
   }
-  
+
   {
     PiiMatrix<double> a(2,3, 8.0, 4.0, 31.0,   4.0, 7.9999, 1.0);
     QVERIFY(Pii::equals(PiiImage::zeroBelow(a, 7.99999),PiiMatrix<double>(2,3, 8.0, 0.0, 31.0,  0.0, 0.0, 0.0)) );

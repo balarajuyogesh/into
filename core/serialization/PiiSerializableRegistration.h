@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -35,12 +35,12 @@
  * #include <PiiSerializableRegistration.h>
  * ~~~
  *
- * The file recognizes the following macros (everything but 
+ * The file recognizes the following macros (everything but
  * `PII_SERIALIZABLE_CLASS` are optional):
  *
  * - `PII_SERIALIZABLE_CLASS` - the name of the serializable type.
  *
- * - `PII_SERIALIZABLE_QOBJECT` - the name of the serializable type. 
+ * - `PII_SERIALIZABLE_QOBJECT` - the name of the serializable type.
  * Same as PII_SERIALIZABLE_CLASS, but marks the class dynamic at the
  * same time. The difference to PII_VIRTUAL_METAOBJECT is that
  * QObjects have a default metaobject implementation based on
@@ -92,9 +92,9 @@
  * serializable object as well as the object itself.
  *
  * - `PII_BUILDING_LIBRARY` - 1 if you are building a shared library
- * from which you want to export a serializable type, 0 otherwise. 
+ * from which you want to export a serializable type, 0 otherwise.
  * This is needed to properly handle `__declspec(dllexport)`
- * and `__declspec(dllimport)`. This macro implies 
+ * and `__declspec(dllimport)`. This macro implies
  * `PII_SERIALIZABLE_SHARED`.
  *
  * - `PII_ARCHIVE_TYPE` - the archive type the object's serializer is
@@ -103,13 +103,13 @@
  * PiiGenericOutputArchive). This makes it possible to use the
  * serializable class with any archive implementation, but imposes a
  * performance penalty. Use 1 for text archives and 2 for binary
- * archives. Note that this macro has no effect if 
+ * archives. Note that this macro has no effect if
  * `PII_SERIALIZABLE_SHARED` is defined, because it suppresses
  * serializer registrations.
  *
  * - `PII_CUSTOM_FACTORY` - if this macro is defined, a factory
  * object will be registered not only to the default serialization
- * factory but also to the archive-specific factory determined by 
+ * factory but also to the archive-specific factory determined by
  * `PII_ARCHIVE_TYPE`.
  *
  * The following example shows how to register an abstract class that
@@ -129,7 +129,7 @@
  * PII_SERIALIZABLE_EXPORT(PiiOperation);
  * ~~~
  *
- * **NOTE**! It is **not** possible to register class templates. 
+ * **NOTE**! It is **not** possible to register class templates.
  * Template instantiations are OK, but generic templates cannot be
  * registered without instantiating them. Furthermore, template
  * instantiations with more than one template parameter cannot be

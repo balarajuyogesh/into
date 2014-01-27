@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -20,7 +20,7 @@
 
 /**
  * A class that is used by PiiOutputArchive to store tracked
- * pointers while serializing them. When a tracked pointer of type 
+ * pointers while serializing them. When a tracked pointer of type
  * `T` is saved first time, PiiOutputArchive calls
  * PiiSerialization::createTrackedPointerHolder(T*) and inserts the
  * returned object to the list of tracked pointers. The list
@@ -79,7 +79,7 @@ public:
   PiiTrackedPointerHolder(const void* pointer = 0,
                           int pointerIndex = 0,
                           bool reference = false);
-  
+
   virtual ~PiiTrackedPointerHolder();
 
   /**
@@ -109,7 +109,7 @@ public:
    * Sets the "saved by reference" flag.
    */
   void setSavedByReference(bool saved) { _bSavedByReference = saved; }
-  
+
 protected:
   /// The address of the tracked object.
   const void* _pointer;

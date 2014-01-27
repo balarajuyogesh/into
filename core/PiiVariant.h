@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -152,7 +152,7 @@ class PII_CORE_EXPORT PiiVariant
           {
 #define PII_VARIANT_SERIALIZE_PRIMITIVE(NAME, PREFIX)                   \
             case NAME ## Type: archive & PII_NVP(pValueStr, _value.PREFIX ## Value); break
-            
+
             // Search in the order of (supposed) prevalence
             PII_VARIANT_SERIALIZE_PRIMITIVE(Int, i);
             PII_VARIANT_SERIALIZE_PRIMITIVE(Double, d);
@@ -164,11 +164,11 @@ class PII_CORE_EXPORT PiiVariant
             PII_VARIANT_SERIALIZE_PRIMITIVE(Char, c);
             PII_VARIANT_SERIALIZE_PRIMITIVE(Short, s);
             PII_VARIANT_SERIALIZE_PRIMITIVE(Int64, l);
-      
+
             PII_VARIANT_SERIALIZE_PRIMITIVE(UnsignedChar, uc);
             PII_VARIANT_SERIALIZE_PRIMITIVE(UnsignedShort, us);
             PII_VARIANT_SERIALIZE_PRIMITIVE(UnsignedInt64, ul);
-            
+
 #undef PII_VARIANT_SERIALIZE_PRIMITIVE
           }
       }
@@ -193,8 +193,8 @@ class PII_CORE_EXPORT PiiVariant
       var._pVTable->load(ar, var);
     }
   };
-    
-  
+
+
 public:
   /**
    * An enumeration for primitive types. The names correspond to
@@ -213,7 +213,7 @@ public:
    * ID always tell the primitive type, if possible. It is then
    * possible to quickly check for "integerness" or "floatness" of any
    * template type. For example, assume that the "subnet" 1/~0xff (IDs
-   * 0x100 - 0x1ff) is reserved for your template type `MyType`<T>. 
+   * 0x100 - 0x1ff) is reserved for your template type `MyType`<T>.
    * Then, 0x100 (0x100 + `CharType`) should be `MyType`<`char`>
    * and so on.
    */
@@ -223,16 +223,16 @@ public:
       ShortType,
       IntType,
       Int64Type,
-      
+
       UnsignedCharType = 0x08,
       UnsignedShortType,
       UnsignedIntType,
       UnsignedInt64Type,
-      
+
       FloatType = 0x10,
       DoubleType,
       //LongDoubleType,
-      
+
       BoolType = 0x18,
       VoidPtrType = 0x19,
       LastPrimitiveType = VoidPtrType,
@@ -295,7 +295,7 @@ public:
    * Destroys the variant.
    */
   ~PiiVariant();
-  
+
   /**
    * Returns `true` if this variant is a primitive type, `false`
    * otherwise.
@@ -306,7 +306,7 @@ public:
    * otherwise.
    */
   static bool isPrimitive(unsigned int type) { return type <= LastPrimitiveType; }
-  
+
   /**
    * Returns `true` if this variant is an integer type (char, short,
    * int, qint64) and `false` otherwise. Note that the function may
@@ -328,7 +328,7 @@ public:
   static bool isInteger(unsigned int type) { return (type & 0x10) == 0; }
 
   /**
-   * Returns `true` if this variant is a floating point type and 
+   * Returns `true` if this variant is a floating point type and
    * `false` otherwise. See [isInteger()] for more information.
    */
   bool isFloat() const { return (type() & 0x18) == 0x10; }
@@ -337,7 +337,7 @@ public:
    * `false` otherwise. See [isInteger()] for more information.
    */
   static bool isFloat(unsigned int type) { return (type & 0x18) == 0x10; }
-  
+
   /**
    * Returns `true` if this variant is an unsigned integer type and
    * `false` otherwise. See isInteger() for more information.
@@ -350,7 +350,7 @@ public:
   static bool isUnsigned(unsigned int type) { return (type & 0x18) == 0x8; }
 
   /**
-   * Returns `true` if the type of this variant is not 
+   * Returns `true` if the type of this variant is not
    * `InvalidType`, and `false` otherwise.
    */
   bool isValid() const { return type() != InvalidType; }
@@ -359,7 +359,7 @@ public:
    * `false` otherwise.
    */
   static bool isValid(unsigned int type) { return type != InvalidType; }
-      
+
   /**
    * Get the type of the variant. To compare for a certain type, you
    * may do the following:
@@ -381,7 +381,7 @@ public:
    * is at the caller.
    *
    * @return a `const` reference to the wrapped object, if the type
-   * `T` is not one of the primitive types supported by PiiVariant. 
+   * `T` is not one of the primitive types supported by PiiVariant.
    * Otherwise, returns the primitive type as a value.
    */
   template <class T> inline typename PII_MAP_TYPE(PiiVariantValueMap, T) valueAs() const
@@ -397,7 +397,7 @@ public:
 private:
   /* This class plays chicken with binary compatibility. There is no
      d-pointer because PiiVariant is the most common data type used in
-     Into, and its allocations and deallocations must be really fast. 
+     Into, and its allocations and deallocations must be really fast.
      Therefore, all unnecessary heap allocations must be avoided. The
      idea is to store a copy of the class instance into _buffer if it
      fits there. Otherwise, the data must be placed into heap, and
@@ -409,7 +409,7 @@ private:
   template <class T> friend struct VTableImpl;
   template <unsigned int typeId> struct TypeIdMapper;
   template <unsigned int typeId> friend struct TypeIdMapper;
-  
+
   /* A changeable virtual function table. Different types have
      different implementations, and we must thus be able to change the
      virtual table. Using a C++ interface for this would cost an
@@ -488,7 +488,7 @@ namespace Pii
   /**
    * A global function that returns the corresponding variant type ID
    * for any type. A specialization is provided for each primitive
-   * type. One should write more specializations for custom types. 
+   * type. One should write more specializations for custom types.
    * There is no default implementation.
    *
    * @internal
@@ -531,12 +531,12 @@ template <class T> struct PiiVariant::SmallObjectFunctions
   {
     new (to._buffer) T(*from.ptrAs<T>());
   }
-  
+
   static void destructImpl(PiiVariant& var)
   {
     var.ptrAs<T>()->~T();
   }
-  
+
   static void copyImpl(PiiVariant& to, const PiiVariant& from)
   {
     *to.ptrAs<T>() = *from.ptrAs<T>();
@@ -560,12 +560,12 @@ template <class T> struct PiiVariant::LargeObjectFunctions
   {
     to._pointer = new T(*from.ptrAs<T>());
   }
-  
+
   static void destructImpl(PiiVariant& var)
   {
     delete var.ptrAs<T>();
   }
-  
+
   static void copyImpl(PiiVariant& to, const PiiVariant& from)
   {
     *to.ptrAs<T>() = *from.ptrAs<T>();
@@ -621,7 +621,7 @@ template <unsigned int typeId> struct PiiVariant::TypeIdMapper
   template <> inline PII_MAP_TYPE(PiiVariantValueMap, TYPE) PiiVariant::valueAs<TYPE>() const { return _value.PREFIX ## Value; } \
   template <> inline TYPE& PiiVariant::valueAs<TYPE>() { return _value.PREFIX ## Value; } \
   namespace Dummy {}
-  
+
 
 PII_PRIMITIVE_VARIANT_DECL(char, c, Char);
 PII_PRIMITIVE_VARIANT_DECL(short, s, Short);

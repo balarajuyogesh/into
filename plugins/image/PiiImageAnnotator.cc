@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -38,13 +38,13 @@ PiiImageAnnotator::PiiImageAnnotator() :
   PiiDefaultOperation(new Data)
 {
   PII_D;
-  
+
   addSocket(d->pImageInput = new PiiInputSocket("image"));
   addSocket(d->pAnnotationInput = new PiiInputSocket("annotation"));
   d->pAnnotationInput->setOptional(true);
   addSocket(d->pTypeInput = new PiiInputSocket("type"));
   d->pTypeInput->setOptional(true);
-  
+
   addSocket(d->pImageOutput = new PiiOutputSocket("image"));
 }
 
@@ -76,18 +76,18 @@ bool PiiImageAnnotator::enabled() const { return _d()->bEnabled; }
 void PiiImageAnnotator::check(bool reset)
 {
   PII_D;
-  
+
   PiiDefaultOperation::check(reset);
   d->bAnnotationConnected = d->pAnnotationInput->isConnected();
   d->bTypeConnected = d->pTypeInput->isConnected();
   if (d->bTypeConnected && !d->bAnnotationConnected)
     PII_THROW(PiiExecutionException, tr("Type input cannot be connected if the annotation input is not connected."));
 }
-  
+
 void PiiImageAnnotator::process()
 {
   PII_D;
-  
+
   PiiVariant obj = d->pImageInput->firstObject();
 
   if (!d->bEnabled)
@@ -98,7 +98,7 @@ void PiiImageAnnotator::process()
         {
         case UnsignedCharColorMatrixType:
           d->annotate<PiiColor<unsigned char> >(obj);
-          break;        
+          break;
         case UnsignedCharColor4MatrixType:
           d->annotate<PiiColor4<unsigned char> >(obj);
           break;
@@ -253,7 +253,7 @@ void PiiImageAnnotator::Data::drawAnnotations(QImage* image, const QVariantList&
       // All types must have x
       if (!map.contains("x"))
         continue;
-      
+
       if (map.contains("pen"))
         painter.setPen(map["pen"].value<QPen>());
       else
@@ -263,7 +263,7 @@ void PiiImageAnnotator::Data::drawAnnotations(QImage* image, const QVariantList&
         painter.setBrush(map["brush"].value<QBrush>());
       else
         painter.setBrush(Qt::NoBrush);
-      
+
       if (map["x"].type() == QVariant::Double)
         drawAnnotation<float,double>(&painter, map);
       else
@@ -283,7 +283,7 @@ template <class T, class U> void PiiImageAnnotator::Data::drawAnnotation(QPainte
   T x2 = annotation["x2"].value<U>();
   T y2 = annotation["y2"].value<U>();
   QString text = annotation["text"].toString();
-  
+
   switch (type)
     {
     case Text:      painter->drawText(x,y,text); break;

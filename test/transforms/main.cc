@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -58,12 +58,12 @@ void TestPiiTransforms::linearHough()
     double distanceResolution = 1.0;
     double angleResolution = 45.0;
     PiiMatrix<int> result(PiiHoughTransform(angleResolution,distanceResolution).transform<int>(img));
-   
+
     int r,c;
     Pii::max(result, &r, &c);
-    
+
     //qDebug()<<"dist : "<<(r-rows)*distanceResolution<<" angle: "<<c*angleResolution;
-    
+
     QCOMPARE(r, result.rows()/2); // line crosses origin
     QCOMPARE(c, 3); // 135 degrees
   }
@@ -80,11 +80,11 @@ void TestPiiTransforms::linearHough()
     int r,c;
     Pii::max(result, &r, &c);
     //qDebug()<<"dist : "<<r*distanceResolution<<" angle: "<<c*angleResolution;
-    
+
     QCOMPARE(r, result.rows()/2 - 1); // minimum distance to origin is ~1 pixel (negative d)
     QCOMPARE(c, 3); // 135 degrees
   }
-  
+
   {
     PiiMatrix<int> img(5,5,
                        0,0,0,1,0,
@@ -100,12 +100,12 @@ void TestPiiTransforms::linearHough()
     int r,c;
     Pii::max(result, &r, &c);
     //qDebug()<<"dist : "<<r*distanceResolution<<" angle should be 0 or 90 (0): "<<c*angleResolution;
-    
+
     QCOMPARE(1.0,(r-rows)*distanceResolution); // d is 1
     QCOMPARE(0.0,c*angleResolution); // 0 degrees
   }
 
-  
+
   {
     PiiMatrix<int> img(5,5,
                        1,1,1,1,1,
@@ -117,16 +117,16 @@ void TestPiiTransforms::linearHough()
     double distanceResolution = 1.0;
     double angleResolution = 45.0;
     PiiMatrix<int> result(PiiHoughTransform(angleResolution, distanceResolution).transform<int>(img));
- 
+
     int rows = result.rows()/2;
     int r,c;
     Pii::max(result, &r, &c);
 
- 
+
     QCOMPARE(-2.0,(r-rows)*distanceResolution); // d is -2
     QCOMPARE(90.0,c*angleResolution); // 90 degrees
   }
-  
+
   {
     PiiMatrix<int> img(7,7,
                        1,1,1,1,1,1,1,
@@ -138,16 +138,16 @@ void TestPiiTransforms::linearHough()
                        0,0,0,0,1,0,0);
     double distanceResolution = 1.0;
     double angleResolution = 45.0;
-    PiiMatrix<int> result(PiiHoughTransform(angleResolution, distanceResolution).transform<int>(img));    
-    
+    PiiMatrix<int> result(PiiHoughTransform(angleResolution, distanceResolution).transform<int>(img));
+
     int r,c;
     Pii::max(result, &r, &c);
     //qDebug()<<"highest dist : "<<r*distanceResolution<<" angle: "<<c*angleResolution;
-    
+
     int rows = result.rows()/2;
     QCOMPARE(-3.0,(r-rows)*distanceResolution); // d is -3
     QCOMPARE(90.0,c*angleResolution); // 90 degrees
-       
+
 
     // Suppress highest peak
     result(r,c) = 0;
@@ -158,7 +158,7 @@ void TestPiiTransforms::linearHough()
     QCOMPARE(1.0,(r-rows)*distanceResolution); //d is 1
     QCOMPARE(135.0, c*angleResolution);
   }
-  
+
   {
     PiiMatrix<int> img(4,4,
                        0,0,0,1,
@@ -168,14 +168,14 @@ void TestPiiTransforms::linearHough()
     double distanceResolution = 1.0;
     double angleResolution = 45.0;
     PiiMatrix<int> result(PiiHoughTransform(angleResolution, distanceResolution).transform<int>(img));
-    
+
     //QCOMPARE(result.rows(), 5);
     //QCOMPARE(result.columns(), 4);
     //Pii::matlabPrint(std::cout, result);
     int r,c;
     Pii::max(result, &r, &c);
     //qDebug()<<"dist : "<<r*distanceResolution<<" angle: "<<c*angleResolution;
-    
+
     QCOMPARE(r,2); // d is 0
     QCOMPARE(c,1); // 45 degrees
   }
@@ -200,7 +200,7 @@ void TestPiiTransforms::linearHough()
     PiiMatrix<int> result(PiiTransforms::linearHough<int>(img, std::bind2nd(std::greater<int>(), 0), angleResolution,
                                                           distanceResolution));
     //PiiMatrix<int> result(PiiTransforms::linearHough<int, std::greater<int> >(img, 0, 10));
-    
+
     int r,c;
     int high=Pii::max(result, &r, &c);
     //qDebug()<<"Isoin: "<<high<<" r: "<<r*distanceResolution <<" angle :"<<c*angleResolution;
@@ -291,7 +291,7 @@ void TestPiiHoughTransformOperation::hough()
   connectAllInputs();
 
   QVERIFY(start());
-  
+
   try
     {
       //Read image.
@@ -308,7 +308,7 @@ void TestPiiHoughTransformOperation::hough()
         for(int c =0; c < img.columns(); ++c)
           if(img(r,c) != 0)
             bEmpty = false;
- 
+
       QVERIFY(!bEmpty);
       QVERIFY(sendObject("image", img));
     }
@@ -331,9 +331,9 @@ void TestPiiHoughTransformOperation::hough()
    stop();
 }
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
-  //Contains all transform-namespace functions. 
+  //Contains all transform-namespace functions.
   TestPiiTransforms transform;
   QTest::qExec(&transform,argc, argv);
 
@@ -341,6 +341,6 @@ int main(int argc, char *argv[])
   TestPiiHoughTransformOperation op;
   QTest::qExec(&op, argc, argv);
 
-    
+
   return 0;
 }

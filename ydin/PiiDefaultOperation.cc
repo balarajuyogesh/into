@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -130,7 +130,7 @@ void PiiDefaultOperation::check(bool reset)
   // Make all output sockets listeners to their connected inputs.
   for (int i=0; i<d->lstOutputs.size(); ++i)
     d->lstOutputs[i]->setInputListener();
-  
+
   // Install flow controller
   delete d->pFlowController;
   d->pFlowController = createFlowController();
@@ -166,7 +166,7 @@ PiiFlowController* PiiDefaultOperation::createFlowController()
 
   if (iConnectedInputCount == 0)
     return 0;
-  
+
   // If there is only one connected input, PiiOneInputFlowController
   // is our choice.
   if (iConnectedInputCount == 1)
@@ -177,7 +177,7 @@ PiiFlowController* PiiDefaultOperation::createFlowController()
     return new PiiOneGroupFlowController(d->lstInputs, d->lstOutputs);
 
   PiiDefaultFlowController::RelationList lstRelations;
-  
+
   // If there are more than one non-negative group id, assign loose
   // relationships between them.
   if (iPositiveGroupIdCount > 1)
@@ -273,7 +273,7 @@ void PiiDefaultOperation::setThreadingCapabilities(ThreadingCapabilities threadi
 
   if (d->bChecked)
     return;
-  
+
   d->threadingCapabilities = threadingCapabilities;
 
   // Fix thread count if necessary

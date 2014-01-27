@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -65,7 +65,7 @@
 #endif
 
 /**
- * Write a log message. This version of the function takes a 
+ * Write a log message. This version of the function takes a
  * `va_list` argument instead of a variable number of arguments. This
  * function does not call `va_end` on `argp`; the caller is
  * responsible for it.
@@ -117,7 +117,7 @@ namespace PiiLog
   /**
    * A typedef for a pointer to a message filter function. See
    * setMessageFilter() for details.
-   */ 
+   */
   typedef bool (*MessageFilter)(const char* module, QtMsgType level);
 
   /**
@@ -145,7 +145,7 @@ namespace PiiLog
   /**
    * Sets the global log message filter and return a pointer to the
    * previous filter (which may be 0). Set the filter to 0 to disable
-   * filtering. By default, the message filter is set to 
+   * filtering. By default, the message filter is set to
    * [defaultMessageFilter](defaultMessageFilter()).
    *
    * The message filter is used to select which messages are actually
@@ -173,7 +173,7 @@ namespace PiiLog
   PII_CORE_EXPORT MessageFilter setMessageFilter(MessageFilter filter);
 
   /**
-   * The default message filter. This filter inspects the 
+   * The default message filter. This filter inspects the
    * [PII_LOG_LEVEL] environment variable. If the variable is not set or
    * the `level` is higher than or equal to `PII_LOG_LEVEL`, `true`
    * will be returned. Otherwise, `false` will be returned. The log
@@ -182,7 +182,7 @@ namespace PiiLog
    * means that debug messages will not be logged etc.
    */
   PII_CORE_EXPORT bool defaultMessageFilter(const char* module, QtMsgType level);
-  
+
   /**
    * Sets the log format. The default log format is an empty string,
    * which means that only the message itself will be logged. The
@@ -289,5 +289,5 @@ PII_LOG_FUNCTION_NOOP(Fatal)
 #endif
 
 /// @endhide
-  
+
 #endif //_PIILOG_H

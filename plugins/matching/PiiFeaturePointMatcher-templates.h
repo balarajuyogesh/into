@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -52,15 +52,15 @@ void PiiFeaturePointMatcher<T, SampleSet>::buildDatabase(const PiiMatrix<T>& poi
 {
   const int iSamples = PiiSampleSet::sampleCount(features),
     iFeatures = PiiSampleSet::featureCount(features);
-  
+
   if (points.rows() != iSamples ||
       (modelIndices.size() != 0 && points.rows() != modelIndices.size()))
     PII_THROW(PiiClassificationException,
               QCoreApplication::translate("PiiFeaturePointMatcher",
                                           "There must be an equal number of points, features, and model indices."));
-  
+
   d = d->createCleanCopy();
-  
+
   // We are going to use the K-d tree only if the number of points is
   // much larger than the number of features. This limit would be way
   // too low if we performed exact search, but we won't.
@@ -97,7 +97,7 @@ PiiMatching::MatchList PiiFeaturePointMatcher<T,SampleSet>::findMatchingModels(c
 
   typedef QHash<int, QList<QPair<int,int> > > MatchHash;
   MatchHash hashMatchIndices;
-  
+
   // Find N closest matches for each point
   for (int i=0; i<iPoints; ++i)
     {
@@ -143,7 +143,7 @@ PiiMatching::MatchList PiiFeaturePointMatcher<T,SampleSet>::findMatchingModels(c
   QList<QPair<int,int> > lstCandidateModels;
   int iMinMatches = 1;
   int iMaxMatches = 1;
-  
+
   // Collect models that have enough matches
   for (MatchHash::iterator i = hashMatchIndices.begin();
        i != hashMatchIndices.end(); ++i)
@@ -163,7 +163,7 @@ PiiMatching::MatchList PiiFeaturePointMatcher<T,SampleSet>::findMatchingModels(c
 
   matQueryPoints.reserve(iMaxMatches);
   matModelPoints.reserve(iMaxMatches);
-  
+
   while (!lstCandidateModels.isEmpty())
     {
       // Collect point correspondences in the last candidate model.
@@ -185,12 +185,12 @@ PiiMatching::MatchList PiiFeaturePointMatcher<T,SampleSet>::findMatchingModels(c
           //qDebug("Model matched with %d inliers", vecInliers.size());
           // removePoints requires a sorted index list
           qSort(vecInliers);
-          
+
           lstMatchedModels << PiiMatching::Match(iCurrentCandidate,
                                                  matcher.bestModel(),
                                                  matchIndices(vecInliers, lstMatchedPairs));
 
-          
+
           // If only one match is requested, return now
           if (d->matchingMode == PiiMatching::MatchOneModel)
             return lstMatchedModels;

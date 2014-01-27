@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -34,7 +34,7 @@ PiiNetworkServerThread::~PiiNetworkServerThread()
 {
   stop();
   wait();
-  
+
   if (d->bOwnProtocol)
     delete d->pProtocol;
 }
@@ -76,7 +76,7 @@ void PiiNetworkServerThread::run()
       // the time limit, kill the thread.
       if (!d->requestCondition.wait(d->iMaxIdleTime))
         break;
-      
+
       if (!d->bRunning)
         break;
 

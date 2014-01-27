@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -35,7 +35,7 @@ namespace PiiCalibration
   }
 
 #ifndef PII_NO_OPENCV
-  
+
   // A utility function that creates an RelativePosition structure
   // out of rotation and translation vectors. rowIndex specifies the
   // active row in the rotation and translation matrices.
@@ -52,7 +52,7 @@ namespace PiiCalibration
     // [  0 fy cy ]
     // [  0  0  1 ]
     CvMat* result = PiiOpenCv::cvMat<double>(3, 3);
-    
+
     // Initialize the intrinsic matrix with the given input values.
     result->data.db[0] = intrinsic.focalLength.x;
     result->data.db[4] = intrinsic.focalLength.y;
@@ -176,7 +176,7 @@ namespace PiiCalibration
     // Collect all world points here (64-bit double coordinates)
     CvMat* pWorldPoints = cvCreateMat(totalPoints, 3, CV_64FC1);
     CvMat* pImagePoints = cvCreateMat(totalPoints, 2, CV_64FC1);
-    
+
     // Go through all points in all views and store to the OpenCv
     // matrices.
     for (int view = 0, pointIndex = 0; view < viewCount; ++view)
@@ -289,11 +289,11 @@ namespace PiiCalibration
     PiiMatrix<double> r2 = camera2.rotationMatrix();
     PiiMatrix<double> t1 = camera1.translationMatrix();
     PiiMatrix<double> t2 = camera2.translationMatrix();
-        
+
     // Rs = R2*R1^-1 = R2*R1^T, because rotation matrices are orthogonal
     PiiMatrix<double> rs(r2 * Pii::transpose(r1));
     PiiMatrix<double> ts(t2 - rs * t1);
-    
+
     return RelativePosition(rs, ts);
   }
 
@@ -322,7 +322,7 @@ namespace PiiCalibration
     if (matrix.rows() != 3 || matrix.columns() != 3)
       return result;
 
-    // (R - R^T) / 2 = M sin(theta) 
+    // (R - R^T) / 2 = M sin(theta)
     PiiMatrix<double> M((matrix - Pii::transpose(matrix)) * 0.5);
     /* M is now
        [  0 -z  y ]
@@ -342,9 +342,9 @@ namespace PiiCalibration
     /* If the rotation vector has only one non-zero component, we can
        pick the sine and cosine directly from the rotation matrix. The
        rotation matrices around x, y, and z axis are:
-       
+
              x            y            z
-             
+
        [  1  0  0 ] [  c  0  s ] [  c -s  0 ]
        [  0  c -s ] [  0  1  0 ] [  s  c  0 ]
        [  0  s  c ] [ -s  0  c ] [  0  0  1 ]
@@ -363,7 +363,7 @@ namespace PiiCalibration
     */
     if (typeMask == 0)
       return PiiVector<double,3>(vector.row(0));
-    
+
     // The lenght of the rotation vector is now equal to sin(theta)
     double sinTheta = Pii::norm(vector,2);
     vector /= sinTheta; // normalize to unit length
@@ -406,7 +406,7 @@ namespace PiiCalibration
           cosTheta = 1.0 - cosTheta;
         }
       }
-    
+
     double theta = atan2(sinTheta, cosTheta);
     if (theta < 0) theta += M_PI;
 
@@ -437,7 +437,7 @@ namespace PiiCalibration
     // Tangential distortion model...
     double tangentialX = 2*intrinsic.p1*xy + intrinsic.p2*(r2 + 2*x2);
     double tangentialY = intrinsic.p1*(r2 + 2*y2) + 2*intrinsic.p2*xy;
-    
+
     // Apply the distortion model
     *newX = x*radialDistortion + tangentialX;
     *newY = y*radialDistortion + tangentialY;
@@ -450,7 +450,7 @@ namespace PiiCalibration
       _intrinsic(intrinsic),
       _dX(x), _dY(y)
     {}
-    
+
     int functionCount() const
     {
       return 1;
@@ -467,7 +467,7 @@ namespace PiiCalibration
     const CameraParameters& _intrinsic;
     double _dX, _dY;
   };
-  
+
   void undistort(const CameraParameters& intrinsic,
                  double x, double y,
                  double *newX, double *newY)
@@ -483,7 +483,7 @@ namespace PiiCalibration
     *newY = matResult(0,1);
     /*
     double radialDistortion, tangentialX, tangentialY, r2, x2, y2, xy, tmpX, tmpY, xDiff, yDiff;
-    
+
     // First translate to the principal point and divide out the
     // focal length.
     x = (x - intrinsic.center.x)/intrinsic.focalLength.x;
@@ -536,7 +536,7 @@ namespace PiiCalibration
     PiiMatrix<double> matResult(PiiMatrix<double>::uninitialized(distorted.rows(), Pii::isNan(zValue) ? 2 : 3));
     if (!Pii::isNan(zValue))
       Pii::fill(matResult.columnBegin(2), matResult.columnEnd(2), zValue);
-    
+
     for (int row=0; row<matResult.rows(); ++row)
       {
         const double* pSource = distorted[row];
@@ -545,28 +545,28 @@ namespace PiiCalibration
       }
     return matResult;
   }
-    
+
   PiiMatrix<double> cameraToWorldCoordinates(const PiiMatrix<double>& coordinatePoints,
                                              const RelativePosition& extrinsic)
   {
-    // X_c = [x_c, y_c, z_c]^T  =  coordinates in camera reference frame 
+    // X_c = [x_c, y_c, z_c]^T  =  coordinates in camera reference frame
     // X_w = [x_w, y_w, z_w]^T = coordinates in world reference frame
     // R is cameras rotation matrix
     // T is cameras translation matrix --> [t_x,t_y,t_z]^T
     // Now  X_c = RX_w + T --> X_w = R^-1(X_c - T)
-    
-    
+
+
     PiiMatrix<double> worldCoordinates(coordinatePoints.rows(),3);
     PiiMatrix<double> invR(Pii::transpose(extrinsic.rotationMatrix()));
 
     PiiMatrix<double> tR = extrinsic.translationMatrix();
-   
+
     for(int i = coordinatePoints.rows(); i--;)
       {
         double x = coordinatePoints(i,0) - tR(0,0);
         double y = coordinatePoints(i,1) - tR(1,0);
         double z = coordinatePoints(i,2) - tR(2,0);
-       
+
         worldCoordinates(i,0) = invR(0,0)*x + invR(0,1)*y+invR(0,2)*z;
         worldCoordinates(i,1) = invR(1,0)*x + invR(1,1)*y+invR(1,2)*z;
         worldCoordinates(i,2) = invR(2,0)*x + invR(2,1)*y+invR(2,2)*z;
@@ -581,11 +581,11 @@ namespace PiiCalibration
     //Now X_c = R*X_w+T , where R is rotation matrix and T is
     //translation matrix.
     //X_c = [x_c,y_c,z_c]^T is point in camera coordinates,
-    //X_w = [x_w,y_w,z_w]^T is point in world coordinates  
+    //X_w = [x_w,y_w,z_w]^T is point in world coordinates
 
     PiiMatrix<double> cameraCoordinates(worldPoints.rows(), worldPoints.columns());
     PiiMatrix<double> matR = extrinsic.rotationMatrix();
-    
+
     for (int r = worldPoints.rows(); r--; )
       {
         double x = worldPoints(r,0);
@@ -599,7 +599,7 @@ namespace PiiCalibration
 
     return cameraCoordinates;
   }
-  
+
   void normalizedToPixelCoordinates(const CameraParameters& intrinsic,
                                     double x, double y,
                                     double *newX, double *newY)
@@ -638,7 +638,7 @@ namespace PiiCalibration
   {
     return cameraToPixelCoordinates(worldToCameraCoordinates(points, extrinsic), intrinsic);
   }
-  
+
   PiiMatrix<double> perspectiveProjection(const PiiMatrix<double>& points,
                                           double zValue)
   {
@@ -648,7 +648,7 @@ namespace PiiCalibration
         result(r,0) = points(r,0)/points(r,2);
         result(r,1) = points(r,1)/points(r,2);
       }
-    
+
     // Fill with a constant value to z
     if (!Pii::isNan(zValue))
       for (int r=points.rows(); r--; )
@@ -684,14 +684,14 @@ namespace PiiCalibration
   /************************************************************************
    * Remapping functions
    ************************************************************************/
-  
+
   template <class UnaryFunction>
   PiiMatrix<PiiPoint<typename UnaryFunction::result_type > > undistortMap(int rows, int columns,
                                                                           const CameraParameters& intrinsic,
                                                                           const UnaryFunction& func)
   {
     typedef PiiPoint<typename UnaryFunction::result_type> PointType;
-    
+
     // Four corners in (distorted) image coordinates
     PiiMatrix<double> matCorners(4,2,
                                  0.0, 0.0,
@@ -715,7 +715,7 @@ namespace PiiCalibration
 
     //std::cout << dXStep << " " << dYStep << "\n";
     //std::cout.flush();
-    
+
 
     // Result image is the same size as the input
     PiiMatrix<PointType> matResult(rows, columns);
@@ -736,7 +736,7 @@ namespace PiiCalibration
       }
     return matResult;
   }
-  
+
   PiiImage::DoubleCoordinateMap undistortMap(int rows, int columns,
                                              const CameraParameters& intrinsic)
   {

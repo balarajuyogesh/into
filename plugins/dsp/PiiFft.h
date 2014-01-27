@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -42,7 +42,7 @@ public:
    * Perform an inverse Fourier transform.
    */
   template <class S> PiiMatrix<std::complex<T> > inverseFft(const PiiMatrix<std::complex<S> >& source);
-    
+
 private:
   template <class S> bool forward1d(const S* source, std::complex<T>* destination, int count);
   template <class S> bool inverse1d(const std::complex<S>* source, std::complex<T>* destination, int count);
@@ -50,7 +50,7 @@ private:
   void factorize(int count);
   template <class S> void reorderSeries(const S* source, std::complex<T>* dest);
   void initializeTrigonomials(int radix);
-  
+
   inline void fftPrime(int radix);
   inline void fft2(std::complex<T>* z);
   inline void fft3(std::complex<T>* z);
@@ -86,7 +86,7 @@ namespace PiiDsp
   {
     static PiiMatrix<std::complex<T> > apply(const PiiMatrix<std::complex<T> >& matrix) { return matrix; }
   };
-  
+
   /**
    * Calculates the correlation of two signals using the Fourier
    * transform. The fast correlation is defined as
@@ -100,7 +100,7 @@ namespace PiiDsp
    *
    * @exception PiiMathException& if input matrices are different in
    * size
-   * 
+   *
    * @relates PiiFft
    */
   template <class T> inline PiiMatrix<T> fastCorrelation(const PiiMatrix<T>& a,
@@ -124,9 +124,9 @@ namespace PiiDsp
       result.column -= correlation.columns();
     return result;
   }
-  
+
   /**
-   * Find the translation of signal `a` with respect to signal `b`. 
+   * Find the translation of signal `a` with respect to signal `b`.
    * This function uses [fastCorrelation()] to find the maximum
    * correlation.
    *

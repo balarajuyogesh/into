@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -94,7 +94,7 @@ void TestPiiMath::median()
                   4,2,3,1,5 };
 
   QCOMPARE(Pii::medianN(a2,2),-1);
-  
+
   QCOMPARE(Pii::fastMedian(a3,3),10.0);
   QCOMPARE(Pii::medianN(a3,3),10.0);
   QCOMPARE(Pii::median3(a3),10.0);
@@ -106,7 +106,7 @@ void TestPiiMath::median()
   QCOMPARE(Pii::fastMedian(a7,7),0.0f);
   QCOMPARE(Pii::medianN(a7,7),0.0f);
   QCOMPARE(Pii::median7(a7),0.0f);
-  
+
   QCOMPARE(Pii::fastMedian(a9,9),5u);
   QCOMPARE(Pii::medianN(a9,9),5u);
   QCOMPARE(Pii::median9(a9),5u);
@@ -203,7 +203,7 @@ void TestPiiMath::normalize()
   QCOMPARE(Pii::norm(Pii::normalized(vector),2), 1.0);
 
   QCOMPARE(Pii::norm(Pii::normalized(Pii::transpose(vector), Pii::Vertically),2), 1.0);
-  
+
   Pii::normalize(vector);
   QCOMPARE(Pii::norm(vector,2), 1.0);
 }
@@ -223,12 +223,12 @@ void TestPiiMath::combinations()
                                                    1,2,
                                                    0,2,
                                                    0,1)));
-  
+
   combinations.resize(0,5);
   // Try to take five elements out of a set with only one element
   Pii::combinations(1,5,Pii::MatrixRowAdder<int>(combinations));
   QVERIFY(combinations.isEmpty());
-  
+
   combinations.resize(0,1000);
   Pii::combinations(1000,1000,Pii::MatrixRowAdder<int>(combinations));
   QCOMPARE(combinations.rows(), 1);
@@ -265,7 +265,7 @@ void TestPiiMath::transformRows()
                                         0.0,0.0,0.0,
                                         1.0,1.0,1.0,
                                         2.0,2.0,2.0)));
-                        
+
 }
 
 void TestPiiMath::transformColumns()
@@ -280,7 +280,7 @@ void TestPiiMath::transformColumns()
                                         0.0,1.0,2.0,
                                         0.0,1.0,2.0,
                                         0.0,1.0,2.0)));
-                        
+
 }
 
 void TestPiiMath::forEach()
@@ -328,7 +328,7 @@ void TestPiiMath::movingAverage()
                        7,8,9,10);
 
   PiiMatrix<int> tmp(Pii::movingAverage<int>(input,2,Pii::Vertically));
-  
+
   QVERIFY(Pii::equals(Pii::movingAverage<int>(input,2,Pii::Vertically),
                       PiiMatrix<int>(3,4,
                                      2,3,4,5,
@@ -357,7 +357,7 @@ void TestPiiMath::movingAverage()
                                              3.5, 4.0, 5.0, 5.5,
                                              5.5, 6.0, 7.0, 7.5,
                                              7.5, 8.0, 9.0, 9.5)));
-                                       
+
   avg = Pii::movingAverage<double>(input, 3, Pii::Horizontally, Pii::ShrinkWindowSymmetrically);
   QVERIFY(Pii::equals(avg, PiiMatrix<double>(input)));
 
@@ -367,7 +367,7 @@ void TestPiiMath::movingAverage()
                                              7.0, 12.0, 18.0, 15.0,
                                              11.0, 18.0, 26.0, 21.0,
                                              15.0, 24.0, 34.0, 27.0) / 4.0));
-  
+
   avg = Pii::movingAverage<double>(input, 4, Pii::Horizontally, Pii::ShrinkWindowSymmetrically);
   QVERIFY(avg.isEmpty());
 
@@ -706,7 +706,7 @@ void TestPiiMath::norm()
                       -1300,-5,6);
   PiiMatrix<double> matD(2,3, 1.0, 2.0, 3.0,
                          -1300.0, -5.0, 6.0);
-  
+
   PiiMatrix<char> matCh(1,2, 11, 11);
   PiiMatrix<char> matCh2(1,2, 100, 100);
 
@@ -777,7 +777,7 @@ void TestPiiMath::multiplyTransposed()
   QVERIFY(Pii::equals(ba_aT, ba * Pii::transpose(a)));
   QVERIFY(Pii::equals(bT_ba, Pii::transpose(b) * ba));
   QVERIFY(Pii::equals(bT_aT, Pii::transpose(b) * Pii::transpose(a)));
-  
+
   //Test multiplication of incompatible matrices (should throw exception).
   try
     {
@@ -852,7 +852,7 @@ void TestPiiMath::mean()
   PiiMatrix<char> mat(2,2,100,100,100,100);
   QVERIFY(Pii::almostEqual(Pii::mean<double>(mat, Pii::Vertically), PiiMatrix<double>(1,2,100.0,100.0), tol));
   QVERIFY(Pii::almostEqual(Pii::mean<double>(mat, Pii::Horizontally), PiiMatrix<double>(2,1,100.0,100.0), tol));
-  
+
   QVERIFY(almostEqual(Pii::mean<double>(matItest), matItestMeanAll) );
 
   PiiMatrix<char> mat2(1,2,100,100);
@@ -867,10 +867,10 @@ void TestPiiMath::isSingular()
   matSingular(0,0) += 0.00001F;
   QVERIFY( Pii::isSingular(matSingular) == false );
 
-  PiiMatrix<int> mat(2,2, 1, 1, 3, 2); 
+  PiiMatrix<int> mat(2,2, 1, 1, 3, 2);
   QVERIFY( Pii::isSingular(mat) == false);
 
-  PiiMatrix<int> mat2(3,3, 1, 1, 1, 2, 2, 2, 3, 3, 3); 
+  PiiMatrix<int> mat2(3,3, 1, 1, 1, 2, 2, 2, 3, 3, 3);
   QVERIFY( Pii::isSingular(mat2) == true);
 
   QVERIFY( Pii::isSingular(matItest) == false );
@@ -894,7 +894,7 @@ void TestPiiMath::isAntiSymmetric()
   QVERIFY( Pii::isAntiSymmetric(mat) == false );
   mat(0,1) = -mat(0,1);
   QVERIFY( Pii::isAntiSymmetric(mat) == true );
-} 
+}
 
 
 void TestPiiMath::isSymmetric()
@@ -938,8 +938,8 @@ void TestPiiMath::find()
   QVERIFY(Pii::equals(Pii::find(b, -1), Pii::find(b, 1)));
   QVERIFY(Pii::equals(Pii::find(b), Pii::find(b, 2)));
   QVERIFY(Pii::equals(Pii::find(b), Pii::find(b, 10)));
-  QCOMPARE(Pii::find(b, -2).rows(), 0); 
-  QCOMPARE(Pii::find(b, -3).rows(), 0); 
+  QCOMPARE(Pii::find(b, -2).rows(), 0);
+  QCOMPARE(Pii::find(b, -3).rows(), 0);
 
   QVERIFY(Pii::equals(Pii::find(matItest, std::bind2nd(std::greater<int>(), 0)),
                       PiiMatrix<int>(4,2, 0,0, 0,2, 1,0, 1,1)));
@@ -970,7 +970,7 @@ void TestPiiMath::innerProduct()
       PiiMatrix<double> m1(1,2, 5, 3);
       PiiMatrix<double> m2(2,2, 7, 0, -9, 500);
       Pii::innerProduct(m1, m2);
-      QVERIFY(false); 
+      QVERIFY(false);
     }
   catch(PiiException&)
     {
@@ -1021,7 +1021,7 @@ void TestPiiMath::divided()
       PiiMatrix<double> m1(1, 2, 5, 3);
       PiiMatrix<double> m2(2,2, 7, 0, -9, 500);
       Pii::divided(m1, m2);
-      QFAIL("Matrix division should fail with incompatible sizes."); 
+      QFAIL("Matrix division should fail with incompatible sizes.");
     }
   catch(PiiException&)
     {
@@ -1088,7 +1088,7 @@ void TestPiiMath::determinant()
   }
 
   {
-    PiiMatrix<int> mat(3,3, 
+    PiiMatrix<int> mat(3,3,
                        2   ,   -15,    4   ,
                        71  ,    13, -15641,
                        0   ,  9999, 71347);
@@ -1120,7 +1120,7 @@ void TestPiiMath::crossProduct()
   {
     bool bExceptionThrown = false;
     PiiMatrix<float> mat(1,2, 1.0, 2.0);
-    
+
     try
       {
         Pii::crossProduct(mat, mat); //Should cause exception to be thrown.
@@ -1228,11 +1228,11 @@ void TestPiiMath::realAndImag()
   QCOMPARE(Pii::imag(std::complex<double>(1.3, 2.0)), 2.0);
   QCOMPARE(Pii::real(5.0), 5.0);
   QCOMPARE(Pii::imag(5.0), 0.0);
- 
+
   QVERIFY(Pii::equals(Pii::real(mat), PiiMatrix<float>(2,2,
                                                            1.0,3.0,
                                                            5.0,7.0)));
-  
+
   QVERIFY(Pii::equals(Pii::imag(mat), PiiMatrix<float>(2,2,
                                                            2.0,4.0,
                                                            6.0,8.0)));
@@ -1489,7 +1489,7 @@ void TestPiiMath::eigen()
     QVERIFY(Pii::equals(eigendata.eigenvaluesI(), eigendata2.eigenvaluesI()));
     QVERIFY(Pii::equals(eigendata.eigenvectors(), eigendata2.eigenvectors()));
     QVERIFY(Pii::equals(eigendata.blockDiagonalEigenvalMatrix(), eigendata2.blockDiagonalEigenvalMatrix()));
-    
+
     DO_EIGEN_ASSERTS(double, double, tol);
   }
 
@@ -1641,7 +1641,7 @@ void TestPiiMath::isOrthogonalLike()
                                                        0.0,  0.0)) == true );
   QVERIFY( Pii::isOrthogonalLike(PiiMatrix<double>(3,2, 1.0, 0.0,
                                                        0.1, 1.0,
-                                                       0.0, 0.0)) == false );  
+                                                       0.0, 0.0)) == false );
   QVERIFY( Pii::isOrthogonalLike(PiiMatrix<int>(4,4, 1,0,0,0,  0,1,0,0,  0,0,1,0,  0,0,0,1)) == true );
   QVERIFY( Pii::isOrthogonalLike(PiiMatrix<float>(4,4, 0.0, 0.0, 1.0, 0.0,
                                                       0.0, 1.0, 0.0, 0.0,
@@ -1727,7 +1727,7 @@ void TestPiiMath::svd()
     QVERIFY( Pii::almostEqual(D, eigenVals, tolerance) );           \
   }
 
-  
+
   /*
   {
     PiiMatrix<double> mat(1,1, 2.0);
@@ -1815,7 +1815,7 @@ void TestPiiMath::svd()
     Pii::randomizeMatrix(mat, -100000.0, 100000.0);
     D = Pii::svd(mat, &U, &V);
     DO_SVD_ASSERTS(double, 1e-9);
-    
+
   }
   } catch (PiiException& ex)
     {
@@ -1838,11 +1838,11 @@ void TestPiiMath::pca()
     //Camera framerate
     const int iFramesPerSecond = 10;
 
-    //Time step 
+    //Time step
     const double dTimeStep = 1.0/iFramesPerSecond;
 
     //Oscillator angular frequence
-    const double dOmega = 2*M_PI*0.01;                  
+    const double dOmega = 2*M_PI*0.01;
 
     const double dInitPhase = 1;
     const double dStartTime = 0.0;         //
@@ -1852,7 +1852,7 @@ void TestPiiMath::pca()
     const bool bAddNoise = false;
 
     // Matrix where to store the data as column-per-dataframe.
-    PiiMatrix<double> matDataColumns(8, iMeasurementCount);  
+    PiiMatrix<double> matDataColumns(8, iMeasurementCount);
 
     double t = dStartTime;
     for(int i = 0; i<iMeasurementCount; ++i, t += dTimeStep)
@@ -1913,7 +1913,7 @@ void TestPiiMath::pca()
     const PiiMatrix<double> matProjectedDataRow = matDataRows * pcaDataRows.principalComponents();
     QVERIFY(Pii::almostEqual(matProjectedDataColumn, Pii::transpose(matProjectedDataRow), tol));
 
-    // Calculate PCA directly with eigenvalues of covariance and compare the results with 
+    // Calculate PCA directly with eigenvalues of covariance and compare the results with
     // data obtained above.
     {
       const PiiMatrix<double> matCovDataRows = Pii::covariance(matDataRows);
@@ -1923,10 +1923,10 @@ void TestPiiMath::pca()
       // To make comparison possible, sort eigenvalues and take square root(variance -> standard deviation).
       std::sort(eigenvals.row(0), eigenvals.row(0) + eigenvals.columns(), std::greater<double>());
       eigenvals.map(Pii::unaryCompose(Pii::Sqrt<double>(), Pii::Abs<double>()));
-          
+
       // Verify that got (almost) the same standard deviations with PCA and direct eigenvalue calculation.
       QVERIFY( Pii::almostEqual(eigenvals, pcaDataColumns.standardDevs(), 1e-5) );
-          
+
 
       // Compare eigenvectors (for relevant axis only)
       const int numRelevantDimensions = pcaDataColumns.relevantDimensions();
@@ -1943,7 +1943,7 @@ void TestPiiMath::pca()
                                          eigensystem.eigenvectors()(0, -i-1, numRows, 1) * -1.0, 1e-5 )
                    );
         }
-      
+
       QVERIFY( Pii::isOrthogonalLike( eigensystem.eigenvectors()) );
       QVERIFY( Pii::isOrthogonalLike( pcaDataColumns.principalComponents()) );
     }
@@ -2049,7 +2049,7 @@ void TestPiiMath::numeric()
   QCOMPARE( Pii::Numeric<type>::minValue(), -std::numeric_limits<type>::max() ); \
   QCOMPARE( Pii::Numeric<type>::maxValue(), std::numeric_limits<type>::max() ); \
   QVERIFY( Pii::Numeric<type>::tolerance() != (type)0 );            \
-  QVERIFY( Pii::Numeric<type>::tolerance() < (type)10e-5 ); 
+  QVERIFY( Pii::Numeric<type>::tolerance() < (type)10e-5 );
 
   TEST_INTEGER_TYPE(char);
   TEST_INTEGER_TYPE(short);
@@ -2060,7 +2060,7 @@ void TestPiiMath::numeric()
   TEST_FLOATING_TYPE(float);
   TEST_FLOATING_TYPE(double);
   TEST_FLOATING_TYPE(long double);
- 
+
 #undef TEST_FLOAT_TYPE
 #undef TEST_INTEGER_TYPES
 }
@@ -2095,7 +2095,7 @@ void TestPiiMath::kthSmallest()
           qDebug() << org[i];
         */
         QCOMPARE(org[p], el);
-        
+
       }
   }
 
@@ -2108,7 +2108,7 @@ void TestPiiMath::kthSmallest()
     int value = Pii::kthSmallest<int>(array,10,4);
     QCOMPARE(value, 4);
 
-    
+
   }
 
 }
@@ -2116,7 +2116,7 @@ void TestPiiMath::kthSmallest()
 void TestPiiMath::partition()
 {
   {
-    
+
     int array[10] = {1,4,0,5,2,3,7,6,8,9};
     int value = 3;
     int k = Pii::partition<int>(array, 10, 5);
@@ -2124,21 +2124,21 @@ void TestPiiMath::partition()
 
     //There exist property that all values which are 0..k-1 indices
     //must be below or equal as value
-    
+
     for(int i = 0; i < k; ++i)
       {
         QVERIFY(array[i] <= value);
       }
 
     //There exist property that all value which are at indices k to end
-    //must be equal or greater then value   
-    
+    //must be equal or greater then value
+
     for(int i = k; i < 10; ++i)
       {
         QVERIFY(array[i] >= value);
       }
 
-   
+
   }
 
 }
@@ -2159,7 +2159,7 @@ void TestPiiMath::windowSum()
   float data[5] = { 1, 2, 3, 4, 5 };
   // Calculate moving average over three neighbors
   Pii::windowSum(data, data+5, 3, std::bind2nd(std::divides<float>(), 3));
-  
+
   QCOMPARE(data[0], 1.0f);
   QCOMPARE(data[1], 2.0f);
   QCOMPARE(data[2], 3.0f);
@@ -2168,7 +2168,7 @@ void TestPiiMath::windowSum()
 
   // Sum two neighbors
   Pii::windowSum(data, data+5, 2, Pii::Identity<float>());
-  
+
   QCOMPARE(data[0], 3.0f);
   QCOMPARE(data[1], 5.0f);
   QCOMPARE(data[2], 7.0f);
@@ -2280,7 +2280,7 @@ void TestPiiMath::cumulativeSum()
                                      0, 6, 15, 27)));
   PiiMatrix<int> matSum(4,4);
   Pii::cumulativeSum(matrix, matSum, Pii::Identity<int>(), Pii::ZeroBorderCumulativeSum);
-  QVERIFY(Pii::equals(matSum, 
+  QVERIFY(Pii::equals(matSum,
                       PiiMatrix<int>(4,4,
                                      0, 0,  0,  0,
                                      0, 1,  3,  6,
@@ -2371,4 +2371,4 @@ void TestPiiMath::setDiagonal()
 }
 
 QTEST_MAIN(TestPiiMath)
-  
+

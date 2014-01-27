@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -238,7 +238,7 @@ void PiiDigitExtractor::createBlob(PiiMatrix<int> &boundingBoxes)
 {
   if (boundingBoxes.isEmpty())
     return;
-  
+
   //Combines bounding boxes into blobs. Specially, boxes may be combined if
   //x locations are on most iCombineXThreshold pixels apart
   //y locations are on most iCombineYThreshold pixels apart
@@ -347,7 +347,7 @@ void PiiDigitExtractor::initializeKnnClassifier()
 
   //Average vector
   ia >> d->matMeanDigitVector;
-      
+
   //Base vectors
   ia >> d->matBaseDigitVectors;
 }

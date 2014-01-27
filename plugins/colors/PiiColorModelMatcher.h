@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -20,7 +20,7 @@
 #include <PiiMatrix.h>
 
 /**
- * An operation that converts a color image into an intensity map. 
+ * An operation that converts a color image into an intensity map.
  * Pixel values in the intensity map are proportional to the
  * likelihood of that pixel belonging to a predefined color model.
  *
@@ -48,14 +48,14 @@ class PiiColorModelMatcher : public PiiDefaultOperation
    * matchingThreshold description
    */
   Q_PROPERTY(double matchingThreshold READ matchingThreshold WRITE setMatchingThreshold);
- 
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiColorModelMatcher();
-  
+
   void setMatchingThreshold(double matchingThreshold);
   double matchingThreshold() const;
-  
+
 protected:
   void process();
 

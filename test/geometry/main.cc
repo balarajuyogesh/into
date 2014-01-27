@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -58,7 +58,7 @@ void TestPiiGeometry::lineToLineDistance()
     PiiMatrix<double> first(2,3,
                             1.0, 0.0, 0.0,
                             0.0, 0.0, 0.0);
-    
+
     PiiMatrix<double> second(2,3,
                              1.0, 0.0, 0.0,
                              0.0, 0.0, 0.0);
@@ -72,7 +72,7 @@ void TestPiiGeometry::lineToLineDistance()
     PiiMatrix<double> first(2,3,
                             1.0, 0.0, 0.0,
                             0.0, 0.0, 0.0);
-    
+
     PiiMatrix<double> second(2,3,
                              1.0, 0.0, 0.0,
                              0.0, 0.0, 1.0);
@@ -80,13 +80,13 @@ void TestPiiGeometry::lineToLineDistance()
     double distance = PiiGeometry::lineToLineDistance(first, second);
     QCOMPARE(distance, 1.0);
   }
-  
+
   {
     // Lines are on the same plane, and not parallel
     PiiMatrix<double> first(2,3,
                             1.0, 0.0, 0.0,
                             0.0, 0.0, 0.0);
-    
+
     PiiMatrix<double> second(2,3,
                              -1.0, 1.0, 0.0,
                              1.0, 5.0, 0.0);
@@ -100,14 +100,14 @@ void TestPiiGeometry::lineToLineDistance()
     PiiMatrix<double> first(2,3,
                             1.0, 0.0, 0.0,
                             0.0, 0.0, 0.0);
-    
+
     PiiMatrix<double> second(2,3,
                              -1.0, 1.0, 0.0,
                              0.0, 0.0, 3.0);
     double distance = PiiGeometry::lineToLineDistance(first, second);
     QCOMPARE(distance, 3.0);
   }
-  
+
 }
 
 void TestPiiGeometry::pointToLineSegmentDistance()
@@ -118,7 +118,7 @@ void TestPiiGeometry::pointToLineSegmentDistance()
     PiiMatrix<double> dMatPoint(1,2, 1.0,1.0);
 
     QCOMPARE(PiiGeometry::pointToLineSegmentDistance(dMatLine, dMatPoint),1.0);
-      
+
   }
 
   {
@@ -138,23 +138,23 @@ void TestPiiGeometry::pointToLineSegmentDistance()
     dMatPoint(0,0) = 3.0;
     dMatPoint(0,1) = 0.0;
     dMatPoint(0,2) = 0.0;
-    
+
     QCOMPARE(PiiGeometry::pointToLineSegmentDistance(dMatLine, dMatPoint),3.0);
 
 
   }
-  
-  
+
+
 
 }
 
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
   //Contains all geometry-namespace functions.
-  
+
   TestPiiGeometry geometry;
   QTest::qExec(&geometry,argc, argv);
-  
+
   return 0;
 }

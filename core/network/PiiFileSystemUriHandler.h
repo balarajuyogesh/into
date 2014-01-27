@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -23,7 +23,7 @@
 #include <QFileInfoList>
 
 /**
- * A URI handler for PiiHttpProtocol that maps request URIs to files. 
+ * A URI handler for PiiHttpProtocol that maps request URIs to files.
  * This handler can be used with PiiHttpProtocol to serve static
  * files.
  *
@@ -89,7 +89,7 @@ class PII_NETWORK_EXPORT PiiFileSystemUriHandler :
    * files.
    */
   Q_PROPERTY(bool showHiddenFiles READ showHiddenFiles WRITE setShowHiddenFiles);
-  
+
   /**
    * If this flag is `true` (the default), symbolic links in the
    * directory structure are followed. Otherwise not.
@@ -133,7 +133,7 @@ public:
     };
   PiiFileSystemUriHandler(const QString& fileSystemRoot = "");
   ~PiiFileSystemUriHandler();
-  
+
   void handleRequest(const QString& uri, PiiHttpDevice* dev, PiiHttpProtocol::TimeLimiter* controller);
 
   void setFollowSymLinks(bool followSymLinks);
@@ -182,7 +182,7 @@ private:
   void deleteDirectory(const QString& dirName, PiiHttpDevice* dev);
   void createDirectory(const QString& dirName, PiiHttpDevice* dev);
   void createPath(const QString& path, PiiHttpDevice* dev);
-  
+
   PII_DISABLE_COPY(PiiFileSystemUriHandler);
 };
 

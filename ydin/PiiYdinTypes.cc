@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -89,7 +89,7 @@ namespace PiiYdin
         PII_PRIMITIVE_CASES(return numberToQString, variant);
       }
     return QString();
-  }  
+  }
 
   QString convertToQString(PiiInputSocket* input)
   {
@@ -97,5 +97,5 @@ namespace PiiYdin
     if (strValue.isNull())
       PII_THROW_UNKNOWN_TYPE(input);
     return strValue;
-  }  
+  }
 }

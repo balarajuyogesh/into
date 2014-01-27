@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -64,7 +64,7 @@ namespace PiiTracking
           }
         next = next->next();
       }
-    
+
     // Can we estimate?
     if (estTimeDiff)
       {
@@ -81,7 +81,7 @@ namespace PiiTracking
   }
 
   /**
-   * An evaluation function that returns the minimum fitness of 
+   * An evaluation function that returns the minimum fitness of
    * `trajectory` and the next node in chain. Using this function as an
    * evaluator for trajectories sets the trajectory fitness to the
    * minimum of individual measurement fitnesses.
@@ -96,7 +96,7 @@ namespace PiiTracking
     // fitness.
     if (trajectory->next())
       minScore = qMin(minScore, trajectory->next()->trajectoryFitness());
-    
+
     return minScore;
   }
 

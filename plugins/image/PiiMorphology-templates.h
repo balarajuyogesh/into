@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -56,7 +56,7 @@ namespace PiiImage
        default:
          return image;
        }
-   }  
+   }
 
   template <class Matrix, class U>
   PiiMatrix<typename Matrix::value_type> topHat(const Matrix& image, const PiiMatrix<U>& mask)
@@ -73,7 +73,7 @@ namespace PiiImage
     typedef typename Matrix::value_type T;
     int maskRows = mask.rows(), maskCols = mask.columns();
     int rOrig = maskRows / 2, cOrig = maskCols/2; //Origin
-    
+
     //first do close-operation
     PiiMatrix<T> closed = erode(dilate(image, mask), mask);
 
@@ -83,7 +83,7 @@ namespace PiiImage
 
     return closed;
   }
-  
+
   template <class Matrix, class U>
   PiiMatrix<typename Matrix::value_type> erode(const Matrix& image, const PiiMatrix<U>& mask, bool handleBorders)
   {
@@ -102,13 +102,13 @@ namespace PiiImage
 
     rows = img.rows();
     cols = img.columns();
-    
+
     if (maskRows > rows || maskCols > cols)
       {
         qWarning("PiiMorphology::erode(image, mask): Mask cannot be larger than image.");
         return img;
       }
-    
+
     PiiMatrix<T> result(rows,cols);
     int rDiff = rows-maskRows;
     int cDiff = cols-maskCols;
@@ -133,10 +133,10 @@ namespace PiiImage
 
     if (handleBorders)
       return result(rOrig, cOrig, image.rows(), image.columns());
-     
+
     return result;
   }
-  
+
   template <class Matrix, class U>
   PiiMatrix<typename Matrix::value_type> dilate(const Matrix& image, const PiiMatrix<U>& mask)
   {
@@ -144,10 +144,10 @@ namespace PiiImage
     int maskRows = mask.rows(), maskCols = mask.columns();
     int rows = image.rows(), cols = image.columns();
     int rOrig = maskRows/2, cOrig = maskCols/2;
-    
+
     if (maskRows > rows || maskCols > cols)
       qWarning("BinaryMorphology::dilate(image, mask): Mask cannot be larger than image.");
-    
+
     PiiMatrix<T> result(rows,cols);
     typename Matrix::row_iterator ptr;
     const U* maskData;
@@ -157,7 +157,7 @@ namespace PiiImage
       {
         for (int c=0; c<=cDiff; ++c)
           {
-            
+
             if (!image(r+rOrig,c+cOrig))
               continue;
             for (int mr=0; mr<maskRows; ++mr)
@@ -177,7 +177,7 @@ namespace PiiImage
       edge--;
       for (int r=0; r<=rDiff; ++r)
         {
-          
+
           if (!image(r+rOrig,c))
             continue;
 
@@ -199,20 +199,20 @@ namespace PiiImage
       edge--;
       if ((c + cOrig) > (cols-1))
         break;
-      
+
       for (int r=0; r<=rDiff; r++)
         {
-          
+
           if (!image(r+rOrig,c+cOrig))
             continue;
-          
+
           for (int mr=0; mr<maskRows; ++mr)
             {
               maskData = mask.row(mr);
               ptr = result.row(r+mr) + c;
               for(register int mc=edge; mc--;)
                 ptr[mc] = T(int(ptr[mc]) | int(maskData[mc]));
-              
+
             }
         }
     }
@@ -238,7 +238,7 @@ namespace PiiImage
     }
 
 
-  
+
   //bottom edge
   edge = maskRows;
   int maxRows = rows - (maskRows-rOrig);
@@ -247,7 +247,7 @@ namespace PiiImage
 
       if ((r + rOrig) > (rows-1))
         break;
-      
+
       edge--;
       for (int c=0; c<=cDiff; c++)
         {
@@ -261,12 +261,12 @@ namespace PiiImage
               ptr = result.row(r+mr) + c;
               for(register int mc=maskCols; mc--;)
                 ptr[mc] = T(int(ptr[mc]) | int(maskData[mc]));
-              
+
             }
         }
     }
 
-  
+
   //left top
   int rEdge = rOrig + 1;
   int cEdge;
@@ -289,7 +289,7 @@ namespace PiiImage
       }
     }
 
-  
+
   //right top
   rEdge = rOrig + 1;
   for(int r=0; r<rOrig; ++r)
@@ -310,8 +310,8 @@ namespace PiiImage
             }
         }
     }
-     
-      
+
+
   //left bottom
   rEdge = maskRows;
   for(int r=rows-maskRows+rOrig+1; r<rows; ++r)
@@ -357,7 +357,7 @@ namespace PiiImage
 
     return result;
   }
-  
+
   template <class Matrix, class U>
   PiiMatrix<typename Matrix::value_type> hitAndMiss(const Matrix& image,
                                                     const PiiMatrix<U>& mask,
@@ -370,7 +370,7 @@ namespace PiiImage
     const U* maskData;
     const U* signData;
     typename Matrix::const_row_iterator imageData;
-    
+
     if (maskRows > rows || maskCols > cols)
       {
         qWarning("PiiMorphology::hitAndMiss(image, structure, mask): Mask cannot be larger than image.");
@@ -378,7 +378,7 @@ namespace PiiImage
       }
 
     PiiMatrix<T> result(rows,cols);
-    
+
     for (int r=0; r<=(rows-maskRows); r++)
       {
         for (int c=0; c<=(cols-maskCols); c++)
@@ -440,23 +440,23 @@ namespace PiiImage
             result = tmpResult;
           }
       }
-    
+
     return result;
-  }                               
+  }
 
   template <class Matrix>
   PiiMatrix<typename Matrix::value_type> border(const Matrix& image)
   {
     typedef typename Matrix::value_type T;
     PiiMatrix<T> result(image.rows(), image.columns());
-    
+
     // Loop through all border detector masks
     for (int m=8; m--;)
       // Combine results into the resulting border matrix
       result |= hitAndMiss(image, borderMasks[m][0], borderMasks[m][1]);
-    
+
     return result;
-  }                               
+  }
 
   template <class Matrix>
   PiiMatrix<typename Matrix::value_type> shrink(const Matrix& image, int amount)
@@ -478,7 +478,7 @@ namespace PiiImage
   {
     int rows = mask.rows();
     int cols = mask.columns();
-    
+
     switch(type)
       {
       case EllipticalMask:
@@ -486,13 +486,13 @@ namespace PiiImage
           //calculate correspondence between x and y
           double a = (double)cols/2;
           double b = (double)rows/2;
-          
+
           for (double r=0.5; r<rows; ++r)
             {
               double x = a*std::sqrt(1-(double)(r-b)*double(r-b)/(b*b));
               double bottom = a-x;
               double top = a+x;
-              
+
               for (double c=0.5; c<cols; c++)
                 {
                   if (c>bottom && c<top)
@@ -501,7 +501,7 @@ namespace PiiImage
             }
         }
         break;
-      
+
       case DiamondMask:
         {
           //Calculate step
@@ -509,7 +509,7 @@ namespace PiiImage
           double kc = cols/2;
           double temp = 0;
           int kp = rows / 2;
-      
+
           if ( rows % 2 == 0) kp--;
           temp = 0;
           //Diamond upper side
@@ -519,7 +519,7 @@ namespace PiiImage
                 mask(r,int(c+kc)) = T(1);
               temp+=step;
             }
-      
+
           if ( rows % 2 == 0) kp++;
           //Diamond bottom
           temp = 0;
@@ -535,20 +535,20 @@ namespace PiiImage
         mask = T(1);
       }
   }
-  
+
   template <class T> PiiMatrix<T> createMask(MaskType type, int rows, int cols)
   {
     if (cols == 0)
       cols = rows;
     if (rows == 0)
       return PiiMatrix<T>(0,0);
-    
+
     PiiMatrix<T> mask(rows, cols);
     createMask(type, mask);
-    
+
     return mask;
   }
-  
+
 }
 
 #endif //_PIIMORPHOLOGY_TEMPLATES_H

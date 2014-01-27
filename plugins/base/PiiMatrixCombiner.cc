@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -45,7 +45,7 @@ void PiiMatrixCombiner::setDynamicInputCount(int cnt)
 void PiiMatrixCombiner::process()
 {
   int cnt = inputCount();
-  
+
   // Let's see if all inputs are compatible to each other. Rules:
   // 1. If any of the inputs is not a matrix, stop.
   // 2. Primitive matrices are compatible with complex types
@@ -55,7 +55,7 @@ void PiiMatrixCombiner::process()
   PiiVariant::PrimitiveType maxPrimitive = PiiVariant::CharType;
   bool primitiveFound = false, colorFound = false, complexFound = false;
   QSize maxSize(0,0);
-  
+
   for (int i=0; i<cnt; ++i)
     {
       PiiVariant obj = readInput(i);
@@ -122,7 +122,7 @@ template <class T> void PiiMatrixCombiner::buildCompound(QSize maxSize)
   PII_D;
   int cnt = inputCount();
   int rows = 0, columns = 0;
-  
+
   if (d->iColumns > 0)
     {
       columns = d->iColumns;

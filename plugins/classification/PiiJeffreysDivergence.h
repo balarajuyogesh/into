@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -37,7 +37,7 @@ PII_DEFAULT_DISTANCE_MEASURE_DEF(PiiJeffreysDivergence)
       double si = double(sample[i] > 0 ? sample[i] : dLogZeroSubstitute);
       double mi = double(model[i] > 0 ? model[i] : dLogZeroSubstitute);
       double denom = (si+mi)/2;
-          
+
       sum += si*log(si/denom) + mi*log(mi/denom);
     }
   return sum;

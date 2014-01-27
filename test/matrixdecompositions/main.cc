@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -58,7 +58,7 @@ void TestPiiMatrixDecompositions::unpackRowReflectors(const PiiMatrix<double>& m
                          matTransform.rowBegin(r)+r+diagonal,
                          matTau(0,r));
     }
-    
+
   PiiMatrix<double> matT(mat.rows(), mat.rows()), matGram(iVectors, iVectors);
   Pii::unpackReflectors(Pii::Horizontally, matTransform, matTau[0], matT, matGram, diagonal);
   PiiMatrix<double> matP(Pii::transpose(matTransform) * Pii::transpose(matT) * matTransform);
@@ -70,7 +70,7 @@ void TestPiiMatrixDecompositions::unpackRowReflectors(const PiiMatrix<double>& m
       for (int c=r+diagonal+1; c<matNulled.columns(); ++c)
         QVERIFY(Pii::almostEqualRel(matNulled(r,c), 0.0, 1e-10));
     }
-  
+
 }
 
 void TestPiiMatrixDecompositions::unpackColumnReflectors(const PiiMatrix<double>& mat, int diagonal)
@@ -91,10 +91,10 @@ void TestPiiMatrixDecompositions::unpackColumnReflectors(const PiiMatrix<double>
                             matTransform.columnBegin(c)+c+diagonal,
                             matTau(0,c));
     }
-    
+
   PiiMatrix<double> matT(mat.columns(), mat.columns()), matGram(iVectors, iVectors);
   Pii::unpackReflectors(Pii::Vertically, matTransform, matTau[0], matT, matGram, diagonal);
-  
+
   PiiMatrix<double> matQ(matTransform * matT * Pii::transpose(matTransform));
   for (int d=0; d<matQ.rows(); ++d)
     matQ(d,d) += 1;
@@ -156,7 +156,7 @@ void TestPiiMatrixDecompositions::qrDecompose()
                              3.0, 0.0);
       PiiMatrix<double> matR;
       PiiMatrix<double> matQ = Pii::qrDecompose(matA, &matR);
- 
+
       QVERIFY(Pii::almostEqual(matQ * matR, matA, 1e-4));
     }
   catch (PiiException& ex)
@@ -208,19 +208,19 @@ void TestPiiMatrixDecompositions::qrDecompose()
                                                           30 + int(Pii::uniformRandom(0,100)),
                                                           -1e10, 1e10));
           //qDebug("%d: %dx%d", i, matA.rows(), matA.columns());
-      
+
           PiiMatrix<double> matR;
           PiiMatrix<double> matQ = Pii::qrDecompose(matA, &matR);
 
           //int r,c;
           //double dMax = Pii::max(Pii::matrix(Pii::abs(matA - matQ * matR)), &r, &c);
           //qDebug("%lf %d %d", dMax, r, c);
-      
+
           // R must be upper triangle
           for (int r=1; r<matR.rows(); ++r)
             for (int c=0; c<qMin(r,matR.columns()-1); ++c)
               QCOMPARE(matR(r,c), 0.0);
-      
+
           // A = QR?
           QVERIFY(Pii::almostEqual(matQ * matR, matA, 1e-4));
         }
@@ -239,7 +239,7 @@ void TestPiiMatrixDecompositions::bdDecompose()
       PiiMatrix<double> matA(Pii::uniformRandomMatrix(3 + int(Pii::uniformRandom(0,40)),
                                                       3 + int(Pii::uniformRandom(0,40)),
                                                       -1e5, 1e5));
-      
+
       PiiMatrix<double> matTauQ, matTauP, matDecomposed(matA);
       Pii::bdDecompose(matDecomposed, matTauQ, matTauP);
       PiiMatrix<double> matQ = Pii::bdUnpackQ(matDecomposed, matTauQ[0]);
@@ -255,7 +255,7 @@ void TestPiiMatrixDecompositions::svDecompose()
     PiiMatrix<double,2,2> mat(1.0, 2.0,
                               -4.0, -1.0),
       copy(mat);
-    
+
     PiiPlaneRotation<double> left, right;
     Pii::svDecompose(mat, left, right);
     left.rotateColumns(copy, 0, 1);
@@ -279,7 +279,7 @@ void TestPiiMatrixDecompositions::svDecompose()
 
     PiiMatrix<double> matS(3,3);
     Pii::setDiagonal(matS, S[0]);
-    
+
     QVERIFY(Pii::almostEqual(mat, U*matS*Pii::transpose(V), 1e-15));
   }
 
@@ -298,7 +298,7 @@ void TestPiiMatrixDecompositions::svDecompose()
 
     PiiMatrix<double> matS(3,3);
     Pii::setDiagonal(matS, S[0]);
-    
+
     QVERIFY(Pii::almostEqual(mat, U*matS*Pii::transpose(V), 1e-7));
   }
 }

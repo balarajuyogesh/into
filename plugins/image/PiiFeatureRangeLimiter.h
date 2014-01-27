@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -73,7 +73,7 @@ class PiiFeatureRangeLimiter : public PiiDefaultOperation
    * The number of inputs. Must be greater than zero.
    */
   Q_PROPERTY(int dynamicInputCount READ dynamicInputCount WRITE setDynamicInputCount);
-  
+
   /**
    * Lower limit of the acceptance range.
    */
@@ -82,7 +82,7 @@ class PiiFeatureRangeLimiter : public PiiDefaultOperation
    * Upper limit of the acceptance range.
    */
   Q_PROPERTY(double upperLimit READ upperLimit WRITE setUpperLimit);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 
 public:
@@ -96,10 +96,10 @@ public:
 
   void setDynamicInputCount(int cnt);
   int dynamicInputCount() const;
-  
+
 protected:
   void process();
-  
+
 private:
   template <class T> void calculateLimiterMatrix(const PiiVariant& obj);
   template <class T> void operateMatrix(const PiiVariant& obj, int outputIndex);
@@ -115,7 +115,7 @@ private:
     QVector<int> lstRows;
   };
   PII_D_FUNC;
-  
+
 };
 
 

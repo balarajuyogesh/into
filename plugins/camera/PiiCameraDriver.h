@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@
 
 /**
  * A common interface for cameras that read images into a frame
- * buffer. Images are stored as *frames* containing at least one 
+ * buffer. Images are stored as *frames* containing at least one
  * *scan* *line*. Valid frame sizes are determined by the type of
  * camera and the driver.
  *
@@ -56,7 +56,7 @@
  * ------------------
  *
  * The speed of a camera is said to be high if image data cannot be
- * processed or stored into a hard drive at the original frame rate. 
+ * processed or stored into a hard drive at the original frame rate.
  * In such situations, the driver allocates a larger frame buffer in
  * which it can store many consequent frames. The buffer can also work
  * in a circular fashion: once it is full, the next frame will be
@@ -67,7 +67,7 @@
  *
  * Line-scan capture is a combination of high-speed and ordinary DMA
  * capture. The driver allocates a circularly accessed frame buffer
- * into which scan-lines are read. Each frame is just one pixel high. 
+ * into which scan-lines are read. Each frame is just one pixel high.
  * Although the data is usually analyzed in real time, line-scan
  * drivers can also be used in high-speed mode to capture just a
  * predefined number of frames.
@@ -83,7 +83,7 @@
  * Accessing frame buffers
  * -----------------------
  *
- * By default, the memory for image storage is managed by the driver. 
+ * By default, the memory for image storage is managed by the driver.
  * With DMA devices, this is often (but not necessarily) the only
  * option. The frame buffer can be accessed either directly or by
  * copying its contents. Direct access is faster, but care must be
@@ -95,7 +95,7 @@ class PII_CAMERA_EXPORT PiiCameraDriver : public QObject, public PiiConfigurable
 {
   Q_OBJECT
   Q_INTERFACES(PiiConfigurable)
-    
+
   Q_PROPERTY(QSize frameSize READ frameSize WRITE setFrameSize);
   Q_PROPERTY(int imageFormat READ imageFormat WRITE setImageFormat);
   Q_PROPERTY(TriggerMode triggerMode READ triggerMode WRITE setTriggerMode);
@@ -103,7 +103,7 @@ class PII_CAMERA_EXPORT PiiCameraDriver : public QObject, public PiiConfigurable
   Q_PROPERTY(QSize resolution READ resolution);
   Q_PROPERTY(int bitsPerPixel READ bitsPerPixel);
   Q_PROPERTY(int cameraType READ cameraType);
-  
+
   PII_DEFAULT_SERIALIZATION_FUNCTION(QObject);
 public:
   class Listener;
@@ -117,11 +117,11 @@ public:
       HardwareTrigger,
       FreeRun
     };
-  
+
   /**
    * Returns a list of the cameras that can be automatically detected
    * by the driver. Note that this is not necessarily a complete list
-   * of accessible cameras. The IDs on the list can be used as the 
+   * of accessible cameras. The IDs on the list can be used as the
    * *cameraId* parameter to the [initialize()].
    */
   virtual QStringList cameraList() const = 0;
@@ -137,7 +137,7 @@ public:
    * possibilities include, for example, network addresses. The
    * [cameraList()] function returns a list of automatically found
    * camera IDs.
-   *   
+   *
    * You can configure camera driver via properties, but
    * sometimes you must call initialize(cameraId) again before your
    * configuration value is updated.
@@ -181,7 +181,7 @@ public:
   virtual bool isOpen() const = 0;
 
   /**
-   * Returns `true` if frames are currently being captured and 
+   * Returns `true` if frames are currently being captured and
    * `false` otherwise.
    */
   virtual bool isCapturing() const = 0;
@@ -231,12 +231,12 @@ public:
    * Set image format. Default implementation does nothing.
    */
   virtual bool setImageFormat(int format) = 0;
-  
+
   /**
    * Sets frame size. Default implementation does nothing.
    */
   virtual bool setFrameSize(const QSize& frameSize) = 0;
-  
+
   /**
    * Returns a pointer to the beginning of a frame buffer.
    *
@@ -268,7 +268,7 @@ public:
    * properties.
    */
   QVariantMap& propertyMap();
-  
+
   QVariant property(const char* name) const;
   bool setProperty(const char* name, const QVariant& value);
 
@@ -292,7 +292,7 @@ class PiiCameraDriver::Listener
 {
 public:
   virtual ~Listener();
-  
+
   /**
    * Called whenever when a frame has been captured. The receiver can
    * perform its image processing tasks here while the driver
@@ -302,7 +302,7 @@ public:
    * index is a linear counter that can be used to fetch the frame
    * data from the driver using PiiCameraDriver::frameBuffer().
    *
-   * @param frameBuffer a pointer to the captured buffer. If 
+   * @param frameBuffer a pointer to the captured buffer. If
    * `frameBuffer` is non-zero, a new frame was allocated inside the
    * driver and must be deallocated with `free`() by the caller.
    *
@@ -324,7 +324,7 @@ public:
    *
    * @param endIndex the last missed frame
    *
-   * ! Missed frames are not necessarily accessible in the driver. 
+   * ! Missed frames are not necessarily accessible in the driver.
    * Therefore, it is not allowed to call
    * PiiCameraDriver::frameBuffer() for missed frames. Doing so may
    * crash your application, cause a deadlock or anything else. To

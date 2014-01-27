@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -20,7 +20,7 @@
 #include "PiiResourceConnector.h"
 // Force the definitions of essential types always before
 // PiiDynamicTypeFunctions.
-#include "PiiEngine.h" 
+#include "PiiEngine.h"
 #include <PiiDynamicTypeFunctions.h>
 
 template <class T, class U> T resource_cast(U* resource);
@@ -87,7 +87,7 @@ namespace PiiYdin
 
   /// @internal
   PII_YDIN_EXPORT int pointerOffset(const char* superClass, const char* subClass);
-  
+
   /**
    * Creates an instance of the object identified by *resourceName*.
    * This function uses PiiSerializationFactory to create the object,
@@ -144,7 +144,7 @@ namespace PiiYdin
   template <class ParentType> ParentType* createResource(const char* name)
   {
     PiiSerializationFactory* pFactory = PiiSerializationFactory::factory(name);
-    
+
     // Don't know how to create this resource.
     if (pFactory == 0)
       return 0;
@@ -193,7 +193,7 @@ namespace PiiYdin
     QString strConnectorName = resourceConnectorName(resourceName(resource1),
                                                      resourceName(resource2),
                                                      role);
-    
+
     *mustDelete = false;
     if (strConnectorName.isEmpty())
       return 0;
@@ -204,7 +204,7 @@ namespace PiiYdin
     *mustDelete = true;
     return createResource<PiiResourceConnector>(qPrintable(strConnectorName));
   }
-  
+
   /**
    * Connect *resource1* and *resource2* as specified by *role*.
    *
@@ -212,14 +212,14 @@ namespace PiiYdin
    * PiiOperation. The resource name of type `T` must be resolvable
    * with [resourceName()].
    *
-   * @param resource2 a pointer to a class instance, such as QWidget. 
+   * @param resource2 a pointer to a class instance, such as QWidget.
    * The resource name of type `U` must be resolvable with
    * [resourceName()].
    *
    * @param role the type of connection between the resources, such as
    * "pii:display".
    *
-   * @return `true` if the resources were successfully connected, 
+   * @return `true` if the resources were successfully connected,
    * `false` otherwise. The connection will fail if the name of one of
    * the resources cannot be determined or if there is no connector
    * (see PiiYdin::resourceDatabase()) associated with the two

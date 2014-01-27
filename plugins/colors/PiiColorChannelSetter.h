@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,7 +24,7 @@
  * Inputs
  * ------
  *
- * @in image - a color image to which color channels are to be set. 
+ * @in image - a color image to which color channels are to be set.
  * Optional. If this input is not connected, the output will be
  * composed of the individual color channels.
  *

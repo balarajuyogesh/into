@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -65,7 +65,7 @@ void PiiReadWriteLock::lockForRead()
           d->hashCurrentReaders.insert(self, 1);
           ++d->iActiveReaders;
           return;
-        }      
+        }
     }
 
   // Must wait for all writers to finish.
@@ -120,7 +120,7 @@ void PiiReadWriteLock::unlockRead()
   QMutexLocker lock(&d->mutex);
 
   Q_ASSERT(d->iActiveReaders > 0);
-  
+
   if (d->bRecursive)
     {
       Qt::HANDLE self = QThread::currentThreadId();
@@ -129,7 +129,7 @@ void PiiReadWriteLock::unlockRead()
           --it.value() <= 0)
         d->hashCurrentReaders.erase(it);
     }
-  
+
   if (--d->iActiveReaders == 0 && d->iActiveWriters == 0)
     wakeUp();
 }

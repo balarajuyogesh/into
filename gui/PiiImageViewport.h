@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -56,7 +56,7 @@ protected:
 
 private:
   void updateImage();
-  
+
   PiiImageViewport *_pParent;
   volatile bool _bRunning;
   volatile bool _bEnabled;
@@ -71,7 +71,7 @@ class PiiImageViewportAdapter
 {
 public:
   /**
-   * Returns a tool tip text that should be shown at the given point. 
+   * Returns a tool tip text that should be shown at the given point.
    * If no tooltip must be shown, returns an empty string. The point
    * is in image's pixel coordinates.
    */
@@ -98,12 +98,12 @@ public:
    * will be drawn.
    *
    * If you have changed the viewport's physical pixel size to, there
-   * is no difference between physical and displayed pixel size. 
+   * is no difference between physical and displayed pixel size.
    * Therefore, *pixelsPerUnit* will always be equal to the scale
    * factor. If, for example, *pixelsPerUnit* 0.5 px/mm and you want
    * a grid spacing of at least 10 px while keeping the grid lines
    * aligned to multiples of powers of ten (that is, whole
-   * millimeters, centimeters etc.), return 20 (each grid is 2 cm). 
+   * millimeters, centimeters etc.), return 20 (each grid is 2 cm).
    * That makes 0.5 px/mm * 20 mm = 10 px.
    *
    * @param pixelsPerUnit the number of pixels each physical unit
@@ -135,7 +135,7 @@ class PII_GUI_EXPORT PiiImageViewport : public QWidget, public PiiImageViewportA
   Q_OBJECT
 
   /**
-   * The fit mode of the image in the viewport. The default is 
+   * The fit mode of the image in the viewport. The default is
    * `NoFit`.
    */
   Q_PROPERTY(FitMode fitMode READ fitMode WRITE setFitMode);
@@ -146,7 +146,7 @@ class PII_GUI_EXPORT PiiImageViewport : public QWidget, public PiiImageViewportA
    */
   Q_PROPERTY(SelectionMode selectionMode READ selectionMode WRITE setSelectionMode);
   Q_ENUMS(SelectionMode);
-  
+
   /**
    * The physical size of a pixel in millimeters.
    */
@@ -159,11 +159,11 @@ class PII_GUI_EXPORT PiiImageViewport : public QWidget, public PiiImageViewportA
 
   friend class PiiImageScrollArea;
   friend class PiiImageViewportUpdater;
-  
+
 public:
   /**
    * Enumeration, which is used for determining the fit mode of the
-   * image in the viewport. With the fit modes `FitToView` and 
+   * image in the viewport. With the fit modes `FitToView` and
    * `FillView` the zoom factor is changed automatically, when the
    * image viewport is resized. Regardless of the fit mode, the aspect
    * ratio of the image remains the same. The following values are determined:
@@ -173,11 +173,11 @@ public:
    *
    * - `FitToView` - when viewport  is resized, the image is rescaled
    * as big as possible inside the viewport widget area, preserving the
-   * aspect ratio, and still fitting in inside the image viewport widget. 
+   * aspect ratio, and still fitting in inside the image viewport widget.
    *
    * - `FillView` - when image is resized, the image is scaled as
    * small as possible outside the image viewport, filling the whole
-   * image viewport area and preserving the aspect ratio. 
+   * image viewport area and preserving the aspect ratio.
    */
   enum FitMode
     {
@@ -246,27 +246,27 @@ public:
   PiiImageViewport(const QImage& image, QWidget *parent = 0);
 
   PiiImageViewport(QWidget *parent = 0);
-  
+
   ~PiiImageViewport();
 
   /**
-   * Adds overlay to the viewport. See the documentation of 
+   * Adds overlay to the viewport. See the documentation of
    * `PiiImageOverlay` for more details about the overlays.
    */
   void addOverlay(PiiImageOverlay* overlay);
-   
+
   /**
    * Changes current set of overlays with new one.
    * NOTE: ALL old overlays are removed.
    */
   void setOverlays(const QList<PiiImageOverlay*>& overlays);
-   
+
   /**
    * Remove given overlay from image.
    * If parameter is 0, ALL overlays are removed
    */
   void removeOverlay(PiiImageOverlay* overlay=0);
-  
+
   /**
    * Set current image on the viewport, resize the component.
    * Use this version of the function, if you don't
@@ -274,10 +274,10 @@ public:
    * object, and you are sure that the QImage object, whose content is
    * shown on the image viewport, is stored somewhere else, when the
    * image is in the viewport. If these conditions are not fullfilled,
-   * use the other version of the setImage function in stead.   
+   * use the other version of the setImage function in stead.
    */
   void setImage(QImage* image, int layer = 0);
-  
+
   /**
    * Works similarly than the other setImage function, except the memory
    * management works differently. Use this version of the function,
@@ -290,7 +290,7 @@ public:
 
   void setOpacity(double opacity, int layer);
   double opacity(int layer) const;
-  
+
   void setLayerVisible(bool visible, int layer);
   bool isLayerVisible(int layer) const;
 
@@ -306,7 +306,7 @@ public:
 
   void setSelectionMode(SelectionMode selectionMode);
   SelectionMode selectionMode() const;
-  
+
   /**
    * Returns pointer to current image on viewport
    */
@@ -364,7 +364,7 @@ signals:
   void pageUpPressed();
   void pageDownPressed();
   void escPressed();
-  
+
   /**
    * This signal is emitted, once the visible area compared to the
    * parent widget changes in this widget. The signal is emitted only
@@ -405,13 +405,13 @@ public slots:
   void updateImage();
 
   /**
-   * This slot zooms in by the factor determined by the property 
+   * This slot zooms in by the factor determined by the property
    * `zoomStep` (property not implemented yet).
    */
   void zoomIn();
 
   /**
-   * This slot zooms out by the factor determined by the property 
+   * This slot zooms out by the factor determined by the property
    * `zoomStep` (property not implemented yet).
    */
   void zoomOut();
@@ -433,7 +433,7 @@ public slots:
   void fitToView();
 
   void setNoFit(bool checked);
-  
+
   /**
    * This slot sets the state of the image viewport to "Fit to View" .
    * When "Fit to View" state is on, the image is scaled automatically
@@ -461,7 +461,7 @@ public slots:
    * This slot sets overlay coloring on/off.
    */
   void setShowOverlayColoring(bool val);
-  
+
 protected:
   void keyPressEvent(QKeyEvent* event);
   void mouseMoveEvent(QMouseEvent* event);
@@ -494,7 +494,7 @@ protected:
       image = im;
       pImage = &image;
     }
-    
+
     /*
      * A (possibly shared) copy of the image, if implicit sharing is in
      * use. If the user gave the image as a pointer, this image will be
@@ -510,13 +510,13 @@ protected:
     qreal dOpacity;
     bool bVisible;
   };
-  
+
   class Data
   {
   public:
     Data();
     virtual ~Data();
-    
+
     /// Visible portion of the image, scaled to the correct size.
     QImage prescaledImage;
     /// The area of the original image prescaledImage represents.
@@ -526,61 +526,61 @@ protected:
 
     // Image rect
     QRect imageRect;
-    
+
     /**
      * How much the viewport is scaled
      */
     double dZoomFactor;
-    
+
     /**
      * A Single zoom step. When zooming out, the current zoom factor is
      * divided by this zoom step. When zooming in, the zoom factor is
      * multiplied by the zoom step.
      */
     double dZoomStep;
-    
+
     /**
      * Minimum value of the zoom factor.
      */
     double dMinZoomFactor;
-    
+
     /**
      * Maximum value of the zoom factor.
      */
     double dMaxZoomFactor;
-    
+
     QSizeF pixelSize;
-    
+
     // Horizontal and vertical scaling. Takes pixelSize into account.
     double dXScale, dYScale, dAspectRatio;
-    
+
     // Contains the region (in pixels) of the original image (pixmap),
     // which will be painted on the screen.
     QRect visibleArea;
-    
+
     // This member variable is used in focusing zooming to cursor. It
     // contains the widget position of the cursor, when the zooming is
     // done by mouse wheel and control key.
     QPoint mouseCurrPoint;
-    
+
     /**
      * The location, in widget coordinates, where the mouse button has
      * been pressed down.
      */
     QPoint mousePressPoint;
-    
+
     QAction *pFitToViewAction, *pFillViewAction, *pNoFitAction, *pZoomInAction, *pZoomOutAction, *pActualSizeAction, *pShowOverlayColoringAction;
-    
+
     QList<PiiImageOverlay*> overlays;
     bool bShowOverlayColoring;
-    
+
     // Contains the area, which will be selected by the mouse, by
     // dragging the left mouse button. If the mouse button is not
     // pressed, contains a null value (QRect()).
     QRect selectionArea;
 
     QList<Layer*> lstLayers;
-    
+
     PiiImageViewportUpdater* pUpdater;
     PiiImageViewportAdapter* pAdapter;
 
@@ -598,11 +598,11 @@ protected:
   PiiImageViewport(Data *d, const QImage& image, QWidget *parent = 0);
   PiiImageViewport(Data *d, QWidget *parent = 0);
   /// @endhide
-  
+
 private:
   void init();
   QMenu *createPopupMenu();
-  void checkFitMode();   
+  void checkFitMode();
   void focusImage(PiiImageViewport::FocusPolicy focusPolicy = FocusToWidgetTopLeft);
   void setCurrX(int x);
   void setCurrY(int y);
@@ -610,7 +610,7 @@ private:
   void moveCurrY(int dy);
   void scaleToFit();
   void scaleToFill();
-    
+
   void updateZoomFactors();
 
   int xFromWidget2Image(int x) const;

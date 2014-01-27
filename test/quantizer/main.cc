@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -22,7 +22,7 @@ void TestQuantizer::divideEqually()
   // Six samples with 2 features in each
   PiiMatrix<int> data(1, 6, 5,3,6,2,1,4);
   PiiMatrix<int> limits(PiiQuantizer<int>::divideEqually(data, 3));
-  
+
   QCOMPARE(limits(0),3);
   QCOMPARE(limits(1),5);
 

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -52,14 +52,14 @@ PiiShapeContextOperation::PiiShapeContextOperation() : PiiDefaultOperation(new D
   d->pLimitsInput->setOptional(true);
   d->pImageInput->setOptional(true);
   d->pDirectionInput->setOptional(true);
-  
+
   addSocket(d->pPointsOutput = new PiiOutputSocket("points"));
   addSocket(d->pFeaturesOutput = new PiiOutputSocket("features"));
   addSocket(d->pBoundariesOutput = new PiiOutputSocket("boundaries"));
   addSocket(d->pLimitsOutput = new PiiOutputSocket("limits"));
 
   setProtectionLevel("samplingStep", WriteWhenStoppedOrPaused);
-  
+
 }
 
 void PiiShapeContextOperation::check(bool reset)
@@ -91,7 +91,7 @@ void PiiShapeContextOperation::check(bool reset)
   // Use squared distances
   for (int i=0; i<d->vecDistances.count(); i++)
     d->vecDistances[i] *= d->vecDistances[i];
-  
+
   PiiDefaultOperation::check(reset);
 }
 
@@ -111,7 +111,7 @@ template <class T> PiiMatrix<int> PiiShapeContextOperation::createBoundaries(con
   // These are checked by pickAngles()
   d->iLastImageRows = img.rows();
   d->iLastImageColumns = img.columns();
-  
+
   PiiMatrix<int> matResult(0,2);
   matResult.reserve(512);
 
@@ -231,7 +231,7 @@ void PiiShapeContextOperation::processBoundary(const PiiMatrix<int>& boundary, c
   QVector<double> vecAngles;
   PiiMatrix<int> matKeyPoints(0, boundary.columns());
   matKeyPoints.reserve(512);
-  
+
   if (boundary.rows() <= 3)
     matKeyPoints = boundary;
   else if (d->invariance & PiiMatching::RotationInvariant)
@@ -254,7 +254,7 @@ void PiiShapeContextOperation::processBoundary(const PiiMatrix<int>& boundary, c
                 vecAngles << pickAngles(matBoundaryKeyPoints);
 
               matKeyPoints.appendRows(matBoundaryKeyPoints);
-              
+
               // boundaryDirections returns one angle less if start
               // and end points are the same.
               if (vecAngles.size() < matKeyPoints.rows())
@@ -265,7 +265,7 @@ void PiiShapeContextOperation::processBoundary(const PiiMatrix<int>& boundary, c
     }
   else
     matKeyPoints = reducePoints(boundary);
-      
+
   // Create feature matrix
   PiiMatrix<float> matFeatures = PiiMatching::shapeContextDescriptor(boundary,
                                                                      matKeyPoints,
@@ -293,7 +293,7 @@ PiiMatrix<int> PiiShapeContextOperation::reducePoints(const PiiMatrix<int>& boun
         PiiMatrix<int> result = PiiGeometry::reduceVertices(boundary, d->dTolerance * d->dTolerance);
         //if (!addLastPoint)
         result.resize(result.rows()-1, result.columns());
-        
+
         return result;
       }
     case SelectEveryNthPoint:
@@ -311,7 +311,7 @@ PiiMatrix<int> PiiShapeContextOperation::reducePoints(const PiiMatrix<int>& boun
 
         // Check the sampling limits
         int iSize = int(double(boundary.rows()) / dStep + 0.5);
-        
+
         if (iSize <= 4)
           return boundary;
 
@@ -362,7 +362,7 @@ QList<PiiMatrix<int> > PiiShapeContextOperation::joinNestedShapes(const PiiMatri
     {
       int x = lstBoundaries[i](0,0);
       int y = lstBoundaries[i](0,1);
-      
+
       for (int j=0; j<lstBoundaries.size(); j++)
         {
           if (i != j && PiiGeometry::contains(lstBoundaries[j], x, y))
@@ -390,11 +390,11 @@ QList<PiiMatrix<int> > PiiShapeContextOperation::joinNestedShapes(const PiiMatri
             {
               int index = lstIndices[j];
               int iLength = matLimitLengths(0,index);
-              
+
               // Calculate limits
               matLimits(0,j) = iLength + iStart;
               iStart = matLimits(0,j);
-              
+
               // Reorganize boundaries
               joinedBoundaries(iJoinedStartPoint,0,iLength,-1) << boundaries(limits(0,index)-iLength,0,iLength,-1);
               iJoinedStartPoint += iLength;

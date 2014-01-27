@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -36,14 +36,14 @@
  *
  * @in distance - an optional input that collects the distances to the
  * closest training sample.
- * 
+ *
  * Outputs
  * -------
  *
- * @out confusion matrix - The current confusion matrix. 
+ * @out confusion matrix - The current confusion matrix.
  * (PiiMatrix<int>)
  *
- * @out distance matrix - The current distance matrix. 
+ * @out distance matrix - The current distance matrix.
  * (PiiMatrix<double>) See the [distanceMatrix] property for
  * explanation.
  *
@@ -91,7 +91,7 @@ protected:
 
 private:
   void addDistance(int correctClass, int classification, double distance);
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {

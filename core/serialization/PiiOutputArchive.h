@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -58,7 +58,7 @@ public:
   {
     qDeleteAll(_pointerMap);
   }
-  
+
   /**
    * A design pattern for casting the type of this archive to that of
    * the template parameter (i.e. the most derived class). The pattern
@@ -136,7 +136,7 @@ private:
         *self() << static_cast<int>(-1); // overload resolution problem work-around
         return true;
       }
-    
+
     PiiTrackedPointerHolder* pHolder = _pointerMap.value(value,0);
     // Already stored this one ...
     if (pHolder != 0)
@@ -169,7 +169,7 @@ private:
       {
         // Store the index of the already saved object.
         *self() << pHolder->pointerIndex();
-        
+
         if (pHolder->isSavedByReference())
           return true;
 
@@ -186,7 +186,7 @@ private:
         _pointerMap.insert(value, createTrackedPointerHolder(value, index, true));
         *self() << index;
       }
-    
+
     return false;
   }
 
@@ -229,7 +229,7 @@ private:
 
     // PENDING
     // if (metaObject.hasConstructData())
-    
+
     // 8 bits is enough for a version number
     unsigned char version = 0;
     if (metaObject.isClassInfoStored())
@@ -242,7 +242,7 @@ private:
     if (!PiiSerializer<Archive>::serialize(name, *self(), *value, version))
       PII_SERIALIZATION_ERROR_INFO(SerializerNotFound, name);
   }
-  
+
   template <class T> void saveTrackedPointer(const T* value)
   {
     // Test if we need to store
@@ -262,7 +262,7 @@ private:
         version = metaObject.version();
         *self() << (unsigned char)version;
       }
-    
+
     // Store the object
     if (!PiiSerializer<Archive>::serialize(metaObject.className(), *self(), const_cast<T&>(value), version))
       PII_SERIALIZATION_ERROR_INFO(SerializerNotFound, metaObject.className());
@@ -277,7 +277,7 @@ private:
         // Stores a pointer with its index and memory address
       }
   }
-  
+
   QHash<const void*,PiiTrackedPointerHolder*> _pointerMap;
 };
 

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -18,7 +18,7 @@
 
 #include <QTextStream>
 #include "PiiArchive.h"
-#include "PiiInputArchive.h"  
+#include "PiiInputArchive.h"
 #include "PiiArchiveMacros.h"
 #include "PiiTextArchive.h"
 #include <cstring>
@@ -53,13 +53,13 @@ public:
    * or it cannot be read from, or the archive format is unknown
    */
   PiiTextInputArchive(QIODevice* d);
-  
+
   /**
    * Read raw binary data from the text archive. The data is base64
    * decoded after reading.
    */
   void readRawData(void* ptr, unsigned int size);
-  
+
   PiiTextInputArchive& operator>> (QString& value);
 
   PiiTextInputArchive& operator>> (char*& value);

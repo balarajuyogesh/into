@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -69,36 +69,36 @@ QString PiiVideoReader::fileName() const
 
 void PiiVideoReader::initialize() throw(PiiVideoException&)
 {
-  // Free frame. 
+  // Free frame.
   if (d->pFrame != 0)
     av_free(d->pFrame);
 
   // Close the codec
   if (d->pCodecCtx != 0)
     avcodec_close(d->pCodecCtx);
-  
+
   // Close the video file
   if (d->pFormatCtx != 0)
     av_close_input_file(d->pFormatCtx);
-  
-  // Must be called before using avcodec lib 
+
+  // Must be called before using avcodec lib
   avcodec_init();
 
   // Register all codecs.
   avcodec_register_all();
-  
+
   av_register_all();
 
   // The last three arguments are used to specify the file format,
   // buffer size, and format options, but by setting this to 0,
   // libavformat will try auto-detect these.
-  
+
   if (av_open_input_file(&d->pFormatCtx, d->strFileName.toLocal8Bit().constData(), 0, 0, 0)!=0)
     PII_THROW(PiiVideoException, tr("Couldn't open file"));
-  
+
   // This fills the streams field of the AVFormatContext with valid
   // information.
-  
+
   if (av_find_stream_info(d->pFormatCtx)<0)
     PII_THROW(PiiVideoException, tr("Couldn't find stream information"));
 
@@ -120,13 +120,13 @@ void PiiVideoReader::initialize() throw(PiiVideoException&)
 
   // OK, so now we've got a pointer to the so-called codec context for our video
   // stream, but we still have to find the actual codec and open it.
-  
+
   // Find the decoder for the video stream
   AVCodec* pCodec = avcodec_find_decoder(d->pCodecCtx->codec_id);
 
   if (pCodec==0)
     PII_THROW(PiiVideoException, tr("Codec not found."));
-  
+
   // Inform the codec that we can handle truncated bitstreams -- i.e.,
   // bitstreams where frame boundaries can fall in the middle of packets
   if (pCodec->capabilities & CODEC_CAP_TRUNCATED)
@@ -137,7 +137,7 @@ void PiiVideoReader::initialize() throw(PiiVideoException&)
     PII_THROW(PiiVideoException, tr("Couldn't open codec."));
 
   AVStream *pStream = d->pFormatCtx->streams[d->iVideoStream];
-  
+
   // time_base stores the fps of the stream as a fraction
   PiiFraction<qint64>
     frameTime(d->pCodecCtx->time_base.num,
@@ -163,10 +163,10 @@ void PiiVideoReader::initialize() throw(PiiVideoException&)
   d->iLastFramePts = 0;
   d->iTargetPts = 0;
   d->bTargetChanged = false;
-  
+
   // Allocate a video frame
   d->pFrame = avcodec_alloc_frame();
-  
+
   /*qDebug("PiiVideoReader::initialize()\n"
          "  Frame size: %d x %d\n"
          "  Data:       %p %p %p %p\n"
@@ -195,7 +195,7 @@ bool PiiVideoReader::getFrame(AVFrame *frame, int frameStep = 1)
       // calculate a new target depends on frameStep.
       if (!d->bTargetChanged)
         d->iTargetPts += frameStep * d->iFrameTime;
-      
+
       d->bTargetChanged = false;
       bSeeked = true;
 
@@ -211,14 +211,14 @@ bool PiiVideoReader::getFrame(AVFrame *frame, int frameStep = 1)
       d->pCodecCtx->skip_frame = AVDISCARD_DEFAULT;
       d->iTargetPts = d->iLastFramePts + d->iFrameTime;
     }
-  
+
   while (AV_READ_FRAME(d->pFormatCtx, &packet) >= 0)
     {
       // Is this a packet from the video stream?
       if (packet.stream_index == d->iVideoStream)
         {
           int iFrameFinished = 0;
-          
+
           // Decode video frame
           if (AVCODEC_DECODE_VIDEO(d->pCodecCtx, frame,
                                    &iFrameFinished,
@@ -233,7 +233,7 @@ bool PiiVideoReader::getFrame(AVFrame *frame, int frameStep = 1)
               // time stamp of the packet as the last decoded frame
               // time (global stream pos).
               d->iLastFramePts = packet.pts;
-              
+
               // If we weren't seeking, return now. Otherwise continue
               // until we hit the correct position.
               if (!bSeeked || d->iLastFramePts >= d->iTargetPts)
@@ -245,7 +245,7 @@ bool PiiVideoReader::getFrame(AVFrame *frame, int frameStep = 1)
         }
       av_free_packet(&packet);
     }
-  
+
   return false;
 }
 
@@ -269,7 +269,7 @@ template <> PiiMatrix<unsigned char> PiiVideoReader::getFrame(int frameStep)
                                          d->pFrame->linesize[0]);
       return matResult;
     }
- 
+
   return PiiMatrix<unsigned char>();
 }
 
@@ -284,7 +284,7 @@ template <> PiiMatrix<PiiColor4<> > PiiVideoReader::getFrame(int frameStep)
          d->pFrame->linesize[0], d->pFrame->linesize[1],
          d->pFrame->linesize[2], d->pFrame->linesize[3]);
   */
-  
+
   if (bSuccess)
     {
       // Allocate an AVFrame structure for conversion result
@@ -294,7 +294,7 @@ template <> PiiMatrix<PiiColor4<> > PiiVideoReader::getFrame(int frameStep)
 
       // Malloc ensures we can safely leave the buffer to PiiMatrix.
       void* bfr = ::malloc(avpicture_get_size(PIX_FMT_RGB32, d->pCodecCtx->width, d->pCodecCtx->height));
-      
+
       if (bfr == 0)
         {
           av_free(pResultFrame);
@@ -351,5 +351,5 @@ void PiiVideoReader::seekToEnd()
   d->iTargetPts = d->iStreamDuration - d->iFrameTime;
   d->bTargetChanged = true;
 }
-  
+
 

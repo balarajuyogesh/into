@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -32,7 +32,7 @@ PiiMathematicalFunction::PiiMathematicalFunction() :
 void PiiMathematicalFunction::process()
 {
   PiiVariant obj = readInput();
-  
+
   switch (_d()->function)
     {
     case NoFunction:
@@ -120,7 +120,7 @@ void PiiMathematicalFunction::process()
         }
       return;
     }
-  
+
   PII_THROW_UNKNOWN_TYPE(inputAt(0));
 }
 

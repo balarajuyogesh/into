@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -152,28 +152,28 @@ void PiiImageViewport::init()
 {
   setObjectName("imageViewport");
   d->pAdapter = this;
-  
+
   // Speed up painting a bit
   setAttribute(Qt::WA_OpaquePaintEvent);
-  
+
   d->pNoFitAction = new QAction(tr("&No Fit"), this);
   d->pNoFitAction->setShortcut(QKeySequence(tr("Ctrl+1")));
   d->pNoFitAction->setShortcutContext(Qt::WidgetShortcut);
   d->pNoFitAction->setCheckable(true);
   connect(d->pNoFitAction, SIGNAL(toggled(bool)), this, SLOT(setNoFit(bool)));
-  
+
   d->pFitToViewAction = new QAction(tr("&Fit to View"), this);
   d->pFitToViewAction->setCheckable(true);
   d->pFitToViewAction->setShortcut(QKeySequence(tr("Ctrl+2")));
   d->pFitToViewAction->setShortcutContext(Qt::WidgetShortcut);
   connect(d->pFitToViewAction, SIGNAL(toggled(bool)), this, SLOT(setFitToView(bool)));
-  
+
   d->pFillViewAction = new QAction(tr("Fill &View"), this);
   d->pFillViewAction->setCheckable(true);
   d->pFillViewAction->setShortcut(QKeySequence(tr("Ctrl+3")));
   d->pFillViewAction->setShortcutContext(Qt::WidgetShortcut);
   connect(d->pFillViewAction, SIGNAL(toggled(bool)), this, SLOT(setFillView(bool)));
-  
+
   QActionGroup* fitActionGroup = new QActionGroup(this);
   fitActionGroup->addAction(d->pFitToViewAction);
   fitActionGroup->addAction(d->pFillViewAction);
@@ -199,7 +199,7 @@ void PiiImageViewport::init()
   d->pShowOverlayColoringAction->setCheckable(true);
   d->pShowOverlayColoringAction->setChecked (d->bShowOverlayColoring);
   connect(d->pShowOverlayColoringAction, SIGNAL(triggered(bool)), this, SLOT(setShowOverlayColoring(bool)));
-  
+
   addAction(d->pNoFitAction);
   addAction(d->pFitToViewAction);
   addAction(d->pFillViewAction);
@@ -215,13 +215,13 @@ void PiiImageViewport::init()
 
   d->pUpdater = new PiiImageViewportUpdater(this);
   connect(d->pUpdater, SIGNAL(imageReady()), this, SLOT(update()));
-  
+
   d->pUpdater->startThread();
 }
 
 void PiiImageViewport::setShowOverlayColoring(bool val)
 {
-  d->bShowOverlayColoring = val;  
+  d->bShowOverlayColoring = val;
   updateImage();
 }
 
@@ -250,12 +250,12 @@ QMenu* PiiImageViewport::popupMenu(const QPoint&) const
 {
   if (d->pPopupMenu)
     return d->pPopupMenu;
-  
+
   d->pPopupMenu = new QMenu(tr("&Display"), const_cast<PiiImageViewport*>(this));
 
   d->pPopupMenu->addAction(d->pZoomInAction);
   d->pPopupMenu->addAction(d->pZoomOutAction);
-  d->pPopupMenu->addAction(d->pActualSizeAction);  
+  d->pPopupMenu->addAction(d->pActualSizeAction);
   d->pPopupMenu->addSeparator();
   d->pPopupMenu->addAction(d->pNoFitAction);
   d->pPopupMenu->addAction(d->pFitToViewAction);
@@ -265,10 +265,10 @@ QMenu* PiiImageViewport::popupMenu(const QPoint&) const
 
   if (d->overlays.size() > 0)
     {
-      d->pPopupMenu->addSeparator();    
+      d->pPopupMenu->addSeparator();
       d->pPopupMenu->addAction(d->pShowOverlayColoringAction);
     }
-  
+
   return d->pPopupMenu;
 }
 
@@ -276,7 +276,7 @@ void PiiImageViewport::setImage(QImage* image, int layer)
 {
   if (layer < 0 || layer > d->lstLayers.size())
     return;
-  
+
   d->imageLock.lock();
 
   // It is assumed here, that the image object given as a parameter
@@ -287,7 +287,7 @@ void PiiImageViewport::setImage(QImage* image, int layer)
     d->imageRect = d->lstLayers[0]->pImage->rect();
 
   d->imageLock.unlock();
-  
+
   checkFitMode();
   focusImage();
   updateImage();
@@ -303,7 +303,7 @@ void PiiImageViewport::setImage(const QImage& image, int layer)
     d->imageRect = d->lstLayers[0]->pImage->rect();
 
   d->imageLock.unlock();
-  
+
   checkFitMode();
   focusImage();
   updateImage();
@@ -537,7 +537,7 @@ void PiiImageViewport::keyPressEvent(QKeyEvent* event)
     emit pageDownPressed();
   else if ( event->key() == Qt::Key_Escape)
     emit escPressed();
-  
+
   // The event must be delivered always to the parent, because for
   // example pageUp key might have multiple meanings in different
   // situations.
@@ -550,10 +550,10 @@ void PiiImageViewport::mouseMoveEvent(QMouseEvent* event)
 
   if (d->imageRect.isNull())
     return;
-  
+
   d->mouseCurrPoint = event->pos();
   QPoint imagePoint = pointFromWidget2Image(d->mouseCurrPoint);
-      
+
   if (d->selectionMode != NoSelection &&
       event->buttons() & Qt::LeftButton)
     {
@@ -571,7 +571,7 @@ void PiiImageViewport::mouseMoveEvent(QMouseEvent* event)
             d->selectionArea = QRect(minX, -1, maxX-minX, height()+2);
           else
             d->selectionArea = QRect(-1,minY, width()+2, maxY-minY);
-          
+
           update();
         }
       else if (!d->selectionArea.isNull())
@@ -582,7 +582,7 @@ void PiiImageViewport::mouseMoveEvent(QMouseEvent* event)
             d->selectionArea.setCoords(minX, -1, maxX, height()+2);
           else
             d->selectionArea.setCoords(-1,minY, width()+2, maxY);
-          
+
           update();
         }
 
@@ -616,7 +616,7 @@ void PiiImageViewport::mousePressEvent(QMouseEvent* event)
 {
   if (d->imageRect.isNull())
     return;
-  
+
   setFocus(Qt::MouseFocusReason);
 
   // The mouse press point (in widget coordinates) is stored.
@@ -629,7 +629,7 @@ void PiiImageViewport::mousePressEvent(QMouseEvent* event)
       if (pMenu)
         pMenu->exec(event->globalPos());
     }
-      
+
   QWidget::mousePressEvent(event);
 }
 
@@ -666,14 +666,14 @@ void PiiImageViewport::mouseReleaseEvent(QMouseEvent* event)
     // NOTE: Not tested
     emit clicked(pointFromWidget2Image(event->pos()),
                  event->modifiers());
-      
+
   QWidget::mouseReleaseEvent(event);
 }
 
 void PiiImageViewport::paintEvent(QPaintEvent* event)
 {
   //QWidget::paintEvent(event);
-  
+
   d->imageLock.lock();
 
   QPainter p(this);
@@ -682,7 +682,7 @@ void PiiImageViewport::paintEvent(QPaintEvent* event)
   // Paint with background color first. There may be transparent
   // portions in the image.
   p.fillRect(paintRect, palette().brush(backgroundRole()));
-  
+
   // Draw image only if there is one
   if (!d->prescaledImage.isNull())
     {
@@ -692,18 +692,18 @@ void PiiImageViewport::paintEvent(QPaintEvent* event)
           d->prescaledImage.height() < height())
         {
           QRect imageRect = d->prescaledImage.rect();
-          
+
           // Center the image on the widget
           int leftShift = qMax((width()-imageRect.width())/2, 0),
             topShift = qMax((height()-imageRect.height())/2, 0);
           imageRect.moveLeft(leftShift);
           imageRect.moveTop(topShift);
-          
+
           // First check if the paint area contains not only image data.
           if (!imageRect.contains(paintRect))
             // Fill the whole area with the background brush.
             p.fillRect(paintRect, palette().brush(backgroundRole()));
-          
+
           // Does the area to be painted intersect with the image?
           QRect paintImageRect = imageRect & paintRect;
           if (paintImageRect.isValid())
@@ -712,9 +712,9 @@ void PiiImageViewport::paintEvent(QPaintEvent* event)
       // Otherwise just dump the data onto the screen
       else
         p.drawImage(paintRect, d->prescaledImage, paintRect);
-      
+
       d->imageLock.unlock();
-      
+
       QRect tempWindow = p.window();
       p.setWindow(d->visibleArea);
       // Draw the overlays.
@@ -723,24 +723,24 @@ void PiiImageViewport::paintEvent(QPaintEvent* event)
         // visible area.
         if (d->overlays.at(i)->enabled() && d->overlays.at(i)->intersects(d->visibleArea))
           d->overlays.at(i)->paint((&p), d->bShowOverlayColoring);
-      
+
       p.setWindow(tempWindow);
-      
+
       // Draw the selection rectangle with dashed line and color white/black
       if (!d->selectionArea.isNull())
         {
           p.setPen(Qt::NoPen);
           p.setBrush(QColor(0,0,255,10));
           p.drawRect(d->selectionArea);
-          
+
           QPen pen(QColor(0,0,0));
           p.setPen(pen);
           p.setBrush(Qt::NoBrush);
           p.drawRect(d->selectionArea);
-          
+
           if (d->selectionMode == Area)
             p.drawLine(d->mousePressPoint, d->mouseCurrPoint);
-          
+
           pen.setColor(QColor(255,255,255));
           pen.setStyle(Qt::DashLine);
           p.setPen(pen);
@@ -767,14 +767,14 @@ void PiiImageViewport::paintEvent(QPaintEvent* event)
               if (d->dHLineStep > 0)
                 {
                   d->iHLineCount = h / d->dHLineStep + 2;
-                  
+
                   double dMod = fmod(gridRect.top(), d->dHLineStep);
                   d->dHLineStart = gridRect.top() - dMod;
                 }
               else
                 d->dHLineStart = d->iHLineCount = 0;
             }
-          
+
           // Calculate vertical lines if necessary
           if (gridRect.left() != d->previousGridRect.left() ||
               gridRect.right() != d->previousGridRect.right())
@@ -783,7 +783,7 @@ void PiiImageViewport::paintEvent(QPaintEvent* event)
               if (d->dVLineStep > 0)
                 {
                   d->iVLineCount = w / d->dVLineStep + 2;
-                  
+
                   double dMod = fmod(gridRect.left(), d->dVLineStep);
                   d->dVLineStart = gridRect.left() - dMod;
                 }
@@ -791,7 +791,7 @@ void PiiImageViewport::paintEvent(QPaintEvent* event)
                 d->dVLineStart = d->iVLineCount = 0;
             }
           d->previousGridRect = gridRect;
-          
+
           QPen pen(Qt::DotLine);
           pen.setColor(QColor(130,130,130));
           p.setPen(pen);
@@ -803,7 +803,7 @@ void PiiImageViewport::paintEvent(QPaintEvent* event)
               double y = d->dYScale * ((d->dHLineStart + (double)i*d->dHLineStep) / d->pixelSize.height() - (double)d->visibleArea.y());
               p.drawLine(QLineF(0, y, width(), y));
             }
-        
+
           // Draw vertical grid lines
           for (int i=0; i<d->iVLineCount; i++)
             {
@@ -811,7 +811,7 @@ void PiiImageViewport::paintEvent(QPaintEvent* event)
               p.drawLine(QLineF(x, 0, x, height()));
             }
         }
-      
+
     }
   else
     d->imageLock.unlock();
@@ -872,42 +872,42 @@ void PiiImageViewport::focusImage(PiiImageViewport::FocusPolicy focusPolicy)
 {
   if (d->imageRect.isNull())
     return;
-  
+
   // Calculate the width and the height of the scaled image in widget pixels.
   int iScaledImageWidth = int(double(d->imageRect.width())*d->dXScale + 0.5);
   int iScaledImageHeight = int(double(d->imageRect.height())*d->dYScale + 0.5);
-      
+
   QWidget* pParent = parentWidget();
   if (pParent)
     {
-          
+
       // Calculate the width and height of the current visible area in
       // d->pixmap pixels.
       int iVisibleWidth = int(double(pParent->width())/d->dXScale + 1);
       int iVisibleHeight = int(double(pParent->height())/d->dYScale + 1);
       int iVisibleLeft = 0;
       int iVisibleTop = 0;
-          
+
       if (iScaledImageWidth > width())
         {
           // The image is wider than the widget
           double dXFocusFactor = 0.0;
           int xFocusPoint = 0;
-              
+
           if (focusPolicy == PiiImageViewport::FocusToMouseCursor)
             {
               // First, calculate focus point x-coordinate in the
               // coordinates of d->pImage based on the current cursor position.
               dXFocusFactor = double(d->mouseCurrPoint.x())/double(pParent->width());
               int xOffset = int(dXFocusFactor * double(d->visibleArea.width()) + 0.5);
-              xFocusPoint = d->visibleArea.x() + xOffset; 
+              xFocusPoint = d->visibleArea.x() + xOffset;
             }
           else if (focusPolicy == PiiImageViewport::FocusToWidgetTopLeft)
             {
               xFocusPoint = d->visibleArea.x();
             }
-              
-              
+
+
           // Set the new visible left coordinate so, that the
           // x-coordinate in d->pImage, where the cursor point, remain
           // the same.
@@ -926,26 +926,26 @@ void PiiImageViewport::focusImage(PiiImageViewport::FocusPolicy focusPolicy)
           // widget.
           iVisibleLeft = (d->imageRect.width()-iVisibleWidth)/2;
         }
-          
+
       if (iScaledImageHeight > height())
         {
           // The image is taller than the parent widget
           double dYFocusFactor = 0.0;
           int yFocusPoint = 0;
-              
+
           if (focusPolicy == PiiImageViewport::FocusToMouseCursor)
             {
               // First, calculate focus point y-coordinate in the
               // coordinates of d->pImage based on the current cursor position.
               dYFocusFactor = double(d->mouseCurrPoint.y())/double(pParent->height());
               int yOffset = int(dYFocusFactor*double(d->visibleArea.height()) + 0.5);
-              yFocusPoint = d->visibleArea.y()+yOffset; 
+              yFocusPoint = d->visibleArea.y()+yOffset;
             }
           else if (focusPolicy == PiiImageViewport::FocusToWidgetTopLeft)
             {
               yFocusPoint = d->visibleArea.y();
             }
-              
+
           // Set the new visible top coordinate so, that the
           // y-coordinate in d->pImage, where the cursor point, remain
           // the same.
@@ -992,9 +992,9 @@ void PiiImageViewport::setCurrX(int x)
   d->visibleArea.setX(x);
   //The width is set back to the old value
   d->visibleArea.setWidth(tempWidth);
-  
+
   emit visibleAreaChanged(d->visibleArea.x(), d->visibleArea.y(), d->visibleArea.width(), d->visibleArea.height());
-  
+
   updateImage();
 }
 
@@ -1007,7 +1007,7 @@ void PiiImageViewport::setCurrY(int y)
   // The old height must be set back, because setting the y value above
   // changed the height.
   d->visibleArea.setHeight(height);
-  
+
   emit visibleAreaChanged(d->visibleArea.x(), d->visibleArea.y(), d->visibleArea.width(), d->visibleArea.height());
 
   updateImage();
@@ -1069,7 +1069,7 @@ QString PiiImageViewport::formatToolTipText(const QString& text) const
       if (iTabIndex == -1)
         strResult += "<tr><td colspan=\"2\">" + lstRows[i] + "</td></tr>";
       else
-        strResult += "<tr><td>" + lstRows[i].replace(iTabIndex, 1, "</td><td>") + "</td></tr>"; 
+        strResult += "<tr><td>" + lstRows[i].replace(iTabIndex, 1, "</td><td>") + "</td></tr>";
     }
 
   return strResult;
@@ -1239,7 +1239,7 @@ void PiiImageViewportUpdater::updateImage()
       (d->prescaledImage.format() != QImage::Format_ARGB32 && d->lstLayers.size() > 1))
     d->prescaledImage = QImage(drawingArea.width(), drawingArea.height(),
                                d->lstLayers.size() > 1 ? QImage::Format_ARGB32 : QImage::Format_RGB32);
-  
+
   // Scale and draw the visible portion of the image into a pixmap
   QPainter p(&d->prescaledImage);
   if (!d->lstLayers[0]->bVisible || d->lstLayers[0]->dOpacity != 1.0)

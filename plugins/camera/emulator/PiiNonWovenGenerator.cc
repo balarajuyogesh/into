@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -73,9 +73,9 @@ void PiiNonWovenGenerator::generateTexture(PiiMatrix<unsigned char>& buffer,
     }
   else
     _matBuffer.resize(rows+1, columns);
-  
+
   int roughnessX = int(_fractalGenerator.scaleRoughness(columns,100) * _dRoughness * 100 + 0.5);
-  
+
   int c1, c2;
   // If we can seed the fractal by previous data, we'll do it.
   if (iFirstRow == 1)
@@ -103,7 +103,7 @@ void PiiNonWovenGenerator::generateTexture(PiiMatrix<unsigned char>& buffer,
     generateBondingPattern(_matBuffer,
                            iFirstRow, column,
                            rows-1, columns);
-  
+
   buffer(row, column, rows, columns) << _matBuffer(iFirstRow, 0, rows, columns);
 }
 

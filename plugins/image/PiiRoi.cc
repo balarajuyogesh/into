@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -23,7 +23,7 @@ namespace PiiImage
     QT_TRANSLATE_NOOP("PiiRoi", "Region-of-interest rectangle (%1, %2), (%3-by-%4) exceeds image boundaries (%5-by-%6).");
   const char* roiMaskSizeError =
     QT_TRANSLATE_NOOP("PiiRoi", "Region-of-interest mask size (%1-by-%2) doesn't match image size (%3-by-%4).");
-  
+
   PiiMatrix<bool> toRoiMask(const PiiVariant& obj)
   {
     switch (obj.type())

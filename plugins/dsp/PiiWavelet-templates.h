@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -54,7 +54,7 @@ namespace PiiDsp
 
     return result;
   }
-  
+
   template <class T> PiiMatrix<T> quadratureMirror(const PiiMatrix<T>& filter, int odd)
   {
     PiiMatrix<T> result(Pii::flipped(filter, Pii::Horizontally));
@@ -63,11 +63,11 @@ namespace PiiDsp
       pRow[c] = -pRow[c];
     return result;
   }
-  
+
   template <class T> QList<PiiMatrix<T> > createScalingWavelets(const PiiMatrix<T>& filter)
   {
     PiiMatrix<T> decompLo, decompHi, reconstLo, reconstHi;
-  
+
     reconstLo = filter / T(Pii::sum<T>(filter) / 1.41421356237309504880); //M_SQRT2
     reconstHi = quadratureMirror(reconstLo);
     decompHi = Pii::flipped(reconstHi, Pii::Horizontally);
@@ -94,7 +94,7 @@ namespace PiiDsp
         cStep = 2;
         oddCol = odd & 1;
       }
-    
+
     PiiMatrix<T> result(PiiMatrix<T>::uninitialized(rows, cols));
 
     for (int r=oddRow, resultRow=0; r<mat.rows(); r+=rStep, ++resultRow)

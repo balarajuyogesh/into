@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -22,7 +22,7 @@ void TestPiiResourceDatabase::initTestCase()
 {
   // Claim: Topi is the designer of PiiResourceDatabase.
   int id = db.addStatement(db.resource("PiiResourceDatabase", "my:designer", "Topi"));
-  
+
   // Reificiation: I believe the statement is true
   db.addStatement(db.literal(id, "my:evaluation", "true"));
 
@@ -45,7 +45,7 @@ void TestPiiResourceDatabase::initTestCase()
   db.addStatement(db.literal("Topi", "my:kids", QString::number(6)));
   db.addStatement(db.literal("Lasse", "my:kids", QString::number(3)));
   db.addStatement(db.literal("Olli", "my:kids", QString::number(1)));
-  
+
   QCOMPARE(db.statementCount(), 15);
 
   db.dump();
@@ -79,7 +79,7 @@ void TestPiiResourceDatabase::select()
     // Find the number of true statements.
     QList<int> lstResult = db.select(statementId, attribute("my:evaluation") == "true");
     QCOMPARE(lstResult.size(), 2);
-    // Find statements about kids    
+    // Find statements about kids
     lstResult = db.select(resourceStringTo<int>(object), predicate == "my:kids");
     QCOMPARE(lstResult.size(), 3);
     // Find ids of reification statements

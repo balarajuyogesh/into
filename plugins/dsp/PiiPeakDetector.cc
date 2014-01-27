@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -56,7 +56,7 @@ template <class T> void PiiPeakDetector::findPeaks(const PiiVariant& obj)
                                                    d->dSharpnessThreshold,
                                                    d->iSmoothWidth,
                                                    d->iWindowWidth);
-  
+
   PiiMatrix<double> matPeaks(lstPeaks.size(), 3);
   PiiMatrix<int> matIndices(lstPeaks.size(), 1);
   for (int i=0; i<lstPeaks.size(); ++i)
@@ -81,7 +81,7 @@ template <class T> PiiMatrix<double> PiiPeakDetector::adjustLevel(const PiiMatri
                                                          Pii::Horizontally, Pii::ShrinkWindow);
   // Turn zeros to ones
   std::replace_if(matAvg.rowBegin(0), matAvg.rowEnd(0), std::bind2nd(std::equal_to<double>(), 0.0), 1.0);
-  
+
   // Divide each value by the local average
   return Pii::matrix(Pii::divided(PiiMatrix<double>(matrix), matAvg));
 }

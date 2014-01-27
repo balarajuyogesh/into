@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -48,7 +48,7 @@ class PiiTypeCastingOperation : public PiiDefaultOperation
 public:
   PiiTypeCastingOperation();
   ~PiiTypeCastingOperation();
-    
+
 protected:
   void process();
 
@@ -61,11 +61,11 @@ private:
   {
   public:
     Data();
-    
+
     int outputType;
   };
   PII_D_FUNC;
-  
+
   template <class T> void operate( const PiiVariant& obj );
   template <class T> void operateC( const PiiVariant& obj );
   template <class T> void operateCI( const PiiVariant& obj );

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -61,7 +61,7 @@ void PiiNetworkCameraOperation::check(bool reset)
 {
   PII_D;
   PiiImageReaderOperation::check(reset);
-  
+
   QUrl proxy(d->strProxyUrl);
   if (!proxy.isEmpty())
     {
@@ -75,7 +75,7 @@ void PiiNetworkCameraOperation::check(bool reset)
     {
       QUrl image(d->strImageUrl);
       checkUrl(image);
-      
+
       d->strHost = image.host();
       d->iPort = image.port(80);
       d->strPath = image.path();
@@ -91,7 +91,7 @@ void PiiNetworkCameraOperation::process()
   QString strHost = d->strHost, strPath = d->strPath;
   qint16 iPort = d->iPort;
   QString strUrl = d->strImageUrl;
-  
+
   if (d->pUrlInput->isConnected())
     {
       PiiVariant urlObj = d->pUrlInput->firstObject();
@@ -122,12 +122,12 @@ void PiiNetworkCameraOperation::process()
                   tr("Cannot open connection to: %1").arg(d->networkClient.serverAddress()));
       return;
     }
-  
+
   PiiHttpDevice dev(socket, PiiHttpDevice::Client);
   dev.setRequest("GET", strPath);
   dev.setHeader("Host", strHost);
   dev.finish();
-  
+
   // Read response header
   dev.readHeader();
   PiiHttpResponseHeader header = dev.responseHeader();
@@ -139,18 +139,18 @@ void PiiNetworkCameraOperation::process()
         PII_THROW(PiiExecutionException, tr("HTTP error: %1").arg(header.reasonPhrase()));
       return;
     }
-  
+
   if (header.hasKey("Content-Type") &&
       header.contentType().startsWith("image/") &&
       header.contentType().size() > 6)
     imageFormat = header.contentType().mid(6).toLatin1();
-  
+
   bool bClose = header.value("Connection").toLower() == "close";
 
   // Decode image
   QImageReader imageReader(&dev, imageFormat);
   QImage image = imageReader.read();
-  
+
   // Reset (and disconnect) socket
   if (bClose) //&& !d->bStreamMode)
     disconnectSocket();

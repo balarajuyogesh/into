@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -74,7 +74,7 @@ QVariant PiiGenericFunction::call(QVariantList& params)
               QCoreApplication::translate("PiiGenericFunction", "Wrong number of arguments."));
   QVector<void*> vecParams;
   vecParams << 0; // Return value
-  
+
   // Convert parameter list to void pointers.
   for (int i=0; i<iParamCnt; ++i)
     {

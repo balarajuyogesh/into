@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -81,7 +81,7 @@ namespace Pii
         *x = 1;
         return;
       }
-    
+
     // Scaling may be needed to avoid overflow/underflow.
     Real dMaxAbs = abs(*findSpecialValue(x, x+n,
                                          std::greater<Real>(),
@@ -92,14 +92,14 @@ namespace Pii
         dScale = qBound(Numeric<Real>::smallestPositive()/epsilon<Real>(1.0),
                         dMaxAbs,
                         Numeric<Real>::maxValue()*epsilon<Real>(1.0));
-        
+
         if (dScale != 1.0)
           {
             mapN(x, n, std::bind2nd(std::multiplies<Real>(), 1.0/dScale));
             dMaxAbs /= dScale;
           }
       }
-    
+
     Real dAlpha = *x;
     Real dScaledNorm = 0;
     if (dMaxAbs != 0)
@@ -108,7 +108,7 @@ namespace Pii
           dScaledNorm += square(x[i]/dMaxAbs);
         dScaledNorm = sqrt(dScaledNorm) * dMaxAbs;
       }
-    
+
     if (dScaledNorm == 0)
       {
         // H  =  I
@@ -118,12 +118,12 @@ namespace Pii
           *beta = 0;
         return;
       }
-    
+
     dMaxAbs = qMax(abs(dAlpha), abs(dScaledNorm));
     Real dBeta = -dMaxAbs * sqrt(square(dAlpha/dMaxAbs) + square(dScaledNorm/dMaxAbs));
     if (dAlpha < 0)
       dBeta = -dBeta;
-    
+
     *tau = (dBeta-dAlpha) / dBeta;
     mapN(x+1, n-1, std::bind2nd(std::multiplies<Real>(), 1.0/(dAlpha-dBeta)));
     x[0] = 1;
@@ -163,7 +163,7 @@ namespace Pii
                       typename Matrix::value_type* bfr)
   {
     typedef typename Matrix::value_type Real;
-    
+
     if (tau == 0)
       return;
 
@@ -172,7 +172,7 @@ namespace Pii
     // tmp = (A' * v)'
     for (int i=0; i<iCols; ++i)
       bfr[i] = innerProductN(A.columnBegin(i), iRows, v, Real(0));
-    
+
 
     // A << A - tau * v * tmp
     for (int i=0; i<iRows; ++i)
@@ -226,7 +226,7 @@ namespace Pii
                    typename Matrix::value_type tau)
   {
     typedef typename Matrix::value_type Real;
-    
+
     if (tau == 0)
       return;
 
@@ -279,8 +279,8 @@ namespace Pii
    * Note that the number of reflector vectors (Nr) may be smaller
    * than the number of rows/columns as shown in the top right
    * illustration. Generally, the number of reflectors is
-   * `min(m-diagonal, n)` for the case where *direction* = 
-   * `Vertically`, and `min(m, n-diagonal)` if *direction* = 
+   * `min(m-diagonal, n)` for the case where *direction* =
+   * `Vertically`, and `min(m, n-diagonal)` if *direction* =
    * `Horizontally`. Here, m and n denote the number of rows and columns
    * in *V*.
    *
@@ -288,7 +288,7 @@ namespace Pii
    * stored as columns (`Vertically`) or as rows (`Horizontally`).
    *
    * @param V a set of elementary reflector vectors in a compact form
-   * (see the illustration above). The diagonal entries must be ones. 
+   * (see the illustration above). The diagonal entries must be ones.
    * Entries marked with an "x" in the illustration are ignored. Note
    * that this function does not modify V. To get V, you need to set
    * the entries marked with x to zero.
@@ -321,7 +321,7 @@ namespace Pii
     const int iRows = V.rows(), iCols = V.columns();
     /* Calculate the Gram matrix of V.
        As a result, gram(i,j) = <v_i, v_j>
-       
+
        Since <v_i, v_j> = <v_j, v_i>, only the lower triangle will be
        calculated. Furthermore, we don't need the diagonal entries
        <v_i, v_i>, which leaves the diagonal empty as well.
@@ -368,7 +368,7 @@ namespace Pii
           T(r2,r1) = -tau[r1] *
             innerProduct(T.rowBegin(r2) + r2, T.rowEnd(r2)-diagonal,
                          gram.rowBegin(r1) + r2,
-                         Real(0.0));        
+                         Real(0.0));
         // The diagonal
         typename PiiMatrix<Real>::row_iterator row = T.rowBegin(r1) + r1;
         *row++ = -tau[r1];

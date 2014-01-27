@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -74,7 +74,7 @@
  * number of retained support vectors varies widely depending on
  * application, but sometimes only very few samples need to be stored.
  *
- * ! The derivation above neglects the bias term. See 
+ * ! The derivation above neglects the bias term. See
  * [classification_kernels] for a justification.
  *
  */
@@ -132,7 +132,7 @@ public:
    * kernel is a Gaussian kernel with unit variance.
    */
   void setKernelFunction(PiiKernelFunction<ConstFeatureIterator>* kernel);
-  
+
   /**
    * Returns the number of features in each feature vector. If the
    * perceptron has not been trained, zero will be returned.
@@ -161,19 +161,19 @@ public:
    * manually, but using the learn() function.
    */
   void setSupportVectors(const SampleSet& supportVectors);
-  
+
   /**
    * Returns the maximum number of learning iterations. The default
    * value is 100.
    */
   int maxIterations() const;
   /**
-   * Sets the maximum number of iterations the algorithm will take. 
+   * Sets the maximum number of iterations the algorithm will take.
    * This value limits the number of times the whole sample set is
    * iterated over.
    */
   void setMaxIterations(int maxIterations);
-  
+
 private:
   class Data : public PiiLearningAlgorithm<SampleSet>::Data
   {

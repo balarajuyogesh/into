@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -19,7 +19,7 @@
 #include <PiiDefaultOperation.h>
 
 /**
- * Composes an output matrix from N inputs of primitive data types. 
+ * Composes an output matrix from N inputs of primitive data types.
  * The amount of inputs is set with [dynamicInputCount].
  *
  * At least one dynamic input must be connected. The output matrix
@@ -46,9 +46,9 @@
  *
  * @out output - composed matrix. The type of the matrix is determined
  * by the type of the first connected input. If type `T` is read, a
- * PiiMatrix<T> will be emitted. If [direction] is 
+ * PiiMatrix<T> will be emitted. If [direction] is
  * `Pii::Horizontally`, the matrix is M-by-[dynamicInputCount], where M
- * is the number of objects related to `sync`. If [direction] is 
+ * is the number of objects related to `sync`. If [direction] is
  * `Pii::Vertically`, the matrix is [dynamicInputCount]-by-M. If `sync`
  * is not connected, M is always one. If `sync` is connected and no
  * objects are received in the other inputs during one sync object, an
@@ -61,7 +61,7 @@ class PiiMatrixComposer : public PiiDefaultOperation
 
   /**
    * The number of inputs. Defines also the amount of columns (or
-   * rows, if [direction] = `Pii::Vertically`) in the output matrix. 
+   * rows, if [direction] = `Pii::Vertically`) in the output matrix.
    * The default is one.
    */
   Q_PROPERTY(int dynamicInputCount READ dynamicInputCount WRITE setDynamicInputCount);
@@ -72,7 +72,7 @@ class PiiMatrixComposer : public PiiDefaultOperation
    * creates the same number of rows.
    */
   Q_PROPERTY(Pii::MatrixDirection direction READ direction WRITE setDirection);
-  
+
   /**
    * A default value for each input as a `double`. The default value
    * will be used if the corresponding input is not connected. Default
@@ -94,14 +94,14 @@ class PiiMatrixComposer : public PiiDefaultOperation
    * ~~~
    */
   Q_PROPERTY(QVariantList defaultValues READ defaultValues WRITE setDefaultValues);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiMatrixComposer();
   ~PiiMatrixComposer();
-  
+
   void check(bool reset);
-  
+
 protected:
   void process();
   void syncEvent(SyncEvent* event);

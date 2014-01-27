@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -46,7 +46,7 @@ PiiThresholdingOperation::PiiThresholdingOperation() :
   addSocket(d->pBinaryImageOutput);
   addSocket(d->pThresholdOutput);
 }
-  
+
 void PiiThresholdingOperation::check(bool reset)
 {
   PII_D;
@@ -57,7 +57,7 @@ void PiiThresholdingOperation::check(bool reset)
       (d->windowSize.width() < 1 ||
        d->windowSize.height() < 1))
     PII_THROW(PiiExecutionException, tr("Window size is too small for adaptive thresholding."));
-  
+
   d->bThresholdConnected = d->pThresholdInput->isConnected();
 }
 
@@ -72,7 +72,7 @@ void PiiThresholdingOperation::process()
       PII_COLOR_IMAGE_CASES(thresholdColor, obj);
     default:
       PII_THROW_UNKNOWN_TYPE(d->pImageInput);
-    }  
+    }
 }
 
 template <class T> void PiiThresholdingOperation::thresholdColor(const PiiVariant& obj)
@@ -222,14 +222,14 @@ template <class T> void PiiThresholdingOperation::threshold(const PiiMatrix<T>& 
           d->pThresholdOutput->emitObject(d->dAbsoluteThreshold);
           return;
         }
-      
+
     }
 
   if (!d->bInverse)
     d->pBinaryImageOutput->emitObject(PiiImage::threshold(image, T(threshold)));
   else
     d->pBinaryImageOutput->emitObject(PiiImage::inverseThreshold(image, T(threshold)));
-    
+
   d->pThresholdOutput->emitObject(threshold);
 }
 

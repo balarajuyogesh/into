@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -103,7 +103,7 @@ PiiIoChannel* PiiDefaultIoDriver::channel(int channel)
     {
       if (channel >= d->lstChannels.size())
         d->lstChannels.resize(channel+1);
-      
+
       if (d->lstChannels[channel] == 0)
         {
           PiiIoChannel *pChannel = createChannel(channel);
@@ -112,7 +112,7 @@ PiiIoChannel* PiiDefaultIoDriver::channel(int channel)
             connect(pChannel, SIGNAL(channelFailed(PiiIoChannel*,QString)),
                     SLOT(reconnect(PiiIoChannel*,QString)), Qt::DirectConnection);
         }
-      
+
       return d->lstChannels[channel];
     }
   return 0;

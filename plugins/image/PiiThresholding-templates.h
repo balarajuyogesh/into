@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,7 +26,7 @@ namespace PiiImage
     PiiMatrix<double> matVariances(1,histogram.columns()-1);
     PiiMatrix<double> matCumulative(cumulative(histogram));
     double* varptr = matVariances.row(0);
-    
+
     for (int k=0; k<matVariances.columns(); k++)
       {
         double sum1 = 0, sum2 = 0, mu1 = 0, mu2 = 0, var1 = 0, var2 = 0;
@@ -146,7 +146,7 @@ namespace PiiImage
     RoiMaskPixelCounter(const PiiMatrix<T>& mask) :
       matMaskSum(Pii::cumulativeSum<int>(mask & 1, Pii::ZeroBorderCumulativeSum))
     {}
-    
+
     inline int countPixels(int r1, int c1, int r2, int c2) const
     {
       return matMaskSum(r2,c2) + matMaskSum(r1,c1) - matMaskSum(r2,c1) - matMaskSum(r1,c2);
@@ -172,7 +172,7 @@ namespace PiiImage
                              windowRows,
                              windowColumns);
   }
-  
+
   template <class Matrix, class BinaryFunction>
   PiiMatrix<typename BinaryFunction::result_type> adaptiveThreshold(const Matrix& image,
                                                                     BinaryFunction func,
@@ -227,7 +227,7 @@ namespace PiiImage
     PiiMatrix<I> matIntegral = Pii::cumulativeSum<I,Matrix>(image, Pii::ZeroBorderCumulativeSum);
     // Integral image of squares
     PiiMatrix<I2> matIntegral2 = Pii::cumulativeSum(image, Pii::Square<I2>(), Pii::ZeroBorderCumulativeSum);
-    
+
     // Initialize result image
     PiiMatrix<T> matThresholded(PiiMatrix<T>::uninitialized(image.rows(), image.columns()));
     if (windowColumns <= 0)
@@ -259,7 +259,7 @@ namespace PiiImage
             double dMean = double(pNextRow[c2] + pPrevRow[c1] - pNextRow[c1] - pPrevRow[c2]) / iCount;
             double dVar = double(pNextRow2[c2] + pPrevRow2[c1] - pNextRow2[c1] - pPrevRow2[c2]) / iCount // sum(x²)/N
               - Pii::square(dMean);
-            
+
             pTarget[c] = func(source[c],
                               dMean,
                               dVar);

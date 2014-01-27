@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -35,13 +35,13 @@ public:
   PiiLockedPtr(QMutex* mutex, T* ptr = 0);
   ~PiiLockedPtr();
   PiiLockedPtr(const PiiLockedPtr& other);
-  
+
   PiiLockedPtr& operator= (const PiiLockedPtr& other);
   PiiLockedPtr& operator= (T* ptr);
 
   operator T* () const;
   T* operator-> () const;
-    
+
 private:
   class Data : public PiiSharedD<Data>
   {

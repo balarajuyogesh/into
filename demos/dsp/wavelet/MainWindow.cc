@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -80,7 +80,7 @@ PiiEngine* MainWindow::createEngine()
   _pHorizontalProbeInput = new PiiProbeInput;
   _pVerticalProbeInput = new PiiProbeInput;
   _pDiagonalProbeInput = new PiiProbeInput;
-  
+
   // Create image source
   _pImageFileReader = pEngine->createOperation("PiiImageFileReader");
   _pImageFileReader->setProperty("imageType", "GrayScale");
@@ -88,13 +88,13 @@ PiiEngine* MainWindow::createEngine()
 
   // Create wavelet operation
   PiiOperation *pWaveletTransform = pEngine->createOperation("PiiDwtOperation");
-  
+
   // Make operation connections
   connect(this, SIGNAL(selectImage(int)), pTriggerSource, SLOT(trigger(int)));
 
   pTriggerSource->connectOutput("trigger", _pImageFileReader, "trigger");
   _pImageFileReader->connectOutput("image", pWaveletTransform, "input");
-  
+
   _pSourceProbeInput->connectOutput(_pImageFileReader->output("image"));
   _pApproximationProbeInput->connectOutput(pWaveletTransform->output("approximation"));
   _pHorizontalProbeInput->connectOutput(pWaveletTransform->output("horizontal"));

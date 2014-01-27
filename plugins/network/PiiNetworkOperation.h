@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -36,7 +36,7 @@ class PiiMimeHeader;
  * server/client. The body must be convertible to a QString. Any
  * primitive type will do.
  *
- * @in content type - the MIME type of the message body as a QString. 
+ * @in content type - the MIME type of the message body as a QString.
  * This input is optional and cannot be connected alone. If the input
  * is not connected, the [contentType] property will be used.
  *
@@ -85,9 +85,9 @@ class PII_NETWORKPLUGIN_EXPORT PiiNetworkOperation : public PiiDefaultOperation
   Q_PROPERTY(QStringList inputNames READ inputNames WRITE setInputNames);
 
   /**
-   * The MIME type of the request/response body. Used only if the 
+   * The MIME type of the request/response body. Used only if the
    * `body` input is connected. If the `content type` input is
-   * connected, it overrides this value. The default value is 
+   * connected, it overrides this value. The default value is
    * `text`/plain.
    */
   Q_PROPERTY(QString contentType READ contentType WRITE setContentType);
@@ -115,7 +115,7 @@ class PII_NETWORKPLUGIN_EXPORT PiiNetworkOperation : public PiiDefaultOperation
 
 public:
   ~PiiNetworkOperation();
-  
+
   void check(bool reset);
 
   /**
@@ -167,12 +167,12 @@ protected:
   {
   public:
     Data();
-    
+
     /// Names of dynamic output sockets.
     QStringList lstOutputNames;
     /// Names of dynamic input sockets.
     QStringList lstInputNames;
-    
+
     /// `true` iff the `body` input is connected.
     bool bBodyConnected;
     /// `true` iff the `content type` input is connected.

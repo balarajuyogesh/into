@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -47,7 +47,7 @@ void PiiKernelAdatron<SampleSet>::learn(const SampleSet& samples,
   PII_D;
   const int iSamples = PiiSampleSet::sampleCount(samples),
     iFeatures = PiiSampleSet::featureCount(samples);
-  
+
   PiiMatrix<double> matKernel(PiiClassification::calculateDistanceMatrix(samples,
                                                                          *d->pKernel,
                                                                          true, true));
@@ -58,7 +58,7 @@ void PiiKernelAdatron<SampleSet>::learn(const SampleSet& samples,
   d->vecLabels.clear();
   PiiSampleSet::clear(d->supportVectors);
   d->bConverged = false;
-  
+
   int iIterations = 0;
   double dTheta = 0, dLearningRate = d->dLearningRate, dMinZ, dMaxZ;
   do

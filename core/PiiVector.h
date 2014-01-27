@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -183,7 +183,7 @@ public:
     // Avoid divzero and numerical instability
     if (Pii::almostEqualRel(length, 0.0, Pii::Numeric<double>::tolerance()))
       return;
-    
+
     length = Pii::sqrt(length);
 
     for(int i=D; i--; )
@@ -206,13 +206,13 @@ public:
     length = Pii::sqrt<double>(length);
 
     PiiVector vec;
-    
+
     for(int i=D; i--; )
       vec[i]= values[i] / length;
 
     return vec;
   }
-  
+
   /**
    * Get the value of the vector at `index` as a copy.
    */
@@ -237,7 +237,7 @@ public:
   {
     return values[index];
   }
-  
+
   /**
    * Analogous to operator[], non-const version. This operator is
    * useful for template functions that work with both PiiMatrix and

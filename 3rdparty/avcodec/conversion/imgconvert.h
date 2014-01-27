@@ -24,10 +24,10 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif 
+#endif
 int imgconvert(AVPicture *dst, int dst_pix_fmt,
                const AVPicture *src, int src_pix_fmt,
                int src_width, int src_height);
 #ifdef __cplusplus
 }
-#endif 
+#endif

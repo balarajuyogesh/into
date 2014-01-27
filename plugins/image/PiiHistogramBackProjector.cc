@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -55,7 +55,7 @@ void PiiHistogramBackProjector::check(bool reset)
     PII_THROW(PiiExecutionException, tr("Model input is not connected and model has not been set."));
 
   d->varTmpModel = d->varModel;
-  
+
   PiiDefaultOperation::check(reset);
 }
 
@@ -90,7 +90,7 @@ template <class T> void PiiHistogramBackProjector::backProject(const PiiVariant&
   // Read model histogram from input if it is connected
   if (d->bModelConnected)
     d->varTmpModel = inputAt(2)->firstObject();
-  
+
   // Two-dimensional back-projection
   if (obj2.isValid())
     {
@@ -135,7 +135,7 @@ template <class T, class U> void PiiHistogramBackProjector::backProject(const Pi
   maxVal = Pii::max(ch2);
   if (int(maxVal) >= model.columns())
     PII_THROW(PiiExecutionException, tr(errorMsg).arg(1).arg(0).arg(maxVal).arg(model.columns()-1));
-  
+
   emitObject(PiiImage::backProject(ch1, ch2, model));
 }
 

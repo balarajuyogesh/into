@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,7 +24,7 @@ template <class Matrix, class Filter> struct PiiMatrixTraits<PiiFilteredMatrix<M
       staticRows = Pii::MinInt<Matrix::staticRows, Filter::staticRows>::intValue,
       staticColumns = Pii::MinInt<Matrix::staticColumns, Filter::staticColumns>::intValue
     };
-  
+
   typedef typename Pii::IfClass<Pii::IsConst<Matrix>,
                                 PiiFilteredIterator<typename Matrix::const_iterator,
                                                     typename Filter::const_iterator,
@@ -36,7 +36,7 @@ template <class Matrix, class Filter> struct PiiMatrixTraits<PiiFilteredMatrix<M
   typedef const_iterator const_row_iterator;
   typedef iterator column_iterator;
   typedef const_iterator const_column_iterator;
-  
+
   // const_iterator is always const_iterator
   //typedef PiiFilteredIterator<typename Matrix::const_iterator, typename Filter::const_iterator> const_iterator;
   typedef typename std::iterator_traits<typename Matrix::iterator>::value_type value_type;
@@ -82,7 +82,7 @@ class PiiFilteredMatrix : public PiiConceptualMatrix<PiiFilteredMatrix<Matrix,Fi
 public:
   typedef PiiConceptualMatrix<PiiFilteredMatrix<Matrix,Filter> > BaseType;
   typedef PiiMatrixTraits<PiiFilteredMatrix<Matrix,Filter> > Traits;
-  
+
   PiiFilteredMatrix(Matrix& matrix, const Filter& filter) :
     _begin(matrix.begin(), matrix.end(), filter.begin()),
     _end(_begin.begin(), matrix.end(), matrix.end(), filter.end()),
@@ -132,7 +132,7 @@ private:
 #ifdef PII_CXX11
   PiiFilteredMatrix(const PiiFilteredMatrix& other);
 #endif
-  
+
   typename BaseType::iterator _begin, _end;
   mutable int _iColumns;
 };
@@ -140,7 +140,7 @@ private:
 namespace Pii
 {
   /**
-   * Creates a PiiFilteredMatrix that accesses those elements of 
+   * Creates a PiiFilteredMatrix that accesses those elements of
    * *matrix* whose corresponding element in *filter* is non-zero. Note
    * that this function does not check that *matrix* and *filter*
    * are equal in size.

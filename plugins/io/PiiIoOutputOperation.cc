@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -59,7 +59,7 @@ void PiiIoOutputOperation::setChannelState(int channel, bool value)
             {
               if (channel >=0 && channel < d->lstChannels.size())
                 d->lstChannels[channel]->setOutputState(value);
-              
+
               return;
             }
           catch (PiiIoDriverException& ex)

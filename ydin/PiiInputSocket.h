@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -39,7 +39,7 @@ class PiiOutputSocket;
 /**
  * A macro that throws a PiiExecutionException. The error message
  * states that the `matrix` received in `input` has a wrong size,
- * and it should actually have the specified number of `rows` and 
+ * and it should actually have the specified number of `rows` and
  * `columns`.
  *
  * @param INPUT a pointer to the input that reveived the matrix.
@@ -60,7 +60,7 @@ class PiiOutputSocket;
  * Default implementation of an input socket. This class maintains an
  * input queue whose capacity can be controlled with the
  * [queueCapacity] property. A producer operation can send objects to
- * the input queue and continue working until the input queue is full. 
+ * the input queue and continue working until the input queue is full.
  * Once this happens, the sending thread must wait until the receiver
  * has processed one or more objects.
  *
@@ -78,7 +78,7 @@ class PII_YDIN_EXPORT PiiInputSocket : public PiiAbstractInputSocket
   /**
    * The capacity of the input queue. The default value is 2. The
    * minimum value for queue capacity is 1. Note that queue capacity
-   * can safely be changed only if the parent operation is stopped. 
+   * can safely be changed only if the parent operation is stopped.
    * Changing the capacity will destroy all objects currently in the
    * queue.
    */
@@ -92,7 +92,7 @@ public:
 
   /// Destroys the socket.
   ~PiiInputSocket();
-  
+
   /**
    * Sets the group id. Input sockets are organized to groups
    * identified by numeric ids. Sockets with the same group id are
@@ -118,7 +118,7 @@ public:
   Q_INVOKABLE bool isConnected() const;
 
   /**
-   * Checks if this input socket can be left unconnected in processing. 
+   * Checks if this input socket can be left unconnected in processing.
    * If an optional input socket is left unconnected, the receiving
    * operation ignores it in processing.
    *
@@ -175,7 +175,7 @@ public:
    * Resets the socket. This clears the object queue.
    */
   void reset();
-  
+
   /**
    * Puts `obj` into the incoming queue.
    */
@@ -201,13 +201,13 @@ public:
    * Returns the number of objects currently in the input queue.
    */
   int queueLength() const;
-  
+
   /**
    * Returns the object at `index` in the input queue. If there is no
    * such object, an invalid variant will be returned.
    */
   PiiVariant queuedObject(int index) const;
-  
+
   /**
    * Returns the type ID of the object at `index` in the input queue.
    */
@@ -235,16 +235,16 @@ public:
   void setController(PiiInputController* controller);
 
   PiiInputController* controller() const;
-  
+
 protected:
   /// @internal
   class Data : public PiiAbstractInputSocket::Data
   {
   public:
     Data();
-    
+
     bool setInputConnected(bool connected);
-  
+
     int iGroupId;
     bool bConnected;
     bool bOptional;
@@ -259,7 +259,7 @@ protected:
 
   /// @internal
   PiiInputSocket(const QString& name, Data* data);
-  
+
 private:
   inline int queueIndex(int index) const { return (_d()->iQueueStart+index) % _d()->lstQueue.size(); }
 };

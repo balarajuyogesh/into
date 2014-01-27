@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -45,7 +45,7 @@ class PII_VIDEO_EXPORT PiiVideoFileWriter : public PiiDefaultOperation
   Q_PROPERTY(QString outputDirectory READ outputDirectory WRITE setOutputDirectory);
 
   /**
-   * The output file name. 
+   * The output file name.
    */
   Q_PROPERTY(QString fileName READ fileName WRITE setFileName);
 
@@ -53,14 +53,14 @@ class PII_VIDEO_EXPORT PiiVideoFileWriter : public PiiDefaultOperation
    * Frame rate.
    */
   Q_PROPERTY(int frameRate READ frameRate WRITE setFrameRate);
-  
-  
+
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 
 public:
   PiiVideoFileWriter();
   virtual ~PiiVideoFileWriter();
-  
+
   QString outputDirectory() const;
   void setOutputDirectory(const QString& dirName);
 
@@ -69,19 +69,19 @@ public:
 
   int frameRate() const;
   void setFrameRate(int frameRate);
-  
+
 protected:
   void process();
 
 private slots:
   void deletePiiVideoWriter( int state );
-  
+
 private:
   template <class T> void initPiiVideoWriter(const PiiVariant& obj);
   template <class T> void grayImage(const PiiVariant& obj);
   template <class T> void floatImage(const PiiVariant& obj);
   template <class T> void colorImage(const PiiVariant& obj);
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {
@@ -90,7 +90,7 @@ private:
 
     QString strOutputDirectory, strFileName;
     int iIndex, iWidth, iHeight, iFrameRate;
-    
+
     PiiVideoWriter *pVideoWriter;
     PiiInputSocket* pImageInput;
   };

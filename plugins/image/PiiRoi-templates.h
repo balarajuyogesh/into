@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -34,7 +34,7 @@ namespace PiiImage
       }
     return matMask;
   }
-  
+
   template <class T, class Processor> void handleRoiInput(PiiInputSocket* input,
                                                           RoiType roiType,
                                                           const PiiMatrix<T>& image,
@@ -45,7 +45,7 @@ namespace PiiImage
         process(image);
         return;
       }
-    
+
     if (!input->isConnected())
       {
         // Special case: mask type ROI and no separate ROI object. If
@@ -62,7 +62,7 @@ namespace PiiImage
         process(image);
         return;
       }
-    
+
     const int iRows = image.rows(), iColumns = image.columns();
     const PiiVariant& varRoi = input->firstObject();
     if (roiType == AutoRoi)
@@ -72,7 +72,7 @@ namespace PiiImage
         else
           roiType = MaskRoi;
       }
-    
+
     if (roiType == RectangleRoi)
       {
         if (varRoi.type() != PiiYdin::IntMatrixType)

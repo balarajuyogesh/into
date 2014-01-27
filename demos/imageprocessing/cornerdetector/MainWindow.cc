@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
   // Initialize engine
   initEngine();
-  
+
   // Initialize ui
   init();
 
@@ -66,7 +66,7 @@ PiiEngine* MainWindow::createEngine()
   PiiOperation *pSwitch = pEngine->createOperation("PiiSwitch", "switch");
   pSwitch->setProperty("operationMode", "AsynchronousMode");
   pSwitch->setProperty("passThrough", true);
-  
+
   _pImageFileReader = pEngine->createOperation("PiiImageFileReader");
   _pImageFileReader->setProperty("fileNamePattern", QString("%1/*.jpg").arg(defaultImageDirPath()));
   PiiOperation *pConversionSwitch = pEngine->createOperation("PiiImageConversionSwitch");
@@ -76,7 +76,7 @@ PiiEngine* MainWindow::createEngine()
   cornerPen.setWidth(3);
   pAnnotator->setProperty("pen", cornerPen);
   _pCornerDetector = pEngine->createOperation("PiiCornerDetector");
-  
+
   // Create probe input for result image display
   _pResultProbeInput = new PiiProbeInput;
 
@@ -111,7 +111,7 @@ void MainWindow::changeThreshold(int threshold)
 
   // Change threshold
   _pCornerDetector->setProperty("threshold", threshold);
-  
+
   // Select the same image again
   emit updateImage(0);
 }

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -40,7 +40,7 @@ void TestPiiCamera::bayerToRgb()
   QVERIFY(rgb(0,1) == PiiColor4<>(4,4,6));
   QVERIFY(rgb(0,2) == PiiColor4<>(6,5,4));
   QVERIFY(rgb(0,3) == PiiColor4<>(6,8,2));
-  
+
   QVERIFY(rgb(1,0) == PiiColor4<>(1,8,6));
   QVERIFY(rgb(1,1) == PiiColor4<>(3,4,6));
   QVERIFY(rgb(1,2) == PiiColor4<>(4,4,4));
@@ -64,7 +64,7 @@ void TestPiiCamera::bayerToRgb()
                                           1,3,4,4,
                                           1,2,3,3,
                                           1,2,3,3)));
-  
+
   PiiMatrix<int> green(PiiCamera::bayerToRgb(test,
                                              PiiCamera::RggbDecoder<>(),
                                              PiiCamera::GreenPixel<int>()));
@@ -73,7 +73,7 @@ void TestPiiCamera::bayerToRgb()
                                             8,4,4,5,
                                             5,2,4,4,
                                             5,4,7,5)));
-  
+
   PiiMatrix<int> blue(PiiCamera::bayerToRgb(test,
                                             PiiCamera::RggbDecoder<>(),
                                             PiiCamera::BluePixel<int>()));

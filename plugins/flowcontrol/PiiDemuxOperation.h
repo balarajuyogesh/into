@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -51,26 +51,26 @@
  * in the range [0, `outputCount` - 1]. All numeric values are
  * automatically converted to integers.
  *
- * @in input - any object. Passed to the output selected by the 
+ * @in input - any object. Passed to the output selected by the
  * `control` input.
- * 
+ *
  * Outputs
  * -------
  *
- * @out outputX - the output channels. X ranges from 0 to 
+ * @out outputX - the output channels. X ranges from 0 to
  * `dynamicOutputCount` - 1.
  *
  */
 class PiiDemuxOperation : public PiiDefaultOperation
 {
   Q_OBJECT
-  
+
   /**
    * The number of output channels. The value equals to the number of
    * output sockets. The default value is two.
    */
   Q_PROPERTY(int dynamicOutputCount READ dynamicOutputCount WRITE setDynamicOutputCount);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiDemuxOperation();

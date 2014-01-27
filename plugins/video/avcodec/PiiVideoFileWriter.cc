@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -20,7 +20,7 @@
 PiiVideoFileWriter::Data::Data() :
   strOutputDirectory("."), strFileName("output.mpg"), iIndex(0),
   iWidth(0), iHeight(0), iFrameRate(25), pVideoWriter(0)
-  
+
 {
 }
 
@@ -33,7 +33,7 @@ PiiVideoFileWriter::PiiVideoFileWriter() :
   addSocket(d->pImageInput);
 
   connect(this, SIGNAL(stateChanged(int)), SLOT(deletePiiVideoWriter(int)), Qt::DirectConnection);
-  
+
 }
 PiiVideoFileWriter::~PiiVideoFileWriter()
 {
@@ -46,7 +46,7 @@ void PiiVideoFileWriter::process()
   PII_D;
   using namespace PiiYdin;
   PiiVariant obj = d->pImageInput->firstObject();
-  
+
   if (d->iIndex == 0 )
     {
       switch (obj.type())
@@ -84,13 +84,13 @@ void PiiVideoFileWriter::process()
     }
 
   ++d->iIndex;
-   
+
 }
 
 void PiiVideoFileWriter::deletePiiVideoWriter(int state)
 {
   PII_D;
-  
+
   if ( state == PiiOperation::Stopped )
     {
       delete d->pVideoWriter;
@@ -102,7 +102,7 @@ void PiiVideoFileWriter::deletePiiVideoWriter(int state)
 template <class T> void PiiVideoFileWriter::initPiiVideoWriter(const PiiVariant& obj)
 {
   PII_D;
- 
+
   const PiiMatrix<T> matrix = obj.valueAs<PiiMatrix<T> >();
 
   if (d->strFileName.isEmpty() )
@@ -115,7 +115,7 @@ template <class T> void PiiVideoFileWriter::initPiiVideoWriter(const PiiVariant&
 
    d->iWidth = matrix.columns();
    d->iHeight = matrix.rows();
-   
+
    if ( d->pVideoWriter == 0 )
      d->pVideoWriter = new PiiVideoWriter(filename, d->iWidth, d->iHeight, d->iFrameRate);
    else
@@ -125,7 +125,7 @@ template <class T> void PiiVideoFileWriter::initPiiVideoWriter(const PiiVariant&
        d->pVideoWriter->setHeight(d->iHeight);
        d->pVideoWriter->setFrameRate(d->iFrameRate);
      }
-   
+
    try
      {
        d->pVideoWriter->initialize();
@@ -136,7 +136,7 @@ template <class T> void PiiVideoFileWriter::initPiiVideoWriter(const PiiVariant&
        message +=ob.message();
        PII_THROW(PiiExecutionException, message.toStdString().c_str());
      }
-   
+
 }
 
 template <class T> void PiiVideoFileWriter::grayImage( const PiiVariant& obj )
@@ -188,7 +188,7 @@ template <class T> void PiiVideoFileWriter::colorImage( const PiiVariant& obj )
     {
       PII_THROW(PiiExecutionException, tr("Input frame was not saved correctly"));
     }
-  
+
 }
 
 QString PiiVideoFileWriter::outputDirectory() const { return _d()->strOutputDirectory; }

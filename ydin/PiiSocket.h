@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -33,7 +33,7 @@ class PiiProxySocket;
 class PII_YDIN_EXPORT PiiSocket : public QObject
 {
   Q_OBJECT
-  
+
 public:
   ~PiiSocket();
 
@@ -44,7 +44,7 @@ public:
 protected:
   /// @hide
   enum Type { Input, Output, ProxyInput, ProxyOutput };
-  
+
   class PII_YDIN_EXPORT Data
   {
   public:
@@ -52,7 +52,7 @@ protected:
     virtual ~Data();
     Type type;
   } *d;
-  
+
   PiiSocket(Data*);
   PII_DISABLE_COPY(PiiSocket);
   /// @endhide

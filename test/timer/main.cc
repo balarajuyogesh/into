@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -47,7 +47,7 @@ void TestPiiTimer::elapsedTime()
     PiiDelay::msleep(10);
     //qDebug("B%i: %i %i", i, (int)tmr2.restart(), t.restart());
   }
-  
+
   PiiTimer tmr;
   PiiDelay::msleep(50);
    qint64 iUsecs = tmr.microseconds();

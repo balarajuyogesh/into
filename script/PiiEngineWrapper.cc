@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,10 +27,10 @@
 namespace PiiEngineWrapper
 {
   PII_STATIC_TR_FUNC(PiiEngine)
-    
+
   PII_QOBJECT_CONVERSION_FUNCTIONS(PiiEngine);
   PII_QOBJECT_CONSTRUCTOR(PiiEngine);
-  
+
   static QScriptValue convertPiiPluginToScriptValue(QScriptEngine* engine, const PiiEngine::Plugin& plugin)
   {
     QScriptValue result = engine->newObject();
@@ -53,11 +53,11 @@ namespace PiiEngineWrapper
     PiiScript::registerClasses(engine, "PiiEngine", parentResource);
     PiiScript::registerClasses(engine, "QWidget", parentResource);
     // PENDING other QObject derived classes/deeper inheritance hierarchies?
-    
+
     if (pOldClass != 0)
       globalObject.setScriptClass(pOldClass);
   }
-  
+
   static QScriptValue loadPlugins(QScriptContext* context, QScriptEngine* engine)
   {
     PII_CHECK_AT_LEAST_ONE_ARGUMENT(loadPlugins);
@@ -165,7 +165,7 @@ namespace PiiEngineWrapper
         return context->throwError(ex.message());
       }
   }
-  
+
   static QScriptValue plugins(QScriptContext* context, QScriptEngine* engine)
   {
     PII_CHECK_NO_ARGUMENTS(plugins);
@@ -192,12 +192,12 @@ namespace PiiEngineWrapper
 void initPiiEngine(QScriptEngine* engine)
 {
   PII_REGISTER_SCRIPT_TYPE_CONVERSION(PiiEngineWrapper, PiiEngine);
-  
+
   QScriptValue prototype = engine->newObject();
   PiiScript::setSuperclass(prototype, "PiiOperationCompound");
   prototype.setProperty("execute", engine->newFunction(PiiEngineWrapper::execute));
   prototype.setProperty("save", engine->newFunction(PiiEngineWrapper::save));
-  
+
   QScriptValue constructor = engine->newFunction(PiiEngineWrapper::createPiiEngine, prototype);
   PiiScript::configure(constructor, engine->newQMetaObject(&PiiEngine::staticMetaObject));
   constructor.setProperty("loadPlugins", engine->newFunction(PiiEngineWrapper::loadPlugins));

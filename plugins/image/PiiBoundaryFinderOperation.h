@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -45,7 +45,7 @@
  * @out limits - the indices of boundary polygon ends
  * (PiiMatrix<int>). The first vector is always at index 0, and the
  * first limit is the index of the start row of the second one. If the
- * first polygon has 120 points and the second one 90 points, 
+ * first polygon has 120 points and the second one 90 points,
  * `limits` will be the 1-by-2 matrix (120, 210).
  *
  * @out mask - boundary mask. A gray-level image in which the detected
@@ -80,7 +80,7 @@ class PiiBoundaryFinderOperation : public PiiDefaultOperation
    * discarded.
    */
   Q_PROPERTY(int maxLength READ maxLength WRITE setMaxLength);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 
 public:

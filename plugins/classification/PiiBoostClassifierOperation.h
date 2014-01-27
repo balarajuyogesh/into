@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -56,7 +56,7 @@ public:
   template <class SampleSet> class Template;
 
   ~PiiBoostClassifierOperation();
-  
+
 protected:
   /// @internal
   class Data : public PiiClassifierOperation::Data
@@ -104,7 +104,7 @@ template <class SampleSet> class PiiBoostClassifierOperation::Template :
 
 public:
   Template();
-  
+
   int bufferedSampleCount() const;
   int featureCount() const;
 
@@ -116,7 +116,7 @@ protected:
   void replaceClassifier();
   void resizeBatch(int newSize);
   void resetClassifier();
-  
+
 private:
   /// @internal
   class Data : public PiiBoostClassifierOperation::Data
@@ -128,7 +128,7 @@ private:
     PiiSampleSetCollector<SampleSet> collector;
   };
   PII_D_FUNC;
- 
+
   // Had to put this inline due to a MSVC bug
   PiiBoostClassifier<SampleSet>* createClassifier()
   {
@@ -206,7 +206,7 @@ template <class SampleSet> bool PiiBoostClassifierOperation::Template<SampleSet>
       delete d->pNewClassifier;
       d->pNewClassifier = 0;
     }
-  
+
   return bSuccess;
 }
 

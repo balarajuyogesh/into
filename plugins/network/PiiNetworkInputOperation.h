@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -95,7 +95,7 @@ class PiiHttpServer;
  * HTML form submissions (GET and POST with
  * application/x-www-form-urlencoded and multipart/form-data
  * encodings). If the string representing the value of a submitted
- * form field can be converted to an `int`, it will be converted. 
+ * form field can be converted to an `int`, it will be converted.
  * `double` will be tried next, and if that is not successful, the value
  * will be used as a string.
  *
@@ -122,7 +122,7 @@ class PiiNetworkInputOperation : public PiiNetworkOperation,
 
   /**
    * The URI of the operation within the server. Note that each
-   * operation must have a unique URI in the context of a HTTP server. 
+   * operation must have a unique URI in the context of a HTTP server.
    * If `uri` is empty, `/objectName` will be used as the URI.
    */
   Q_PROPERTY(QString uri READ uri WRITE setUri);
@@ -167,32 +167,32 @@ public:
 
 protected:
   void process();
-  
+
 private:
   void replyToClient(PiiHttpDevice* h);
   void destroyServer();
-  
+
   /// @internal
   class Data : public PiiNetworkOperation::Data
   {
   public:
     Data();
-    
+
     PiiHttpServer* pServer;
     bool bOwnServer;
     bool bNeedToWaitResponse;
     PiiWaitCondition responseCondition;
     QMutex requestLock;
-    
+
     PiiInputSocket* pStatusInput;
     bool bStatusConnected;
     int iStatusCode;
-    
+
     QList<PiiVariant> lstResponseValues;
-    
+
     QString strCurrentContentType;
     QString strResponseData;
-    
+
     QString strHttpServer;
     QString strUri;
     QString strInterruptedResponse;

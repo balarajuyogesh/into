@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -50,7 +50,7 @@ void PiiImageDisplay::init()
           this, SLOT(viewportScaleChanged(double, double)));
   connect(ui->_pImageScrollArea->imageViewport(), SIGNAL(fitModeChanged(int)),
           SLOT(enableScrollBars(int)));
-  
+
   initMeasureBars();
 }
 
@@ -71,7 +71,7 @@ void PiiImageDisplay::initMeasureBars()
           ui->_pHorizontalMeasureBar, SLOT(setMouseLocation(QPoint)));
   connect(ui->_pImageScrollArea, SIGNAL(mouseOnView(bool)),
           ui->_pHorizontalMeasureBar, SLOT(setDrawMouseLocation(bool)));
-  
+
 
   ui->_pVerticalMeasureBar->setOrientation(Qt::Vertical);
   ui->_pVerticalMeasureBar->setLineWidth(1);
@@ -80,26 +80,26 @@ void PiiImageDisplay::initMeasureBars()
   ui->_pVerticalMeasureBar->setTickPosition(PiiMeasureBar::TicksTopOrRight);
   ui->_pVerticalMeasureBar->setScale(ui->_pImageScrollArea->imageViewport()->yScale());
   ui->_pVerticalMeasureBar->setStartPos(0);
-  
+
   connect(ui->_pImageScrollArea, SIGNAL(verticalStartPosChanged(double)),
           ui->_pVerticalMeasureBar, SLOT(setStartPos(double)));
   connect(ui->_pImageScrollArea->imageViewport(), SIGNAL(mouseLocationChanged(QPoint)),
           ui->_pVerticalMeasureBar, SLOT(setMouseLocation(QPoint)));
   connect(ui->_pImageScrollArea, SIGNAL(mouseOnView(bool)),
           ui->_pVerticalMeasureBar, SLOT(setDrawMouseLocation(bool)));
-  
+
   QVariantList minDistances, tickScales;
   QStringList tickNames;
-  
+
   minDistances << 10 << 25 << 50;
   tickScales << 1 << 5 << 10 << 50 << 100 << 500 << 1000 << 5000 << 10000 << 50000 << 100000;
   tickNames  << "px" << "" << "-" << "" << "-" << "" << "-" << "" << "-" << "" << "-";
-  
+
   ui->_pHorizontalMeasureBar->setMinTickDistances(minDistances);
   ui->_pHorizontalMeasureBar->setTickScales(tickScales);
   ui->_pHorizontalMeasureBar->setTickNames(tickNames);
   ui->_pHorizontalMeasureBar->setDrawUnitNames(false);
-  
+
   ui->_pVerticalMeasureBar->setMinTickDistances(minDistances);
   ui->_pVerticalMeasureBar->setTickScales(tickScales);
   ui->_pVerticalMeasureBar->setTickNames(tickNames);

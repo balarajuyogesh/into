@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -39,7 +39,7 @@ class PiiCornerDetector : public PiiDefaultOperation
   Q_OBJECT
 
   /**
-   * Corner detection threshold. See 
+   * Corner detection threshold. See
    * [PiiImage::detectFastCorners()].
    */
   Q_PROPERTY(double threshold READ threshold WRITE setThreshold);
@@ -50,7 +50,7 @@ public:
 
   void setThreshold(double threshold);
   double threshold() const;
-  
+
 protected:
   void process();
 

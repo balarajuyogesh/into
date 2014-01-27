@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -18,7 +18,7 @@
 PiiWaitCondition::PiiWaitCondition(QueueMode mode) :
   _bQueue(mode == Queue), _iWaiters(0), _iWakeSignals(0)
 { }
-  
+
 bool PiiWaitCondition::wait(unsigned long time)
 {
   //serialize access to _iWakeSignals and _iWaiters
@@ -55,7 +55,7 @@ void PiiWaitCondition::wakeOne()
       _condition.wakeOne();
       // Decrement the waiter count. In some rare cases, wait()
       // doesn't return immediately after wakeOne(), but multiple
-      // wakeOne() calls may be invoked before wait() finishes. 
+      // wakeOne() calls may be invoked before wait() finishes.
       // Therefore, the waiter count must be decreased before the
       // wait() call actually returns.
       _iWaiters--;

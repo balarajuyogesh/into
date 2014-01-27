@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -18,10 +18,10 @@
 Frame::Frame()
 {
   setupUi(this);
-  
+
   _bMouseDown = false;
   setFrameShape(Panel);
-        
+
   // Make this a borderless window which can't
   // be resized or moved via the window system
   setWindowFlags(Qt::FramelessWindowHint);
@@ -29,41 +29,41 @@ Frame::Frame()
 
   connect(_pContent, SIGNAL(quit()), this, SLOT(close()));
 }
-    
+
 // Allows you to access the content area of the frame
 // where widgets and layouts can be added
 QWidget* Frame::contentWidget() const
 {
   return _pContent;
 }
-    
+
 void Frame::mousePressEvent(QMouseEvent *e)
 {
   _oldPos = e->pos();
   _bMouseDown = e->button() == Qt::LeftButton;
 }
-    
+
 void Frame::mouseMoveEvent(QMouseEvent *e)
 {
   int x = e->x();
   int y = e->y();
-        
+
   if (_bMouseDown)
     {
       int dx = x - _oldPos.x();
       int dy = y - _oldPos.y();
-      
+
       QRect g = geometry();
-      
+
       if (_bLeft)
         g.setLeft(g.left() + dx);
       if (_bRight)
         g.setRight(g.right() + dx);
       if (_bBottom)
         g.setBottom(g.bottom() + dy);
-      
+
       setGeometry(g);
-      
+
       _oldPos = QPoint(!_bLeft ? e->x() : _oldPos.x(), e->y());
     }
   else
@@ -73,12 +73,12 @@ void Frame::mouseMoveEvent(QMouseEvent *e)
       _bRight = qAbs(x - r.right()) <= 5;
       _bBottom = qAbs(y - r.bottom()) <= 5;
       bool hor = _bLeft | _bRight;
-      
+
       if (hor && _bBottom)
         {
           if (_bLeft)
             setCursor(Qt::SizeBDiagCursor);
-          else 
+          else
             setCursor(Qt::SizeFDiagCursor);
         }
       else if (hor)

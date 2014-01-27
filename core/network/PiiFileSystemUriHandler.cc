@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -70,11 +70,11 @@ void PiiFileSystemUriHandler::getFile(const QString& fileName,
   if ((!d->bFollowSymLinks && info.isSymLink()) ||
       (!d->bShowHiddenFiles && info.isHidden()))
     PII_THROW_HTTP_ERROR(NotFoundStatus);
-  
+
   QFile file(fileName);
   if (!file.open(QIODevice::ReadOnly))
     PII_THROW_HTTP_ERROR(NotFoundStatus);
-  
+
   QDateTime modTime(info.lastModified().toUTC());
 
   // If the client gave us an If-Modified-Since header, we may not
@@ -117,7 +117,7 @@ void PiiFileSystemUriHandler::putFile(const QString& fileName,
 {
   QFileInfo info(fileName);
   bool bExisted = info.exists();
-  
+
   // If hidden files are not shown to clients, they cannot be created,
   // either.
   if (!d->bShowHiddenFiles && info.isHidden())
@@ -125,7 +125,7 @@ void PiiFileSystemUriHandler::putFile(const QString& fileName,
       piiWarning(tr("%1 would be a hidden file. Refusing to create.").arg(fileName));
       PII_THROW_HTTP_ERROR(ForbiddenStatus);
     }
-  
+
   QTemporaryFile tmpFile(QDir::tempPath() + "/uploadtmp");
   if (!tmpFile.open())
     {
@@ -265,7 +265,7 @@ void PiiFileSystemUriHandler::listDirectoryAsHtml(PiiHttpDevice* dev, const QFil
              "<head><title>" + dev->requestPath() + "</title></head>\n"
              "<body>\n"
              "<ul>\n");
-  
+
   for (QFileInfoList::const_iterator it = files.begin(); it != files.end(); ++it)
     {
       if (it->isDir())
@@ -277,7 +277,7 @@ void PiiFileSystemUriHandler::listDirectoryAsHtml(PiiHttpDevice* dev, const QFil
   dev->print("</ul>\n"
              "</body>\n"
              "</html>\n");
-  
+
   dev->setHeader("Content-Type", "text/html");
 }
 
@@ -292,7 +292,7 @@ void PiiFileSystemUriHandler::listDirectoryAsJson(PiiHttpDevice* dev, const QFil
       else if (*it == "size") iFields |= Size;
       else if (*it == "modified") iFields |= LastModified;
     }
-  
+
   dev->print("[");
   for (QFileInfoList::const_iterator it = files.begin(); it != files.end(); ++it)
     {
@@ -303,7 +303,7 @@ void PiiFileSystemUriHandler::listDirectoryAsJson(PiiHttpDevice* dev, const QFil
         mapValues["size"] = it->size();
       if (iFields & LastModified)
         mapValues["modified"] = it->lastModified();
-      
+
       if (it != files.begin()) dev->print(",\n ");
       dev->print(PiiNetwork::toJson(mapValues));
     }
@@ -325,7 +325,7 @@ void PiiFileSystemUriHandler::getDirectory(const QString& path, PiiHttpDevice* d
 
   if (dev->requestMethod() not_member_of<QString> ("GET", "HEAD"))
     PII_THROW_HTTP_ERROR(MethodNotAllowedStatus);
-  
+
   QDir::Filters filters = QDir::AllEntries | QDir::Readable | QDir::NoDotAndDotDot;
   if (!d->bFollowSymLinks)
     filters |= QDir::NoSymLinks;
@@ -376,10 +376,10 @@ void PiiFileSystemUriHandler::handleRequest(const QString& uri, PiiHttpDevice* d
       getDirectory(d->strFileSystemRoot, dev, controller);
       return;
     }
-  
+
   QStringList lstPaths = strFileName.split('/', QString::SkipEmptyParts);
   strFileName = d->strFileSystemRoot;
-  
+
   for (QStringList::iterator i=lstPaths.begin(); i!=lstPaths.end(); )
     {
       if (*i == "..")
@@ -415,7 +415,7 @@ void PiiFileSystemUriHandler::handleRequest(const QString& uri, PiiHttpDevice* d
 
       if (i != lstPaths.constEnd()-1)
         {
-          // All except the last path component must be directories. 
+          // All except the last path component must be directories.
           if (!info.isReadable() || !info.isDir())
             {
               if (strMethod == "MKCOL") // WebDAV spec: missing intermediate collections are "conflict"

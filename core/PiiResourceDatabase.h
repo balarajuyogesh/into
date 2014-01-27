@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,7 +26,7 @@
 #include <functional>
 
 /**
- * A database that stores statements about resources. 
+ * A database that stores statements about resources.
  * PiiResourceDatabase is based upon the idea of making statements
  * about resources in the form of subject-predicate-object
  * expressions, just like in RDF (http://www.w3.org/RDF/). These
@@ -62,7 +62,7 @@
  * `(PiiResourceDatabase,uses,PiiResourceStatement)`.
  *
  * Statements in PiiResourceDatabase are also resources, and they
- * have automatically assigned ids. Therefore, it is possible to 
+ * have automatically assigned ids. Therefore, it is possible to
  * *reify* statements in RDF style. In RDF terminology, reification
  * means staments about statements. Resource ids of the form "[123]"
  * (a hash followed by an integer) are reserved for statements.
@@ -79,7 +79,7 @@ public:
   static PiiResourceStatement literal(const QString& subject, const QString& predicate, const QString& object);
   static PiiResourceStatement resource(const char* subject, const char* predicate, void* object);
   static PiiResourceStatement resource(const QString& subject, const QString& predicate, void* object);
-  
+
   /**
    * Creates a resource statement that refers to another
    * statement. The subject will be converted to "#subject". The
@@ -92,7 +92,7 @@ public:
    */
   static PiiResourceStatement resource(int subject, const QString& predicate, const QString& object);
   static PiiResourceStatement literal(int subject, const QString& predicate, const QString& object);
-  
+
   /**
    * Adds a statement to the database. Returns the id of the
    * statement.
@@ -100,7 +100,7 @@ public:
   int addStatement(const PiiResourceStatement& statement);
 
   /**
-   * A statements to the database. This function adds the given 
+   * A statements to the database. This function adds the given
    * `statements` to the database, starting from the first one. If the
    * subject of a statement is "#", the statement is treated as a
    * reification of the previous statement (a statement about
@@ -137,7 +137,7 @@ public:
    * Returns the number of stored statements.
    */
   int statementCount() const;
-  
+
   /**
    * Returns a list of statements matching the given *filter*.
    *
@@ -168,7 +168,7 @@ public:
    * Returns a list of subjects, predicates, or objects whose
    * containing statement matches *filter*. A selector is a function
    * object that picks one field of a statement. The type of the
-   * returned list depends on the return value of the selector. 
+   * returned list depends on the return value of the selector.
    * Supported selectors are:
    *
    * - `subject` - the subject of a statement, QString
@@ -177,7 +177,7 @@ public:
    *
    * - `object` - the object of a statement, QString
    *
-   * - `attribute`("name") - named attribute of a statement, QString. 
+   * - `attribute`("name") - named attribute of a statement, QString.
    * The attribute selector is equal to a logical AND filter that
    * first matches the predicate to `name` and then compares the
    * object.
@@ -222,7 +222,7 @@ public:
    *
    * - `resourceidToInt`() - converts a resource id of the form [123]
    * to an integer. If the input string is not an id of a statement,
-   * -1 will be returned, and any subsequent comparison will return 
+   * -1 will be returned, and any subsequent comparison will return
    * `false`.
    *
    * ~~~(c++)
@@ -263,14 +263,14 @@ public:
   void dump() const;
 
 private:
-  class Data    
+  class Data
   {
   public:
     QList<PiiResourceStatement> lstStatements;
   } *d;
 
   int generateId();
-  
+
   PII_DISABLE_COPY(PiiResourceDatabase);
 };
 
@@ -311,7 +311,7 @@ namespace Pii
 {
   // Forward declaration
   template <class Filter> struct NotFilter;
-  
+
   // A base class for resource filters. Used with the CRT pattern to
   // provide a common superclass for all filter types. Filters are
   // function objects (unary predicates) that map a statement to a
@@ -386,7 +386,7 @@ namespace Pii
   {
     typedef typename Selector::ValueType ValueType;
     typedef typename Selector::ConstReferenceType ConstReferenceType;
-    
+
     ResourceFilter(const Selector& s, const BinaryPredicate& c, ConstReferenceType v) :
       select(s), compare(c), value(v)
     {}
@@ -418,7 +418,7 @@ namespace Pii
   ResourceFilterBase<MatchListFilter<Selector, BinaryPredicate> >
   {
     typedef typename Selector::ValueType ValueType;
-    
+
     MatchListFilter(const Selector& s, const BinaryPredicate& c, const QList<ValueType>& lst) :
       select(s), compare(c), lstValues(lst)
     {}
@@ -446,7 +446,7 @@ namespace Pii
   {
     return MatchListFilter<Selector, BinaryPredicate>(selector, compare, lst);
   }
-  
+
   // Base class for selectors. Selectors are function objects that
   // take one member out of a statement triplet. Selector comparison
   // operators are defined in this structure, and they all return an
@@ -458,7 +458,7 @@ namespace Pii
     // Primitive types are used as such in function arguments, complex
     // types as const references.
     typedef typename Pii::IfClass<Pii::IsPrimitive<Type>, Type, const Type&>::Type ConstReferenceType;
-  
+
     Selector* self() { return static_cast<Selector*>(this); }
     const Selector* self() const { return static_cast<const Selector*>(this); }
 
@@ -482,7 +482,7 @@ namespace Pii
       return matchListFilter(*self(), std::equal_to<ValueType>(), lst);
     }
 
-    // Check if the selector is valid after selecting a statement. 
+    // Check if the selector is valid after selecting a statement.
     // Default selector is always valid.
     operator bool () const { return true; }
   };
@@ -515,19 +515,19 @@ namespace Pii
     Attribute(const QString& predicate) :
       strPredicate(predicate), bOk(true)
     {}
-    
+
     Attribute operator() (const QString& predicate) const
     {
       return Attribute(predicate);
     }
-    
+
     QString operator() (const PiiResourceStatement& statement) const
     {
       bOk = statement.predicate() == strPredicate;
       return statement.object();
     }
     operator bool () const { return bOk; }
-    
+
     const QString& strPredicate;
     mutable bool bOk;
   };
@@ -561,7 +561,7 @@ namespace Pii
   {
     return ResourceStringTo<T,Selector>(select);
   }
-  
+
   // A selector that converts a numeric resource id (e.g. #123) to an
   // int.
   template <class Selector> struct ResourceIdToInt : SelectorBase<ResourceIdToInt<Selector>, int>

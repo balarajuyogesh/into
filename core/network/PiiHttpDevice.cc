@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -95,14 +95,14 @@ void PiiHttpDevice::finish()
             setHeader("Content-Length", 0);
           sendHeader();
         }
-      
+
       // Flush the device if it is still connected
       if (d->pSocket->bytesToWrite() > 0 && isWritable())
         d->pSocket->waitForBytesWritten(5000);
     }
   else
     destroyOutputFilters();
-  
+
   d->bFinished = true;
 }
 
@@ -270,11 +270,11 @@ void PiiHttpDevice::endOutputFiltering(PiiStreamFilter* filter)
       qint64 iBufferedSize = tmpFilter->bufferedSize();
       if (tmpFilter->outputFilter() == this && iBufferedSize >= 0)
         setHeader("Content-Length", iBufferedSize);
-      
+
       if (iBufferedSize != tmpFilter->flushFilter())
         piiWarning("Output filter could not write all buffered data.");
       d->pActiveOutputFilter = tmpFilter->outputFilter();
-      
+
       delete tmpFilter;
       if (filter == 0 || tmpFilter == filter)
         break;
@@ -287,7 +287,7 @@ void PiiHttpDevice::setRequest(const QString& method, const QString& uri)
 
   if (method == "GET")
     d->requestHeader.removeValue("Content-Type");
-  
+
   if (d->mode == Client && d->bFinished)
     restart();
   else if (uri.indexOf('?') != -1)
@@ -314,7 +314,7 @@ void PiiHttpDevice::setHeader(const QString& name, const QVariant& value, bool r
     setResponseHeader(name, value.toString(), replace);
   else
     setRequestHeader(name, value.toString(), replace);
-  
+
   checkCodec(name, value.toString());
 }
 
@@ -397,7 +397,7 @@ void PiiHttpDevice::readFormValues()
 {
   if (isBodyRead())
     return;
-  
+
   PII_D;
 
   // PENDING Multipart messages
@@ -567,7 +567,7 @@ qint64 PiiHttpDevice::readData(char* bytes, qint64 maxSize)
   if (d->iHeaderLength != -1 && d->iBodyLength != -1)
     {
       qint64 iBytesLeft = d->iHeaderLength + d->iBodyLength - d->iBytesRead;
-      
+
       //qDebug("  %lld bytes read so far. Total number of bytes: %lld. Remaining: %lld",
       //d->iBytesRead, d->iHeaderLength + d->iBodyLength, iBytesLeft);
 
@@ -576,17 +576,17 @@ qint64 PiiHttpDevice::readData(char* bytes, qint64 maxSize)
 
       maxSize = qMin(iBytesLeft, maxSize);
     }
-  
+
   /*piiDebug("PiiHttpDevice::readData(%d). d->pSocket->bytesAvailable() = %d, QIODevice::bytesAvailable() = %d",
     (int)maxSize, (int)d->pSocket->bytesAvailable(), (int)QIODevice::bytesAvailable());*/
 
   qint64 iRead = d->pSocket.readWaited(bytes, maxSize, d->iDataTimeout, d->pController);
 
   //piiDebug("  read %d bytes", int(iRead));
-  
+
   // Count the total number of bytes read.
   if (iRead >= 0)
-    {  
+    {
       d->iBytesRead += iRead;
       if (d->iMessageSizeLimit > 0 && d->iBytesRead > d->iMessageSizeLimit)
         return -1;
@@ -619,9 +619,9 @@ bool PiiHttpDevice::readHeader()
   PII_D;
   if (d->mode == Server && d->bFinished)
     restart();
-  
+
   if (d->bHeaderRead) return true;
-    
+
   bool bResult = d->mode == Client ? decodeResponseHeader() : decodeRequestHeader();
   d->bHeaderRead = true;
   // GET request cannot have a message body
@@ -691,7 +691,7 @@ bool PiiHttpDevice::decodeResponseHeader()
       piiWarning(ex.message());
       return false;
     }
-  
+
   return true;
 }
 
@@ -782,7 +782,7 @@ bool PiiHttpDevice::decodeRequestHeader()
           return false;
         }
     }
-  
+
   return true;
 }
 
@@ -821,7 +821,7 @@ void PiiHttpDevice::clearBuffer(QIODevice* device)
 void PiiHttpDevice::restart()
 {
   PII_D;
-  
+
   destroyOutputFilters();
 
   clearBuffer(this);

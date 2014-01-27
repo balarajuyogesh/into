@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -51,7 +51,7 @@ class PII_SERIALIZATION_EXPORT PiiQVariantWrapper
   friend struct PiiSerialization::Accessor;
   PII_DECLARE_VIRTUAL_METAOBJECT_FUNCTION = 0;
   template <class Archive> void serialize(Archive&, const unsigned int) {}
-  
+
 public:
   /**
    * Returns the wrapped value as a variant. Subclasses reimplement
@@ -107,7 +107,7 @@ public:
   {
     v = QVariant::fromValue(_value);
   }
-  
+
   void setVariant(QVariant& v)
   {
     _pValue = (T*)v.constData();

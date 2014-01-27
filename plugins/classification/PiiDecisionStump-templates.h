@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -76,7 +76,7 @@ void PiiDecisionStump<SampleSet>::learn(const SampleSet& samples,
 
   const QVector<double> vecWeights(weights.size() == iSamples ?
                                    weights : QVector<double>(iSamples, 1.0/iSamples));
-  
+
 
   double dWeightSum = 0;
   // Calculate the sum of weights for each class separately
@@ -92,7 +92,7 @@ void PiiDecisionStump<SampleSet>::learn(const SampleSet& samples,
 
   QVector<Feature> vecFeatures(iSamples);
   QVector<double> vecLeftWeights(vecWeightTotals.size());
-  
+
   double dMinError = INFINITY;
 
   // For each feature
@@ -104,7 +104,7 @@ void PiiDecisionStump<SampleSet>::learn(const SampleSet& samples,
       // Sort according to the feature value
       qSort(vecFeatures);
       vecLeftWeights.fill(0);
-      
+
       // Calculate classification error for each threshold.
       for (int i=0; i<iSamples; i++)
         {

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,7 +24,7 @@
 #include <PiiNetworkClient.h>
 
 /**
- * A camera interface that reads images from a network camera. 
+ * A camera interface that reads images from a network camera.
  * Currently, the operation only supports HTTP as the transfer
  * protocol.
  *
@@ -53,7 +53,7 @@ class PII_CAMERA_EXPORT PiiNetworkCameraOperation : public PiiImageReaderOperati
   Q_PROPERTY(QString imageUrl READ imageUrl WRITE setImageUrl);
 
   /**
-   * The URL of a HTTP proxy server. Use the same syntax as for 
+   * The URL of a HTTP proxy server. Use the same syntax as for
    * `imageUrl`, but do not provide a path. A valid proxy URL looks like
    * this: http://my.proxy.com:8088.
    */
@@ -72,20 +72,20 @@ class PII_CAMERA_EXPORT PiiNetworkCameraOperation : public PiiImageReaderOperati
   Q_PROPERTY(bool streamMode READ streamMode WRITE setStreamMode);
 
   /**
-   * Should the operation ignore network and image decoding errors? 
+   * Should the operation ignore network and image decoding errors?
    * Set this flag to `true` if it does not harm to skip a few frames
    * due to bad network connections etc. The default is `false`.
    */
   Q_PROPERTY(bool ignoreErrors READ ignoreErrors WRITE setIgnoreErrors);
 
   /**
-   * The maximum amount of time (in seconds) to wait for network I/O. 
+   * The maximum amount of time (in seconds) to wait for network I/O.
    * Image decoder will wait at most this many seconds for data before
    * it cancels its operation. The default value is one. Use a larger
    * value for slow network connections.
    */
   Q_PROPERTY(double maxIoDelay READ maxIoDelay WRITE setMaxIoDelay);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 
 public:

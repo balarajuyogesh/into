@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -62,7 +62,7 @@ public:
     size_t stFullBlockSize = stBlockSize;
     // This is the number of bytes available to the user
     stBlockSize -= sizeof(void*);
-    
+
     // Optimization...
     stLastAddress = size_t(pLastAddress) - size_t(pMemory);
 
@@ -80,7 +80,7 @@ public:
 
   void* allocate(size_t bytes);
   bool deallocate(void* ptr);
-    
+
   size_t stBlockSize;
   bool bOwn;
   void *pMemory, *pLastAddress, *pHead;

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -25,7 +25,7 @@
  * ------
  *
  * @in input - any number or a matrix containing numbers
- * 
+ *
  * Outputs
  * -------
  *
@@ -62,12 +62,12 @@ class PiiStringizer : public PiiDefaultOperation
    * is an empty string.
    */
   Q_PROPERTY(QString endDelimiter READ endDelimiter WRITE setEndDelimiter);
-  
+
   /**
    * The maximum number of digits after the decimal point shown in a
    * floating-point number. The default value is 2.
    */
-  Q_PROPERTY(int precision READ precision WRITE setPrecision);  
+  Q_PROPERTY(int precision READ precision WRITE setPrecision);
 
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
@@ -75,19 +75,19 @@ public:
 
   void setColumnSeparator(const QString& columnSeparator);
   QString columnSeparator() const;
-  
+
   void setRowSeparator(const QString& rowSeparator);
   QString rowSeparator() const;
-  
+
   void setPrecision(int precision);
   int precision() const;
-  
+
   void setStartDelimiter(const QString& startDelimiter);
   QString startDelimiter() const;
-  
+
   void setEndDelimiter(const QString& endDelimiter);
   QString endDelimiter() const;
-  
+
 protected:
   void process();
 

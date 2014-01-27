@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -55,8 +55,8 @@
  * @out sector - the angle of the visible sector, in radians. This
  * value is affected by the [focalLength].
  *
- * @out scale - the physical size of a pixel in the unwarped image. 
- * Pixel scale is represented as a 1-by-2 PiiMatrix<double>. 
+ * @out scale - the physical size of a pixel in the unwarped image.
+ * Pixel scale is represented as a 1-by-2 PiiMatrix<double>.
  * Horizontal size (first matrix element) is expressed in rad/px, and
  * vertical size (second matrix element) in units determined by
  * [cameraDistance].
@@ -65,7 +65,7 @@
 class PiiImageUnwarpOperation : public PiiDefaultOperation
 {
   Q_OBJECT
-  
+
   /**
    * The focal length of the camera in pixels. Default is 1e100.
    */
@@ -120,7 +120,7 @@ protected:
 
 private:
   template <class T> void unwarp(const PiiVariant& obj);
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {
@@ -131,7 +131,7 @@ private:
     double dRadius;
     double dMaxSectorAngle;
     double dCenter;
-    
+
     PiiInputSocket *pImageInput, *pDistanceInput, *pRadiusInput, *pCenterInput, *pSkewInput;
     bool bRadiusConnected, bDistanceConnected, bCenterConnected, bSkewConnected;
     PiiOutputSocket *pImageOutput, *pRadiusOutput, *pDistanceOutput,

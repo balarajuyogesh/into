@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -138,10 +138,10 @@ namespace PiiOptimization
      */
     virtual bool hasJacobian() const { return false; }
   };
-  
+
   template <class T> void ResidualFunction<T>::jacobian(const T* /*params*/, PiiMatrix<T>& /*jacobian*/) const
   {}
-  
+
   /**
    * The Broyden-Fletcher-Goldfarb-Shanno (BFGS) method is a method to
    * solve an unconstrained nonlinear optimization problem. This
@@ -185,7 +185,7 @@ namespace PiiOptimization
                                                          int maxIterations = 100);
 
   /**
-   * The Levenberg-Marquardt is a method of non-linear optimization. 
+   * The Levenberg-Marquardt is a method of non-linear optimization.
    * It minimizes the sum of the squares of M nonlinear functions in N
    * arguments by using Jacobian and information about function
    * values. If the optimized function is not provided with Jacobian,
@@ -193,7 +193,7 @@ namespace PiiOptimization
    * approximation.
    *
    * Such a minimization problem could be solved as a general
-   * non-linear optimization problem (for example, using the 
+   * non-linear optimization problem (for example, using the
    * [LBFGS](lbfgsMinimize()) algorithm), but it is reasonable to use
    * the information about the function F structure to solve the
    * problem more effectively.
@@ -241,7 +241,7 @@ namespace PiiOptimization
    * Solves the linear assignment problem. Wikipedia defines this
    * problem as follows: "There are a number of agents and a number of
    * tasks. Any agent can be assigned to perform any task, incurring
-   * some cost that may vary depending on the agent-task assignment. 
+   * some cost that may vary depending on the agent-task assignment.
    * It is required to perform all tasks by assigning exactly one
    * agent to each task in such a way that the total cost of the
    * assignment is minimized." The problem is presented as a cost
@@ -251,7 +251,7 @@ namespace PiiOptimization
    * This implementation is an adaptation of Roy Jonker's original C++
    * implementation, which in turn is based on "A Shortest Augmenting
    * Path Algorithm for Dense and Sparse Linear Assignment Problems,"
-   * Computing 38, 325-340, 1987 by R. Jonker and A. Volgenant. 
+   * Computing 38, 325-340, 1987 by R. Jonker and A. Volgenant.
    * Specifically, the dense version of the algorithm is implemented.
    *
    * @param cost the cost matrix. This matrix must be square (the

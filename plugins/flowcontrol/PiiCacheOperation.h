@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,13 +28,13 @@
  * than once. The most typical use is in caching feature vectors used
  * for training a classifier.
  *
- * ! The implementation of this operation is still incomplete. 
+ * ! The implementation of this operation is still incomplete.
  * Don't use.
  *
- * The cache works by associating each cached object with a *key*. 
+ * The cache works by associating each cached object with a *key*.
  * Whenever a key is received, the cache is searched for an
  * occurrence. If a hit is found, it will be sent to the `data`
- * output. If not, the key will be passed to the `key` output. The 
+ * output. If not, the key will be passed to the `key` output. The
  * `found` output will emit either 0 or 1 depending on the search
  * result (0 = not found, 1 = found).
  *
@@ -67,7 +67,7 @@
  * not found in cache.
  *
  * @out data - the data associated with the key input, if found in the
- * cache. In the case of a cache miss, an object received in the 
+ * cache. In the case of a cache miss, an object received in the
  * `data` input will be passed to this output.
  *
  */
@@ -83,8 +83,8 @@ class PiiCacheOperation : public PiiDefaultOperation
    * allocation techniques vary. The operation uses an estimate of 32
    * bytes per each object (const PiiVariant&). If the object is a
    * primitive type, additional 32 bytes will be assumed. If it is a
-   * matrix, 32 bytes + sizeof(T) * rows * columns will be assumed. 
-   * The size of a QString is assumed to be 32 + two times its length. 
+   * matrix, 32 bytes + sizeof(T) * rows * columns will be assumed.
+   * The size of a QString is assumed to be 32 + two times its length.
    * Zero means no limit. The default is 2 Mb.
    */
   Q_PROPERTY(int maxBytes READ maxBytes WRITE setMaxBytes);
@@ -105,11 +105,11 @@ class PiiCacheOperation : public PiiDefaultOperation
    * processing speed on multi-core machines.
    */
   Q_PROPERTY(bool allowOrderChanges READ allowOrderChanges WRITE setAllowOrderChanges);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiCacheOperation();
-  
+
   void setMaxBytes(int maxBytes);
   int maxBytes() const;
   void setMaxObjects(int maxObjects);
@@ -133,7 +133,7 @@ private:
     bool bAllowOrderChanges;
 
     int iConsumedMemory;
-    
+
     QHash<QString, PiiVariant> hashObjects;
     QLinkedList<QString> lstKeys;
   };

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -29,10 +29,10 @@
  * @in input0 - first input. Any matrix or scalar.
  *
  * @in input1 - Optional second input. Any matrix or scalar. If the
- * object in `input0` is a scalar, `input1` must be a scalar. If 
+ * object in `input0` is a scalar, `input1` must be a scalar. If
  * `input0` is a matrix, `input1` can be either a scalar or a matrix.
  * In the latter case, the sizes of the matrices must match.
- * 
+ *
  * Outputs
  * -------
  *
@@ -56,7 +56,7 @@
 class PiiMinMaxOperation : public PiiDefaultOperation
 {
   Q_OBJECT
-  
+
   /**
    * Operation mode. Default is `MaximumMode`.
    */
@@ -69,7 +69,7 @@ class PiiMinMaxOperation : public PiiDefaultOperation
    * operation will stop running. Default is one.
    */
   Q_PROPERTY(int minMaxCount READ minMaxCount WRITE setMinMaxCount);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   /**
@@ -80,7 +80,7 @@ public:
    * - `MaximumMode` - find maximum/maxima
    */
   enum Mode { MinimumMode, MaximumMode };
-  
+
   PiiMinMaxOperation();
 
   void setMode(Mode mode);

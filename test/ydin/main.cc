@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -97,7 +97,7 @@ void TestPiiYdin::createResource()
     QCOMPARE(pObj->test2(), 2);
     delete pObj;
   }
-  
+
 }
 
 QTEST_MAIN(TestPiiYdin)

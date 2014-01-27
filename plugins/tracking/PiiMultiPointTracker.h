@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -31,7 +31,7 @@
  * @in coordinates - PiiMatrix<int>
  * @in labels      - PiiMatrix<int> (optional)
  * @in image       - image (for test)
- * 
+ *
  * Outputs
  * -------
  *
@@ -63,7 +63,7 @@ class PiiMultiPointTracker : public PiiDefaultOperation
    * predictionThreshold description
    */
   Q_PROPERTY(double predictionThreshold READ predictionThreshold WRITE setPredictionThreshold);
-  
+
   /**
    * maximumStopTime description
    */
@@ -83,7 +83,7 @@ class PiiMultiPointTracker : public PiiDefaultOperation
    * cumulativeStatistics description
    */
   Q_PROPERTY(bool cumulativeStatistics READ cumulativeStatistics WRITE setCumulativeStatistics);
-  
+
   /**
    * frameCount description
    */
@@ -114,7 +114,7 @@ class PiiMultiPointTracker : public PiiDefaultOperation
    * lines description
    */
   Q_PROPERTY(QVariantList lines READ lines WRITE setLines);
-  
+
   /**
    * emissionInterval description
    */
@@ -127,7 +127,7 @@ class PiiMultiPointTracker : public PiiDefaultOperation
    * same end point.
    */
   Q_PROPERTY(bool allowMerging READ allowMerging WRITE setAllowMerging);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiMultiPointTracker();
@@ -155,10 +155,10 @@ public:
 
   void setTrackingArea(const QRect& trackingArea);
   QRect trackingArea() const;
-  
+
   void setAreaIdentifications(const QVariantList& areaIdentifications);
   QVariantList areaIdentifications() const;
-  
+
   void setLineIdentifications(const QVariantList& lineIdentifications);
   QVariantList lineIdentifications() const;
 
@@ -181,20 +181,20 @@ public:
     int totalStayTime;
     int visitors;
   };
-  
+
   struct LineStatistics
   {
     int objectsIn;
     int objectsOut;
   };
-  
+
 protected:
   void process();
   void check(bool reset);
 
 private:
   friend class Tracker;
-  
+
   double evaluateTrajectory(PiiCoordinateTrackerNode<double,2>* trajectory);
 
   int mapTime(int time);
@@ -204,10 +204,10 @@ private:
   static int checkCalculationLine(const QPoint& calcLineStart, const QPoint& calcLineEnd, const QPoint& prev, const QPoint& curr );
   static bool hasIntersection(const QPoint& calcLineStart, const QPoint& calcLineEnd, const QPoint& prev, const QPoint& curr );
   static int pathDirection(const QPoint& calcLineStart, const QPoint& calcLineEnd, const QPoint& prev, const QPoint& curr);
-  
+
   void operate(const PiiMatrix<int>& coordinates);
   void operate(const PiiMatrix<int>& coordinates, const PiiMatrix<int>& labels);
-  
+
   template <class T> void operateImage(const PiiVariant& obj);
 
   class Tracker : public PiiExtendedCoordinateTracker<double,2>
@@ -215,7 +215,7 @@ private:
   public:
     Tracker(PiiMultiPointTracker *parent);
     ~Tracker();
-    
+
     void resetTracker();
     double evaluateTrajectory(PiiCoordinateTrackerNode<double,2>* trajectory);
     void addMeasurements(const PiiMatrix<int>& coordinates, int t);
@@ -223,11 +223,11 @@ private:
     void addMeasurements(const QList<PiiVector<double,2> >& measurements, int t);
     void predict(int t);
     void endTrajectories(QList<PiiCoordinateTrackerNode<double,2>*> trajectories, int t);
-    
+
   private:
     PiiMultiPointTracker* _pParent;
   };
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {
@@ -236,7 +236,7 @@ private:
     ~Data();
 
     PiiInputSocket *pCoordinatesInput, *pLabelsInput, *pImageInput;
-    
+
     PiiOutputSocket *pAreaIdOutput,*pDwellHistogramOutput,*pAverageDwellOutput,
       *pObjectsOutput,*pVisitorsOutput,*pAreaStartTimeOutput,
       *pAreaEndTimeOutput,*pLineIdOutput,*pObjectsInOutput,

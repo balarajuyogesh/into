@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -42,7 +42,7 @@ void PiiClassIndexMapper::process()
 
   int classIndex = -1, listIndex = -1;
   QString className("Unknown");
-  
+
   if (index >= 0)
     {
       if (index < d->lstClassIndices.size())
@@ -78,7 +78,7 @@ void PiiClassIndexMapper::setClassInfoMap(const QVariantMap& classInfoMap)
   d->classInfoMap = classInfoMap;
   d->lstClassNames.clear();
   d->lstListIndices.clear();
-  
+
   QList<int> indices;
   bool bHaveIndices = false;
   if (d->classInfoMap.contains("classIndices"))
@@ -89,14 +89,14 @@ void PiiClassIndexMapper::setClassInfoMap(const QVariantMap& classInfoMap)
   QStringList names;
   if (d->classInfoMap.contains("classNames"))
     names = d->classInfoMap["classNames"].toStringList();
-  
+
   for ( int i=0; i<d->lstClassIndices.size(); i++ )
     {
       int value = d->lstClassIndices[i];
       int index = i;
       if (bHaveIndices)
         index = indices.indexOf(value);
-      
+
       if ( index > -1 && names.size() > index)
         d->lstClassNames.append(names[index]);
       else

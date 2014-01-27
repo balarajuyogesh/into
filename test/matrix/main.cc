@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -211,15 +211,15 @@ void TestPiiMatrix::submatrix()
     mat(2,6,4,1) = 'c';
     mat(6,0,2,1) = 'x';
     //showMatrix(mat);
-    
+
     const char* data =
       "++++++++"
-      "+++++bbb" 
-      "+aaa+bcb" 
-      "+aaa+bcb" 
-      "+aaa+bcb" 
-      "+++++bcb" 
-      "x++++bbb" 
+      "+++++bbb"
+      "+aaa+bcb"
+      "+aaa+bcb"
+      "+aaa+bcb"
+      "+++++bcb"
+      "x++++bbb"
       "x+++++++";
     QVERIFY(Pii::equals(mat, PiiMatrix<char>(8, 8, data)));
   }
@@ -274,7 +274,7 @@ void TestPiiMatrix::transpose()
                                      1, 4,
                                      2, 5,
                                      3, 6)));
-  
+
 }
 
 void TestPiiMatrix::integerMath()
@@ -550,7 +550,7 @@ void TestPiiMatrix::selfAssignment()
   QCOMPARE(a(1,1), 9);
   QCOMPARE(a.constRowBegin(0), b.constRowBegin(0));
   QVERIFY(a.constRowBegin(0) != c.constRowBegin(0));
-  
+
   QCOMPARE(c(1,1), 0);
   a = c;
   QCOMPARE(a(1,1), 0);
@@ -648,11 +648,11 @@ void TestPiiMatrix::iterators()
     QCOMPARE(*(mat.end() - 1), char(5));
     mat.begin()[2] = -2;
     QCOMPARE(mat.begin()[2], char(-2));
-    
+
     mat.columnBegin(0)[1] = 2;
     QCOMPARE(*(mat.columnBegin(0)+1), char(2));
     QCOMPARE(*(mat.columnEnd(1)-2), char(3));
-    
+
     {
       for (PiiMatrix<char>::iterator i = mat.end(); i-- != mat.begin(); )
         *i += 1;
@@ -781,7 +781,7 @@ void TestPiiMatrix::resizing()
                                           7,8,9,0,0,
                                           0,0,0,0,0,
                                           0,0,0,0,0)));
-  
+
   mat.removeRow(4);
   mat.removeRow(1);
   mat.removeColumn(4);
@@ -845,7 +845,7 @@ void TestPiiMatrix::resizing()
   mat.resize(1,0);
   QCOMPARE(mat.rows(), 1);
   QCOMPARE(mat.columns(), 0);
-  
+
   mat.resize(0,0);
   QCOMPARE(mat.rows(), 0);
   QCOMPARE(mat.columns(), 0);

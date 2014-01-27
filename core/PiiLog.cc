@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -62,7 +62,7 @@ namespace PiiLog
   }
 
   void ignoreMessage(QtMsgType, const char*) {}
-  
+
   void writeToFile(QtMsgType, const char* msg)
   {
     static QMutex fileLock;
@@ -144,7 +144,7 @@ void piiLogv(const char* module, QtMsgType level, const char* msg, va_list argp)
 
   if (PiiLog::pLogMessageFilter != 0 && !(*PiiLog::pLogMessageFilter)(module, level))
     return;
-  
+
   QString strMessage;
   if (msg != 0)
     strMessage.vsprintf(msg, argp);

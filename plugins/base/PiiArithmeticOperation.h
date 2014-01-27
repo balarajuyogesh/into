@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -33,7 +33,7 @@
  * connected, the second operand will initialized to a [constant]
  * value. The default constant value is a zero (double). Note that if
  * this input is a matrix, `input0` must also be a matrix.
- * 
+ *
  * Outputs
  * -------
  *
@@ -80,17 +80,17 @@ public:
    * matrices. For other types, ordinary multiplication will be used.
    *
    * - `ElementDivision` - divide matrices element-by-element (see
-   * Pii::divide()). This operator applies only to two matrices. 
+   * Pii::divide()). This operator applies only to two matrices.
    * For other types, ordinary division will be used.
    */
   enum Function { Plus, Minus, Division, Multiplication, ElementMultiplication, ElementDivision };
-  
+
   PiiVariant constant() const;
   void setConstant(const PiiVariant& constant);
 
   Function function() const;
   void setFunction(Function function);
-  
+
   void check(bool reset);
 
 protected:
@@ -104,13 +104,13 @@ private:
 
   inline void wrongTypes(int type0, int type1);
   template <class T> inline void send(const T& value);
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {
   public:
     Data();
-    
+
     PiiInputSocket* pInput0, *pInput1;
     PiiOutputSocket* pOutput;
     PiiVariant pConstant;

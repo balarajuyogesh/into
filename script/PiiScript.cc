@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -33,7 +33,7 @@ namespace PiiScript
     QScriptEngine::AutoCreateDynamicProperties;
 
   PII_STATIC_TR_FUNC(PiiScript);
-  
+
   void setSuperclass(QScriptValue prototype, const char* superclass)
   {
     prototype.setPrototype(prototype.engine()->globalObject().property(superclass).property("prototype"));
@@ -67,7 +67,7 @@ namespace PiiScript
       }
     return mapResult;
   }
-  
+
   QScriptValue mapToObject(QScriptEngine* engine, const QVariantMap& map)
   {
     QScriptValue object(engine->newObject());
@@ -81,7 +81,7 @@ namespace PiiScript
     QObject* pObject = PiiYdin::createResource<QObject>(qPrintable(strName));
     if (pObject == 0)
       return context->throwError(tr("Could not create an instance of %1.").arg(strName));
-    
+
     QString strParentClass = constructor.property("parentClass").toString();
     if (!strParentClass.isEmpty() && !Pii::isA(qPrintable(strParentClass), pObject))
       {
@@ -127,7 +127,7 @@ namespace PiiScript
     PiiResourceDatabase* pDb = PiiYdin::resourceDatabase();
     // Find all classes ...
     QList<QString> lstClasses = pDb->select(Pii::subject, Pii::attribute("pii:class") == superClass);
-    
+
     // ... in the specified plug-in (if any)
     if (!parentResource.isEmpty())
       lstClasses = lstClasses && pDb->select(Pii::subject, Pii::attribute("pii:parent") == parentResource);

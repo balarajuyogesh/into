@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,7 +26,7 @@
  * ------
  *
  * @in image - Input image. Any image type.
- * 
+ *
  * Outputs
  * -------
  *
@@ -56,19 +56,19 @@ class PiiImageScaleOperation : public PiiDefaultOperation
   Q_PROPERTY(QSize scaledSize READ scaledSize WRITE setScaledSize);
 
   /**
-   * Interpolation mode. The default is `LinearInterpolation`. 
+   * Interpolation mode. The default is `LinearInterpolation`.
    * `NearestNeighborInterpolation` is faster, but less accurate.
    */
   Q_PROPERTY(Interpolation interpolation READ interpolation WRITE setInterpolation);
   Q_ENUMS(Interpolation);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   /**
    * A copy of Pii::Interpolation. (Stupid moc.)
    */
   enum Interpolation { NearestNeighborInterpolation, LinearInterpolation };
-  
+
   /**
    * Scaling modes:
    *
@@ -118,7 +118,7 @@ public:
       ScaleToFillBox,
       ScaleToPixelCount
     };
-  
+
   PiiImageScaleOperation();
 
 protected:
@@ -126,7 +126,7 @@ protected:
 
   ScaleMode scaleMode() const;
   void setScaleMode(ScaleMode scaleMode);
-  
+
   double scaleRatio() const;
   void setScaleRatio(double scaleRatio);
 

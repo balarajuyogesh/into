@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -42,7 +42,7 @@ void PiiHttpProtocol::registerUriHandler(const QString& uri, UriHandler* handler
   PII_D;
   if (!uri.startsWith('/'))
     return;
-  
+
   QMutexLocker lock(&d->handlerListLock);
   // Replace old handler if one exists.
   for (int i=0; i<d->lstHandlers.size(); ++i)
@@ -103,7 +103,7 @@ void PiiHttpProtocol::communicate(QIODevice* dev, PiiProgressController* control
           httpDevice.setStatus(RequestEntityTooLargeStatus);
           return;
         }
-      
+
       // Interrupted
       if (!controller->canContinue())
         {
@@ -141,7 +141,7 @@ void PiiHttpProtocol::communicate(QIODevice* dev, PiiProgressController* control
         httpDevice.setStatus(NotFoundStatus);
 
       httpDevice.finish();
-      
+
       // HTTP/1.1 behavior: we'll only close the connection if the
       // client or the handler specifically asked to do so, or the
       // client just closed the connection.
@@ -161,7 +161,7 @@ PiiHttpProtocol::HandlerPair PiiHttpProtocol::findHandler(const QString& path)
 {
   PII_D;
   QMutexLocker lock(&d->handlerListLock);
-  
+
   int iBestMatchIndex = -1, iBestMatchLength = 0;
   for (int i=0; i<d->lstHandlers.size(); ++i)
     {
@@ -254,7 +254,7 @@ QString PiiHttpProtocol::statusMessage(int code)
 
   if (pMatch != pEnd)
     return pMatch->description;
-  
+
   return QString();
 }
 
@@ -290,7 +290,7 @@ public:
   {
     time.start();
   }
-  
+
   PiiProgressController* pController;
   int iMaxTime;
   QTime time;

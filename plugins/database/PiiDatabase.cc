@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@ namespace PiiDatabase
         piiWarning("Database URI is incorrectly formatted.");
         return false;
       }
-  
+
     QString driverName = QString("Q%1").arg(dbUrl.scheme().toUpper());
     if (!QSqlDatabase::isDriverAvailable(driverName))
       {
@@ -36,12 +36,12 @@ namespace PiiDatabase
       }
     // Get rid of "/"
     QString databaseName = dbUrl.path().remove(0,1);
-  
+
     QSqlDatabase db = QSqlDatabase(QSqlDatabase::addDatabase(driverName, connectionName));
 
     if (!db.isValid())
       return false;
-  
+
     db.setHostName(dbUrl.host());
     db.setDatabaseName(databaseName);
     db.setUserName(dbUrl.userName());

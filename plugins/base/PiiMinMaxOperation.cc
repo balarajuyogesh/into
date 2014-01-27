@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -102,7 +102,7 @@ template <class T, class Comparator> PiiMatrix<T> PiiMinMaxOperation::findExtrem
 
   // Allocate storage for coordinates
   coords.resize(d->iMinMaxCount+1, 2);
-  
+
   for (int r=0; r<mat.rows(); ++r)
     for (int c=0; c<mat.columns(); ++c)
       {

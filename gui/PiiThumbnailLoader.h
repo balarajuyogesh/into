@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,7 +26,7 @@
 class PII_GUI_EXPORT PiiThumbnailLoader : public QThread
 {
   Q_OBJECT
-  
+
 public:
   PiiThumbnailLoader(QObject *parent = 0);
 
@@ -46,7 +46,7 @@ public:
    * Get the list of the file names which are waiting list.
    */
   QStringList fileNames() const;
-  
+
   /**
    * Set the given file names for the loading. If the thread is not
    * running, we will start it automatically.
@@ -65,7 +65,7 @@ signals:
    * by the file name.
    */
   void thumbnailReady(const QString& fileName, const QImage& image);
-  
+
 private:
   bool _bRunning;
   QMutex _loadingMutex;

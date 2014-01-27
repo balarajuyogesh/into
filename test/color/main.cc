@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -113,7 +113,7 @@ void TestPiiColor::arithmetic()
     PiiMatrix<int> mat(PiiMatrix<int>::identity(3)*2);
     PiiColor<int> source(1,2,3);
     PiiColor<int> target;
-                       
+
     Pii::multiply(source.constBegin(), mat, target.begin());
     QCOMPARE(target.c0, 2);
     QCOMPARE(target.c1, 4);

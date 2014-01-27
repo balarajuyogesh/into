@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -57,7 +57,7 @@ public:
   PiiCalibrationPointFinder(double minDistance = 0.0,
                             double maxDistance = INFINITY);
   ~PiiCalibrationPointFinder();
-  
+
   /**
    * Find the set of measurements that best matches the geometric
    * arrangement of `worldPoints`.
@@ -97,28 +97,28 @@ public:
    * occured, an empty matrix will be returned.
    */
   PiiMatrix<double> selectedPoints() const;
-  
+
   void setMinDistance(double minDistance);
   double minDistance() const;
   void setMaxDistance(double maxDistance);
   double maxDistance() const;
-  
+
 private:
   // We don't want the functor interface to be public.
   template <class UnaryOp, class Storage> friend void Pii::combinations(int,int,UnaryOp,Storage);
- 
+
   void operator()(int* combination);
-    
+
   void calculateProjectionError(const QVector<int>& indices);
   void createDistanceMatrix();
   void createCombinationMatrix();
-  
+
   /// @internal
   class Data
   {
   public:
     Data(double minDistance, double maxDistance);
-    
+
     PiiMatrix<double> matWorldPoints;
     PiiMatrix<double> matImagePoints;
     PiiMatrix<double> matCurrentPoints;

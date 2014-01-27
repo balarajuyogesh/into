@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -21,8 +21,8 @@
 #include <PiiVariant.h>
 #include "PiiHoughTransform.h"
 
-/** 
- * Operation interface for Hough transform. Hough transform is a 
+/**
+ * Operation interface for Hough transform. Hough transform is a
  * technique which can be used to find imperfect instances of
  * objects within a certain class of shapes by a voting procedure.
  *
@@ -34,7 +34,7 @@
  * This operation implements the classical Hough transform, which is
  * concerned with the identification of lines in the image. Hough
  * transform has been extended to identifying positions of arbitrary
- * shapes, most commonly circles or ellipses. See 
+ * shapes, most commonly circles or ellipses. See
  * [PiiHoughTransform] for details.
  *
  * Inputs
@@ -60,7 +60,7 @@
  * [maxPeakCount] peaks, the number of rows in the matrix matches the
  * number of peaks found. The rows of the matrix are ordered so that
  * the highest peak comes first.
- * 
+ *
  * @out coordinates - a PiiMatrix<int> containing the end points of
  * detected lines at image boundaries [maxPeakCount] highest peaks in
  * the transformation domain are considered. The matrix has 4 columns
@@ -79,13 +79,13 @@ class PII_TRANSFORMS_EXPORT PiiHoughTransformOperation : public PiiDefaultOperat
    * in the result matrix.
    */
   Q_PROPERTY(double angleResolution READ angleResolution WRITE setAngleResolution);
-  
+
   /**
    * The distanceResolution defines distance (in number of pixels)
    * what each row represents in the result matrix. Default value is 1.0
    */
   Q_PROPERTY(double distanceResolution READ distanceResolution WRITE setDistanceResolution);
-  
+
   /**
    * The number of highest peaks detected in the accumulator. See the
    * `maxCnt` parameter of [PiiTransforms::findPeaks()]. Default
@@ -95,7 +95,7 @@ class PII_TRANSFORMS_EXPORT PiiHoughTransformOperation : public PiiDefaultOperat
 
   /**
    * The minimum magnitude for a peak in the parameter space to be
-   * considered a peak. See the `threshold` parameter of 
+   * considered a peak. See the `threshold` parameter of
    * [PiiTransforms::findPeaks()]. Default value is 0. Getting this
    * value right usually requires experimenting.
    */
@@ -107,14 +107,14 @@ class PII_TRANSFORMS_EXPORT PiiHoughTransformOperation : public PiiDefaultOperat
    *
    * @see PiiTransforms::findPeaks()
    */
-  Q_PROPERTY(double minPeakDistance READ minPeakDistance WRITE setMinPeakDistance);  
+  Q_PROPERTY(double minPeakDistance READ minPeakDistance WRITE setMinPeakDistance);
 
   Q_PROPERTY(int startAngle READ startAngle WRITE setStartAngle);
   Q_PROPERTY(int endAngle READ endAngle WRITE setEndAngle);
   Q_PROPERTY(int startDistance READ startDistance WRITE setStartDistance);
   Q_PROPERTY(int endDistance READ endDistance WRITE setEndDistance);
 
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiHoughTransformOperation();
@@ -130,7 +130,7 @@ protected:
 
   void setDistanceResolution(double resolution);
   double distanceResolution() const;
-  
+
   void setMaxPeakCount(int value);
   int maxPeakCount() const;
   void setStartAngle(int startAngle);
@@ -151,7 +151,7 @@ private:
   template <class T> void findPeaks(const PiiMatrix<T>& objects);
 
   template <class T> struct TransformTraits;
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {

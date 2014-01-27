@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -33,7 +33,7 @@ void PiiThumbnailLoader::run()
         }
       QString strFileName = _lstFileNames.takeFirst();
       _loadingMutex.unlock();
-      
+
       QImage image(strFileName);
       if (image.format() == QImage::Format_ARGB32)
         Pii::setQImageFormat(&image, QImage::Format_RGB32);

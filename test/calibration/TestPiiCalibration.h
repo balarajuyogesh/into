@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -23,7 +23,7 @@
 class TestPiiCalibration :  public QObject
 {
   Q_OBJECT
-  
+
 public:
 
   TestPiiCalibration() { init(); }
@@ -32,7 +32,7 @@ public:
   void init();
 
 private slots:
-  void calculateCameraPosition();  
+  void calculateCameraPosition();
   void calibrateCameras();
   void worldToCameraCoordinates();
   void cameraToWorldCoordinates();
@@ -41,7 +41,7 @@ private slots:
   void rotationVectors();
   void rotationVectors_data();
   void normalizedToPixelCoordinates();
-  
+
 private:
   bool _bVerbose;
   QList<PiiMatrix<double> > _lstLeftCameraWorldCoordinates;

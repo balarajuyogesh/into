@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -31,13 +31,13 @@
 
 /**
  * A URI handler for PiiHttpProtocol that maps HTTP requests to member
- * function calls on any object instance. 
+ * function calls on any object instance.
  *
  * Usage example
  * -------------
  *
  * In the example below, a GET request to
- * http://localhost:3142/myClass/functions/plus?1&2 would return 3. 
+ * http://localhost:3142/myClass/functions/plus?1&2 would return 3.
  * http://localhost:3142/myClass/functions/hello would return "Hello,
  * Finland!".
  *
@@ -58,7 +58,7 @@
  * pObjectServer->addFunction("plus", pMyClass, &MyClass::plus);
  * pObjectServer->addFunction("voidFunc", pMyClass, &MyClass::voidFunc);
  * pObjectServer->addCallback("callback(QString)");
- * 
+ *
  * pHttpServer->protocol()->registerUriHandler("/myClass/", pObjectServer);
  * pHttpServer->start();
  *
@@ -86,7 +86,7 @@
  * HTTP/1.1 200 OK
  * Content-Type: text/plain
  * Content-Length: 25
- * 
+ *
  * functions/
  * channels/
  * ping
@@ -105,7 +105,7 @@
  * HTTP/1.1 200 OK
  * Content-Type: text/plain
  * Content-Length: 44
- * 
+ *
  * QString hello()
  * int plus(int,int)
  * voidFunc()
@@ -140,7 +140,7 @@
  * GET /myClass/functions/plus?1&2 HTTP/1.1
  * ~~~
  *
- * Parameters are automatically decoded using 
+ * Parameters are automatically decoded using
  * [PiiHttpDevice::decodeVariant()]. If the function has a return value,
  * the same encoding will be used in the return message body.
  *
@@ -175,12 +175,12 @@
  * ~~~
  * HTTP/1.1 200 OK
  * Content-Type: multipart/mixed-replace; boundary="ural"
- * 
+ *
  * 4A40938-2229-9F31-D008-2EFA98EC4E6C
  * --ural
  * X-ID: callbacks/callback(QString)
  * Content-Length: 17
- * 
+ *
  * Callback invoked.
  * --ural
  * ...
@@ -232,7 +232,7 @@ class PII_NETWORK_EXPORT PiiObjectServer :
   public PiiHttpProtocol::UriHandler
 {
   Q_OBJECT
-  Q_INTERFACES(PiiHttpProtocol::UriHandler)  
+  Q_INTERFACES(PiiHttpProtocol::UriHandler)
   Q_ENUMS(ThreadSafetyLevel)
 public:
   /**
@@ -257,7 +257,7 @@ public:
     AccessFromAnyThread,
     AccessConcurrently
   };
-  
+
   PiiObjectServer();
   ~PiiObjectServer();
 
@@ -266,7 +266,7 @@ public:
    * function-specific levels are set, this level will be used for all
    * calls. The default value is `AccessFromAnyThread`.
    *
-   * ! If a QObjectServer is not created in the main thread (e.g. 
+   * ! If a QObjectServer is not created in the main thread (e.g.
    * via PiiInstantiableObjectServer), it must be moved to the main
    * thread if the access mode is `AccessFromMainThread`. Otherwise,
    * calls to the object would never be delivered. The same applies to
@@ -280,7 +280,7 @@ public:
   ThreadSafetyLevel safetyLevel() const;
 
   /**
-   * Sets the safety level of an individual function, identified by 
+   * Sets the safety level of an individual function, identified by
    * *functionSignature*. Getting the signature right is important
    * because different overloads of the same function may have
    * different safety levels.
@@ -302,7 +302,7 @@ public:
   void removeFunctionSafetyLevel(const QString& functionSignature);
 
   void handleRequest(const QString& uri, PiiHttpDevice* dev, PiiHttpProtocol::TimeLimiter* controller);
-  
+
   /**
    * Adds a new callable function to the server's interface. The
    * signature of the function will be added to the function list
@@ -327,7 +327,7 @@ public:
   }
 
   /**
-   * Adds *function* to the server's interface as *name*. 
+   * Adds *function* to the server's interface as *name*.
    * PiiObjectServer takes the ownership of the pointer.
    */
   QString addFunction(const QString& name, PiiGenericFunction* function);
@@ -369,7 +369,7 @@ public:
    * channel. The default is 10000.
    */
   void setChannelTimeout(int channelTimeout);
-  
+
   /**
    * Returns the current channel time-out.
    */
@@ -385,7 +385,7 @@ public:
    * important to get the signature right; it is used by clients to
    * determine the parameter types of a call-back function. The
    * signature consists of a function name followed by a
-   * comma-separated list of parameter names in braces. 
+   * comma-separated list of parameter names in braces.
    * "valueChanged(int)" is an example of a valid signature. If
    * unsure, use QMetaObject::normalizedSignature().
    *
@@ -418,7 +418,7 @@ public:
    * @exception PiiSerializationException& if function parameters
    * could not be encoded.
    */
-  
+
   /// @hide
   template <class R> R callBack(const QString& function)
   {
@@ -469,7 +469,7 @@ protected:
   {
   public:
     ChannelImpl();
-    
+
     void push(PiiHttpDevice* dev, PiiHttpProtocol::TimeLimiter* controller, QMutexLocker* lock);
     void removeObjectsQueuedTo(const QString& uri);
     bool isAlive(int timeout) const;
@@ -504,7 +504,7 @@ protected:
 
   /// @internal
   typedef QMap<QString,ThreadSafetyLevel> SafetyLevelMap;
-  
+
   /// @internal
   class PII_NETWORK_EXPORT Data
   {
@@ -524,7 +524,7 @@ protected:
   PiiObjectServer(Data*);
 
   /**
-   * Invokes *function* with *params* and returns its return value. 
+   * Invokes *function* with *params* and returns its return value.
    * This function is called by PiiObjectServer when a client
    * requests /functions/function. The parameters to the call are
    * automatically decoded and passed to this function. The return
@@ -534,7 +534,7 @@ protected:
    * list of functions added with [addFunction()] and resolves their
    * overloaded versions. If there is a function that accepts the
    * passed argument types directly or if the arguments can be
-   * converted to the required types, the function will be invoked. 
+   * converted to the required types, the function will be invoked.
    * You can override this function to implement functions in a
    * different way.
    *
@@ -557,26 +557,26 @@ protected:
   virtual QVariant call(const QString& function, QVariantList& params);
 
   /**
-   * Connects the pushable the source identified by *sourceId* to 
+   * Connects the pushable the source identified by *sourceId* to
    * *channel*. The default implementation assumes that *sourceId* is
    * "signals/signature", where signature is the function signature of
    * a signal in the QObject being served, and connects it to the
    * channel.
    *
    * Subclasses can override this function to add custom pushable
-   * sources to channels. Whenever new pushable data from 
+   * sources to channels. Whenever new pushable data from
    * *sourceUri* is available, it should be pushed to all channels to
    * which the source is connected.
    *
    * @exception PiiHttpException& if something goes wrong. The default
-   * implementation throws an exception with `NotFoundStatus` if 
+   * implementation throws an exception with `NotFoundStatus` if
    * *sourceUri* isn't a valid URI for a signal.
    */
   virtual void connectToChannel(Channel* channel, const QString& sourceId);
-  
+
   /**
    * Disconnects the pushable the source identified by *sourceId*
-   * from *channel*. The default implementation assumes that 
+   * from *channel*. The default implementation assumes that
    * *sourceId* is "signals/signature", where signature is the function
    * signature of a signal in the QObject being served, and
    * disconnects it from the channel.
@@ -586,7 +586,7 @@ protected:
    * more data from *sourceId* must be pushed to the channel.
    *
    * @exception PiiHttpException& if something goes wrong. The default
-   * implementation throws an exception with `NotFoundStatus` if 
+   * implementation throws an exception with `NotFoundStatus` if
    * *sourceUri* isn't a valid URI for a signal.
    */
   virtual void disconnectFromChannel(Channel* channel, const QString& sourceId);
@@ -604,7 +604,7 @@ protected:
 
   /// @internal
   virtual void moveToMainThread();
-  
+
 private slots:
   void collectGarbage();
   QVariant callFromMainThread(void* function, void* params);

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -36,7 +36,7 @@ PiiMatrix<float> PiiMatching::shapeContextDescriptor(const PiiMatrix<int>& bound
 
   if (iKeyPoints < 1 || iBoundaryPoints < 1)
     return matFeatures;
-  
+
   // If the first and last point on the boundary are not the same,
   // handle the last point too.
   if (boundaryPoints.rowAs<PiiPoint<int> >(0) != boundaryPoints.rowAs<PiiPoint<int> >(iBoundaryPoints))
@@ -44,7 +44,7 @@ PiiMatrix<float> PiiMatching::shapeContextDescriptor(const PiiMatrix<int>& bound
 
   if (iBoundaryPoints < 2)
     return matFeatures;
-  
+
   // Calculate max distance and angle step
   double dMaxDistance = distances.last();
   double dAngleStep = 2*M_PI / qMax(1,angles);
@@ -59,7 +59,7 @@ PiiMatrix<float> PiiMatching::shapeContextDescriptor(const PiiMatrix<int>& bound
       if (iPairCount > 10000)
         iStep = iPairCount / 10000;
       iPairCount = 0;
-      
+
       for (int i=0; i<iKeyPoints-1; i += iStep)
         for (int j=i+1; j<iKeyPoints; j += iStep)
           {
@@ -84,7 +84,7 @@ PiiMatrix<float> PiiMatching::shapeContextDescriptor(const PiiMatrix<int>& bound
   for (int i=0; i<iKeyPoints; ++i)
     {
       float* pCurrentRow = matFeatures[i];
-      
+
       // Get the main point
       int x = keyPoints(i,0);
       int y = keyPoints(i,1);
@@ -134,9 +134,9 @@ PiiMatrix<float> PiiMatching::shapeContextDescriptor(const PiiMatrix<int>& bound
       if (fSum != 0)
         Pii::mapN(pCurrentRow, iColumns, std::bind2nd(std::multiplies<float>(), 1.0f/fSum));
     }
-  
+
   delete[] pNewDistances;
-  
+
   return matFeatures;
 }
 
@@ -159,13 +159,13 @@ QVector<double> PiiMatching::boundaryDirections(const PiiMatrix<int>& boundaryPo
                          float(boundaryPoints(1,0) - vecLast.x));
   angles[iPoints-1] = Pii::atan2(float(vecFirst.y - boundaryPoints(iPoints-2,1)),
                                  float(vecFirst.x - boundaryPoints(iPoints-2,0)));
-  
+
   for (int i=1; i<iPoints-1; ++i)
     {
       const PiiPoint<int>& prevPt(boundaryPoints.rowAs<PiiPoint<int> >(i-1));
       const PiiPoint<int>& nextPt(boundaryPoints.rowAs<PiiPoint<int> >(i+1));
       angles[i] = Pii::atan2(float(nextPt.y - prevPt.y), float(nextPt.x - prevPt.x));
     }
-    
+
   return angles;
 }

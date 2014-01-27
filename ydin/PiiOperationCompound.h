@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -50,9 +50,9 @@
  *
  * If the execution of any of a compound's child operations is
  * terminated before all of its siblings have changed their state to
- * `Running`, the compound itself may never change its state to 
+ * `Running`, the compound itself may never change its state to
  * `Running`. This can happen, for example, if a data source quickly
- * runs out of data. In such a case the state turns first to 
+ * runs out of data. In such a case the state turns first to
  * `Starting` and then to `Stopping` and finally to `Stopped`,
  * omitting `Running`, although the operations themself were
  * successfully started.
@@ -91,7 +91,7 @@
  * ~~~
  *
  * The parsing recurses to sub-operations. Thus, if one knows the
- * internals of compound operations, any input can be found (e.g. 
+ * internals of compound operations, any input can be found (e.g.
  * "subop.subop.image"). `parent` denotes the parent operation.
  * This makes it possible to connect to a socket that is within
  * another compound.
@@ -99,7 +99,7 @@
  * In the example below, `Op0` contains `Op1`. In the context of
  * the root operation that contains both `Op0` and `Op2` (not
  * drawn), the sockets of the operations are denoted by
- * "Op0.Op1.in1", "Op0.Op1.out", and "Op2.in2". In the context of 
+ * "Op0.Op1.in1", "Op0.Op1.out", and "Op2.in2". In the context of
  * `Op0`, `in2` is "parent.Op2.in2".
  *
  * ![Compound example](operationcompound.png)
@@ -179,7 +179,7 @@
  * };
  * ~~~
  *
- * When registering an operation compound to a plug-in, use the 
+ * When registering an operation compound to a plug-in, use the
  * [PII_REGISTER_COMPOUND] macro instead of [PII_REGISTER_OPERATION].
  *
  */
@@ -188,7 +188,7 @@ class PII_YDIN_EXPORT PiiOperationCompound : public PiiOperation
   Q_OBJECT
 
   Q_ENUMS(ConnectionType);
-  
+
   friend struct PiiSerialization::Accessor;
   PII_SEPARATE_SAVE_LOAD_MEMBERS
   PII_DECLARE_SAVE_LOAD_MEMBERS
@@ -199,7 +199,7 @@ public:
   PiiOperationCompound();
   /// Destroys the compound.
   ~PiiOperationCompound();
-  
+
   /**
    * Checks all child operations.
    *
@@ -252,7 +252,7 @@ public:
   /**
    * Waits for all child operations to terminate their execution.
    *
-   * @param time the maximum time to wait (in milliseconds). 
+   * @param time the maximum time to wait (in milliseconds).
    * `ULONG_MAX` causes the function not to time out.
    *
    * @return `true` if all child operations exited before the call
@@ -271,7 +271,7 @@ public:
    *
    * @param state the target state
    *
-   * @param time the maximum time to wait (in milliseconds). 
+   * @param time the maximum time to wait (in milliseconds).
    * `ULONG_MAX` causes the method not to time out.
    *
    * @return `true` if the state was reached before the call timed
@@ -289,7 +289,7 @@ public:
    * compound's sub-operations while start-up, the compound turns into
    * `Stopped` state. Another unexpected situation may arise if a
    * producer operation quickly runs out of data and spontaneously
-   * stops while other operations are still `Pausing` or `Starting`. 
+   * stops while other operations are still `Pausing` or `Starting`.
    * In this case the compound may will turn into `Running` state and
    * immediately to `Stopping`. Waiting for `Stopped` after stop()
    * or interrupt() and waiting for `Paused` after pause() is safe
@@ -338,7 +338,7 @@ public:
   Q_INVOKABLE virtual void addOperation(PiiOperation* op);
 
   /**
-   * Removes an operation from the compound's internal operation list. 
+   * Removes an operation from the compound's internal operation list.
    * The operation no longer belongs to the children of the compound
    * object.
    *
@@ -362,9 +362,9 @@ public:
    * childOperations.size().
    */
   Q_INVOKABLE int childCount() const;
-  
+
   /**
-   * Returns a pointer to the child operation identified by *name*. 
+   * Returns a pointer to the child operation identified by *name*.
    * This function support tree look-ups. That is, a "sub.child" as
    * the name will first look up a child with "sub" as its name and
    * then recurse to find its "child".
@@ -397,12 +397,12 @@ public:
    * replaced/removed, `false` otherwise.
    */
   Q_INVOKABLE bool replaceOperation(PiiOperation *oldOp, PiiOperation* newOp);
-  
+
   /**
    * Deletes all child operations and exposed sockets.
    */
   Q_INVOKABLE void clear();
-  
+
   /**
    * Returns the named input socket. The name may refer to an exposed
    * socket, to a proxy or to a socket in an internal operation. For
@@ -446,7 +446,7 @@ public:
    *
    * @return `true` if successful, `false` otherwise (*socket* is not
    * a child of this compound or there is a name conflict).
-   * 
+   *
    */
   bool exposeInput(PiiAbstractInputSocket* socket);
   bool exposeOutput(PiiAbstractOutputSocket* socket);
@@ -456,7 +456,7 @@ public:
    * with the dot syntax.
    */
   bool exposeInput(const QString& fullName);
-  
+
   /**
    * A convenience function that allows one to expose an output socket
    * with the dot syntax (explained above).
@@ -498,7 +498,7 @@ public:
    * Removes all input and output sockets from the public interface.
    */
   Q_INVOKABLE void removeAllSockets();
-  
+
   /**
    * Creates an unconnected proxy input. This function creates a new
    * PiiProxySocket and exposes its input socket as *name*. If a
@@ -548,7 +548,7 @@ public:
    * returned.
    */
   Q_INVOKABLE PiiProxySocket* outputProxy(const QString& name) const;
-  
+
   /**
    * Returns the number of output sockets. Equivalent to but faster
    * than outputs().size().
@@ -616,7 +616,7 @@ public:
    * Returns a property using the "dot syntax".
    */
   QVariant property(const char * name) const;
-  
+
   /**
    * Creates a clone of this compound. This function recursively
    * clones all of its child operations.
@@ -640,7 +640,7 @@ protected:
   struct RemovePropertySet { static void perform(PiiOperation* op, const QString& n) { op->removePropertySet(n); } };
   struct Reconfigure { static void perform(PiiOperation* op, const QString& n) { op->reconfigure(n); } };
   struct EndPropertySet { static void perform(PiiOperation* op) { op->endPropertySet(); } };
-  
+
   /**
    * Sends a command to all child operations. Use the action structures
    * to specify the action to be taken. This function loops through
@@ -685,7 +685,7 @@ private slots:
   void handleError(PiiOperation* sender, const QString& msg);
   void removeExposedInput(QObject* socket);
   void removeExposedOutput(QObject* socket);
-  
+
 private:
   // Recursive socket look-up
   struct InputFinder;
@@ -696,7 +696,7 @@ private:
   struct GetPropertyFinder;
   // and sub-operations
   struct OperationFinder;
-  
+
   // Generic find function for sockets and UI components
   template <class Finder> typename Finder::Type find(Finder f, const QString& path) const;
 
@@ -739,7 +739,7 @@ public:
    * The current state.
    */
   State state;
-  
+
   /**
    * List of child operations.
    */
@@ -747,7 +747,7 @@ public:
 
 private:
   friend class PiiOperationCompound;
-  
+
   /**
    * Exposed input sockets.
    */
@@ -756,7 +756,7 @@ private:
    * Exposed output sockets.
    */
   QList<PiiAbstractOutputSocket*> lstOutputs;
-    
+
   /**
    * States of child operations. In each pair, "first" is the state of
    * the operation and "second" a flag that tells if the operation has

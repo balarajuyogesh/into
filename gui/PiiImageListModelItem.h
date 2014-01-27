@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -31,7 +31,7 @@ public:
   ~PiiImageListModelItem();
 
   PiiImageListModelItem& operator= (const PiiImageListModelItem& other);
-  
+
   QVariantMap dataMap() const;
   QString fileName() const;
   QString displayName() const;
@@ -53,12 +53,12 @@ private:
   public:
     Data() {}
     Data(const QString& fileName);
-    
+
     QString strDisplayName, strTooltipText, strFileName;
     QIcon icon;
     QBrush backgroundBrush;
     QList<QPair<int,QVariant> > lstData;
-    
+
     static Data* sharedNull();
   } *d;
 

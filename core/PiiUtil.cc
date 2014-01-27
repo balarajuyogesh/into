@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -85,7 +85,7 @@ namespace Pii
         pMeta = pMeta->superClass();
       }
     return false;
-  } 
+  }
 
   uint qHash(const char* key)
   {
@@ -125,7 +125,7 @@ namespace Pii
                   list << g;
               }
           }
-      
+
       }
     if ( list.contains(temp) )
       return true;
@@ -141,9 +141,9 @@ namespace Pii
                     timeStamp.date().month(),
                     timeStamp.date().dayOfWeek(),
                     timeStamp.date().weekNumber()};
-    
+
     //qDebug("timeStamp : %i %i %i %i %i %i", table[0], table[1], table[2], table[3], table[4], table[5]);
-    
+
     bool ret = false;
     for ( int i=0; i<list.size(); i++ )
       {
@@ -163,16 +163,16 @@ namespace Pii
                     line = false;
                     break;
                   }
-                
+
               }
             ret = line;
-            
+
           }
-        
+
         if ( ret )
           return ret;
       }
-    
+
     return ret;
   }
 
@@ -254,7 +254,7 @@ namespace Pii
       }
     return lstResult;
   }
-  
+
   QVariantMap decodeProperties(const QString& encodedProperties,
                                QChar propertySeparator,
                                QChar valueSeparator,
@@ -354,7 +354,7 @@ namespace Pii
                                          const QSettings& valueMap,
                                          Qt::CaseSensitivity sensitivity,
                                          const QString& commentMark));
-  
+
   PII_DEFINE_EXPORTED_FUNCTION_TEMPLATE(bool, setProperties<QVariantMap>,
                                         (QObject* obj,
                                          const QStringList& properties,
@@ -400,7 +400,7 @@ namespace Pii
           if (cLast == magnitudes[i].symbol)
             return number.left(number.size()-1).toDouble(ok) * ::pow(10.0, double(magnitudes[i].exponent));
       }
-    
+
     return number.toDouble(ok);
   }
 
@@ -485,13 +485,13 @@ namespace Pii
   QList<QList<int> > findNeighbors(QLinkedList<QPair<int,int> >& pairs)
   {
     QList<QList<int> > lstResult;
-    
+
     while (!pairs.isEmpty())
       {
         QList<int> lstIndices;
         int iFirst = pairs.first().first;
         lstIndices << iFirst;
-        
+
         // This removes all neighbors of the first item from <pairs>.
         joinNeighbors(iFirst, pairs, lstIndices);
         qSort(lstIndices);
@@ -501,7 +501,7 @@ namespace Pii
 
         lstResult << lstIndices;
       }
-    
+
     return lstResult;
   }
 
@@ -572,12 +572,12 @@ namespace Pii
         return QString();
       }
   }
-  
+
   QString unescapeString(const QString& source)
   {
     QString strResult;
     strResult.reserve(source.size());
-    
+
     for (int i=0; i<source.size(); ++i)
       {
         int iChar = source[i].toLatin1();
@@ -610,7 +610,7 @@ namespace Pii
       }
     return strResult;
   }
-  
+
   QVariant unescapeVariant(const QString& value)
   {
     QVariant result;

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -32,7 +32,7 @@
 #define PII_FRAC_ADJUST_MEAN(val) do { if (_iTargetMean >= _iMinimum) val = (val + _iTargetMean3) >> 2; } while(0)
 
 /**
- * A class that generates two-dimensional cloud-like fractal pictures. 
+ * A class that generates two-dimensional cloud-like fractal pictures.
  * This class works with integer-valued matrices (int, char, etc.) and
  * produces gray-scale clouds that can also be used as height maps.
  *
@@ -82,7 +82,7 @@ public:
    *
    * @param c3 initial value for the lower right corner
    *
-   * @param roughness the scale of random variations in the fractal. 
+   * @param roughness the scale of random variations in the fractal.
    * This value determines how large changes are allowed on the large
    * scale. Usually, a value between minimum and maximum is used. Use
    * [setRoughnessScale] to control how rapidly the roughness dies out.
@@ -144,7 +144,7 @@ public:
    * Set the mean level the fractal generator will try to achieve.
    * This value is useful in large non-rectangular fractals. The
    * generator will always drive the random variations slightly
-   * towards the target mean. If the value is less than 
+   * towards the target mean. If the value is less than
    * [minimum](setMinimum()), it will not be used.
    */
   void setTargetMean(int targetMean)
@@ -156,7 +156,7 @@ public:
    * Get the target mean value.
    */
   int targetMean() const { return _iTargetMean; }
-  
+
   /**
    * The magic equation of roughness scaling. Halving the size of
    * generated fractal in the recursive algorithm scales roughness
@@ -182,7 +182,7 @@ void PiiCloudFractalGenerator::generateSquareFractal(PiiMatrix<T>& buffer,
                                                      int c0, int c1, int c2, int c3,
                                                      int roughness)
 {
-  /* Original corner points are denoted as cX. New corners are ncX. 
+  /* Original corner points are denoted as cX. New corners are ncX.
    * New corners for the recursive call are generated in between the
    * original ones as shown below.
    *
@@ -205,7 +205,7 @@ void PiiCloudFractalGenerator::generateSquareFractal(PiiMatrix<T>& buffer,
     }
 
   int halfSize = size >> 1;
-  
+
   // Other new corners (in addition to the center)
   int nc0 = row > 0 ? buffer(row-1,col+halfSize) : ((c0 + c1) >> 1) + PII_FRAC_RAND(roughness),
     nc1 = col > 0 ? buffer(row+halfSize,col-1) : ((c0 + c2) >> 1) + PII_FRAC_RAND(roughness);
@@ -219,7 +219,7 @@ void PiiCloudFractalGenerator::generateSquareFractal(PiiMatrix<T>& buffer,
       buffer(row+1,col+1) = PII_FRAC_TRUNC(nc2);
       return;
     }
-  
+
   int nc3 = ((c1 + c3) >> 1) + PII_FRAC_RAND(roughness),
     nc4 = ((c2 + c3) >> 1) + PII_FRAC_RAND(roughness);
 
@@ -252,7 +252,7 @@ PiiMatrix<T> PiiCloudFractalGenerator::generateSquareFractal(int size,
                                                              int roughness)
 {
   PiiMatrix<T> result(PiiMatrix<T>::uninitialized(size, size));
-  
+
   generateSquareFractal(result,
                         0, 0, size,
                         c0, c1, c2, c3,
@@ -289,7 +289,7 @@ void PiiCloudFractalGenerator::generateFractal(PiiMatrix<T>& buffer,
   while (rows >= size && columns >= size)
     size <<= 1;
   size >>= 1;
-  
+
   // Terminate recursion if we ended into a 2^N square
   if (rows == columns &&
       rows == size)
@@ -345,7 +345,7 @@ void PiiCloudFractalGenerator::generateFractal(PiiMatrix<T>& buffer,
       nc0 = int(PII_FRAC_INTP(size, Col, c0, nc0, c1));
       PII_FRAC_ADJUST_MEAN(nc0);
     }
-      
+
   if (col > 0)
     nc1 = buffer(row+size-1,col-1);
   else
@@ -378,7 +378,7 @@ void PiiCloudFractalGenerator::generateFractal(PiiMatrix<T>& buffer,
       nc3 = ((c1 + c3) >> 1) + PII_FRAC_RAND(roughnessY);
       nc3 = int(PII_FRAC_INTP(size, Col, c1, nc3, c3));
       PII_FRAC_ADJUST_MEAN(nc3);
-      
+
       generateFractal(buffer, row, col+size, size, rightSpace,
                       nc0, c1,
                       nc2, nc3,

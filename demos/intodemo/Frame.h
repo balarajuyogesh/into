@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@
 class Frame : public QFrame, private Ui_Frame
 {
 public:
-    
+
   Frame();
 
   // Allows you to access the content area of the frame
@@ -37,7 +37,7 @@ public:
   void mouseMoveEvent(QMouseEvent *e);
   void mouseReleaseEvent(QMouseEvent *e);
   void leaveEvent(QEvent *e);
-  
+
 private:
   QPoint _oldPos;
   bool _bMouseDown;

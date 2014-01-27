@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -32,7 +32,7 @@ void TestPiiClassification::kMeans()
                                1.0,-0.5,
                                1.0,0.0,
                                1.0,0.5);
-  
+
   /*PiiMatrix<double> centroids = PiiClassification::kMeans(samples, 2,
                                                           PiiGeometricDistance<const double*>());
   Pii::matlabPrint(std::cout, centroids);
@@ -42,7 +42,7 @@ void TestPiiClassification::kMeans()
   QCOMPARE(centroids(1,1) + 1, 1.0);
   QVERIFY(centroids(0,0) != centroids(1,0));
   */
-  
+
   PiiMatrix<double> centroids = PiiClassification::kMeans(matSamples, 6, PiiSquaredGeometricDistance<const double*>());
   QVERIFY(centroids.isEmpty());
 }

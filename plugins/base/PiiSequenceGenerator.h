@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,7 +26,7 @@
  * ------
  *
  * @in trigger - an optional input that triggers the emission.
- * 
+ *
  * Outputs
  * -------
  *
@@ -57,7 +57,7 @@ class PiiSequenceGenerator : public PiiDefaultOperation
    */
   Q_PROPERTY(SequenceMode sequenceMode READ sequenceMode WRITE setSequenceMode);
   Q_ENUMS(SequenceMode);
-  
+
   /**
    * The number of times the sequence will be repeated. Once this
    * count is reached, the operation will send a stop signal which
@@ -72,7 +72,7 @@ class PiiSequenceGenerator : public PiiDefaultOperation
    * causes converts the output to `ints`.
    */
   Q_PROPERTY(bool integerOutput READ integerOutput WRITE setIntegerOutput);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   /**
@@ -85,7 +85,7 @@ public:
    * [sequenceEnd] and [sequenceStart].
    */
   enum SequenceMode { Repeat, BackAndForth };
-  
+
   PiiSequenceGenerator();
 
   void setSequenceStart(double sequenceStart);

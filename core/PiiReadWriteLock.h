@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -52,7 +52,7 @@ private:
   {
   public:
     Data (bool recursive);
-    
+
     QMutex mutex;
     QWaitCondition readerWait, writerWait;
     ThreadHash hashCurrentReaders;
@@ -79,7 +79,7 @@ public:
   {
     _pLock->unlockRead();
   }
-  
+
 private:
   PiiReadWriteLock* _pLock;
   PII_DISABLE_COPY(PiiReadLocker);
@@ -98,7 +98,7 @@ public:
   {
     _pLock->unlockWrite();
   }
-  
+
 private:
   PiiReadWriteLock* _pLock;
   PII_DISABLE_COPY(PiiWriteLocker);

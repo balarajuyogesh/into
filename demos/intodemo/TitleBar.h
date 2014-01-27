@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,18 +26,18 @@
 class TitleBar : public QWidget, private Ui_TitleBar
 {
   Q_OBJECT
-  
+
 public:
   TitleBar(QWidget *parent);
 
 public slots:
   void showSmall();
   void showMaxRestore();
-  
+
 protected:
   void mousePressEvent(QMouseEvent *me);
   void mouseMoveEvent(QMouseEvent *me);
-  
+
 private:
   QPixmap _restorePixmap, _maxPixmap;
   bool _bMaxNormal;

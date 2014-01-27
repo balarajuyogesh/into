@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -69,7 +69,7 @@ namespace PiiTransforms
     ThresholdSelector(double threshold) : _dThreshold(threshold) {}
 
     template <class T> bool operator() (T magnitude) const { return magnitude >= _dThreshold; }
-    
+
   private:
     double _dThreshold;
   };
@@ -86,19 +86,19 @@ namespace PiiTransforms
       ThresholdSelector(threshold),
       _iLimit(Pii::round<int>(selectionProbability * RAND_MAX))
     {}
-    
+
     template <class T> bool operator() (T magnitude) const
     {
       return ThresholdSelector::operator() (magnitude) &&
         rand() < _iLimit;
     }
-    
+
   private:
     int _iLimit;
   };
 
   enum GradientSign { PositiveGradient = 1, NegativeGradient = 2, IgnoreGradientSign = 3 };
-  
+
   /**
    * Circular Hough transform. The circular Hough transform detects
    * circles in images. Circles are parametrized by their center (x,y)
@@ -151,7 +151,7 @@ namespace PiiTransforms
                              U radius,
                              double angleError,
                              GradientSign sign = IgnoreGradientSign);
-  
+
   /**
    * This version uses the Sobel edge detector to first estimate
    * gradient in *image*. Then, it applies circularHough() to all
@@ -216,7 +216,7 @@ namespace PiiTransforms
    * difference between radii is used as the measure of difference.
    *
    * @param maxCnt the maximum number of circles to find. If this
-   * value is zero, all circles exceeding threshold will be returned. 
+   * value is zero, all circles exceeding threshold will be returned.
    * A non-zero value means at most maxCnt strongest circles will be
    * returned.
    *

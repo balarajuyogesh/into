@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -33,7 +33,7 @@ struct PII_NETWORK_EXPORT PiiGenericSocketDescriptor
    * Create an invalid socket descriptor.
    */
   PiiGenericSocketDescriptor() : customDescriptor(0) {}
-  
+
   /**
    * Create a new %SocketDescriptor with the given native
    * socketDescriptor. This constructor is suitable for use with
@@ -57,7 +57,7 @@ struct PII_NETWORK_EXPORT PiiGenericSocketDescriptor
    * native socket descriptor.
    */
   PiiGenericSocketDescriptor(void* socketDescriptor) : customDescriptor(socketDescriptor) {}
-    
+
   union
   {
     PiiNetwork::SocketDescriptorType networkSocketDescriptor;

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -25,7 +25,7 @@
  * ------
  *
  * @in input - any matrix
- * 
+ *
  * Outputs
  * -------
  *
@@ -41,7 +41,7 @@ class PiiMatrixFlipper : public PiiDefaultOperation
    */
   Q_PROPERTY(FlipMode flipMode READ flipMode WRITE setFlipMode);
   Q_ENUMS(FlipMode);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   /**
@@ -56,7 +56,7 @@ public:
    * 180 degrees rotation)
    */
   enum FlipMode { FlipHorizontally, FlipVertically, FlipBoth };
-  
+
   PiiMatrixFlipper();
 
 protected:

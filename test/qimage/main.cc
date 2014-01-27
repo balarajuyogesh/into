@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -87,7 +87,7 @@ void TestPiiQImage::matrixToImage()
     pImage->scanLine(0)[1] = 'B'; // restore old value
   }
   {
-    // Color matrix 
+    // Color matrix
     PiiMatrix<PiiColor4<unsigned char> > matrix(3, 2, static_cast<void*>(rawData), Pii::RetainOwnership);
     PiiColorQImage *pImage = PiiColorQImage::create(matrix);
     QCOMPARE(qRed(((QRgb*)pImage->scanLine(0))[0]), (int)'C');

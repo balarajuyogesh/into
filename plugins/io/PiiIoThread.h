@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,7 +24,7 @@
 class PiiIoThread : public QThread
 {
   Q_OBJECT
-    
+
 public:
   struct OutputSignal
   {
@@ -34,9 +34,9 @@ public:
     qint64 time;
     int pulseWidth;
   };
-  
+
   PiiIoThread(QObject *parent = 0);
-  
+
   void run();
   void stop() { _bRunning = false; }
 

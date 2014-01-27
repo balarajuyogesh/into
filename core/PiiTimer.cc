@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,7 +28,7 @@ static LARGE_INTEGER getFILETIMEoffset()
   SYSTEMTIME s;
   FILETIME f;
   LARGE_INTEGER t;
-  
+
   s.wYear = 1970;
   s.wMonth = 1;
   s.wDay = 1;
@@ -69,7 +69,7 @@ struct PiiPerformanceCounter
         ticsPerSec.QuadPart = 10000000;
       }
   }
-    
+
   void query(timespec* tp)
   {
     LARGE_INTEGER t;
@@ -149,7 +149,7 @@ public:
     */
     return qint64(t->tv_sec - time.tv_sec) * 1000000 + qint64(t->tv_nsec - time.tv_nsec) / 1000;
   }
-  
+
   timespec time;
   bool bStopped;
 };
@@ -161,7 +161,7 @@ PiiTimer::PiiTimer() :
 
 PiiTimer::PiiTimer(const PiiTimer& other) :
   d(new Data(*other.d))
-{ 
+{
 }
 
 PiiTimer& PiiTimer::operator= (const PiiTimer& other)

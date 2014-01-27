@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -45,7 +45,7 @@ void TestPiiFifoBuffer::oneThread()
   QVERIFY(::memcmp(read+30, data, 30) == 0);
 
   char buffer[60];
-  
+
   bfr.reset();
   w.start();
   bfr.read(buffer, 10);
@@ -64,7 +64,7 @@ void TestPiiFifoBuffer::oneThread()
     }
   */
   QVERIFY(::memcmp(buffer, data, 60) == 0);
-  
+
 }
 
 void TestPiiFifoBuffer::oneThread_data()
@@ -90,9 +90,9 @@ void TestPiiFifoBuffer::twoThreads()
   Reader r(&bfr);
   w.setBlockSize(writerBlock);
   r.setBlockSize(readerBlock);
-  
+
   w.start();
-  r.start();  
+  r.start();
   w.wait();
   r.wait();
   QVERIFY(::memcmp(w.getArray(), r.getArray(), BUFFERSIZE) == 0);
@@ -103,7 +103,7 @@ void TestPiiFifoBuffer::twoThreads_data()
   QTest::addColumn<int>("bufferSize");
   QTest::addColumn<int>("writerBlock");
   QTest::addColumn<int>("readerBlock");
-  
+
   QTest::newRow("16,1,1") << 16 << 1 << 1;
   QTest::newRow("59,2,1") << 59 << 2 << 1;
   QTest::newRow("64,1,3") << 64 << 1 << 3;

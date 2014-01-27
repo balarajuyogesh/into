@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -53,7 +53,7 @@ qint64 PiiMultipartStreamBuffer::bufferedSize() const
 {
   const PII_D;
   if (d->bFlushed) return 0;
-  
+
   qint64 iBodyLength = PiiStreamBuffer::bufferedSize();
   QString strBodyLength = QString::number(iBodyLength);
   // In d->strHeader, %2 needs to be taken away, but the final \r\n

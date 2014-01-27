@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,10 +24,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
   // Initialize engine
   initEngine();
-  
+
   // Initialize ui
   init();
-  
+
   // Start processing
   startProcessing();
   emit updateImage(0);
@@ -63,16 +63,16 @@ PiiEngine* MainWindow::createEngine()
   pSwitch->setProperty("operationMode", "AsynchronousMode");
   pSwitch->setProperty("dynamicInputCount", 1);
   pSwitch->setProperty("passThrough", true);
-  
+
   // Create probe input for source and result image display
   _pSourceProbeInput = new PiiProbeInput;
   _pResultProbeInput = new PiiProbeInput;
-  
+
   // Create image source
   PiiOperation *pImageFileReader = pEngine->createOperation("PiiImageFileReader");
   pImageFileReader->setProperty("fileNames", QString("%1/olga.jpg").arg(defaultImageDirPath()));
   pImageFileReader->setProperty("repeatCount", 1);
-  
+
   // Create scale operation
   _pImageScaleOperation = pEngine->createOperation("PiiImageScaleOperation");
   _pImageScaleOperation->setProperty("scaleMode", "ScaleAccordingToFactor");
@@ -81,7 +81,7 @@ PiiEngine* MainWindow::createEngine()
   _pImageRotationOperation = pEngine->createOperation("PiiImageRotationOperation");
   _pImageRotationOperation->setProperty("transformedSize", "ExpandAsNecessary");
   _pImageRotationOperation->setProperty("backgroundColor", QColor(Qt::white));
-    
+
   // Make operation connections
   connect(this, SIGNAL(updateImage(int)), pTriggerSource, SLOT(trigger(int)));
 
@@ -92,7 +92,7 @@ PiiEngine* MainWindow::createEngine()
 
   _pSourceProbeInput->connectOutput(pSwitch->output("output0"));
   _pResultProbeInput->connectOutput(_pImageRotationOperation->output("image"));
-  
+
   return pEngine;
 }
 
@@ -115,11 +115,11 @@ void MainWindow::updateValues()
 {
   // Change scale ratio
   _pImageScaleOperation->setProperty("scaleRatio", (double)_pScaleSlider->value() / 100.0);
-  
+
   // Change rotation angle
   _pImageRotationOperation->setProperty("angleDeg", _pRotationSlider->value());
 
   // Trig the same image again
   emit updateImage(0);
-  
+
 }

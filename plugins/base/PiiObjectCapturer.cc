@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -29,7 +29,7 @@ PiiObjectCapturer::PiiObjectCapturer() :
   PiiDefaultOperation(new Data)
 {
   PII_D;
-  
+
   addSocket(d->pSyncInput = new PiiInputSocket("sync"));
   d->pSyncInput->setOptional(true);
 
@@ -59,7 +59,7 @@ PiiInputSocket* PiiObjectCapturer::input(const QString &name) const
 void PiiObjectCapturer::clearObjects()
 {
   PII_D;
-  
+
   d->syncObject = PiiVariant();
   d->lstObjects.clear();
 
@@ -133,16 +133,16 @@ void PiiObjectCapturer::syncEvent(SyncEvent* event)
 void PiiObjectCapturer::setDynamicInputCount(int dynamicInputCount)
 {
   PII_D;
-  
+
   if (dynamicInputCount < 1)
     return;
-  
+
   d->iDynamicInputCount = dynamicInputCount;
   setNumberedInputs(d->iDynamicInputCount, 1);
 
   for (int i=1; i<=d->iDynamicInputCount; ++i)
     PiiDefaultOperation::inputAt(i)->setGroupId(1);
-  
+
   clearObjects();
 }
 

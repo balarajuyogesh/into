@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -18,7 +18,7 @@
 #endif
 
 #include "PiiSerializationException.h"
-#include "PiiSmartPtr.h" 
+#include "PiiSmartPtr.h"
 #include "PiiQVariantWrapper.h"
 #include "PiiNameValuePair.h"
 #include "PiiBinaryObject.h"
@@ -48,7 +48,7 @@ namespace PiiSerialization
   {
     separateFunctions(archive, value, version);
   }
-  
+
   // ********** Any random-access collection ***********
 
   template <class T, class Archive, class Collection> void save(Archive& archive, const Collection& lst, const unsigned int /*version*/)
@@ -82,7 +82,7 @@ namespace PiiSerialization
     archive & PII_NVP("width", width);
     archive & PII_NVP("height", height);
   }
-  
+
   template <class T, class Archive, class Size> inline void loadSize(Archive& archive, Size& size)
   {
     T width, height;
@@ -96,7 +96,7 @@ namespace PiiSerialization
   {
     saveSize<int>(archive, size);
   }
-  
+
   template <class Archive> inline void load(Archive& archive, QSize& size, const unsigned int /*version*/)
   {
     loadSize<int>(archive, size);
@@ -106,7 +106,7 @@ namespace PiiSerialization
   {
     saveSize<double>(archive, size);
   }
-  
+
   template <class Archive> inline void load(Archive& archive, QSizeF& size, const unsigned int /*version*/)
   {
     loadSize<double>(archive, size);
@@ -132,7 +132,7 @@ namespace PiiSerialization
   {
     savePoint<int>(archive, point);
   }
-  
+
   template <class Archive> inline void load(Archive& archive, QPoint& point, const unsigned int /*version*/)
   {
     loadPoint<int>(archive, point);
@@ -142,7 +142,7 @@ namespace PiiSerialization
   {
     savePoint<double>(archive, point);
   }
-  
+
   template <class Archive> inline void load(Archive& archive, QPointF& point, const unsigned int /*version*/)
   {
     loadPoint<double>(archive, point);
@@ -157,7 +157,7 @@ namespace PiiSerialization
     archive & PII_NVP("width", width);
     archive & PII_NVP("height", height);
   }
-  
+
   template <class T, class Archive, class Rect> inline void loadRect(Archive& archive, Rect& rect)
   {
     T x, y, width, height;
@@ -172,7 +172,7 @@ namespace PiiSerialization
   {
     saveRect<int>(archive, rect);
   }
-  
+
   template <class Archive> inline void load(Archive& archive, QRect& rect, const unsigned int /*version*/)
   {
     loadRect<int>(archive, rect);
@@ -182,7 +182,7 @@ namespace PiiSerialization
   {
     saveRect<double>(archive, rect);
   }
-  
+
   template <class Archive> inline void load(Archive& archive, QRectF& rect, const unsigned int /*version*/)
   {
     loadRect<double>(archive, rect);
@@ -214,7 +214,7 @@ namespace PiiSerialization
         map.insert(key, val);
       }
   }
-  
+
   struct CollectionLoader
   {
     template <class Archive, class Collection, class T> static void serialize(Archive& archive, Collection& lst, const unsigned int version, T*)
@@ -230,7 +230,7 @@ namespace PiiSerialization
       ::PiiSerialization::save<T>(archive, lst, version);
     }
   };
-  
+
   template <class Archive, class Collection, class T> inline void serialize(Archive& archive, Collection& lst, const unsigned int version)
   {
     Pii::If<Archive::InputArchive, CollectionLoader, CollectionSaver>::Type::serialize(archive, lst, version, (T*)0);
@@ -294,7 +294,7 @@ namespace PiiSerialization
     else
       pixmap.loadFromData(array, "XPM");
   }
-    
+
   template <class Archive> inline void save(Archive& /*archive*/, const QGradient& /*gradient*/, const unsigned int /*version*/)
   {
     //PENDING
@@ -304,7 +304,7 @@ namespace PiiSerialization
   {
     //PENDING
   }
-  
+
   template <class Archive> inline void save(Archive& archive, const QBrush& brush, const unsigned int /*version*/)
   {
     archive << PII_NVP("gradient", brush.gradient());
@@ -344,27 +344,27 @@ namespace PiiSerialization
   {
     archive << font.toString();
   }
-  
+
   template <class Archive> inline void load(Archive& archive, QFont& font, const unsigned int /*version*/)
   {
     QString desc;
     archive >> desc;
     font.fromString(desc);
   }
-  
+
   template <class Archive> inline void save(Archive& archive, const QTime& time, const unsigned int /*version*/)
   {
     // 10 bits (1024 values) for millisecond, 6 bits (64 values) for
     // second and minute, the rest (10 bits) for hour.
     archive << ((time.hour() << 22) | (time.minute() << 16) | (time.second() << 10) | time.msec());
   }
-  
+
   template <class Archive> inline void load(Archive& archive, QTime& time, const unsigned int /*version*/)
   {
     int i;
     archive >> i;
     time.setHMS(i >> 22, (i >> 16) & 0x3f, (i >> 10) & 0x3f, i & 0x3ff);
-  } 
+  }
 
   template <class Archive> inline void save(Archive& archive, const QDate& date, const unsigned int /*version*/)
   {
@@ -372,13 +372,13 @@ namespace PiiSerialization
     // the rest (23 bits) for year.
     archive << ((date.year() << 11) | (date.month() << 5) | date.day());
   }
-  
+
   template <class Archive> inline void load(Archive& archive, QDate& date, const unsigned int /*version*/)
   {
     int i;
     archive >> i;
     date.setDate(i >> 11, (i >> 5) & 0xf, i & 0x1f);
-  } 
+  }
 
   template <class Archive> inline void save(Archive& archive, const QDateTime& dateTime, const unsigned int /*version*/)
   {
@@ -386,7 +386,7 @@ namespace PiiSerialization
             << PII_NVP("time", dateTime.time())
             << PII_NVP("spec", int(dateTime.timeSpec()));
   }
-  
+
   template <class Archive> inline void load(Archive& archive, QDateTime& dateTime, const unsigned int /*version*/)
   {
     QDate date;
@@ -398,7 +398,7 @@ namespace PiiSerialization
     dateTime.setDate(date);
     dateTime.setTime(time);
     dateTime.setTimeSpec(Qt::TimeSpec(qBound(0,spec,2)));
-  } 
+  }
 
   struct PropertyLoader
   {
@@ -440,7 +440,7 @@ namespace PiiSerialization
     archive << PII_NVP("propCnt", iValidCnt);
 
     PiiConfigurable* pConfigurable = qobject_cast<PiiConfigurable*>(&obj);
-    // Loop through the properties 
+    // Loop through the properties
     for (int i=propertyOffset; i<iTotalCnt; ++i)
       {
         // Store only read/write properties flagged as "stored"
@@ -583,7 +583,7 @@ namespace PiiSerialization
     archive >> PII_NVP("val", value);
     variant.setValue(value);
   }
-  
+
   /*
    * A function that deserializes a QVariant. The deserializer first
    * reads a type ID and determines the type of the variant
@@ -605,7 +605,7 @@ namespace PiiSerialization
           setQVariantValue<TYPE >(archive, variant); \
           break;
 #define PII_SET_QVARIANT_VALUE(N, PARAM) PII_SET_QVARIANT_VALUE_ PARAM
-        
+
         PII_FOR_N(PII_SET_QVARIANT_VALUE, 24,
                   ((Int, int),
                    (UInt, unsigned int),

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -32,10 +32,10 @@ class PII_EMULATORIODRIVER_EXPORT PiiEmulatorIoDriver : public PiiDefaultIoDrive
 public:
   PiiEmulatorIoDriver();
   ~PiiEmulatorIoDriver();
-  
+
   /**
    * Select the I/O unit to use. The driver may be able to handle many
-   * I/O boards. The active unit is selected by a generic unit id. 
+   * I/O boards. The active unit is selected by a generic unit id.
    * Possibilities include, for example, network addresses and numeric
    * board indices.
    *
@@ -56,7 +56,7 @@ public:
    * Get the total number of I/O channels.
    */
   int channelCount() const;
-  
+
   /**
    * Initialize the driver. This function is must be called before the
    * driver can be accessed

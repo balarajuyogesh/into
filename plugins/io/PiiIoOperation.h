@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -43,7 +43,7 @@ class PiiIoOperation : public PiiDefaultOperation
   Q_PROPERTY(QString ioUnit READ ioUnit WRITE setIoUnit);
 
   /**
-   * A flag that can be used to stop receiving/sending I/O signals. 
+   * A flag that can be used to stop receiving/sending I/O signals.
    * Once this value is set to `false`, the operation will neither
    * react to changes in input signals nor activate any output
    * channels.
@@ -85,7 +85,7 @@ class PiiIoOperation : public PiiDefaultOperation
    * props["electricalConnection"] = "IttlConnection";
    *
    * pOutput->setProperty("channelConfigs", QVariantList() << props1 << props2 << props3);
-   * ~~~   
+   * ~~~
    */
   Q_PROPERTY(QVariantList channelConfigs READ channelConfigs WRITE setChannelConfigs);
 
@@ -110,7 +110,7 @@ protected:
 
   int channelCount() const;
   QVariantList channelStates() const;
-  
+
   void setIoDriver(const QString& ioDriver);
   QString ioDriver() const;
 

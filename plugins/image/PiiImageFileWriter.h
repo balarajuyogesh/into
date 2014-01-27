@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -35,12 +35,12 @@
  * Inputs
  * ------
  *
- * @in image - an image with 8, 24, or 32 bits per pixel. 
+ * @in image - an image with 8, 24, or 32 bits per pixel.
  * Floating-point images are converted to gray-scale by multiplying by
  * 255 and quantizing into 256 levels.
  *
  * @in filename - the name of the output file. If this input is
- * connected, automatic file name generation will be turned off. 
+ * connected, automatic file name generation will be turned off.
  * The output directory and image prefix are still in effect. For
  * example, if "images/naama.bmp" is read, the output file name will
  * be [[outputDirectory]]/images/[[namePrefix]]naama.bmp. If the
@@ -56,14 +56,14 @@
  *
  * @in value - the value corresponding to the key (QString).
  *
- * @out metaX - X ranges from 0 to the number of [metaFields] - 1. 
+ * @out metaX - X ranges from 0 to the number of [metaFields] - 1.
  * Receives the value of the meta field X, where X is an index to
  * [metaFields]. Accepted types are `int`, `double`, and `QString`.
  *
  * Outputs
  * -------
  *
- * @out filename - the full name of the current image, including path. 
+ * @out filename - the full name of the current image, including path.
  * The path is relative unless the `filename` input or the
  * [outputDirectory] property contains an absolute path.
  *
@@ -94,7 +94,7 @@ class PII_IMAGE_EXPORT PiiImageFileWriter : public PiiDefaultOperation
    * file names only if [changeExtension] is `true`.
    */
   Q_PROPERTY(QString extension READ extension WRITE setExtension);
-  
+
   /**
    * The index of the next image. Indices are padded with zeros so
    * that their length always equals six. Thus, at most one million
@@ -115,8 +115,8 @@ class PII_IMAGE_EXPORT PiiImageFileWriter : public PiiDefaultOperation
    * read from the filename input will be changed to [extension]. The
    * default is `false`.
    */
-  Q_PROPERTY(bool changeExtension READ changeExtension WRITE setChangeExtension);  
-  
+  Q_PROPERTY(bool changeExtension READ changeExtension WRITE setChangeExtension);
+
   /**
    * Use file locking. Setting this flag to true causes
    * PiiImageFileWriter to acquire an exclusive (write) lock for the
@@ -187,10 +187,10 @@ class PII_IMAGE_EXPORT PiiImageFileWriter : public PiiDefaultOperation
    * Enables or disables overwriting of existing files. The default is
    * `true`.
    */
-  Q_PROPERTY(bool overwrite READ overwrite WRITE setOverwrite);  
-  
+  Q_PROPERTY(bool overwrite READ overwrite WRITE setOverwrite);
+
   /**
-   * The physical size of a pixel. The default value is (1.0, 1.0). 
+   * The physical size of a pixel. The default value is (1.0, 1.0).
    * Not all image formats can store this value.
    */
   Q_PROPERTY(QSizeF pixelSize READ pixelSize WRITE setPixelSize);
@@ -219,11 +219,11 @@ class PII_IMAGE_EXPORT PiiImageFileWriter : public PiiDefaultOperation
    * formats that support alpha. The default value is `false`.
    */
   Q_PROPERTY(bool storeAlpha READ storeAlpha WRITE setStoreAlpha);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiImageFileWriter();
-  
+
   /**
    * Write a matrix as an image to a file.
    *
@@ -243,7 +243,7 @@ public:
   template <class T> bool writeImage(const PiiMatrix<T>& image, const QString& fileName, bool lock = false);
 
   void check(bool reset);
-  
+
 protected:
   void syncEvent(SyncEvent* event);
   void process();
@@ -268,7 +268,7 @@ protected:
 
   void setWriteEnabled(bool writeEnabled);
   bool writeEnabled() const;
-  
+
   void setAutoCreateDirectory(bool autoCreateDirectory);
   bool autoCreateDirectory() const;
 
@@ -313,13 +313,13 @@ private:
     int iCompression;
     QStringList lstKeys, lstValues;
     bool bKeyValuesConnected, bNameInputConnected;
-    
+
     PiiInputSocket* pImageInput;
     PiiInputSocket* pNameInput;
     PiiInputSocket* pKeyInput;
     PiiInputSocket* pValueInput;
     PiiOutputSocket* pNameOutput;
-    
+
     PiiVariant imageObject, nameObject;
     QStringList lstMetaFields;
     int iStaticInputCount;

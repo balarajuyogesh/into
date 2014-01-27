@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,7 +28,7 @@ void TestPiiAlgorithm::swap()
   QVERIFY(Pii::equals(mat, PiiMatrix<int>(2,3,
                                           4,5,6,
                                           1,2,3)));
-  
+
   Pii::swap(mat.columnBegin(0), mat.columnEnd(0), mat.columnBegin(2));
   QVERIFY(Pii::equals(mat, PiiMatrix<int>(2,3,
                                           6,5,4,

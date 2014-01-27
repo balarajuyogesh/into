@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -17,24 +17,24 @@ class PiiRemoteMetaObject::Data : public PiiRemoteObject::Data
 {
 public:
   Data(QObject*);
-  
+
   int typeIndex(int typeId)
   {
     if (typeId < int(QVariant::UserType))
       return typeId;
     return 0x80000000 | stringData.add(QMetaType::typeName(typeId));
   }
-  
+
   template <class T> int addFunctionData(const QList<T>& functions, uint paramIndex, uint flags);
   template <class T> void addFunctionParams(const QList<T>& functions);
   void addPropertyData();
-  
+
   QObject* pObject;
-  
+
   struct StringData
   {
     StringData() : _iStringIndex(-1) {}
-    
+
     int add(const QString& word)
     {
       QByteArray aWord(word.toLatin1());
@@ -49,13 +49,13 @@ public:
       _iStringIndex = -1;
     }
     const QArrayData* data() const { return reinterpret_cast<const QArrayData*>(_aCombined.constData()); }
-  
+
     QByteArray _aHeader, _aStringData, _aCombined;
     int _iStringIndex;
   } stringData;
 
   QVector<uint> vecMetaData;
-  
+
   QMetaObject metaObject;
   bool bMetaCreated;
   QList<Function> lstFunctions;
@@ -67,7 +67,7 @@ int PiiRemoteMetaObject::Data::StringData::add(const char* word, int len)
 {
   ++_iStringIndex;
   _aHeader.resize((_iStringIndex + 1) * sizeof(QByteArrayData));
-    
+
   QByteArrayData* pData = reinterpret_cast<QByteArrayData*>(_aHeader.data() + _iStringIndex * sizeof(QByteArrayData));
   pData->ref.atomic._q_value = -1;
   if (len == -1) len = strlen(word);
@@ -75,14 +75,14 @@ int PiiRemoteMetaObject::Data::StringData::add(const char* word, int len)
   pData->offset = sizeof(QByteArrayData) + _aStringData.size();
   _aStringData.append(word, len);
   _aStringData.append('\0');
-    
+
   // Fix offsets
   for (int i=0; i<_iStringIndex; ++i)
     {
       pData = reinterpret_cast<QByteArrayData*>(_aHeader.data() + i * sizeof(QByteArrayData));
       pData->offset += sizeof(QByteArrayData);
     }
-    
+
   return _iStringIndex;
 }
 
@@ -170,20 +170,20 @@ void PiiRemoteMetaObject::createMetaObject()
   if (d->bMetaCreated)
     return;
   d->bMetaCreated = true;
-  
+
   d->stringData.add("PiiRemoteMetaObject");
   d->stringData.add("");
 
   collectFunctions(true); // signals
   collectFunctions(false); // other functions
   collectProperties();
- 
+
   d->vecMetaData.resize(iMetaHeaderSize);
 
   // Store the number of functions ...
   d->vecMetaData[iMethodIndex] = d->lstFunctions.size() + d->lstSignals.size();
   // Functions start immediately after the header
-  d->vecMetaData[iMethodIndex + 1] = iMetaHeaderSize; 
+  d->vecMetaData[iMethodIndex + 1] = iMetaHeaderSize;
   // The first N are signals
   d->vecMetaData[iSignalIndex] = d->lstSignals.size();
 
@@ -194,12 +194,12 @@ void PiiRemoteMetaObject::createMetaObject()
   iParamIndex = d->addFunctionData(d->lstFunctions, iParamIndex, 0x2);
   d->addFunctionParams(d->lstSignals);
   d->addFunctionParams(d->lstFunctions);
-  
+
   d->vecMetaData[iPropertyIndex] = d->lstProperties.size();
   d->vecMetaData[iPropertyIndex + 1] = d->vecMetaData.size();
-  
+
   d->addPropertyData();
-  
+
   d->vecMetaData << 0; // EOD
 
 #if 0
@@ -227,7 +227,7 @@ void PiiRemoteMetaObject::createMetaObject()
     }
   printf("\n");
 #endif
-  
+
   d->stringData.build();
   d->metaObject.d.stringdata = d->stringData.data();
   d->metaObject.d.data = d->vecMetaData.constData();
@@ -245,7 +245,7 @@ void PiiRemoteMetaObject::collectProperties()
   for (int i=0; i<lstProperties.size(); ++i)
     {
       // This also catches the special case of no properties (one empty entry in the list).
-      if (!propExp.exactMatch(QString(lstProperties[i]))) 
+      if (!propExp.exactMatch(QString(lstProperties[i])))
         continue;
 
       int iSpaceIndex = lstProperties[i].indexOf(' ');
@@ -258,7 +258,7 @@ void PiiRemoteMetaObject::collectProperties()
           piiWarning(QString("Unsupported remote property type: ") + QString(lstProperties[i]));
           continue;
         }
-      
+
       d->lstProperties << Property(type, lstProperties[i].constData() + iSpaceIndex + 1);
    }
 }
@@ -273,7 +273,7 @@ void PiiRemoteMetaObject::collectFunctions(bool listSignals)
     d->lstSignals.clear();
   else
     d->lstFunctions.clear();
-  
+
   for (int i=0; i<lstSignatures.size(); ++i)
     {
       if (!funcExp.exactMatch(QString(lstSignatures[i])))
@@ -296,7 +296,7 @@ void PiiRemoteMetaObject::collectFunctions(bool listSignals)
         lstParams = funcExp.cap(3).toLatin1().split(',');
       QList<int> lstParamTypes;
       const char* pSignature = lstSignatures[i].constData() + iSpaceIndex + 1;
-      
+
       for (int j=0; j<lstParams.size(); ++j)
         {
           int type = QMetaType::type(lstParams[j].constData());

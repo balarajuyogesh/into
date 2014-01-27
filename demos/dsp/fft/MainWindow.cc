@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -45,7 +45,7 @@ void MainWindow::init()
 
   // Init type of the result image display
   _pResultImageDisplay->setProperty("displayType", "AutoScale");
-  
+
   // Make ui-connections
   connect(_pPreviousImageButton, SIGNAL(clicked()), this, SLOT(prevButtonClicked()));
   connect(_pNextImageButton, SIGNAL(clicked()), this, SLOT(nextButtonClicked()));
@@ -68,7 +68,7 @@ PiiEngine* MainWindow::createEngine()
   // Create probe input for source and result image display
   _pSourceProbeInput = new PiiProbeInput;
   _pResultProbeInput = new PiiProbeInput;
-  
+
   // Create image source
   _pImageFileReader = pEngine->createOperation("PiiImageFileReader");
   _pImageFileReader->setProperty("imageType", "GrayScale");
@@ -87,7 +87,7 @@ PiiEngine* MainWindow::createEngine()
   pTriggerSource->connectOutput("trigger", _pImageFileReader, "trigger");
   _pImageFileReader->connectOutput("image", pFourierTransform, "input");
   pFourierTransform->connectOutput("power spectrum", pLog, "input");
-  
+
   _pSourceProbeInput->connectOutput(_pImageFileReader->output("image"));
   _pResultProbeInput->connectOutput(pLog->output("output"));
 

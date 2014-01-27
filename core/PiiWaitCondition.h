@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -49,7 +49,7 @@
  *     // Key was pressed, do something interesting
  *     doSomething();
  *   }
- *  
+ *
  *
  * //thread 2
  * for (;;)
@@ -76,14 +76,14 @@ public:
    * immediately terminate
    */
   enum QueueMode { NoQueue, Queue };
-  
+
   /**
    * Construct a new wait condition object.
    *
-   * @param mode the signalling mode 
+   * @param mode the signalling mode
    */
   PiiWaitCondition(QueueMode mode = NoQueue);
-  
+
   /**
    * Wait for a wakeOne() call from another thread. The thread calling
    * this will block if there is no pending wake event until another
@@ -129,14 +129,14 @@ public:
    * Get the number of threads currently waiting on the condition.
    */
   unsigned int waiterCount() const { return _iWaiters; }
-  
+
 private:
   bool _bQueue;
   //number of threads waiting
   unsigned int _iWaiters;
   //number of wake signals in queue
   unsigned int _iWakeSignals;
-  
+
   QWaitCondition _condition;
   QMutex _mutex;
 };

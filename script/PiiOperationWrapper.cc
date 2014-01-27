@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -41,11 +41,11 @@ namespace PiiOperationWrapper
 
     if (pInput == 0)
       piiWarning("connect(): input \"%s\" does not exist.", qPrintable(input.toString()));
-    
+
     if (output != 0 && pInput != 0)
       output->connectInput(pInput);
   }
-  
+
   static QScriptValue connect(QScriptContext* context, QScriptEngine* engine)
   {
     PII_CHECK_ONE_ARGUMENT(connect);
@@ -59,7 +59,7 @@ namespace PiiOperationWrapper
         //qDebug("%s : %s", qPrintable(it.name()), qPrintable(it.value().toString()));
         PiiAbstractOutputSocket* pOutput = pThis->output(it.name());
         if (pOutput == 0)
-          piiWarning("connect(): output \"%s\" does not exist.", qPrintable(it.name())); 
+          piiWarning("connect(): output \"%s\" does not exist.", qPrintable(it.name()));
 
         QScriptValue currentValue = it.value();
         if (currentValue.isArray())

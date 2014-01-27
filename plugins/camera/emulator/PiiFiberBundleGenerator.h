@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -67,7 +67,7 @@ class PII_CAMERAEMULATOR_EXPORT PiiFiberBundleGenerator : public PiiTextureGener
    * The maximum thickness of a fiber bundle. The default value is 90.
    */
   Q_PROPERTY(int maxThickness READ getMaxThickness WRITE setMaxThickness);
-  
+
   /**
    * Smoothing flag. If set to `true` (the default), the generated
    * texture will be run through a low-pass filter.
@@ -103,7 +103,7 @@ private:
   class FiberBundle;
 
   void generateLine(unsigned char* line, int width);
-  
+
   int _iBundleWidth;
   int _iBundleCount;
   double _dElasticity;

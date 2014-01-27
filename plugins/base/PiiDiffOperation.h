@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@
  * @in input - the input object. Any numeric or complex type, or a
  * matrix containing such types. Note that the difference between
  * unsigned integers may easily underflow.
- * 
+ *
  * Outputs
  * -------
  *
@@ -48,7 +48,7 @@ public:
 protected:
   void process();
   void check(bool reset);
-  
+
 private:
   /// @internal
   class Data : public PiiDefaultOperation::Data

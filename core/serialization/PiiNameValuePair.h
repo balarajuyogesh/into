@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -34,14 +34,14 @@
 #define PII_NVP(name, value) ::PiiSerialization::makeNvp(name, value)
 
 /**
- * A convenience macro that writes/retrieves `member` to/from 
+ * A convenience macro that writes/retrieves `member` to/from
  * `archive`. The name of the value will be written to the archive as
  * such (if the archive supports name-value pairs).
  */
 #define PII_SERIALIZE(archive, member) archive & PII_NVP(#member, member)
 
 /**
- * A convenience macro that writes/retrieves `member` to/from 
+ * A convenience macro that writes/retrieves `member` to/from
  * `archive` with a custom name. This is useful if the name of your
  * member variable is not human-friendly.
  */
@@ -67,7 +67,7 @@ template <class T> struct PiiNameValuePair
   {
     archive & *this->value;
   }
-  
+
   const char* name;
   mutable T* value;
 };

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -33,13 +33,13 @@ class ServerObject : public QObject
 
 public:
   ServerObject() : iNumber(0), dNumber(3.14159), bTest1Called(false), iTest1Value(0) {}
-  
+
   void setNumber(int number) { iNumber = number; emit numberChanged(number); }
   int number() const { return iNumber; }
   double floatingPoint() const { return dNumber; }
   void setVariant(const PiiVariant& var) { varValue = var; emit variantChanged(var); }
   PiiVariant variant() const { return varValue; }
-  
+
   int iNumber;
   double dNumber;
   bool bTest1Called;
@@ -68,7 +68,7 @@ public:
 public slots:
   void storeNumber(int value) { _iNumber = value; }
   void storeVariant(const PiiVariant& var) { _variant = var; }
-  
+
 private slots:
   void initTestCase();
   void properties();
@@ -82,7 +82,7 @@ private slots:
 signals:
   void test1();
   void test1(int value);
-  
+
 private:
   void serverThread();
 

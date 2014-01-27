@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -74,7 +74,7 @@ PiiLineScanEmulator::PiiLineScanEmulator() :
                                          << "frameSize"
                                          << "frameRect"
                                          << "frameBufferCount";
-    
+
 }
 
 PiiLineScanEmulator::~PiiLineScanEmulator()
@@ -125,7 +125,7 @@ QStringList PiiLineScanEmulator::cameraList() const
 void PiiLineScanEmulator::initialize(const QString& /*cameraId*/)
 {
   //qDebug("PiiLineScanEmulator::initialize(%s)", qPrintable(cameraId));
-  
+
   if (_bBufferingRunning)
     PII_THROW(PiiCameraDriverException, tr("Buffering is running. Stop the capture first."));
 
@@ -186,7 +186,7 @@ bool PiiLineScanEmulator::close()
   delete _pBufferingThread;
   _pCapturingThread = 0;
   _pBufferingThread = 0;
-  
+
   _bOpen = false;
 
   return true;
@@ -220,7 +220,7 @@ bool PiiLineScanEmulator::startCapture(int frames)
 
   if (_pCapturingThread == 0)
     _pCapturingThread = Pii::createAsyncCall(this, &PiiLineScanEmulator::capture);
-  
+
   _bCapturingRunning = true;
   _bBufferingRunning = true;
   _iFrameIndex = -1;
@@ -228,7 +228,7 @@ bool PiiLineScanEmulator::startCapture(int frames)
   _iCurrentLineIndex = 0;
   _iHandledFrameCount = 0;
   _iMaxFrames = _triggerMode == PiiCameraDriver::SoftwareTrigger ? 0 : frames;
-  
+
   // Start acquisition
   if (false) //!_pEmulator->startAcquisition())
     {
@@ -241,7 +241,7 @@ bool PiiLineScanEmulator::startCapture(int frames)
       _pBufferingThread->start();
       _pCapturingThread->start();
     }
-  
+
   return true;
 }
 
@@ -253,7 +253,7 @@ bool PiiLineScanEmulator::stopCapture()
   // Stop the buffering and capturing threads
   stopBuffering();
   stopCapturing();
-  
+
   return true;
 }
 
@@ -278,7 +278,7 @@ void PiiLineScanEmulator::buffer()
   _rightTargetPoint = QPoint(_iRightEdgeLimit/2,0);
   _dLeftEdgePos = _iLeftEdgeLimit/2;
   _dRightEdgePos = _iRightEdgeLimit/2;
-  
+
   QTime elapsedMSecTime;
   elapsedMSecTime.restart();
   while (_bBufferingRunning)
@@ -289,7 +289,7 @@ void PiiLineScanEmulator::buffer()
         PiiDelay::msleep(qMax(1,int(0.9*((double)_iHeight/_dOutputPulseFrequency)*1000)));
       else //FreeRun
         PiiDelay::usleep(qMax(1,int(0.9*_iExposureTime*_iHeight)));
-      
+
       if (!_bBufferingRunning)
         break;
 
@@ -309,20 +309,20 @@ void PiiLineScanEmulator::buffer()
             }
           generateLine();
         }
-      
+
       // Fake the frame intensity depends on gain and exposureTime
       double dFactor = (double)_iExposureTime / (double)_iBaseExposureTime * (_dGain + 1.0);
       unsigned char *pPtr = _frameBuffer.row(iStartLineIndex);
       int count = _iHeight*_frameBuffer.columns();
-      
+
       for (int i=0; i<count; i++)
         pPtr[i] = (unsigned char)qBound(0.0,dFactor * pPtr[i], 255.0);
-      
+
       // Increase frame index
       _iFrameIndex++;
       int iFrameIndex = _iFrameIndex % _vecBufferPointers.size();
       _vecBufferPointers[iFrameIndex] = _frameBuffer.row(iStartLineIndex);
-      
+
       _frameBufMutex.unlock();
       _frameWaitCondition.wakeOne();
     }
@@ -337,7 +337,7 @@ void PiiLineScanEmulator::capture()
       _frameWaitCondition.wait();
       if (!_bCapturingRunning)
         break;
-      
+
       // Check if we already handled the last captured frame
       if (_iFrameIndex == _iLastHandledFrame)
         continue;
@@ -346,7 +346,7 @@ void PiiLineScanEmulator::capture()
 
       // Increase handled frame counter
       _iLastHandledFrame++;
-      
+
       // Check if we must skip frames...
       if (_iFrameIndex - _iLastHandledFrame > (unsigned int)_iSkippingLimit)
         {
@@ -363,7 +363,7 @@ void PiiLineScanEmulator::capture()
       listener()->frameCaptured(_iLastHandledFrame, 0);
 
       _frameBufMutex.unlock();
-      
+
       // Check if we must stop capturing
       if (_iMaxFrames > 0 && _iHandledFrameCount++ >= _iMaxFrames)
         {
@@ -381,7 +381,7 @@ void PiiLineScanEmulator::releaseFrames(int start, int end)
 {
   if (end == -1)
     end = _vecBufferPointers.size()-1;
-  
+
   for (int i=start; i<=end; i++)
     {
       int index = i%_vecBufferPointers.size();
@@ -422,7 +422,7 @@ void PiiLineScanEmulator::setMaxResolution(const QSize& resolution)
     _iWidth = _resolution.width();
   else
     _iWidth = qMin(_iWidth, _resolution.width()-_iOffsetX);
-  
+
   if (_iHeight < 0)
     _iHeight = _resolution.height();
   else
@@ -433,7 +433,7 @@ bool PiiLineScanEmulator::setFrameSize(const QSize& frameSize)
 {
   _iWidth = qMin(frameSize.width(), _resolution.width() - _iOffsetX);
   _iHeight = qMin(frameSize.height(), _resolution.height() - _iOffsetY);
-  
+
   return true;
 }
 
@@ -487,7 +487,7 @@ bool PiiLineScanEmulator::setTriggerRate(double triggerRate)
 bool PiiLineScanEmulator::loadImages()
 {
   // 1) Make the file list
-  
+
   QDir directory = QFileInfo(_strDefectImagePattern).dir();
   QString glob = QFileInfo(_strDefectImagePattern).fileName();
 
@@ -523,7 +523,7 @@ bool PiiLineScanEmulator::loadImages()
               alphaMasks << img.alphaChannel();
             else
               alphaMasks << QImage();
-            
+
             QImage gsImage(img.width(), img.height(), QImage::Format_Indexed8);
             // Convert to gray scale
             for (int r=img.height(); r--; )
@@ -583,7 +583,7 @@ bool PiiLineScanEmulator::setTextureGeneratorName(const QString& textureGenerato
   // Ensure that the generator will not try to continue from what
   // the previous one left behind.
   _bFirstScanLine = true;
-  
+
   return true;
 }
 
@@ -666,7 +666,7 @@ void PiiLineScanEmulator::generateLine()
   generateTexture();
 
   unsigned char* line = _frameBuffer.row(_iCurrentLineIndex);
-  
+
   // New defect pixel in this line.
   int newDefPixels = 0;
 
@@ -688,7 +688,7 @@ void PiiLineScanEmulator::generateLine()
           for (int c=tempImage.width(); c--; )
             pTarget[c] = ((255 - pAlpha[c]) * pTarget[c] + pAlpha[c] * pSource[c]) / 255;;
           tempCoord.ry()++;
-        }      
+        }
 
       newDefPixels += tempImage.width();
 
@@ -718,19 +718,19 @@ void PiiLineScanEmulator::generateLine()
       _dRightEdgePos = updateEdgePos(_dRightEdgePos, _rightTargetPoint, iRightEdgeLimit);
       memset(line + _iWidth - int(_dRightEdgePos), _borderColor.red(), int(_dRightEdgePos));
     }
-  
+
   // Simulate vignetting
   if (_dpMultipliers)
     for (int i=_iWidth; i--; )
       line[i] = static_cast<unsigned char>(_dpMultipliers[i] * line[i]);
-  
+
   updateTotalDefRate(double(newDefPixels)/_iWidth);
 
   _iCurrentLineIndex++;
   if (_iCurrentLineIndex >= _iFrameBufferHeight)
     _iCurrentLineIndex = 0;
 
-} 
+}
 
 double PiiLineScanEmulator::updateEdgePos(double pos, QPoint& targetPoint, int limit)
 {

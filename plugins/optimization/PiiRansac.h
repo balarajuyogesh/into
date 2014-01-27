@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -149,7 +149,7 @@ protected:
   {
   public:
     Data();
-    
+
     int iMaxIterations;
     int iMaxSamplings;
     int iMinInliers;
@@ -158,7 +158,7 @@ protected:
     QVector<int> vecBestInliers;
     PiiMatrix<double> matBestModel;
   } *d;
-  
+
   /// @internal
   PiiRansac(Data* d);
 
@@ -169,7 +169,7 @@ protected:
    * Returns the total number of samples in observed data.
    */
   virtual int totalSampleCount() const = 0;
-  
+
   /**
    * Returns the minimum number of samples required to construct a
    * model. For example, a plane needs at least three points. This
@@ -179,7 +179,7 @@ protected:
    * models.
    */
   virtual int minSamples() const = 0;
-  
+
   /**
    * Returns all models that can describe the given point
    * configuration. If [minSamples()] returns a value that is less than
@@ -197,7 +197,7 @@ protected:
    * @param dataIndices an array of indices that refer to the samples
    * that should be used in constructing the model. The number of
    * indices is always [minSamples()]. For example, if the samples at
-   * indices 0, 5, and 9 should be used to form the model, 
+   * indices 0, 5, and 9 should be used to form the model,
    * `dataIndices` would contain 0, 5, and 9. It is up to the model
    * implementation to handle the data associated with the given
    * indices. Possible indices range from 0 to [totalSampleCount()] -

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -75,7 +75,7 @@ void PiiFeatureCombiner::check(bool reset)
       d->iSampleIndex = 0;
       d->matBuffer.resize(0,0);
     }
-  
+
   if (d->lstDistanceMeasureNames.size() != 0 &&
       d->lstDistanceMeasureNames.size() != dynamicInputCount())
     PII_THROW(PiiExecutionException, tr("The number of distance measures must match the number of feature vectors."));
@@ -147,7 +147,7 @@ template <class T> void PiiFeatureCombiner::emitCompound(int totalLength)
   PiiMatrix<T> matResult(PiiMatrix<T>::uninitialized(1, totalLength));
   T* pResultRow = matResult.row(0);
   T* pBegin = pResultRow;
-  
+
   PiiMatrix<int>& matBoundaries = d->varBoundaries.valueAs<PiiMatrix<int> >();
 
   for (int i=0; i<inputCount(); ++i)
@@ -180,7 +180,7 @@ template <class T> void PiiFeatureCombiner::emitCompound(int totalLength)
         {
           PII_THROW(PiiExecutionException, tr("The feature vector read from the \"%1%0\" input is not a row matrix.").arg("features").arg(i));
         }
-      
+
       matBoundaries(0, i) = pResultRow - pBegin;
     }
   // If batch size is non-zero, store the compound feature vector
@@ -298,7 +298,7 @@ void PiiFeatureCombiner::startLearningThread()
       return;
     }
   d->matStoredBoundaries = d->varBoundaries.valueAs<PiiMatrix<int> >();
-  
+
   d->bThreadRunning = true;
   d->pLearningThread->start();
 }

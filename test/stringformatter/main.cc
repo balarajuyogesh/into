@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -44,7 +44,7 @@ void TestPiiStringFormatter::process()
 
   QVERIFY(sendObject("input0", "abc"));
   QVERIFY(sendObject("input1", true));
-  
+
   QCOMPARE(outputValue("output", QString()), QString("abc true abc"));
 }
 

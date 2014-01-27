@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -48,13 +48,13 @@ void PiiMorphologyOperation::process()
 
   if ( d->maskSize.width() == 0 || d->maskSize.height() == 0 )
     d->pBinaryImageOutput->emitObject(obj);
-  
+
   switch (obj.type())
     {
       PII_GRAY_IMAGE_CASES(morphologyOperation, obj);
     default:
       PII_THROW_UNKNOWN_TYPE(d->pImageInput);
-    }  
+    }
 }
 
 
@@ -69,7 +69,7 @@ template <class T> void PiiMorphologyOperation::morphologyOperation(const PiiVar
       d->pBinaryImageOutput->emitObject(obj);
       return;
     }
-  
+
   d->pBinaryImageOutput->emitObject(PiiImage::morphology(image,
                                                          d->matMask,
                                                          d->operation,

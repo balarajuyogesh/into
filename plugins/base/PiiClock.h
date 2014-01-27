@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,7 +28,7 @@
  * ------
  *
  * @in trigger - the trigger. Any object type.
- * 
+ *
  * Outputs
  * -------
  *
@@ -60,10 +60,10 @@ class PiiClock : public PiiDefaultOperation
    */
   Q_PROPERTY(TimeType timeType READ timeType WRITE setTimeType);
   Q_ENUMS(TimeType);
-  
+
   /**
    * Set a format of the output.
-   * 
+   *
    * These expressions may be used for the date:
    * - d    - the day as number without a leading zero (1 to 31)
    * - dd   - the day as number with a leading zero (01 to 31)
@@ -108,7 +108,7 @@ class PiiClock : public PiiDefaultOperation
    * is not connected. The default values is 1000 ms.
    */
   Q_PROPERTY(int interval READ interval WRITE setInterval);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiClock();
@@ -134,16 +134,16 @@ public:
    * Time.
    */
   enum TimeType { LocalTime, UTC };
-   
+
   void setInputType(const InputType& inputType);
   InputType inputType() const;
-  
+
   QString format() const;
   void setFormat(QString format);
 
   void setTimeType(const TimeType& timeType);
   TimeType timeType() const;
-  
+
   void setInterval(int interval);
   int interval() const;
 
@@ -154,10 +154,10 @@ protected:
 
 private slots:
   void timerTimeout();
-  
+
 private:
   void emitObjects();
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {

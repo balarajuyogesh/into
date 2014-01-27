@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -29,7 +29,7 @@ PiiMatrix<T> PiiHoughTransform::transform(const Matrix& img, UnaryOp rule)
   int iStartDistance = startDistance(), iEndDistance = endDistance();
   int iStartAngle = startAngle(), iEndAngle = endAngle();
   const double dAngleResolution = angleResolution(), dDistanceResolution = distanceResolution();
-    
+
   double centerX = double(iCols-1)/2.0; // the center point of X coordinates
   double centerY = double(iRows-1)/2.0; // the center point of Y coordinates
 
@@ -45,7 +45,7 @@ PiiMatrix<T> PiiHoughTransform::transform(const Matrix& img, UnaryOp rule)
   //qDebug("distances: %d -> %d (%d)", iStartDistance, iEndDistance, iDistances);
   //qDebug("angles: %d -> %d (%d)", iStartAngle, iEndAngle, iAngles);
   //qDebug("center: (%lf, %lf)", centerY, centerX);
-    
+
   PiiMatrix<T> result(iDistances, iAngles);
 
   initSinCosTables(iAngles);
@@ -70,6 +70,6 @@ PiiMatrix<T> PiiHoughTransform::transform(const Matrix& img, UnaryOp rule)
               result(d - iStartDistance, omega) += T(*it);
           }
       }
-  
+
   return result;
 }

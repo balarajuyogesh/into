@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -83,7 +83,7 @@ class PiiImageAnnotator : public PiiDefaultOperation
    * placed on the given coordinates. The default is (0,0).
    */
   Q_PROPERTY(QPoint textPosition READ textPosition WRITE setTextPosition);
-  
+
   /**
    * List of annotations to be always drawn. Each entry in this list
    * must be a QVariantMap that stores the properties of the
@@ -96,7 +96,7 @@ class PiiImageAnnotator : public PiiDefaultOperation
    * emit the image object forward.
    */
   Q_PROPERTY(bool enabled READ enabled WRITE setEnabled);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
 
@@ -132,10 +132,10 @@ public:
    * All numeric types are accepted as coordinates.
    */
   enum AnnotationType { Text, Point, Line, Rectangle, Ellipse, Circle, Auto };
-  
+
   AnnotationType annotationType() const;
   void setAnnotationType(AnnotationType annotationType);
-  
+
   void setFont(const QFont& font);
   QFont font() const;
 
@@ -155,10 +155,10 @@ public:
   bool enabled() const;
 
   void check(bool reset);
-  
+
 protected:
   void process();
-  
+
 private:
 
   /// @internal
@@ -172,17 +172,17 @@ private:
     void drawText(QImage* image, const QString& text);
     void drawAnnotations(QImage*, const QVariantList& annotations);
     template <class T, class U> void drawAnnotation(QPainter* painter, const QVariantMap& annotation);
-    
+
     AnnotationType annotationType;
     QFont font;
     QBrush brush;
     QPen pen;
     QPoint textPosition;
     QVariantList lstAnnotations;
-    
+
     PiiInputSocket* pImageInput, *pAnnotationInput, *pTypeInput;
     bool bAnnotationConnected, bTypeConnected;
-    
+
     PiiOutputSocket* pImageOutput;
     bool bEnabled;
   };

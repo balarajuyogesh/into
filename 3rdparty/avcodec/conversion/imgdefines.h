@@ -18,7 +18,7 @@
 //HACK
 extern uint32_t HACK_ff_squareTbl[512];
 
-//HACK HACK 
+//HACK HACK
 #ifndef bswap_16
 static inline uint16_t bswap_16(uint16_t x)
 {

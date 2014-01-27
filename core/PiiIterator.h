@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -49,7 +49,7 @@ public:
   PiiUnaryFunctionIterator(Iterator iterator, const UnaryFunction& func) :
     _iterator(iterator), _func(func)
   {}
-  
+
   /**
    * Constructs a copy of *other*.
    */
@@ -73,12 +73,12 @@ public:
   value_type operator* () const { return _func(*_iterator); }
 
   /**
-   * Returns `true` if the `iterator` members of `this` and 
+   * Returns `true` if the `iterator` members of `this` and
    * *other* are equal, and `false` otherwise.
    */
   bool operator== (const PiiUnaryFunctionIterator& other) const { return _iterator == other._iterator; }
   /**
-   * Returns `false` if the `iterator` members of `this` and 
+   * Returns `false` if the `iterator` members of `this` and
    * *other* are equal, and `true` otherwise.
    */
   bool operator!= (const PiiUnaryFunctionIterator& other) const { return _iterator != other._iterator; }
@@ -167,7 +167,7 @@ public:
   typedef value_type& reference;
 
   /**
-   * Constructs an iterator that transforms *iterator1* and 
+   * Constructs an iterator that transforms *iterator1* and
    * *iterator2* with *func*. This constructor is seldom used
    * explicitly; use the [Pii::binaryFunctionIterator()] function
    * instead.
@@ -200,12 +200,12 @@ public:
   value_type operator* () const { return _func(*_iterator1, *_iterator2); }
 
   /**
-   * Returns `true` if the `iterator1` members of `this` and 
+   * Returns `true` if the `iterator1` members of `this` and
    * *other* are equal, and `false` otherwise.
    */
   bool operator== (const PiiBinaryFunctionIterator& other) const { return _iterator1 == other._iterator1; }
   /**
-   * Returns `false` if the `iterator1` members of `this` and 
+   * Returns `false` if the `iterator1` members of `this` and
    * *other* are equal, and `true` otherwise.
    */
   bool operator!= (const PiiBinaryFunctionIterator& other) const { return _iterator1 != other._iterator1; }
@@ -353,12 +353,12 @@ public:
   reference operator* () { return *_current; }
 
   /**
-   * Returns `true` if the `iterator` members of `this` and 
+   * Returns `true` if the `iterator` members of `this` and
    * *other* are equal, and `false` otherwise.
    */
   bool operator== (const PiiFilteredIterator& other) const { return _current == other._current; }
   /**
-   * Returns `false` if the `iterator` members of `this` and 
+   * Returns `false` if the `iterator` members of `this` and
    * *other* are equal, and `true` otherwise.
    */
   bool operator!= (const PiiFilteredIterator& other) const { return _current != other._current; }
@@ -395,7 +395,7 @@ public:
     return *this;
   }
   /**
-   * Increments both `iterator` and `filter`. Returns a copy of 
+   * Increments both `iterator` and `filter`. Returns a copy of
    * `this`.
    */
   PiiFilteredIterator operator++ (int)
@@ -405,7 +405,7 @@ public:
     return tmp;
   }
   /**
-   * Decrements both `iterator` and `filter`. Returns a copy of 
+   * Decrements both `iterator` and `filter`. Returns a copy of
    * `this`.
    */
   PiiFilteredIterator operator-- (int)
@@ -447,7 +447,7 @@ public:
   Iterator end() const { return _end; }
   Iterator current() const { return _current; }
   FilterIterator filter() const { return _filter; }
-  
+
 private:
   Iterator _begin, _end, _current;
   FilterIterator _filter;

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,10 +24,10 @@ class PiiScriptObjectWrapper : public QObject
 
   virtual void throwIt() const = 0;
   template <class T> class Template;
-  
+
 public:
   ~PiiScriptObjectWrapper();
-  
+
   template <class T> T* pointer() const
   {
     // HACK misusing exceptions to perform a dynamic type check
@@ -42,7 +42,7 @@ public:
     T* ptr = pointer<T>();
     return ptr ? *ptr : T();
   }
-  
+
   template <class T> static Template<T>* create(const T& wrapped)
   {
     return new Template<T>(wrapped);

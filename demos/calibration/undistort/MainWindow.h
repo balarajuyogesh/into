@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,7 +26,7 @@
 class MainWindow : public DemoMainWindow, private Ui::MainWindow
 {
   Q_OBJECT
-  
+
 public:
   MainWindow(QWidget *parent = 0);
 
@@ -37,20 +37,20 @@ protected:
 signals:
   void readImage(int);
   void updateImage(int);
-  
+
 private slots:
   void updateButtonStates(int state);
   void startButtonClicked();
   void changeDistortion(int value);
   void changeFocalLength(int value);
   void selectImageFile();
-  
+
 private:
   void init();
   void createImageReaderOperations(PiiEngine *engine);
   void removeImageReaderOperations(PiiEngine *engine);
   void updateImage();
-  
+
   PiiProbeInput *_pProbeInput1, *_pProbeInput2;
   PiiOperation *_pUndistortOperation;
 };

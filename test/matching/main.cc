@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -25,7 +25,7 @@
 
 void TestPiiMatching::boundaryDirections()
 {
-  
+
   {
     PiiMatrix<int> points(5,2,
                           0,0,
@@ -50,7 +50,7 @@ void TestPiiMatching::boundaryDirections()
     QVector<double> lstExpectedAnglesInDegree = QVector<double>() << -90 << 0 << 90 << 180;
     QVector<double> lstCalculatedAngles = PiiMatching::boundaryDirections(points);
     QCOMPARE(lstExpectedAnglesInDegree.size(), lstCalculatedAngles.size());
-    
+
     for (int i=0; i<lstCalculatedAngles.size(); i++)
       QVERIFY(Pii::abs(lstCalculatedAngles[i] / M_PI * 180.0 - lstExpectedAnglesInDegree[i]) <= 1);
   }

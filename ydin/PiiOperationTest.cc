@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -50,7 +50,7 @@ bool PiiOperationTest::createOperation(const char* plugin,
       qWarning("%s", qPrintable(ex.message()));
       return false;
     }
- 
+
   d->pOperation = PiiSerializationFactory::create<PiiOperation>(operation);
   if (d->pOperation == 0)
     return false;
@@ -126,7 +126,7 @@ void PiiOperationTest::connectInput(PiiAbstractInputSocket* input)
   //qDebug("Connecting %s", qPrintable(input->objectName()));
   if (input->connectedOutput() != 0)
     return;
-  
+
   PiiOutputSocket* pOutput = new PiiOutputSocket("");
   pOutput->setParent(this);
   pOutput->connectInput(input);
@@ -183,7 +183,7 @@ PiiProbeInput* PiiOperationTest::createProbe(PiiAbstractOutputSocket* output, co
 {
   PiiProbeInput* pProbe = new PiiProbeInput(name);
   output->connectInput(pProbe);
-  connect(pProbe, SIGNAL(objectReceived(PiiVariant)), SLOT(emitObject(PiiVariant)), Qt::DirectConnection);
+  connect(pProbe, SIGNAL(objectReceived(PiiVariant,PiiProbeInput*)), SLOT(emitObject(PiiVariant,PiiProbeInput*)), Qt::DirectConnection);
   connect(output, SIGNAL(destroyed(QObject*)), SLOT(deleteProbe(QObject*)), Qt::DirectConnection);
   return pProbe;
 }
@@ -226,10 +226,9 @@ bool PiiOperationTest::stop()
   return false;
 }
 
-void PiiOperationTest::emitObject(const PiiVariant& obj)
+void PiiOperationTest::emitObject(const PiiVariant& obj, PiiProbeInput* sender)
 {
-  if (sender() != 0)
-    emit objectReceived(sender()->objectName(), obj);
+  emit objectReceived(sender->objectName(), obj);
 }
 
 QStringList PiiOperationTest::outputsWithData() const
@@ -239,7 +238,7 @@ QStringList PiiOperationTest::outputsWithData() const
        i != d->mapProbes.end(); ++i)
     if (i.value()->hasSavedObject())
       lstResult << i.key();
-  
+
   return lstResult;
 }
 

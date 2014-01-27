@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -23,7 +23,7 @@ class TestPiiTypeTraits : public QObject
   Q_OBJECT
 
 private slots:
-  void isTests();
+  void IsX();
 };
 
 

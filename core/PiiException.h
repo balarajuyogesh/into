@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -32,7 +32,7 @@
 #endif
 
 /**
- * A macro for throwing an exception with error location information. 
+ * A macro for throwing an exception with error location information.
  * With this macro, the file name and line number of the current code
  * line are automatically stored as the error location. If you don't
  * need the location information, just throw the exception as in `throw
@@ -42,7 +42,7 @@
  * PII_THROW(PiiException, tr("The software just failed spectacularly."));
  * ~~~
  *
- * @param EXCEPTION the class name of the exception to be thrown, e.g. 
+ * @param EXCEPTION the class name of the exception to be thrown, e.g.
  * PiiException.
  *
  * @param MESSAGE the error message
@@ -76,7 +76,7 @@ public:
    * Constructs an empty exception.
    */
   PiiException();
-  
+
   /**
    * Constructs a new exception with the given *message*.
    *
@@ -93,8 +93,8 @@ public:
    * user-readable explation of the error, and it is typically
    * translatable.
    *
-   * @param location the location of the code this error occured at. 
-   * The standard, official, God-given format is "%file:line", e.g. 
+   * @param location the location of the code this error occured at.
+   * The standard, official, God-given format is "%file:line", e.g.
    * "PiiException.h:30". The reason is that such a string works as a
    * hyperlink to source code when debugging applications with
    * (X)Emacs (which is the standard editor).
@@ -147,7 +147,7 @@ public:
   QString toString() const;
 
   /**
-   * Throws the exception as a value and deletes the this pointer. 
+   * Throws the exception as a value and deletes the this pointer.
    * This function is used to throw exceptions whose type is not known
    * at compile time.
    *

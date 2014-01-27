@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -51,9 +51,9 @@ namespace Pii
    * Adds a slash to the end of path, if needed.
    */
   PII_CORE_EXPORT QString fixPath(const QString& path);
-  
+
   /**
-   * Deletes all files in the given directory and its sub-directories. 
+   * Deletes all files in the given directory and its sub-directories.
    * Returns `true` on success and `false` on failure. If the
    * directory doesn't exists, return `false`. The function will try
    * to delete everything even when some files cannot be removed.

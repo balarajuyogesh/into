@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,14 +28,14 @@ template <class Archive> void PiiOperationCompound::save(Archive& archive, const
   // Save all exposed inputs
   int inputCnt = d->lstInputs.size();
   PII_SERIALIZE(archive, inputCnt);
-  
+
   for (int i=0; i<inputCnt; ++i)
     {
       PiiAbstractInputSocket* pSocket = d->lstInputs[i];
       // For each input, its name is first stored
       QString name = pSocket->objectName();
       PII_SERIALIZE(archive, name);
-      
+
       // Is it a proxy or not?
       bool proxy = pSocket->isProxy();
       PII_SERIALIZE(archive, proxy);
@@ -44,14 +44,14 @@ template <class Archive> void PiiOperationCompound::save(Archive& archive, const
   // Save all exposed outputs
   int outputCnt = d->lstOutputs.size();
   PII_SERIALIZE(archive, outputCnt);
-  
+
   for (int i=0; i<outputCnt; ++i)
     {
       PiiAbstractOutputSocket* pSocket = d->lstOutputs[i];
       // For each output, its name is first stored
       QString name = pSocket->objectName();
       PII_SERIALIZE(archive, name);
-      
+
       // Is it a proxy?
       bool proxy = pSocket->isProxy();
       PII_SERIALIZE(archive, proxy);
@@ -81,13 +81,13 @@ template <class Archive> void PiiOperationCompound::save(Archive& archive, const
 
   // At this point, every possible connection point has been stored
   // and can be retrieved with a name.
-  
+
   // Store connections between operations
   for (int i=0; i<d->lstOperations.size(); i++)
     {
       // Find all output sockets
       QList<PiiAbstractOutputSocket*> outputs = d->lstOperations[i]->outputs();
-      
+
       // Store the number of outputs
       int cnt = outputs.size();
       PII_SERIALIZE(archive, cnt);
@@ -115,7 +115,7 @@ template <class Archive> void PiiOperationCompound::save(Archive& archive, const
           PII_SERIALIZE(archive, inputs);
         }
     }
-  
+
   // Store connections from proxy outputs. It is in principle possible
   // (albeit stupid) to connect an output proxy inside the compound.
   for (int i=0; i<outputCnt; ++i)
@@ -162,11 +162,11 @@ template <class Archive> void PiiOperationCompound::load(Archive& archive, const
       else
         d->lstInputs << 0;
     }
-  
+
   // Load all exposed output sockets
   int outputCnt;
   PII_SERIALIZE(archive, outputCnt);
-  
+
   for (int i=0; i<outputCnt; ++i)
     {
       QString name;

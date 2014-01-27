@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
   // Initialize engine
   initEngine();
-  
+
   // Initialize ui
   init();
 
@@ -42,7 +42,7 @@ void MainWindow::init()
 
   _pSourceImageDisplay->imageViewport()->setProperty("fitMode", "FitToView");
   _pResultImageDisplay->imageViewport()->setProperty("fitMode", "FitToView");
-  
+
   // Make ui-connections
   connect(_pBrowseImageButton, SIGNAL(clicked()), this, SLOT(selectImage()));
 
@@ -69,25 +69,25 @@ PiiEngine* MainWindow::createEngine()
   // Create probe input for source, thresholded and result image display
   _pSourceProbeInput = new PiiProbeInput;
   _pResultProbeInput = new PiiProbeInput;
-  
+
   // Create image source
   _pImageFileReader = pEngine->createOperation("PiiImageFileReader");
   _pImageFileReader->setProperty("imageType", "Color");
   QString strImageName = QString("%1/intopii.jpg").arg(defaultImageDirPath());
   _pImageFileReader->setProperty("fileNames", strImageName);
-  
+
   // Create thresholding, labeling and objectPropertyExtractor operations
   PiiOperation *pThresholdingOperation = pEngine->createOperation("PiiThresholdingOperation");
   pThresholdingOperation->setProperty("thresholdType", "OtsuThreshold");
   pThresholdingOperation->setProperty("inverse", true);
-  
+
   PiiOperation *pLabelingOperation = pEngine->createOperation("PiiLabelingOperation");
   PiiOperation *pObjectPropertyExtractor = pEngine->createOperation("PiiObjectPropertyExtractor");
 
   PiiOperation *pImageAnnotator = pEngine->createOperation("PiiImageAnnotator");
   pImageAnnotator->setProperty("annotationType", "Rectangle");
   pImageAnnotator->setProperty("pen", QPen(Qt::red));
-  
+
   // Make operation connections
   pTriggerSource->connectOutput("trigger", _pImageFileReader, "trigger");
   _pImageFileReader->connectOutput("image", pThresholdingOperation, "image");
@@ -97,10 +97,10 @@ PiiEngine* MainWindow::createEngine()
 
   _pImageFileReader->connectOutput("image", pImageAnnotator, "image");
   pObjectPropertyExtractor->connectOutput("boundingboxes", pImageAnnotator, "annotation");
-  
+
   _pSourceProbeInput->connectOutput(_pImageFileReader->output("image"));
   _pResultProbeInput->connectOutput(pImageAnnotator->output("image"));
-  
+
   connect(this, SIGNAL(selectImage(int)), pTriggerSource, SLOT(trigger(int)));
 
   return pEngine;
@@ -114,11 +114,11 @@ void MainWindow::selectImage()
     {
       // Pause processing when setting the new image
       pauseProcessing();
-      
+
       // Set new image
       _pImageFileReader->setProperty("fileNames", lstFileNames);
       _pSourceImageName->setText(lstFileNames[0]);
-      
+
       // Restart engine
       startProcessing();
 

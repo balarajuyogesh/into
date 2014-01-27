@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -131,7 +131,7 @@ namespace Pii
    * @param mode the extension mode
    *
    * @param sides a bit mask that tells which sides of the matrix are
-   * extended. Use a composition of MatrixBorder values, e.g. 
+   * extended. Use a composition of MatrixBorder values, e.g.
    * MatrixTop | MatrixBottom.
    *
    * @return the extended matrix
@@ -141,7 +141,7 @@ namespace Pii
          int amount,
          ExtendMode mode = ExtendZeros,
          int sides = -1);
-  
+
   /**
    * Extend a matrix by adding new rows/columns to its sides. This
    * version of the function adds a different number of rows/columns
@@ -171,7 +171,7 @@ namespace Pii
                                                 ExtendMode mode);
 
   /**
-   * Sample a matrix (typically an image) at continuous positions. 
+   * Sample a matrix (typically an image) at continuous positions.
    * This function uses bi-linear interpolation for values that don't
    * match pixels.
    *
@@ -295,7 +295,7 @@ namespace Pii
   template <class Collection, class T> Collection columnToList(const PiiMatrix<T>& matrix, int column);
 
   /**
-   * Find the first occurrence of an element that matches `Rule`. 
+   * Find the first occurrence of an element that matches `Rule`.
    * Stores the row and column coordinates to `r` and `c`. If no
    * such value is not found, both coordinates will be set to -1.
    *
@@ -311,7 +311,7 @@ namespace Pii
   template <class Rule, class T> void findFirst(const PiiMatrix<T>& matrix, T value, int &r, int& c);
 
   /**
-   * Find the last occurrence of an element that matches `Rule`. 
+   * Find the last occurrence of an element that matches `Rule`.
    * Stores the row and column coordinates to `r` and `c`. If no
    * such value is not found, both coordinates will be set to -1.
    *
@@ -327,7 +327,7 @@ namespace Pii
   template <class Rule, class T> void findLast(const PiiMatrix<T>& matrix, T value, int &r, int& c);
 
   /**
-   * Find the first occurrence (top to bottom, left to right) of 
+   * Find the first occurrence (top to bottom, left to right) of
    * `value` in `matrix`. Stores the row and column coordinates to `r`
    * and `c`. If the value is not found, both coordinates will be set
    * to -1.
@@ -338,7 +338,7 @@ namespace Pii
   }
 
   /**
-   * Find the last occurrence (bottom to top, right to left) of 
+   * Find the last occurrence (bottom to top, right to left) of
    * `value` in `matrix`. Stores the row and column coordinates to `r`
    * and `c`. If the value is not found, both coordinates will be set
    * to -1.
@@ -393,7 +393,7 @@ namespace Pii
      * Constructs a function object that inserts new rows to `mat`.
      */
     MatrixRowAdder(PiiMatrix<T>& mat) : matrix(mat) {}
-    
+
     /**
      * Add `row` to `matrix`.
      */
@@ -406,7 +406,7 @@ namespace Pii
   /**
    * Sort matrix rows into ascending order based on the value on the
    * specified column. Use `predicate` as the comparison function.
-   * 
+   *
    * ~~~(c++)
    * PiiMatrix<int> mat(3,3,
    *                    -1,2,3,

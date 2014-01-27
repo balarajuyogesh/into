@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -35,7 +35,7 @@ template <class SampleSet> class PiiClassifier
   friend struct PiiSerialization::Accessor;
   PII_DECLARE_VIRTUAL_METAOBJECT_FUNCTION;
   template <class Archive> void serialize(Archive&, const unsigned int) {}
-  
+
 public:
   virtual ~PiiClassifier() {}
 

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -49,13 +49,13 @@ public:
     bool bStrict;
 
     Relation() : iParent(0), iChild(0), bStrict(false) {}
-      
+
     /// Create a new relationship.
     Relation(int parent, int child, bool strict) :
       iParent(parent), iChild(child), bStrict(strict)
     {}
   };
-  
+
   typedef QList<Relation> RelationList;
 
   /**
@@ -140,7 +140,7 @@ public:
    * groups, denoted by `parent` and `child`.
    */
   static Relation looseRelation(int parent, int child);
-  
+
   FlowState prepareProcess();
   bool hasSyncEvents() const;
   void sendSyncEvents(SyncListener* listener);
@@ -170,7 +170,7 @@ private:
 
     void setStrictRelationship(bool strict) { _bStrictRelationship = strict; }
     bool isStrictRelationship() const { return _bStrictRelationship; }
-    
+
     /**
      * Get the current level of the flow through this group. The default
      * level is zero.
@@ -181,7 +181,7 @@ private:
      * Set the current flow level.
      */
     void setFlowLevel(int level) { _iFlowLevel = level; }
-  
+
     /**
      * A convenience function to change the flow level. This is
      * equivalent to setFlowLevel(flowLevel()+change).
@@ -209,7 +209,7 @@ private:
     void flowLevelError();
     inline void activateParents(QVector<SyncEvent>& syncEvents);
     void setChildrenInSync(bool inSync);
-    
+
     int _iGroupId;
     int _iFlowLevel;
     int _iActiveChildren;
@@ -231,7 +231,7 @@ private:
          const QList<PiiOutputSocket*>& outputs,
          const RelationList& relations);
     ~Data();
-    
+
     /**
      * Groups of synchronized input and output sockets.
      */
@@ -252,7 +252,7 @@ private:
   };
 
   PII_D_FUNC;
-  
+
   static QString tr(const char* message);
 };
 

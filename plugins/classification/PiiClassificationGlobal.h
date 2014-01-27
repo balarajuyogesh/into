@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -41,7 +41,7 @@ namespace PiiClassification
 {
 #ifdef Q_MOC_RUN
   Q_GADGET
-    
+
   Q_ENUMS(BoostingAlgorithm
           FullBufferBehavior
           DistanceCombinationMode
@@ -164,7 +164,7 @@ public:
    * /   \___/   \  |___|___|___|
    * \___/   \___/  |   |   |   |
    *     \___/      |___|___|___|
-   *     
+   *
    * ~~~
    */
   enum SomTopology { SomHexagonal, SomSquare };

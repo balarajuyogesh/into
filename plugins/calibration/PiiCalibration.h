@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -36,7 +36,7 @@ namespace PiiCalibration
    * A structure that stores all intrinsic camera parameters estimated
    * by the calibration functions. These parameters are related to the
    * camera and its lens and do not change depending on the scene
-   * viewed. Please refer to the documentation at 
+   * viewed. Please refer to the documentation at
    * [calibration_intrinsic_parameters] for an explanation.
    */
   struct PII_CALIBRATION_EXPORT CameraParameters
@@ -85,7 +85,7 @@ namespace PiiCalibration
 
   /**
    * A structure that stores the extrinsic parameters related to a
-   * scene viewed. These parameterers are specific to a certain view. 
+   * scene viewed. These parameterers are specific to a certain view.
    * Please refer to [calibration_extrinsic_parameters] for an
    * explanation.
    */
@@ -125,10 +125,10 @@ namespace PiiCalibration
      * Return the translation vector as a 3-by-1 column matrix.
      */
     PiiMatrix<double> translationMatrix() const;
-    
+
     /**
      * The rotation vector. Defines the rotation between the world
-     * coordinate system and the camera reference frame. Use the 
+     * coordinate system and the camera reference frame. Use the
      * [rotationVectorToMatrix()] function to convert this vector to a
      * rotation matrix.
      */
@@ -176,7 +176,7 @@ namespace PiiCalibration
   Q_DECLARE_OPERATORS_FOR_FLAGS(CalibrationOptions)
 
 #ifndef PII_NO_OPENCV
-    
+
   /**
    * Calibrate a camera. This function calculates the intrinsic
    * parameters that minimize the reprojection error over the whole
@@ -193,11 +193,11 @@ namespace PiiCalibration
    * can be reused. In such a case it suffices to store only one
    * matrix in this list.
    *
-   * @param imagePoints the corresponding points in image coordinates. 
+   * @param imagePoints the corresponding points in image coordinates.
    * Each matrix in this list corresponds to one view of the
    * calibration rig and holds an N-by-2 matrix in which each row
    * represents the 2-dimensional image coordinates of a calibration
-   * point. The number of rows in each matrix must match 
+   * point. The number of rows in each matrix must match
    * `worldPoints`.
    *
    * @param intrinsic store the calculated intrinsic parameters to
@@ -210,7 +210,7 @@ namespace PiiCalibration
    * @param extrinsic store the extrinsic parameters to this list (if
    * non-zero). The extrinsic parameters are calculated for each view.
    *
-   * @param options a logical OR of calibration options, e.g. 
+   * @param options a logical OR of calibration options, e.g.
    * `EstimateIntrinsic` | `NoTangentialDistortion`.
    *
    * @exception PiiCalibrationException& if the calibration cannot be
@@ -250,7 +250,7 @@ namespace PiiCalibration
 #endif //PII_NO_OPENCV
 
   /**
-   * Calculate the relative position of `camera2` with respect to 
+   * Calculate the relative position of `camera2` with respect to
    * `camera1`. When the positions of the cameras have been calculated
    * with respect to the world coordinate system, this function can be
    * used to find the transformation between the camera reference
@@ -283,7 +283,7 @@ namespace PiiCalibration
    * respect to the world coordinate system. Let us denote the
    * rotation and translation matrices with \(R_2\) and \(T_2\).
    *
-   * @return the relative position of `camera2` with respect to 
+   * @return the relative position of `camera2` with respect to
    * `camera1`.
    */
   PII_CALIBRATION_EXPORT RelativePosition calculateRelativePosition(const RelativePosition& camera1,
@@ -421,7 +421,7 @@ namespace PiiCalibration
    *
    * @param extrinsic the location of the camera wrt to the world
    * coordinate system.
-   * 
+   *
    * @param intrinsic camera parameters
    *
    * @return a N-by-2 matrix which contains 2-dimensional pixel
@@ -488,7 +488,7 @@ namespace PiiCalibration
    * \[
    * R^T = I - M\sin(\theta) + M^2(1-\cos(\theta))
    * \]
-   * 
+   *
    * This equation makes use of the fact that M is an antisymmetric
    * matrix. Thus, \(M^T = -M\) and \((M^2)^T = M^2\).
    *
@@ -503,7 +503,7 @@ namespace PiiCalibration
    * \[
    * (R + R^T) / 2 = I + M^2(1-\cos(\theta))
    * \]
-   * 
+   *
    * The only unknown here is \(\cos(\theta)\), which is trivial to
    * solve.
    */
@@ -512,7 +512,7 @@ namespace PiiCalibration
   /**
    * Creates a coordinate map that converts distorted pixel coordinates
    * to undistorted ones. The returned map can be used with
-   * PiiImage::remap() to correct an image against lens distortions. 
+   * PiiImage::remap() to correct an image against lens distortions.
    * This function returns the distorted pixel coordinates in double
    * precision.
    */
@@ -522,7 +522,7 @@ namespace PiiCalibration
   /**
    * Creates a coordinate map that converts distorted pixel coordinates
    * to undistorted ones. The returned map can be used with
-   * PiiImage::remap() to correct an image against lens distortions. 
+   * PiiImage::remap() to correct an image against lens distortions.
    * This function returns the distorted pixel coordinates as
    * integers, rounded to the position of the closest matching pixel.
    */

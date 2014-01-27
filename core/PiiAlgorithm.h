@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,7 +26,7 @@
 namespace Pii
 {
   /**
-   * Sets all values in the range [*begin*, *end*) to *value*. 
+   * Sets all values in the range [*begin*, *end*) to *value*.
    * Returns *end*.
    */
   template <class Iterator>
@@ -38,7 +38,7 @@ namespace Pii
   }
 
   /**
-   * Sets all values in the range [*begin*, *begin* + *b*) to 
+   * Sets all values in the range [*begin*, *begin* + *b*) to
    * *value*. Returns *begin* + *n*.
    */
   template <class Iterator>
@@ -91,7 +91,7 @@ namespace Pii
 
   /**
    * Assigns sequentially increasing or decreasing values to the range
-   * [*begin*, *end*). The first value will be set to 
+   * [*begin*, *end*). The first value will be set to
    * *initialValue*, which will then increase *step* units on each
    * iteration. Returns *end*.
    */
@@ -106,7 +106,7 @@ namespace Pii
   }
 
   /**
-   * Assigns sequentially increasing values to the range [*begin*, 
+   * Assigns sequentially increasing values to the range [*begin*,
    * *end*). The first value will be set to *initialValue*, which will
    * then be incremented by one on each iteration. Returns *end*.
    */
@@ -119,7 +119,7 @@ namespace Pii
 
   /**
    * Assigns sequentially increasing or decreasing values to the range
-   * [*begin*, *begin* + *n*). The first value will be set to 
+   * [*begin*, *begin* + *n*). The first value will be set to
    * *initialValue*, which will then increase *step* units on each
    * iteration. Returns *begin* + *n*.
    */
@@ -134,7 +134,7 @@ namespace Pii
   }
 
   /**
-   * Assigns sequentially increasing values to the range [*begin*, 
+   * Assigns sequentially increasing values to the range [*begin*,
    * *end* + *n*). The first value will be set to *initialValue*,
    * which will then be incremented by one on each iteration. Returns
    * *begin* + *end*.
@@ -145,7 +145,7 @@ namespace Pii
   {
     return sequenceN(begin, n, initialValue, 1);
   }
-  
+
   /**
    * Applies a unary function *func* to all elements in the range [
    * *begin*, *end*), and stores the result in place. The `map`
@@ -181,7 +181,7 @@ namespace Pii
 
   /**
    * Applies a unary function *func* to all elements in the range [
-   * *begin*, *end*) for which *predicate* returns a non-zero value. 
+   * *begin*, *end*) for which *predicate* returns a non-zero value.
    * The returned value will be stored in place. Returns *end*.
    */
   template <class Iterator, class UnaryPredicate, class UnaryFunction>
@@ -198,7 +198,7 @@ namespace Pii
   /**
    * Applies a binary function *func* to all elements in the range
    * [*begin1*, *end1*), and stores the result in place. The second
-   * argument to the binary function is taken from *begin2*. The 
+   * argument to the binary function is taken from *begin2*. The
    * `map` algorithm is equal to [transform()] except that it always
    * modifies the elements in place and works slightly faster.
    *
@@ -225,7 +225,7 @@ namespace Pii
   /**
    * Applies a binary function *func* to all elements in the range
    * [*begin1*, *begin1* + *n*), and stores the result in place. The second
-   * argument to the binary function is taken from *begin2*. The 
+   * argument to the binary function is taken from *begin2*. The
    * `map` algorithm is equal to [transform()] except that it always
    * modifies the elements in place and works slightly faster.
    */
@@ -263,7 +263,7 @@ namespace Pii
   }
 
   /**
-   * Copies all elements in the range [*begin*, *end*) to *output*. 
+   * Copies all elements in the range [*begin*, *end*) to *output*.
    * Returns *output* + (*end* - *begin*).
    */
   template <class InputIterator, class OutputIterator>
@@ -373,7 +373,7 @@ namespace Pii
 
   /**
    * Applies a unary function *func* to all elements in the range [
-   * *begin*, *end*), and stores the returned value to *output*. 
+   * *begin*, *end*), and stores the returned value to *output*.
    * Returns *output* + (*end* - *begin*).
    */
   template <class InputIterator, class OutputIterator, class UnaryFunction>
@@ -387,7 +387,7 @@ namespace Pii
 
   /**
    * Applies a unary function *func* to all elements in the range [
-   * *begin*, *begin* + *n*), and stores the returned value to 
+   * *begin*, *begin* + *n*), and stores the returned value to
    * *output*. Returns *output* + *n*.
    */
   template <class InputIterator, class OutputIterator, class UnaryFunction>
@@ -404,7 +404,7 @@ namespace Pii
    * Applies a binary function *func* to all elements in the range
    * [*begin1*, *end1*), using the corresponding element in the
    * range starting at *begin2* as the second argument to the
-   * function. The return value of the function will be stored to 
+   * function. The return value of the function will be stored to
    * *output*. Returns *output* + (*end1* - *begin1*).
    */
   template <class InputIterator1, class InputIterator2, class OutputIterator, class BinaryFunction>
@@ -421,7 +421,7 @@ namespace Pii
    * Applies a binary function *func* to all elements in the range
    * [*begin1*, *begin1* + *n*), using the corresponding element in
    * the range starting at *begin2* as the second argument to the
-   * function. The return value of the function will be stored to 
+   * function. The return value of the function will be stored to
    * *output*. Returns *output* + *n*.
    */
   template <class InputIterator1, class InputIterator2, class OutputIterator, class BinaryFunction>
@@ -436,7 +436,7 @@ namespace Pii
 
   /**
    * Loops through all values in the range [*begin*, *end*) and
-   * applies *func* to each element and the current value of 
+   * applies *func* to each element and the current value of
    * *initialValue*. Returns the final value of *initialValue*.
    *
    * ~~~(c++)
@@ -471,7 +471,7 @@ namespace Pii
 
   /**
    * Loops through all values in the range [*begin*, *end*) and
-   * applies *func* to each element and the current value of 
+   * applies *func* to each element and the current value of
    * *initialValue*, if *predicate* returns a non-zero value for the
    * element. Returns the final value of *initialValue*.
    *
@@ -514,7 +514,7 @@ namespace Pii
   template<class InputIterator, class UnaryFunction, class BinaryPredicate>
   InputIterator findSpecialValue(InputIterator begin,
                                  InputIterator end,
-                                 BinaryPredicate op, 
+                                 BinaryPredicate op,
                                  UnaryFunction f)
   {
     typedef typename UnaryFunction::result_type R;
@@ -537,7 +537,7 @@ namespace Pii
   }
 
   /**
-   * Applies *func* to each element in the range [*begin*, *end*). 
+   * Applies *func* to each element in the range [*begin*, *end*).
    * The return value of the unary function *func* (if any) is
    * ignored. Returns *func*.
    *
@@ -558,7 +558,7 @@ namespace Pii
   /**
    * Applies *func* to each element in the range [*begin*, *end*)
    * for which *predicate* returns a non-zero value. The return value
-   * of the unary function *func* (if any) is ignored. Returns 
+   * of the unary function *func* (if any) is ignored. Returns
    * *func*.
    *
    * ~~~(c++)

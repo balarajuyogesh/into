@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -140,7 +140,7 @@ bool PiiSocketDevice::waitForDataAvailable(int waitTime, PiiProgressController* 
   while (timer.milliseconds() < waitTime);
   return false;
 }
-  
+
 qint64 PiiSocketDevice::readWaited(char* data, qint64 maxSize, int waitTime, PiiProgressController* controller)
 {
   if (d->pDevice == 0) return -1;
@@ -164,7 +164,7 @@ qint64 PiiSocketDevice::readWaited(char* data, qint64 maxSize, int waitTime, Pii
         return iBytesRead;
     }
   while (maxSize > 0);
-  
+
   return iBytesRead;
 }
 
@@ -187,14 +187,14 @@ bool PiiSocketDevice::waitForDataWritten(int waitTime, PiiProgressController* co
   while (timer.milliseconds() < waitTime);
   return true;
 }
-  
+
 qint64 PiiSocketDevice::writeWaited(const char* data, qint64 maxSize, int waitTime, PiiProgressController* controller)
 {
   if (d->pDevice == 0) return -1;
-  
+
   qint64 iBytesWritten = 0;
   do
-    {       
+    {
       qint64 iBytesInPiece = d->pDevice->write(data, maxSize);
       if (iBytesInPiece > 0)
         {
@@ -208,7 +208,7 @@ qint64 PiiSocketDevice::writeWaited(const char* data, qint64 maxSize, int waitTi
         return iBytesWritten;
     }
   while (maxSize > 0);
-  
+
   return iBytesWritten;
 }
 
@@ -282,7 +282,7 @@ PiiSocketDevice::operator QIODevice* () const
 {
   return d->pDevice;
 }
-  
+
 QIODevice* PiiSocketDevice::operator-> () const
 {
   return d->pDevice;

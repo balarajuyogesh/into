@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -115,7 +115,7 @@ protected:
     Data();
     PiiInputSocket* pTriggerInput;
     PiiOutputSocket* pImageOutput;
-    
+
     ImageType imageType;
     /**
      * The maximum number of images the source will emit.

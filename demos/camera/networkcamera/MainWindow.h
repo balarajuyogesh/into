@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@
 class MainWindow : public DemoMainWindow, private Ui::MainWindow
 {
   Q_OBJECT
-  
+
 public:
   MainWindow(QWidget *parent = 0);
 
@@ -40,7 +40,7 @@ private slots:
   void updateButtonStates(int state);
   void startButtonClicked();
   void setFps(PiiVariant fpsObject);
-  
+
 private:
   void init();
 

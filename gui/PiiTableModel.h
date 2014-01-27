@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@ class PiiModelItem;
 
 /**
  * A hybrid of a table model and an item "delegate". This model can be
- * used with Qt's view classes to create editable lists and tables. 
+ * used with Qt's view classes to create editable lists and tables.
  * PiiTableModel is useful with data such as database query results
  * where all items in a table column contain similar data. The same
  * editor is used for each row, but columns may have different
@@ -78,7 +78,7 @@ public:
       ColumnEditorPropertiesRole,
       ColumnEditorValueRole
     };
-  
+
   /**
    * Supported editor types.
    *
@@ -125,7 +125,7 @@ public:
     };
 
   /**
-   * Creates a new PiiTableModel and binds it to the `parent` view. 
+   * Creates a new PiiTableModel and binds it to the `parent` view.
    * Since PiiTableModel is not a pure model, but works also as the
    * "delegate", it cannot be used with many views simultaneously.
    */
@@ -193,14 +193,14 @@ public:
    * be adjusted to match the length of `texts`.
    */
   void setColumnTexts(int column, const QStringList& texts);
-  
+
   /**
    * Sets the value of the element at the given coordinates. The value
-   * may be different from the displayed text. If `behavior` is 
+   * may be different from the displayed text. If `behavior` is
    * `ChangeTextAutomatically`, the text will be automatically set based
    * on column configuration. For example, setting the value of a
    * combo box column automatically changes the text based on the
-   * combo's item list. To disable the default behavior, set 
+   * combo's item list. To disable the default behavior, set
    * `behavior` `DoNotChangeText`.
    */
   void setValue(int row, int column, const QVariant& value, ValueChangeBehavior behavior = ChangeTextAutomatically);
@@ -212,7 +212,7 @@ public:
    * - LineEditor - the value will be converted to a QString
    *
    * - {Integer,Double}SpinBoxEditor - the value will be converted
-   * to a QString and wrapped into the editor's `prefix` and 
+   * to a QString and wrapped into the editor's `prefix` and
    * `suffix`, if set. The `specialValueText` property of the spin box
    * will be taken into account.
    *
@@ -232,7 +232,7 @@ public:
    */
   void insertRow(const QList<PiiModelItem*>& items, int row);
   void insertRow(const QList<PiiModelItem*>& items);
-  
+
   /**
    * Removes `row` and returns its items as a list. The model no
    * longer owns the pointers, and they must be deleted by the caller.
@@ -352,7 +352,7 @@ public:
   void setHeaderTitles(const QStringList& headerTitles);
 
   /**
-   * Returns data associated with any role at the given model index. 
+   * Returns data associated with any role at the given model index.
    * See [PiiModelItem::_d()].
    */
   QMap<int, QVariant> itemData(const QModelIndex &index) const;
@@ -384,8 +384,8 @@ public:
    * Returns `true` if the last row can be deleted, `false`
    * otherwise.
    */
-  bool canDeleteLast() const;  
-  
+  bool canDeleteLast() const;
+
   /**
    * Returns `true` if the selected rows can be moved up, `false`
    * otherwise. Moving rows up is possible if a) at least one row is
@@ -464,14 +464,14 @@ protected:
 
     int rows() const { return lstItems.size()-1; }
     int columns() const { return lstItems[0].size(); }
-    
+
     PiiTableModelDelegate* pDelegate;
     QList<QList<PiiModelItem*> > lstItems;
     bool bCanDeleteLast;
     int iLastInsertRow;
     int iInsertCount;
   } *d;
-  
+
   /**
    * Creates a new item at the given coordinates. The default
    * implementation sets the item's value (`ColumnEditorValueRole`)
@@ -479,7 +479,7 @@ protected:
    */
   virtual PiiModelItem* createItem(int row, int column);
   /**
-   * Creates an editor for editing the item at the given coordinates. 
+   * Creates an editor for editing the item at the given coordinates.
    * The default implementation creates one of the supported editor
    * types, based on header data. If you override this function, you
    * probably need to override [setEditorData()], [setModelData()], and
@@ -499,7 +499,7 @@ protected:
 
   /// @internal
   PiiTableModel(Data* data, QAbstractItemView *parent);
-  
+
 private:
   friend class PiiTableModelDelegate;
 

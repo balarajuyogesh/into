@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -33,7 +33,7 @@ void TestPiiUtil::decodeProperties()
 
   map = Pii::decodeProperties("value1\\==1;value2 \\\\= 123;value3=ab\\cdef ; value4=abc\\\\ 123",
                               ';','=','\\', Pii::TrimPropertyName);
-  
+
   QCOMPARE(map["value1="].toInt(), 1);
   QCOMPARE(map["value2 \\"].toInt(), 123);
   QCOMPARE(map["value3"].toString(), QString("abcdef "));

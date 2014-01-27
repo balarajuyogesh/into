@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -87,7 +87,7 @@ void PiiCameraOperation::check(bool reset)
       d->bTriggered = d->pTriggerInput->isConnected();
       if (d->bTriggered)
         d->pCameraDriver->setProperty("triggerMode", PiiCameraDriver::SoftwareTrigger);
-      
+
       try
         {
           d->pCameraDriver->initialize(d->strCameraId);
@@ -96,7 +96,7 @@ void PiiCameraOperation::check(bool reset)
         {
           PII_THROW(PiiExecutionException, tr("Couldn't initialize driver: %1").arg(ex.message()));
         }
-      
+
       QSize frameSize = d->pCameraDriver->frameSize();
       d->iImageWidth = frameSize.width();
       d->iImageHeight = frameSize.height();
@@ -107,7 +107,7 @@ void PiiCameraOperation::check(bool reset)
       d->iMaxMissedIndex = 0;
       d->bMissedFrames = false;
     }
-  
+
   PiiImageReaderOperation::check(reset);
 }
 
@@ -141,7 +141,7 @@ void PiiCameraOperation::interrupt()
 {
   PII_D;
   d->pCameraDriver->stopCapture();
-  
+
   PiiImageReaderOperation::interrupt();
   d->pauseWaitCondition.wakeAll();
 }
@@ -166,29 +166,29 @@ void PiiCameraOperation::stop()
 void PiiCameraOperation::frameCaptured(int frameIndex, void *frameBuffer, qint64 elapsedTime)
 {
   PII_D;
-  
+
   QMutexLocker lock(&d->pauseMutex);
   if (d->bWaitPause)
     {
       d->pauseWaitCondition.wait();
       if (state() != Running)
         return;
-      
+
       // We can't handle the frame if we missed it
       if (d->bMissedFrames &&
           (frameIndex <= d->iMaxMissedIndex || (d->iMaxMissedIndex < 0 && frameIndex > 0)))
         return;
-      
+
       d->bMissedFrames = false;
     }
-  
+
   if (frameIndex >= 0)
     {
       Pii::PtrOwnership ownership = frameBuffer != 0 ? Pii::ReleaseOwnership : Pii::RetainOwnership;
       void *pFrameBuffer = ownership == Pii::ReleaseOwnership ?
         frameBuffer : d->pCameraDriver->frameBuffer(frameIndex);
       d->iFrameCount.ref();
-      
+
       if (pFrameBuffer == 0)
         ; //piiWarning("PiiCameraOperation::frameCaptured(), pFrameBuffer == 0");
       else
@@ -245,7 +245,7 @@ template <class T> void PiiCameraOperation::convert(void *frameBuffer,
             // Free frameBuffer-memory if necessary
             if (ownership == Pii::ReleaseOwnership)
               free(frameBuffer);
-            
+
             break;
           }
         case PiiCamera::Yuv422Format:
@@ -297,7 +297,7 @@ PiiVariant PiiCameraOperation::processImage(const PiiVariant& image, int /*frame
 QVariant PiiCameraOperation::property(const char* name) const
 {
   const PII_D;
-  
+
   if (strncmp(name, "driver.", 7) == 0)
     {
       if (d->pCameraDriver != 0)
@@ -313,7 +313,7 @@ QVariant PiiCameraOperation::property(const char* name) const
 bool PiiCameraOperation::setProperty(const char* name, const QVariant& value)
 {
   PII_D;
-  
+
   if (strncmp(name, "driver.", 7)==0)
     {
       if (d->pCameraDriver != 0)
@@ -340,12 +340,12 @@ bool PiiCameraOperation::loadCameraConfig(const QString& fileName)
       piiWarning(tr("Configuration file %1 doesn't exists.").arg(fileName));
       return false;
     }
-  
+
   QSettings configSettings(fileName, QSettings::IniFormat);
   QStringList allKeys = configSettings.allKeys();
   for (int i=0; i<allKeys.size(); i++)
     d->pCameraDriver->setProperty(qPrintable(allKeys[i]), configSettings.value(allKeys[i]));
-  
+
   return true;
 }
 
@@ -365,7 +365,7 @@ bool PiiCameraOperation::saveCameraConfig(const QString& fileName)
   QList<QPair<QString, QVariant> > lstProperties = Pii::propertyList(d->pCameraDriver, 1, Pii::WritableProperties);
   for (int i=0; i<lstProperties.size(); i++)
     configSettings.setValue(lstProperties[i].first, lstProperties[i].second);
-  
+
   return true;
 }
 
@@ -465,7 +465,7 @@ template <class T> PiiMatrix<PiiColor<T> > PiiCameraOperation::yuv411toRgb(void 
   int index = 0;
   PiiColor<T> *pData = matrix.row(0);
   T *pBuffer = static_cast<T*>(frameBuffer);
-  
+
   for (int i=0; i<length; i+=6, index+=4)
     {
       u = pBuffer[i+0] - 128;
@@ -480,7 +480,7 @@ template <class T> PiiMatrix<PiiColor<T> > PiiCameraOperation::yuv411toRgb(void 
       yuvToRgb<T>(&pData[index+2], y3,u,v);
       yuvToRgb<T>(&pData[index+3],y4,u,v);
     }
-  
+
   return matrix;
 }
 
@@ -493,7 +493,7 @@ template <class T> PiiMatrix<PiiColor<T> > PiiCameraOperation::yuv422toRgb(void 
   int index = 0;
   PiiColor<T> *pData = matrix.row(0);
   T *pBuffer = static_cast<T*>(frameBuffer);
-  
+
   for (int i=0; i<length; i+=4, index+=2)
     {
       y1 = pBuffer[i+0];
@@ -513,4 +513,4 @@ template <class T> void PiiCameraOperation::yuvToRgb(PiiColor<T>* data, int y, i
   data->c1 = (T)qBound(0, int(y - 0.698001 * v - 0.337633*u), 255);
   data->c2 = (T)qBound(0, int(y + 1.732446*u), 255);
 }
-  
+

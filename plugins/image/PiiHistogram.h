@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -118,7 +118,7 @@ namespace PiiImage
   }
 
   /**
-   * Normalize the given histogram so that its elements sum up to one. 
+   * Normalize the given histogram so that its elements sum up to one.
    * If the matrix has many rows, each row is normalized. The return
    * type may be different from the input type. Typically, float or
    * double is used as the return type. If all values in a row equal
@@ -150,7 +150,7 @@ namespace PiiImage
    * @param value the percentile value, which should be smaller than
    * or equal to the maximum value in `cumulative`.
    *
-   * @return the index of the first element exceeding or equal to 
+   * @return the index of the first element exceeding or equal to
    * `value`, or -1 if no such element was found
    */
   template <class T> int percentile(const PiiMatrix<T>& cumulative, T value);
@@ -166,7 +166,7 @@ namespace PiiImage
    * @param histogram the histogram. A 1-by-N matrix.
    *
    * The function makes no boundary checks for performance reasons. If
-   * you aren't sure about your data, you must check that 
+   * you aren't sure about your data, you must check that
    * `histogram`.columns() is larger than the maximum value in `img`
    * and that there are no negative values in `img`.
    *
@@ -223,7 +223,7 @@ namespace PiiImage
    * @param img the input image
    *
    * @param levels the number of quantization levels. If this value is
-   * omitted, the maximum value found in `image` will be used. If 
+   * omitted, the maximum value found in `image` will be used. If
    * `levels` is smaller than the maximum value, the latter will be used.
    *
    * @return an image with enhanced contrast
@@ -238,7 +238,7 @@ namespace PiiImage
       iLevels(256),
       bNormalized(false)
     {}
-  
+
     virtual ~HistogramHandler() {}
 
     static inline bool acceptsManyRegions() { return true; }
@@ -250,7 +250,7 @@ namespace PiiImage
       else
         variant.valueAs<PiiMatrix<int> >() += histogram;
     }
-    
+
     void initialize(int levels, bool normalized)
     {
       iPixelCount = 0;
@@ -269,7 +269,7 @@ namespace PiiImage
     void operator() (const PiiMatrix<T>& image);
     template <class Roi> void operator() (const PiiMatrix<T>& image, const Roi& roi);
     void normalize();
-  
+
     PiiVariant varHistogram;
   };
 
@@ -279,12 +279,12 @@ namespace PiiImage
     {
       baCalculate[0] = baCalculate[1] = baCalculate[2] = true;
     }
-    
+
     void initialize(int levels, bool normalized);
     void operator() (const PiiMatrix<Clr>& image);
     template <class Roi> void operator() (const PiiMatrix<Clr>& image, const Roi& roi);
     void normalize();
-    
+
     PiiVariant varHistograms[3];
     PiiMatrix<typename Clr::Type> channelImages[3];
     bool baCalculate[3];

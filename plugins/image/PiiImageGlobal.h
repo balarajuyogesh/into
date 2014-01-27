@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -35,7 +35,7 @@ namespace PiiImage
 {
 #ifdef Q_MOC_RUN
   Q_GADGET
-    
+
   Q_ENUMS(TransformedSize Connectivity MorphologyOperation MaskType RoiType PrebuiltFilterType);
 public:
 #endif
@@ -55,7 +55,7 @@ public:
    * result as it will always be centered. (Figure B)
    *
    * ~~~
-   *                ______ 
+   *                ______
    *    /\         |  /\  |
    * +-/--\-+      | /  \ |
    * |/    \|      |/    \|
@@ -66,11 +66,11 @@ public:
    *    A             B
    * ~~~
    *
-   * In the figures, the diamond shape denotes the transformed image. 
+   * In the figures, the diamond shape denotes the transformed image.
    * The boxed area shows the size of the result image.
    */
   enum TransformedSize { RetainOriginalSize, ExpandAsNecessary };
-  
+
   /**
    * Pixel connectivitity modes for operations such as labeling and
    * boundary finding.
@@ -106,7 +106,7 @@ public:
    * - `Bottomhat` - closed minus original
    */
   enum MorphologyOperation { Erode, Dilate, Open, Close, TopHat, BottomHat };
-  
+
   /**
    * Predefined types for structuring elements.
    *
@@ -133,20 +133,20 @@ public:
   /**
    * Region-of-interest types.
    *
-   * - `AutoRoi` - the type of the ROI is automatically determined. 
+   * - `AutoRoi` - the type of the ROI is automatically determined.
    * If the ROI object is a PiiMatrix<int>, `RectangleRoi` will be
    * used. Otherwise, `MaskRoi` will be used.
    *
    * - `MaskRoi` - the ROI is represented as a binary matrix
    * (PiiMatrix<bool>) in which non-zero (`true`) entries represent
    * interesting pixels. The size of the ROI mask must be equal to
-   * that of the processed image. In operations that support ROI, 
+   * that of the processed image. In operations that support ROI,
    * `MaskRoi` has a special meaning: if the `roi` input is not
    * connected, and the input image is a four-channel color image, its
    * alpha channel will be used as the ROI mask.
    *
    * - `RectangleRoi` - the ROI is a set of rectangles, each
-   * represented by a four-dimensional vector (x, y, width, height). 
+   * represented by a four-dimensional vector (x, y, width, height).
    * The rectangles are stored in an N-by-4 PiiMatrix<int>.
    *
    * - `NoRoi` - ROI is disabled. Even if there is a ROI present, the

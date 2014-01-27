@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -35,12 +35,12 @@ PiiConfusionMatrix& PiiConfusionMatrix::operator=(const PiiConfusionMatrix& othe
   PiiMatrix<int>::operator=(other);
   return *this;
 }
-                 
+
 
 double PiiConfusionMatrix::mixup(int column) const
 {
   int wrong = 0, correct = 0;
-    
+
   for (int i=rows(); i--; )
     {
       if (i != column)
@@ -55,7 +55,7 @@ double PiiConfusionMatrix::mixup(int column) const
 double PiiConfusionMatrix::error(int row) const
 {
   int wrong = 0, correct = 0;
-    
+
   for (int i=columns(); i--; )
     {
       if (i != row)
@@ -87,7 +87,7 @@ void PiiConfusionMatrix::addEntry(int correctClass, int classification)
 {
   if (correctClass < 0 || classification < 0)
     return;
-  
+
   int max = qMax(correctClass, classification) + 1;
   if (max > rows())
     resize(max,max);

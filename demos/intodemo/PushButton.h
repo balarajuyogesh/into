@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,10 +24,10 @@
 class PushButton : public QPushButton
 {
   Q_OBJECT
-  
+
 public:
   PushButton(QWidget *parent = 0);
-  
+
   /**
    * Set a pixmap.
    */
@@ -37,13 +37,13 @@ public:
    * Set a name of the button.
    */
   void setName(const QString& name);
-  
+
   /**
    * Set and get a directory name.
    */
   void setDirname(const QString& dirname);
   QString dirname() const;
-  
+
 protected:
   void paintEvent(QPaintEvent *event);
 

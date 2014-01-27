@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -20,7 +20,7 @@
 #include <PiiMatrix.h>
 
 /**
- * An operation that builds histograms out of correlated variables. 
+ * An operation that builds histograms out of correlated variables.
  * The most typical use of this operation may be in creating a 2-D or
  * 3-D color histogram out of color channels, but the operation can
  * create multi-dimensional distributions out of any data quantized to
@@ -35,13 +35,13 @@
  * +---+ +---+ +---+
  * ~~~
  *
- * Assume also that the maximum value for each channel is 3, i.e. 
+ * Assume also that the maximum value for each channel is 3, i.e.
  * there are 4 distinct values. The length of the resulting histogram
  * in `JointDistribution` would be 4 * 4 * 4 = 64. The indices of the
  * three-dimensional colors in the resulting histogram would be (from
  * upper left corner) 0 + 4 * 1 + 4 * 4 * 3 = 52, 1 + 4 * 0 + 4 * 4 *
  * 2 = 32 etc. In `MarginalDistributions` mode the histograms are
- * calculated for each cannel separately, and concatenated together. 
+ * calculated for each cannel separately, and concatenated together.
  * In the example above, the length of the histogram would be 4 + 4 +
  * 4 = 12.
  *
@@ -98,9 +98,9 @@ class PiiMultiVariableHistogram : public PiiDefaultOperation
    * ~~~
    */
   Q_PROPERTY(QVariantList scales READ scales WRITE setScales);
-  
+
   /**
-   * The type of distribution to create. The default is 
+   * The type of distribution to create. The default is
    * `JointDistribution`.
    */
   Q_PROPERTY(DistributionType distributionType READ distributionType WRITE setDistributionType);
@@ -128,10 +128,10 @@ public:
    * the histogram will be \(\sum_i l_i\).
    */
   enum DistributionType { JointDistribution, MarginalDistributions };
-  
+
   PiiMultiVariableHistogram();
   ~PiiMultiVariableHistogram();
-  
+
   QVariantList levels() const;
   void setLevels(const QVariantList& levels);
   void setDistributionType(DistributionType distributionType);
@@ -152,13 +152,13 @@ private:
   void setInputCount(int cnt);
   void jointHistogram(const QList<PiiMatrix<int> >& matrices, int rows, int columns, PiiMatrix<int>* result);
   void marginalHistograms(const QList<PiiMatrix<int> >& matrices, int rows, int columns, PiiMatrix<int>* result);
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {
   public:
     Data();
-    
+
     QVector<int> vecLevels;
     QVector<int> vecSteps;
     QVector<double> vecScales;

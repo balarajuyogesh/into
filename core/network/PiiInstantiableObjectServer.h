@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,7 +28,7 @@
  *
  * PiiInstantiableObjectServer makes it possible to create a new
  * instance for each client. It works as a primary server that either
- * creates new server instances or passes requests to existing ones. 
+ * creates new server instances or passes requests to existing ones.
  * There will be no "default" server object, but each client must
  * create a instance by requesting /new. The server uses
  * [createServer()] function to create a new secondary server and
@@ -43,7 +43,7 @@
  * ~~~
  * HTTP/1.1 200 OK
  * Content-Length: 35
- * 
+ *
  * 243F6A8-885A-308D-3131-98A2E0370734
  * ~~~
  *
@@ -87,7 +87,7 @@
  * ~~~
  * GET /new?className=QTimer HTTP/1.1
  * ~~~
- */   
+ */
 class PII_NETWORK_EXPORT PiiInstantiableObjectServer:
   public QObject,
   public PiiHttpProtocol::UriHandler
@@ -97,7 +97,7 @@ class PII_NETWORK_EXPORT PiiInstantiableObjectServer:
 public:
   PiiInstantiableObjectServer();
   ~PiiInstantiableObjectServer();
-  
+
   /**
    * Sets the number of millisecond an object instance will be kept
    * alive after a client breaks connection to it without explicitly
@@ -132,10 +132,10 @@ protected:
     {
       idleTime.start();
     }
-    
+
     QTime idleTime;
     PiiHttpProtocol::UriHandler* pServer;
-  };  
+  };
 
   /// @internal
   class PII_NETWORK_EXPORT Data
@@ -148,7 +148,7 @@ protected:
     int iMaxInstances, iInstanceCount;
     QHash<QString,Instance> hashInstances;
   } *d;
-  
+
   /**
    * Returns a new server instance given the *parameters* passed in
    * the HTTP request. This function must be overridden to create a
@@ -164,12 +164,12 @@ protected:
 
 private slots:
   void collectGarbage();
-  
+
 private:
   QString createNewInstance(const QVariantMap& parameters);
   PiiHttpProtocol::UriHandler* findInstance(const QString& instanceId) const;
   void deleteServer(const QString& serverId);
-  void deleteServers();  
+  void deleteServers();
 };
 
 #endif //_PIIINSTANTIABLEOBJECTSERVER_H

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -72,7 +72,7 @@ PiiFlowController::FlowState PiiOneInputFlowController::prepareProcess()
         case StopTagType:
           d->pInput->shift();
           return FinishedState;
-          
+
         case PauseTagType:
           d->pInput->shift();
           return PausedState;

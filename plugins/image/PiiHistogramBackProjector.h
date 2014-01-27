@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,7 +30,7 @@
  * Inputs
  * ------
  *
- * @in image - input image. Any integer-valued one-channel (i.e. 
+ * @in image - input image. Any integer-valued one-channel (i.e.
  * gray-level) image.
  *
  * @in channel0 - alias for `image`. More intuitive to the programmer
@@ -39,9 +39,9 @@
  * @in channel1 - optional input that is used only with
  * two-dimensional backprojection.
  *
- * @in model - optional input for a changing model histogram. 
+ * @in model - optional input for a changing model histogram.
  * Overrides [model] if connected.
- * 
+ *
  * Outputs
  * -------
  *
@@ -58,7 +58,7 @@ class PiiHistogramBackProjector : public PiiDefaultOperation
    * model is a PiiMatrix<int> or a PiiMatrix<bool>.
    */
   Q_PROPERTY(PiiVariant model READ model WRITE setModel);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiHistogramBackProjector();

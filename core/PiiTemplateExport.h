@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -33,7 +33,7 @@
  * - MSVC: The `DECLARE` macros expand to nothing if building a
  * library. If the library is not being build, the `DECLARE` macros
  * declare an explicit instance with `__declspec`(dllimport) storage
- * class. The `DEFINE` macros create an explicit instance with 
+ * class. The `DEFINE` macros create an explicit instance with
  * `__declspec`(dllexport) storage class. This trick is needed because
  * there is no way to just declare an exported explicit instance in
  * MSVC. Even if the storage class is `dllexport`, the compiler

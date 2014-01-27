@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,7 +28,7 @@ void PiiIoThread::run()
   while (_bRunning)
     {
       _mutex.lock();
-      
+
       for (int i=_lstPollingInputs.size(); i--; )
         {
           try
@@ -39,7 +39,7 @@ void PiiIoThread::run()
             {
             }
         }
-      
+
       //HANDLE OUTPUTS ->
       qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
       int size = _lstWaitingOutputSignals.size();
@@ -65,9 +65,9 @@ void PiiIoThread::run()
       for (int i=_lstWaitingOutputSignals.size(); i--; )
         if (_lstWaitingOutputSignals[i].handled)
           _lstWaitingOutputSignals.removeAt(i);
-      
+
       _mutex.unlock();
-      
+
       PiiDelay::msleep(10);
     }
 }
@@ -99,7 +99,7 @@ void PiiIoThread::removeOutputList(const QVector<PiiIoChannel*>& lstChannels)
       _lstWaitingOutputSignals.removeAt(i);
 
   _mutex.unlock();
-  
+
 }
 
 void PiiIoThread::addNewStruct(PiiIoChannel *channel, bool active, qint64 time, int width)

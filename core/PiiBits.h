@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@ namespace Pii
 {
   /**
    * @group bits Bit Fiddling
-   * 
+   *
    * Functions for tweaking single bits. Some functions in this
    * group come with inline assembly versions for maximum
    * performance.
@@ -54,7 +54,7 @@ namespace Pii
   {
     return ((c >> n) | (c << (INTBITS - n)));
   }
-    
+
   /**
    * Rotate a binary code left by `n` positions.
    *
@@ -137,7 +137,7 @@ namespace Pii
   inline unsigned char rol(unsigned char c, const unsigned char n) { return (unsigned char)rol<16>(c, n); }
   inline unsigned char ror(unsigned char c, const unsigned char n) { return (unsigned char)ror<16>(c, n); }
 #endif
-  
+
   /**
    * Get the number of ones in a binary number.
    *
@@ -145,7 +145,7 @@ namespace Pii
    * @param bits the number of bits to consider
    */
   PII_CORE_EXPORT int countOnes(unsigned int c, const unsigned char bits = INTBITS);
-  
+
   template <unsigned char bits> int countOnes(unsigned int c)
   {
     int count = 0;
@@ -157,7 +157,7 @@ namespace Pii
     return count;
 
   }
-    
+
   /**
    * Get the number of 0-to-1 or 1-to-0 transitions in a binary
    * number. The number of transitions is calculated circularly. For
@@ -174,7 +174,7 @@ namespace Pii
     return countOnes<bits>(c ^ ror<bits>(c, 1));
   }
 
-    
+
   /**
    * Rotate a binary number to its minimum value.
    *
@@ -206,7 +206,7 @@ namespace Pii
     return tmp >> sizeof(int)*4;
   }
 
-    
+
   /**
    * Calculate the Hamming distance between two binary numbers.
    *
@@ -245,7 +245,7 @@ namespace Pii
   {
     if (c == 0)
       return -1;
-    
+
     for (int i=0; i<int(sizeof(T)*8); i++)
       {
         if (c & 1)
@@ -264,7 +264,7 @@ namespace Pii
   {
     if (c == 0)
       return -1;
-    
+
     for (int i=sizeof(T)*8; i--;)
       {
         if (c & signMask<T>())
@@ -281,7 +281,7 @@ namespace Pii
    *
    * @param bitMask create a new memory address in which all bits set
    * in this mask are zero. To align an address to a 16-byte boundary,
-   * use 0xf as the bit mask. 0xff aligns to a 256-byte boundary etc. 
+   * use 0xf as the bit mask. 0xff aligns to a 256-byte boundary etc.
    * Different values can be used to align memory to word and/or cache
    * boundaries. The actual values of these depend on the underlying
    * processor architecture.
@@ -323,13 +323,13 @@ namespace Pii
     union { float _f; unsigned int _ui; } value = { value1 - value2 };
     return (value._ui & INT_MIN);
   }
-  
+
   /**
    * Returns the sign bit of *value1* - *value2*.
    */
   inline unsigned int signBit(double value1, double value2)
   {
-    //Same as above, but now the trick is to take only the 32 MSBs. 
+    //Same as above, but now the trick is to take only the 32 MSBs.
     //Unfortunately, this also means that byte order needs to be taken
     //into account.
     union { double _d; unsigned int _ui[2]; } value = { value1 - value2 };

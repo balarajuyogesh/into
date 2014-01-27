@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -40,13 +40,13 @@ void PiiDefaultFlowController::SyncGroup::sendTag()
 {
   // Take the first tag in the group because all should be similar.
   PiiVariant tag = at(0)->queuedObject(0);
-          
+
   // Send the tag to all synchronized outputs
   for (int i=lstOutputs.size(); i--; )
     lstOutputs[i]->emitObject(tag);
 
   int flowLevelChange = tag.valueAs<int>();
-  
+
   shiftInputs();
 
   _iFlowLevel += flowLevelChange;
@@ -85,7 +85,7 @@ void PiiDefaultFlowController::SyncGroup::activateParents(QVector<SyncEvent>& sy
       // first).
       if (_pParentGroup != 0)
         _pParentGroup->activateParents(syncEvents);
-      
+
       syncEvents << SyncEvent(SyncEvent::StartInput, _iGroupId);
       _bSyncStartSent = true;
     }
@@ -145,7 +145,7 @@ void PiiDefaultFlowController::SyncGroup::resume()
       for (int i=_lstChildGroups.size(); i--; )
         if (_lstChildGroups[i]->_iFlowLevel > _iFlowLevel)
           ++_iActiveChildren;
-      
+
       // If _iActiveChildren is now zero, there is no delay and no
       // active children. This branch of groups is thus completely
       // processed.
@@ -181,17 +181,17 @@ void PiiDefaultFlowController::SyncGroup::resume()
    */
 
   /* There is no way of knowing if the sync start was already sent. If
-     a child group received objects before pause, the event was sent. 
+     a child group received objects before pause, the event was sent.
      If neither a child nor the parent received an object, the event
      was not sent. This may happen if the parent group has a non-zero
-     delay and a child group pauses before receiving a single object. 
+     delay and a child group pauses before receiving a single object.
      This could be solved by making PiiOutputSocket to set a flag into
      PiiSocketState that tells if any objects have been sent. But in
      this case a new operation added during pause would never get the
      sync start event. Therefore, we have to risk resending the event
      here and make PiiFlowController::SyncListener filter out
      successive sync events to the same group.
-     
+
      The same problem happens when end tags are received immediately
      after resume. Since we don't know if sync start was sent, we
      cannot filter out an unnecessary sync end event. The SyncListener
@@ -202,7 +202,7 @@ void PiiDefaultFlowController::SyncGroup::resume()
 
 PiiFlowController::FlowState PiiDefaultFlowController::SyncGroup::prepareProcess(QVector<SyncEvent>& syncEvents)
 {
-  // Can't handle objects if children have not been processed yet. 
+  // Can't handle objects if children have not been processed yet.
 #define CHECK_ACTIVE_CHILDREN  if (_iActiveChildren > 0) return IncompleteState
 
   /*
@@ -213,12 +213,12 @@ PiiFlowController::FlowState PiiDefaultFlowController::SyncGroup::prepareProcess
          _iFlowLevel,
          _iActiveChildren);
   */
-  
+
   switch (PiiFlowController::inputGroupTypeMask(begin(), end()))
     {
     case NoObject: // (Partially) empty group
       return IncompleteState;
-      
+
     case NormalObject: // Normal object in all sockets
       CHECK_ACTIVE_CHILDREN;
 
@@ -297,7 +297,7 @@ PiiFlowController::FlowState PiiDefaultFlowController::SyncGroup::prepareProcess
           if (_iFlowLevel == _pParentGroup->_iFlowLevel)
             {
               // Decrease active child count at parent, and check if
-              // we were the last one. 
+              // we were the last one.
               if (--_pParentGroup->_iActiveChildren == 0)
                 {
                   // All siblings are done now -> send sync end event
@@ -318,7 +318,7 @@ PiiFlowController::FlowState PiiDefaultFlowController::SyncGroup::prepareProcess
       _iActiveChildren = _lstChildGroups.size();
 
       return SynchronizedState;
-      
+
     case StopTag:
       shiftInputs();
       return FinishedState;
@@ -330,15 +330,15 @@ PiiFlowController::FlowState PiiDefaultFlowController::SyncGroup::prepareProcess
     case ResumeTag:
       shiftInputs();
       return ResumedState;
-      
+
     case ReconfigurationTag:
       shiftInputs();
       return ReconfigurableState;
-      
+
     default:
       unexpectedInputError();
     }
-  
+
   return IncompleteState;
 
 #undef CHECK_ACTIVE_CHILDREN
@@ -398,7 +398,7 @@ void PiiDefaultFlowController::Data::initHierarchy(const PiiDefaultFlowControlle
   while (bGroupAdded && relations.size() > 0)
     {
       bGroupAdded = false;
-      
+
       // Look for a group without a parent
       for (int i=tmpRelations.size(); i--;)
         {
@@ -424,13 +424,13 @@ void PiiDefaultFlowController::Data::initHierarchy(const PiiDefaultFlowControlle
                     pChildGroup->setStrictRelationship(tmpRelations[j].bStrict);
                     tmpRelations.removeAt(j);
                   }
-              
+
               bGroupAdded = true;
               break;
             }
         }
     }
-  
+
   // If there are relations left, the user set up a loop. She may have
   // added a group with no sockets as well. But we don't care.
 }
@@ -441,7 +441,7 @@ PiiDefaultFlowController::SyncGroup* PiiDefaultFlowController::Data::findOrCreat
   for (int i=vecSyncGroups.size(); i--; )
     if (vecSyncGroups[i]->groupId() == groupId) // yep
       return vecSyncGroups[i];
-  
+
   // No match -> create a new group
   SyncGroup* grp = new SyncGroup(groupId);
   vecSyncGroups << grp;
@@ -532,7 +532,7 @@ PiiFlowController::FlowState PiiDefaultFlowController::prepareProcess()
     {
       // All sync groups are active again.
       d->vecActiveSyncGroups = d->vecSyncGroups;
-      
+
       // Take the type of the object in the first input
       unsigned int uiTagType = d->vecSyncGroups[0]->at(0)->firstObject().type();
       if (uiTagType == PiiYdin::StopTagType)
@@ -541,7 +541,7 @@ PiiFlowController::FlowState PiiDefaultFlowController::prepareProcess()
         return PausedState;
       else if (uiTagType == PiiYdin::ResumeTagType)
         {
-          // Last to first to ensure children are handled first. 
+          // Last to first to ensure children are handled first.
           for (int i=d->vecSyncGroups.size(); i--; )
             d->vecSyncGroups[i]->resume();
           return ResumedState;
@@ -552,7 +552,7 @@ PiiFlowController::FlowState PiiDefaultFlowController::prepareProcess()
           return ReconfigurableState;
         }
     }
-  
+
   return IncompleteState;
 }
 

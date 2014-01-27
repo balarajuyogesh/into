@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -39,7 +39,7 @@ class PII_VIDEO_EXPORT PiiVideoFileReader : public PiiImageReaderOperation
   Q_OBJECT
 
   /**
-   * A video file name. An example: "videos/video1.avi". 
+   * A video file name. An example: "videos/video1.avi".
    */
   Q_PROPERTY(QString fileName READ fileName WRITE setFileName);
 
@@ -56,15 +56,15 @@ class PII_VIDEO_EXPORT PiiVideoFileReader : public PiiImageReaderOperation
    * FrameStep description
    */
   Q_PROPERTY(int frameStep READ frameStep WRITE setFrameStep);
-  
-  
+
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 
 public:
 
   PiiVideoFileReader();
   ~PiiVideoFileReader();
-  
+
   QString fileName() const;
   void setFileName(const QString& fileName);
 

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -29,7 +29,7 @@ typedef PiiGenericTextInputArchive InputArchive;
 struct BigType
 {
   template <class Archive> void serialize(Archive&, const unsigned int) {}
-  
+
   BigType() { ++iCount; }
   BigType(const BigType& other) { ++iCount; memcpy(bigBuffer, other.bigBuffer, sizeof(bigBuffer)); }
   ~BigType() { --iCount; }
@@ -60,7 +60,7 @@ void TestPiiVariant::serialization()
         obj5(PiiMatrix<int>(2,2,
                             1,2,
                             3,4));
-      
+
       buffer.open(QIODevice::ReadWrite);
       OutputArchive oa(&buffer);
       oa << obj0;
@@ -91,7 +91,7 @@ void TestPiiVariant::serialization()
 
       READ_CHECK(int, 1);
       READ_CHECK(bool, true);
-      READ_CHECK(double, 0.7);      
+      READ_CHECK(double, 0.7);
       READ_CHECK(QString, QString("Test string."));
 
       ia >> obj;
@@ -123,12 +123,12 @@ void TestPiiVariant::construct()
     QCOMPARE(v2.valueAs<TYPE>(), (TYPE)VALUE);  \
     QVERIFY(v1.isPrimitive());                  \
   }
-  
+
   TEST_TYPE(char, 'a');
   TEST_TYPE(short, 1);
   TEST_TYPE(int, -1);
   TEST_TYPE(qint64, 0);
-  
+
   TEST_TYPE(unsigned char, 'a');
   TEST_TYPE(unsigned short, 1);
   TEST_TYPE(unsigned int, -1);
@@ -156,7 +156,7 @@ void TestPiiVariant::copy()
   QCOMPARE(VAR.type(), Pii::typeId<BigType>()); \
   for (int i=0; i<16; ++i)                            \
     QCOMPARE(VAR.valueAs<BigType>().bigBuffer[i], i)
-  
+
   TEST_BUFFER(v1);
   TEST_BUFFER(v2);
   v3 = v2;
@@ -166,7 +166,7 @@ void TestPiiVariant::copy()
   v3 = v5;
   QVERIFY(v3.type() == (unsigned)PiiYdin::DoubleMatrixType);
   QVERIFY(v3.valueAs<PiiMatrix<double> >().isEmpty());
-  
+
   v1 = v2 = v3 = v4;
   QCOMPARE(BigType::iCount, 1);
   QVERIFY(!v1.isValid());

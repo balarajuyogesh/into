@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -136,7 +136,7 @@ bool PiiSimpleProcessor::tryToReceive(PiiAbstractInputSocket* sender, const PiiV
     } // if (sender->canReceive())
   else
     return false;
-  
+
   return true;
 }
 
@@ -150,10 +150,10 @@ void PiiSimpleProcessor::check(bool reset)
 void PiiSimpleProcessor::start()
 {
   QMutexLocker lock(_pStateMutex);
-  
+
   if (_pParentOp->state() == PiiOperation::Pausing)
     return;
-  
+
   // If an operation resumes from pause and it has no connected
   // inputs, it must send a resume tag to all outputs now.
   if (_pParentOp->state() == PiiOperation::Paused)
@@ -164,7 +164,7 @@ void PiiSimpleProcessor::start()
           try { _pParentOp->operationResumed(); } catch (...) {}
         }
     }
-  // Paused state changes to running when resume tags are received. 
+  // Paused state changes to running when resume tags are received.
   // Other states change to running immediately.
   else
     _pParentOp->setState(PiiOperation::Running);
@@ -226,9 +226,9 @@ void PiiSimpleProcessor::stop(PiiOperation::State finalState)
       else
         // Otherwise, turn directly to the final state
         _pParentOp->setState(finalState);
-      
+
       _pStateMutex->unlock();
-      
+
       try
         {
           _pParentOp->sendTag(finalState == PiiOperation::Stopped ?

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -19,7 +19,7 @@
 #include <QVariantList>
 
 /**
- * An object that can be used as a slot for any signal. 
+ * An object that can be used as a slot for any signal.
  * PiiUniversalSlot has no static moc-generated slots, but it can
  * create a matching a slot for any signal at run time. When the slot
  * is invoked, the call is passed to the protected [invokeSlot()]
@@ -35,7 +35,7 @@ class PII_CORE_EXPORT PiiUniversalSlot : public QObject
   // Omitting Q_OBJECT on purpose.
 public:
   ~PiiUniversalSlot();
-  
+
   /// @internal
   int qt_metacall(QMetaObject::Call call, int id, void** arguments);
 
@@ -58,7 +58,7 @@ public:
    * use the SIGNAL macro to wrap the signal name, but it is not
    * necessary.
    *
-   * @param slot the signature of the dynamic slot to create. If 
+   * @param slot the signature of the dynamic slot to create. If
    * *slot* is zero, *signal* will be used as the signature of the slot
    * as well. You can use the SLOT macro to wrap the slot name, but it
    * is not necessary.

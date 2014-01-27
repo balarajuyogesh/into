@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -72,11 +72,11 @@ class PiiFftOperation : public PiiDefaultOperation
    * is `false`. This flag has no effect in inverse transform.
    */
   Q_PROPERTY(bool subtractMean READ subtractMean WRITE setSubtractMean);
-  
+
 public:
 
   PiiFftOperation();
-  
+
   /**
    * FFT direction.
    *
@@ -85,7 +85,7 @@ public:
    * - `Inverse` - calculates inverse FFT.
    */
   enum FftDirection { Forward, Inverse };
-  
+
   FftDirection direction() const;
   void setDirection(FftDirection direction);
 
@@ -95,7 +95,7 @@ public:
   bool subtractMean() const;
 
   template <class T> class Template;
-    
+
 protected:
   /// @internal
   class Data : public PiiDefaultOperation::Data

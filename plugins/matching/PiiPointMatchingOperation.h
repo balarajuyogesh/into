@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -56,7 +56,7 @@
  * accepted. This input is used only in when collecting the model
  * samples. Inherited from PiiClassifierOperation.
  *
- * @in points - the locations of feature points in image coordinates. 
+ * @in points - the locations of feature points in image coordinates.
  * A N-by-D matrix in which each row contains D-dimensional point
  * coordinates. All numeric matrix types will be accepted, but the
  * operation internally uses `float` for calculations. Each point
@@ -74,7 +74,7 @@
  * operation will use the minimum bounding hypercube of the feature
  * points as the model location. Note that it is not necessary that
  * the feature points are inside the location. The location can frame
- * any area of the point space with respect to the feature points. 
+ * any area of the point space with respect to the feature points.
  * This input is used only when collecting model samples.
  *
  * Outputs
@@ -113,7 +113,7 @@
  * transform and reading the pixel at x. If the input space is
  * D-dimensional, the size of the transformation matrix will be D+1 by
  * D+1. In training, and if no model matches in `MatchOneModel` mode,
- * this output will emit a D+1 by D+1 identity matrix. 
+ * this output will emit a D+1 by D+1 identity matrix.
  * PiiMatrix<double>.
  *
  * @out query points - the subset of the input points that was matched
@@ -138,7 +138,7 @@ class PII_MATCHING_EXPORT PiiPointMatchingOperation : public PiiClassifierOperat
    * result in 0-N matching results, which may include multiple
    * matches to the same model. This mode is suitable if objects may
    * overlap and many similar objects may be present. If the operation
-   * is used for database retrieval rather than object detection, 
+   * is used for database retrieval rather than object detection,
    * `MatchDifferentModels` is usually used. In this mode, only one
    * match is allowed for each individual model, but the query may
    * still be matched by many different models. In `MatchOneModel`
@@ -211,7 +211,7 @@ protected:
   public:
     Data(int pointDimensions);
     ~Data();
-    
+
     PiiInputSocket *pPointsInput, *pLocationInput;
     PiiOutputSocket *pModelIndexOutput, *pLocationOutput, *pTransformOutput,
       *pModelPointsOutput, *pQueryPointsOutput;
@@ -239,7 +239,7 @@ protected:
    * point locations. In images, the number of dimensions is two.
    */
   PiiPointMatchingOperation(int pointDimensions);
-  
+
   void setMatchingMode(PiiMatching::ModelMatchingMode matchingMode);
   PiiMatching::ModelMatchingMode matchingMode() const;
   void setClosestMatchCount(int closestMatchCount);
@@ -251,7 +251,7 @@ protected:
   void resetClassifier();
   double classify();
   void collectSample(double label, double weight);
-  
+
   /**
    * Matches the given *points* to the database stored in *matcher*
    * using *features* as the feature descriptors. Subclasses override
@@ -272,7 +272,7 @@ protected:
   virtual PiiMatrix<double> toTransformMatrix(const PiiMatrix<double>& transformParams) = 0;
 
   /**
-   * Removes duplicate matches to the same model from 
+   * Removes duplicate matches to the same model from
    * *matchedModels*. This function is called if there are more than one
    * matched model. Subclasses may implement any strategy for pruning
    * duplicates. The default implementation does nothing.

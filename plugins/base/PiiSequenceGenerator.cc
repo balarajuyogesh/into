@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -35,7 +35,7 @@ void PiiSequenceGenerator::check(bool reset)
 {
   setThreadCount(inputAt(0)->isConnected() ? 0 : 1);
   PiiDefaultOperation::check(reset);
-  
+
   if (reset)
     {
       PII_D;
@@ -43,7 +43,7 @@ void PiiSequenceGenerator::check(bool reset)
         PII_THROW(PiiExecutionException, tr("Sequence start (%1) is greater than sequence end (%2).").arg(d->dSequenceStart).arg(d->dSequenceEnd));
       if (d->dStep > d->dSequenceEnd - d->dSequenceStart)
         PII_THROW(PiiExecutionException, tr("Sequence step (%1) is larger than sequence length (%2).").arg(d->dStep).arg(d->dSequenceEnd-d->dSequenceStart));
-      
+
       d->dCurrentValue = d->dStep < 0 ? d->dSequenceEnd : d->dSequenceStart;
       d->dCurrentStep = d->dStep;
       d->iCurrentRepeatCount = 0;
@@ -71,7 +71,7 @@ void PiiSequenceGenerator::process()
       if (d->bAutoExit &&
           ++d->iCurrentRepeatCount >= d->iRepeatCount)
         operationStopped();
-      
+
       if (d->sequenceMode == Repeat) // go back to the other end
         d->dCurrentValue = d->dCurrentStep > 0 ? d->dSequenceStart : d->dSequenceEnd;
       else // reverse direction

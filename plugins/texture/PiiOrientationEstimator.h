@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -29,7 +29,7 @@
  * ------
  *
  * @in image - input image. Any gray level or color image.
- * 
+ *
  * Outputs
  * -------
  *
@@ -60,7 +60,7 @@ class PiiOrientationEstimator : public PiiDefaultOperation
 
   /**
    * The type of orientation estimation. Different methods have
-   * different strengths and weaknesses. The default is 
+   * different strengths and weaknesses. The default is
    * `UnidirectionalGradient`.
    */
   Q_PROPERTY(EstimationType estimationType READ estimationType WRITE setEstimationType);
@@ -100,7 +100,7 @@ public:
    * requires larger samples than `Gradient` and is somewhat slower.
    */
   enum EstimationType { Gradient, UnidirectionalGradient, Fourier };
-  
+
   PiiOrientationEstimator();
 
   void check(bool reset);
@@ -131,7 +131,7 @@ private:
 
   // Rotate histogram if needed and emit it
   void emitHistogram(PiiMatrix<float>& histogram);
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {
@@ -140,12 +140,12 @@ private:
 
     PiiInputSocket* pImageInput;
     PiiOutputSocket* pHistogramOutput;
-    
+
     int iAngles;
     EstimationType estimationType;
     bool bRotateHistogram;
     bool bNormalized;
-    
+
     PiiFft<float> fft;
   };
   PII_D_FUNC;

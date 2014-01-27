@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -32,7 +32,7 @@
  * operations. That is, the size of the managed memory has no effect
  * on allocation/deallocation time. If you need to allocate lots of
  * small memory chunks, all of which are about the same size, chances
- * are that PiiSimpleMemoryManager is faster than `malloc()` or 
+ * are that PiiSimpleMemoryManager is faster than `malloc()` or
  * `new`. This may be attributed not only to faster
  * allocation/deallocation but also slightly better cache hit ratios.
  *
@@ -117,15 +117,15 @@ public:
    * memory.
    */
   PiiSimpleMemoryManager(void* buffer, size_t memorySize, size_t blockSize);
-  
+
   /**
    * Deallocates the memory buffer.
    */
   ~PiiSimpleMemoryManager();
-  
+
   /**
    * Allocate memory. The function returns a pointer to the allocated
-   * memory block. If the number of bytes requested exceeds 
+   * memory block. If the number of bytes requested exceeds
    * *blockSize* or no more blocks are available, 0 will be returned.
    *
    * @param bytes the number of bytes to allocate. If *bytes* is
@@ -139,7 +139,7 @@ public:
   /**
    * Deallocate a previously allocated buffer. If `buffer` is not
    * within the allocated memory area, `false` will be returned,
-   * expect for a null pointer, for which `true` will be returned. 
+   * expect for a null pointer, for which `true` will be returned.
    * Otherwise, the buffer will be deallocated and `true` will be
    * returned. If *buffer* points to an invalid memory location, the
    * behavior is undefined.

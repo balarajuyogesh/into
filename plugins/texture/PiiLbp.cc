@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -115,7 +115,7 @@ unsigned short* PiiLbp::createLookupTable(int samples, Mode mode)
             newMap[i] = last;
         }
       break;
-      
+
     case RotationInvariant:
       {
         unsigned short *tmpMap = new unsigned short[1<<samples];
@@ -127,7 +127,7 @@ unsigned short* PiiLbp::createLookupTable(int samples, Mode mode)
             int rotMin = rotateToMinimum(i,samples);
             if (tmpMap[rotMin] == USHRT_MAX)
               tmpMap[rotMin] = newMax++;
-            
+
             newMap[i] = tmpMap[rotMin];
           }
         delete[] tmpMap;
@@ -151,7 +151,7 @@ void PiiLbp::Data::update()
 {
   delete[] pPoints;
   pPoints = new InterpolationPoint[iSamples];
-  
+
   //initialize _iSamples samples evenly spaced on a circle
   double step = 2 * M_PI / iSamples;
   double angle = 0;
@@ -191,7 +191,7 @@ void PiiLbp::Data::update()
         }
 
       //qDebug("pPoints[%i] = (%d + %lf, %d + %lf)", i, pPoints[i].x, offsetX, pPoints[i].y, offsetY);
-                        
+
       double dx = 1-offsetX;
       double dy = 1-offsetY;
 

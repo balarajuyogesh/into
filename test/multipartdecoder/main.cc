@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -94,7 +94,7 @@ X-URI: empty\r\n\
 
   PiiMimeHeader header(bfr.readLine());
   bfr.readLine();
-  
+
   PiiMultipartDecoder decoder(&bfr, header);
   // Read preamble
   QByteArray aPreamble = decoder.readAll();
@@ -107,7 +107,7 @@ X-URI: empty\r\n\
       QCOMPARE(decoder.header().value("X-URI"), QString("empty"));
       QByteArray aBody = decoder.readAll();
       QVERIFY(aBody.isEmpty());
-      
+
       QVERIFY(!decoder.nextMessage());
     }
   catch (PiiException& ex)

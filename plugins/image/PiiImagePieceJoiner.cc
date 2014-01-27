@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -59,7 +59,7 @@ PiiImagePieceJoiner::PiiImagePieceJoiner() :
 void PiiImagePieceJoiner::check(bool reset)
 {
   PII_D;
-  
+
   PiiDefaultOperation::check(reset);
 
   if (reset)
@@ -104,7 +104,7 @@ void PiiImagePieceJoiner::process()
       d->largeImage = d->pImageInput->firstObject();
       if (d->pLocationInput->isConnected())
         readLocation();
-        
+
       //qDebug("PiiImagePieceJoiner: read main image (type 0x%x).", d->largeImage.type());
     }
 }
@@ -148,7 +148,7 @@ void PiiImagePieceJoiner::joinPieces()
   PII_D;
   if (d->rectList.size() == 0)
     return;
-  
+
   QLinkedList<QPair<int,int> > pairs;
 
   /*QRect r1(0,0,10,10), r2(10,0,10,10), r3(20,0,10,10),
@@ -167,7 +167,7 @@ void PiiImagePieceJoiner::joinPieces()
   qDebug("r9,r5: %s", isNeighbor(r9,r5) ? "yes" : "no");*/
 
   //qDebug("PiiImagePieceJoiner: Joining %d pieces", d->rectList.size());
-  
+
   // First find all pairs of neighboring pieces (a piece is a neighbor
   // to itself)
   for (int i=d->rectList.size(); i--; )
@@ -216,12 +216,12 @@ void PiiImagePieceJoiner::joinPieces()
             area |= d->rectList[indices[i]];
           emitCompound(area);
         }
-      
+
       // Send its label
       d->pLabelOutput->emitObject(d->labelList[indices[0]]);
       //qDebug("PiiImagePieceJoiner: finished this compound");
     }
-  
+
   // Initialize the lists of rectangles and labels
   d->rectList.clear();
   d->labelList.clear();
@@ -262,7 +262,7 @@ template <class T> void PiiImagePieceJoiner::emitSubImage(QPair<QRect,QList<QRec
   PiiMatrix<T> matPiece(PiiMatrix<T>::uninitialized(rows, columns));
   // Fill the image with the selected background color
   matPiece = ColorConverter<T>::value(d->clrBackground);
-    
+
   for (int i=subAreas->size(); i--; )
     {
       QRect *subArea = subAreas->at(i);

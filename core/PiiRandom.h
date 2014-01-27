@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -47,7 +47,7 @@ namespace Pii
   PII_CORE_EXPORT PiiMatrix<double> uniformRandomMatrix(int rows, int columns);
 
   /**
-   * Returns a uniformly distributed random number in [*min*, 
+   * Returns a uniformly distributed random number in [*min*,
    * *max*].
    */
   inline double uniformRandom(double min, double max)
@@ -75,16 +75,16 @@ namespace Pii
    * distributed random numbers.
    */
   PII_CORE_EXPORT PiiMatrix<double> normalRandomMatrix(int rows, int columns);
-  
+
   /**
    * Initializes the random number generator from system clock. Note
-   * that successive inits within the same millisecond have no effect. 
+   * that successive inits within the same millisecond have no effect.
    * Note also that this function must be called before any random
    * numbers are generated if you don't want a similar sequence each
    * time the program is run.
    */
   PII_CORE_EXPORT void seedRandom();
-  
+
   /**
    * Seeds the random number generator with your favourite value.
    */

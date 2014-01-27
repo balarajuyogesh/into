@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -29,7 +29,7 @@
 class MainWindow : public DemoMainWindow, private Ui::MainWindow
 {
   Q_OBJECT
-  
+
 public:
   MainWindow(QWidget *parent = 0);
 
@@ -39,24 +39,24 @@ public:
     QColor color;
     QList<PiiMatrix<int> > lstBoundaries;
   };
-  
+
 protected:
   QStringList requiredPlugins() const { return QStringList() << "piiimage" << "piibase" << "piimatching"; }
   PiiEngine* createEngine();
 
-  
+
 signals:
   void trigImage(int);
-  
+
 private slots:
   void nextButtonClicked();
   void prevButtonClicked();
   void updateModels(const PiiVariant& name, const QVariantList& information);
   void updateImage(const PiiVariant& image, const QVariantList& information);
-  
+
 private:
   void init();
-  
+
   QList<Model> _lstModels;
   QList<PiiImageOverlay*> _lstOverlays;
   QList<QColor> _lstColors;

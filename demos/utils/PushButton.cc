@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -20,7 +20,7 @@ PushButton::PushButton(QWidget *parent) :
   QPushButton(parent)
 {
   setText("");
-  
+
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
   _pixmapLeft = QPixmap(":left");
   _pixmapRight = QPixmap(":right");
@@ -31,13 +31,13 @@ PushButton::PushButton(QWidget *parent) :
 void PushButton::paintEvent(QPaintEvent *event)
 {
   QPushButton::paintEvent(event);
-  
+
   QPainter p(this);
   int h = height();
   int w = width();
 
   int cap = 5;
-  
+
   // Draw icon and text
   if (_mode == IconLeft)
     {
@@ -55,14 +55,14 @@ void PushButton::paintEvent(QPaintEvent *event)
 void PushButton::setIconMode(IconMode mode)
 {
   setText("");
-  
+
   _mode = mode;
   _strName = mode == IconLeft ? tr("Previous image") : tr("Next image");
-  
+
   // Set minimum width
   QFontMetrics m(font());
   setMinimumWidth(m.width(_strName) + 2*height());
 
   repaint();
 }
-                            
+

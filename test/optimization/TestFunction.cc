@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -25,7 +25,7 @@ void TestFunction::functionGradient(const double* params, double* gradient) cons
 
 double TestFunction::functionValue(const double* params) const
 {
-  //Now test function is x^2 
+  //Now test function is x^2
   double res = params[0]*params[0];
   //qDebug()<<"Function Val res: "<<res<<" params: "<<params(0,0);
   return res;

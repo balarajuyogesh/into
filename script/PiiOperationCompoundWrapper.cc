@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@ namespace PiiOperationCompoundWrapper
 
   PII_QOBJECT_CONVERSION_FUNCTIONS(PiiOperationCompound)
   PII_QOBJECT_CONSTRUCTOR(PiiOperationCompound)
-    
+
   PII_SEQUENCE_CONVERSION_FUNCTIONS(PiiOperationList)
 
   static QScriptValue addOperations(QScriptContext* context, QScriptEngine* engine)
@@ -163,7 +163,7 @@ void initPiiOperationCompound(QScriptEngine* engine)
   prototype.setProperty("exposeOutput", engine->newFunction(PiiOperationCompoundWrapper::exposeOutput));
   prototype.setProperty("unexposeInput", engine->newFunction(PiiOperationCompoundWrapper::unexposeInput));
   prototype.setProperty("unexposeOutput", engine->newFunction(PiiOperationCompoundWrapper::unexposeOutput));
-  
+
   QScriptValue constructor = engine->newFunction(PiiOperationCompoundWrapper::createPiiOperationCompound, prototype);
   PiiScript::configure(constructor, engine->newQMetaObject(&PiiOperationCompound::staticMetaObject));
 

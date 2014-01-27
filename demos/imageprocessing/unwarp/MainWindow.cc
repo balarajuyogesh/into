@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,10 +24,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
   // Initialize engine
   initEngine();
-  
+
   // Initialize ui
   init();
-  
+
   // Start processing
   startProcessing();
   emit selectImage(0);
@@ -60,7 +60,7 @@ PiiEngine* MainWindow::createEngine()
   // Create probe input for source and result image display
   _pSourceProbeInput = new PiiProbeInput;
   _pResultProbeInput = new PiiProbeInput;
-  
+
   // Create image source
   PiiOperation *pImageFileReader = pEngine->createOperation("PiiImageFileReader");
   //pImageFileReader->setProperty("imageType", "GrayScale");
@@ -82,7 +82,7 @@ PiiEngine* MainWindow::createEngine()
   pTriggerSource->connectOutput("trigger", pImageFileReader, "trigger");
   pImageFileReader->connectOutput("image", _pImageCropper, "image");
   _pImageCropper->connectOutput("image", _pImageUnwarpOperation, "image");
-  
+
   _pSourceProbeInput->connectOutput(pImageFileReader->output("image"));
   _pResultProbeInput->connectOutput(_pImageUnwarpOperation->output("image"));
 
@@ -104,10 +104,10 @@ void MainWindow::setCroppedArea(const QRect& area, int /*modifiers*/)
   QRect fixedArea = area;
   fixedArea.setX(qMax(fixedArea.x(), 0));
   fixedArea.setY(qMax(fixedArea.y(), 0));
-  
+
   // Change cropping area
   _pImageCropper->setProperty("area", fixedArea);
-  
+
   // Trig the image again
   emit selectImage(0);
 }

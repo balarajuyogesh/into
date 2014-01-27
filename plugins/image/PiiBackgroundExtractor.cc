@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,7 +30,7 @@ PiiBackgroundExtractor::PiiBackgroundExtractor() :
   PiiDefaultOperation(new Data)
 {
   addSocket(new PiiInputSocket("image"));
-  
+
   addSocket(new PiiOutputSocket("image"));
   addSocket(new PiiOutputSocket("movement"));
 }
@@ -54,7 +54,7 @@ template <class T> void PiiBackgroundExtractor::operate(const PiiVariant& obj)
   int iValidCounter = 0;
 
   const int iRows = inputMatrix.rows(), iCols = inputMatrix.columns();
-  
+
   if (d->bFirst) // Initialize.
     {
       // Init support matrices.
@@ -67,7 +67,7 @@ template <class T> void PiiBackgroundExtractor::operate(const PiiVariant& obj)
     {
       if (iRows != d->matBackground.rows() || iCols != d->matBackground.columns())
         PII_THROW_WRONG_SIZE(inputAt(0), inputMatrix, d->matBackground.rows(), d->matBackground.columns());
-      
+
       for (int r=0; r<iRows; ++r)
         {
           float* pInputRow = inputMatrix[r];
@@ -104,7 +104,7 @@ template <class T> void PiiBackgroundExtractor::operate(const PiiVariant& obj)
 
               // Update background model.
               // B_t+1 = B_t + (alpha1 * (1 - M_t) + alpha2 * M_t) * D_t
-              pBackgroundRow[c] += float((d->dAlpha1 * (1.0 - pForegroundRow[c]) + 
+              pBackgroundRow[c] += float((d->dAlpha1 * (1.0 - pForegroundRow[c]) +
                                           d->dAlpha2 * pForegroundRow[c]) * dDifference);
             }
         }

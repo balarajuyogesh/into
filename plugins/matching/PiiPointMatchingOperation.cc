@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -86,7 +86,7 @@ void PiiPointMatchingOperation::check(bool reset)
       if (!d->lstLabels.isEmpty() && d->lstLabels.size() != d->matLocations.rows())
         PII_THROW(PiiExecutionException, tr("There must be an equal number of model locations and labels."));
     }
-  
+
   d->pMatcher->setMatchingMode(d->matchingMode);
   d->bMustSendPoints = d->pModelPointsOutput->isConnected() ||
     d->pQueryPointsOutput->isConnected();
@@ -202,7 +202,7 @@ int PiiPointMatchingOperation::checkDescriptor(const PiiMatrix<float>& points,
 double PiiPointMatchingOperation::classify()
 {
   PII_D;
-  
+
   PiiMatrix<float> matFeatures = PiiYdin::convertMatrixTo<float>(featureInput());
   PiiMatrix<float> matPoints = PiiYdin::convertMatrixTo<float>(d->pPointsInput);
 
@@ -248,7 +248,7 @@ void PiiPointMatchingOperation::emitMatch(const PiiMatching::Match& match, const
          iModelIndex,
          iModelIndex < d->lstLabels.size() ?
          d->lstLabels[iModelIndex] : iModelIndex);*/
-  
+
   classificationOutput()->emitObject(iModelIndex < d->lstLabels.size() ?
                                      d->lstLabels[iModelIndex] : iModelIndex);
   d->pModelIndexOutput->emitObject(iModelIndex);
@@ -274,7 +274,7 @@ void PiiPointMatchingOperation::emitMatch(const PiiMatching::Match& match, const
 void PiiPointMatchingOperation::collectSample(double label, double /*weight*/)
 {
   PII_D;
-  
+
   PiiMatrix<float> matFeatures = PiiYdin::convertMatrixTo<float>(featureInput());
   PiiMatrix<float> matPoints = PiiYdin::convertMatrixTo<float>(d->pPointsInput);
 
@@ -318,10 +318,10 @@ void PiiPointMatchingOperation::collectSample(double label, double /*weight*/)
             }
         }
     }
-  
+
   // PENDING Should we reserve some room to further avoid
   // reallocation?
-  
+
   d->matNewFeatures.appendRows(matFeatures);
   d->matNewPoints.appendRows(matPoints);
   d->vecNewModelIndices.reserve(d->vecNewModelIndices.size() + iPoints);

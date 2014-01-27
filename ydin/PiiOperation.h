@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -37,7 +37,7 @@
 
 /**
  * A superclass for operations that can be run by Ydin. Operations can
- * be roughly divided into produces, consumers, and transformations. 
+ * be roughly divided into produces, consumers, and transformations.
  * An image source, such as a camera, is a producer (an input), image
  * processing operations are transforms, and a connection to a process
  * control system is a consumer (an output). There are however
@@ -64,7 +64,7 @@
  * matching types can be connected to each other, and an output can be
  * connected to multiple inputs.
  *
- * Sockets are automatically destroyed with their parent operation. 
+ * Sockets are automatically destroyed with their parent operation.
  * Furthermore, all connections between deleted sockets are
  * automatically deleted. Thus, one doesn't need to care about
  * deleting anything but the operation itself.
@@ -88,7 +88,7 @@ class PII_YDIN_EXPORT PiiOperation : public QObject, public PiiConfigurable
    * properties (see [startPropertySet()]) and `false` otherwise.
    */
   Q_PROPERTY(bool cachingProperties READ isCachingProperties);
-    
+
   Q_ENUMS(State ProtectionLevel);
 
   PII_DECLARE_VIRTUAL_METAOBJECT_FUNCTION;
@@ -97,7 +97,7 @@ class PII_YDIN_EXPORT PiiOperation : public QObject, public PiiConfigurable
 public:
 
   ~PiiOperation();
-  
+
   /**
    * The state of an operation can assume six different values:
    *
@@ -161,9 +161,9 @@ public:
    * Returns a string presentation of the given state.
    */
   static const char* stateName(State state);
-  
+
   /**
-   * Checks that the necessary preconditions for processing are met. 
+   * Checks that the necessary preconditions for processing are met.
    * This function is called by before processing is started. It is
    * followed by a [start()] call, provided that all operations in an
    * engine have been successfully initialized. The function should
@@ -184,7 +184,7 @@ public:
   virtual void check(bool reset) = 0;
 
   /**
-   * Starts the operation and executes it until interrupted or paused. 
+   * Starts the operation and executes it until interrupted or paused.
    * The operation should prepare itself for work and change state to
    * `Starting` or `Running`.
    *
@@ -199,40 +199,40 @@ public:
   virtual void start() = 0;
 
   /**
-   * Pauses the operation. The operation should change its state to 
-   * `Pausing`. Pausing has direct effect on producer operations only. 
+   * Pauses the operation. The operation should change its state to
+   * `Pausing`. Pausing has direct effect on producer operations only.
    * If a producer is in `Pausing` state, it'll finish its current
    * processing round, turn to `Paused` state and inform all
    * connected operations that it is now safe to pause. This will
-   * finally turn all operations in a pipeline to `Paused` state. 
+   * finally turn all operations in a pipeline to `Paused` state.
    * Before the next [start()] call, [check()] will be called with the
    * `reset` parameter set to `false`.
    *
-   * Note that pause() has no effect if the operation is not in 
+   * Note that pause() has no effect if the operation is not in
    * `Running` state.
    */
   virtual void pause() = 0;
 
   /**
-   * Stops the operation. The operation should change its state to 
-   * `Stopping`. Stopping and pausing work similarly in most cases. 
+   * Stops the operation. The operation should change its state to
+   * `Stopping`. Stopping and pausing work similarly in most cases.
    * Usually, the only difference is in the final state of the
    * operation. Overriding this function makes it possible for an
-   * operation to prepare for stopping. The difference between 
+   * operation to prepare for stopping. The difference between
    * `stop`() and [interrupt()] is in that the former performs a "clean"
    * stop, which won't leave any object currently being processed in
    * the pipeline.
    *
-   * Note that stop() has no effect if the operation is not in 
+   * Note that stop() has no effect if the operation is not in
    * `Running` state.
    */
   virtual void stop() = 0;
-  
+
   /**
    * Interrupts the execution. Calling this function should stop the
    * execution of this operation as soon as possible, even in the
    * middle of a processing round. After an interrupt, the next
-   * [start()] call will be preceded by a [check()] call with the 
+   * [start()] call will be preceded by a [check()] call with the
    * `reset` parameter set to `true`.
    */
   virtual void interrupt() = 0;
@@ -259,7 +259,7 @@ public:
    * returns inputs().size().
    */
   Q_INVOKABLE virtual int inputCount() const;
-  
+
   /**
    * Returns a pointer to the input associated with *name*.
    *
@@ -270,7 +270,7 @@ public:
   Q_INVOKABLE virtual PiiAbstractInputSocket* input(const QString& name) const;
 
   Q_INVOKABLE virtual PiiAbstractInputSocket* inputAt(int index) const;
-  
+
   /**
    * Returns the number of output sockets. The default implementation
    * returns outputs().size().
@@ -286,7 +286,7 @@ public:
   Q_INVOKABLE virtual PiiAbstractOutputSocket* outputAt(int index) const;
 
   /**
-   * Returns a list of all input sockets connected to this operation. 
+   * Returns a list of all input sockets connected to this operation.
    * The order in which the sockets are returned should be
    * "intuitive", but no strict restrictions are imposed.
    */
@@ -298,7 +298,7 @@ public:
   Q_INVOKABLE QStringList inputNames() const;
 
   /**
-   * Returns a list of all output sockets connected to this operation. 
+   * Returns a list of all output sockets connected to this operation.
    * Analogous to inputs().
    */
   virtual QList<PiiAbstractOutputSocket*> outputs() const = 0;
@@ -312,7 +312,7 @@ public:
    * Returns meta information associated with *socket*. This function
    * can be used to query named properties of input and output
    * sockets. Operations are required to provide at least the `name`
-   * property. Other properties can be used depending on application. 
+   * property. Other properties can be used depending on application.
    * Below is a short list of commonly used properies:
    *
    * - `name` - the name of the socket in the context of this
@@ -397,7 +397,7 @@ public:
 
   bool isCachingProperties() const;
   QString propertySetName() const;
-  
+
   /**
    * Ends storing a named property set. After calling this function
    * calls to [setProperty()] will change property values directly.
@@ -421,7 +421,7 @@ public:
    * have applied the new properties.
    */
   Q_INVOKABLE virtual void reconfigure(const QString& propertySetName = QString()) = 0;
-  
+
   /**
    * Virtual version of QObject::setProperty(). Making a non-virtual
    * function virtual in a subclass is *baad*. But we need to be able
@@ -469,7 +469,7 @@ public:
    * Disconnects all outputs.
    */
   Q_INVOKABLE void disconnectAllOutputs();
-  
+
   /**
    * Returns the protection level of *property*.
    */
@@ -489,7 +489,7 @@ signals:
   /**
    * Indicates that the state of this operation has changed. If you
    * connect to this signal from outside, make sure you either run an
-   * event loop in the receiving thread or create a direct connection. 
+   * event loop in the receiving thread or create a direct connection.
    * This is needed because the signal will most likely be emitted
    * from another thread. If you create a queued connection and don't
    * run an event loop in the receiving thread, the signal will be
@@ -501,7 +501,7 @@ signals:
    * avoid registering a new meta type.
    */
   void stateChanged(int state);
-  
+
 protected:
   /// @hide
   typedef QList<QPair<const char*, ProtectionLevel> > ProtectionList;
@@ -520,7 +520,7 @@ protected:
     QString strPropertySetName;
     QMap<QString,PropertyList> mapCachedProperties;
   } *d;
-  
+
   PiiOperation(Data* d);
   /// @endhide
 

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -47,13 +47,13 @@ PiiMultiPointTracker::PiiMultiPointTracker() :
 
   //init previousEmissionTime to the currentTime
   d->uiPreviousEmissionTime = QDateTime::currentDateTime().toTime_t();
-  
+
   //add inputs
   addSocket(d->pCoordinatesInput = new PiiInputSocket("coordinates"));
 
   addSocket(d->pLabelsInput = new PiiInputSocket("labels"));
   d->pLabelsInput->setOptional(true);
-  
+
   addSocket(d->pImageInput = new PiiInputSocket("image"));
   d->pImageInput->setOptional(true);
 
@@ -71,7 +71,7 @@ PiiMultiPointTracker::PiiMultiPointTracker() :
   addSocket(d->pLineStartTimeOutput = new PiiOutputSocket("line start time"));
   addSocket(d->pLineEndTimeOutput = new PiiOutputSocket("line end time"));
   addSocket(d->pImageOutput = new PiiOutputSocket("image"));
-  
+
   d->colorList.append(QColor(Qt::black));
   d->colorList.append(QColor(Qt::cyan));
   d->colorList.append(QColor(Qt::green));
@@ -149,7 +149,7 @@ void PiiMultiPointTracker::process()
     }
   else
     PII_THROW_UNKNOWN_TYPE(d->pCoordinatesInput);
-  
+
   if (d->pImageInput->isConnected() && d->pImageOutput->isConnected())
     {
       //if image-input is connected, draw all routes to the image
@@ -158,7 +158,7 @@ void PiiMultiPointTracker::process()
         {
         case PiiYdin::UnsignedCharColorMatrixType:
           operateImage<PiiColor<unsigned char> >(imageObj);
-          break;        
+          break;
         case PiiYdin::UnsignedCharColor4MatrixType:
           operateImage<PiiColor4<unsigned char> >(imageObj);
           break;
@@ -180,7 +180,7 @@ void PiiMultiPointTracker::process()
           int key = areaKeys[i];
           AreaStatistics areaStruct = d->hashAreas[key];
           int visitorCount = areaStruct.visitors;
-          
+
           d->pAreaIdOutput->emitObject(key);
           d->pDwellHistogramOutput->emitObject(areaStruct.dwellHistogram);
           d->pAverageDwellOutput->emitObject(visitorCount ? double(areaStruct.totalStayTime) / visitorCount : 0);
@@ -189,7 +189,7 @@ void PiiMultiPointTracker::process()
           d->pAreaStartTimeOutput->emitObject(static_cast<int>(d->uiPreviousEmissionTime));
           d->pAreaEndTimeOutput->emitObject(static_cast<int>(currentTime));
         }
-      
+
       // Line statistics
       QList<int> lineKeys = d->hashLines.keys();
       for ( int i=0; i<lineKeys.size(); i++ )
@@ -241,11 +241,11 @@ bool PiiMultiPointTracker::collectLineStatistics(PiiCoordinateTrackerNode<double
   PII_D;
   bool bAmountChanged = false;
 
-  // First calculate count of the in/out 
+  // First calculate count of the in/out
   QPoint previousPoint = QPoint(int(trajectory->measurement()[0]),
                                 int(trajectory->measurement()[1]));
   trajectory = trajectory->next();
-  
+
   PiiMatrix<int> directionSums(1,d->lstLines.size());
   while (trajectory)
     {
@@ -255,7 +255,7 @@ bool PiiMultiPointTracker::collectLineStatistics(PiiCoordinateTrackerNode<double
         {
           QPoint lineStartPoint = d->lstLines[i].value<QPolygon>().point(0);
           QPoint lineEndPoint = d->lstLines[i].value<QPolygon>().point(1);
-          
+
           directionSums(0,i) += checkCalculationLine(lineStartPoint, lineEndPoint, currentPoint, previousPoint);
         }
 
@@ -281,7 +281,7 @@ bool PiiMultiPointTracker::collectLineStatistics(PiiCoordinateTrackerNode<double
             }
         }
     }
-  
+
   return bAmountChanged;
 }
 
@@ -289,7 +289,7 @@ bool PiiMultiPointTracker::collectAreaStatistics(PiiCoordinateTrackerNode<double
 {
   PII_D;
   bool bAmountChanged = false;
-  
+
   PiiVector<double,2> previousPoint = trajectory->measurement();
   int size = d->lstAreas.size();
 
@@ -304,9 +304,9 @@ bool PiiMultiPointTracker::collectAreaStatistics(PiiCoordinateTrackerNode<double
       someIn[i] = false;
       exitTime[i] = 0;
     }
-  
+
   int previousTime = trajectory->time();
-  
+
   while (trajectory)
     {
       PiiVector<double,2> currentPoint = trajectory->measurement();
@@ -319,7 +319,7 @@ bool PiiMultiPointTracker::collectAreaStatistics(PiiCoordinateTrackerNode<double
               QPolygon polygon = d->lstAreas[i].value<QPolygon>();
               currentIn[i] = polygon.contains(point); //Pii::contains(polygon,point);
               someIn[i] = someIn[i] || currentIn[i];
-              
+
               // If the point is within the area, we increase total object
               // count.
               if (currentIn[i])
@@ -333,12 +333,12 @@ bool PiiMultiPointTracker::collectAreaStatistics(PiiCoordinateTrackerNode<double
               else if (previousIn[i])
                 {
                   int stayTime = int(double(exitTime[i] - previousTime)/1000.0 + 0.5);
-                  int k=mapTime(stayTime); 
+                  int k=mapTime(stayTime);
                   d->hashAreas[key].dwellHistogram(k)++;
                   d->hashAreas[key].totalStayTime += stayTime;
                 }
               previousIn[i] = currentIn[i];
-              
+
             }
         }
       previousPoint = currentPoint;
@@ -366,7 +366,7 @@ bool PiiMultiPointTracker::collectAreaStatistics(PiiCoordinateTrackerNode<double
       if (someIn[i])
         d->hashAreas[key].visitors++;
     }
-  
+
   delete[] previousIn;
   delete[] currentIn;
   delete[] someIn;
@@ -401,7 +401,7 @@ template <class T> void PiiMultiPointTracker::operateImage(const PiiVariant& obj
         {
           QPointF point(node->measurement()[0],node->measurement()[1]);
           polygon.append(point);
-          
+
           node = node->next();
         }
       trajects.append(polygon);
@@ -409,9 +409,9 @@ template <class T> void PiiMultiPointTracker::operateImage(const PiiVariant& obj
 
   const PiiMatrix<T>& matrix = obj.valueAs<PiiMatrix<T> >();
   PiiColorQImage* qmatrix = PiiColorQImage::create(matrix);
-  
+
   QPainter painter(qmatrix);
-  
+
   QPen pen(Qt::DashLine);
   pen.setWidth(2);
   pen.setCosmetic(true);
@@ -432,7 +432,7 @@ template <class T> void PiiMultiPointTracker::operateImage(const PiiVariant& obj
   pen.setColor(QColor(Qt::gray));
   painter.setPen(pen);
   painter.drawRect(d->trackingArea);
-  
+
   // Draw trajectories
   pen.setStyle(Qt::SolidLine);
   for ( int i=0; i<trajects.count(); i++ )
@@ -447,7 +447,7 @@ template <class T> void PiiMultiPointTracker::operateImage(const PiiVariant& obj
 }
 
 
-/* 
+/*
  * This function checks, if the path from the point `prev` to the
  * point `curr` intersects the calculation line from the point
  * `calcLineStart` to `calcLineEnd.` If there is now intersection, 0 is
@@ -524,7 +524,7 @@ void PiiMultiPointTracker::setAreas(const QVariantList& areas)
           d->hashAreas.insert(id, newStruct);
         }
     }
-  
+
   //remove unnecessary areas
   QHashIterator<int, AreaStatistics> k(d->hashAreas);
   while (k.hasNext())
@@ -558,7 +558,7 @@ void PiiMultiPointTracker::setLines(const QVariantList& lines)
           d->hashLines.insert(id, newStruct);
         }
     }
-  
+
   //remove unnecessary lines
   QHashIterator<int, LineStatistics> k(d->hashLines);
   while (k.hasNext())
@@ -670,10 +670,10 @@ void PiiMultiPointTracker::Tracker::addMeasurements(const PiiMatrix<int>& coordi
 void PiiMultiPointTracker::Tracker::addMeasurements(const QList<PiiVector<double,2> >& measurements, int t)
 {
   PiiMultiPointTracker::Data* const d = _pParent->_d();
-  
+
   // First predict a new position for all measurements
   PiiCoordinateTracker<double,2>::predict(t);
-  
+
   // Then get rid of all trajectories whose predictions are outside
   // of the tracking area.
   if (d->trackingArea.isValid())
@@ -743,7 +743,7 @@ void PiiMultiPointTracker::Tracker::addMeasurements(const QList<PiiVector<double
 
   // Get rid of any remaining ones
   resetTracker();
-  
+
   // We are done
   append(retainedTrajectories);
 }
@@ -754,7 +754,7 @@ void PiiMultiPointTracker::Tracker::endTrajectories(QList<PiiCoordinateTrackerNo
 
   bool bLineStatChanged = false;
   bool bAreaStatChanged = false;
-  
+
   for (int i=0; i<trajectories.size(); i++)
     {
       PiiCoordinateTrackerNode<double,2>* trajectory = trajectories[i];

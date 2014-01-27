@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -32,7 +32,7 @@
 
 namespace PiiNetworkPrivate
 {
-  enum 
+  enum
   {
     Invalid = 0x00000000,
     Readable = 0x00000001,
@@ -124,7 +124,7 @@ int PiiRemoteMetaObject::metaCall(QMetaObject::Call callType, int id, void** arg
     {
       // The fist ids are signals, which we stored in another list.
       id -= d->lstSignals.size();
-      
+
       const QList<int>& lstTypes = d->lstFunctions[id].lstParamTypes;
       QVariant varReturnValue = lstTypes.size() > 0 ?
         callList("functions/" + d->lstFunctions[id].strName,
@@ -136,7 +136,7 @@ int PiiRemoteMetaObject::metaCall(QMetaObject::Call callType, int id, void** arg
           !Pii::copyMetaType(varReturnValue, d->lstFunctions[id].returnType, args))
         PII_THROW(PiiNetworkException, tr("Unexpected return value from %1.")
                   .arg(QString::fromLatin1(d->lstFunctions[id].aSignature)));
-      
+
       id -= d->lstFunctions.size();
     }
   else if (callType == QMetaObject::ReadProperty)
@@ -169,7 +169,7 @@ int PiiRemoteMetaObject::metaCall(QMetaObject::Call callType, int id, void** arg
       PII_CHECK_SERVER_RESPONSE;
 
       pDev->discardBody();
-      
+
       id -= d->lstProperties.size();
     }
   else

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -37,7 +37,7 @@ Q_EXPORT_PLUGIN2(piiscript, PiiScriptExtensionPlugin);
 namespace PiiScript
 {
   PII_STATIC_TR_FUNC(PiiScript)
-    
+
   static QScriptValue configure(QScriptContext* context, QScriptEngine* /*engine*/)
   {
     PII_CHECK_AT_LEAST_ONE_ARGUMENT(configure);

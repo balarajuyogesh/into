@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -69,8 +69,8 @@ class PII_YDIN_EXPORT PiiDefaultOperation :
    *
    * ! If `threadCount` is larger than one, special attention is
    * required. If the state of the operation is altered in [process()],
-   * one needs to ensure that mutual exclusion is handled properly. 
-   * For example, counters may need to be implemented with QAtomicInt. 
+   * one needs to ensure that mutual exclusion is handled properly.
+   * For example, counters may need to be implemented with QAtomicInt.
    * Temporary variables that cache previous processing results need
    * to made thread-specific. Furthermore, strict ordering limits (see
    * PiiDefaultFlowController) won't apply. The threads will be
@@ -90,7 +90,7 @@ class PII_YDIN_EXPORT PiiDefaultOperation :
   Q_PROPERTY(int threadCount READ threadCount WRITE setThreadCount);
 
   /**
-   * The priority of the operation when [threadCount] is non-zero. 
+   * The priority of the operation when [threadCount] is non-zero.
    * Threaded operations with a high priority are more likely to be
    * scheduled for execution than those with a low priority. Use
    * QThread::Priority as the value for this property. The default
@@ -117,7 +117,7 @@ class PII_YDIN_EXPORT PiiDefaultOperation :
    */
   Q_PROPERTY(ThreadingCapabilities threadingCapabilities READ threadingCapabilities);
   Q_FLAGS(ThreadingCapabilities);
-  
+
 public:
   typedef PiiFlowController::SyncEvent SyncEvent;
 
@@ -136,10 +136,10 @@ public:
    */
   enum ThreadingCapability { NonThreaded = 1, SingleThreaded = 2, MultiThreaded = 4 };
   Q_DECLARE_FLAGS(ThreadingCapabilities, ThreadingCapability);
-  
+
   PiiDefaultOperation();
   ~PiiDefaultOperation();
-  
+
   /**
    * Ensures that no property will be set while process() or
    * syncEvent() is being called by acquiring [processLock()] for
@@ -155,7 +155,7 @@ public:
   /**
    * Checks the operation for execution. This function creates a
    * suitable flow controller by calling [createFlowController()]. It
-   * then sets the flow controller to the active 
+   * then sets the flow controller to the active
    * [processor](PiiOperationProcessor) and sets the processor as the
    * [input controller](PiiInputController) for all inputs. It
    * also makes all output sockets listeners to their connected
@@ -187,7 +187,7 @@ public:
    * will be turned into `Pausing` state, and processing will pause
    * once the thread has finished its current processing round. In
    * non-threaded mode, the processor will check if the operation has
-   * connected inputs. If it does, the operation will turn into 
+   * connected inputs. If it does, the operation will turn into
    * `Pausing` state and wait until it receives pause signals from
    * previous operations in the pipeline. If there are no connected
    * inputs, the operation will immediately turn into `Paused` state.
@@ -195,13 +195,13 @@ public:
   void pause();
 
   /**
-   * Applies cached property changes. If the operation is either 
+   * Applies cached property changes. If the operation is either
    * `Paused` or `Stopped`, sets the properties directly. Otherwise it
    * works similarly to pause(), but it instead of changing the state
    * of the operation it changes applies the given property set.
    */
   void reconfigure(const QString& propertySetName = QString());
-  
+
   /**
    * Prepares the operation for stopping. Works analogously to
    * [pause()].
@@ -220,13 +220,13 @@ protected:
   public:
     Data();
     ~Data();
-    
+
   private:
     friend class PiiDefaultOperation;
     friend class PiiSimpleProcessor;
     friend class PiiThreadedProcessor;
     friend class PiiMultiThreadedProcessor;
-    
+
     // Handles object flow. Synchronizes inputs etc.
     PiiFlowController* pFlowController;
 
@@ -237,7 +237,7 @@ protected:
     int iActiveInputGroup;
 
     bool bChecked;
-    
+
     mutable PiiReadWriteLock processLock;
     int iThreadCount;
     ThreadingCapabilities threadingCapabilities;
@@ -263,7 +263,7 @@ protected:
    * to create output objects and sends them to output sockets.
    *
    * Calls to process(), syncEvent(), and setProperty() are
-   * synchronized and cannot occur simultaneously. 
+   * synchronized and cannot occur simultaneously.
    * PiiDefaultOperation ensures this by locking [processLock()] for
    * reading before calling process(). If [threadCount] is set to a
    * value larger than one, process() may be called simultaneously
@@ -281,7 +281,7 @@ protected:
   virtual void process() = 0;
 
   /**
-   * Returns the id of the synchronized socket group being processed. 
+   * Returns the id of the synchronized socket group being processed.
    * If all input sockets work in parallel, or there are no input
    * sockets, this value can be safely ignored. Otherwise, one can use
    * the value to decide which sockets need to be read and processed
@@ -301,11 +301,11 @@ protected:
    * buffered data. The default implementation does nothing.
    *
    * Calls to process(), syncEvent(), and setProperty() are
-   * synchronized and cannot occur simultaneously. 
+   * synchronized and cannot occur simultaneously.
    * PiiDefaultOperation ensures this by locking [processLock()] for
    * reading before calling syncEvent().
    *
-   * When entering syncEvent(), input sockets are in undefined state. 
+   * When entering syncEvent(), input sockets are in undefined state.
    * If you need data from the inputs in syncEvent(), you need to
    * store the objects in process().
    *
@@ -378,15 +378,15 @@ protected:
    * (read-locked) functions.
    */
   PiiReadWriteLock* processLock();
-  
+
 private:
   void init();
   void createProcessor();
-  
+
   friend class PiiSimpleProcessor;
   friend class PiiThreadedProcessor;
   friend class PiiMultiThreadedProcessor;
-  
+
   inline void processLocked()
   {
     PiiReadLocker lock(&_d()->processLock);
@@ -398,7 +398,7 @@ private:
     PiiReadLocker lock(&_d()->processLock);
     controller->sendSyncEvents(this);
   }
-  
+
   inline bool isAcceptableThreadCount(int threadCount) const;
 };
 

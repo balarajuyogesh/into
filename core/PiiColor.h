@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -83,7 +83,7 @@ template <class T> struct PiiColor4Traits : public PiiColorBaseTraits<T>
  * ~~~
  *
  * The syntax is <space><Channel>, where <space> is any of the
- * following: rgb, hsv, hsi, yuv, yiq, xyz, lab, luv, cmyk, rgba. 
+ * following: rgb, hsv, hsi, yuv, yiq, xyz, lab, luv, cmyk, rgba.
  * <Channel> is the name of the color channel as a capital letter,
  * e.g. R, G, B, or Y. The R channel of the RGB color space is denoted
  * by rgbR. Furthermore, the channels are aliased with generic names
@@ -120,17 +120,17 @@ public:
    * first color channel in the RGB space is B.
    */
   typename PiiColorBaseTraits<T>::Iterator begin() { return channels; }
- 
+
   /**
    * Create a new color with the same value on each color channel.
    */
   PiiColorBase(T value = 0) :
     c2(value), c1(value), c0(value)
   { }
-    
+
   /**
-   * Create a new color with the given values for each color channel. 
-   * Note that the order of channels in the channel array is reversed. 
+   * Create a new color with the given values for each color channel.
+   * Note that the order of channels in the channel array is reversed.
    * When you initialize a PiiColor with RGB values, B will be the
    * first channel.
    *
@@ -172,17 +172,17 @@ public:
   operator char() const { return char(operator int()); }
 
   /**
-   * Return the average of all color channels as an `unsigned` 
+   * Return the average of all color channels as an `unsigned`
    * `int`.
    */
   operator unsigned int() const { return ((unsigned int)c0 + (unsigned int)c1 + (unsigned int)c2)/3; }
   /**
-   * Return the average of all color channels as an `unsigned` 
+   * Return the average of all color channels as an `unsigned`
    * `short`.
    */
   operator unsigned short() const { return (unsigned short)operator unsigned int(); }
   /**
-   * Return the average of all color channels as an `unsigned` 
+   * Return the average of all color channels as an `unsigned`
    * `char`.
    */
   operator unsigned char() const { return (unsigned char)operator unsigned int(); }
@@ -220,7 +220,7 @@ template <class T = unsigned char> class PiiColor :
   public PiiColorBase<T>,
   public PiiArithmeticBase<PiiColor<T>, PiiColorTraits<T> >
 {
-  friend struct PiiSerialization::Accessor;  
+  friend struct PiiSerialization::Accessor;
   template <class Archive> inline void serialize(Archive& archive, const unsigned int /*version*/)
   {
     archive & this->channels[0];
@@ -239,7 +239,7 @@ public:
    * Create a new color with the same value on each color channel.
    */
   PiiColor(T value = 0) : PiiColorBase<T>(value) {}
-  
+
   /**
    * Create a new color with the given values for color channels.
    *
@@ -280,7 +280,7 @@ public:
 
 /**
  * A four-channel color. Fourth color channel is sometimes useful in
- * aligning the color values to word boundaries in memory. 
+ * aligning the color values to word boundaries in memory.
  * Furthermore, some colors are composed of four distinct channels.
  *
  * The class functions equivalently to PiiColor, but provides space
@@ -294,7 +294,7 @@ template <class T = unsigned char> class PiiColor4 :
   public PiiColorBase<T>,
   public PiiArithmeticBase<PiiColor4<T>, PiiColor4Traits<T> >
 {
-  friend struct PiiSerialization::Accessor;  
+  friend struct PiiSerialization::Accessor;
   template <class Archive> inline void serialize(Archive& archive, const unsigned int /*version*/)
   {
     archive & this->channels[0];
@@ -309,13 +309,13 @@ public:
   typedef PiiArithmeticBase<PiiColor4<T>, PiiColor4Traits<T> > BaseType;
 
   enum { ChannelCount = 4 };
-  
+
   /**
    * Create a new color with the same value on each color channel.
    */
   PiiColor4(T value = 0) : PiiColorBase<T>(value), c3(value) { }
   /**
-   * Create a new color with the given values for each color channel. 
+   * Create a new color with the given values for each color channel.
    * To create an RGBA color, do this:
    *
    * ~~~(c++)
@@ -346,7 +346,7 @@ public:
    * channel will be set to zero.
    */
   template <class U> PiiColor4(const PiiColorBase<U>& clr) : PiiColorBase<T>(T(clr.c0), T(clr.c1), T(clr.c2)), c3(0) {}
-  
+
   /**
    * An stl-style const iterator to the end of color channels.
    */
@@ -374,7 +374,7 @@ namespace Pii
     typedef PiiColor<typename ToFloatingPoint<T>::Type> Type;
     typedef typename ToFloatingPoint<T>::Type PrimitiveType;
   };
-  
+
   /**
    * Constructs a real-valued counterpart of an integer-channel color.
    */

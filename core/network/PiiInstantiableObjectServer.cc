@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -75,7 +75,7 @@ void PiiInstantiableObjectServer::handleRequest(const QString& uri, PiiHttpDevic
 {
   QString strRequestPath = dev->requestPath(uri);
   dev->startOutputFiltering(new PiiStreamBuffer);
- 
+
   // This class provides only "/new" and "/delete" functionality and
   // passes other requests to secondary servers.
   if (strRequestPath.isEmpty())

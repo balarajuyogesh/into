@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -31,7 +31,7 @@ PiiIoInputOperation::PiiIoInputOperation() : PiiIoOperation(new Data)
 void PiiIoInputOperation::check(bool reset)
 {
   PII_D;
-  
+
   // PiiIoOperation::check() may change channels -> disconnect the old ones
   for (int i=0; i<d->lstChannels.size(); ++i)
     d->lstChannels[i]->disconnect(this);

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -58,7 +58,7 @@ template <class S> PiiMatrix<std::complex<T> > PiiFft<T>::forwardFft(const PiiMa
   int rows = source.rows();
 
   PiiMatrix<std::complex<T> > result(rows, cols);
-  
+
   if ( cols > 1 )
     {
       for ( int r=0; r<rows; r++ )
@@ -80,7 +80,7 @@ template <class S> PiiMatrix<std::complex<T> > PiiFft<T>::forwardFft(const PiiMa
         {
           for ( int r=0; r<rows; r++ )
             src[r] = result(r,c);
-          
+
           if ( !forward1d<std::complex<T> >(src, res, rows) )
             return PiiMatrix<std::complex<T> >(1,1);
           for ( int r=0; r<rows; r++ )
@@ -101,7 +101,7 @@ template <class S> PiiMatrix<std::complex<T> > PiiFft<T>::inverseFft(const PiiMa
 {
   int cols = source.columns();
   int rows = source.rows();
-  
+
   PiiMatrix<std::complex<T> > result(rows, cols);
 
   if ( cols > 1 )
@@ -125,7 +125,7 @@ template <class S> PiiMatrix<std::complex<T> > PiiFft<T>::inverseFft(const PiiMa
         {
           for ( int r=0; r<rows; r++ )
             src[r] = result(r,c);
-          
+
           if ( !inverse1d<T>(src, res, rows) )
             return PiiMatrix<std::complex<T> >(1,1);
           for ( int r=0; r<rows; r++ )
@@ -142,7 +142,7 @@ template <class S> bool PiiFft<T>::forward1d(const S* source, std::complex<T>* d
 {
   if (count == 0)
     return false;
-  
+
   if (_count != count)
     {
       factorize(count);
@@ -154,34 +154,34 @@ template <class S> bool PiiFft<T>::forward1d(const S* source, std::complex<T>* d
   _remainRadix[1] = _count / _actualRadix[1];
   for ( int i = 2; i<=_factorCount; i++ )
     {
-      _sofarRadix[i]  = _sofarRadix[i-1] * _actualRadix[i-1]; 
-      _remainRadix[i] = _remainRadix[i-1] / _actualRadix[i]; 
+      _sofarRadix[i]  = _sofarRadix[i-1] * _actualRadix[i-1];
+      _remainRadix[i] = _remainRadix[i-1] / _actualRadix[i];
     }
-  
+
   reorderSeries(source, destination);
 
   for ( int i=1; i<=_factorCount; i++)
     synthesizeFft(_sofarRadix[i], _actualRadix[i], _remainRadix[i], destination);
 
   return true;
-  
+
 }
 
 template <class T>
 template <class S> bool PiiFft<T>::inverse1d(const std::complex<S>* source, std::complex<T>* destination, int count)
 {
   S s;
-  
+
   if ( count == 0 )
     return false;
 
   std::complex<S> *tmpPtr = new std::complex<S>[count];
-  
+
   for ( int i=count; i--; )
     tmpPtr[i] = std::complex<S>(source[i].real(), -source[i].imag());
 
   forward1d(tmpPtr, destination, count);
-  
+
   s = 1.0 / count;
   for ( int i=count; i--; )
     {
@@ -191,7 +191,7 @@ template <class S> bool PiiFft<T>::inverse1d(const std::complex<S>* source, std:
     }
 
   delete[] tmpPtr;
-  
+
   return true;
 }
 
@@ -208,7 +208,7 @@ template <class S> void PiiFft<T>::reorderSeries(const S* source, std::complex<T
 {
   int i,j,k;
   int *counts = new int[_factorCount+1];
-  
+
   for (i=1; i<=_factorCount; i++)
     counts[i]=0;
 
@@ -228,7 +228,7 @@ template <class S> void PiiFft<T>::reorderSeries(const S* source, std::complex<T
           counts[j] = counts[j] + 1;
         }
     }
-  
+
   dest[_count-1] = source[_count-1];
   delete[] counts;
 }
@@ -301,7 +301,7 @@ template <class T> void PiiFft<T>::factorize(int count)
   _actualRadix[0] = 0;
   for ( i=1; i<=_factorCount; i++ )
     _actualRadix[i] = factors[_factorCount - i + 1];
-  
+
 }
 
 template <class T> void PiiFft<T>::synthesizeFft(int sofarRadix, int radix, int remainRadix, std::complex<T>* dest)
@@ -315,21 +315,21 @@ template <class T> void PiiFft<T>::synthesizeFft(int sofarRadix, int radix, int 
 
   if ( isPrimeFactor(radix) )
     initializeTrigonomials(radix);
-  
+
   dataOffset = 0;
   groupOffset = dataOffset;
   adr = groupOffset;
-  
+
   for (dataNo=0; dataNo<sofarRadix; dataNo++)
     {
       if (sofarRadix>1)
         {
           _twiddle[0] = std::complex<T>(1.0,0.0);
-          _twiddle[1] = S; 
-          
+          _twiddle[1] = S;
+
           for (twNo=2; twNo<radix; twNo++)
             _twiddle[twNo] = S * _twiddle[twNo-1];
-          
+
           S = cosSin * S;
         }
 
@@ -365,7 +365,7 @@ template <class T> void PiiFft<T>::synthesizeFft(int sofarRadix, int radix, int 
               case 10  : fft10(_z); break;
               default  : fftPrime(radix); break;
               }
-            
+
             adr = groupOffset;
             for (blockNo=0; blockNo<radix; blockNo++)
               {
@@ -379,7 +379,7 @@ template <class T> void PiiFft<T>::synthesizeFft(int sofarRadix, int radix, int 
         groupOffset = dataOffset;
         adr = dataOffset;
     }
-  
+
 }
 
 template <class T> void PiiFft<T>::initializeTrigonomials( int radix )
@@ -394,17 +394,17 @@ template <class T> void PiiFft<T>::initializeTrigonomials( int radix )
       _z = new std::complex<T>[radix];
       _prevPrimeRadix = radix;
     }
-  
+
   int i;
   T w;
   std::complex<T> x;
 
-  
+
   w = 2 * _pi / radix;
   _trig[0] = std::complex<T>(1,0);
-  x = std::complex<T>(std::cos(w), -std::sin(w)); 
+  x = std::complex<T>(std::cos(w), -std::sin(w));
   _trig[1] = x;
-  
+
   for (i=2; i<radix; i++)
     _trig[i] = x * _trig[i-1];
 
@@ -434,7 +434,7 @@ template <class T> inline void PiiFft<T>::fftPrime(int radix)
   for (j = 1; j < max; j++)
     {
       _z[j] = _z[0];
-      _z[n-j] = _z[0]; 
+      _z[n-j] = _z[0];
       k = j;
       for (i = 1; i < max; i++)
         {
@@ -447,12 +447,12 @@ template <class T> inline void PiiFft<T>::fftPrime(int radix)
 
           _z[n-j] = std::complex<T>(_z[n-j].real() + re.real() + im.imag(), _z[n-j].imag() + re.imag() - im.real());
           _z[j] = std::complex<T>(_z[j].real() + re.real() - im.imag(), _z[j].imag() + re.imag() + im.real());
-          
+
           //_z[n-j].real() += (re.real() + im.imag());
           //_z[n-j].imag() += (re.imag() - im.real());
           //_z[j].real()   += (re.real() - im.imag());
           //_z[j].imag()   += (re.imag() + im.real());
-          
+
           k = k + j;
           if (k >= n)
             k = k - n;
@@ -462,7 +462,7 @@ template <class T> inline void PiiFft<T>::fftPrime(int radix)
   for ( j = 1; j < max; j++)
     {
       _z[0] = std::complex<T>(_z[0].real() + v[j].real(), _z[0].imag() + w[j].imag() );
-      //_z[0].real() += v[j].real(); 
+      //_z[0].real() += v[j].real();
       //_z[0].imag() += w[j].imag();
     }
   delete[] w;
@@ -492,13 +492,13 @@ template <class T> inline void PiiFft<T>::fft3(std::complex<T>* z)
   s1 = z[0] + m1;
   z[1] = s1 + m2;
   z[2] = s1 - m2;
-  
+
 }
 
 template <class T> inline void PiiFft<T>::fft4(std::complex<T>* z)
 {
   std::complex<T> t1, t2, m2, m3;
-  
+
   t1 = z[0] + z[2];
   t2 = z[1] + z[3];
 
@@ -506,7 +506,7 @@ template <class T> inline void PiiFft<T>::fft4(std::complex<T>* z)
   m3 = std::complex<T>(z[1].imag() - z[3].imag(), z[3].real() - z[1].real());
   //m3.real() = z[1].imag() - z[3].imag();
   //m3.imag() = z[3].real() - z[1].real();
-  
+
   z[0] = t1 + t2;
   z[2] = t1 - t2;
   z[1] = m2 + m3;
@@ -532,23 +532,23 @@ template <class T> inline void PiiFft<T>::fft5(std::complex<T>* z)
   m3 = std::complex<T>(-c5_3 * (t3.imag() + t4.imag()), c5_3 * (t3.real() + t4.real()));
   m4 = std::complex<T>(-c5_4 * t4.imag(), c5_4 * t4.real() );
   m5 = std::complex<T>(-c5_5 * t3.imag(), c5_5 * t3.real());
-  //m3.real() = -c5_3 * (t3.imag() + t4.imag()); 
+  //m3.real() = -c5_3 * (t3.imag() + t4.imag());
   //m3.imag() =  c5_3 * (t3.real() + t4.real());
   //m4.real() = -c5_4 * t4.imag();
   //m4.imag() =  c5_4 * t4.real();
   //m5.real() = -c5_5 * t3.imag();
   //m5.imag() =  c5_5 * t3.real();
-  
+
   s3 = m3 - m4;
   s5 = m3 + m5;
   s1 = z[0] + m1;
   s2 = s1 + m2;
   s4 = s1 - m2;
-  
+
   z[1] = s2 + s3;
   z[2] = s4 + s5;
   z[3] = s4 - s5;
-  z[4] = s2 - s3;  
+  z[4] = s2 - s3;
 }
 
 template <class T> inline void PiiFft<T>::fft8(std::complex<T>* z)
@@ -563,16 +563,16 @@ template <class T> inline void PiiFft<T>::fft8(std::complex<T>* z)
   _b[0] = z[1];
   _b[1] = z[3];
   _b[2] = z[5];
-  _b[3] = z[7];  
-    
+  _b[3] = z[7];
+
   fft4(_a);
   fft4(_b);
-   
+
   gem = c8 * (_b[1].real() + _b[1].imag());
   _b[1] = std::complex<T>(gem, c8 * (_b[1].imag() - _b[1].real()));
   //_b[1].imag() = c8 * (_b[1].imag() - _b[1].real());
   //_b[1].real() = gem;
-  
+
   gem = _b[2].imag();
   _b[2] = std::complex<T>(gem, -_b[2].real());
   //_b[2].imag() = -_b[2].real();
@@ -592,12 +592,12 @@ template <class T> inline void PiiFft<T>::fft8(std::complex<T>* z)
   z[5] = _a[1] - _b[1];
   z[6] = _a[2] - _b[2];
   z[7] = _a[3] - _b[3];
-  
+
 }
 
 template <class T> inline void PiiFft<T>::fft10(std::complex<T>* z)
 {
-  
+
   _a[0] = z[0];
   _a[1] = z[2];
   _a[2] = z[4];
@@ -609,7 +609,7 @@ template <class T> inline void PiiFft<T>::fft10(std::complex<T>* z)
   _b[2] = z[9];
   _b[3] = z[1];
   _b[4] = z[3];
-  
+
   fft5(_a);
   fft5(_b);
 

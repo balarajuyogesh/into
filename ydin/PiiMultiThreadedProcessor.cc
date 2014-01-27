@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@ public:
     _bFreeRun(false)
   {
   }
-  
+
   void process(int groupId)
   {
     _iGroupId = groupId;
@@ -112,7 +112,7 @@ protected:
         synchronized (pThreadMutex) _pProcessor->threadFinished(this, ex);
       }
   }
-  
+
 private:
   PiiMultiThreadedProcessor* _pProcessor;
   QMutex _startMutex;
@@ -166,7 +166,7 @@ void PiiMultiThreadedProcessor::endEmit(Qt::HANDLE threadId)
     {
       _freeInputCondition.wait();
       bAllCompleted = true;
-      
+
       for (int i=0; i<iCnt; ++i)
         if (!abOutputCompleted[i])
           bAllCompleted &= abOutputCompleted[i] =
@@ -250,7 +250,7 @@ PiiMultiProcessorThread* PiiMultiThreadedProcessor::reserveThread()
 {
   if (!_bReset)
     return 0;
-  
+
   // Add new threads until the pool is full
   if (_lstAllThreads.size() < _pParentOp->threadCount())
     {
@@ -375,7 +375,7 @@ bool PiiMultiThreadedProcessor::tryToReceive(PiiAbstractInputSocket* sender, con
       // discard of the object right away.
       if (!_bReset)
         return true;
-  
+
       else if (_pParentOp->_d()->state member_of (PiiOperation::Stopped, PiiOperation::Paused))
         _pParentOp->setState(PiiOperation::Running);
     }
@@ -383,13 +383,13 @@ bool PiiMultiThreadedProcessor::tryToReceive(PiiAbstractInputSocket* sender, con
   try
     {
       QMutexLocker lock(&_threadMutex);
-      
+
       PiiInputSocket* pInput = static_cast<PiiInputSocket*>(sender);
       if (!pInput->canReceive())
         return false;
 
       pInput->receive(object);
-  
+
       /*PiiInputSocket* pInput = static_cast<PiiInputSocket*>(sender);
       qDebug("%s: %d objects in queue",
              qPrintable(pInput->objectName()), pInput->queueLength());
@@ -414,19 +414,19 @@ bool PiiMultiThreadedProcessor::tryToReceive(PiiAbstractInputSocket* sender, con
             }
 
           _bBlocked = true;
-              
+
           // Must ensure sync events are not sent concurrently
           // with process().
           if (_pFlowController->hasSyncEvents())
             {
               waitAllThreadsToStop();
               lock.unlock();
-              
+
               _pParentOp->sendSyncEvents(_pFlowController); // may throw
             }
           else
             lock.unlock();
-             
+
           endEmit(callingThreadId); // may throw
 
           lock.relock();
@@ -480,9 +480,9 @@ bool PiiMultiThreadedProcessor::tryToReceive(PiiAbstractInputSocket* sender, con
       // Exceptions won't be thrown from the critical section
       // above. Therefore, the mutex is not held if we are here. Must relock.
       QMutexLocker lock(&_threadMutex);
-      
+
       _bBlocked = false;
-      
+
       // Only errors are handled here. Stopping/pausing is handled
       // in threadFinished().
       emit _pParentOp->errorOccured(_pParentOp, ex.message());
@@ -495,7 +495,7 @@ bool PiiMultiThreadedProcessor::tryToReceive(PiiAbstractInputSocket* sender, con
       destroyAllThreads();
       synchronized (_pStateMutex) _pParentOp->setState(PiiOperation::Stopped);
     }
-  
+
   return true;
 }
 
@@ -516,7 +516,7 @@ void PiiMultiThreadedProcessor::check(bool reset)
     {
       PiiInputSocket* pInput = _pParentOp->inputAt(i);
       if (!pInput->isConnected()) continue;
-      
+
       if (iGroupCount == 0)
         {
           _iSingleInputGroupId = pInput->groupId();
@@ -549,7 +549,7 @@ void PiiMultiThreadedProcessor::check(bool reset)
 void PiiMultiThreadedProcessor::start()
 {
   QMutexLocker lock(_pStateMutex);
-  
+
   if (_pParentOp->state() not_member_of (PiiOperation::Stopped, PiiOperation::Paused))
     return;
 
@@ -571,7 +571,7 @@ void PiiMultiThreadedProcessor::start()
         }
 
       _pParentOp->setState(PiiOperation::Running);
-      
+
       synchronized (_threadMutex) startAllThreads();
     }
 }
@@ -581,10 +581,10 @@ void PiiMultiThreadedProcessor::interrupt()
   QMutexLocker lock(_pStateMutex);
   if (_pParentOp->state() == PiiOperation::Stopped)
     return;
-  
+
   _bReset = false;
   _freeInputCondition.wakeOne();
-  
+
   synchronized (_threadMutex)
     {
       // If there are threads running, kill them immediately.

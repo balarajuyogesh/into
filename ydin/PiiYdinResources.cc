@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -52,7 +52,7 @@ namespace PiiYdin
     // Superclass and subclass are the same.
     if (!strcmp(superClass, subClass))
       return 0;
-    
+
     using namespace Pii;
     // First, we search all direct superclasses of the resource.
     QList<PiiResourceStatement> lstSuperClasses = resourceDatabase()->select(subject == subClass &&
@@ -60,7 +60,7 @@ namespace PiiYdin
     for (int i=0; i<lstSuperClasses.size(); ++i)
       if (lstSuperClasses[i].object() == superClass)
         return pointerOffset(lstSuperClasses[i].id());
-    
+
     // Not a direct superclass. Recurse.
     for (int i=0; i<lstSuperClasses.size(); ++i)
       {

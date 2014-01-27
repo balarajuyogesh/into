@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,13 +24,13 @@
 
 void TestPiiMatrixUtil::columnToList()
 {
-  //Basic 
+  //Basic
   {
     PiiMatrix<int> mat(2,2, 1,2, 3,4);
     QList<int> lst = Pii::columnToList<QList<int> >(mat, 0);
     for(int i = 0; i < lst.size(); ++i)
       QCOMPARE(mat(i,0), lst[i]);
-     
+
 
     lst = Pii::columnToList<QList<int> > (mat,1);
     for(int i = 0; i < lst.size(); ++i)
@@ -63,7 +63,7 @@ void TestPiiMatrixUtil::columnToList()
     int* pJ = &j;
     int* pK = &k;
     int* pL = &l;
-    
+
     PiiMatrix<int*>* pMatEvil = new PiiMatrix<int*>(2,2, pI, pJ, pK, pL);
     QList<int*> lstPointers = Pii::columnToList<QList<int*> >(*pMatEvil, 0);
     delete pMatEvil;
@@ -81,12 +81,12 @@ void TestPiiMatrixUtil::concatenate()
 {
   PiiMatrix<int> mat1(1,2,
                       1,2);
-  
+
   PiiMatrix<int> mat2(3,2,
                       3,4,
                       5,6,
                       7,8);
-  
+
   QVERIFY(Pii::equals(Pii::concatenate(mat1, mat2, Pii::Vertically),
                       PiiMatrix<int>(4,2,
                                      1,2,
@@ -152,7 +152,7 @@ void TestPiiMatrixUtil::extend()
                        1, 2,
                        2, 3);
 
-    QVERIFY(Pii::equals(Pii::extend(mat, 3, Pii::ExtendSymmetric), 
+    QVERIFY(Pii::equals(Pii::extend(mat, 3, Pii::ExtendSymmetric),
             PiiMatrix<int>(8, 8,
                            3, 3, 2, 2, 3, 3, 2, 2,
                            3, 3, 2, 2, 3, 3, 2, 2,
@@ -162,8 +162,8 @@ void TestPiiMatrixUtil::extend()
                            3, 3, 2, 2, 3, 3, 2, 2,
                            2, 2, 1, 1, 2, 2, 1, 1,
                            2, 2, 1, 1, 2, 2, 1, 1)));
-    
-    QVERIFY(Pii::equals(Pii::extend(mat, 3, Pii::ExtendPeriodic), 
+
+    QVERIFY(Pii::equals(Pii::extend(mat, 3, Pii::ExtendPeriodic),
                         PiiMatrix<int>(8, 8,
                                        3, 2, 3, 2, 3, 2, 3, 2,
                                        2, 1, 2, 1, 2, 1, 2, 1,
@@ -173,8 +173,8 @@ void TestPiiMatrixUtil::extend()
                                        2, 1, 2, 1, 2, 1, 2, 1,
                                        3, 2, 3, 2, 3, 2, 3, 2,
                                        2, 1, 2, 1, 2, 1, 2, 1)));
-    
-    QVERIFY(Pii::equals(Pii::extend(mat, 3, Pii::ExtendReplicate), 
+
+    QVERIFY(Pii::equals(Pii::extend(mat, 3, Pii::ExtendReplicate),
                         PiiMatrix<int>(8, 8,
                                        1, 1, 1, 1, 2, 2, 2, 2,
                                        1, 1, 1, 1, 2, 2, 2, 2,
@@ -201,7 +201,7 @@ void TestPiiMatrixUtil::findFirst()
     Pii::findFirst<std::equal_to<int> >(mat,2,r,c);
     QCOMPARE(r,0);
     QCOMPARE(c,1);
-   
+
   }
 
 }
@@ -220,7 +220,7 @@ void TestPiiMatrixUtil::findLast()
     Pii::findLast<std::equal_to<int> >(mat,2,r,c);
     QCOMPARE(r,1);
     QCOMPARE(c,1);
-   
+
   }
 }
 
@@ -241,7 +241,7 @@ void TestPiiMatrixUtil::listToMatrix()
     QCOMPARE(matSec.rows(), 4);
     QCOMPARE(matSec.columns(),1);
     QVERIFY(Pii::equals(matSec, PiiMatrix<double>(4,1, 1.0, 2.0, 3.0, 4.0)));
-    
+
   }
 }
 
@@ -288,13 +288,13 @@ void TestPiiMatrixUtil::printMatrix()
                           8.0, 1.0, 2.3, 5.4);
     QString data;
     QTextStream stream(&data);
-    Pii::printMatrix(stream, mat, ", ", "\n"); 
+    Pii::printMatrix(stream, mat, ", ", "\n");
     QVERIFY(data == "1, 2.3, 5.4, 8\n"
                     "2.3, 5.4, 8, 1\n"
                     "5.4, 8, 1, 2.3\n"
                     "8, 1, 2.3, 5.4");
 
-  }  
+  }
 }
 
 void TestPiiMatrixUtil::replicate()
@@ -302,7 +302,7 @@ void TestPiiMatrixUtil::replicate()
   //Basic
   {
     PiiMatrix<int> mat(1,1,1);
-                       
+
     int vertical = 2;
     int horizontal = 3;
     PiiMatrix<int> mat2(Pii::replicate(mat,vertical,horizontal));
@@ -340,27 +340,27 @@ void TestPiiMatrixUtil::replicate()
                   QCOMPARE(mat2(r,c),1);
               }
           }
-      } 
+      }
   }
 }
 
 void TestPiiMatrixUtil::rowToList()
 {
-  //Basic 
+  //Basic
   {
     PiiMatrix<int> mat(2,2, 1,2, 3,4);
     QList<int> lst = Pii::rowToList<QList<int> >(mat, 0);
     for(int i = 0; i < lst.size(); ++i)
       QCOMPARE(mat(0,i), lst[i]);
-    
-    
+
+
     lst = Pii::rowToList<QList<int> > (mat,1);
     for(int i = 0; i < lst.size(); ++i)
       QCOMPARE(mat(1,i),lst[i]);
-    
+
     PiiMatrix<char> matChar(2,3, 'a','p','i',
                                  'n','a','t');
-    
+
     QList<char> lstChar = Pii::rowToList<QList<char> > (matChar,1);
     for(int i = 0; i < lst.size(); ++i)
       QCOMPARE(matChar(1,i), lstChar[i]);
@@ -391,7 +391,7 @@ void TestPiiMatrixUtil::sortRows()
                         PiiMatrix<int>(3,3,
                                        -2,1,3,
                                        -1,2,3,
-                                       3,0,3))); 
+                                       3,0,3)));
     Pii::sortRows(mat,1);
     QVERIFY(Pii::equals(mat,
                         PiiMatrix<int>(3,3,
@@ -430,7 +430,7 @@ void TestPiiMatrixUtil::valueAt()
     QCOMPARE(Pii::valueAt(mat,0.5,0.5), 1.25f);
     QCOMPARE(Pii::valueAt(mat,1.0,0.5), 1.5f);
     QCOMPARE(Pii::valueAt(mat,1.0,1.5), 2.0f);
-    QCOMPARE(Pii::valueAt(mat,1.5,2.0), 3.5f); 
+    QCOMPARE(Pii::valueAt(mat,1.5,2.0), 3.5f);
   }
   {
     PiiMatrix<int> mat(3,3,
@@ -447,7 +447,7 @@ void TestPiiMatrixUtil::valueAt()
     QVERIFY(Pii::valueAt(mat, 2.0, 0.0));
   }
 }
- 
+
 void TestPiiMatrixUtil::flip()
 {
   {

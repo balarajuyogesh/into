@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -20,7 +20,7 @@
 #include <QLinkedList>
 
 /**
- * Calculate the moving average over a window of a predefined size. 
+ * Calculate the moving average over a window of a predefined size.
  * The output will be the average over the last N input values, which
  * must be of the same type (and size, if matrices are averaged).
  *
@@ -29,7 +29,7 @@
  *
  * @in input - the input value. Any numeric or complex type or a
  * matrix containing such types.
- * 
+ *
  * Outputs
  * -------
  *
@@ -57,7 +57,7 @@ class PiiMovingAverageOperation : public PiiDefaultOperation
    * default value is 0. The range applies only to scalars. Matrices
    * are not checked for range under/overflow.
    */
-  Q_PROPERTY(double rangeMin READ rangeMin WRITE setRangeMin);  
+  Q_PROPERTY(double rangeMin READ rangeMin WRITE setRangeMin);
   /**
    * The maximum acceptable value. See [rangeMin] for a detailed
    * description. The default value is 0. Use 360 or 2*M_PI for
@@ -69,7 +69,7 @@ class PiiMovingAverageOperation : public PiiDefaultOperation
    * If this property is true, output type will be forced to input type.
    */
   Q_PROPERTY(bool forceInputType READ forceInputType WRITE setForceInputType);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiMovingAverageOperation();

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -38,14 +38,14 @@
 class PiiColorConverter : public PiiDefaultOperation
 {
   Q_OBJECT
-  
+
   /**
-   * The type of color conversion. The default value is 
+   * The type of color conversion. The default value is
    * `GenericConversion`.
    */
   Q_PROPERTY(ColorConversion colorConversion READ colorConversion WRITE setColorConversion);
   Q_ENUMS(ColorConversion);
-  
+
   /**
    * A 3-by-3 conversion matrix (PiiMatrix<float> or
    * PiiMatrix<double>) for the generic conversion. Let us assume the
@@ -75,7 +75,7 @@ class PiiColorConverter : public PiiDefaultOperation
    * inverts the typical gamma of a monitor.
    */
   Q_PROPERTY(double gamma READ gamma WRITE setGamma);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   /**
@@ -86,14 +86,14 @@ public:
    * conversion matrix. The result type will always be
    * PiiMatrix<PiiColor<float> >.
    *
-   * - `RgbToGrayMean` - calculate the mean of three color channels. 
+   * - `RgbToGrayMean` - calculate the mean of three color channels.
    * Retains the type of color channels, but outputs a gray-level
    * image.
    *
    * - `RgbToGrayMeanFloat` - calculate the mean of three color
    * channels. The type of the output will be PiiMatrix<float>.
    *
-   * - `RgbToGraySum` - calculate the sum of three color channels. 
+   * - `RgbToGraySum` - calculate the sum of three color channels.
    * The type of the output will be PiiMatrix<int> for all types
    * except PiiMatrix<PiiColor<float> >, for which it equals the
    * input.
@@ -152,7 +152,7 @@ public:
    * - `GammaCorrection` - apply gamma correction to each color
    * channel. Uses [gamma] as the correction factor. Retains input
    * type. See PiiColors::correctGamma().
-   * 
+   *
    * @see PiiColors
    */
   enum ColorConversion
@@ -175,7 +175,7 @@ public:
     RgbToY719,
     GammaCorrection
   };
-  
+
   PiiColorConverter();
 
   void setColorConversion(ColorConversion colorConversion);
@@ -189,7 +189,7 @@ public:
 
   void setGamma(double gamma);
   double gamma() const;
-  
+
 protected:
   void process();
 

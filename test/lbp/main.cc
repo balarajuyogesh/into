@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -123,11 +123,11 @@ template <class T> void TestPiiLbp::genericLbp()
                        2, 3, 4, 5, 6,
                        8, 4, 2, 1, 0);
   /* Sampling order:
-   *   5 4 3  
+   *   5 4 3
    * 7 6   2 1
    * 8       0
    * 9 a   e f
-   *   b c d  
+   *   b c d
    *
    * binary:  1100000110000001
    * decimal: 49537
@@ -169,7 +169,7 @@ template <class T> void TestPiiLbp::thresholdedLbp()
       QCOMPARE(matResult.rows(), 1);
       QCOMPARE(matResult.columns(), 1);
       QCOMPARE(matResult(0,0), 0xff - (1 << (i+5)) + 1);
-    }                          
+    }
 }
 
 QTEST_MAIN(TestPiiLbp)

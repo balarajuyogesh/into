@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -48,7 +48,7 @@ void PiiImageFilterOperation::setFilterName(const QString& filterName)
       "uniform", "gaussian",
       "log"
     };
-  
+
   QString n = filterName.toLower();
   if (n == "custom")
     d->filterType = Custom;
@@ -191,7 +191,7 @@ template <class T> void PiiImageFilterOperation::intColorFilter(const PiiVariant
                               d->matHorzFilter, d->matVertFilter, d->borderHandling) :
           PiiImage::intFilter(PiiImage::colorChannel(img,2),
                               d->matActiveFilter, d->borderHandling);
-          
+
         PiiMatrix<T> matResult(ch2.rows(), ch2.columns());
         PiiImage::setColorChannel(matResult, 2, ch2);
         for (int i=0; i <= 1; ++i)

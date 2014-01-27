@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,7 +24,7 @@ class PiiScriptExtensionPlugin : public QScriptExtensionPlugin
 #if QT_VERSION >= 0x050000
   Q_PLUGIN_METADATA(IID "com.intopii.Into.PiiScriptExtensionPlugin" FILE "piiscriptextensionplugin.json")
 #endif
-  
+
 public:
   void initialize(const QString& key, QScriptEngine* engine);
   QStringList	keys() const;

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,7 +26,7 @@
  * Inputs
  * ------
  *
- * @in image - an image the LBP texture feature is extracted from. 
+ * @in image - an image the LBP texture feature is extracted from.
  * The image may be of any type. Color images are automatically
  * converted to gray scale before processing.
  *
@@ -58,13 +58,13 @@ class PiiLbpOperation : public PiiDefaultOperation
    * multiple parameters are given, multiple feature vectors are
    * extracted for each input image. The parameters are represented
    * with
-   * `samples,radius[,threshold][,mode][,interpolation][,smoothing]`. 
+   * `samples,radius[,threshold][,mode][,interpolation][,smoothing]`.
    * Samples is the number of samples taken around each pixel (int),
    * radius is the sampling radius (float), and threshold a "noise
-   * canceller threshold" (float). Valid values for mode are 
+   * canceller threshold" (float). Valid values for mode are
    * `Uniform`, `RotationInvariant`, `UniformRotationInvariant`, and
    * `Symmetric`. Interpolation can be either `LinearInterpolation`
-   * or `NearestNeighborInterpolation`. Smoothing can be either 
+   * or `NearestNeighborInterpolation`. Smoothing can be either
    * `Smoothed` or `NonSmoothed`. Everything but samples and radius can
    * be omitted. Default values are "Standard",
    * "NearestNeighborInterpolation", and "NonSmoothed". Threshold,
@@ -158,7 +158,7 @@ public:
 
   OutputType outputType() const;
   void setOutputType(OutputType type);
-  
+
   void setRoiType(PiiImage::RoiType roiType);
   PiiImage::RoiType roiType() const;
 
@@ -173,7 +173,7 @@ private:
   template <class T, class LbpType> class Lbp;
   friend class AnyLbp;
   template <class T, class LbpType> friend class Lbp;
-  
+
   void createOutput(int samples, double radius, PiiLbp::Mode mode = PiiLbp::Standard,
                     Pii::Interpolation interpolation = Pii::NearestNeighborInterpolation,
                     bool smoothed = false, double threshold = 0);
@@ -187,17 +187,17 @@ private:
     Data();
     ~Data();
     OutputType outputType;
-    
+
     QStringList lstParameters;
     QList<PiiLbp*> lstOperators;
     QList<int> lstSmoothingWindows;
     QList<double> lstThresholds;
     bool bMustSmooth;
-    
+
     QVector<bool> vecMustCalculate;
     bool bCompoundConnected;
     int iStaticOutputCount;
-    
+
     PiiInputSocket* pRoiInput;
     PiiImage::RoiType roiType;
     AnyLbp* pLbp;

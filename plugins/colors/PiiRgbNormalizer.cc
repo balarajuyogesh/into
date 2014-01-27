@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -52,7 +52,7 @@ template <class T> void PiiRgbNormalizer::normalizedRgb(const PiiVariant& obj)
   // Create output matrices in heap (exception-safe)
   PiiMatrix<typename T::Type> ch1(PiiMatrix<typename T::Type>::uninitialized(clrImg.rows(), clrImg.columns()));
   PiiMatrix<typename T::Type> ch2(PiiMatrix<typename T::Type>::uninitialized(clrImg.rows(), clrImg.columns()));
-  
+
   int iCh1 = 0, iCh2 = 1;
   if (d->channels == RedBlue)
     iCh2 = 2;
@@ -61,7 +61,7 @@ template <class T> void PiiRgbNormalizer::normalizedRgb(const PiiVariant& obj)
       iCh1 = 1;
       iCh2 = 2;
     }
-  
+
   PiiColors::normalizedRgb(clrImg, ch1, ch2, (float)d->dMaxValue, iCh1, iCh2);
 
   emitObject(ch1, 0);

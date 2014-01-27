@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -38,7 +38,7 @@ PiiTableModel::Data::Data(PiiTableModel* model) :
   iLastInsertRow(-1),
   iInsertCount(0)
 {
-  // Create an empty header. First row in lstItems is the header. 
+  // Create an empty header. First row in lstItems is the header.
   // Table data starts at row 1.
   lstItems << QList<PiiModelItem*>();
 }
@@ -92,7 +92,7 @@ void PiiTableModel::clear()
   d->lstItems.clear();
   d->lstItems.append(lstHeader);
   endResetModel();
-  
+
   enableControls();
 }
 
@@ -105,7 +105,7 @@ void PiiTableModel::beginInsertRows(int row, int count)
 
   for (int i=0; i<count; ++i)
     d->lstItems.append(QList<PiiModelItem*>());
-  
+
   for (int i=d->lstItems.size()-1; i>row+count; --i)
     d->lstItems[i] = d->lstItems[i-count];
 
@@ -492,7 +492,7 @@ QWidget* PiiTableModel::createEditor(QWidget* parent,
   pWidget->setContentsMargins(0,0,0,0);
   // Set remaining properties to the widget
   Pii::setProperties(pWidget, mapEditorProps);
-  
+
   return pWidget;
 }
 
@@ -501,7 +501,7 @@ void PiiTableModel::setEditorData(QWidget* editor, int row, int column) const
   PiiModelItem* pItem = itemAt(row, column);
   if (pItem == 0)
     return;
-  
+
   switch (columnEditorType(column))
     {
     case LineEditor:

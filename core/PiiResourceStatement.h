@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -53,14 +53,14 @@ public:
   PiiResourceStatement();
 
   ~PiiResourceStatement();
-  
+
   /**
    * Creates a copy of another statement.
    */
   PiiResourceStatement(const PiiResourceStatement& other);
 
   PiiResourceStatement& operator= (const PiiResourceStatement& other);
-    
+
   /**
    * Returns `true` if this is a valid statement, and `false`
    * otherwise. A statement is valid if and only if both subject and

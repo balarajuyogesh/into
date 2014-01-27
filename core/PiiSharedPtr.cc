@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -15,7 +15,7 @@
 
 /* HACK
  *
- * An empty file that makes inline dllexport functions work in MSVC++. 
+ * An empty file that makes inline dllexport functions work in MSVC++.
  * God bless Microsoft.
  */
 

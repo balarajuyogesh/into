@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -32,7 +32,7 @@ template <class SampleSet> class PiiSomOperation::Template : public PiiSomOperat
 
 public:
   Template();
-  
+
   int bufferedSampleCount() const { return _d()->collector.sampleCount(); }
   int featureCount() const { return qMax(_d()->collector.featureCount(), _d()->pClassifier->featureCount()); }
 
@@ -66,7 +66,7 @@ protected:
   void resizeBatch(int newSize);
   void resetClassifier();
   void finishOnlineLearning();
-  
+
   /// @internal
   class Data : public PiiSomOperation::Data
   {
@@ -165,7 +165,7 @@ template <class SampleSet> void PiiSomOperation::Template<SampleSet>::resetClass
   PII_D;
   PiiSom<SampleSet> *pSom = createSom();
   pSom->setIterationNumber(0);
-  
+
   delete d->pClassifier;
   d->pClassifier = pSom;
   setModels(PiiVariant());
@@ -183,7 +183,7 @@ template <class SampleSet> bool PiiSomOperation::Template<SampleSet>::learnBatch
       delete d->pNewClassifier;
       d->pNewClassifier = 0;
     }
-  
+
   return bSuccess;
 }
 

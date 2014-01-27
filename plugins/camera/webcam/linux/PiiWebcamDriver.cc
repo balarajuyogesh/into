@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,10 +28,10 @@
 static bool xioctl(int fd, int request, void  *arg)
 {
   int r;
-  
+
   do r = ioctl(fd, request, arg);
   while (-1 == r && EINTR == errno);
-  
+
   return r == 0;
 }
 
@@ -85,7 +85,7 @@ QStringList PiiWebcamDriver::cameraList() const
 void PiiWebcamDriver::initialize(const QString& cameraId)
 {
   piiDebug("PiiWebcamDriver::initialize(%s)", qPrintable(cameraId));
-  
+
   if (_bCapturingRunning)
     PII_THROW(PiiCameraDriverException, tr("Capturing is running. Stop the capture first."));
 
@@ -101,14 +101,14 @@ void PiiWebcamDriver::initialize(const QString& cameraId)
   QFileInfo info(QString("%1/%2").arg(_strBaseDir).arg(strCameraId));
   _strDevice = info.isSymLink() ? info.symLinkTarget() : info.filePath();
   piiDebug(" device = %s", qPrintable(_strDevice));
-  
+
   // Check if we must close the driver
   if (strCameraId != _strCameraId)
     close();
 
   // Get property map
   QVariantMap& dataMap = propertyMap();
-  
+
   // Check if we must open the device
   if (!_bOpen)
     {
@@ -117,7 +117,7 @@ void PiiWebcamDriver::initialize(const QString& cameraId)
         PII_THROW(PiiCameraDriverException, tr("Couldn't open device '%1'.").arg(strCameraId));
 
       struct v4l2_capability cap;
-      
+
       if (!xioctl(_fileDevice.handle(), VIDIOC_QUERYCAP, &cap))
         PII_THROW(PiiCameraDriverException, tr("%1 is not V4L2 device").arg(strCameraId));
 
@@ -125,7 +125,7 @@ void PiiWebcamDriver::initialize(const QString& cameraId)
         PII_THROW(PiiCameraDriverException, tr("%1 is no video capture device").arg(strCameraId));
 
       if (!(cap.capabilities & V4L2_CAP_STREAMING))
-        PII_THROW(PiiCameraDriverException, tr("%1 does not support streaming i/o").arg(strCameraId));  
+        PII_THROW(PiiCameraDriverException, tr("%1 does not support streaming i/o").arg(strCameraId));
 
       // Test cropping support
       struct v4l2_cropcap cropcap;
@@ -142,16 +142,16 @@ void PiiWebcamDriver::initialize(const QString& cameraId)
           if (xioctl (_fileDevice.handle(), VIDIOC_S_CROP, &crop))
             _bCroppingSupported = true;
         }
-      
+
       if (!dataMap.contains("triggerMode") &&
           !setTriggerMode(PiiCameraDriver::FreeRun))
         PII_THROW(PiiCameraDriverException, tr("Could not set default triggerMode."));
     }
   else if (!deregisterFrameBuffers())
     PII_THROW(PiiCameraDriverException, tr("Could not deregister frame buffers"));
- 
+
   _strCameraId = strCameraId;
-  
+
   // Set image format
   if (!setImageFormat(dataMap.contains("imageFormat") ?
                       dataMap.take("imageFormat").toInt() : (int)PiiCamera::Yuv422Format))
@@ -160,7 +160,7 @@ void PiiWebcamDriver::initialize(const QString& cameraId)
   // Update frameRect
   if (dataMap.contains("frameRect") && !setFrameRect(dataMap.take("frameRect").toRect()))
     PII_THROW(PiiCameraDriverException, tr("Couldn't set frameRect."));
-  
+
   // Write all configuration values from the map
   for (QVariantMap::iterator i=dataMap.begin(); i != dataMap.end(); ++i)
     {
@@ -168,11 +168,11 @@ void PiiWebcamDriver::initialize(const QString& cameraId)
         PII_THROW(PiiCameraDriverException, tr("Couldn't write the configuration value '%1'").arg(i.key()));
     }
   dataMap.clear();
-  
+
   // Register frame buffers
   if (!registerFrameBuffers(_fileDevice.handle()))
     PII_THROW(PiiCameraDriverException, tr("Could not register frame buffers"));
-  
+
   _vecBufferPointers.fill(0,_iFrameBufferCount);
 
   _bOpen = true;
@@ -189,7 +189,7 @@ bool PiiWebcamDriver::close()
   _pCapturingThread = 0;
 
   deregisterFrameBuffers();
-  
+
   _fileDevice.close();
   _bOpen = false;
 
@@ -217,23 +217,23 @@ bool PiiWebcamDriver::startCapture(int frames)
 {
   if (!_bOpen || listener() == 0 || _bCapturingRunning)
     return false;
-                
+
   // Create and start the capturing threads
   if (_pCapturingThread == 0)
     _pCapturingThread = Pii::createAsyncCall(this, &PiiWebcamDriver::capture);
-  
+
   _bCapturingRunning = true;
   _iFrameIndex = -1;
   _iHandledFrameCount = 0;
   _iMaxFrames = _triggerMode == PiiCameraDriver::SoftwareTrigger ? 0 : frames;
-  
+
   // Start acquisition
   if (!startAcquisition(_fileDevice.handle()))
     {
       piiWarning(tr("Couldn't start acquisition"));
       return false;
     }
-  
+
   _pCapturingThread->start();
 
   return true;
@@ -246,7 +246,7 @@ bool PiiWebcamDriver::stopCapture()
 
   // Stop the capturing threads
   stopCapturing();
-  
+
   return true;
 }
 
@@ -261,18 +261,18 @@ void PiiWebcamDriver::capture()
 {
   prctl(PR_SET_NAME, "V4L2Capture", 0, 0, 0);
   _pCapturingThread->setPriority(QThread::HighestPriority);
-  
+
   QVector<void*> lstBuffers;
   lstBuffers.reserve(_iFrameBufferCount);
-  
+
   int iHandledFrames = 0;
   bool bSoftwareTrigger = _triggerMode == PiiCameraDriver::SoftwareTrigger;
-  
+
   while (_bCapturingRunning)
     {
       if (bSoftwareTrigger)
         _triggerWaitCondition.wait();
-      
+
       if (!_bCapturingRunning)
         break;
 
@@ -282,7 +282,7 @@ void PiiWebcamDriver::capture()
 
           //Grab frame
           grabFrame(_fileDevice.handle(), &pBuffer, 10);
-            
+
           if (pBuffer == 0) break;
           lstBuffers << pBuffer;
         }
@@ -308,7 +308,7 @@ void PiiWebcamDriver::capture()
         }
       else
         listener()->frameCaptured(-1, 0,0);
-      
+
       if (lstBuffers.size() > 0)
         {
           lstBuffers.clear();
@@ -317,7 +317,7 @@ void PiiWebcamDriver::capture()
 
       if (!requeueBuffers(_fileDevice.handle()))
         _bCapturingRunning = false;
-      
+
       // Check if we must stop capturing
       if (_iMaxFrames > 0)
         {
@@ -331,7 +331,7 @@ void PiiWebcamDriver::capture()
   // Stop acquisition
   if (!stopAcquisition(_fileDevice.handle()))
     piiWarning(tr("Error in stop acquisition"));
-  
+
   // Inform listener
   listener()->captureFinished(true);
 }
@@ -339,10 +339,10 @@ void PiiWebcamDriver::capture()
 void PiiWebcamDriver::grabFrame(int fd, void **buffer, int timeout)
 {
   *buffer = 0;
-  
+
   pollfd pfd = { fd, POLLIN, 0 };
   int r = poll(&pfd, 1, timeout);
-  
+
   if (r == -1)
     {
       QString strReason;
@@ -361,7 +361,7 @@ void PiiWebcamDriver::grabFrame(int fd, void **buffer, int timeout)
             strReason = tr("Unknown error in grabbing image");
           break;
         }
-      
+
       piiWarning(tr("Couldn't grab frame: %1").arg(strReason));
       return;
     }
@@ -371,10 +371,10 @@ void PiiWebcamDriver::grabFrame(int fd, void **buffer, int timeout)
 
   v4l2_buffer buf;
   CLEAR (buf);
-  
+
   buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
   buf.memory = V4L2_MEMORY_MMAP;
-  
+
   if (xioctl (fd, VIDIOC_DQBUF, &buf))
     {
       *buffer = _vecBuffers[buf.index]->frameStart;
@@ -403,17 +403,17 @@ bool PiiWebcamDriver::startAcquisition(int fd)
   for (int i=0; i<_iFrameBufferCount; ++i)
     {
       v4l2_buffer buf;
-      
+
       CLEAR (buf);
-      
+
       buf.type        = V4L2_BUF_TYPE_VIDEO_CAPTURE;
       buf.memory      = V4L2_MEMORY_MMAP;
       buf.index       = i;
-      
+
       if (!xioctl(fd, VIDIOC_QBUF, &buf))
         return false;
     }
-  
+
   type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
   return xioctl(fd, VIDIOC_STREAMON, &type);
 }
@@ -431,7 +431,7 @@ bool PiiWebcamDriver::registerFrameBuffers(int fd)
   req.count               = _iFrameBufferCount;
   req.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
   req.memory              = V4L2_MEMORY_MMAP;
-  
+
   if (!xioctl (fd, VIDIOC_REQBUFS, &req))
     {
       piiWarning(tr("Kernel video driver does not support memory mapping"));
@@ -453,19 +453,19 @@ bool PiiWebcamDriver::registerFrameBuffers(int fd)
   for (int i=0; i<_iFrameBufferCount; i++)
     {
       v4l2_buffer buf;
-      
+
       CLEAR (buf);
-      
+
       buf.type   = V4L2_BUF_TYPE_VIDEO_CAPTURE;
       buf.memory = V4L2_MEMORY_MMAP;
       buf.index  = i;
-      
+
       if (!xioctl (_fileDevice.handle(), VIDIOC_QUERYBUF, &buf))
         {
           piiWarning(tr("Error in query buffers from device"));
           return false;
         }
-      
+
       WebcamBuffer *wBuffer = new WebcamBuffer;
       wBuffer->frameStart = mmap(NULL /* start anywhere */,
                                  buf.length,
@@ -473,7 +473,7 @@ bool PiiWebcamDriver::registerFrameBuffers(int fd)
                                  MAP_SHARED /* recommended */,
                                  fd, buf.m.offset);
       wBuffer->v4l2Buffer = buf;
-      
+
       if (wBuffer->frameStart == MAP_FAILED)
         PII_THROW(PiiCameraDriverException, tr("Error in mmap buffers"));
 
@@ -542,7 +542,7 @@ QSize PiiWebcamDriver::frameSize() const
   struct v4l2_format fmt;
   CLEAR(fmt);
   fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-  
+
   if (!xioctl(_fileDevice.handle(), VIDIOC_G_FMT, &fmt))
     {
       piiWarning(tr("Couldn't get frame size."));
@@ -557,7 +557,7 @@ QRect PiiWebcamDriver::frameRect() const
   v4l2_crop crop;
   CLEAR (crop);
   crop.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-  
+
   if (!_bCroppingSupported || !xioctl(_fileDevice.handle(), VIDIOC_G_CROP, &crop))
     {
       piiWarning(tr("Cropping is not supported. We must use frameSize."));
@@ -609,7 +609,7 @@ QVariantList PiiWebcamDriver::frameSizes() const
 {
   QVariantList lstFrameSizes;
   bool bPrint = true;
-  
+
   //List supported image formats
   int i=0;
   while (true)
@@ -663,7 +663,7 @@ QVariantList PiiWebcamDriver::frameSizes() const
       for (int i=0; i<lstFrameSizes.size(); i++)
         qDebug() << lstFrameSizes[i].toSize();
     }
-  
+
   return lstFrameSizes;
 }
 
@@ -679,9 +679,9 @@ bool PiiWebcamDriver::setFrameSize(const QSize& frameSize)
   CLEAR(fmt);
   fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
   fmt.fmt.pix.pixelformat = _iPixelFormat;
-  fmt.fmt.pix.width       = frameSize.width() < 0 ? 99999 : frameSize.width(); 
+  fmt.fmt.pix.width       = frameSize.width() < 0 ? 99999 : frameSize.width();
   fmt.fmt.pix.height      = frameSize.height() < 0 ? 99999 : frameSize.height();
-  
+
   if (!xioctl(_fileDevice.handle(), VIDIOC_S_FMT, &fmt))
     {
       piiWarning(tr("Couldn't set frame size"));
@@ -702,7 +702,7 @@ bool PiiWebcamDriver::setFrameRect(const QRect& frameRect)
       crop.c.top = frameRect.y();
       crop.c.width = frameRect.width();
       crop.c.height = frameRect.height();
-      
+
       return xioctl(_fileDevice.handle(), VIDIOC_S_CROP, &crop);
     }
   else
@@ -714,7 +714,7 @@ bool PiiWebcamDriver::setFrameRect(const QRect& frameRect)
 bool PiiWebcamDriver::setImageFormat(int value)
 {
   bool bSupported = true;
-  
+
   // Init image format
   struct v4l2_format fmt;
   CLEAR(fmt);
@@ -727,11 +727,11 @@ bool PiiWebcamDriver::setImageFormat(int value)
     case PiiCamera::MonoFormat:
       _iPixelFormat = V4L2_PIX_FMT_GREY;
       _iBitsPerPixel = 8;
-      break;        
+      break;
     case PiiCamera::BayerBGGRFormat:
       _iPixelFormat = V4L2_PIX_FMT_SBGGR8;
       _iBitsPerPixel = 8;
-      break;        
+      break;
     case PiiCamera::Yuv411Format:
       _iPixelFormat = V4L2_PIX_FMT_Y41P;
       _iBitsPerPixel = 8;
@@ -775,7 +775,7 @@ bool PiiWebcamDriver::setImageFormat(int value)
         }
       else
         break;
-    }  
-  
+    }
+
   return true;
 }

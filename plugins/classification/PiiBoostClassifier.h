@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -71,7 +71,7 @@ public:
   {
   public:
     virtual ~Factory() {}
-    
+
     /**
      * Creates a new weak classifier. Caller assumes the ownership of the
      * returned pointer.
@@ -92,7 +92,7 @@ public:
 
   /**
    * Create a new boosting classifier that uses *factory* to create
-   * the weak classifiers. The learning algorithm will be set to 
+   * the weak classifiers. The learning algorithm will be set to
    * *algorithm*. This class will not own *factory*; the pointer must
    * be deleted by the caller.
    */
@@ -100,7 +100,7 @@ public:
                      PiiClassification::BoostingAlgorithm algorithm = PiiClassification::RealBoost);
 
   ~PiiBoostClassifier();
-  
+
   double classify(ConstFeatureIterator sample) throw();
 
   /**
@@ -190,7 +190,7 @@ public:
 
 protected:
   static QString tr(const char* s) { return QCoreApplication::translate("PiiBoostClassifier", s); }
-  
+
 private:
   double updateWeights(const SampleSet& samples,
                        const QVector<double>& labels,

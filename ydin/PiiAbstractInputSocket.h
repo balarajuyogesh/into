@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -52,7 +52,7 @@ public:
    * calls PiiAbstractOutputSocket::disconnectInput().
    */
   Q_INVOKABLE void disconnectOutput();
-  
+
   /**
    * Returns the input controller. Input controller is responsible for
    * handling all incoming objects to this socket. Typically, a single
@@ -93,21 +93,21 @@ protected:
      * sockets leading to this socket is connected to an operation or
      * not.
      *
-     * @return `true` if the socket is connected, `false` otherwise. 
+     * @return `true` if the socket is connected, `false` otherwise.
      * If the socket is a proxy, it may be unconnected even after
      * setInputConnected(true) if none of its outgoing connections leads
      * to a connected input.
      */
     virtual bool setInputConnected(bool connected);
-    
+
     PiiAbstractOutputSocket* pConnectedOutput;
     PiiInputListener* pListener;
   };
   PII_D_FUNC;
-  
+
   /// @internal
   PiiAbstractInputSocket(const QString& name, Data* d);
-  
+
 private:
   // Must be able to set pConnectedOutput and call setInputConnected.
   friend class PiiAbstractOutputSocket;

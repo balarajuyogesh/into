@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@
  * @in index - a zero-based index into the look-up table. If there is
  * no [default value](defaultValue), overflows and underflows will
  * cause a run-time exception. Any primitive type is be accepted.
- * 
+ *
  * Outputs
  * -------
  *
@@ -85,7 +85,7 @@ class PiiLookupTable : public PiiDefaultOperation
    * over/underflow occurs, a run-time exception will be generated.
    */
   Q_PROPERTY(PiiVariant defaultValue READ defaultValue WRITE setDefaultValue);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiLookupTable();

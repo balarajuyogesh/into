@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -113,7 +113,7 @@ qint64 PiiFifoBuffer::readData(char * data, qint64 maxSize)
   //qDebug("PiiFifoBuffer::readData(0x%x, %d)", (int)data, (int)maxSize);
   if (maxSize == 0)
     return 0;
-  
+
   d->bufferLock.lock();
   return readBytes(data, maxSize);
 }
@@ -121,7 +121,7 @@ qint64 PiiFifoBuffer::readData(char * data, qint64 maxSize)
 qint64 PiiFifoBuffer::readBytes(char * data, qint64 maxSize)
 {
   qint64 bytesRemaining = maxSize;
-  
+
   // Read until everything was received
   while (bytesRemaining > 0)
     {
@@ -146,7 +146,7 @@ qint64 PiiFifoBuffer::readBytes(char * data, qint64 maxSize)
       // Read as much as possible
       // Len must be larger than zero because new data has arrived
       qint64 len = bytesRemaining < (d->iSize - d->iFreeSpace) ? bytesRemaining : (d->iSize - d->iFreeSpace);
-      
+
       //qDebug("Reading %d bytes", (int)len);
       qint64 end = d->iReadStart + len;
       //printf("len = %d, freeSpace = %d, start = %d, end = %d\n", len, d->iFreeSpace, d->iReadStart, end);
@@ -187,7 +187,7 @@ qint64 PiiFifoBuffer::writeData(const char * data, qint64 maxSize)
   //qDebug("PiiFifoBuffer::writeData(0x%x, %d)", (int)data, (int)maxSize);
   if (maxSize == 0)
     return 0;
-  
+
   d->bufferLock.lock();
 
   // Analogous to readData

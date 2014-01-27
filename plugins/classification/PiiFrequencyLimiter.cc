@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,10 +28,10 @@ bool PiiFrequencyLimiter::check()
     {
       int elapsed = _filterTime.elapsed();
       _dMeanInterval = 0.05 * elapsed + 0.95 * _dMeanInterval;
-      
+
       if (_dMeanInterval > _dMaxMeanInterval)
         _dMeanInterval = _dMaxMeanInterval;
-      
+
       if ( (double)_dFilterInterval > _dMeanInterval )
         bUpdateObject = false;
     }

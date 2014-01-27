@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,12 +28,12 @@
  * - At each time step read in a set of N candidate measurements.
  *
  * - Evaluate how well each of the N measurements fits into the
- * current set of M candidate trajectories (N x M evaluations). 
+ * current set of M candidate trajectories (N x M evaluations).
  * ([measureFit()])
  *
  * - Generate a new set of candidate trajectories by extending the
  * old ones with the measurements with non-zero probabilities. This
- * may create many branches for a single trajectory. 
+ * may create many branches for a single trajectory.
  * ([createTrajectory()]) Note that trajectories will be cleared
  * and the new trajectories will be added to the empty list.
  *
@@ -55,7 +55,7 @@ template <class Measurement, class Trajectory> class PiiMultiHypothesisTracker :
 public:
   typedef Measurement MeasurementType;
   typedef Trajectory TrajectoryType;
-  
+
   /**
    * Add a new set of candidate measurements to the tracker. This will
    * run one cycle of the algorithm.
@@ -68,7 +68,7 @@ public:
 
 protected:
   virtual ~PiiMultiHypothesisTracker() {}
-  
+
   /**
    * Create a new trajectory by extending an old one.
    *

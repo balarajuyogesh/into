@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -23,7 +23,7 @@ PiiAbstractOutputSocket::Data::Data() :
   PiiSocket::Data(Output)
 {}
 
-PiiAbstractOutputSocket::Data::~Data() 
+PiiAbstractOutputSocket::Data::~Data()
 {}
 
 bool PiiAbstractOutputSocket::Data::setOutputConnected(bool connected)
@@ -81,7 +81,7 @@ void PiiAbstractOutputSocket::connectInput(PiiAbstractInputSocket* input)
 
       // Store the connected input and its controller
       d->lstInputs.append(input);
-      
+
       input->_d()->pConnectedOutput = this;
 
       PiiAbstractOutputSocket* pRootOutput = PiiProxySocket::root(this);

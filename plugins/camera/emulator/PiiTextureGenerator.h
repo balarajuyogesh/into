@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -25,7 +25,7 @@
  * An interface for classes that produce background texture for
  * PiiLineScanEmulator. You may create your own generator by
  * subclassing this interface. Register the class to the resource
- * database (see PiiYdin::resourceDatabase()) and set the 
+ * database (see PiiYdin::resourceDatabase()) and set the
  * [textureGenerator](PiiLineScanEmulator::textureGenerator) property
  * in PiiLineScanEmulator to the name of your class.
  *
@@ -37,7 +37,7 @@ class PII_CAMERAEMULATOR_EXPORT PiiTextureGenerator : public QObject
   PII_PROPERTY_SERIALIZATION_FUNCTION(QObject)
 public:
   ~PiiTextureGenerator();
-  
+
   /**
    * Generate texture to the given frame buffer.
    *

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -64,7 +64,7 @@ template <class T> struct PiiBaseClass
   PiiBaseClass(T& child) : derived(&child) {}
 
   PII_SEPARATE_SAVE_LOAD_MEMBERS
-  
+
   template <class Archive> void load(Archive& archive, const unsigned int /*version*/) const
   {
     unsigned int iBaseClassVersion(0);

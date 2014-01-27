@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -37,7 +37,7 @@ namespace PiiColors
       lstDistances << i;
     return autocorrelogram(image, lstDistances, levels);
   }
-  
+
   PiiMatrix<float> autocorrelogram(const PiiMatrix<int>& image,
                                    const QList<int>& distances,
                                    int levels)
@@ -67,7 +67,7 @@ namespace PiiColors
               pRow1 = image[iWindowVEnd];
             else
               iWindowVEnd = iRows-1;
-            
+
             for (int c=0; c<iCols; ++c)
               {
                 int iSum = 0, iCnt = 0;
@@ -110,7 +110,7 @@ namespace PiiColors
                   pCorrelogram[iCenter] += float(iSum) / iCnt;
               }
           }
-        
+
         // Center
         for (; r<iLastRow; ++r)
           {
@@ -211,7 +211,7 @@ namespace PiiColors
                   }
                 else
                   iWindowHStart = -1;
-                
+
                 if (iWindowHEnd < iCols)
                   {
                     for (int v=iWindowVStart; v<=iWindowVEnd; ++v)

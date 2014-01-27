@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -46,7 +46,7 @@ public:
 protected:
   /// Returns `false.`
   virtual bool needsThread() const;
-  
+
   /// @internal
   class Data : public PiiVectorQuantizerOperation::Data
   {
@@ -55,7 +55,7 @@ protected:
     int k;
   };
   PII_D_FUNC;
-  
+
   /// @internal
   PiiKnnClassifierOperation(Data* data);
 };
@@ -68,7 +68,7 @@ template <class SampleSet> class PiiKnnClassifierOperation::Template :
 
 public:
   Template();
-  
+
   int bufferedSampleCount() const;
   int featureCount() const;
 
@@ -80,7 +80,7 @@ protected:
   void replaceClassifier();
   void resizeBatch(int newSize);
   void resetClassifier();
-  
+
 private:
   /// @internal
   class Data : public PiiKnnClassifierOperation::Data

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -37,7 +37,7 @@ IPin* getPin(IBaseFilter *filter, PIN_DIRECTION direction, int num)
       qDebug("Error getting pin enumerator");
       return NULL;
     }
-  
+
   ULONG found;
   IPin *pPin;
   while (pEnumPins->Next(1, &pPin, &found) == S_OK)
@@ -93,7 +93,7 @@ PiiWebcamDriver::~PiiWebcamDriver()
 QStringList PiiWebcamDriver::cameraList() const
 {
   const_cast<PiiWebcamDriver*>(this)->initialize();
-  
+
   if (!_bInitialized)
     return QStringList();
 
@@ -107,12 +107,12 @@ QStringList PiiWebcamDriver::cameraList() const
     }
 
   QStringList lstCameras;
-  
+
   // Obtain a class enumerator for the video compressor category.
   IEnumMoniker *pEnumCat = NULL;
   hr = pSysDevEnum->CreateClassEnumerator(CLSID_VideoInputDeviceCategory, &pEnumCat, 0);
 
-  if (hr == S_OK && SUCCEEDED(pEnumCat->Reset())) 
+  if (hr == S_OK && SUCCEEDED(pEnumCat->Reset()))
     {
       // Enumerate the monikers.
       IMoniker *pMoniker = NULL;
@@ -161,8 +161,8 @@ bool PiiWebcamDriver::initCamera(const QString& cameraId)
   IEnumMoniker *pEnumCat = NULL;
   hr = pSysDevEnum->CreateClassEnumerator(CLSID_VideoInputDeviceCategory, &pEnumCat, 0);
   safeRelease(&pSysDevEnum);
-  
-  if (hr == S_OK && SUCCEEDED(pEnumCat->Reset())) 
+
+  if (hr == S_OK && SUCCEEDED(pEnumCat->Reset()))
     {
       // Enumerate the monikers.
       IMoniker *pMoniker = NULL;
@@ -180,7 +180,7 @@ bool PiiWebcamDriver::initCamera(const QString& cameraId)
                 {
                   QString strId = QString::fromStdWString(varId.bstrVal);
                   VariantClear(&varId);
-                  
+
                   if (cameraId.contains(strId))
                     {
                       safeRelease(&pPropBag);
@@ -209,8 +209,8 @@ bool PiiWebcamDriver::initCamera(const QString& cameraId)
                           safeRelease(&_pSourceFilter);
                           return false;
                         }
-                        
-                      
+
+
                       return true;
                     }
                 }
@@ -220,14 +220,14 @@ bool PiiWebcamDriver::initCamera(const QString& cameraId)
         }
     }
   safeRelease(&pEnumCat);
-  
+
   return false;
 }
 
 void PiiWebcamDriver::initialize(const QString& cameraId)
 {
   piiDebug("PiiWebcamDriver::initialize(%s)", qPrintable(cameraId));
-  
+
   if (_bCapturingRunning)
     PII_THROW(PiiCameraDriverException, tr("Capturing is running. Stop the capture first."));
 
@@ -247,7 +247,7 @@ void PiiWebcamDriver::initialize(const QString& cameraId)
           break;
         }
     }
-          
+
   if (!bCameraOk)
     PII_THROW(PiiCameraDriverException, tr("Couldn't find camera by id %1").arg(strCameraId));
 
@@ -257,7 +257,7 @@ void PiiWebcamDriver::initialize(const QString& cameraId)
 
   // Get property map
   QVariantMap& dataMap = propertyMap();
-  
+
   // Check if we must open the device
   if (!_bOpen)
     {
@@ -266,20 +266,20 @@ void PiiWebcamDriver::initialize(const QString& cameraId)
 
       if (!initCamera(strCameraId))
         PII_THROW(PiiCameraDriverException, tr("Couldn't initialize camera by id '%1'.").arg(strCameraId));
-      
+
       if (!initSupportedValues())
         PII_THROW(PiiCameraDriverException, tr("Coulnd't initialize supported values."));
 
       qDebug() << _lstImageFormats;
       qDebug() << _lstFrameSizes;
       qDebug() << _resolution;
-      
+
       if (!dataMap.contains("triggerMode") && !setTriggerMode(PiiCameraDriver::FreeRun))
         PII_THROW(PiiCameraDriverException, tr("Could not set default triggerMode."));
     }
- 
+
   _strCameraId = strCameraId;
-  
+
   // Write all configuration values from the map
   for (QVariantMap::iterator i=dataMap.begin(); i != dataMap.end(); ++i)
     {
@@ -290,7 +290,7 @@ void PiiWebcamDriver::initialize(const QString& cameraId)
 
   if (!initSelectedValues())
     PII_THROW(PiiCameraDriverException, tr("Coulnd't initialize selected values."));
-  
+
   _pFrame = 0;
   _bOpen = true;
 }
@@ -301,7 +301,7 @@ bool PiiWebcamDriver::initSupportedValues()
   _lstFrameSizes.clear();
   _lstImageFormats.clear();
   _resolution = QSize(0,0);
-  
+
   if (_pStreamConfig != 0)
     {
       int count, size;
@@ -320,11 +320,11 @@ bool PiiWebcamDriver::initSupportedValues()
               _resolution = QSize(0,0);
               return false;
             }
-          
+
           if (pMediaType->majortype == MEDIATYPE_Video && pMediaType->cbFormat != 0)
             {
               PiiCamera::ImageFormat format = PiiCamera::InvalidFormat;
-              
+
               // Get image format
               if (pMediaType->subtype == MEDIASUBTYPE_YUY2)
                 format = PiiCamera::Yuv422Format;
@@ -345,7 +345,7 @@ bool PiiWebcamDriver::initSupportedValues()
               if (size.width() * size.height() > _resolution.width() * _resolution.height())
                 _resolution = size;
             }
-          
+
           if (pMediaType->cbFormat != 0)
             CoTaskMemFree((PVOID)pMediaType->pbFormat);
           if (pMediaType->pUnk != NULL )
@@ -370,7 +370,7 @@ bool PiiWebcamDriver::initSelectedValues()
 
   if (_frameSize.isNull() || _frameSize.isEmpty())
     _frameSize = _resolution;
-  
+
   if (!_lstImageFormats.contains(_imageFormat))
     {
       piiWarning(tr("Doesn't support image format %1. We select %1.").arg(_imageFormat).arg(_lstImageFormats.first()));
@@ -392,7 +392,7 @@ bool PiiWebcamDriver::initSelectedValues()
         _frameSize = _lstFrameSizes.first().toSize();
       piiWarning(tr("We select the size %1x%2.").arg(_frameSize.width()).arg(_frameSize.height()));
     }
-  
+
   if (_pStreamConfig != 0)
     {
       int count, size;
@@ -423,19 +423,19 @@ bool PiiWebcamDriver::initSelectedValues()
       int iHeight = _frameSize.height();
       bool bOk = false;
       bool bFound = false;
-      
+
       for (int i=0; i<count; i++)
         {
           if (FAILED(_pStreamConfig->GetStreamCaps(i, &pMediaType, (BYTE *)&videoConfig)))
               return false;
-          
+
           if (pMediaType->majortype == MEDIATYPE_Video &&
               pMediaType->cbFormat != 0 &&
               ((VIDEOINFOHEADER*)pMediaType->pbFormat)->bmiHeader.biWidth == iWidth &&
               ((VIDEOINFOHEADER*)pMediaType->pbFormat)->bmiHeader.biHeight == iHeight)
             {
               bOk = true;
-              
+
               if (FAILED(_pStreamConfig->SetFormat(pMediaType)))
                 {
                   piiWarning(tr("Couldn't initialize selected values."));
@@ -444,7 +444,7 @@ bool PiiWebcamDriver::initSelectedValues()
 
               bFound = true;
             }
-          
+
           if (pMediaType->cbFormat != 0)
             CoTaskMemFree((PVOID)pMediaType->pbFormat);
           if (pMediaType->pUnk != NULL )
@@ -499,22 +499,22 @@ bool PiiWebcamDriver::startCapture(int frames)
 {
   if (!_bOpen || listener() == 0 || _bCapturingRunning)
     return false;
-                
+
   // Create and start the capturing threads
   if (_pCapturingThread == 0)
     _pCapturingThread = Pii::createAsyncCall(this, &PiiWebcamDriver::capture);
-  
+
   _bCapturingRunning = true;
   _iFrameIndex = -1;
   _iMaxFrames = _triggerMode == PiiCameraDriver::SoftwareTrigger ? 0 : frames;
-  
+
   // Start acquisition
   if (!startAcquisition())
     {
       piiWarning(tr("Couldn't start acquisition"));
       return false;
     }
-  
+
   _pCapturingThread->start();
 
   return true;
@@ -527,7 +527,7 @@ bool PiiWebcamDriver::stopCapture()
 
   // Stop the capturing threads
   stopCapturing();
-  
+
   return true;
 }
 
@@ -541,9 +541,9 @@ void PiiWebcamDriver::stopCapturing()
 void PiiWebcamDriver::capture()
 {
   _pCapturingThread->setPriority(QThread::HighestPriority);
-  
+
   bool bSoftwareTrigger = _triggerMode == PiiCameraDriver::SoftwareTrigger;
-  
+
   while (_bCapturingRunning)
     {
       if (bSoftwareTrigger)
@@ -555,16 +555,16 @@ void PiiWebcamDriver::capture()
         }
       else
         QThread::yieldCurrentThread();
-      
+
       if (!_bCapturingRunning)
         break;
-          
+
       if (_pFrame != 0)
         {
           void *pSource = _pFrame;
           int iBytes = _iFrameSizeInBytes;
           _pFrame = 0;
-          
+
           //memcpy _pFrame
           void *pDestination = malloc(iBytes);
           memcpy(pDestination, pSource, iBytes);
@@ -572,16 +572,16 @@ void PiiWebcamDriver::capture()
         }
       else
         listener()->frameCaptured(-1,0,0);
-      
+
       // Check if we must stop capturing
       if (_iMaxFrames > 0 && _iFrameIndex >= _iMaxFrames)
         _bCapturingRunning = false;
     }
-  
+
   // Stop acquisition
   if (!stopAcquisition())
     piiWarning(tr("Error in stop acquisition"));
-  
+
   // Inform listener
   listener()->captureFinished(true);
 }
@@ -591,7 +591,7 @@ bool PiiWebcamDriver::startAcquisition()
   qDebug("PiiWebcamDriver::startAcquisition()");
   if (_pMediaControl != 0 && _triggerMode != PiiCameraDriver::SoftwareTrigger)
     _pMediaControl->Run();
-  
+
   return true;
 }
 
@@ -717,8 +717,8 @@ bool PiiWebcamDriver::initGraphBuilder()
       safeRelease(&_pMediaControl);
       safeRelease(&_pGraphBuilder);
       return false;
-    } 
-  
+    }
+
   return true;
 }
 

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -55,7 +55,7 @@ PiiEngine* MainWindow::createEngine()
   // Create probe input for source and result image display
   _pSourceProbeInput = new PiiProbeInput;
   _pResultProbeInput = new PiiProbeInput;
-  
+
   // Create image source
   PiiOperation *pImageFileReader = pEngine->createOperation("PiiImageFileReader");
   pImageFileReader->setProperty("fileNames", QString("%1/olga.jpg").arg(defaultImageDirPath()));
@@ -63,14 +63,14 @@ PiiEngine* MainWindow::createEngine()
   // Create matrix flipper
   _pMatrixFlipper = pEngine->createOperation("PiiMatrixFlipper");
   _pMatrixFlipper->setProperty("flipMode", "FlipHorizontally");
-  
+
   // Make operation connections
   pTriggerSource->connectOutput("trigger", pImageFileReader, "trigger");
   pImageFileReader->connectOutput("image", _pMatrixFlipper, "input");
-  
+
   _pSourceProbeInput->connectOutput(pImageFileReader->output("image"));
   _pResultProbeInput->connectOutput(_pMatrixFlipper->output("output"));
-  
+
   connect(this, SIGNAL(selectImage(int)), pTriggerSource, SLOT(trigger(int)));
 
   return pEngine;

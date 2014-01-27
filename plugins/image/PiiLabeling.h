@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -48,7 +48,7 @@ namespace PiiImage
   {
   public:
     /**
-     * Creates a size limiter that only accepts objects larger than 
+     * Creates a size limiter that only accepts objects larger than
      * `sizeThreshold`.
      */
     inline ObjectSizeLimiter(int sizeThreshold) : _iSizeThreshold(sizeThreshold) {}
@@ -116,7 +116,7 @@ namespace PiiImage
     QVector<int> _vecCounts;
     int _iSizeThreshold;
   };
-  
+
   /**
    * Labels an image using 4-connectivity. This function uses the
    * two-pass algorithm found in most computer vision textbooks.
@@ -131,7 +131,7 @@ namespace PiiImage
    * @param limiter a template class that selects which objects to
    * accept for labeling
    *
-   * @return a labeled image, whose maximum value equals to 
+   * @return a labeled image, whose maximum value equals to
    * `labelCount`
    *
    * @param labelCount an optional output-value parameter that stores
@@ -161,11 +161,11 @@ namespace PiiImage
     QVector<int> vecLabels(1);
     vecLabels.reserve(64);
     limiter.setInitialLabels(vecLabels);
-    
+
     PiiMatrix<int> matResult(iRows, iCols);
     if (matResult.isEmpty())
       return matResult;
-  
+
     int *pCurrent, *pUp, *pLeft;
 
     typename Matrix::const_row_iterator sourceRow = mat.rowBegin(0);
@@ -177,7 +177,7 @@ namespace PiiImage
       vecLabels.append(pCurrent[c] = ++iLabelIndex);  \
       limiter.addLabel();                             \
     } while(false)
-    
+
 
     int c = 0;
     // If first pixel is an object pixel, create a new label
@@ -274,7 +274,7 @@ namespace PiiImage
     iLabelIndex = 0;
     for (int i=0; i<vecLabels.size(); ++i)
       {
-        // If the step from last is over one, there is a gap. 
+        // If the step from last is over one, there is a gap.
         if (vecLabels[i] > iLabelIndex+1)
           {
             // Move all matching labels down to current iLabelIndex+1
@@ -299,7 +299,7 @@ namespace PiiImage
 
     if (labelCount != 0)
       *labelCount = iLabelIndex;
-    
+
     return matResult;
   }
 
@@ -346,7 +346,7 @@ namespace PiiImage
 
 
   /// @hide
-  
+
   // A linked list node for runs of consequtive object pixels on one
   // row.
   struct RunNode
@@ -355,7 +355,7 @@ namespace PiiImage
       start(firstColumn), end(-1), seed(s),
       previous(0), next(0)
     {}
-    
+
     RunNode(int firstColumn = -1, int lastColumn = -1) :
       start(firstColumn), end(lastColumn), seed(false),
       previous(0), next(0)
@@ -382,7 +382,7 @@ namespace PiiImage
       remove(node);
       return node;
     }
-    
+
     void remove(RunNode* node)
     {
       if (node->previous != 0)
@@ -395,7 +395,7 @@ namespace PiiImage
       else
         last = node->previous;
     }
-    
+
     RunList& operator<< (RunNode* node)
     {
       if (last != 0)
@@ -445,7 +445,7 @@ namespace PiiImage
    *
    * @param mat the matrix to be labeled
    *
-   * @param rule1 a unary predicate that determines if a pixel in 
+   * @param rule1 a unary predicate that determines if a pixel in
    * `mat` is an object pixel candidate. A pixel candidate is not
    * necessarily an object pixel unless at least one pixel in the
    * object matches `rule2`.
@@ -502,7 +502,7 @@ namespace PiiImage
     LabelInfo info(lstRuns, matLabels, iLabelIndex, iConnectivityShift);
 
     const int iRows = mat.rows(), iCols = mat.columns();
-    
+
     for (int r=0; r<iRows; ++r)
       {
         typename Matrix::const_row_iterator sourceRow = mat.rowBegin(r);
@@ -531,7 +531,7 @@ namespace PiiImage
               }
           }
       }
-    
+
     // Now we have a list of runs for each row. Connect.
     for (int rowIndex=0; rowIndex<lstRuns.size(); ++rowIndex)
       {
@@ -565,7 +565,7 @@ namespace PiiImage
     // Store return-value parameter if needed
     if (labelCount != 0)
       *labelCount = iLabelIndex;
-    
+
     return info.matLabels;
   }
 }

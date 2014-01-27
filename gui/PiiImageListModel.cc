@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -34,7 +34,7 @@ PiiImageListModel::~PiiImageListModel()
 
 int PiiImageListModel::rowCount(const QModelIndex& /*parent*/) const
 {
-  return d->lstItems.count(); 
+  return d->lstItems.count();
 }
 
 QVariant PiiImageListModel::data(const QModelIndex& index, int role) const
@@ -93,7 +93,7 @@ bool PiiImageListModel::removeRows(int row, int count, const QModelIndex& parent
   if (row >= 0 && (row+count-1) < d->lstItems.count())
     {
       beginRemoveRows(parent, row, row+count-1);
-      
+
       for (int i=0; i<count; i++)
         d->lstItems.removeAt(row);
 
@@ -127,7 +127,7 @@ void PiiImageListModel::setFileNames(const QStringList& fileNames)
     }
 
   emit layoutChanged();
-  
+
   for (int i=0; i<fileNames.size(); i++)
     d->thumbnailLoader.addFileName(fileNames[i]);
 }
@@ -160,7 +160,7 @@ void PiiImageListModel::appendItem(const QString& fileName)
 
   PiiImageListModelItem item(fileName);
   d->lstItems << item;
-  
+
   endInsertRows();
 
   d->thumbnailLoader.addFileName(fileName);

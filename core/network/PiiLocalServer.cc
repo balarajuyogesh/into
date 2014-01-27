@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -40,7 +40,7 @@ void PiiLocalServer::stopListening()
 {
   _d()->server.close();
 }
-  
+
 void PiiLocalServer::incomingConnection(quintptr socketDescriptor)
 {
   PiiNetworkServer::incomingConnection(PiiGenericSocketDescriptor(socketDescriptor));

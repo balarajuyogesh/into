@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -65,9 +65,9 @@ QVariantList PiiMultiVariableHistogram::scales() const
 void PiiMultiVariableHistogram::check(bool reset)
 {
   PII_D;
-  
+
   PiiDefaultOperation::check(reset);
-  
+
   d->vecSteps.clear();
 
   d->vecSteps << d->vecLevels[0];
@@ -125,7 +125,7 @@ template <class T> PiiMatrix<int> PiiMultiVariableHistogram::scale(const PiiVari
 void PiiMultiVariableHistogram::process()
 {
   PII_D;
-  
+
   // Input matrices are stored into a list (either as such or scaled).
   QList<PiiMatrix<int> > lstMatrices;
 
@@ -172,7 +172,7 @@ void PiiMultiVariableHistogram::process()
             PII_THROW_WRONG_SIZE(inputAt(i), matrix, iRows, iColumns);
           lstMatrices << matrix;
         }
-      
+
       if (i == 0)
         {
           iRows = lstMatrices[0].rows();
@@ -199,7 +199,7 @@ void PiiMultiVariableHistogram::jointHistogram(const QList<PiiMatrix<int> >& mat
                                                PiiMatrix<int>* result)
 {
   PII_D;
-  
+
   const int iDimensions = matrices.size();
   for (int r=0; r<rows; ++r)
     {
@@ -212,7 +212,7 @@ void PiiMultiVariableHistogram::jointHistogram(const QList<PiiMatrix<int> >& mat
           int index = qBound(0, const_cast<const PiiMatrix<int>&>(matrices[0])(r, c), d->vecLevels[0]-1);
           for (int k=1; k<iDimensions; ++k)
             index += d->vecSteps[k-1] * qBound(0, const_cast<const PiiMatrix<int>&>(matrices[k])(r, c), d->vecLevels[k]-1);
-          
+
           // Increase histogram at the folded index
           ++(*result)(0, index);
         }
@@ -224,7 +224,7 @@ void PiiMultiVariableHistogram::marginalHistograms(const QList<PiiMatrix<int> >&
                                                    PiiMatrix<int>* result)
 {
   PII_D;
-  
+
   int* pHistogram = result->row(0);
   for (int k=0; k<matrices.size(); ++k)
     {

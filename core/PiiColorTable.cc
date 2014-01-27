@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -25,7 +25,7 @@ namespace Pii
       vecGray << qRgb(i,i,i);
     return vecGray;
   }
-  
+
   const QVector<QRgb>& grayColorTable()
   {
     static QVector<QRgb> vecGray(createGrayColorTable());

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -234,7 +234,7 @@ public:
   {
     typedef typename Traits::template Rebind<typename Operation::result_type>::Type ResultType;
     ResultType result;
-    
+
     // Take iterators to the beginning of both elements
     typename Traits::ConstIterator myCurrent = self()->begin();
     typename ResultType::Iterator resultCurrent = result.begin();
@@ -246,7 +246,7 @@ public:
       }
     return result;
   }
-  
+
   /**
    * Apply a unary function to all elements. Modify the elements in
    * place.
@@ -288,7 +288,7 @@ public:
       }
     return result;
   }
-  
+
   /**
    * Apply a binary function to all elements using the corresponding
    * elements in `this` and `other` as function parameters. Modify
@@ -324,7 +324,7 @@ public:
     result.binaryOp(op, value);
     return result;
   }
-  
+
   /**
    * Apply a binary function to all elements using `value` as the
    * second function parameter. Modify elements in place.

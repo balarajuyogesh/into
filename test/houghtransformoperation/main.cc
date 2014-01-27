@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -42,13 +42,13 @@ void TestPiiHoughTransformOperation::process()
   QVERIFY(start());
 
   QVERIFY(sendObject("image", matInput));
-  
+
   PiiMatrix<int> matEndPoints = outputValue("coordinates", PiiMatrix<int>());
   QCOMPARE(matEndPoints.rows(), 9);
 
   // Sort lines in ascending order based on y coordinage
   Pii::sortRows(matEndPoints, std::less<int>(), 1);
-  
+
   for (int r=0; r<9; ++r)
     {
       QCOMPARE(matEndPoints(r,0), 0);
@@ -56,7 +56,7 @@ void TestPiiHoughTransformOperation::process()
       QCOMPARE(matEndPoints(r,2), 499);
       QCOMPARE(matEndPoints(r,3), matEndPoints(r,1));
     }
-  
+
   matInput = 0;
   // Vertical lines
   for (int c=1; c<=9; ++c)
@@ -98,7 +98,7 @@ void TestPiiHoughTransformOperation::process()
   QVERIFY(qAbs(matEndPoints(1,0) - 0) <= 1);
   QVERIFY(qAbs(matEndPoints(1,1) - 499) <= 1);
   QVERIFY(qAbs(matEndPoints(1,2) - 499) <= 1);
-  QVERIFY(qAbs(matEndPoints(1,3) - 0) <= 1);  
+  QVERIFY(qAbs(matEndPoints(1,3) - 0) <= 1);
 }
 
 QTEST_MAIN(TestPiiHoughTransformOperation)

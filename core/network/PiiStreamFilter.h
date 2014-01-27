@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -33,7 +33,7 @@ public:
   virtual ~PiiStreamFilter();
 
   /**
-   * Writes at most `maxSize` bytes of `data` to this output filter. 
+   * Writes at most `maxSize` bytes of `data` to this output filter.
    * Returns the number of bytes actually written.
    */
   virtual qint64 filterData(const char* data, qint64 maxSize) = 0;
@@ -44,7 +44,7 @@ public:
    * written.
    */
   qint64 filterData(const QByteArray& data);
-  
+
   /**
    * Sets the next output filter in the filter chain. If the output
    * filter is non-null, this filter writes its data to it after
@@ -56,7 +56,7 @@ public:
    * implementation returns 0.
    */
   virtual PiiStreamFilter* outputFilter() const;
-  
+
   /**
    * Flushes all buffered data to the output filter. Returns the
    * number of bytes written. The default implementation returns 0.
@@ -77,7 +77,7 @@ protected:
   public:
     virtual ~Data();
   } *d;
-  
+
   /// @internal
   PiiStreamFilter(Data* d);
 
@@ -96,7 +96,7 @@ public:
    * Constructs a default stream filter whose output filter is zero.
    */
   PiiDefaultStreamFilter();
-  
+
   /**
    * Sets output filter.
    */

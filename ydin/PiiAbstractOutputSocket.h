@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -48,7 +48,7 @@ class PII_YDIN_EXPORT PiiAbstractOutputSocket :
   Q_OBJECT
 public:
   ~PiiAbstractOutputSocket();
-  
+
   /**
    * Connects this socket to the specified input socket. The new input
    * will be appended to the list of connected inputs.
@@ -63,7 +63,7 @@ public:
    * configuration (such as the controller) changes.
    */
   void updateInput(PiiAbstractInputSocket* input);
-  
+
   /**
    * Disconnects this socket from an input. After disconnect, objects
    * emitted through this socket are no longer delivered to this input
@@ -77,7 +77,7 @@ public:
   Q_INVOKABLE void disconnectInputs() { disconnectInput(0); }
 
   /**
-   * Reconnects all inputs currently connected to this output to 
+   * Reconnects all inputs currently connected to this output to
    * `output`, and reconnects this output to `input`.
    */
   Q_INVOKABLE void reconnect(PiiAbstractOutputSocket* output, PiiAbstractInputSocket* input);
@@ -98,7 +98,7 @@ protected:
     InputList(const InputList& other) : InputListParent(other) {}
 
     InputList& operator=(const InputList& other) { InputListParent::operator=(other); return *this; }
-    
+
     int indexOf(PiiAbstractInputSocket* input) const;
     PiiAbstractInputSocket* takeInputAt(int index);
     PiiAbstractInputSocket* inputAt(int index) const;
@@ -122,13 +122,13 @@ protected:
      * sockets leading to this socket is connected to an operation or
      * not.
      *
-     * @return `true` if the socket is connected, `false` otherwise. 
+     * @return `true` if the socket is connected, `false` otherwise.
      * If the socket is a proxy, it may be unconnected even after
      * setInputConnected(true) if none of its outgoing connections
      * leads to a connected input.
      */
     virtual bool setOutputConnected(bool connected);
-    
+
     /*
      * Called by #connectInput() when an input has been connected.
      * The default implementation does nothing.
@@ -145,7 +145,7 @@ protected:
      * The default implementation does nothing.
      */
     virtual void inputDisconnected(PiiAbstractInputSocket* input);
-    
+
     // All connected input sockets.
     InputList lstInputs;
   };

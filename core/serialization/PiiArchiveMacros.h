@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,7 +28,7 @@
   Archive& operator dir (bool ref value) { return operator dir ((unsigned char ref) value); } \
   Archive& operator dir (long ref value) { return operator dir ((int ref) value); } \
   Archive& operator dir (unsigned long ref value) { return operator dir ((unsigned int ref) value); }
-  
+
 #define PII_PRIMITIVE_OPERATORS(Archive, Stream, dir, ref) \
   PII_INTEGER_OPERATORS(Archive, Stream, dir, ref) \
   PII_PRIMITIVE_OPERATOR(Archive, float, Stream, dir, ref) \

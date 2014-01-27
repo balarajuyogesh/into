@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -94,16 +94,16 @@ public:
   enum FileFormat { TextFormat, BinaryFormat };
 
   class Plugin;
-  
+
   /// Constructs a new PiiEngine.
   PiiEngine();
 
   /// Destroys the engine.
   ~PiiEngine();
-  
+
   /**
    * Loads a plug-in into the engine. The name of the plug-in is the
-   * name of the plug-in library file without a file name extension. 
+   * name of the plug-in library file without a file name extension.
    * For example, to load the flow control plug-in
    * ({libpiiflowcontrol.so, piiflowcontrol.dll}), do this:
    *
@@ -115,7 +115,7 @@ public:
    * Unix, the plug-in library file `libpiiflowcontrol`.so will be
    * searched in `LD_LIBRARY_PATH`. In Windows, `piiflowcontrol`.dll
    * will be searched in `PATH`. If the plug-in is located in another
-   * directory, either relative or absolute path names can be used. 
+   * directory, either relative or absolute path names can be used.
    * Use slash as the path separator (backslash will also work on
    * Windows). Note that in this case you need to use the full file
    * name (preferably without the extension, though).
@@ -200,7 +200,7 @@ public:
   static int unloadPlugin(const QString& name, bool force = false);
 
   /**
-   * Returns `true` if the the plugin called `name` is loaded and 
+   * Returns `true` if the the plugin called `name` is loaded and
    * `false` otherwise.
    */
   static bool isLoaded(const QString& name);
@@ -214,7 +214,7 @@ public:
    * Returns the library names of loaded plug-ins.
    */
   static QStringList pluginLibraryNames();
-  
+
   /**
    * Returns the resource names of loaded plug-ins.
    */
@@ -225,7 +225,7 @@ public:
    * calls [PiiOperation::check()] for all child operations. If
    * none of them throws an exception, [PiiOperation::start()] will
    * be called. This is a convenience function that saves one from
-   * manually performing the sanity check. If the engine is neither 
+   * manually performing the sanity check. If the engine is neither
    * `Stopped` nor `Paused`, this function does nothing.
    */
   void execute();
@@ -316,7 +316,7 @@ private:
 /**
  * A class that stores information about a loaded plug-in. Each
  * plug-in has two names: the name of the shared library the plug-in
- * was loaded from, and the name of the plug-in in Ydin's 
+ * was loaded from, and the name of the plug-in in Ydin's
  * [resource database](PiiYdin::resourceDatabase()).
  */
 class PII_YDIN_EXPORT PiiEngine::Plugin
@@ -351,7 +351,7 @@ public:
 
 private:
   friend class PiiEngine;
-  
+
   Plugin(QLibrary* library, const QString& name, const PiiVersionNumber& version);
 
   class Data;

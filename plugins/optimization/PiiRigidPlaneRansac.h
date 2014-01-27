@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -67,10 +67,10 @@ public:
    * function.
    */
   PiiRigidPlaneRansac();
-  
+
   /**
-   * Constructs a new RANSAC estimator that matches *points1* to 
-   * *points2* with an in-plane rotation-scaling-traslation transform. 
+   * Constructs a new RANSAC estimator that matches *points1* to
+   * *points2* with an in-plane rotation-scaling-traslation transform.
    * Both matrices should be N-by-2 and arranged so that matched
    * points are at the same indices.
    *
@@ -78,7 +78,7 @@ public:
    * putative. A percentage of matches is expected to be wrong.
    *
    * Call the [findBestModel()](PiiRansac::findBestModel())
-   * function to find the transformation that maps *points1* to 
+   * function to find the transformation that maps *points1* to
    * *points2*.
    */
   PiiRigidPlaneRansac(const PiiMatrix<T>& points1,
@@ -93,9 +93,9 @@ public:
 
   /// @internal
   inline bool findBestModel() { return PiiRansac::findBestModel(); }
-  
+
   /**
-   * Runs the RANSAC algorithm to find a transformation that maps 
+   * Runs the RANSAC algorithm to find a transformation that maps
    * *points1* to *points2*.
    *
    * @see PiiRansac::findBestModel()
@@ -109,7 +109,7 @@ public:
    * the [autoRefine()] flag.
    */
   PiiMatrix<double> bestModel() const;
-  
+
   /**
    * Refines the rough model estimate given by the standard RANSAC
    * algorithm. This function uses a iterative non-linear optimization
@@ -138,7 +138,7 @@ public:
    * Sets the maximum allowed absolute rotation angle in radians. By
    * default, this value is 2*pi, which accepts all possible
    * rotations. Setting the maximum allowed angle to a small value
-   * makes it possible to limit the search to only small rotations. 
+   * makes it possible to limit the search to only small rotations.
    * The algorithm then discards too large rotations right away
    * without wasting time in inspecting them further.
    */
@@ -197,7 +197,7 @@ protected:
    * Returns the minimum number of rows in the given two point sets.
    */
   int totalSampleCount() const;
-  
+
   /**
    * Returns two. The transformation equation has four unknowns, which
    * can be uniquely solved with two 2D points.
@@ -231,7 +231,7 @@ private:
       iInlierCount(0),
       piInliers(0)
     {}
-    
+
     Data(const PiiMatrix<T>& points1,
          const PiiMatrix<T>& points2) :
       matPoints1(points1), matPoints2(points2),
@@ -242,7 +242,7 @@ private:
       iInlierCount(0),
       piInliers(0)
     {}
-    
+
     PiiMatrix<T> matPoints1, matPoints2;
     bool bAutoRefine;
     double dMaxRotationAngle;
@@ -373,7 +373,7 @@ template <class T> PiiMatrix<double> PiiRigidPlaneRansac<T>::findPossibleModels(
 
   // Return scale and rotation (traslation not known yet)
   PiiMatrix<double> matModel(1,4, dScale, dTheta, 0.0, 0.0);
-  
+
   // Now that we know rotation and scale, we need to transform one of
   // the points in point set 1 to the new coordinate system to find
   // the translation.

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -126,7 +126,7 @@ double PiiVectorQuantizerOperation::classify(PiiVectorQuantizer<SampleSet>& clas
     *distance = dDistance;
   if (vectorIndex != 0)
     *vectorIndex = iVectorIndex;
-  
+
   return labelForIndex(iVectorIndex);
 }
 

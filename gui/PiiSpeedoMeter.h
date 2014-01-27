@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -107,7 +107,7 @@ public:
                         ShowScaleBrush = 8,
                         ShowAlarmBrush = 16 };
   Q_DECLARE_FLAGS(VisibilityFlags, VisibilityFlag);
-  
+
   void setVisibilityFlags(VisibilityFlags visibilityFlags) { _visibilityFlags = visibilityFlags; }
   VisibilityFlags visibilityFlags() const { return _visibilityFlags; }
 
@@ -173,7 +173,7 @@ private:
   int calculateFontSize(double width, double height, const QString& text);
 
   VisibilityFlags _visibilityFlags;
-  
+
   int _iMaxMajorTicks, _iMaxMinorTicks;
   QBrush _outerBorderBrush,_innerBorderBrush, _meterBrush, _scaleBrush, _alarmBrush, _needleBrush, _nailBrush, _valueBrush;
   QPen _outerBorderPen, _innerBorderPen, _meterPen, _scalePen, _needlePen, _nailPen, _valuePen;

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -44,15 +44,15 @@
  *
  * @out filename - the file name of the current image (QString)
  *
- * @out key - the name of a meta-data field in the image (QString). 
- * There may be 0-N meta-data fields that will be emitted per image. 
+ * @out key - the name of a meta-data field in the image (QString).
+ * There may be 0-N meta-data fields that will be emitted per image.
  * This output emits them all with a flow level one higher than that
  * of *image*.
  *
  * @out value - the value of the field corresponding to `key`
  * (QString).
  *
- * @out metaX - X ranges from 0 to the number of [metaFields] - 1. 
+ * @out metaX - X ranges from 0 to the number of [metaFields] - 1.
  * Emits the value of the meta field X, where X is an index to
  * [metaFields]. If there is no such meta field, uses the default
  * value.
@@ -128,7 +128,7 @@ class PII_IMAGE_EXPORT PiiImageFileReader : public PiiImageReaderOperation
    * pReader->setProperty("metaFields", QVariantList() << meta);
    * ~~~
    *
-   * The meta field at index X in the list will be sent to the 
+   * The meta field at index X in the list will be sent to the
    * `metaX` output.
    */
   Q_PROPERTY(QVariantList metaFields READ metaFields WRITE setMetaFields);
@@ -179,7 +179,7 @@ protected:
 
   QStringList fileNames() const;
   void setFileNames(const QStringList& fileNames);
-  
+
   QString fileNamePattern() const;
   void setFileNamePattern(const QString& pattern);
 
@@ -193,14 +193,14 @@ protected:
 
   RandomizationMode randomizationMode() const;
   void setRandomizationMode(RandomizationMode mode);
-  
+
   void setMetaFields(const QVariantList& metaFields);
   QVariantList metaFields() const;
 
 private:
   void createIndices();
   void sendKeys(const QImage& img);
-  
+
   /// @internal
   class Data : public PiiImageReaderOperation::Data
   {
@@ -215,7 +215,7 @@ private:
     int iStaticOutputCount;
     RandomizationMode randMode;
     QVector<int> vecIndices;
-    
+
     PiiInputSocket* pNameInput;
     PiiOutputSocket *pNameOutput, *pKeyOutput, *pValueOutput;
     QList<QPair<QString,PiiVariant> > lstMetaFields;

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,7 +26,7 @@ class PiiFreqOutputEmitter;
 /**
  * Limits object rate based on frequency. This operation can be used
  * to limit the rate of objects to a certain maximum frequency. It
- * works by just passing objects until the maximum rate is exceeded. 
+ * works by just passing objects until the maximum rate is exceeded.
  * No objects will be passed until the object rate comes back to an
  * allowable level. The operation can handle any number of
  * synchronized object streams in parallel.
@@ -35,7 +35,7 @@ class PiiFreqOutputEmitter;
  * ------
  *
  * @in inputX - any number of input sockets.
- * 
+ *
  * Outputs
  * -------
  *
@@ -72,7 +72,7 @@ class PiiFrequencyCounter : public PiiDefaultOperation
    * sent through the frequency ouput.
    */
   Q_PROPERTY(double measurementFrequency READ measurementFrequency WRITE setMeasurementFrequency);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiFrequencyCounter();
@@ -83,22 +83,22 @@ public:
 
   void setDynamicInputCount(int dynamicInputCount);
   int dynamicInputCount() const;
-  
+
   void setMaxFrequency(double frequency);
   double maxFrequency() const;
 
   void setMeasurementFrequency(double frequency);
   double measurementFrequency() const;
-  
+
 protected:
   void process();
-  
+
 private slots:
-  void stateChangeOccured(int state);  
+  void stateChangeOccured(int state);
 
 private:
   friend class PiiFreqOutputEmitter;
-  
+
   class Data;
   PII_UNSAFE_D_FUNC;
 };
@@ -134,7 +134,7 @@ public:
   // The interval (in milliseconds), how often the "frequency" output
   // is emitted. Calculated from dMeasurementFrequency
   unsigned int iMeasurementInterval;
-    
+
   PiiFreqOutputEmitter *pEmitter;
   double dMaxFrequency;
   // The interval (in mill seconds), how often the outputs are emitted.
@@ -152,7 +152,7 @@ public:
   // Counter for the frequency output. Must be volatile type, because
   // it is referenced from two different threads.
   volatile int iFrequencyCounter;
-    
+
   bool bFrequencyOutputConnected;
   int iStaticOutputCount;
 };

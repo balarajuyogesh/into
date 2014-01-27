@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -160,7 +160,7 @@ public:
   typedef Derived DerivedType;
   typedef PiiMatrixTraits<Derived> Traits;
   enum { staticRows = Traits::staticRows, staticColumns = Traits::staticColumns };
-  
+
   typedef typename Traits::const_iterator const_iterator;
   typedef typename Traits::iterator iterator;
   typedef typename std::iterator_traits<iterator>::value_type value_type;
@@ -170,7 +170,7 @@ public:
   typedef typename Traits::const_column_iterator const_column_iterator;
   typedef typename Traits::row_iterator row_iterator;
   typedef typename Traits::const_row_iterator const_row_iterator;
-  
+
   inline DerivedType* self() { return static_cast<Derived*>(this); }
   inline const DerivedType* self() const { return static_cast<const Derived*>(this); }
   inline DerivedType& selfRef() { return *static_cast<Derived*>(this); }
@@ -180,13 +180,13 @@ public:
   int columns() const { return self()->columns(); }
 
   /**
-   * Returns `true` if the matrix is empty, and `false` otherwise. 
+   * Returns `true` if the matrix is empty, and `false` otherwise.
    * An empty matrix cannot hold a single element, i.e. there are
    * either zero rows or zero columns. Any access to an element within
    * an empty matrix will reference illegal memory.
    */
-  bool isEmpty() const { return rows() * columns() == 0; }  
-  
+  bool isEmpty() const { return rows() * columns() == 0; }
+
   const_iterator begin() const { return self()->begin(); }
   const_iterator end() const { return self()->end(); }
 
@@ -251,7 +251,7 @@ template <class Matrix, class UnaryFunction>
 struct PiiMatrixTraits<PiiUnaryMatrixTransform<Matrix, UnaryFunction> >
 {
   enum { staticRows = Matrix::staticRows, staticColumns = Matrix::staticColumns };
-  
+
   typedef typename UnaryFunction::result_type value_type;
   typedef value_type reference;
   typedef PiiUnaryFunctionIterator<typename Matrix::const_iterator, UnaryFunction> const_iterator;
@@ -265,7 +265,7 @@ struct PiiMatrixTraits<PiiUnaryMatrixTransform<Matrix, UnaryFunction> >
 
 /**
  * A matrix that models the *matrix* concept by applying a unary
- * function to another matrix. Given a model of the matrix concept, 
+ * function to another matrix. Given a model of the matrix concept,
  * `mat`, and a function `func`, this matrix works as if it was the
  * result of calculating `func(mat)`. Note that
  * PiiUnaryMatrixTransform is immutable. It provides no way of
@@ -279,7 +279,7 @@ template <class Matrix, class UnaryFunction> class PiiUnaryMatrixTransform :
 {
 public:
   typedef PiiMatrixTraits<PiiUnaryMatrixTransform<Matrix, UnaryFunction> > Traits;
-  
+
   PiiUnaryMatrixTransform(const Matrix& mat, const UnaryFunction& func) :
     _mat(mat), _func(func)
   {}
@@ -332,7 +332,7 @@ struct PiiMatrixTraits<PiiBinaryMatrixTransform<Matrix1, Matrix2, BinaryFunction
       staticRows = Pii::MinInt<Matrix1::staticRows, Matrix2::staticRows>::intValue,
       staticColumns = Pii::MinInt<Matrix1::staticColumns, Matrix2::staticColumns>::intValue
     };
-  
+
   typedef PiiBinaryFunctionIterator<typename Matrix1::const_iterator,
                                     typename Matrix2::const_iterator,
                                     BinaryFunction> const_iterator;
@@ -353,7 +353,7 @@ struct PiiMatrixTraits<PiiBinaryMatrixTransform<Matrix1, Matrix2, BinaryFunction
 /**
  * A matrix that models the *matrix* concept by using a binary
  * function that operates on two other matrices. Given two models of
- * the matrix concept, `mat1` and `mat2`, and a binary function 
+ * the matrix concept, `mat1` and `mat2`, and a binary function
  * `func`, this matrix works as if it was the result of calculating
  * `func(mat1, mat2)`. Note that PiiBinaryMatrixTransform is
  * immutable. It provides no way of modifying the source data.
@@ -366,7 +366,7 @@ public PiiConceptualMatrix<PiiBinaryMatrixTransform<Matrix1, Matrix2, BinaryFunc
 {
 public:
   typedef PiiMatrixTraits<PiiBinaryMatrixTransform<Matrix1, Matrix2, BinaryFunction> > Traits;
-  
+
   PiiBinaryMatrixTransform(const Matrix1& mat1, const Matrix2& mat2, const BinaryFunction& func) :
     _mat1(mat1), _mat2(mat2), _func(func)
   {}
@@ -431,7 +431,7 @@ namespace Pii
   {
     return PiiUnaryMatrixTransform<Matrix, UnaryFunction>(mat, func);
   }
-  
+
   /**
    * Creates a PiiBinaryMatrixTransform that returns *func*(*mat1*,
    * *mat2*). Note that this function does not check that *matrix*

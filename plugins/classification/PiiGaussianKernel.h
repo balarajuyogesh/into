@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -33,7 +33,7 @@ public:
 
   /**
    * Sets the \(\sigma\) of the Gaussian function to *sigma*. This
-   * value controls the "width" of the Gaussian bell curve. A large 
+   * value controls the "width" of the Gaussian bell curve. A large
    * *sigma* means generates a wide, flat curve. As *sigma* approaches
    * zero, the curve will approach the delta function. The default
    * value is 1.
@@ -43,12 +43,12 @@ public:
     _dSigma = sigma;
     _dNormalizer = 1.0/(2*sigma*sigma);
   }
-  
+
   /**
    * Returns the value of \(\sigma\).
    */
   double sigma() const { return _dSigma; }
-  
+
   inline double operator() (FeatureIterator sample, FeatureIterator model, int length) const throw()
   {
     return Pii::exp(-Pii::squaredDistanceN(sample, length, model, 0.0) * _dNormalizer);

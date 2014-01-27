@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -25,11 +25,11 @@
  * ------
  *
  * @in matrix - any numeric or complex matrix
- * 
+ *
  * Outputs
  * -------
  *
- * @out average - the mean value, either `double` or 
+ * @out average - the mean value, either `double` or
  * `complex`<double>. If an average type is meanRows or meanColumns,
  * then output type is PiiMatrix<double> or PiiMatrix<complex<double> >.
  *
@@ -44,7 +44,7 @@ class PiiAverageOperation : public PiiDefaultOperation
    */
   Q_PROPERTY(CalculationMode calculationMode READ calculationMode WRITE setCalculationMode);
   Q_ENUMS(CalculationMode);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiAverageOperation();
@@ -67,7 +67,7 @@ public:
       MeanRows,
       MeanColumns
     };
-  
+
   void setCalculationMode(const CalculationMode& calculationMode);
   CalculationMode calculationMode() const;
 

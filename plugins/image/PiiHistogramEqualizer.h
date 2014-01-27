@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,7 +26,7 @@
  * ------
  *
  * @in image - The input image. Any integer-valued gray-level image.
- * 
+ *
  * Outputs
  * -------
  *
@@ -36,14 +36,14 @@
 class PiiHistogramEqualizer : public PiiDefaultOperation
 {
   Q_OBJECT
-  
+
   /**
    * The number of discrete gray levels in the output image. The
    * default value is 256. Setting this value to zero makes the
    * operation use the maximum value of the input image.
    */
   Q_PROPERTY(int levels READ levels WRITE setLevels);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiHistogramEqualizer();
@@ -56,7 +56,7 @@ protected:
 
 private:
   template <class T> void equalize(const PiiVariant& obj);
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {

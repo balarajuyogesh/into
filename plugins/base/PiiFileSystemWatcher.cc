@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -60,7 +60,7 @@ void PiiFileSystemWatcher::check(bool reset)
       d->lstPreviousCheckTimes << currentTime;
       d->lstLastModifiedFiles << QStringList();
     }
-  
+
   d->lstModifiedFiles.clear();
 }
 
@@ -88,12 +88,12 @@ void PiiFileSystemWatcher::directoryChanged(const QString& path)
   // Not on our watch list.
   if (iPathIndex == -1)
     return;
-  
+
   // Take the last check time of the directory.
   QDateTime previousCheckTime = d->lstPreviousCheckTimes[iPathIndex];
 
   //qDebug() << "path index" << iPathIndex << "previous check time:" << previousCheckTime;
-  
+
   // Iterate over all files in the directory
   QDirIterator iterator(path, d->lstNameFilters, QDir::Files);
   // Collects the names of newest files.
@@ -150,7 +150,7 @@ void PiiFileSystemWatcher::directoryChanged(const QString& path)
     }
 
   //qDebug() << "newest files:" << lstNewestFiles;
-  
+
   // Store the names of files that were modified at the same time
   // instant.
   d->lstLastModifiedFiles[iPathIndex] = lstNewestFiles;
@@ -188,7 +188,7 @@ void PiiFileSystemWatcher::emitNotModifiedFileNames()
   // It may happen that the timer signal gets delivered too late.
   if (state() != Running)
     return;
-  
+
   QDateTime lastAcceptedTime = QDateTime::currentDateTime().addSecs(-d->iWatchDelay);
   try
     {

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -35,7 +35,7 @@ namespace PiiImage
     typedef typename Pii::ToFloatingPoint<T>::PrimitiveType RealScalar;
 
     int iLastPixel = warpedImage.columns() - 1;
-    
+
     if (Pii::isNan(center))
       center = 0.5 * iLastPixel;
 
@@ -85,7 +85,7 @@ namespace PiiImage
 
     //qDebug("Xw1 = %lf, Xw2 = %lf, Z = %lf, dSurfaceDistance = %lf", dXw1, dXw2, dZ, dSurfaceDistance);
     //qDebug("center = %lf, Cw = %lf, R = %lf, a1 = %lf, a2 = %lf", center, dCw, dR, Pii::radToDeg(dAlpha1), Pii::radToDeg(dAlpha2));
-    
+
     // If sector is limited, calculate new boundaries
     if (sectorAngle != 0 && *sectorAngle > 0 && *sectorAngle < dSectorAngle)
       {
@@ -94,7 +94,7 @@ namespace PiiImage
         dAlpha1 += dCorrection;
         dAlpha2 -= dCorrection;
       }
-    
+
     // Straightened length = sector angle * r, projected to image plane
     int iStraightenedLength = Pii::round<int>(dSectorAngle * dR / dSurfaceDistance * focalLength);
     if (iStraightenedLength < 2)
@@ -145,7 +145,7 @@ namespace PiiImage
             for (int r=0; r<warpedImage.rows(); ++r)
               matResult(r,i) = warpedImage(r,iPixelX);
           }
-        
+
         //qDebug("i = %d, dAlpha = %lf, cos = %lf, sin = %lf, dXp = %lf", i, dAlpha * 180 / M_PI, dCosAlpha, dSinAlpha, dPixelX);
       }
 
@@ -154,13 +154,13 @@ namespace PiiImage
 
     if (cameraDistance != 0)
       *cameraDistance = dZ;
-    
+
     if (sectorAngle != 0)
       *sectorAngle = dSectorAngle;
 
     if (startAngle != 0)
       *startAngle = dAlpha1;
-    
+
     return matResult;
   }
 }

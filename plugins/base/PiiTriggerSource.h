@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -37,7 +37,7 @@
 class PiiTriggerSource : public PiiBasicOperation
 {
   Q_OBJECT;
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiTriggerSource();
@@ -51,7 +51,7 @@ public:
   void interrupt();
 
   void reconfigure(const QString& propertySetName = QString());
-  
+
 public slots:
   /**
    * Sends an `int` (1) to the output socket.
@@ -103,7 +103,7 @@ private:
   {
   public:
     Data();
-    
+
     QMutex stateMutex;
   };
   PII_D_FUNC;

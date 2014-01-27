@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -78,6 +78,6 @@ template <class T> void PiiDiffOperation::diff(const PiiVariant& obj)
   // There is no previous object -> emit zero (subtract from itself)
   else
     emitObject(obj.valueAs<T>() - obj.valueAs<T>());
-    
+
   d->lastObject = obj;
 }

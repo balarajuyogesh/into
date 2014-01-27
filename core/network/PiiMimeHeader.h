@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -56,7 +56,7 @@ public:
    * Returns `true` if no header fields have been added.
    */
   bool isEmpty() const;
-  
+
   /**
    * Returns `true` if there is at least one valid header field.
    */
@@ -64,7 +64,7 @@ public:
 
   /**
    * Sets the value of the entry with the given *key* to *value*. If
-   * no entry with the given key exists, a new entry will be created. 
+   * no entry with the given key exists, a new entry will be created.
    * If an entry with the key already exists, the first of them will
    * be replaced with the given value.
    *
@@ -104,7 +104,7 @@ public:
    * `false` otherwise.
    */
   bool hasKey(const QString& key) const;
-  
+
   /**
    * Returns `true` if the header describes a multipart message, and
    * `false` otherwise. The `Content`-Type header field of a
@@ -117,9 +117,9 @@ public:
    * Sets the preamble.
    */
   void setPreamble(const QByteArray& preamble);
-  
+
   /**
-   * Returns the "preamble" of a multipart message, if there is one. 
+   * Returns the "preamble" of a multipart message, if there is one.
    * The preamble can be used to transfer additional information that
    * is not part of the entity itself.
    */
@@ -127,7 +127,7 @@ public:
 
   /**
    * Returns `true` if the header describes a file uploaded from a
-   * HTML form, and `false` otherwise. Browsers use 
+   * HTML form, and `false` otherwise. Browsers use
    * `multipart`/form-data encoding to send files from HTML forms. If
    * the `Content`-Disposition header contains a file name, the
    * entity can be treated as an uploaded file. Use the [fileName()]
@@ -170,7 +170,7 @@ public:
    * Sets the Content-Length header field to the given value.
    */
   void setContentLength(uint length);
-  
+
   /**
    * Returns the value of the Content-Length header as an unsigned
    * integer. If there is no Content-Length header, returns 0.
@@ -178,7 +178,7 @@ public:
   uint contentLength() const;
 
   bool hasContentLength() const;
-  
+
   /**
    * Returns the value of the `Content`-Disposition header, without
    * parameters.
@@ -194,7 +194,7 @@ public:
 
   /**
    * Encodes the header into a QByteArray, one key-value pair (key:
-   * value) on a line. CRLF (\r\n) will be used as a line separator. 
+   * value) on a line. CRLF (\r\n) will be used as a line separator.
    * The last line of the header will always be empty.
    *
    * ! If any of the values contains invalid characters (such as a
@@ -219,8 +219,8 @@ public:
    * the end.
    */
   static QByteArray readHeaderData(QIODevice* device, qint64 maxLength, qint64* bytesRead = 0);
-  
-protected:  
+
+protected:
   /// @internal
   class Data : public PiiSharedD<Data>
   {

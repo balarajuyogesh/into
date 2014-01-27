@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -54,7 +54,7 @@ class PiiRegExpMatcher : public PiiDefaultOperation
    * subexpressions (plus one).
    */
   Q_PROPERTY(QString pattern READ pattern WRITE setPattern);
-   
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiRegExpMatcher();

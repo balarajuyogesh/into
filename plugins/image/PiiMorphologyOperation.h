@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -45,7 +45,7 @@ class PiiMorphologyOperation : public PiiDefaultOperation
    * Type of the structuring element. The default is `RectangularMask`.
    */
   Q_PROPERTY(PiiImage::MaskType maskType READ maskType WRITE setMaskType);
-  
+
   /**
    * The type of a moprhological operation to be applied to input
    * images. The default value is `Erode`.
@@ -58,7 +58,7 @@ class PiiMorphologyOperation : public PiiDefaultOperation
    * `false`.
    */
   Q_PROPERTY(bool handleBorders READ handleBorders WRITE setHandleBorders);
-  
+
   /**
    * Size of the structuring element. Any size will do as far as the
    * mask is smaller than the input image. The default is 3x3.
@@ -80,18 +80,18 @@ public:
 
   QSize maskSize() const;
   void setMaskSize(QSize maskSize);
-  
+
   PiiMatrix<int> mask() const;
   template <class T> void setMask(PiiMatrix<T> mask);
-  
+
 protected:
   void process();
-  
+
 private:
   template <class T> void morphologyOperation(const PiiVariant& obj);
 
   void prepareMask();
-  
+
   /// @internal
   class Data : public PiiDefaultOperation::Data
   {
@@ -101,9 +101,9 @@ private:
     PiiImage::MaskType maskType;
     bool bHandleBorders;
     QSize maskSize;
-    
+
     PiiMatrix<int> matMask;
-    
+
     PiiInputSocket* pImageInput;
     PiiOutputSocket* pBinaryImageOutput;
   };

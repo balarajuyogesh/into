@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
   // Initialize engine
   initEngine();
-  
+
   // Initialize ui
   init();
 
@@ -89,18 +89,18 @@ PiiEngine* MainWindow::createEngine()
   _pSourceProbeInput = new PiiProbeInput;
   _pThresholdedProbeInput = new PiiProbeInput;
   _pResultProbeInput = new PiiProbeInput;
-  
+
   // Create image source
   _pImageFileReader = pEngine->createOperation("PiiImageFileReader");
   _pImageFileReader->setProperty("imageType", "Color");
   QString strImageName = QString("%1/olga.jpg").arg(defaultImageDirPath());
   _pImageFileReader->setProperty("fileNames", strImageName);
-  
+
   // Create thresholding and morphology operations
   _pThresholdingOperation = pEngine->createOperation("PiiThresholdingOperation");
   _pThresholdingOperation->setProperty("thresholdType", "StaticThreshold");
   _pThresholdingOperation->setProperty("inverse", true);
-  
+
   _pMorphologyOperation = pEngine->createOperation("PiiMorphologyOperation");
   _pMorphologyOperation->setProperty("maskType", "Rectangular");
   _pMorphologyOperation->setProperty("type", "Erode");
@@ -112,11 +112,11 @@ PiiEngine* MainWindow::createEngine()
   pSwitch->connectOutput("output", _pThresholdingOperation, "image");
   pUpdateImageTriggerSource->connectOutput("trigger", pSwitch, "trigger");
   _pThresholdingOperation->connectOutput("image", _pMorphologyOperation, "image");
-  
+
   _pSourceProbeInput->connectOutput(_pImageFileReader->output("image"));
   _pThresholdedProbeInput->connectOutput(_pThresholdingOperation->output("image"));
   _pResultProbeInput->connectOutput(_pMorphologyOperation->output("image"));
-  
+
   return pEngine;
 }
 
@@ -124,7 +124,7 @@ void MainWindow::setThreshold(int th)
 {
   // Change absolute threshold
   _pThresholdingOperation->setProperty("absoluteThreshold", th);
-  
+
   // Trig the same image again
   emit updateImage(0);
 }
@@ -133,7 +133,7 @@ void MainWindow::setInverseThreshold(bool inverse)
 {
   // Change the inverse-property
   _pThresholdingOperation->setProperty("inverse", inverse);
-  
+
   // Trig the same image again
   emit updateImage(0);
 }
@@ -164,11 +164,11 @@ void MainWindow::selectImage()
     {
       // Pause processing when setting the new image
       pauseProcessing();
-      
+
       // Set new image
       _pImageFileReader->setProperty("fileNames", lstFileNames);
       _pSourceImageName->setText(lstFileNames[0]);
-      
+
       // Restart engine
       startProcessing();
 

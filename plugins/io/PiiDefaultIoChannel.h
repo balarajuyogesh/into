@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@ class PiiDefaultIoDriver;
 class PII_IO_EXPORT PiiDefaultIoChannel : public PiiIoChannel
 {
   Q_OBJECT
-  
+
   /**
    * The index of the channel in an I/O device.
    */
@@ -55,7 +55,7 @@ class PII_IO_EXPORT PiiDefaultIoChannel : public PiiIoChannel
    */
   Q_PROPERTY(ChannelMode channelMode READ channelMode WRITE setChannelMode);
   Q_ENUMS(ChannelMode);
-  
+
   /**
    * The width of an output pulse in milliseconds. 0 means
    * that output requires acknowledgement.
@@ -67,7 +67,7 @@ class PII_IO_EXPORT PiiDefaultIoChannel : public PiiIoChannel
    */
   Q_PROPERTY(int pulseDelay READ pulseDelay WRITE setPulseDelay);
 
-  
+
   /**
    * If signalFallingEdge is enabled, we send inputStateChanged()
    * signal also with falling edge. In the default state (false) the
@@ -75,7 +75,7 @@ class PII_IO_EXPORT PiiDefaultIoChannel : public PiiIoChannel
    * This property is effective only in `Input` mode.
    */
   Q_PROPERTY(bool signalFallingEdge READ signalFallingEdge WRITE setSignalFallingEdge);
-  
+
   /**
    * The state in which the channel is active. By default, `true`
    * means an active signal. In some applications it may however be
@@ -92,7 +92,7 @@ class PII_IO_EXPORT PiiDefaultIoChannel : public PiiIoChannel
 
 public:
   ~PiiDefaultIoChannel();
-  
+
   /**
    * Channel mode.
    */
@@ -147,7 +147,7 @@ protected:
   public:
     Data();
     virtual ~Data();
-    
+
     PiiDefaultIoDriver *pDriver;
     int iChannelIndex;
     QString strChannelName;

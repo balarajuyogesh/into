@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@ void TestPiiMatrixComposer::process()
   operation()->setProperty("defaultValues", QVariantList() << 1.0 << 2.0);
 
   QVERIFY(start(ExpectFail));
-  
+
   QVERIFY(connectInput("input1"));
   QVERIFY(connectInput("input3"));
 

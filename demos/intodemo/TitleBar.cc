@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -18,23 +18,23 @@
 TitleBar::TitleBar(QWidget *parent)
 {
   setupUi(this);
-  
+
   // Use the style to set the button pixmaps
   _pCloseButton->setIcon(style()->standardPixmap(QStyle::SP_TitleBarCloseButton));
   _pMinimizeButton->setIcon(style()->standardPixmap(QStyle::SP_TitleBarMinButton));
 
   _pCloseButton->setForegroundRole(QPalette::NoRole);
-  
+
   _maxPixmap = style()->standardPixmap(QStyle::SP_TitleBarMaxButton);
   _restorePixmap = style()->standardPixmap(QStyle::SP_TitleBarNormalButton);
-  
+
   _pMaximizeButton->setIcon(_maxPixmap);
 
   _pTitleLabel->setText("Into demos");
   parent->setWindowTitle("Into demos");
-        
+
   _bMaxNormal = false;
-  
+
   connect(_pCloseButton, SIGNAL(clicked()), parent, SLOT(close()));
   connect(_pMinimizeButton, SIGNAL(clicked()), this, SLOT(showSmall()));
   connect(_pMaximizeButton, SIGNAL(clicked()), this, SLOT(showMaxRestore()));
@@ -44,7 +44,7 @@ void TitleBar::showSmall()
 {
   parentWidget()->showMinimized();
 }
-    
+
 void TitleBar::showMaxRestore()
 {
   if (_bMaxNormal)

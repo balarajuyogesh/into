@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -49,7 +49,7 @@ QVariant PiiCameraDriver::property(const char* name) const
     return QObject::property(name);
   else if (d->mapProperties.contains(name))
     return d->mapProperties[name];
-  
+
   return QVariant();
 }
 

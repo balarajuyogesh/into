@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -22,7 +22,7 @@
 class PiiAbstractInputSocket;
 
 /**
- * An interface for classes that receive objects from input sockets. 
+ * An interface for classes that receive objects from input sockets.
  * Input controllers can implement any imaginable object passing
  * mechanisms. One must make sure that operations connected to each
  * other are driven by compatible input controllers. For example, any
@@ -53,7 +53,7 @@ public:
    *
    * Note that the function may not throw exceptions. If your
    * implementation passes the incoming objects right away, you must
-   * catch the exceptions thrown by 
+   * catch the exceptions thrown by
    * [PiiOutputSocket::emitObject()], for example.
    */
   virtual bool tryToReceive(PiiAbstractInputSocket* sender, const PiiVariant& object) throw () = 0;

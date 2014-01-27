@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,7 +30,7 @@
  * and trajectories.
  *
  * PiiCoordinateTracker tracks coordinates in a `D` -dimensional
- * space. The coordinates can be expressed as any data type, `T`. 
+ * space. The coordinates can be expressed as any data type, `T`.
  * Evaluation of new measurements is based on predictions. A
  * prediction is derived from an existing trajectory, and the distance
  * between a new measurement and the prediction works as a measure of
@@ -147,7 +147,7 @@ public:
    * @see PiiCoordinateTrackerNode::trajectoryFitness()
    */
   void sortTrajectories();
-  
+
 protected:
   /**
    * Extends `trajectory` by adding a new PiiCoordinateTrackerNode to
@@ -157,7 +157,7 @@ protected:
   TrajectoryType* createTrajectory(TrajectoryType** trajectory, const MeasurementType& measurement, double fitness, int t);
 
   /**
-   * Measure the likelihood of `measurement` belonging to 
+   * Measure the likelihood of `measurement` belonging to
    * `trajectory` at time instant `t`. The default implementation
    * computes squared distance between `measurement` and the
    * trajectory's prediction ([predict()]). If they are equal, 1.0 will
@@ -166,8 +166,8 @@ protected:
    * "predictionThreshold" is reached.
    *
    * If there is no prediction, `measurement` will be compared to the
-   * trajectory's last point. If the squared distance is within 
-   * [initialThreshold](setInitialThreshold()), 1.0 will be returned. 
+   * trajectory's last point. If the squared distance is within
+   * [initialThreshold](setInitialThreshold()), 1.0 will be returned.
    * Otherwise, 0.0 will be returned.
    *
    * Should `measurement` work as a starting point for a new
@@ -196,7 +196,7 @@ protected:
   }
 
   /**
-   * Create a prediction for all trajectories at time instant `t`. 
+   * Create a prediction for all trajectories at time instant `t`.
    * The default implementation loops through the trajectories and
    * calls [predict(TrajectoryType*, int)] for each trajectory.
    */
@@ -208,7 +208,7 @@ protected:
         trajectory->setPrediction(predict(trajectory, t));
       }
   }
-  
+
   /**
    * Predict the location of a measurement at the time instant `t`
    * given a trajectory. The function should return a pointer to a
@@ -230,7 +230,7 @@ protected:
     Q_UNUSED(t);
     return 0;
   }
-  
+
 private:
   double _dInitialThreshold;
   double _dPredictionThreshold;
@@ -272,7 +272,7 @@ void PiiCoordinateTracker<T,D>::addMeasurements(const PiiMatrix<T>& measurements
   QList<MeasurementType> lst;
   if (measurements.columns() >= D && measurements.rows() == labels.rows())
     {
-      
+
       for (int r=0; r<measurements.rows(); r++)
         {
           if (labels(r,0) >= 1)

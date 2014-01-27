@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -26,11 +26,11 @@
  * ------
  *
  * @in image - input image. Any numeric matrix.
- * 
+ *
  * Outputs
  * -------
  *
- * @out image - input image quantized to discrete levels. 
+ * @out image - input image quantized to discrete levels.
  * PiiMatrix<int>.
  *
  */
@@ -58,12 +58,12 @@ class PiiQuantizerOperation : public PiiDefaultOperation
    * training description
    */
   Q_PROPERTY(bool training READ training WRITE setTraining);
-  
+
   /**
    * trainingPixels description
    */
   Q_PROPERTY(int trainingPixels READ trainingPixels WRITE setTrainingPixels);
-  
+
   /**
    * selectionProbability description
    */
@@ -73,7 +73,7 @@ class PiiQuantizerOperation : public PiiDefaultOperation
 public:
   PiiQuantizerOperation();
   ~PiiQuantizerOperation();
-  
+
   void setLevels(int levels);
   int levels() const;
 
@@ -108,7 +108,7 @@ private:
     double* pCollectedData;
   };
   PII_D_FUNC;
-  
+
   template <class T> void quantize(const PiiVariant& obj);
   template <class T, class U> void quantize(const PiiMatrix<U>& img);
   void learnBoundaries();

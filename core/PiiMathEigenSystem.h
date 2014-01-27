@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -22,7 +22,7 @@
 /*
  * The routines are adapted from TNT(template numerical toolkit),
  * which in turn was
- * "Adapted from JAMA, a Java Matrix Library, developed by jointly 
+ * "Adapted from JAMA, a Java Matrix Library, developed by jointly
  * by the Mathworks and NIST; see http://math.nist.gov/javanumerics/jama)."
  * Both were in the public domain.
  *
@@ -78,7 +78,7 @@ namespace Pii
      * Creates block diagonal eigenvalue matrix from eigenvalues.
      * For real eigenvalues, returns diagonal matrix with eigenvalues on diagonal(1x1 blocks),
      * and for complex eigenvalues block on diagonal is of size 2x2. For example if the
-     * complex eigenvalues are u+iv and u-iv, the block looks like 
+     * complex eigenvalues are u+iv and u-iv, the block looks like
      * ~~~(c++)
      *  u     v
      * -v     u
@@ -92,10 +92,10 @@ namespace Pii
      *
      * @param mat Square matrix whose eigenvalues is to be calculated.
      * @param pRealpartArray Null pointer or pointer to array where realparts
-     *        of eigenvalues will be stored. Make sure that the array is large 
+     *        of eigenvalues will be stored. Make sure that the array is large
      *        enough(at least the size of matrix dimension).
      * @param pImagpartArray Null pointer or pointer to array where imaginaryparts
-     *        of eigenvalues will be stored. Make sure that the array is large 
+     *        of eigenvalues will be stored. Make sure that the array is large
      *        enough(at least the size of matrix dimension).
      * @param pEigenvectors. Null pointer or pointer toMatrix where to store
               eigenvectors as column vectors.
@@ -104,7 +104,7 @@ namespace Pii
     static void solve(const PiiMatrix<T>& mat, Real* const pRealpartArray,
                 Real* const pImagpartArray, PiiMatrix<Real>* const pEigenvectors);
 
-    
+
 
   //Private methods.
   private:
@@ -144,7 +144,7 @@ namespace Pii
         d = yr + r*yi;
         cdivr = (xr + r*xi)/d;
         cdivi = (xi - r*xr)/d;
-      } 
+      }
     else
       {
         r = yr/yi;
@@ -169,12 +169,12 @@ namespace Pii
         }
 
       // Householder reduction to tridiagonal form.
-    
+
       for (int i = n-1; i > 0; i--)
         {
-    
+
         // Scale to avoid under/overflow.
-    
+
         Real scale = 0.0;
         Real h = 0.0;
         for (int k = 0; k < i; k++)
@@ -194,7 +194,7 @@ namespace Pii
           else
             {
             // Generate Householder vector.
-    
+
             for (int k = 0; k < i; k++)
               {
                 d[k] /= scale;
@@ -213,9 +213,9 @@ namespace Pii
               {
                 e[j] = 0.0;
               }
-    
+
             // Apply similarity transformation to remaining columns.
-    
+
             for (int j = 0; j < i; j++)
               {
                 f = d[j];
@@ -253,9 +253,9 @@ namespace Pii
           }
           d[i] = h;
         }
-    
+
       // Accumulate transformations.
-    
+
       for (int i = 0; i < n-1; i++)
       {
         V[n-1][i] = V[i][i];
@@ -292,7 +292,7 @@ namespace Pii
         }
       V[n-1][n-1] = 1.0;
       e[0] = 0.0;
-    } 
+    }
 
 
 
@@ -303,7 +303,7 @@ namespace Pii
     //  Bowdler, Martin, Reinsch, and Wilkinson, Handbook for
     //  Auto. Comp., Vol.ii-Linear Algebra, and the corresponding
     //  Fortran subroutine in EISPACK.
-    
+
     for (int i = 1; i < n; i++)
       {
         e[i-1] = e[i];
@@ -313,7 +313,7 @@ namespace Pii
     Real f = 0.0;
     Real tst1 = 0.0;
     Real eps = pow(2.0,-52.0);
-    for (int l = 0; l < n; l++) 
+    for (int l = 0; l < n; l++)
       {
         // Find small subdiagonal element
 
@@ -321,7 +321,7 @@ namespace Pii
         int m = l;
 
         // Original while-loop from Java code
-        while (m < n) 
+        while (m < n)
           {
             if (abs(e[m]) <= eps*tst1)
               break;
@@ -347,7 +347,7 @@ namespace Pii
                 Real r = hypot(p,1.0);
                 if (p < 0)
                   r = -r;
-              
+
                 d[l] = e[l] / (p + r);
                 d[l+1] = e[l] * (p + r);
                 Real dl1 = d[l+1];
@@ -382,7 +382,7 @@ namespace Pii
 
                   // Accumulate transformation.
 
-                  for (int k = 0; k < n; k++) 
+                  for (int k = 0; k < n; k++)
                     {
                       h = V[k][i+1];
                       V[k][i+1] = s * V[k][i] + c * h;
@@ -407,7 +407,7 @@ namespace Pii
       {
         int k = i;
         Real p = d[i];
-        for (int j = i+1; j < n; j++) 
+        for (int j = i+1; j < n; j++)
           {
             if (d[j] < p)
               {
@@ -428,7 +428,7 @@ namespace Pii
             }
       }
 
-  } 
+  }
 
 
 
@@ -453,7 +453,7 @@ namespace Pii
         Real scale = Real(0.0);
         for (int i = m; i <= high; i++)
           scale = scale + abs(H[i][m-1]);
-        
+
         if (scale != Real(0.0))
           {
 
@@ -468,21 +468,21 @@ namespace Pii
             Real g = sqrt(h);
             if (ort[m] > 0)
               g = -g;
-          
+
             h = h - ort[m] * g;
             ort[m] = ort[m] - g;
 
             // Apply Householder similarity transformation
             // H = (I-u*u'/h)*H*(I-u*u')/h)
 
-            for (int j = m; j < n; j++) 
+            for (int j = m; j < n; j++)
               {
                 Real f = Real(0.0);
                 for (int i = high; i >= m; i--)
                   f += ort[i]*H[i][j];
-              
+
                 f = f/h;
-                for (int i = m; i <= high; i++) 
+                for (int i = m; i <= high; i++)
                   H[i][j] -= f*ort[i];
               }
 
@@ -491,7 +491,7 @@ namespace Pii
                 Real f = Real(0.0);
                 for (int j = high; j >= m; j--)
                   f += ort[j]*H[i][j];
-              
+
                 f = f/h;
                 for (int j = m; j <= high; j++)
                   H[i][j] -= f*ort[j];
@@ -515,9 +515,9 @@ namespace Pii
       {
         if (H[m][m-1] != Real(0.0))
           {
-            for (int i = m+1; i <= high; i++) 
+            for (int i = m+1; i <= high; i++)
               ort[i] = H[i][m-1];
-          
+
             for (int j = m; j <= high; j++)
               {
                 Real g = Real(0.0);
@@ -543,7 +543,7 @@ namespace Pii
     //  by Martin and Wilkinson, Handbook for Auto. Comp.,
     //  Vol.ii-Linear Algebra, and the corresponding
     //  Fortran subroutine in EISPACK.
-     
+
     // Initialize
 
     int n = nn-1;
@@ -582,12 +582,12 @@ namespace Pii
             s = abs(H[l-1][l-1]) + abs(H[l][l]);
             if (s == Real(0.0))
               s = norm;
-          
+
             if (abs(H[l][l-1]) < eps * s)
               break;
             l--;
           }
-      
+
         // Check for convergence
         // One root found
 
@@ -601,7 +601,7 @@ namespace Pii
 
           // Two roots found
 
-          } 
+          }
         else if (l == n-1)
           {
             w = H[n][n-1] * H[n-1][n];
@@ -620,7 +620,7 @@ namespace Pii
                 {
                   z = p + z;
                 }
-              else 
+              else
                 {
                   z = p - z;
                 }
@@ -682,7 +682,7 @@ namespace Pii
 
         // No convergence yet
 
-          } 
+          }
         else
           {
 
@@ -793,11 +793,11 @@ namespace Pii
                   }
                 if (x == Real(0.0))
                   break;
-                
+
                 s = sqrt(p * p + q * q + r * r);
                 if (p < 0)
                   s = -s;
-              
+
                 if (s != 0)
                   {
                     if (k != m)
@@ -858,7 +858,7 @@ namespace Pii
             }  // k loop
           }  // check convergence
       }  // while (n >= low)
-    
+
     // Backsubstitute to find vectors of upper triangular form
 
     if (norm == Real(0.0))
@@ -913,7 +913,7 @@ namespace Pii
                       if (abs(x) > abs(z))
                         H[i+1][n] = (-r - w * t) / x;
                       else
-                        H[i+1][n] = (-s - y * t) / z;  
+                        H[i+1][n] = (-s - y * t) / z;
                     }
 
                   // Overflow control
@@ -923,14 +923,14 @@ namespace Pii
                     {
                       for (int j = i; j <= n; j++)
                         H[j][n] = H[j][n] / t;
-                      
+
                     }
                 }
               }
 
         // Complex vector
 
-          } 
+          }
         else if (q < 0)
           {
             int l = n-1;
@@ -942,7 +942,7 @@ namespace Pii
                 H[n-1][n-1] = q / H[n][n-1];
                 H[n-1][n] = -(H[n][n] - p) / H[n][n-1];
               }
-            else 
+            else
               {
                 cdiv(Real(0.0),-H[n-1][n],H[n-1][n-1]-p,q, cdivr, cdivi);
                 H[n-1][n-1] = cdivr;
@@ -1051,7 +1051,7 @@ namespace Pii
   }
 
 
-  
+
   template<class T, class Real>
   void EigenSystem<T, Real>::solve(const PiiMatrix<T>& mat)
   {
@@ -1069,7 +1069,7 @@ namespace Pii
                                     Real* const pImagpartArray, Array2D* const pEigenvectors)
   {
     const int n = min(mat.rows(), mat.columns());
-    
+
     Array2D* pV = (pEigenvectors != 0) ? pEigenvectors : new Array2D;
     pV->resize(n,n);
 
@@ -1094,7 +1094,7 @@ namespace Pii
     else //Non symmetric matrix.
     {
       Array2D H = Array2D(n,n);
-         
+
       for (int j = 0; j < n; j++)
         {
           for (int i = 0; i < n; i++)
@@ -1124,12 +1124,12 @@ template<class T, class Real>
 PiiMatrix<Real> EigenSystem<T, Real>::blockDiagonalEigenvalMatrix()
 {
   const int n = _matRealParts.columns();
-  if(n == 0 || n != _matImagParts.columns()) 
+  if(n == 0 || n != _matImagParts.columns())
     return PiiMatrix<Real>();
 
   const Real* const d = _matRealParts.row(0);
   const Real* const e = _matImagParts.row(0);
-  
+
   PiiMatrix<Real> D(n,n);
   for (int i = 0; i < n; i++)
     {

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -69,7 +69,7 @@ public:
 
   void setFormat(const QString& format);
   QString format() const;
-  
+
 protected:
   void process();
 

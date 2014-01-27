@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -180,7 +180,7 @@ void PiiNetworkOperation::addToOutputMap(const QString& name, const QVariant& va
   // Damn. Well, it must be a string then.
   d->mapOutputValues[name] = PiiVariant(value.toString());
 }
-  
+
 void PiiNetworkOperation::addToOutputMap(const QString& name, QIODevice& device)
 {
   PII_D;
@@ -210,10 +210,10 @@ void PiiNetworkOperation::emitOutputValues()
           return;
         }
     }
-    
+
   for (int i=0; i<lstOutputValues.size(); ++i)
     outputAt(i+d->iStaticOutputCount)->emitObject(lstOutputValues[i]);
-  
+
   d->mapOutputValues.clear();
 }
 
@@ -221,7 +221,7 @@ void PiiNetworkOperation::check(bool reset)
 {
   PII_D;
   PiiDefaultOperation::check(reset);
-  
+
   d->bBodyConnected = d->pBodyInput->isConnected();
   d->bTypeConnected = d->pTypeInput->isConnected();
   if (!d->bBodyConnected && d->bTypeConnected)

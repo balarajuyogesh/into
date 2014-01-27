@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -66,7 +66,7 @@ void PiiImageCropper::check(bool reset)
       d->bImageReceived = false;
       d->iLeftX = d->iTopY = 0;
     }
-  
+
   switch (d->varTransform.type())
     {
     case PiiVariant::InvalidType:
@@ -108,7 +108,7 @@ void PiiImageCropper::process()
 
       if (d->pLocationInput->isConnected())
         readLocation();
-      
+
       crop(d->pImageInput->firstObject(),
            d->pAreaInput->firstObject(),
            d->pTransformInput->firstObject());
@@ -203,7 +203,7 @@ template <class T> void PiiImageCropper::cropTemplate(const PiiVariant& imageObj
       if (d->matTransform.columns() != 3 || d->matTransform.rows() != 3)
         PII_THROW_WRONG_SIZE(d->pTransformInput, d->matTransform, 3, 3);
     }
- 
+
   if (areaObj.isValid())
     {
       if (areaObj.type() != PiiYdin::IntMatrixType)
@@ -230,7 +230,7 @@ template <class T> void PiiImageCropper::cropTemplate(const PiiVariant& imageObj
 
 
 template <class T> void PiiImageCropper::crop(const PiiMatrix<T>& image, int left, int top, int width, int height)
-{  
+{
   PII_D;
 
   if (d->matTransform.isEmpty())
@@ -238,7 +238,7 @@ template <class T> void PiiImageCropper::crop(const PiiMatrix<T>& image, int lef
       // Calculate area limits
       int firstRow = top >= 0 ? top : image.rows() + top;
       int firstCol = left >= 0 ? left : image.columns() + left;
-  
+
       int lastRow = height >= 0 ? firstRow + height - 1 : image.rows() + height;
       int lastCol = width >= 0 ? firstCol + width - 1 : image.columns() + width;
 

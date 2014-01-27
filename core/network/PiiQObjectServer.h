@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -82,7 +82,7 @@ class PiiConfigurable;
  *
  * The properties of a QObject are provided under the "/properties/"
  * URI. Each property has a URI that corresponds to its name. By
- * default, both static and dynamic properties will be listed. 
+ * default, both static and dynamic properties will be listed.
  * Property definitions can be queried with a GET request to
  * /properties/:
  *
@@ -91,12 +91,12 @@ class PiiConfigurable;
  * ~~~
  *
  * Response:
- * 
+ *
  * ~~~
  * HTTP/1.1 200 OK
  * Content-Type: text/plain
  * Content-Length: 41
- * 
+ *
  * bool active
  * int interval
  * bool singleShot
@@ -118,26 +118,26 @@ class PiiConfigurable;
  * ~~~
  *
  * Response:
- * 
+ *
  * ~~~
  * HTTP/1.1 200 OK
  * Content-Type: text/plain
  * Content-Length: 4
- * 
+ *
  * true
  * ~~~
  *
- * Setting property values may or may not be allowed by the server. 
+ * Setting property values may or may not be allowed by the server.
  * The value of an individual property can be set either with a GET or
  * a POST request:
  *
  * ~~~
  * GET /timer/properties/interval?12345 HTTP/1.1
- * 
+ *
  * POST /timer/properties/interval HTTP/1.1
  * Content-Type: application/x-www-form-urlencoded
  * Content-Length: 15
- * 
+ *
  * interval=12345
  * ~~~
  *
@@ -146,11 +146,11 @@ class PiiConfigurable;
  *
  * ~~~
  * GET /timer/properties?interval=1000&singleShot=false HTTP/1.1
- * 
+ *
  * POST /timer/properties HTTP/1.1
  * Content-Type: application/x-www-form-urlencoded
  * Content-Length: 30
- * 
+ *
  * interval=1000&singleShot=false
  * ~~~
  *
@@ -196,7 +196,7 @@ class PiiConfigurable;
  *
  *   Q_PROPERTY(int unsafeProperty1 READ unsafeProperty1 WRITE setUnsafeProperty1);
  *   Q_PROPERTY(bool unsafeProperty2 READ unsafeProperty2 WRITE setUnsafeProperty2);
- * 
+ *
  * public slots:
  *   int unsafeSlot1(int value);
  *   void unsafeSlot2(const QString& str);
@@ -208,7 +208,7 @@ class PiiConfigurable;
  * Property names and function signatures are both separated with a
  * single space. Use the normalized function signature for functions.
  * The listed properties and functions will be accessed through the
- * event loop of the main thread. QObjects can also set the 
+ * event loop of the main thread. QObjects can also set the
  * [default safety level](PiiObjectServer::setSafetyLevel()) using
  * Q_CLASSINFO:
  *
@@ -224,7 +224,7 @@ class PiiConfigurable;
  * members is set to AccessFromMainThread, the PiiQObjectServer
  * instance must be created in the main thread.
  *
- */   
+ */
 class PII_NETWORK_EXPORT PiiQObjectServer :
   public PiiObjectServer
 {
@@ -246,7 +246,7 @@ public:
   };
 
   Q_DECLARE_FLAGS(ExposedFeatures, ExposedFeature);
-  
+
   /**
    * Creates a new PiiRemoteObjectServer that maps HTTP request to
    * the given *object*. There will be only one instance of the
@@ -268,9 +268,9 @@ public:
   void handleRequest(const QString& uri, PiiHttpDevice* dev, PiiHttpProtocol::TimeLimiter* controller);
 
   QObject* object() const;
-  
+
   /**
-   * Returns a list of accessible property names with their types. 
+   * Returns a list of accessible property names with their types.
    * Each entry in this list consists of a type and a property name,
    * e.g. "int value".
    */
@@ -282,9 +282,9 @@ public:
   QStringList signalSignatures() const;
 
   QStringList listRoot() const;
-  
+
   /**
-   * Sets the safety level of an individual property, identified by 
+   * Sets the safety level of an individual property, identified by
    * *propertyName*.
    */
   void setPropertySafetyLevel(const QString& propertyName, ThreadSafetyLevel safetyLevel);
@@ -303,7 +303,7 @@ protected:
   void connectToChannel(Channel* channel, const QString& sourceId);
   void disconnectFromChannel(Channel* channel, const QString& sourceId);
   void channelDeleted(Channel* channel);
-  
+
   /// @hide
   class MetaFunction : public PiiGenericFunction
   {
@@ -363,7 +363,7 @@ protected:
 
 private slots:
   bool setPropertiesFromMainThread(const QVariantMap& props);
-  
+
 private:
   void init();
   inline ThreadSafetyLevel propertySafetyLevel() const
@@ -380,7 +380,7 @@ private:
   QVariant objectProperty(const QString& name) const;
   bool setObjectProperties(const QVariantMap& props);
   bool setObjectProperty(const QString& name, const QVariant& value);
-  ChannelSlot* findSlot(const QString& signal) const;  
+  ChannelSlot* findSlot(const QString& signal) const;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PiiQObjectServer::ExposedFeatures)

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -27,7 +27,7 @@ class PiiHttpDevice;
  * Inputs
  * ------
  *
- * @in server uri - the URI to which data is to be sent (QString). 
+ * @in server uri - the URI to which data is to be sent (QString).
  * This input is optional. If it is not connected, the [serverUri]
  * property will be used.
  *
@@ -54,7 +54,7 @@ class PiiNetworkOutputOperation : public PiiNetworkOperation
    * schemes. There is no default value.
    */
   Q_PROPERTY(QString serverUri READ serverUri WRITE setServerUri);
-  
+
   /**
    * HTTP request method. The default is `PostRequest`.
    */
@@ -69,13 +69,13 @@ public:
    * - `PostRequest` - input objects are marshalled and sent as a
    * sequence of HTTP POST requests.
    *
-   * - `GetRequest` - input objects are encoded into the request URI. 
+   * - `GetRequest` - input objects are encoded into the request URI.
    * A HTTP GET request will be sent. This method works only if all
    * input objects are primitive types or strings. It cannot be used
    * with the `body` input connected.
    */
   enum RequestMethod { PostRequest, GetRequest };
-  
+
   PiiNetworkOutputOperation();
   ~PiiNetworkOutputOperation();
 
@@ -99,7 +99,7 @@ private:
   {
   public:
     Data();
-    
+
     PiiNetworkClient* pNetworkClient;
     QString strServerUri;
     QString strHost, strUri;

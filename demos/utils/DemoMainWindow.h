@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,7 +28,7 @@
 class PII_DEMOUTILS_EXPORT DemoMainWindow : public QMainWindow
 {
   Q_OBJECT
-  
+
 public:
   DemoMainWindow(QWidget *parent = 0);
   virtual ~DemoMainWindow();
@@ -52,7 +52,7 @@ protected:
    * engine.
    */
   void initEngine();
-   
+
   /**
    * Returns the pointer of the engine.
    */
@@ -67,7 +67,7 @@ protected:
    * Returns the default images path.
    */
   QString defaultImageDirPath() const { return _strDefaultImageDirPath; }
-  
+
   /**
    * Returns the default images path.
    */
@@ -77,14 +77,14 @@ protected:
    * Returns the name of the demo.
    */
   QString demoName() const { return _strDemoName; }
-  
+
   /**
    * Open the file dialog where the user can select the image files.
    * These files are returned as QStringList. You can also change the
    * fileMode. See QFileDialog::FileMode for more information.
    */
   QStringList getImageFiles(QFileDialog::FileMode mode = QFileDialog::ExistingFiles);
-  
+
   /**
    * Show the value of the slider.
    */
@@ -111,7 +111,7 @@ private slots:
    * This function show the error message if the is error occured in engine.
    */
   void handleError(PiiOperation*, const QString& text);
-  
+
 private:
   /**
    * Load all necessary plugins. This function try to load all plugins
@@ -121,7 +121,7 @@ private:
 
   PiiEngine *_pEngine;
   QString _strApplicationPath, _strDefaultImageDirPath, _strDefaultVideoDirPath, _strDemoName;
-  
+
 };
 
 

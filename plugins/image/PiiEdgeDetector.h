@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -29,7 +29,7 @@
  * ------
  *
  * @in image - any gray-level image.
- * 
+ *
  * Outputs
  * -------
  *
@@ -39,11 +39,11 @@
  *
  * @out magnitude - non-thresholded gradient image. If the input is
  * integer-valued, a PiiMatrix<int> will be emitted. Otherwise,
- * PiiMatrix<float> will be emitted. See 
+ * PiiMatrix<float> will be emitted. See
  * [PiiImage::gradientMagnitude()].
  *
  * @out direction - a PiiMatrix<float> that contains local gradient
- * direction for each pixel in radians. See 
+ * direction for each pixel in radians. See
  * [PiiImage::gradientDirection()].
  *
  */
@@ -102,7 +102,7 @@ public:
    * filter to "Gaussian" to prevent spurious edges. In fact, this
    * technique does not do much harm to the other edge detectors
    * either.
-   */     
+   */
   enum Detector { SobelDetector, RobertsDetector, PrewittDetector, CannyDetector };
   PiiEdgeDetector();
 

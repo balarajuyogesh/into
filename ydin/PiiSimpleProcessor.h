@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -28,7 +28,7 @@ class QMutex;
  * processor cannot be used for operations that produce data with no
  * input from external sources. Such operations must be processed in
  * parallel. PiiSimpleProcessor is the right choice when the overhead
- * in parallel processing exceeds the complexity of the operation. 
+ * in parallel processing exceeds the complexity of the operation.
  * Such operations are, for example, simple logical and arithmetic
  * calculations.
  *
@@ -41,7 +41,7 @@ public:
    * Create a new PiiSimpleProcessor.
    */
   PiiSimpleProcessor(PiiDefaultOperation* parent);
-  
+
   /**
    * Returns true.
    */
@@ -68,19 +68,19 @@ public:
   void interrupt();
 
   /**
-   * If the operation has connected inputs, sets the state to 
+   * If the operation has connected inputs, sets the state to
    * `Pausing`. Otherwise sets the state to `Paused` and sends a pause
    * tag.
    */
   void pause();
 
   /**
-   * If the operation has connected inputs, sets the state to 
+   * If the operation has connected inputs, sets the state to
    * `Stopping`. Otherwise sets the state to `Stopped` and sends a stop
    * tag.
    */
   void stop();
-  
+
   void reconfigure(const QString& propertySetName);
 
   void check(bool reset);
@@ -92,7 +92,7 @@ public:
 
 private:
   void stop(PiiOperation::State finalState);
-  
+
   volatile bool _bReset;
   bool _bProcessing;
   QMutex* _pStateMutex;

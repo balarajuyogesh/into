@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -60,7 +60,7 @@ void PiiKdTree<SampleSet>::buildTree(const SampleSet& modelSet,
   d->iFeatureCount = PiiSampleSet::featureCount(modelSet);
   if (d->iFeatureCount == 0 || iSampleCount == 0)
     return;
-  
+
   QVector<FeatureSorter> vecSorters(iSampleCount);
   QVector<double> vecMeans(d->iFeatureCount);
   d->pMeans = vecMeans.data();
@@ -111,7 +111,7 @@ typename PiiKdTree<SampleSet>::Node* PiiKdTree<SampleSet>::createNode(FeatureSor
     return 0;
   else if (sampleCount == 1)
     return new Node(sorterArray[0].second);
-  
+
   // Select the dimension that best splits the remaining samples.
   int iSplitDimension = selectDimension(sorterArray, sampleCount, depth);
 
@@ -193,10 +193,10 @@ void PiiKdTree<SampleSet>::findClosestMatches(Node* node,
     {
       this->findClosestMatches(node->smaller, sample, matchList);
       /* If the closest child could be on the other side of this
-         splitting hyperplane, we need to search the other side too. 
+         splitting hyperplane, we need to search the other side too.
          In the case of a k-NN search take the kth closest node
          instead of the closest one.
-      */ 
+      */
       if (Pii::square(node->featureValue - featureValue) <= distanceLimit(matchList))
         findClosestMatches(node->larger, sample, matchList);
     }

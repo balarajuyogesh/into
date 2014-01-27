@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -43,7 +43,7 @@ void TestPiiPerceptron::learn()
       matSamples(0,0,iSamplesPerSet,2) << Pii::normalRandomMatrix(iSamplesPerSet, 2) + 3;
       // 2: normally distributed around (-3,-3)
       matSamples(iSamplesPerSet,0,-1,2) << Pii::normalRandomMatrix(iSamplesPerSet, 2) - 3;
-      
+
       perceptron.learn(matSamples, vecLabels);
 
       QVERIFY(perceptron.converged());

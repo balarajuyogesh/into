@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -24,7 +24,7 @@
  * Compare two values and output a binary outcome. Two inputs are
  * compared with a predefined comparison operator. The object read
  * from `input0` is always used as the left-hand operand. The
- * right-hand operand is either a [constant] or the object read from 
+ * right-hand operand is either a [constant] or the object read from
  * `input1`, if it is connected.
  *
  * Inputs
@@ -36,7 +36,7 @@
  * matrix. If `input0` contains a scalar, this must be a scalar. If
  * `input0` contains a matrix, this must be either a scalar or a
  * matrix with the same size.
- * 
+ *
  * Outputs
  * -------
  *
@@ -58,7 +58,7 @@ class PiiComparisonOperation : public PiiDefaultOperation
    */
   Q_PROPERTY(Function function READ function WRITE setFunction);
   Q_ENUMS(Function);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   /**
@@ -70,7 +70,7 @@ public:
    * - `NotEqual` - left != right
    */
   enum Function { Equal, LessThan, GreaterThan, LessEqual, GreaterEqual, NotEqual };
-  
+
   PiiComparisonOperation();
 
   void setConstant(double constant);

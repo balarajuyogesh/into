@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -35,7 +35,7 @@ PiiWaveletTextureOperation::PiiWaveletTextureOperation() :
 
   addSocket(d->pImageInput);
   addSocket(d->pFeatureOutput);
-  
+
 }
 
 QString PiiWaveletTextureOperation::wavelet() const

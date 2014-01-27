@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -62,7 +62,7 @@ void TestPiiColors::normalizedRgb()
 {
   {
     PiiMatrix<PiiColor<> > clrMat(2,2);
-    clrMat(0,0) = PiiColor<>(1,2,3); 
+    clrMat(0,0) = PiiColor<>(1,2,3);
     clrMat(0,1) = PiiColor<>(0,0,0);
     clrMat(1,0) = PiiColor<>(10,10,10);
     clrMat(1,1) = PiiColor<>(10,0,0);
@@ -74,7 +74,7 @@ void TestPiiColors::normalizedRgb()
     QVERIFY(Pii::equals(red, PiiMatrix<unsigned char>(2,2,
                                                       42,0,
                                                       85,255)));
-    
+
 
     QVERIFY(Pii::equals(green, PiiMatrix<unsigned char>(2,2,
                                                         85,0,
@@ -82,7 +82,7 @@ void TestPiiColors::normalizedRgb()
   }
   {
     PiiMatrix<PiiColor4<int> > clrMat(2,2);
-    clrMat(0,0) = PiiColor4<int>(1,2,3); 
+    clrMat(0,0) = PiiColor4<int>(1,2,3);
     clrMat(0,1) = PiiColor4<int>(0,0,0);
     clrMat(1,0) = PiiColor4<int>(10,10,10);
     clrMat(1,1) = PiiColor4<int>(10,0,0);
@@ -100,12 +100,12 @@ void TestPiiColors::normalizedRgb()
   }
   {
     PiiMatrix<PiiColor4<> > clrMat(2,2);
-    clrMat = PiiColor4<>(100,100,100); 
+    clrMat = PiiColor4<>(100,100,100);
 
     PiiMatrix<unsigned char> red, blue;
 
     PiiColors::normalizedRgb(clrMat, red, blue, 10, 0, 2);
-    
+
 
     QVERIFY(Pii::equals(red, blue));
 
@@ -116,7 +116,7 @@ void TestPiiColors::normalizedRgb()
 
   {
     PiiMatrix<PiiColor4<> > clrMat(1,1);
-    clrMat = PiiColor4<>(250,50,100); 
+    clrMat = PiiColor4<>(250,50,100);
 
     PiiMatrix<unsigned char> green, blue;
 
@@ -127,7 +127,7 @@ void TestPiiColors::normalizedRgb()
   }
   {
     PiiMatrix<PiiColor4<> > clrMat(1,1);
-    clrMat = PiiColor4<>(255,0,0); 
+    clrMat = PiiColor4<>(255,0,0);
 
     PiiMatrix<unsigned char> red, green;
 
@@ -144,7 +144,7 @@ void TestPiiColors::rgbToHsv()
   rgbImg(0,0) = PiiColor4<>(0,0,255);
   PiiMatrix<PiiColor4<> > hsvImg = PiiColors::rgbToHsv(rgbImg);
   QCOMPARE(hsvImg(0,0).hsvH, uchar(171));
-  QCOMPARE(hsvImg(0,0).hsvS, uchar(255));  
+  QCOMPARE(hsvImg(0,0).hsvS, uchar(255));
   QCOMPARE(hsvImg(0,0).hsvV, uchar(255));
 }
 
@@ -154,7 +154,7 @@ void TestPiiColors::hsvToRgb()
   hsvImg(0,0) = PiiColor4<>(171,128,255);
   PiiMatrix<PiiColor4<> > rgbImg = PiiColors::hsvToRgb(hsvImg);
   QCOMPARE(rgbImg(0,0).rgbR, uchar(128));
-  QCOMPARE(rgbImg(0,0).rgbG, uchar(127));  
+  QCOMPARE(rgbImg(0,0).rgbG, uchar(127));
   QCOMPARE(rgbImg(0,0).rgbB, uchar(255));
 }
 
@@ -188,9 +188,9 @@ void TestPiiColors::rgbToFromHsv()
             QVERIFY(Pii::abs(rgb.c0 - rgb2.c0) <= 3);
             QVERIFY(Pii::abs(rgb.c1 - rgb2.c1) <= 3);
             QVERIFY(Pii::abs(rgb.c2 - rgb2.c2) <= 3);
-          }         
+          }
         }
-  
+
   // Does it work with a four-channel color?
   PiiColor<> rgb(1,2,3);
   PiiColor<> hsv = PiiColors::rgbToHsv(rgb);
@@ -270,7 +270,7 @@ void TestPiiColors::rgbToFromYcbcr()
                    rgb.c0, rgb.c1, rgb.c2,
                    ybr.c0, ybr.c1, ybr.c2,
                    rgb2.c0, rgb2.c1, rgb2.c2);
-          
+
           QVERIFY(Pii::abs(int(rgb.c0) - rgb2.c0) < 2);
           QVERIFY(Pii::abs(int(rgb.c1) - rgb2.c1) < 2);
           QVERIFY(Pii::abs(int(rgb.c2) - rgb2.c2) < 2);
@@ -303,7 +303,7 @@ void TestPiiColors::autocorrelogram()
                       2.0/4*2 + 1.0*2, 0.0,
                       0.0, 0.0,
                       0.0, 0.0);
-  
+
   QVERIFY(Pii::almostEqual(c1, r1, 1e-6));
   QVERIFY(Pii::almostEqual(c2, r2, 1e-6));
   QVERIFY(Pii::almostEqual(PiiColors::autocorrelogram(Pii::matrix(Pii::transpose(input2)), 4), r2, 1e-6));

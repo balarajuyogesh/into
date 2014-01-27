@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -34,7 +34,7 @@ void MainWindow::updateValues()
   _fractalGenerator.setMinimum(_pMinimum->value());
   _fractalGenerator.setMaximum(_pMaximum->value());
   _fractalGenerator.setRoughnessScale(_pRoughnessScale->value());
-  
+
   fractalMatrix = _fractalGenerator.generateSquareFractal<unsigned char>(Pii::pow(2,_pFractalSize->currentIndex()+1),
                                                                          _pLeftTop->value(),
                                                                          _pRightTop->value(),
@@ -57,14 +57,14 @@ void MainWindow::init()
   connect(_pMaximum, SIGNAL(valueChanged(int)), this, SLOT(updateValues()));
   connect(_pRoughnessScale, SIGNAL(valueChanged(double)), this, SLOT(updateValues()));
   connect(_pRoughness, SIGNAL(valueChanged(int)), this, SLOT(updateValues()));
-  
+
   connect(_pLeftTop, SIGNAL(valueChanged(int)), this, SLOT(updateValues()));
   connect(_pRightTop, SIGNAL(valueChanged(int)), this, SLOT(updateValues()));
   connect(_pLeftBottom, SIGNAL(valueChanged(int)), this, SLOT(updateValues()));
   connect(_pRightBottom, SIGNAL(valueChanged(int)), this, SLOT(updateValues()));
 
   connect(this, SIGNAL(imageChanged(PiiVariant)), _pImageDisplay, SLOT(setImage(PiiVariant)));
-  
+
   // Init button states
   updateValues();
 }

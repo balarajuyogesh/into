@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -83,7 +83,7 @@ public:
    *
    * @param size initial size for the heap
    *
-   * @param inverse inversion flag. Normal heap (`inverse` = 
+   * @param inverse inversion flag. Normal heap (`inverse` =
    * `false`) always keeps the largest element at the top of the binary
    * tree. Inverse heap keeps the smallest element.
    */
@@ -92,14 +92,14 @@ public:
   {}
 
   /**
-   * Constructs a heap with an initial size of `size` elements. 
+   * Constructs a heap with an initial size of `size` elements.
    * `fillValue` will be used to initialize the elements.
    *
    * @param size initial size for the heap
    *
    * @param fillValue the initial value of the elements
    *
-   * @param inverse inversion flag. Normal heap (`inverse` = 
+   * @param inverse inversion flag. Normal heap (`inverse` =
    * `false`) always keeps the largest element at the top of the binary
    * tree. Inverse heap keeps the smallest element.
    */
@@ -117,7 +117,7 @@ public:
     _bInverse = other._bInverse;
     return *this;
   }
-  
+
   /**
    * Returns a pointer to the beginning of the heap data.
    */
@@ -127,7 +127,7 @@ public:
    * Returns const a pointer to the beginning of the heap data.
    */
   const T* data() const { return _array._d(); }
-  
+
   /**
    * Returns a reference to the item at *index*.
    *
@@ -163,7 +163,7 @@ public:
    * Reserves space for *n* elements and initializes each to *value*.
    */
   void fill(int n, const T& value);
-  
+
   /**
    * Removes the element at *index* and rearranges the heap to retain
    * the heap property.
@@ -181,7 +181,7 @@ public:
    * rearranged to retain the heap property.
    */
   T take(int index);
-  
+
   /**
    * Returns the number of elements in the heap.
    */
@@ -197,7 +197,7 @@ public:
   void sort();
 
   /**
-   * Returns a copy of this heap with its element in a sorted order. 
+   * Returns a copy of this heap with its element in a sorted order.
    * Normal heap will be turned into an inverse one and vice versa.
    */
   PiiHeap sorted() const;
@@ -256,7 +256,7 @@ template <class GreaterThan> void PiiHeap<T,prealloc>::sort(GreaterThan greaterT
       qSwap(_array[0], _array[--size]);
       // Update the (one element smaller) heap
       updateDownwards(0, size, greaterThan);
-    } 
+    }
 }
 
 template <class T, int prealloc> void PiiHeap<T,prealloc>::put(const T& element)
@@ -351,7 +351,7 @@ template <class GreaterThan> void PiiHeap<T,prealloc>::remove(int index, Greater
       _array[index] = _array[iCurrentItems];
       rearrange(index, iCurrentItems, greaterThan);
     }
-  
+
   _array.resize(iCurrentItems);
 }
 template <class T, int prealloc>
@@ -392,5 +392,5 @@ template <class GreaterThan> void PiiHeap<T,prealloc>::updateDownwards(int index
       childIndex = PII_HEAP_CHILD_INDEX(parentIndex);
     }
 }
-  
+
 #endif //_PIIHEAP_H

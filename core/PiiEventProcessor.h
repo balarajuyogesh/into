@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -112,10 +112,10 @@ protected:
    * once the thread finishes, if one was created.
    */
   void run();
-  
+
 private:
   void eventLoop();
-  
+
 #if (QT_VERSION < 0x040200)
   static void moveToThread(QObject* obj, int newThreadId);
 #endif
@@ -145,7 +145,7 @@ private:
 class PII_CORE_EXPORT PiiEventProcessorRunner : public PiiEventProcessor
 {
   Q_OBJECT
-  
+
 public:
   /**
    * Creates a new event processing thread and starts it.

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -22,7 +22,7 @@
 class QMutex;
 
 /**
- * An implementation of a processor that runs in a separate thread. 
+ * An implementation of a processor that runs in a separate thread.
  * PiiThreadedProcessor creates a new thread when its start() function
  * is called. The thread sleeps when no data is available in inputs
  * and is awakened by each incoming object.
@@ -32,15 +32,15 @@ class QMutex;
 class PiiThreadedProcessor : public QThread, public PiiOperationProcessor
 {
   Q_OBJECT
-  
+
 public:
   /**
    * Construct a new PiiThreadedProcessor.
    */
   PiiThreadedProcessor(PiiDefaultOperation* parent);
-  
+
   void check(bool reset);
-  
+
   /**
    * Execute the processor until interruption. This method starts a
    * new thread that sleeps until new objects appear on connected
@@ -70,7 +70,7 @@ public:
   void stop();
 
   void reconfigure(const QString& propertySetName);
-  
+
   /**
    * Waits until the thread is finished.
    */

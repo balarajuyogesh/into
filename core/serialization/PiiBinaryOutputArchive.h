@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -42,12 +42,12 @@ public:
    * or cannot be written to.
    */
   PiiBinaryOutputArchive(QIODevice* d);
-  
+
   void writeRawData(const void* ptr, unsigned int size);
 
   PiiBinaryOutputArchive& operator<< (const QString& value);
   PiiBinaryOutputArchive& operator<< (const char* value);
-  
+
   PII_PRIMITIVE_OUTPUT_OPERATORS(PiiBinaryOutputArchive, QDataStream)
   PII_PRIMITIVE_OPERATOR(PiiBinaryOutputArchive, char, QDataStream, <<, )
   PII_PRIMITIVE_OPERATOR(PiiBinaryOutputArchive, unsigned char, QDataStream, <<, )

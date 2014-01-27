@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -36,7 +36,7 @@ struct PII_CORE_EXPORT PiiMatrixData
     pBuffer(0),
     bufferType(InternalBuffer)
   {}
-  
+
   PiiMatrixData(int rows, int columns, size_t stride) :
     iRefCount(1),
     iLastRef(1),
@@ -46,7 +46,7 @@ struct PII_CORE_EXPORT PiiMatrixData
     iCapacity(rows),
     pSourceData(0)
   {}
-  
+
   PiiAtomicInt iRefCount;
   // Destroy data when iRefCount goes below this value. Default is
   // one. Setting this value to two and increasing iRefCount by one
@@ -85,7 +85,7 @@ struct PII_CORE_EXPORT PiiMatrixData
     iLastRef = 2;
     return this;
   }
-  
+
   static PiiMatrixData* sharedNull();
   static PiiMatrixData* allocate(int rows, int columns, size_t stride);
   static PiiMatrixData* reallocate(PiiMatrixData* d, int rows);

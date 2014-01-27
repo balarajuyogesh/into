@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -37,7 +37,7 @@ template <class Archive> void serialize(Archive& archive, const unsigned int ver
 #define PII_DECLARE_SAVE_LOAD_MEMBERS \
 template <class Archive> void save(Archive& archive, const unsigned int version); \
 template <class Archive> void load(Archive& archive, const unsigned int version);
-  
+
 
 /**
  * A macro that separates the serialize() function template for type
@@ -104,7 +104,7 @@ namespace PiiSerialization
     {
       return obj->piiMetaObject();
     }
-    
+
     template <class Archive, class T> static void serialize(Archive& archive, T& value, const unsigned int version)
     {
       value.serialize(archive, version);
@@ -122,7 +122,7 @@ namespace PiiSerialization
     {
       ptr->reserve();
     }
-    
+
     template <class T> static T* voidConstruct()
     {
       return new T(PiiSerialization::Void::instance);
@@ -137,7 +137,7 @@ namespace PiiSerialization
   {
     Accessor::serialize(archive, value, version);
   }
-  
+
   /// @internal Utility structure for separateMembers.
   struct MemberSaver
   {
@@ -167,7 +167,7 @@ namespace PiiSerialization
   {
     template <class Archive, class T> static void serialize(Archive& archive, T& value, const unsigned int version);
   };
-  
+
   /**
    * Separates the `serialize` member function template into a
    * save/load pair.
@@ -184,7 +184,7 @@ namespace PiiSerialization
   template <class Archive, class T> inline void separateFunctions(Archive& archive, T& value, const unsigned int version)
   {
     Pii::If<Archive::InputArchive, FunctionLoader, FunctionSaver>::Type::serialize(archive, value, version);
-  }  
+  }
 
   /**
    * Wraps enum types. See [PII_ENUM].
@@ -206,7 +206,7 @@ namespace PiiSerialization
       archive >> iValue;
       value = static_cast<T>(iValue);
     }
-  
+
     T& value;
   };
 
@@ -219,7 +219,7 @@ namespace PiiSerialization
 
   /**
    * A structure whose specializations determine how a specific type
-   * is converted from void*. The default implementation uses 
+   * is converted from void*. The default implementation uses
    * `reinterpret_cast`. This structure may need to be specialized if a
    * class is serialized through a base class pointer, and the base
    * class is not the first one in inheritance order.

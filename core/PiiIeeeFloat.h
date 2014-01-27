@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -20,7 +20,7 @@ namespace Pii
 {
   /**
    * A traits structure that specifies the bit counts and
-   * corresponding integer types for a floating-point number. 
+   * corresponding integer types for a floating-point number.
    * Specialization are provided for `float` and `double`.
    */
   template <class Real> struct IeeeFloatTraits;
@@ -51,7 +51,7 @@ namespace Pii
 
   /**
    * A class that wraps a floating-point number and allows one to
-   * twiddle its bits. The class does not currently support `long` 
+   * twiddle its bits. The class does not currently support `long`
    * `double`.
    *
    * ! Make yourself familiar with the IEEE 754-1985 standard
@@ -65,7 +65,7 @@ namespace Pii
     typedef IeeeFloatTraits<Real> Traits;
     typedef typename IeeeFloatTraits<Real>::IntegerType IntegerType;
     typedef typename IeeeFloatTraits<Real>::UnsignedType UnsignedType;
-  
+
     /**
      * Create a wrapper for `value`.
      */
@@ -103,7 +103,7 @@ namespace Pii
      * Set the sign.
      */
     void setSign(IntegerType sign) { _sign = UnsignedType((1 - sign) >> 1); }
-    
+
     /**
      * Get the sign bit. 0 means positive, 1 negative.
      */
@@ -142,7 +142,7 @@ namespace Pii
       Real _value;
     };
   };
-  
+
 };
 
 #endif //_PIIMATHIEEEFLOAT_H

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -62,7 +62,7 @@ void PiiDatabaseWriter::aboutToChangeState(State state)
 void PiiDatabaseWriter::check(bool reset)
 {
   PiiDefaultOperation::check(reset);
-  
+
   for (int i=0; i<inputCount(); i++)
     if (inputAt(i)->isConnected())
       return;
@@ -119,14 +119,14 @@ void PiiDatabaseWriter::process()
   PII_D;
   if (!d->bWriteEnabled)
     return;
-  
+
   if (!isConnected() && d->pFile == 0)
     {
       delete d->pQuery, d->pQuery = 0;
       if (openConnection())
         createQuery();
     }
-  
+
   QStringList row;
   for (int i=0; i<inputCount() && i<d->lstColumnNames.size(); i++)
     {

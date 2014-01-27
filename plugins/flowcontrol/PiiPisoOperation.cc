@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -74,7 +74,7 @@ PiiOutputSocket* PiiPisoOperation::output(const QString& name) const
   // Try aliased name first
   if (name == "output")
     return outputAt(1);
-  
+
   return PiiDefaultOperation::output(name);
 }
 
@@ -83,7 +83,7 @@ bool PiiPisoOperation::hasDefaultValue(int inputIndex)
   PII_D;
   if (d->defaultValueMode == SameDefaultsForAllGroups)
     inputIndex = inputIndex % d->iGroupSize;
-  
+
   return inputIndex < d->lstDefaultValues.size();
 }
 
@@ -210,20 +210,20 @@ private:
   {
   public:
     InputGroup(int groupId) : _iGroupId(groupId) {}
-    
+
     /*void setTagged(bool tagged) { _bTagged = tagged; }
       bool isTagged() const { return _bTagged; }*/
 
     int groupId() const { return _iGroupId; }
-    
+
     void shift();
-    
+
   private:
     int _iGroupId;
   };
-  
+
   void passTag();
-  
+
   QList<PiiInputSocket*> _lstInputs;
   QList<PiiOutputSocket*> _lstOutputs;
   QList<InputGroup> _lstGroups;

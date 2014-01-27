@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -32,7 +32,7 @@ PiiClock::PiiClock() :
   PII_D;
   addSocket(new PiiInputSocket("trigger"));
   inputAt(0)->setOptional(true);
-  
+
   addSocket(d->pTimeOutput = new PiiOutputSocket("time"));
   addSocket(d->pTimeStampOutput = new PiiOutputSocket("timestamp"));
 
@@ -47,7 +47,7 @@ void PiiClock::check(bool reset)
 
   d->bTimeOutputConnected = d->pTimeOutput->isConnected();
   d->bTimestampOutputConnected = d->pTimeStampOutput->isConnected();
-  
+
   //check if we must use timer
   d->bUseTimer = !inputAt(0)->isConnected() && (d->bTimestampOutputConnected || d->bTimeOutputConnected);
 
@@ -64,7 +64,7 @@ void PiiClock::process()
 
       if (obj.type() != PiiVariant::IntType)
         PII_THROW_UNKNOWN_TYPE(inputAt(0));
-      
+
       d->dateTime.setTime_t(obj.valueAs<unsigned int>());
     }
   else

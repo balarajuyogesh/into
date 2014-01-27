@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -35,7 +35,7 @@ namespace PiiEngineWrapper
         PII_V8_THROW_ERROR(ex.message());
       }
   }
-  
+
   static PII_DECLARE_V8_FUNCTION(loadPlugins)
   {
     PII_CHECK_AT_LEAST_ONE_ARGUMENT(loadPlugins);
@@ -151,7 +151,7 @@ namespace PiiEngineWrapper
         PII_V8_THROW_ERROR(ex.message());
       }
   }
-  
+
   static PII_DECLARE_V8_FUNCTION(plugins)
   {
     PII_CHECK_NO_ARGUMENTS(plugins);
@@ -161,7 +161,7 @@ namespace PiiEngineWrapper
       v8aResult->Set(i, V8ENGINE()->fromVariant(QVariant::fromValue(lstPlugins[i])));
     return v8aResult;
   }
-  
+
   static PII_DECLARE_V8_FUNCTION(pluginLibraryNames)
   {
     PII_CHECK_NO_ARGUMENTS(pluginLibraryNames);
@@ -179,7 +179,7 @@ namespace PiiEngineWrapper
     v8::Local<v8::Object> prototype(PII_PROTO_OF("PiiEngine"));
     prototype->Set(v8::String::New("execute"), PII_V8_FUNCTION(execute));
     prototype->Set(v8::String::New("save"), PII_V8_FUNCTION(save));
-  
+
     v8::Local<v8::Function> constructor(PII_CONSTRUCTOR_OF("PiiEngine"));
     constructor->Set(v8::String::New("loadPlugins"), PII_V8_FUNCTION(loadPlugins));
     constructor->Set(v8::String::New("loadPlugin"), PII_V8_FUNCTION(loadPlugin));

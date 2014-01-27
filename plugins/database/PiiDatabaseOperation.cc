@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -142,13 +142,13 @@ QSqlDatabase* PiiDatabaseOperation::createDatabase(const QString& driver,
   else
     {
       QString strDriverName = "Q" + driver.toUpper();
-      
+
       if (!QSqlDatabase::isDriverAvailable(strDriverName))
         {
           error(tr("There is no database driver available for \"%1\"").arg(driver));
           return 0;
         }
-      
+
       pDb = new QSqlDatabase(QSqlDatabase::addDatabase(strDriverName, d->strConnectionId));
       if (!pDb->isValid())
         {
@@ -156,7 +156,7 @@ QSqlDatabase* PiiDatabaseOperation::createDatabase(const QString& driver,
           error(tr("Cannot create database driver for \"%1\"").arg(driver));
           return 0;
         }
-      
+
       pDb->setHostName(host);
       pDb->setDatabaseName(database);
       pDb->setUserName(user);
@@ -200,7 +200,7 @@ bool PiiDatabaseOperation::checkQuery(QSqlQuery& query)
         .arg((int)lastError.type())
         .arg(lastError.number())
         .arg(lastError.text()));
-  
+
   return false;
 }
 

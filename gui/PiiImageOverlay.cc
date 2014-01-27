@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -146,7 +146,7 @@ void PiiPolygonOverlay::paint(QPainter* p, bool filled)
   p->setPen(d->pen);
   if(filled)
     p->setBrush(d->brush);
-  p->drawPath(d->shape); 
+  p->drawPath(d->shape);
 }
 
 bool PiiPolygonOverlay::contains(const QPoint& p)

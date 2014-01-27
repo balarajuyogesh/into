@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -141,11 +141,11 @@ public:
       CaseSensitive = QDir::CaseSensitive
     };
   Q_DECLARE_FLAGS(Filters, Filter);
-  
+
   PiiFileSystemScanner();
 
   void check(bool reset);
-  
+
 protected:
   void process();
 

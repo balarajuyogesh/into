@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -114,7 +114,7 @@ namespace PiiImage
       }
     return result;
   }
-  
+
   template <class T> PiiMatrix<T> equalize(const PiiMatrix<T>& img, unsigned int levels)
   {
     PiiMatrix<T> result(img.rows(), img.columns());
@@ -124,10 +124,10 @@ namespace PiiImage
       levels = maxValue + 1;
     if (levels == 0)
       return img;
-    
+
     PiiMatrix<int> dist = cumulative(histogram(img, levels));
     int* pDist = dist.row(0);
-    
+
     PiiMatrix<T> newDist(1, levels);
     T* pNewDist = newDist.row(0);
     int sum = pDist[levels-1]; // total number of pixels
@@ -146,7 +146,7 @@ namespace PiiImage
       }
     return backProject(img, newDist);
   }
-  
+
   template <class T> void GrayHistogramHandler<T>::operator() (const PiiMatrix<T>& image)
   {
     iPixelCount += image.rows() * image.columns();

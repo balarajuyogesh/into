@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -187,7 +187,7 @@ bool PiiRawImageHandler::writeFrame(const void* frameBuffer, unsigned int stride
         if (!write(device(), pData, iBytesPerRow))
           return false;
     }
-  
+
   ++d->header.frameCount;
   return true;
 }
@@ -214,7 +214,7 @@ bool PiiRawImageHandler::seekFrame(int frameIndex)
 {
   if (!device()->isOpen())
     return false;
-  
+
   if (frameIndex < 0)
     {
       // Negative index and total number unknown

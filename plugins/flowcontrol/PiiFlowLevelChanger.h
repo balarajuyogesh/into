@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -19,7 +19,7 @@
 #include <PiiDefaultOperation.h>
 
 /**
- * An operation that changes the flow level of data passed through it. 
+ * An operation that changes the flow level of data passed through it.
  * It is useful in situations where one needs to adjust different flow
  * levels before connecting them to further processing. A typical use
  * is to fake image pieces to be "original" images as shown in the
@@ -35,11 +35,11 @@
  * the flow level of this input.
  *
  * @in input - The objects whose flow level must match `sync`.
- * 
+ *
  * Outputs
  * -------
  *
- * @out output - Objects read from `input` at the flow level of 
+ * @out output - Objects read from `input` at the flow level of
  * `sync`.
  *
  */

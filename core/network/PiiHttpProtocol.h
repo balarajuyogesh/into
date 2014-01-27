@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -109,7 +109,7 @@ public:
 
     void setMaxTime(int maxTime);
     int maxTime() const;
-    
+
   private:
     friend class PiiHttpProtocol;
     ~TimeLimiter();
@@ -128,7 +128,7 @@ public:
   {
   public:
     virtual ~UriHandler();
-    
+
     /**
      * Handles a request. This function must be thread-safe.
      *
@@ -156,22 +156,22 @@ public:
      * }
      * ~~~
      *
-     * @exception The function may throw a PiiHttpException on error. 
+     * @exception The function may throw a PiiHttpException on error.
      * PiiHttpProtocol sets the response header correspondingly and
      * writes message to the response body.
      */
     virtual void handleRequest(const QString& uri, PiiHttpDevice* dev, TimeLimiter* controller) = 0;
   };
-  
+
   PiiHttpProtocol();
   ~PiiHttpProtocol();
-  
+
   void communicate(QIODevice* dev, PiiProgressController* controller);
 
   /**
    * Register a URI handler. He caller retains the ownership of the
    * handler. The same handler can be register many times in different
-   * places. The `uri` parameter to the 
+   * places. The `uri` parameter to the
    * [handleRequest()](PiiHttpProtocol::UriHandler::handleRequest())
    * function tells the handler the URI it was registered at.
    *
@@ -208,7 +208,7 @@ public:
   void registerUriHandler(const QString& uri, UriHandler* handler);
 
   /**
-   * Get the handler (if any) that handles requests to `uri`. If 
+   * Get the handler (if any) that handles requests to `uri`. If
    * `exactMatch` is `true`, require an exact match. Otherwise find the
    * most specific match, even if not exact.
    *
@@ -216,7 +216,7 @@ public:
    * no such handler exists.
    */
   UriHandler* uriHandler(const QString& uri, bool exactMatch=false);
-  
+
   /**
    * Unregister a handler at `uri`.
    */
@@ -268,7 +268,7 @@ private:
   typedef QPair<QString, UriHandler*> HandlerPair;
 
   HandlerPair findHandler(const QString& path);
-  
+
   /// @internal
   class Data : public PiiNetworkProtocol::Data
   {

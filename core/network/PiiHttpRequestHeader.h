@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -30,7 +30,7 @@ public:
 
   void setMethod(const QString& method);
   QString method() const;
-  
+
   void setPath(const QString& path);
   QString path() const;
 
@@ -52,7 +52,7 @@ protected:
     Data(const Data& other);
     ~Data();
     Data* clone() const;
-    
+
     QString strMethod;
     QString strPath;
     PiiVersionNumber httpVersion;

@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -59,7 +59,7 @@ protected:
   };
   inline Data* _d() { return static_cast<Data*>(PiiStreamFilter::d); }
   inline const Data* _d() const { return static_cast<const Data*>(PiiStreamFilter::d); }
-  
+
   /// @internal
   PiiStreamBuffer(Data* d);
 };

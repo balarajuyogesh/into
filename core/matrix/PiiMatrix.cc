@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -179,7 +179,7 @@ void PiiTypelessMatrix::resize(int rows, int columns, size_t bytesPerItem)
         reserve(rows, iBytesPerRow);
       else if (d->iRefCount != 1)
         cloneAndReplaceData(d->iCapacity, iBytesPerRow);
-      
+
       d->iRows = rows;
       d->iColumns = columns;
     }

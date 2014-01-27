@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -82,13 +82,13 @@ void PiiTriggerSource::trigger(const QRectF& value)
 void PiiTriggerSource::stop()
 {
   PII_D;
-  
+
   d->stateMutex.lock();
   if (state() == Running)
     {
       setState(Stopped);
       d->stateMutex.unlock();
-      
+
       emitObject(PiiYdin::createStopTag());
     }
   else
@@ -98,13 +98,13 @@ void PiiTriggerSource::stop()
 void PiiTriggerSource::pause()
 {
   PII_D;
-  
+
   d->stateMutex.lock();
   if (state() == Running)
     {
       setState(Paused);
       d->stateMutex.unlock();
-      
+
       emitObject(PiiYdin::createPauseTag());
     }
   else
@@ -115,10 +115,10 @@ void PiiTriggerSource::pause()
 void PiiTriggerSource::start()
 {
   QMutexLocker lock(stateLock());
-  
+
   if (state() == Paused)
     outputAt(0)->resume(PiiSocketState());
-  
+
   setState(Running);
 }
 
@@ -132,7 +132,7 @@ void PiiTriggerSource::interrupt()
       setState(Stopped);
     }
 }
-  
+
 void PiiTriggerSource::reconfigure(const QString& propertySetName)
 {
   try

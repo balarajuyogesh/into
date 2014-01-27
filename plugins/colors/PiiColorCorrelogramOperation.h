@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -50,7 +50,7 @@ class PiiColorCorrelogramOperation : public PiiDefaultOperation
   /**
    * The number of quantization levels per each color channel for
    * color indexing. Color indices for RGB images are calculated as
-   * specified in [PiiColors::toIndexed()]. The default value is 4. 
+   * specified in [PiiColors::toIndexed()]. The default value is 4.
    * If the [quantize] flag is `true`, color channels are quantized to
    * this many levels before calculating the correlogram. If the
    * [quantize] flag is `false`, color channel values greater than or
@@ -63,7 +63,7 @@ class PiiColorCorrelogramOperation : public PiiDefaultOperation
    * The default is 1,3,5,7.
    */
   Q_PROPERTY(QVariantList distances READ distances WRITE setDistances);
-  
+
   PII_OPERATION_SERIALIZATION_FUNCTION
 public:
   PiiColorCorrelogramOperation();
@@ -77,10 +77,10 @@ public:
   bool quantize() const;
 
   void check(bool reset);
-  
+
 protected:
   void process();
-  
+
 private:
   /// @internal
   class Data : public PiiDefaultOperation::Data

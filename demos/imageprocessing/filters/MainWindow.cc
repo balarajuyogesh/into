@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -25,10 +25,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
   // Intialize engine.
   initEngine();
-  
+
   // Initialize ui
   init();
-   
+
   startProcessing();
 
   // Select default filter
@@ -54,7 +54,7 @@ PiiEngine* MainWindow::createEngine()
   // Create probe input for source and result image
   _pSourceProbeInput = new PiiProbeInput;
   _pResultProbeInput = new PiiProbeInput;
-  
+
   // Create image source
   _pImageFileReader = pEngine->createOperation("PiiImageFileReader", "ImageSource");
   _pImageFileReader->setProperty("fileNamePattern", QString("%1/*.jpg").arg(defaultImageDirPath()));
@@ -68,19 +68,19 @@ PiiEngine* MainWindow::createEngine()
 
   // Create filter operation
   _pImageFilter = pEngine->createOperation("PiiImageFilterOperation", "Filter");
-  
+
   // Make operation connections
   pTriggerSource->connectOutput("trigger", _pImageFileReader, "trigger");
   pSwitchTrigger->connectOutput("trigger", pSwitch, "trigger");
   _pImageFileReader->connectOutput("image", pSwitch, "input0");
   pSwitch->connectOutput("output0", _pImageFilter, "image");
-  
+
   _pSourceProbeInput->connectOutput(_pImageFileReader->output("image"));
   _pResultProbeInput->connectOutput(_pImageFilter->output("image"));
-  
+
   connect(this, SIGNAL(selectImage(int)), pTriggerSource, SLOT(trigger(int)));
   connect(this, SIGNAL(updateImage(int)), pSwitchTrigger, SLOT(trigger(int)));
-  
+
   return pEngine;
 }
 
@@ -89,12 +89,12 @@ void MainWindow::init()
   // Initialize ui made by designer
   setupUi(this);
   setWindowTitle(demoName());
-  
+
   _pNextImageButton->setIconMode(PushButton::IconRight);
 
   _pSourceImageDisplay->imageViewport()->setProperty("fitMode", "FitToView");
   _pResultImageDisplay->imageViewport()->setProperty("fitMode", "FitToView");
-  
+
   // Make ui-connections
   connect(_pPreviousImageButton, SIGNAL(clicked()), this, SLOT(prevButtonClicked()));
   connect(_pNextImageButton, SIGNAL(clicked()), this, SLOT(nextButtonClicked()));
@@ -125,7 +125,7 @@ void MainWindow::selectFilter(int index)
     default: strFilterName = "gaussian"; break;
     }
   _pImageFilter->setProperty("filterName", strFilterName);
-  
+
   // Trig the same image again
   emit updateImage(0);
 }
@@ -134,7 +134,7 @@ void MainWindow::selectBorderHandling(int index)
 {
   // Change filter name
   _pImageFilter->setProperty("borderHandling", index);
-  
+
   // Trig the same image again
   emit updateImage(0);
 }
@@ -161,16 +161,16 @@ void MainWindow::selectFilterSize(int value)
 void MainWindow::updateFilterSize()
 {
   int value = _pFilterSizeSlider->value();
-  
+
   // Pause engine
   pauseProcessing();
-  
+
   // Change filter size
   _pImageFilter->setProperty("filterSize", value);
 
   // Restart engine
   startProcessing();
-  
+
   // Select the same image again
   emit updateImage(0);
 }

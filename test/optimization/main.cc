@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -46,7 +46,7 @@ void TestPiiOptimization::lmMinimize()
 
   PiiMatrix<double> initialParams(1,3, 1.0, -1.0, 2.0);
   PiiMatrix<double> result = PiiOptimization::lmMinimize(&func, initialParams);
-  
+
   PiiMatrix<double> residuals(1,3);
   func.residualValues(result[0], residuals[0]);
 

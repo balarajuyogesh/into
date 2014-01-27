@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -46,7 +46,7 @@ class PII_CAMERA_EXPORT PiiCameraOperation : public PiiImageReaderOperation, pub
 
   /**
    * The ID of the selected camera. A list of selectable cameras can
-   * be read from [cameraList]. The ID of a camera can be any string. 
+   * be read from [cameraList]. The ID of a camera can be any string.
    * For example, IP camera drivers use a URL to identify the camera.
    */
   Q_PROPERTY(QString cameraId READ cameraId WRITE setCameraId);
@@ -78,7 +78,7 @@ class PII_CAMERA_EXPORT PiiCameraOperation : public PiiImageReaderOperation, pub
 public:
   PiiCameraOperation();
   ~PiiCameraOperation();
-  
+
   QVariant property(const char* name) const;
   bool setProperty(const char* name, const QVariant& value);
 
@@ -87,7 +87,7 @@ public:
   void interrupt();
   void pause();
   void stop();
-  
+
   // Listener functions
   void frameCaptured(int frameIndex, void *frameBuffer, qint64 elapsedTime);
   void framesMissed(int startIndex, int endIndex);
@@ -118,10 +118,10 @@ protected:
 
   void setDriverName(const QString& driverName);
   QString driverName() const;
-  
+
   QObject* driver() const;
   QStringList cameraList() const;
-  
+
   void setCameraId(const QString& cameraId);
   QString cameraId() const;
 
@@ -144,7 +144,7 @@ private:
   template <class T> PiiMatrix<PiiColor<T> > yuv411toRgb(void *frameBuffer, int width, int height);
   template <class T> PiiMatrix<PiiColor<T> > yuv422toRgb(void *frameBuffer, int width, int height);
   template <class T> void yuvToRgb(PiiColor<T> *data, int y, int u, int v);
-  
+
   void init();
 protected:
   /// @internal
@@ -167,7 +167,7 @@ protected:
     PiiWaitCondition pauseWaitCondition;
     int iMaxMissedIndex;
     QMutex pauseMutex;
-    
+
   };
   PII_D_FUNC;
 

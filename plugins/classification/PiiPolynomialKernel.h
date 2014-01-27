@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -67,7 +67,7 @@ public:
    * Returns the current degree of the polynomial.
    */
   int degree() const { return _iDegree; }
-  
+
   inline double operator() (FeatureIterator sample, FeatureIterator model, int length) const throw()
   {
     return Pii::pow(_dAlpha + _dBeta * Pii::innerProductN(sample, length, model, 0.0), _iDegree)

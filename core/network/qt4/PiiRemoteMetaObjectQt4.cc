@@ -1,4 +1,4 @@
-/* This file is part of Into. 
+/* This file is part of Into.
  * Copyright (C) Intopii 2013.
  * All rights reserved.
  *
@@ -21,12 +21,12 @@ class PiiRemoteMetaObject::Data : public PiiRemoteObject::Data
 {
 public:
   Data(QObject*);
-  
+
   QObject* pObject;
-  
+
   QByteArray stringData;
   QVector<uint> vecMetaData;
-  
+
   QMetaObject metaObject;
   bool bMetaCreated;
   QList<Function> lstFunctions;
@@ -69,19 +69,19 @@ void PiiRemoteMetaObject::createMetaObject()
   d->stringData.resize(iStringHeaderSize);
   d->vecMetaData.resize(iMetaHeaderSize);
   d->vecMetaData << 0; // EOD
-  
+
   collectFunctions(true); // signals
   collectFunctions(false); // other functions
 
   // Store the number of functions ...
   d->vecMetaData[iMethodIndex] = d->lstFunctions.size() + d->lstSignals.size();
   // Functions start immediately after the header
-  d->vecMetaData[iMethodIndex + 1] = iMetaHeaderSize; 
+  d->vecMetaData[iMethodIndex + 1] = iMetaHeaderSize;
   // The first N are signals
   d->vecMetaData[iSignalIndex] = d->lstSignals.size();
 
   collectProperties();
-  
+
   d->metaObject.d.stringdata = d->stringData.constData();
   d->metaObject.d.data = d->vecMetaData.constData();
 }
@@ -101,7 +101,7 @@ void PiiRemoteMetaObject::collectProperties()
   for (int i=0; i<lstProperties.size(); ++i)
     {
       // This also catches the special case of no properties (one empty entry in the list).
-      if (!propExp.exactMatch(QString(lstProperties[i]))) 
+      if (!propExp.exactMatch(QString(lstProperties[i])))
         continue;
 
       int iSpaceIndex = lstProperties[i].indexOf(' ');
@@ -130,7 +130,7 @@ void PiiRemoteMetaObject::collectProperties()
       if (type < int(QVariant::UserType))
         uiFlags |= type << 24;
       d->vecMetaData << uiFlags;
-      
+
       d->lstProperties << Property(type, lstProperties[i].constData() + iSpaceIndex + 1);
    }
 
@@ -155,7 +155,7 @@ void PiiRemoteMetaObject::collectFunctions(bool listSignals)
     d->lstSignals.clear();
   else
     d->lstFunctions.clear();
-  
+
   for (int i=0; i<lstSignatures.size(); ++i)
     {
       if (!funcExp.exactMatch(QString(lstSignatures[i])))
@@ -188,7 +188,7 @@ void PiiRemoteMetaObject::collectFunctions(bool listSignals)
 
       // Add index of (dummy) parameter names. Qt allows at most 10 parameters.
       d->vecMetaData << iParameterIndex + (10 - lstParamTypes.size()) * 2;
-      
+
       // Not void
       if (iSpaceIndex != -1)
         {
