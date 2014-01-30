@@ -337,7 +337,7 @@ void PiiPointMatchingOperation::collectSample(double label, double /*weight*/)
       PiiMatrix<float> matLocation = PiiYdin::convertMatrixTo<float>(d->pLocationInput);
       if (matLocation.rows() != 1 || matLocation.columns() != d->iPointDimensions * 2)
         PII_THROW_WRONG_SIZE(d->pLocationInput, matLocation, 1, d->iPointDimensions * 2);
-      d->matNewLocations.appendRow(matLocation);
+      d->matNewLocations.appendRow(matLocation[0]);
       //Pii::transformRows(d->matPoints(0,-iPoints,-1,-1), matLocation[0], std::minus<int>());
     }
   // Otherwise find bounding box automatically.

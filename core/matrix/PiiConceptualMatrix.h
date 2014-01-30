@@ -35,7 +35,8 @@
  * Checks that the matrices (references) `a` and `b` are of equal
  * size. If they aren't, throws a PiiInvalidArgumentException.
  */
-#define PII_MATRIX_CHECK_EQUAL_SIZE(a,b) if ((a).rows() != (b).rows() || (a).columns() != (b).columns()) PII_MATRIX_SIZE_MISMATCH
+#define PII_MATRIX_CHECK_EQUAL_SIZE(a,b) if ((a).self()->rows() != (b).self()->rows() || \
+                                             (a).self()->columns() != (b).self()->columns()) PII_MATRIX_SIZE_MISMATCH
 
 /**
  * Checks that matrix `a` is square. If it isn't, throws a
@@ -56,7 +57,7 @@ template <class Matrix> struct PiiMatrixTraits;
 #define PII_MATRIX_SCALAR_ASSIGNMENT_OPERATOR(OPERATOR, FUNCTION) \
 Derived& operator OPERATOR ## = (typename PiiMatrixTraits<Derived>::value_type value) \
 { \
-  Pii::map(begin(), end(), \
+  Pii::map(self()->begin(), self()->end(),                              \
            std::bind2nd(FUNCTION<typename PiiMatrixTraits<Derived>::value_type>(), value)); \
   return selfRef(); \
 }
@@ -66,7 +67,7 @@ template <class Matrix> \
 Derived& operator OPERATOR ## = (const PiiConceptualMatrix<Matrix>& other) \
 { \
   PII_MATRIX_CHECK_EQUAL_SIZE(*this, other); \
-  Pii::map(begin(), end(), other.begin(), \
+  Pii::map(self()->begin(), self()->end(), other.self()->begin(),        \
            FUNCTION<typename PiiMatrixTraits<Derived>::value_type>()); \
   return selfRef(); \
 }
@@ -74,6 +75,8 @@ Derived& operator OPERATOR ## = (const PiiConceptualMatrix<Matrix>& other) \
 #define PII_BOTH_MATRIX_ASSIGNMENT_OPERATORS(OPERATOR, FUNCTION) \
   PII_MATRIX_MATRIX_ASSIGNMENT_OPERATOR(OPERATOR, FUNCTION) \
   PII_MATRIX_SCALAR_ASSIGNMENT_OPERATOR(OPERATOR, FUNCTION)
+
+template <class Matrix> class PiiSubmatrix;
 /// @endhide
 
 /**
@@ -152,7 +155,6 @@ Derived& operator OPERATOR ## = (const PiiConceptualMatrix<Matrix>& other) \
  * mat += mat2 / 4 + 5;
  * mat -= mat2 + mat;
  * ~~~
- *
  */
 template <class Derived> class PiiConceptualMatrix
 {
@@ -171,13 +173,10 @@ public:
   typedef typename Traits::row_iterator row_iterator;
   typedef typename Traits::const_row_iterator const_row_iterator;
 
-  inline DerivedType* self() { return static_cast<Derived*>(this); }
-  inline const DerivedType* self() const { return static_cast<const Derived*>(this); }
-  inline DerivedType& selfRef() { return *static_cast<Derived*>(this); }
-  inline const DerivedType& selfRef() const { return *static_cast<const Derived*>(this); }
-
-  int rows() const { return self()->rows(); }
-  int columns() const { return self()->columns(); }
+  inline Derived* self() { return static_cast<Derived*>(this); }
+  inline const Derived* self() const { return static_cast<const Derived*>(this); }
+  inline Derived& selfRef() { return *static_cast<Derived*>(this); }
+  inline const Derived& selfRef() const { return *static_cast<const Derived*>(this); }
 
   /**
    * Returns `true` if the matrix is empty, and `false` otherwise.
@@ -185,39 +184,32 @@ public:
    * either zero rows or zero columns. Any access to an element within
    * an empty matrix will reference illegal memory.
    */
-  bool isEmpty() const { return rows() * columns() == 0; }
-
-  const_iterator begin() const { return self()->begin(); }
-  const_iterator end() const { return self()->end(); }
+  bool isEmpty() const { return self()->rows() * self()->columns() == 0; }
 
   const_iterator constBegin() const { return self()->begin(); }
   const_iterator constEnd() const { return self()->end(); }
 
-  iterator begin() { return self()->begin(); }
-  iterator end() { return self()->end(); }
-
-  const_row_iterator rowBegin(int index) const { return self()->rowBegin(index); }
   const_row_iterator operator[] (int index) const { return self()->rowBegin(index); }
-  const_row_iterator rowEnd(int index) const { return self()->rowEnd(index); }
+  const_row_iterator rowEnd(int index) const { return self()->rowBegin(index) + self->columns(); }
   const_row_iterator constRowBegin(int index) const { return self()->rowBegin(index); }
   const_row_iterator constRowEnd(int index) const { return self()->rowEnd(index); }
-  row_iterator rowBegin(int index) { return self()->rowBegin(index); }
   row_iterator operator[] (int index) { return self()->rowBegin(index); }
-  row_iterator rowEnd(int index) { return self()->rowEnd(index); }
-  const_column_iterator columnBegin(int index) const { return self()->columnBegin(index); }
-  const_column_iterator columnEnd(int index) const { return self()->columnEnd(index); }
+  row_iterator rowEnd(int index) { return self()->rowBegin(index) + self()->columns(); }
+  const_column_iterator columnEnd(int index) const { return self()->columnBegin(index) + self()->rows(); }
   const_column_iterator constColumnBegin(int index) const { return self()->columnBegin(index); }
   const_column_iterator constColumnEnd(int index) const { return self()->columnEnd(index); }
-  column_iterator columnBegin(int index) { return self()->columnBegin(index); }
-  column_iterator columnEnd(int index) { return self()->columnEnd(index); }
+  column_iterator columnEnd(int index) { return self()->columnBegin(index) + self()->rows(); }
 
-  typename Traits::value_type operator() (int r, int c) const { return rowBegin(r)[c]; }
-  typename Traits::reference operator() (int r, int c) { return rowBegin(r)[c]; }
+  inline PiiSubmatrix<const Derived> operator() (int r, int c, int rows, int columns) const;
+  inline PiiSubmatrix<Derived> operator() (int r, int c, int rows, int columns);
+
+  typename Traits::value_type operator() (int r, int c) const { return self()->rowBegin(r)[c]; }
+  typename Traits::reference operator() (int r, int c) { return self()->rowBegin(r)[c]; }
 
   /**
    * Returns a copy of an item in the matrix.
    */
-  typename Traits::value_type at(int r, int c) const { return rowBegin(r)[c]; }
+  typename Traits::value_type at(int r, int c) const { return self()->rowBegin(r)[c]; }
 
   PII_BOTH_MATRIX_ASSIGNMENT_OPERATORS(+, std::plus)
   PII_BOTH_MATRIX_ASSIGNMENT_OPERATORS(-, std::minus)
@@ -232,7 +224,7 @@ public:
    */
   Derived& operator= (value_type value)
   {
-    std::fill(begin(), end(), value);
+    std::fill(self()->begin(), self()->end(), value);
     return selfRef();
   }
 
@@ -240,11 +232,96 @@ public:
   Derived& operator<< (const Matrix& other)
   {
     PII_MATRIX_CHECK_EQUAL_SIZE(*this, other);
-    std::transform(other.begin(), other.end(), begin(),
+    std::transform(other.begin(), other.end(), self()->begin(),
                    Pii::Cast<typename Matrix::value_type, value_type>());
     return selfRef();
   }
+  
+  /**
+   * Applies the *adaptable binary function* to all elements of
+   * this matrix and the corresponding element in *other*. The
+   * matrices must be of equal size. The result is stored in this
+   * matrix. For example, to apply the operator-= the other way, do
+   * this:
+   *
+   * ~~~(c++)
+   * PiiMatrix<int> a, b;
+   * a.map(std::minus<int>(), b);
+   * ~~~
+   *
+   * @exception PiiMathException& if this matrix is not equal to
+   * *other* in size.
+   */
+  template <class BinaryFunc, class Matrix>
+  Derived& map(BinaryFunc op, const PiiConceptualMatrix<Matrix>& other)
+  {
+    PII_MATRIX_CHECK_EQUAL_SIZE(other, *this);
+    Pii::map(self()->begin(), self()->end(), other.self()->begin(), op);
+    return selfRef();
+  }
+
+  /**
+   * Applies a binary function to all elements of this matrix and the
+   * scalar *value*. The result is stored in this matrix. An example:
+   *
+   * ~~~(c++)
+   * PiiMatrix<int> a;
+   * a.map(std::minus<int>(), 5);
+   * // The same can be achieved with
+   * a.map(std::bind2nd(std::minus<int>(), 5));
+   * // ... but which one is more readable?
+   * ~~~
+   */
+  template <class BinaryFunc>
+  Derived& map(BinaryFunc op, typename BinaryFunc::second_argument_type value)
+  {
+    Pii::map(self()->begin(), self()->end(), std::bind2nd(op, value));
+    return selfRef();
+  }
+
+  /**
+   * Applies a unary function to all elements in this matrix. For
+   * example, to negate all elements in a matrix, do the following:
+   *
+   * ~~~(c++)
+   * PiiMatrix<int> a;
+   * a.map(std::negate<int>());
+   * ~~~
+   */
+  template <class UnaryFunc>
+  Derived& map(UnaryFunc op)
+  {
+    Pii::map(self()->begin(), self()->end(), op);
+    return selfRef();
+  }
+
+protected:
+  void fixIndices(int &r, int &c, int &rows, int &columns) const
+  {
+    if (r < 0) r += self()->rows();
+    if (c < 0) c += self()->columns();
+    if (rows < 0) rows += self()->rows() - r + 1;
+    if (columns < 0) columns += self()->columns() - c + 1;
+  }
 };
+
+#include "PiiMatrixIterator.h"
+#include "PiiSubmatrix.h"
+
+template <class Derived>
+PiiSubmatrix<const Derived> PiiConceptualMatrix<Derived>::operator() (int r, int c, int rows, int columns) const
+{
+  fixIndices(r, c, rows, columns);
+  return PiiSubmatrix<const Derived>(selfRef(), r, c, rows, columns);
+}
+
+template <class Derived>
+PiiSubmatrix<Derived> PiiConceptualMatrix<Derived>::operator() (int r, int c, int rows, int columns)
+{
+  fixIndices(r, c, rows, columns);
+  return PiiSubmatrix<Derived>(selfRef(), r, c, rows, columns);
+}
+
 
 template <class Matrix, class UnaryFunction> class PiiUnaryMatrixTransform;
 template <class Matrix, class UnaryFunction>
@@ -317,9 +394,17 @@ public:
   {
     return typename Traits::const_column_iterator(_mat.columnBegin(index), _func);
   }
+  typename Traits::const_row_iterator rowEnd(int index) const
+  {
+    return typename Traits::const_row_iterator(_mat.roEnd(index), _func);
+  }
+  typename Traits::const_column_iterator columnEnd(int index) const
+  {
+    return typename Traits::const_column_iterator(_mat.columnEnd(index), _func);
+  }
 
 private:
-  Matrix _mat;
+  const Matrix& _mat;
   UnaryFunction _func;
 };
 
@@ -412,8 +497,8 @@ public:
   }
 
 private:
-  Matrix1 _mat1;
-  Matrix2 _mat2;
+  const Matrix1& _mat1;
+  const Matrix2& _mat2;
   BinaryFunction _func;
 };
 
@@ -549,9 +634,10 @@ namespace Pii
   template <class Matrix1, class Matrix2> bool equals(const PiiConceptualMatrix<Matrix1>& mat1,
                                                       const PiiConceptualMatrix<Matrix2>& mat2)
   {
-    if (mat1.rows() != mat2.rows() || mat1.columns() != mat2.columns())
+    if (mat1.self()->rows() != mat2.self()->rows() ||
+        mat1.self()->columns() != mat2.self()->columns())
       return false;
-    return std::equal(mat1.begin(), mat1.end(), mat2.begin());
+    return std::equal(mat1.self()->begin(), mat1.self()->end(), mat2.self()->begin());
   }
 }
 

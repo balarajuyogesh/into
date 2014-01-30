@@ -94,7 +94,7 @@ namespace Pii
               }
             // Fill in the result matrix with the polynomial coeffs
             // calculated from one row of measurements.
-            result.appendRow(matZ * Pii::transpose(pseudoInverse(matH)));
+            result.appendRow((matZ * Pii::transpose(pseudoInverse(matH)))[0]);
           }
         return result;
       }

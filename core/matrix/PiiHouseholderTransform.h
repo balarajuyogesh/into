@@ -157,7 +157,7 @@ namespace Pii
    * temporary storage of calculation results.
    */
   template <class Matrix, class InputIterator>
-  void reflectColumns(PiiConceptualMatrix<Matrix>& A,
+  void reflectColumns(Matrix& A,
                       InputIterator v,
                       typename Matrix::value_type tau,
                       typename Matrix::value_type* bfr)
@@ -186,11 +186,8 @@ namespace Pii
     }
   }
 
-  /**
-   * temporary buffer.
-   */
   template <class Matrix, class InputIterator>
-  inline void reflectColumns(PiiConceptualMatrix<Matrix>& A,
+  inline void reflectColumns(Matrix& A,
                              InputIterator v,
                              typename Matrix::value_type tau)
   {
@@ -221,7 +218,7 @@ namespace Pii
    * @see reflectColumns()
    */
   template <class Matrix, class InputIterator>
-  void reflectRows(PiiConceptualMatrix<Matrix>& A,
+  void reflectRows(Matrix& A,
                    InputIterator v,
                    typename Matrix::value_type tau)
   {
@@ -311,7 +308,7 @@ namespace Pii
    */
   template <class Matrix>
   void unpackReflectors(MatrixDirection direction,
-                        const PiiConceptualMatrix<Matrix>& V,
+                        const Matrix& V,
                         const typename Matrix::value_type* tau,
                         PiiMatrix<typename Matrix::value_type>& T,
                         PiiMatrix<typename Matrix::value_type>& gram,

@@ -48,7 +48,6 @@
  * after training. &theta; is a desicion threshold, *k*()
  * denotes the kernel function, and *y* is the binary classification
  * of a training sample (0 or 1).
- *
  */
 template <class SampleSet> class PiiKernelAdatron :
   public PiiLearningAlgorithm<SampleSet>,

@@ -198,7 +198,8 @@ void PiiBoostClassifier<SampleSet>::learn(const SampleSet& samples,
           dIncorrectWeight = M_E;
           break;
         }
-      double dWeightSum = updateWeights(samples, labels, vecHypotheses, vecWeights, dCorrectWeight, dIncorrectWeight);
+      //double dWeightSum =
+      updateWeights(samples, labels, vecHypotheses, vecWeights, dCorrectWeight, dIncorrectWeight);
 
       // Start backtracking when three weak classifiers have been
       // selected.
@@ -219,7 +220,8 @@ void PiiBoostClassifier<SampleSet>::learn(const SampleSet& samples,
                 break;
             }
           if (bClassifierExcluded)
-            dWeightSum = updateWeights(samples, labels, vecHypotheses, vecWeights, dCorrectWeight, dIncorrectWeight);
+            // dWeightSum =
+            updateWeights(samples, labels, vecHypotheses, vecWeights, dCorrectWeight, dIncorrectWeight);
           // if (dWeightSum < J*) break;
         } // FloatBoost
       PII_TRY_CONTINUE(this->controller(), double(d->lstClassifiers.size()+1)/d->iMaxClassifiers);

@@ -60,6 +60,7 @@ unix {
 }
 linux: QMAKE_CXXFLAGS += -fvisibility=hidden
 macx*: CONFIG += x86
+linux-g++: QMAKE_CXXFLAGS += -Wno-psabi
 
 equals(MODE, release) {
   unix:CONFIG += separate_debug_info

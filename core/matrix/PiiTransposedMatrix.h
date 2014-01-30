@@ -24,8 +24,8 @@
 template <class Matrix> class PiiTransposedMatrixIterator
 {
 public:
-  typedef std::forward_iterator_tag iterator_category;
   typedef typename Matrix::const_column_iterator ColumnIterator;
+  typedef typename std::iterator_traits<ColumnIterator>::iterator_category iterator_category;
   typedef typename std::iterator_traits<ColumnIterator>::difference_type difference_type;
   typedef typename std::iterator_traits<ColumnIterator>::value_type value_type;
   typedef typename std::iterator_traits<ColumnIterator>::pointer pointer;
@@ -52,9 +52,11 @@ public:
     _iCurrentColumn(other._iCurrentColumn)
   {}
 
+  value_type operator[] (int index) const { return *(*this + index); }
+
   PiiTransposedMatrixIterator& operator= (const PiiTransposedMatrixIterator& other)
   {
-    const_cast<Matrix*>(_pMatrix) = other._pMatrix;
+    _pMatrix = other._pMatrix;
     _columnBegin = other._columnBegin;
     _columnEnd = other._columnEnd;
     _iCurrentColumn = other._iCurrentColumn;
@@ -73,6 +75,18 @@ public:
     return *this;
   }
 
+  PiiTransposedMatrixIterator& operator-- ()
+  {
+    if (_columnBegin == _pMatrix->columnBegin(_iCurrentColumn) &&
+        _iCurrentColumn > 0)
+      {
+        --_iCurrentColumn;
+        _columnEnd = _pMatrix->columnEnd(_iCurrentColumn);
+        _columnBegin = _columnEnd - 1;
+      }
+    return *this;
+  }
+
   PiiTransposedMatrixIterator& operator++ (int)
   {
     PiiTransposedMatrixIterator tmp(*this);
@@ -80,10 +94,52 @@ public:
     return tmp;
   }
 
+  PiiTransposedMatrixIterator& operator-- (int)
+  {
+    PiiTransposedMatrixIterator tmp(*this);
+    --(*this);
+    return tmp;
+  }
+
+  PiiTransposedMatrixIterator& operator+= (int amount)
+  {
+    int iPos = _columnBegin - _pMatrix->columnBegin(_iCurrentColumn) + amount;
+    int iColumn = iPos / _pMatrix->rows();
+    int iRow = iPos % _pMatrix->rows();
+    _iCurrentColumn +=  iColumn;
+    _columnBegin = _pMatrix->columnBegin(_iCurrentColumn) + iRow;
+    _columnEnd = _pMatrix->columnBegin(_iCurrentColumn);
+    return *this;
+  }
+  PiiTransposedMatrixIterator& operator-= (int amount)
+  {
+    return operator+= (-amount);
+  }
+
+  PiiTransposedMatrixIterator operator+ (int amount) const
+  {
+    PiiTransposedMatrixIterator tmp(*this);
+    return tmp += amount;
+  }
+
+  PiiTransposedMatrixIterator operator- (int amount) const
+  {
+    PiiTransposedMatrixIterator tmp(*this);
+    return tmp += -amount;
+  }
+
   bool operator== (const PiiTransposedMatrixIterator& other) const { return _columnBegin == other._columnBegin; }
   bool operator!= (const PiiTransposedMatrixIterator& other) const { return _columnBegin != other._columnBegin; }
 
   value_type operator* () const { return *_columnBegin; }
+
+  difference_type operator- (const PiiTransposedMatrixIterator& other) const
+  {
+    return
+      (_columnBegin - _pMatrix->columnBegin(_iCurrentColumn)) -
+      (other._columnBegin - other._pMatrix->columnBegin(other._iCurrentColumn)) +
+      (_iCurrentColumn - other._iCurrentColumn) * _pMatrix.rows();
+  }
 
 private:
   const Matrix* _pMatrix;
@@ -126,19 +182,15 @@ public:
   typedef PiiMatrixTraits<PiiTransposedMatrix<Matrix> > Traits;
 
   PiiTransposedMatrix(const Matrix& matrix) : _matrix(matrix) {}
-  PiiTransposedMatrix(const PiiTransposedMatrix& other) : _matrix(other._matrix) {}
-  PiiTransposedMatrix& operator= (const PiiTransposedMatrix& other)
-  {
-    _matrix = other._matrix;
-    return *this;
-  }
 #ifdef PII_CXX11
-  PiiTransposedMatrix(PiiTransposedMatrix&& other) : _matrix(std::move(other._matrix)) {}
-  PiiTransposedMatrix& operator= (PiiTransposedMatrix&& other)
-  {
-    std::swap(_matrix, other._matrix);
-    return *this;
-  }
+  PiiTransposedMatrix(PiiTransposedMatrix&& other) :
+    _matrix(std::move(other._matrix))
+  {}
+  PiiTransposedMatrix& operator= (const PiiTransposedMatrix& other) = delete;
+#else
+  PiiTransposedMatrix(const PiiTransposedMatrix& other) :
+    _matrix(other._matrix)
+  {}
 #endif
 
   typename Traits::const_iterator begin() const { return typename Traits::const_iterator(&_matrix); }
@@ -152,8 +204,6 @@ public:
 
   int rows() const { return _matrix.columns(); }
   int columns() const { return _matrix.rows(); }
-
-  typename Traits::value_type operator() (int r, int c) const { return _matrix(c,r); }
 
 private:
   Matrix _matrix;

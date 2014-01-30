@@ -2340,10 +2340,12 @@ PiiMatrix<PII_COMBINE_TYPES(typename Matrix1::value_type, typename Matrix2::valu
 operator* (const PiiConceptualMatrix<Matrix1>& mat1,
            const PiiConceptualMatrix<Matrix2>& mat2)
 {
-  const int iCols1 = mat1.columns();
-  if (iCols1 != mat2.rows())
+  const Matrix1& m1 = mat1.selfRef();
+  const Matrix2& m2 = mat2.selfRef();
+  const int iCols1 = m1.columns();
+  if (iCols1 != m2.rows())
     PII_MATRIX_SIZE_MISMATCH;
-  const int iRows1 = mat1.rows(), iCols2 = mat2.columns();
+  const int iRows1 = m1.rows(), iCols2 = m2.columns();
 
   typedef PII_COMBINE_TYPES(typename Matrix1::value_type, typename Matrix2::value_type) T;
   PiiMatrix<T, Matrix1::staticRows, Matrix2::staticColumns> result(PiiMatrix<T>::uninitialized(iRows1, iCols2));
@@ -2351,7 +2353,7 @@ operator* (const PiiConceptualMatrix<Matrix1>& mat1,
     {
       T* pRow = result[r];
       for (int c=0; c<iCols2; ++c)
-        pRow[c] = Pii::innerProductN(mat1.rowBegin(r), iCols1, mat2.columnBegin(c), T(0));
+        pRow[c] = Pii::innerProductN(m1.rowBegin(r), iCols1, m2.columnBegin(c), T(0));
     }
   return result;
 }
@@ -2999,7 +3001,7 @@ namespace Pii
    * ~~~
    */
   template <class Matrix, class UnaryFunction, class BinaryPredicate>
-  typename UnaryFunction::result_type findSpecialValue(const PiiConceptualMatrix<Matrix>& mat,
+  typename UnaryFunction::result_type findSpecialValue(const Matrix& mat,
                                                        BinaryPredicate op,
                                                        UnaryFunction f,
                                                        typename UnaryFunction::result_type defaultValue,

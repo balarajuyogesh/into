@@ -97,7 +97,7 @@ template <class T> void PiiHoughTransformOperation::findPeaks(const PiiMatrix<T>
   for (int i=0; i<lstPeaks.size(); ++i)
     {
       matPeaks.appendRow(d->hough.distance(lstPeaks[i].row), d->hough.angle(lstPeaks[i].column));
-      matCoordinates.appendRow(d->hough.lineEnds(lstPeaks[i].row, lstPeaks[i].column));
+      matCoordinates.appendRow(d->hough.lineEnds(lstPeaks[i].row, lstPeaks[i].column)[0]);
     }
 
   outputAt(1)->emitObject(matPeaks);

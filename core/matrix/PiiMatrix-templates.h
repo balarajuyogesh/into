@@ -21,132 +21,6 @@
 
 /**** Iterators ****/
 
-template <class T> class PiiMatrixIterator
-{
-public:
-  typedef std::random_access_iterator_tag iterator_category;
-  typedef ptrdiff_t difference_type;
-  typedef typename Pii::ToNonConst<T>::Type value_type;
-  typedef typename Pii::IfClass<Pii::IsConst<T>,
-                                const PiiMatrix<value_type>&,
-                                PiiMatrix<value_type>&>::Type MatrixRef;
-  typedef T* pointer;
-  typedef T& reference;
-
-  PiiMatrixIterator(pointer firstRow, pointer row, int columns, size_t stride) :
-    _pFirstRow(firstRow), _pRow(row), _iColumn(0), _iColumns(columns), _iStride(stride)
-  {}
-  PiiMatrixIterator(const PiiMatrixIterator& other) :
-    _pFirstRow(other._pFirstRow),
-    _pRow(other._pRow),
-    _iColumn(other._iColumn),
-    _iColumns(other._iColumns),
-    _iStride(other._iStride)
-  {}
-  PiiMatrixIterator(MatrixRef mat) :
-    _pFirstRow(mat[0]), _pRow(_pFirstRow),
-    _iColumn(0), _iColumns(mat.columns()),
-    _iStride(mat.stride())
-  {}
-  PiiMatrixIterator(MatrixRef mat, int row) :
-    _pFirstRow(mat[0]), _pRow(mat[row]),
-    _iColumn(0), _iColumns(mat.columns()),
-    _iStride(mat.stride())
-  {}
-
-  reference operator* () const { return _pRow[_iColumn]; }
-  pointer operator-> () const { return _pRow + _iColumn; }
-
-  PiiMatrixIterator& operator= (const PiiMatrixIterator& other)
-  {
-    _pFirstRow = other._pFirstRow;
-    _pRow = other._pRow;
-    _iColumn = other._iColumn;
-    _iColumns = other._iColumns;
-    _iStride = other._iStride;
-    return *this;
-  }
-  pointer addPtr(ptrdiff_t offset) const { return reinterpret_cast<pointer>((char*)_pRow + offset); }
-  reference operator[] (int i) const { return *(*this + i); }
-  bool operator== (const PiiMatrixIterator &other) const { return (_pRow + _iColumn) == (other._pRow + other._iColumn); }
-  bool operator!= (const PiiMatrixIterator &other) const { return  (_pRow + _iColumn) != (other._pRow + other._iColumn); }
-  bool operator< (const PiiMatrixIterator& other) const { return  (_pRow + _iColumn) < (other._pRow + other._iColumn); }
-  bool operator<= (const PiiMatrixIterator& other) const { return  (_pRow + _iColumn) <= (other._pRow + other._iColumn); }
-  bool operator> (const PiiMatrixIterator& other) const { return  (_pRow + _iColumn) > (other._pRow + other._iColumn); }
-  bool operator>= (const PiiMatrixIterator& other) const { return  (_pRow + _iColumn) >= (other._pRow + other._iColumn); }
-
-  PiiMatrixIterator& operator++ ()
-  {
-    if (++_iColumn >= _iColumns)
-      {
-        _iColumn = 0;
-        _pRow = addPtr(_iStride);
-      }
-    return *this;
-  }
-  PiiMatrixIterator operator++(int)
-  {
-    PiiMatrixIterator tmp(*this);
-    operator++();
-    return tmp;
-  }
-  PiiMatrixIterator& operator--()
-  {
-    if (--_iColumn < 0)
-      {
-        _iColumn = _iColumns-1;
-        _pRow = addPtr(-_iStride);
-      }
-    return *this;
-  }
-  PiiMatrixIterator operator--(int)
-  {
-    PiiMatrixIterator tmp(*this);
-    operator--();
-    return tmp;
-  }
-  PiiMatrixIterator& operator+= (int i)
-  {
-    if (_iColumns == 0) return *this;
-    int iNewColumn = _iColumn + i;
-    if (iNewColumn >= 0)
-      {
-        _pRow = addPtr(iNewColumn/_iColumns * _iStride);
-        _iColumn = iNewColumn % _iColumns;
-      }
-    else
-      {
-        ++iNewColumn;
-        _pRow = addPtr((iNewColumn/_iColumns - 1) * _iStride);
-        _iColumn = _iColumns - 1 + iNewColumn % _iColumns;
-      }
-    return *this;
-  }
-  PiiMatrixIterator& operator-= (int i) { return operator+= (-i); }
-  PiiMatrixIterator operator+ (int i) const { PiiMatrixIterator tmp(*this); return tmp += i; }
-  PiiMatrixIterator operator- (int i) const { PiiMatrixIterator tmp(*this); return tmp -= i; }
-  difference_type operator- (const PiiMatrixIterator& other) const
-  {
-    return _iStride != 0 ?
-      ((char*)(_pRow) - (char*)(other._pRow))/ptrdiff_t(_iStride) * _iColumns + _iColumn - other._iColumn :
-      0;
-  }
-
-  int column() const { return _iColumn; }
-  int row() const
-  {
-    return _iStride != 0 ?
-      ((char*)_pRow - (char*)_pFirstRow) / _iStride :
-      0;
-  }
-
-private:
-  pointer _pFirstRow, _pRow;
-  int _iColumn, _iColumns;
-  size_t _iStride;
-};
-
-
 template <class T> class PiiMatrixColumnIterator
 {
 public:
@@ -234,6 +108,69 @@ private:
   size_t _iStride;
 };
 
+/***** Submatrix specialization *****/
+
+template <class T>
+struct PiiMatrixTraits<PiiSubmatrix<PiiMatrix<T> > >
+{
+  enum { staticRows = -1, staticColumns = -1 };
+
+  typedef PiiMatrix<T> Matrix;
+  typedef typename Matrix::value_type value_type;
+  typedef typename Matrix::reference reference;
+  typedef PiiMatrixIterator<const T*> const_iterator;
+  typedef PiiMatrixIterator<T*> iterator;
+
+  typedef typename Matrix::const_row_iterator const_row_iterator;
+  typedef typename Matrix::const_column_iterator const_column_iterator;
+  typedef typename Matrix::row_iterator row_iterator;
+  typedef typename Matrix::column_iterator column_iterator;
+};
+
+template <class T>
+class PiiSubmatrix<PiiMatrix<T> > :
+  public PiiSubmatrixBase<PiiSubmatrix<PiiMatrix<T> >, PiiMatrix<T> >
+{
+public:
+  typedef PiiSubmatrixBase<PiiSubmatrix, PiiMatrix<T> > SuperType;
+  typedef PiiMatrixTraits<PiiSubmatrix> Traits;
+
+  PiiSubmatrix(PiiMatrix<T>& mat, int r, int c, int rows, int columns) :
+    SuperType(mat, r, c, rows, columns)
+  {}
+
+  typename Traits::const_iterator begin() const
+  {
+    return typename Traits::const_iterator(this->_mat.row(this->_iRow) + this->_iColumn,
+                                           this->_iColumns,
+                                           this->_mat.stride());
+  }
+  typename Traits::const_iterator end() const
+  {
+    return typename Traits::const_iterator(this->_mat.row(this->_iRow) + this->_iColumn,
+                                           this->_mat.row(this->_iRow + this->_iRows) + this->_iColumn,
+                                           this->_iColumns,
+                                           this->_mat.stride());
+  }
+  typename Traits::iterator begin()
+  {
+    return typename Traits::iterator(this->_mat.row(this->_iRow) + this->_iColumn,
+                                     this->_iColumns,
+                                     this->_mat.stride());
+  }
+  typename Traits::iterator end()
+  {
+    return typename Traits::iterator(this->_mat.row(this->_iRow) + this->_iColumn,
+                                     this->_mat.row(this->_iRow + this->_iRows) + this->_iColumn,
+                                     this->_iColumns,
+                                     this->_mat.stride());
+  }
+
+  using PiiConceptualMatrix<PiiSubmatrix>::operator=;
+};
+
+
+
 /**** Matrix functions ****/
 
 template <class T> PiiMatrix<T,-1,-1>::PiiMatrix(int rows, int columns, VaArgType firstElement, ...) :
@@ -247,26 +184,15 @@ template <class T> PiiMatrix<T,-1,-1>::PiiMatrix(int rows, int columns, VaArgTyp
   va_end(argp);
 }
 
-template <class T> template <class Matrix>
+template <class T>
+template <class Matrix>
 PiiMatrix<T>& PiiMatrix<T,-1,-1>::operator= (const PiiConceptualMatrix<Matrix>& other)
 {
-  d->release();
-  d = PiiMatrixData::createUninitializedData(other.rows(), other.columns(), other.columns() * sizeof(T));
-  Pii::transform(other.begin(), other.end(), begin(), Pii::Cast<typename Matrix::value_type,T>());
-  return *this;
-}
-
-template <class T> template <class Matrix>
-PiiMatrix<T>& PiiMatrix<T,-1,-1>::assign(const PiiConceptualMatrix<Matrix>& other)
-{
-  PII_MATRIX_CHECK_EQUAL_SIZE(*this, other);
-  if (d->iRefCount != 1)
-    {
-      d->release();
-      d = createUninitializedData(other.rows(), other.columns(), other.columns() * sizeof(T));
-    }
-  Pii::transform(other.begin(), other.end(), begin(), Pii::Cast<typename Matrix::value_type,T>());
-  return *this;
+  PiiMatrix matCopy(PiiMatrixData::createUninitializedData(other.self()->rows(), other.self()->columns(),
+                                                           other.self()->columns() * sizeof(T)));
+  Pii::transform(other.self()->begin(), other.self()->end(), matCopy.begin(),
+                 Pii::Cast<typename Matrix::value_type,T>());
+  return *this = matCopy;
 }
 
 template <class T>
@@ -274,7 +200,7 @@ template <class Matrix> PiiFilteredMatrix<const PiiMatrix<T>, Matrix>
 PiiMatrix<T,-1,-1>::operator() (const PiiConceptualMatrix<Matrix>& mask) const
 {
   PII_MATRIX_CHECK_EQUAL_SIZE(*this, mask);
-  return Pii::filteredMatrix(*this, *mask.self());
+  return Pii::filteredMatrix(*this, mask.selfRef());
 }
 
 template <class T>
@@ -282,29 +208,16 @@ template <class Matrix> PiiFilteredMatrix<PiiMatrix<T>, Matrix>
 PiiMatrix<T,-1,-1>::operator() (const PiiConceptualMatrix<Matrix>& mask)
 {
   PII_MATRIX_CHECK_EQUAL_SIZE(*this, mask);
-  return Pii::filteredMatrix(*this, *mask.self());
+  return Pii::filteredMatrix(*this, mask.selfRef());
 }
 
-template <class T> typename PiiMatrix<T>::Traits::row_iterator PiiMatrix<T,-1,-1>::insertRow(int index, const PiiMatrix<T>& row)
+template <class T>
+template <class Iterator>
+typename PiiMatrix<T>::Traits::row_iterator PiiMatrix<T,-1,-1>::insertRow(int index, Iterator row)
 {
   detach();
   T* pNewRow = static_cast<T*>(PiiTypelessMatrix::insertRow(index, columns() * sizeof(T)));
-  // Not a column vector
-  if (row.columns() != 1)
-    memcpy(pNewRow, row[0], qMin(row.columns(), columns()) * sizeof(T));
-  // Column vector
-  else
-    Pii::copyN(row.columnBegin(0), qMin(row.rows(), columns()), pNewRow);
-
-  return pNewRow;
-}
-
-template <class T> typename PiiMatrix<T>::Traits::row_iterator PiiMatrix<T,-1,-1>::insertRow(int index, const T* row)
-{
-  detach();
-  size_t iBytesPerRow = columns() * sizeof(T);
-  T* pNewRow = static_cast<T*>(PiiTypelessMatrix::insertRow(index, iBytesPerRow));
-  memcpy(pNewRow, row, iBytesPerRow);
+  std::copy(row, row + columns(), pNewRow);
   return pNewRow;
 }
 
@@ -339,48 +252,26 @@ template <class T> typename PiiMatrix<T>::Traits::row_iterator PiiMatrix<T,-1,-1
   return pNewRow;
 }
 
-template <class T> void PiiMatrix<T,-1,-1>::appendRows(const PiiMatrix<T>& other)
+template <class T>
+template <class Matrix>
+void PiiMatrix<T,-1,-1>::appendRows(const Matrix& other)
 {
   if (this->isEmpty())
-    {
-      *this = other;
-      return;
-    }
+    resize(0, other.columns());
 
   reserve(rows() + other.rows());
-  size_t iBytesPerRow = columns() * sizeof(T);
   for (int i=0; i<other.rows(); ++i)
-    memcpy(PiiTypelessMatrix::insertRow(-1, iBytesPerRow),
-           other[i],
-           iBytesPerRow);
+    appendRow(other[i]);
 }
 
-
-template <class T> typename PiiMatrix<T>::Traits::column_iterator PiiMatrix<T,-1,-1>::insertColumn(int index, const PiiMatrix<T>& column)
+template <class T>
+template <class Iterator>
+typename PiiMatrix<T>::Traits::column_iterator PiiMatrix<T,-1,-1>::insertColumn(int index, Iterator column)
 {
   detach();
   T* pColumnStart = static_cast<T*>(PiiTypelessMatrix::insertColumn(index, sizeof(T)));
   typename Traits::column_iterator ci(pColumnStart, stride());
-  if (column.rows() == 1)
-    {
-      typename Traits::const_row_iterator r = column.rowBegin(0);
-      Pii::copyN(r, qMin(column.columns(), rows()), ci);
-    }
-  else
-    {
-      typename Traits::const_column_iterator c = column.columnBegin(0);
-      Pii::copyN(c, qMin(column.rows(), rows()), ci);
-    }
-  return ci;
-}
-
-
-template <class T> typename PiiMatrix<T>::Traits::column_iterator PiiMatrix<T,-1,-1>::insertColumn(int index, const T* column)
-{
-  detach();
-  T* pColumnStart = static_cast<T*>(PiiTypelessMatrix::insertColumn(index, sizeof(T)));
-  typename Traits::column_iterator ci(pColumnStart, stride());
-  Pii::copy(column, column + rows(), ci);
+  std::copy(column, column + rows(), ci);
   return ci;
 }
 
@@ -449,7 +340,7 @@ template <class T> PiiMatrix<T> PiiMatrix<T,-1,-1>::identity(int size)
 template <class T> PiiMatrix<T> PiiMatrix<T,-1,-1>::column(int column) const
 {
   PiiMatrix<T> result(uninitialized(1, rows()));
-  Pii::copy(columnBegin(column), columnEnd(column), result.rowBegin(0));
+  std::copy(columnBegin(column), columnEnd(column), result.rowBegin(0));
   return result;
 }
 

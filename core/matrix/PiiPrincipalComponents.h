@@ -46,7 +46,7 @@ namespace Pii
    * @see subtractMean()
    */
   template <class Matrix>
-  PiiMatrix<typename Matrix::value_type> principalComponents(const PiiConceptualMatrix<Matrix>& X,
+  PiiMatrix<typename Matrix::value_type> principalComponents(const Matrix& X,
                                                              PiiMatrix<typename Matrix::value_type>* S = 0)
   {
     // SVD: X = USV' -> X' = VS'U'
@@ -72,12 +72,12 @@ namespace Pii
    *
    * @see subtractMean()
    */
-  template <class Matrix> PiiMatrix<typename Matrix::value_type> pcaDecorrelate(const PiiConceptualMatrix<Matrix>& X)
+  template <class Matrix> PiiMatrix<typename Matrix::value_type> pcaDecorrelate(const Matrix& X)
   {
     typedef typename Matrix::value_type T;
     PiiMatrix<T> matU;
     // Singular values as a row vector
-    PiiMatrix<T> matS = svDecompose<Matrix>(X, &matU, 0, Pii::SvdFullU);
+    PiiMatrix<T> matS = svDecompose(X, &matU, 0, Pii::SvdFullU);
     // Optimized multiplication of U*S (S is diagonal)
     transformRows(matU, matS[0], std::multiplies<T>());
     return matU;

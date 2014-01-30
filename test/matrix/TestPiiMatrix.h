@@ -43,8 +43,8 @@ private slots:
   void reserve();
 
 private:
-  template <class T> void setTo(PiiMatrix<T>& matrix, T value);
-  template <class T> void setSubmatrix(PiiMatrix<T>& matrix, T value);
+  template <class Matrix> void setTo(Matrix& matrix, typename Matrix::value_type value);
+  template <class Matrix> void setSubmatrix(Matrix& matrix, typename Matrix::value_type value);
 };
 
 #endif //_TESTPIIMATRIX_H

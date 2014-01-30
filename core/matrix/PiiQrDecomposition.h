@@ -171,7 +171,7 @@ namespace Pii
    * @see qrUnpack()
    */
   template <class Matrix>
-  void qrDecompose(PiiConceptualMatrix<Matrix>& A, typename Matrix::value_type* tau, typename Matrix::value_type* bfr)
+  void qrDecompose(Matrix& A, typename Matrix::value_type* tau, typename Matrix::value_type* bfr)
   {
     typedef typename Matrix::value_type Real;
 
@@ -207,7 +207,7 @@ namespace Pii
         householderTransform(column, iRowsLeft, tau + i, &beta);
         // Apply the reflection transform to the rest of A.
         if (i < iCols-1)
-          reflectColumns((PiiMatrix<Real>&)A.selfRef()(i, i+1, -1, -1), column, tau[i], bfr);
+          reflectColumns(A(i, i+1, -1, -1).selfRef(), column, tau[i], bfr);
 
         /* Transform the current column as well. Actually, we only
            store the first element as all the rest are zeros. The rest
@@ -261,7 +261,7 @@ namespace Pii
    * @see qrUnpack()
    */
   template <class Matrix>
-  void qrDecompose(PiiConceptualMatrix<Matrix>& A,
+  void qrDecompose(Matrix& A,
                    PiiMatrix<typename Matrix::value_type>& tau)
   {
     typedef typename Matrix::value_type Real;
@@ -327,9 +327,9 @@ namespace Pii
            the advice.
         */
         matA1.resize(iRowsLeft, iCurrentBlockSize);
-        matA1 << A.selfRef()(iBlockStart, iBlockStart, iRowsLeft, iCurrentBlockSize);
+        matA1 << A(iBlockStart, iBlockStart, iRowsLeft, iCurrentBlockSize);
         qrDecompose(matA1, pTauRow, pBfr);
-        A.selfRef()(iBlockStart, iBlockStart, iRowsLeft, iCurrentBlockSize) << matA1;
+        A(iBlockStart, iBlockStart, iRowsLeft, iCurrentBlockSize) << matA1;
 
         // Done with the block. Now update blocks A12 and A22 (A2)
         if (iBlockStart+iCurrentBlockSize < iCols)
@@ -363,11 +363,11 @@ namespace Pii
                    A2 <- A2 + A1 T'A1'A2
                 */
 
-                A.selfRef()(iBlockStart, iBlockStart + iCurrentBlockSize, -1, -1) +=      // A2  +=
+                A(iBlockStart, iBlockStart + iCurrentBlockSize, -1, -1) +=      // A2  +=
                   matA1 *                                                       // A1  *
                   transpose(matT(0,0, iCurrentBlockSize, iCurrentBlockSize)) *  // T'  *
                   transpose(matA1) *                                            // A1' *
-                  A.selfRef()(iBlockStart, iBlockStart + iCurrentBlockSize, -1, -1);      // A2
+                  A(iBlockStart, iBlockStart + iCurrentBlockSize, -1, -1);      // A2
               }
             // The remaining part is small. Use the reflector vectors
             // directly.
@@ -376,7 +376,7 @@ namespace Pii
                 for (int i=0; i < iCurrentBlockSize; ++i)
                   {
                     matA1(i,i) = 1; // Reflector vector has one as its first element
-                    reflectColumns((PiiMatrix<Real>&)A.selfRef()(iBlockStart+i, iBlockStart+iCurrentBlockSize, -1, -1),
+                    reflectColumns(A(iBlockStart+i, iBlockStart+iCurrentBlockSize, -1, -1).selfRef(),
                                    matA1.columnBegin(i)+i, pTauRow[i], pBfr);
                   }
               }
@@ -393,7 +393,7 @@ namespace Pii
    * matrix unpacked. Optionally, the R matrix will also be filled.
    */
   template <class Matrix>
-  PiiMatrix<typename Matrix::value_type> qrDecompose(const PiiConceptualMatrix<Matrix>& A,
+  PiiMatrix<typename Matrix::value_type> qrDecompose(const Matrix& A,
                                                      PiiMatrix<typename Matrix::value_type>* R = 0,
                                                      QrUnpackStyle style = UnpackEconomyQR)
   {

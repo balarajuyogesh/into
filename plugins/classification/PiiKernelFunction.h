@@ -18,7 +18,7 @@
 
 #include "PiiDistanceMeasure.h"
 
-#ifdef PII_CXX11
+#ifdef PII_CXX11_AND_IF_GCC_IMPLEMENTED_IT
 template <class SampleSet> using PiiKernelFunction = PiiDistanceMeasure<SampleSet>
 #else
 #  define PiiKernelFunction PiiDistanceMeasure

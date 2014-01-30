@@ -107,7 +107,7 @@ namespace Pii
             if (iColsLeft > 0)
               {
                 // Apply the reflection to the rest of the matrix...
-                reflectColumns((PiiMatrix<Real>&)A(i, i+1, -1, -1), column, pTauQ[i], pBfr);
+                reflectColumns(A(i, i+1, -1, -1).selfRef(), column, pTauQ[i], pBfr);
                 // ... and this column.
                 *column = beta;
 
@@ -116,7 +116,7 @@ namespace Pii
                 // right of superdiagonal.
                 householderTransform(row, iColsLeft, pTauP + i, &beta);
                 // Apply the reflection to the rest of the matrix...
-                reflectRows((PiiMatrix<Real>&)A(i+1, i+1, -1, -1), row, pTauP[i]);
+                reflectRows(A(i+1, i+1, -1, -1).selfRef(), row, pTauP[i]);
                 // ... and this row
                 *row = beta;
               }
@@ -139,12 +139,12 @@ namespace Pii
             householderTransform(row, iColsLeft, pTauP + i, &beta);
             if (iRowsLeft > 0)
               {
-                reflectRows((PiiMatrix<Real>&)A(i+1, i, -1, -1), row, pTauP[i]);
+                reflectRows(A(i+1, i, -1, -1).selfRef(), row, pTauP[i]);
                 *row = beta;
 
                 typename PiiMatrix<Real>::column_iterator column = A.columnBegin(i)+i+1;
                 householderTransform(column, iRowsLeft, pTauQ + i, &beta);
-                reflectColumns((PiiMatrix<Real>&)A(i+1, i+1, -1, -1), column, pTauQ[i], pBfr);
+                reflectColumns(A(i+1, i+1, -1, -1).selfRef(), column, pTauQ[i], pBfr);
                 *column = beta;
               }
             else

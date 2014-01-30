@@ -54,7 +54,7 @@ void TestPiiMatrixDecompositions::unpackRowReflectors(const PiiMatrix<double>& m
                                 matTau[0] + r,
                                 &dBeta);
       if (r < iVectors - 1)
-        Pii::reflectRows((PiiMatrix<double>&)matTransform(r+1, r+diagonal, -1, -1),
+        Pii::reflectRows(matTransform(r+1, r+diagonal, -1, -1).selfRef(),
                          matTransform.rowBegin(r)+r+diagonal,
                          matTau(0,r));
     }
@@ -87,7 +87,7 @@ void TestPiiMatrixDecompositions::unpackColumnReflectors(const PiiMatrix<double>
                                 matTau[0] + c,
                                 &dBeta);
       if (c < iVectors - 1)
-        Pii::reflectColumns((PiiMatrix<double>&)matTransform(c+diagonal, c+1, -1, -1),
+        Pii::reflectColumns(matTransform(c+diagonal, c+1, -1, -1).selfRef(),
                             matTransform.columnBegin(c)+c+diagonal,
                             matTau(0,c));
     }

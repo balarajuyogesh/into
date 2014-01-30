@@ -36,7 +36,7 @@ namespace Pii
    * pseudoinverse in a numerically stable way.
    */
   template <class Matrix>
-  PiiMatrix<typename Matrix::value_type> pseudoInverse(const PiiConceptualMatrix<Matrix>& A)
+  PiiMatrix<typename Matrix::value_type> pseudoInverse(const Matrix& A)
   {
     typedef typename Matrix::value_type T;
     // A = USV* -> A+ = VS+U*

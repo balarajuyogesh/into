@@ -95,7 +95,7 @@ public:
                                                 typename Pii::OnlyIf<rowCount == Matrix::staticRows &&
                                                 columnCount == Matrix::staticColumns, Matrix>::Type >& other)
   {
-    Pii::copy(other.begin(), other.end(), begin());
+    Pii::copy(other.self()->begin(), other.self()->end(), begin());
     return *this;
   }
 
@@ -104,7 +104,7 @@ public:
                                                 columnCount != Matrix::staticColumns, Matrix>::Type >& other)
   {
     PII_MATRIX_CHECK_EQUAL_SIZE(*this, other);
-    Pii::copy(other.begin(), other.end(), begin());
+    Pii::copy(other.self()->begin(), other.self()->end(), begin());
     return *this;
   }
 
@@ -240,19 +240,14 @@ template <class T> struct PiiMatrixTraits<PiiMatrix<T,-1,-1> >
 
   typedef T value_type;
   typedef T& reference;
-  typedef PiiMatrixIterator<T> iterator;
-  typedef PiiMatrixIterator<const T> const_iterator;
+  typedef PiiMatrixIterator<T*> iterator;
+  typedef PiiMatrixIterator<const T*> const_iterator;
   typedef PiiMatrixColumnIterator<T> column_iterator;
   typedef PiiMatrixColumnIterator<const T> const_column_iterator;
   typedef T* row_iterator;
   typedef const T* const_row_iterator;
 };
 
-template <class T> class PiiSubmatrix;
-template <class T> struct PiiMatrixTraits<PiiSubmatrix<T> > :
-  PiiMatrixTraits<PiiMatrix<T,-1,-1> >
-{
-};
 /// @endhide
 
 
@@ -374,11 +369,12 @@ public:
    * each individual element.
    */
   template <class Matrix> explicit PiiMatrix(const PiiConceptualMatrix<Matrix>& other) :
-    PiiTypelessMatrix(PiiMatrixData::createUninitializedData(other.rows(),
-                                                             other.columns(),
-                                                             other.columns() * sizeof(T)))
+    PiiTypelessMatrix(PiiMatrixData::createUninitializedData(other.self()->rows(),
+                                                             other.self()->columns(),
+                                                             other.self()->columns() * sizeof(T)))
   {
-    Pii::transform(other.begin(), other.end(), begin(), Pii::Cast<typename Matrix::value_type,T>());
+    Pii::transform(other.self()->begin(), other.self()->end(), begin(),
+                   Pii::Cast<typename Matrix::value_type,T>());
   }
 
   /**
@@ -481,53 +477,45 @@ public:
    */
   PiiMatrix(int rows, int columns, VaArgType firstElement, ...);
 
+  /// @hide
 #ifdef PII_CXX11
-  /**
-   * Moves the contents of *other* to `this` and leaves *other*
-   * with null data.
-   */
-  PiiMatrix(PiiMatrix&& other)
-  {
-    std::swap(d, other.d);
-  }
-  /**
-   * Moves the contents of *other* to `this` and leaves *other*
-   * with null data.
-   */
-  PiiMatrix(PiiSubmatrix<T>&& other)
-  {
-    std::swap(d, other._matrix.d);
-    d->makeImmutable();
-  }
+  PiiMatrix(PiiSubmatrix<PiiMatrix>&& other) :
+    PiiTypelessMatrix(other.source().createReference(other.rows(),
+                                                     other.columns(),
+                                                     other.rowBegin(0))
+                      ->makeImmutable())
+  {}
 
-  /**
-   * Moves the contents of *other* to `this` and leaves *other*
-   * with null data. Returns a reference to `this`.
-   */
-  PiiMatrix& operator= (PiiMatrix&& other)
+  PiiMatrix& operator= (PiiSubmatrix<PiiMatrix>&& other)
   {
-    std::swap(d, other._matrix.d);
-    return *this;
-  }
-  PiiMatrix& operator= (PiiSubmatrix<T>&& other)
-  {
-    std::swap(d, other._matrix.d);
-    d->makeImmutable();
+    auto pNewD = other.source().createReference(other.rows(),
+                                                other.columns(),
+                                                other.rowBegin(0))
+      ->makeImmutable();
+    d->release();
+    d = pNewD;
     return *this;
   }
 #else
-  PiiMatrix(const PiiSubmatrix<T>& other)
+  PiiMatrix(const PiiSubmatrix<PiiMatrix>& other) :
+    PiiTypelessMatrix(other.source().createReference(other.rows(),
+                                                     other.columns(),
+                                                     const_cast<T*>(other.rowBegin(0)))
+                      ->makeImmutable())
+  {}
+
+  PiiMatrix& operator= (const PiiSubmatrix<PiiMatrix>& other)
   {
-    std::swap(d, const_cast<PiiSubmatrix<T>&>(other)._matrix.d);
-    d->makeImmutable();
-  }
-  PiiMatrix& operator= (const PiiSubmatrix<T>& other)
-  {
-    std::swap(d, const_cast<PiiSubmatrix<T>&>(other)._matrix.d);
-    d->makeImmutable();
+    auto pNewD = other.source().createReference(other.rows(),
+                                                other.columns(),
+                                                const_cast<T*>(other.rowBegin(0)))
+      ->makeImmutable();
+    d->release();
+    d = pNewD;
     return *this;
   }
 #endif
+  /// @endhide
 
   /// Destroys the matrix.
   ~PiiMatrix() {}
@@ -580,13 +568,13 @@ public:
   /**
    * Returns a random-access iterator to the start of the matrix data.
    */
-  typename Traits::iterator begin() { return typename Traits::iterator(*this); }
-  typename Traits::const_iterator begin() const { return typename Traits::const_iterator(*this); }
+  typename Traits::iterator begin() { return typename Traits::iterator(row(0), columns(), stride()); }
+  typename Traits::const_iterator begin() const { return typename Traits::const_iterator(row(0), columns(), stride()); }
   /**
    * Returns a random-access iterator to the end of the matrix data.
    */
-  typename Traits::iterator end() { return typename Traits::iterator(*this, rows()); }
-  typename Traits::const_iterator end() const { return typename Traits::const_iterator(*this, rows()); }
+  typename Traits::iterator end() { return typename Traits::iterator(row(0), row(rows()), columns(), stride()); }
+  typename Traits::const_iterator end() const { return typename Traits::const_iterator(row(0), row(rows()), columns(), stride()); }
 
   /**
    * Returns a random-access iterator to the start of the row at
@@ -733,15 +721,10 @@ public:
    * //     7, 0, 9);
    * ~~~
    */
-  PiiSubmatrix<T> operator() (int r, int c, int rows, int columns)
+  using PiiConceptualMatrix<PiiMatrix>::operator();
+  const PiiMatrix operator() (int r, int c, int rows, int columns) const
   {
-    fixIndices(r, c, rows, columns);
-    return PiiSubmatrix<T>(this->createReference(rows, columns, row(r) + c));
-  }
-
-  PiiMatrix operator() (int r, int c, int rows, int columns) const
-  {
-    fixIndices(r, c, rows, columns);
+    this->fixIndices(r, c, rows, columns);
     return PiiMatrix(this->createReference(rows, columns, const_cast<T*>(row(r) + c))->makeImmutable());
   }
 
@@ -796,39 +779,22 @@ public:
   }
 
   /**
-   * Appends the given vector to the end of this matrix. The size of
-   * the *row* matrix must be 1-by-columns(), unless this matrix is
-   * empty. In that case this matrix will be set equal to *row*.
-   *
-   * @see insertRow(int, const PiiMatrix&)
-   */
-  typename Traits::row_iterator appendRow(const PiiMatrix& row)
-  {
-    if (this->isEmpty())
-      {
-        *this = row;
-        return rowBegin(0);
-      }
-    return insertRow(-1, row);
-  }
-
-  /**
    * Appends the given vector to the end of this matrix.
    *
    * @see insertRow(int, const T*)
    */
-  typename Traits::row_iterator appendRow(const T* row)
+  template <class Iterator> typename Traits::row_iterator appendRow(Iterator row)
   {
     return insertRow(-1, row);
   }
 
   /**
-   * Append all rows in *other* to the end of this matrix. The number
+   * Appends all rows in *other* to the end of this matrix. The number
    * of columns in *other* must equal to that of this matrix, unless
    * this matrix is empty. In that case this matrix will be set equal
    * to *other*.
    */
-  void appendRows(const PiiMatrix& other);
+  template <class Matrix> void appendRows(const Matrix& other);
 
   /**
    * Appends the given elements as a new row to the end of this
@@ -851,19 +817,13 @@ public:
   typename Traits::row_iterator insertRow(int index);
 
   /**
-   * Inserts the given row at *index*. The input matrix can be either
-   * a column or a row vector.
-   *
-   */
-  typename Traits::row_iterator insertRow(int index, const PiiMatrix& row);
-
-  /**
    * Inserts the given row at the given row index. The data of the new
    * row will be copied from *row*, which must hold at least
    * [columns()] elements.
    *
    */
-  typename Traits::row_iterator insertRow(int index, const T* row);
+  template <class Iterator>
+  typename Traits::row_iterator insertRow(int index, Iterator row);
 
   /**
    * Insert a row with the given data elements at the given row index.
@@ -884,31 +844,13 @@ public:
   }
 
   /**
-   * Appends the given vector (N-by-1 matrix) as a new column to the
-   * right of the last column. The number of rows in this matrix must
-   * be equal to the number of rows in *column*, unless this matrix
-   * is empty. In that case this matrix will be set equal to
-   * *column*.
-   *
-   * @see insertColumn(int, const PiiMatrix&)
-   */
-  typename Traits::column_iterator appendColumn(const PiiMatrix& column)
-  {
-    if (this->isEmpty())
-      {
-        *this = column;
-        return columnBegin(0);
-      }
-    return insertColumn(-1, column);
-  }
-
-  /**
    * Appends the given vector as a new column to the right of the last
    * column.
    *
    * @see insertColumn(int, const T*)
    */
-  typename Traits::column_iterator appendColumn(const T* column)
+  template <class Iterator>
+  typename Traits::column_iterator appendColumn(Iterator column)
   {
     return insertColumn(-1, column);
   }
@@ -937,33 +879,18 @@ public:
   typename Traits::column_iterator insertColumn(int index = -1);
 
   /**
-   * Inserts the given column at the given index. Any subsequent
-   * columns will be shifted forwards. The input matrix can be either
-   * a column or a row vector.
-   *
-   * @param column a matrix whose first column or row will be copied
-   * to the memory location of the newly added column.
-   *
-   * @param index the column index of the new column. -1 means last.
-   *
-   * @return an iterator to the beginning of the newly added column
-   */
-  typename Traits::column_iterator insertColumn(int index, const PiiMatrix& column);
-
-  /**
    * Inserts the given column at the given column index. The data of
    * the new column will be copied from *column*, which must hold at
    * least [rows()] elements.
-   *
    */
-  typename Traits::column_iterator insertColumn(int index, const T* column);
+  template <class Iterator>
+  typename Traits::column_iterator insertColumn(int index, Iterator column);
 
   /**
    * Inserts a column with the given data elements at the given column
    * index. Any subsequent columns will be shifted forwards. The
    * number of elements must be equal to the number of rows in the
    * matrix.
-   *
    */
   typename Traits::column_iterator insertColumn(int index, VaArgType firstElement, ...);
 
@@ -1017,15 +944,6 @@ public:
   }
 
   /**
-   * Assigns the elements of *other* to the corresponding elements of
-   * this.
-   *
-   * @exception PiiMathException& if *other* and `this` are not
-   * equal in size.
-   */
-  template <class Matrix> PiiMatrix& assign(const PiiConceptualMatrix<Matrix>& other);
-
-  /**
    * Applies the *adaptable binary function* `op` to all
    * elements of this matrix and the corresponding elements in
    * *other*. The matrices must be of equal size. The result is returned
@@ -1046,31 +964,8 @@ public:
     PII_MATRIX_CHECK_EQUAL_SIZE(other, *this);
     typedef typename BinaryFunc::result_type R;
     PiiMatrix<R> result(PiiMatrix<R>::uninitialized(rows(), columns()));
-    Pii::transform(begin(), end(), other.begin(), result.begin(), op);
+    Pii::transform(begin(), end(), other.self()->begin(), result.begin(), op);
     return result;
-  }
-
-  /**
-   * Applies the *adaptable binary function* to all elements of
-   * this matrix and the correspondng element in *other*. The
-   * matrices must be of equal size. The result is stored in this
-   * matrix. For example, to apply the operator-= the other way, do
-   * this:
-   *
-   * ~~~(c++)
-   * PiiMatrix<int> a, b;
-   * a.map(std::minus<int>(), b);
-   * ~~~
-   *
-   * @exception PiiMathException& if this matrix is not equal to
-   * *other* in size.
-   */
-  template <class BinaryFunc, class Matrix>
-  PiiMatrix& map(BinaryFunc op, const PiiConceptualMatrix<Matrix>& other)
-  {
-    PII_MATRIX_CHECK_EQUAL_SIZE(other, *this);
-    Pii::map(begin(), end(), other.begin(), op);
-    return *this;
   }
 
   /**
@@ -1090,40 +985,6 @@ public:
     PiiMatrix<R> result(PiiMatrix<R>::uninitialized(rows(), columns()));
     Pii::transform(begin(), end(), result.begin(), std::bind2nd(op, value));
     return result;
-  }
-
-  /**
-   * Applies a binary function to all elements of this matrix and the
-   * scalar *value*. The result is stored in this matrix. An example:
-   *
-   * ~~~(c++)
-   * PiiMatrix<int> a;
-   * a.map(std::minus<int>(), 5);
-   * // The same can be achieved with
-   * a.map(std::bind2nd(std::minus<int>(), 5));
-   * // ... but which one is more readable?
-   * ~~~
-   */
-  template <class BinaryFunc>
-  PiiMatrix& map(BinaryFunc op, typename BinaryFunc::second_argument_type value)
-  {
-    Pii::map(begin(), end(), std::bind2nd(op, value));
-    return *this;
-  }
-
-  /**
-   * Applies a unary function to all elements in this matrix. For
-   * example, to negate all elements in a matrix, do the following:
-   *
-   * ~~~(c++)
-   * PiiMatrix<int> a;
-   * a.map(std::negate<int>());
-   * ~~~
-   */
-  template <class UnaryFunc> PiiMatrix& map(UnaryFunc op)
-  {
-    Pii::map(begin(), end(), op);
-    return *this;
   }
 
   /**
@@ -1228,117 +1089,7 @@ public:
   }
 
 private:
-  friend class PiiSubmatrix<T>;
-
   PiiMatrix(PiiMatrixData* d) : PiiTypelessMatrix(d) {}
-
-  void fixIndices(int &r, int &c, int &rows, int &columns) const
-  {
-    if (r < 0) r += this->rows();
-    if (c < 0) c += this->columns();
-    if (rows < 0) rows += this->rows() - r + 1;
-    if (columns < 0) columns += this->columns() - c + 1;
-  }
-};
-
-/**
- * A matrix that provides a mutable reference to a PiiMatrix.
- * Sub-matrices are temporary in nature; they only exist as return
- * values from [PiiMatrix::operator()](int,int,int,int).
- * Sub-matrices cannot be copied. Unfortunately, there is no elegant
- * way of making a movable but non-copyable type in C++ prior to
- * C++11. Therefore, this class uses a bit of hackery to implement
- * move semantics with the old C++ standard.
- *
- * ~~~(c++)
- * PiiMatrix<int> mat(5,5);
- * // Constructing a copy of a PiiSubmatrix is possible prior to
- * // C++11. This is however strongly discouraged. The following
- * // won't compile if C++11 is enabled.
- * PiiSubMatrix<int> sub(mat(1,1,2,2)); // WRONG!
- * PiiSubMatrix<int> sub2(sub); // WRONG!
- * // As a result, sub will be left in an empty state.
- *
- * // The following is legal in both old C++ and C++11
- * PiiMatrix<int> sub(mat(1,1,2,2)); // immutable shallow copy
- * // Modifies the central portion of mat
- * mat(1,1,3,3) *= 5;
- * ~~~
- */
-template <class T> class PiiSubmatrix :
-  public PiiConceptualMatrix<PiiSubmatrix<T> >
-{
-public:
-  typedef PiiMatrixTraits<PiiSubmatrix<T> > Traits;
-
-#ifdef PII_CXX11
-  /**
-   * Moves the contents of *other* to this and leaves *other* with
-   * null data.
-   */
-  PiiSubmatrix(PiiSubmatrix&& other)
-  {
-    // Swap our matrix (null) with other's.
-    std::swap(_matrix.d, other._matrix.d);
-  }
-  PII_DISABLE_COPY(PiiSubmatrix);
-#else
-  PiiSubmatrix(const PiiSubmatrix& other)
-  {
-    // HACK Same as above, but now we really have no way of ensuring
-    // "other" is not going to be used later.
-    std::swap(_matrix.d, const_cast<PiiSubmatrix&>(other)._matrix.d);
-  }
-
-private: PiiSubmatrix& operator= (const PiiSubmatrix& other);
-#endif
-public:
-  /**
-   * Sets all elements to *value* and returns a reference to `this`.
-   */
-  PiiSubmatrix& operator= (typename Traits::value_type value) { return PiiConceptualMatrix<PiiSubmatrix<T> >::operator=(value); }
-
-  typename Traits::iterator begin() { return _matrix.begin(); }
-  typename Traits::iterator end() { return _matrix.end(); }
-  typename Traits::const_iterator begin() const { return _matrix.begin(); }
-  typename Traits::const_iterator end() const { return _matrix.end(); }
-  typename Traits::row_iterator rowBegin(int index) { return _matrix.rowBegin(index); }
-  typename Traits::row_iterator rowEnd(int index) { return _matrix.rowEnd(index); }
-  typename Traits::const_row_iterator rowBegin(int index) const { return _matrix.rowBegin(index); }
-  typename Traits::const_row_iterator rowEnd(int index) const { return _matrix.rowEnd(index); }
-  typename Traits::column_iterator columnBegin(int index) { return _matrix.columnBegin(index); }
-  typename Traits::column_iterator columnEnd(int index) { return _matrix.columnEnd(index); }
-  typename Traits::const_column_iterator columnBegin(int index) const { return _matrix.columnBegin(index); }
-  typename Traits::const_column_iterator columnEnd(int index) const { return _matrix.columnEnd(index); }
-
-  int rows() const { return _matrix.rows(); }
-  int columns() const { return _matrix.columns(); }
-
-  T& operator() (int r, int c) { return _matrix(r,c); }
-  T operator() (int r, int c) const { return _matrix(r,c); }
-
-  /**
-   * Returns a reference to the wrapped matrix. This function makes it
-   * possible to pass a sub-matrix to a function that takes a
-   * PiiMatrix as a parameter.
-   *
-   * ~~~(c++)
-   * template <class T> void modify(PiiMatrix<T>& mat);
-   *
-   * // ...
-   * PiiMatrix<float> mat(3,5);
-   * // You need to explicitly specify the template parameter for
-   * // overload resolution.
-   * modify<float>(mat(1,0,1,-1));
-   * ~~~
-   */
-  operator PiiMatrix<T>& () { return _matrix; }
-
-private:
-  friend class PiiMatrix<T>;
-  PiiSubmatrix(PiiMatrixData* data) : _matrix(data) {}
-
-  PiiMatrix<T> _matrix;
 };
 
 #include "PiiMatrix-templates.h"
@@ -1368,7 +1119,6 @@ namespace Pii
   }
 
   /**
-   *
    * This specialization just returns `mat`.
    */
   template <class T, int rows, int cols>

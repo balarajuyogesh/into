@@ -85,8 +85,7 @@ public:
    * name. The rotation will affect all columns but only rows *p* and
    * `q` (p < q).
    */
-  template <class Matrix> void rotateColumns(PiiConceptualMatrix<Matrix>& mat,
-                                             int p, int q) const
+  template <class Matrix> void rotateColumns(Matrix& mat, int p, int q) const
   {
     rotateInPlane(mat.rowBegin(p), mat.rowBegin(q), mat.columns(), c, s);
   }
@@ -97,8 +96,7 @@ public:
    * name. The rotation will affect all rows but only columns *p* and
    * `q` (p < q).
    */
-  template <class Matrix> void rotateRows(PiiConceptualMatrix<Matrix>& mat,
-                                          int p, int q) const
+  template <class Matrix> void rotateRows(Matrix& mat, int p, int q) const
   {
     rotateInPlane(mat.columnBegin(p), mat.columnBegin(q), mat.rows(), c, -Pii::conj(s));
   }

@@ -23,7 +23,7 @@ namespace Pii
 {
   template <class Stream, class Matrix, class ColSeparator, class RowSeparator>
   void printMatrix(Stream& out,
-                   const PiiConceptualMatrix<Matrix>& mat,
+                   const Matrix& mat,
                    const ColSeparator& columnSeparator,
                    const RowSeparator& rowSeparator)
   {
@@ -48,7 +48,7 @@ namespace Pii
 
   template <class Stream, class Matrix>
   void matlabPrint(Stream& out,
-                   const PiiConceptualMatrix<Matrix>& mat)
+                   const Matrix& mat)
   {
     out << "[ ";
     printMatrix<Stream,Matrix,const char*,const char*>(out, mat, " ", "; ...\n  ");
@@ -236,8 +236,8 @@ namespace Pii
   }
 
   template <class Matrix1, class Matrix2>
-  PiiMatrix<typename Matrix1::value_type> concatenate(const PiiConceptualMatrix<Matrix1>& mat1,
-                                                      const PiiConceptualMatrix<Matrix2>& mat2,
+  PiiMatrix<typename Matrix1::value_type> concatenate(const Matrix1& mat1,
+                                                      const Matrix2& mat2,
                                                       Pii::MatrixDirection direction)
   {
     typedef typename Matrix1::value_type T;

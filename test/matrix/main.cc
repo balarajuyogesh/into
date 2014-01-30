@@ -177,14 +177,16 @@ void TestPiiMatrix::constructors()
   }
 }
 
-template <class T> void TestPiiMatrix::setTo(PiiMatrix<T>& matrix, T value)
+template <class Matrix> void TestPiiMatrix::setTo(Matrix& matrix,
+                                                  typename Matrix::value_type value)
 {
   matrix = value;
 }
 
-template <class T> void TestPiiMatrix::setSubmatrix(PiiMatrix<T>& matrix, T value)
+template <class Matrix> void TestPiiMatrix::setSubmatrix(Matrix& matrix,
+                                                         typename Matrix::value_type value)
 {
-  setTo<T>(matrix(0,0,-1,-1), value);
+  setTo(matrix(0,0,-1,-1).selfRef(), value);
 }
 
 void TestPiiMatrix::submatrix()
@@ -226,7 +228,7 @@ void TestPiiMatrix::submatrix()
 
   {
     PiiMatrix<double> mat(5,5);
-    setTo<double>(mat(1,1,3,3), 1);
+    setTo(mat(1,1,3,3).selfRef(), 1);
     QVERIFY(Pii::equals(mat,
                         PiiMatrix<int>(5,5,
                                        0,0,0,0,0,
@@ -246,7 +248,7 @@ void TestPiiMatrix::submatrix()
     QCOMPARE(sub2(0,0), 3.0);
     QCOMPARE(mat(4,4), 0.0);
 
-    setSubmatrix<double>(mat(1,1,3,3), 5.0);
+    setSubmatrix(mat(1,1,3,3).selfRef(), 5.0);
     QCOMPARE(mat(2,2), 5.0);
   }
   {
@@ -401,11 +403,11 @@ void TestPiiMatrix::rowHandling()
     QVERIFY(Pii::equals(mat, PiiMatrix<int>(3,2, 1,0, 2,3, 0,4)));
     QVERIFY(Pii::equals(mat - mat, PiiMatrix<int>(mat.rows(), mat.columns())));
     PiiMatrix<int> row(1,2, 1,2);
-    mat.appendRow(row);
-    mat.appendRow(row);
-    mat.appendRow(row);
-    mat.appendRow(row);
-    mat.appendRow(row);
+    mat.appendRow(row[0]);
+    mat.appendRow(row[0]);
+    mat.appendRow(row[0]);
+    mat.appendRow(row[0]);
+    mat.appendRow(row[0]);
     PiiMatrix<int> sub(mat(0,1, 8,1));
     sub.removeRow(0);
     sub.removeRow(0);
@@ -417,10 +419,9 @@ void TestPiiMatrix::rowHandling()
   {
     PiiMatrix<double> a(3,5);
     PiiMatrix<double> row(1,5);
-    a.appendRow(row);
+    a.appendRow(row[0]);
     a = PiiMatrix<double>(3,5);
-    a.appendRow(row);
-
+    a.appendRow(row[0]);
 
     a.removeRow(0);
     a.removeRow(0);
@@ -555,6 +556,26 @@ void TestPiiMatrix::selfAssignment()
   a = c;
   QCOMPARE(a(1,1), 0);
   QCOMPARE(b(1,1), 0);
+
+  a = PiiMatrix<int>::constant(2, 2, 2);
+  a = a/2+4;
+  QVERIFY(Pii::equals(a, PiiMatrix<int>::constant(2, 2, 5)));
+  a << a + 2;
+  QVERIFY(Pii::equals(a, PiiMatrix<int>::constant(2, 2, 7)));
+  a(0, 0, 1, -1) = 0;
+  QVERIFY(Pii::equals(a, PiiMatrix<int>(2, 2, 0, 0, 7, 7)));
+  a(1, 0, -1, -1) << a(0, 0, 1, -1);
+  QVERIFY(Pii::equals(a, PiiMatrix<int>(2, 2)));
+
+  a = PiiMatrix<int>(2, 4,
+                     1, 2, 3, 4,
+                     5, 6, 7, 8);
+  /* TODO make this work
+    a(0, 0, 2, 2) << (Pii::transpose(a)(2, 0, 2, 2) - 3);
+  QVERIFY(Pii::equals(a, PiiMatrix<int>(2, 4,
+                                        0, 4, 3, 4,
+                                        1, 5, 7, 8)));
+  */
 }
 
 void TestPiiMatrix::iterators()
@@ -795,7 +816,7 @@ void TestPiiMatrix::resizing()
                        1,2,3,
                        4,5,6,
                        7,8,9);
-  mat.appendColumn(mat(0,2,3,1));
+  mat.appendColumn(mat(0,2,3,1).columnBegin(0));
   QVERIFY(Pii::equals(mat, PiiMatrix<int>(3,4,
                                           1,2,3,3,
                                           4,5,6,6,
@@ -805,7 +826,7 @@ void TestPiiMatrix::resizing()
                                           0,1,2,3,3,
                                           1,4,5,6,6,
                                           2,7,8,9,9)));
-  mat.insertRow(0, mat(0,0,1,5));
+  mat.insertRow(0, mat(0,0,1,5)[0]);
   QVERIFY(Pii::equals(mat, PiiMatrix<int>(4,5,
                                           0,1,2,3,3,
                                           0,1,2,3,3,

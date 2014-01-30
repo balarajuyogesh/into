@@ -74,11 +74,11 @@ namespace PiiImage
     int maskRows = mask.rows(), maskCols = mask.columns();
     int rOrig = maskRows / 2, cOrig = maskCols/2; //Origin
 
-    //first do close-operation
-    PiiMatrix<T> closed = erode(dilate(image, mask), mask);
+    // First close
+    PiiMatrix<T> closed(erode(dilate(image, mask), mask));
 
-    //remove edges from closed and original matrix and minus them each other
-    static_cast<PiiMatrix<T>&>(closed(rOrig,cOrig,-(maskRows-rOrig),-(maskCols-cOrig)))
+    // Subtract the center parts from each other.
+    closed(rOrig,cOrig,-(maskRows-rOrig),-(maskCols-cOrig))
       .map(BottomhatFunction<T>(), image(rOrig,cOrig,-(maskRows-rOrig),-(maskCols-cOrig)));
 
     return closed;

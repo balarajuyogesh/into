@@ -66,7 +66,7 @@ namespace Pii
    * k-by-k square matrix in which k is the minimum of A's dimensions.
    */
   template <class Matrix>
-  PiiMatrix<typename Matrix::value_type> svDecompose(const PiiConceptualMatrix<Matrix>& A,
+  PiiMatrix<typename Matrix::value_type> svDecompose(const Matrix& A,
                                                      PiiMatrix<typename Matrix::value_type>& tmp,
                                                      PiiMatrix<typename Matrix::value_type>* U,
                                                      PiiMatrix<typename Matrix::value_type>* V,
@@ -81,7 +81,7 @@ namespace Pii
     // Square matrix doesn't need preconditioning
     if (iRows == iCols)
       {
-        tmp << A.selfRef()(0, 0, iMinSize, iMinSize);
+        tmp << A(0, 0, iMinSize, iMinSize);
         if (U != 0)
           {
             U->resize(iRows, options & SvdFullU ? iRows : iMinSize);
@@ -247,7 +247,7 @@ namespace Pii
    * ! Output matrices U and V will be automatically resized.
    */
   template <class Matrix>
-  PiiMatrix<typename Matrix::value_type> svDecompose(const PiiConceptualMatrix<Matrix>& A,
+  PiiMatrix<typename Matrix::value_type> svDecompose(const Matrix& A,
                                                      PiiMatrix<typename Matrix::value_type>* U = 0,
                                                      PiiMatrix<typename Matrix::value_type>* V = 0,
                                                      SvdOptions options = SvdFullU | SvdFullV)
