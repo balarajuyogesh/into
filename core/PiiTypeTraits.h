@@ -258,6 +258,8 @@ namespace Pii
    */
   template <class T> struct IsConst : False {};
   template <class T> struct IsConst<const T> : True {};
+  template <class T> struct IsConst<const T*> : True {};
+  template <class T> struct IsConst<const T&> : True {};
 
   /**
    * A tester struct whose `boolValue` member evaluates statically to

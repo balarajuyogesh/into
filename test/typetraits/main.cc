@@ -33,7 +33,9 @@ void TestPiiTypeTraits::IsX()
   TEST(IsVoid, void, int);
   TEST(IsVoid, void, void*);
   TEST(IsPointer, int*, int);
+  TEST(IsPointer, const int*, const int);
   TEST(IsReference, int&, int);
+  TEST(IsReference, const int&, const int);
   TEST(IsArray, int[], int);
   TEST(IsSigned, int, unsigned int);
   TEST(IsUnsigned, unsigned char, long);
@@ -42,6 +44,9 @@ void TestPiiTypeTraits::IsX()
   TEST(IsNumeric, float, bool);
   TEST(IsPrimitive, bool, Base);
   TEST(IsConst, const Derived, Derived);
+  TEST(IsConst, const int, int);
+  TEST(IsConst, const int*, int*);
+  TEST(IsConst, const int&, int&);
 
 #define DERIVED_TEST(NOT, BASE,DERIVED)                               \
   typedef Pii::IsBaseOf<BASE,DERIVED> IsBaseOf ## BASE ## DERIVED;    \
@@ -61,7 +66,7 @@ void TestPiiTypeTraits::IsX()
   TO_TEST(ToValue, const double*, const double);
   TO_TEST(ToValue, int&, int);
   TO_TEST(ToValue, const double&, const double);
-  TO_TEST(ToValue, int* const&, int const);
+  TO_TEST(ToValue, int* const&, int* const);
 }
 
 QTEST_MAIN(TestPiiTypeTraits)
