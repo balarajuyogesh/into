@@ -9,4 +9,4 @@ INTODIR = ..
 include($$INTODIR/base.pri)
 include($$INTODIR/libinstall.pri)
 DEFINES += PII_BUILD_SCRIPT
-LIBS += -lpiicore$$INTO_LIBV -lpiiydin$$LIBVER
+LIBS += -lpiicore$$INTO_LIBV -lpiiydin$$INTO_LIBV

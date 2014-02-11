@@ -193,7 +193,7 @@ contents are as follows:
 INTODIR=/home/me/into
 include($$INTODIR/base.pri)
 qt5: QT += widgets
-LIBS += -lpiicore$$LIBVER -lpiiydin$$LIBVER -lpiigui$$LIBVER
+LIBS += -lpiicore$$INTO_LIBV -lpiiydin$$INTO_LIBV -lpiigui$$INTO_LIBV
 SOURCES = Threshold.cc
 TARGET = threshold
 CONFIG += console

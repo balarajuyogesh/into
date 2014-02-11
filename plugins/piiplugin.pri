@@ -55,4 +55,4 @@ defined(PLUGIN_INSTALL_PATH, var) {
 }
 include(../libinstall.pri)
 
-LIBS += -lpiiydin$$INTO_LIBV -lpiicore$$LIBVER
+LIBS += -lpiiydin$$INTO_LIBV -lpiicore$$INTO_LIBV

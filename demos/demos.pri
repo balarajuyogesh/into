@@ -18,7 +18,7 @@ INCLUDEPATH += $$INTODIR/demos/utils
 HEADERS   = *.h
 SOURCES   = *.cc
 
-LIBS += -lpiiydin$$INTO_LIBV -lpiicore$$LIBVER -L$$INTODIR/demos/utils/$$MODE -ldemoutils
+LIBS += -lpiiydin$$INTO_LIBV -lpiicore$$INTO_LIBV -L$$INTODIR/demos/utils/$$MODE -ldemoutils
 
 TARGET = $$PRO_FILE_BASENAME
 defined(DEMO_INSTALL_PATH, var): {

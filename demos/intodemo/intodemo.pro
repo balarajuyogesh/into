@@ -7,7 +7,7 @@ RESOURCES += resources.qrc
 
 HEADERS   = *.h
 SOURCES   = *.cc
-LIBS += -lpiiydin$$INTO_LIBV -lpiicore$$LIBVER
+LIBS += -lpiiydin$$INTO_LIBV -lpiicore$$INTO_LIBV
 
 TARGET = $$PRO_FILE_BASENAME
 defined(DEMO_INSTALL_PATH, var): {

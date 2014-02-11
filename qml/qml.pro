@@ -10,7 +10,7 @@ include($$INTODIR/base.pri)
 
 DEFINES += PII_BUILD_QML
 
-LIBS += -lQt5V8 -lpiicore$$INTO_LIBV -lpiiydin$$LIBVER
+LIBS += -lQt5V8 -lpiicore$$INTO_LIBV -lpiiydin$$INTO_LIBV
 
 # HACK: Qt does spectacular job in hiding important functionality.
 # We need to hack around the limitations by accessing private API.

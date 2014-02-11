@@ -25,4 +25,4 @@ defined(TEST_INSTALL_PATH, var): {
   INSTALLS += target
 }
 
-LIBS += -lpiiydin$$INTO_LIBV -lpiicore$$LIBVER
+LIBS += -lpiiydin$$INTO_LIBV -lpiicore$$INTO_LIBV
