@@ -13,6 +13,6 @@ qt5: QT += widgets
 FORMS += ui/*.ui
 RESOURCES += resources.qrc
 DEFINES += PII_BUILD_GUI
-LIBS += -lpiicore$$INTO_LIBV -lpiiydin$$LIBVER
+LIBS += -lpiicore$$INTO_LIBV -lpiiydin$$INTO_LIBV
 # PENDING ydin is needed only because of PiiClassInfoRegisterer
 # Resource database should be moved to core.
