@@ -26,6 +26,7 @@ private slots:
   void decodeProperties();
   void arrayCopy();
   void findNeighbors();
+  void findDependencies();
   void splitQuoted();
 };
 

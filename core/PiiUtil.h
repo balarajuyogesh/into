@@ -779,6 +779,66 @@ namespace Pii
    * ~~~
    */
   PII_CORE_EXPORT QList<QList<int> > findNeighbors(QLinkedList<QPair<int,int> >& pairs);
+
+  /// @relates findDependencies
+  enum DependencyOrder
+    {
+      AnyValidOrder,
+      AnyLayeredOrder,
+      SortedLayeredOrder
+    };
+
+  /**
+   * Given a directed acyclic graph represented as a list of edges
+   * between vertices, produces a valid topological sort. In English:
+   * given a list of dependencies, produces a valid ordering. This
+   * function can be used to resolve execution order for dependent
+   * operations etc.
+   *
+   * Graph edges are represented as pairs. Each pair (a,b) in *edges*
+   * denotes a directed edge from vertex a to verted b. In other
+   * words, b depends on a. Each vertex is an integer, and it is
+   * typically used as an array index when resolving dependencies
+   * between objects.
+   *
+   * The returned value contains 0-N lists, each storing a number of
+   * indices from *edges*.
+   *
+   * - If *order* is `AnyValidOrder`, there is at most one output
+   *   list, and it contains the input elements in an order that is a
+   *   valid topological sort.
+   *
+   * - If *order* is `AnyLayeredOrder`, the elements in each list only
+   *   depend on those on the previous lists, and have no
+   *   inter-dependencies. The elements in the first list don't depend
+   *   on anything. The elements in each list are in an unspecified
+   *   order.
+   *
+   * - If *order* is `SortedLayeredOrder`, the behaviour is otherwise
+   *   equal to `AnyLayeredOrder`, but the elements in each list are
+   *   sorted in ascending order.
+   *
+   * The result is empty if the input contains no loopless graphs. If
+   * the graph contains loops, they will be left in *edges*.
+   *
+   * ! The input list is modified by this function. If there are no
+   *   loops in the graph, *edges* will be empty upon return.
+   *
+   * ~~~(c++)
+   * QLinkedList<QPair<int,int> > lstEdges;
+   * lstEdges << qMakePair(0,1) << qMakePair(0,3) << qMakePair(0,4) << qMakePair(3,4) << qMakePair(3,5)
+   *          << qMakePair(2,6) << qMakePair(6,8) << qMakePair(7,8);
+   *
+   * QList<QList<int> > lstValid(Pii::findDependencies(lstEdges), Pii::AnyValidOrder);
+   * // ((0, 1, 3, 4, 5, 2, 6, 7, 8))
+   *
+   * // lstEdges is empty now. Assume it is filled with the same data again.
+   * QList<QList<int> > lstLayered(Pii::findDependencies(lstEdges), Pii::SortedLayeredOrder);
+   * // ((0, 2, 7), (1, 3, 6), (4, 5, 8))
+   * ~~~
+   */
+  PII_CORE_EXPORT QList<QList<int> > findDependencies(QLinkedList<QPair<int,int> >& edges,
+                                                      DependencyOrder order = AnyValidOrder);
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Pii::PropertyFlags);

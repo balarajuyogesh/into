@@ -81,6 +81,58 @@ void TestPiiUtil::findNeighbors()
   QCOMPARE(lstNeighbors[1], QList<int>() << 2 << 6 << 7 << 8);
 }
 
+void TestPiiUtil::findDependencies()
+{
+  {
+    QLinkedList<QPair<int,int> > lstPairs;
+    lstPairs << qMakePair(0,1) << qMakePair(0,3) << qMakePair(0,4) << qMakePair(3,4) << qMakePair(3,5)
+             << qMakePair(2,6) << qMakePair(6,8) << qMakePair(7,8);
+    QList<QList<int> > lstDeps(Pii::findDependencies(lstPairs, Pii::AnyValidOrder));
+    QCOMPARE(lstDeps.size(), 1);
+    QCOMPARE(lstDeps[0], QList<int>() << 0 << 1 << 3 << 4 << 5 << 2 << 6 << 7 << 8);
+  }
+  {
+    QLinkedList<QPair<int,int> > lstPairs;
+    lstPairs << qMakePair(0,1) << qMakePair(0,3) << qMakePair(0,4) << qMakePair(3,4) << qMakePair(3,5)
+             << qMakePair(2,6) << qMakePair(6,8) << qMakePair(7,8);
+    QList<QList<int> > lstDeps(Pii::findDependencies(lstPairs, Pii::SortedLayeredOrder));
+    QCOMPARE(lstDeps.size(), 3);
+    QCOMPARE(lstDeps[0], QList<int>() << 0 << 2 << 7);
+    QCOMPARE(lstDeps[1], QList<int>() << 1 << 3 << 6);
+    QCOMPARE(lstDeps[2], QList<int>() << 4 << 5 << 8);
+  }
+  {
+    QLinkedList<QPair<int,int> > lstPairs;
+    lstPairs << qMakePair(0,1) << qMakePair(1,2) << qMakePair(2,0) // loop
+             << qMakePair(3,4) << qMakePair(4,6) << qMakePair(6,5) << qMakePair(5,7)
+             << qMakePair(3,5) << qMakePair(3,6) << qMakePair(3,7)
+             << qMakePair(8,8); // loop
+    QList<QList<int> > lstDeps(Pii::findDependencies(lstPairs, Pii::AnyValidOrder));
+    QCOMPARE(lstDeps.size(), 1);
+    QCOMPARE(lstDeps[0], QList<int>() << 3 << 4 << 6 << 5 << 7);
+    QCOMPARE(lstPairs,
+             (QLinkedList<QPair<int,int> >()
+              << qMakePair(0,1) << qMakePair(1,2) << qMakePair(2,0) << qMakePair(8,8)));
+  }
+  {
+    QLinkedList<QPair<int,int> > lstPairs;
+    lstPairs << qMakePair(0,1) << qMakePair(1,2) << qMakePair(2,0) // loop
+             << qMakePair(3,4) << qMakePair(4,6) << qMakePair(6,5) << qMakePair(5,7)
+             << qMakePair(3,5) << qMakePair(3,6) << qMakePair(3,7)
+             << qMakePair(8,8); // loop
+    QList<QList<int> > lstDeps(Pii::findDependencies(lstPairs, Pii::AnyLayeredOrder));
+    QCOMPARE(lstDeps.size(), 5);
+    QCOMPARE(lstDeps[0], QList<int>() << 3);
+    QCOMPARE(lstDeps[1], QList<int>() << 4);
+    QCOMPARE(lstDeps[2], QList<int>() << 6);
+    QCOMPARE(lstDeps[3], QList<int>() << 5);
+    QCOMPARE(lstDeps[4], QList<int>() << 7);
+    QCOMPARE(lstPairs,
+             (QLinkedList<QPair<int,int> >()
+              << qMakePair(0,1) << qMakePair(1,2) << qMakePair(2,0) << qMakePair(8,8)));
+  }
+}
+
 void TestPiiUtil::splitQuoted()
 {
   QCOMPARE(Pii::splitQuoted("\"a,b,c\",d,e"), QStringList() << "a,b,c" << "d" << "e");

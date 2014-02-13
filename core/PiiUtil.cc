@@ -20,6 +20,8 @@
 #include <QtDebug>
 #include <QLinkedList>
 #include <QCoreApplication>
+#include <QHash>
+#include <QSet>
 #include <cmath>
 
 namespace Pii
@@ -450,10 +452,12 @@ namespace Pii
     return vecResult;
   }
 
-  void joinNeighbors(int index, QLinkedList<QPair<int,int> >& pairs, QList<int>& indices)
+  typedef QLinkedList<QPair<int,int> > RelationList;
+
+  void joinNeighbors(int index, RelationList& pairs, QList<int>& indices)
   {
     QList<int> newIndices;
-    QLinkedList<QPair<int,int> >::iterator i = pairs.begin();
+    RelationList::iterator i = pairs.begin();
     while (i != pairs.end())
       {
         // If a match was found in the pair, add the other index in the
@@ -482,7 +486,7 @@ namespace Pii
     indices << newIndices;
   }
 
-  QList<QList<int> > findNeighbors(QLinkedList<QPair<int,int> >& pairs)
+  QList<QList<int> > findNeighbors(RelationList& pairs)
   {
     QList<QList<int> > lstResult;
 
@@ -502,6 +506,122 @@ namespace Pii
         lstResult << lstIndices;
       }
 
+    return lstResult;
+  }
+
+  /* The following two structures encapsulate differences between
+     single- and multilayered dependency resolution so that the
+     algorithm implementation is the same in both cases.
+   */
+  struct SingleLayerOrder
+  {
+    typedef QHash<int, int> DepCache;
+    typedef QList<int> Level;
+    typedef QList<Level> LevelList;
+
+    static inline int& primary(int& count) { return count; }
+    static inline int& secondary(int& count) { return count; }
+    static inline void update(DepCache&) {}
+    static inline void addLevel(LevelList&) {}
+    static inline int nextLevel(int i) { return i; }
+    static inline void insert(Level& level, int i)
+    {
+      if (!level.contains(i))
+        level.append(i);
+    }
+    static inline const LevelList& toLists(const LevelList& levels) { return levels; }
+  };
+
+  struct MultiLayerOrder
+  {
+    typedef QHash<int, QPair<int,int> > DepCache;
+    typedef QSet<int> Level;
+    typedef QList<Level> LevelList;
+
+    static inline int& primary(QPair<int,int>& pair) { return pair.first; }
+    static inline int& secondary(QPair<int,int>& pair) { return pair.second; }
+
+    static inline void update(DepCache& counts)
+    {
+      for (DepCache::iterator it = counts.begin(); it != counts.end(); ++it)
+        it->first = it->second;
+    }
+
+    static inline void addLevel(LevelList& levels) { levels << Level(); }
+    static inline int nextLevel(int i) { return i+1; }
+    static inline void insert(Level& level, int i) { level.insert(i); }
+    static inline QList<QList<int> > toLists(const LevelList& levels)
+    {
+      QList<QList<int> > lstResult;
+      for (int i=0; i<levels.size(); ++i)
+        {
+          // May happen if the input has dependency loops.
+          if (levels[i].isEmpty())
+            break;
+          lstResult.append(levels[i].toList());
+        }
+      return lstResult;
+    }
+  };
+
+  template <class Order>
+  QList<QList<int> > findDependencies(RelationList& pairs)
+  {
+    // Initialize a cache that counts dependencies for all elements.
+    typedef typename Order::DepCache DepCache;
+    DepCache hshDepCounts;
+
+    // The cache holds two dependency counters. The secondary one is
+    // updated on each iteration step. The primary counters are
+    // updated in batch once a round is done.
+    for (RelationList::iterator it = pairs.begin(); it != pairs.end(); ++it)
+      ++Order::secondary(hshDepCounts[it->second]);
+
+    typename Order::LevelList lstLevels;
+    lstLevels << typename Order::Level();
+    int iLevel = 0;
+    bool bPairRemoved = true;
+
+    while (!pairs.isEmpty() && bPairRemoved)
+      {
+        // Make secondary counters primary.
+        Order::update(hshDepCounts);
+        Order::addLevel(lstLevels);
+
+        bPairRemoved = false;
+        for (RelationList::iterator it = pairs.begin(); it != pairs.end();)
+          {
+            // This element has no dependencies.
+            if (Order::primary(hshDepCounts[it->first]) == 0)
+              {
+                // Put it on the current dependency level.
+                Order::insert(lstLevels[iLevel], it->first);
+                // If its pair only had this one dependency, put it on
+                // the next level.
+                if (--Order::secondary(hshDepCounts[it->second]) == 0)
+                  Order::insert(lstLevels[Order::nextLevel(iLevel)], it->second);
+                it = pairs.erase(it);
+                bPairRemoved = true;
+              }
+            else
+              ++it;
+          }
+        iLevel = Order::nextLevel(iLevel);
+      }
+
+    return Order::toLists(lstLevels);
+  }
+
+  QList<QList<int> > findDependencies(RelationList& pairs, DependencyOrder order)
+  {
+    if (order == AnyValidOrder)
+      return findDependencies<SingleLayerOrder>(pairs);
+    QList<QList<int> > lstResult(findDependencies<MultiLayerOrder>(pairs));
+    if (order == SortedLayeredOrder)
+      {
+        for (int i=0; i<lstResult.size(); ++i)
+          qSort(lstResult[i]);
+      }
     return lstResult;
   }
 
