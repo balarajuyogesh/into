@@ -239,7 +239,7 @@ namespace Pii
      */
     AdaptableUnaryFunction1 firstOp;
     /**
-     * The first function.
+     * The second function.
      */
     AdaptableUnaryFunction2 secondOp;
   };
