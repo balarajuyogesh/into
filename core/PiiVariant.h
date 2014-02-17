@@ -107,13 +107,10 @@ PII_TYPEMAP(PiiVariantValueMap)
  * ~~~
  *
  * Any type can be made compatible with PiiVariant. For this, one
- * needs to first choose a unique variant type ID for the type. The
- * mechanism differs from QVariant's type registration technique 1)
- * for run-time performance reasons and 2) to ensure a static type id
- * across all computing environments. Use the
- * [PII_DECLARE_VARIANT_TYPE] macro to assign a type ID to a type. The
- * new type must then be registered by the [PII_REGISTER_VARIANT_TYPE]
- * macro.
+ * needs to first choose a unique variant type ID for the type. Use
+ * the [PII_DECLARE_VARIANT_TYPE] macro to assign a type ID to a type.
+ * The new type must then be registered by the
+ * [PII_REGISTER_VARIANT_TYPE] macro.
  *
  * ~~~(c++)
  * // MyClass.h
@@ -131,6 +128,26 @@ PII_TYPEMAP(PiiVariantValueMap)
  * PII_REGISTER_VARIANT_TYPE(MyClass);
  * ~~~
  *
+ * **Why not QVariant?**
+ *
+ * Type IDs in PiiVariant are static and globally unique. While
+ * managing such IDs is cumbersome compared to the system used by
+ * QMetaType, it makes it possible to pass a PiiVariant from a process
+ * (or computer) to another without converting type IDs to globally
+ * unique IDs (text) and back. It also makes it possible to detect
+ * classes of types (such as integers, primitive types etc.) by bit
+ * masking.
+ *
+ * PiiVariant has no d pointer. This means it cannot be easily changed
+ * without breaking binary compatibility. But it also means that no
+ * heap allocations are needed if the type being wrapped to a
+ * PiiVariant fits into it.
+ *
+ * All this means that PiiVariant is faster than QVariant. It also
+ * offers an extensible type conversion system. Just like QVariant,
+ * PiiVariant can automatically convert between some core types,
+ * although the number of such types is smaller. But it provides a
+ * mechanism for registering custom type conversion functions.
  */
 class PII_CORE_EXPORT PiiVariant
 {
@@ -197,6 +214,15 @@ class PII_CORE_EXPORT PiiVariant
 
 public:
   /**
+   * Type conversion function. The conversion function will be passed
+   * a pointer to the variant being converted and a typeless pointer
+   * to the memory location where the conversion result should be
+   * stored. The function should result `true` if the conversion
+   * succeeded and `false` otherwise.
+   */
+  typedef bool (*ConverterFunction)(const PiiVariant*, void*);
+
+  /**
    * An enumeration for primitive types. The names correspond to
    * primitive C++ types. `InvalidType` (0xffffffff) indicates an
    * unknown type. The type IDs are composed so that their categories
@@ -213,8 +239,8 @@ public:
    * ID always tell the primitive type, if possible. It is then
    * possible to quickly check for "integerness" or "floatness" of any
    * template type. For example, assume that the "subnet" 1/~0xff (IDs
-   * 0x100 - 0x1ff) is reserved for your template type `MyType`<T>.
-   * Then, 0x100 (0x100 + `CharType`) should be `MyType`<`char`>
+   * 0x100 - 0x1ff) is reserved for your template type `MyType<T>`.
+   * Then, 0x100 (0x100 + `CharType`) should be `MyType<char>`
    * and so on.
    */
   enum PrimitiveType
@@ -394,6 +420,56 @@ public:
     return *ptrAs<T>();
   }
 
+  /**
+   * Converts this variant to the given type *T*. If there is no
+   * registered conversion function from the type of the variant to
+   * *T*, returns a default-constructed value.
+   *
+   * PiiVariant supports eight numeric types (`short, int, qint64,
+   * ushort, uint, quint64, float, double`), two character types
+   * (`char`, `uchar`) and `bool` by default. All numeric types
+   * convert to each other and to `bool`, which converts to all
+   * numeric types. Character types convert to and from all numeric
+   * types except `float` and `double`.
+   *
+   * If *ok* is non-zero, it will be set to either `true` of `false`,
+   * depending on whether the conversion was successful or not.
+   *
+   * ~~~(c++)
+   * PiiVariant d(1.23);
+   * bool bOk;
+   * int i = d.convertTo<int>(&bOk);
+   * // bOk == true
+   * ~~~
+   */
+  template <class T> inline T convertTo(bool* ok = 0) const;
+
+  /**
+   * Returns `true` if there is a registered converter that can
+   * convert this variant to the given type and `false` otherwise.
+   * Note that the conversion may fail even if there is converter
+   * available.
+   */
+  bool canConvert(uint toType) const;
+
+  /**
+   * Returns `true` if there is a registered converter that can
+   * convert *fromType* to *toType* and `false` otherwise. Same as
+   * `converter(fromType, toType) != 0`.
+   */
+  static bool canConvert(uint fromType, uint toType);
+
+  /**
+   * Registers a converter function for converting *fromType* to
+   * *toType*. If *function* is zero, removes an existing converter.
+   */
+  static void setConverter(uint fromType, uint toType, ConverterFunction function);
+  /**
+   * Returns the conversion function used to convert *fromType* to
+   * *toType*. If no such converter is registered, returns zero.
+   */
+  static ConverterFunction converter(uint fromType, uint toType);
+
 private:
   /* This class plays chicken with binary compatibility. There is no
      d-pointer because PiiVariant is the most common data type used in
@@ -409,6 +485,9 @@ private:
   template <class T> friend struct VTableImpl;
   template <unsigned int typeId> struct TypeIdMapper;
   template <unsigned int typeId> friend struct TypeIdMapper;
+  typedef QMap<quint64,ConverterFunction> ConverterMap;
+  struct ConvertInit { ConvertInit(); };
+  static ConvertInit _convertInit;
 
   /* A changeable virtual function table. Different types have
      different implementations, and we must thus be able to change the
@@ -480,6 +559,17 @@ private:
 
   static VTable* vTableByType(unsigned int type);
   static QHash<unsigned int, VTable*>* hashVTables();
+  static ConverterMap* converterMap();
+  template <class From, class To>
+  static bool defaultConverter(const PiiVariant* from, void* to)
+  {
+    *reinterpret_cast<To*>(to) = from->valueAs<From>();
+    return true;
+  }
+  static inline qint64 toKey(quint64 fromType, quint64 toType)
+  {
+    return fromType | (toType << 32);
+  }
 };
 
 
@@ -490,8 +580,6 @@ namespace Pii
    * for any type. A specialization is provided for each primitive
    * type. One should write more specializations for custom types.
    * There is no default implementation.
-   *
-   * @internal
    */
   template <class T> unsigned int typeId();
 }
@@ -680,5 +768,17 @@ namespace Pii
   }
 }
 
+template <class T> T PiiVariant::convertTo(bool* ok) const
+{
+  if (_uiType == Pii::typeId<T>())
+    return *ptrAs<T>();
+  T value = T();
+  ConverterFunction convert = converter(_uiType, Pii::typeId<T>());
+  bool bOk = false;
+  if (convert)
+    bOk = convert(this, &value);
+  if (ok) *ok = bOk;
+  return value;
+}
 
 #endif //_PIIVARIANT_H

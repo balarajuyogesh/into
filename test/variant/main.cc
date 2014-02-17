@@ -185,5 +185,37 @@ void TestPiiVariant::mapType()
   QCOMPARE(BigType::iCount, 0);
 }
 
+void TestPiiVariant::canConvert()
+{
+  QVERIFY(PiiVariant::canConvert(PiiVariant::IntType, PiiVariant::DoubleType));
+  QVERIFY(PiiVariant::canConvert(PiiVariant::DoubleType, PiiVariant::IntType));
+  QVERIFY(PiiVariant::canConvert(PiiVariant::BoolType, PiiVariant::FloatType));
+  QVERIFY(PiiVariant::canConvert(PiiVariant::UnsignedCharType, PiiVariant::ShortType));
+  QVERIFY(PiiVariant::canConvert(PiiVariant::DoubleType, PiiVariant::UnsignedIntType));
+  QVERIFY(!PiiVariant::canConvert(PiiVariant::DoubleType, PiiVariant::CharType));
+  QVERIFY(!PiiVariant::canConvert(PiiVariant::UnsignedCharType, PiiVariant::FloatType));
+  QVERIFY(!PiiVariant::canConvert(PiiVariant::VoidPtrType, PiiVariant::DoubleType));
+  PiiVariant i(1);
+  QVERIFY(i.canConvert(PiiVariant::ShortType));
+}
+
+void TestPiiVariant::convertTo()
+{
+  PiiVariant i(123);
+  QCOMPARE(i.convertTo<int>(), 123);
+  QCOMPARE(i.convertTo<double>(), 123.0);
+  QCOMPARE(i.convertTo<ushort>(), ushort(123));
+  QCOMPARE(i.convertTo<bool>(), true);
+
+  PiiVariant b(true);
+  QCOMPARE(b.convertTo<int>(), 1);
+  QCOMPARE(b.convertTo<double>(), 1.0);
+
+  PiiVariant c('a');
+  bool bOk = true;
+  QCOMPARE(c.type(), uint(PiiVariant::CharType));
+  QCOMPARE(c.convertTo<double>(&bOk), 0.0);
+  QVERIFY(!bOk);
+}
 
 QTEST_MAIN(TestPiiVariant)

@@ -27,6 +27,8 @@ private slots:
   void copy();
   void serialization();
   void mapType();
+  void canConvert();
+  void convertTo();
 };
 
 #endif //_TESTPIIVARIANT_H

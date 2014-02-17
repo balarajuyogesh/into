@@ -43,6 +43,8 @@ PII_SERIALIZABLE_EXPORT(PiiVariantList);
 PII_SERIALIZABLE_EXPORT(PiiQVariantWrapper::Template<PiiVariant>);
 PII_SERIALIZABLE_EXPORT(PiiQVariantWrapper::Template<PiiVariantList>);
 
+// Initializes default conversion functions
+PiiVariant::ConvertInit PiiVariant::_convertInit;
 
 // Save a few bytes by not repeating the string.
 const char* PiiVariant::pValueStr = "value";
@@ -103,4 +105,62 @@ PiiVariant::~PiiVariant()
 PiiVariant::VTable* PiiVariant::vTableByType(unsigned int type)
 {
   return hashVTables()->value(type);
+}
+
+PiiVariant::ConverterMap* PiiVariant::converterMap()
+{
+  static ConverterMap converterMap;
+  return &converterMap;
+}
+
+bool PiiVariant::canConvert(uint fromType, uint toType)
+{
+  return fromType == toType || converter(fromType, toType) != 0;
+}
+
+bool PiiVariant::canConvert(uint toType) const
+{
+  return canConvert(_uiType, toType);
+}
+
+PiiVariant::ConverterFunction PiiVariant::converter(uint fromType, uint toType)
+{
+  ConverterMap* pMap = converterMap();
+  quint64 uiKey = toKey(fromType, toType);
+  ConverterMap::iterator it = pMap->find(uiKey);
+  if (it != pMap->end())
+    return *it;
+  return 0;
+}
+
+void PiiVariant::setConverter(uint fromType, uint toType, ConverterFunction function)
+{
+  quint64 uiKey = toKey(fromType, toType);
+  if (function)
+    converterMap()->insert(uiKey, function);
+  else
+    converterMap()->remove(uiKey);
+}
+
+#define CONVERT_DEFAULT(FROM_TYPE, TO_TYPE) \
+  setConverter(Pii::typeId<FROM_TYPE>(),    \
+               Pii::typeId<TO_TYPE>(),      \
+               &PiiVariant::defaultConverter<FROM_TYPE, TO_TYPE>);
+
+#define ADD_CONVERTERS(FROM_TYPE, N, TO_TYPES) \
+  PII_FOR_N_ARG(CONVERT_DEFAULT, FROM_TYPE PII_NULL, N, TO_TYPES)
+
+PiiVariant::ConvertInit::ConvertInit()
+{
+  ADD_CONVERTERS(char, 8, (short, int, qint64, uchar, uint, ushort, quint64, bool));
+  ADD_CONVERTERS(short, 10, (char, int, qint64, uchar, ushort, uint, quint64, float, double, bool));
+  ADD_CONVERTERS(int, 10, (char, short, qint64, uchar, ushort, uint, quint64, float, double, bool));
+  ADD_CONVERTERS(qint64, 10, (char, short, int, uchar, ushort, uint, quint64, float, double, bool));
+  ADD_CONVERTERS(uchar, 8, (char, short, int, qint64, uint, ushort, quint64, bool));
+  ADD_CONVERTERS(ushort, 10, (char, short, int, qint64, uchar, uint, quint64, float, double, bool));
+  ADD_CONVERTERS(uint, 10, (char, short, int, qint64, uchar, ushort, quint64, float, double, bool));
+  ADD_CONVERTERS(quint64, 10, (char, short, int, qint64, uchar, ushort, uint, float, double, bool));
+  ADD_CONVERTERS(float, 8, (short, int, qint64, ushort, uint, quint64, double, bool));
+  ADD_CONVERTERS(double, 8, (short, int, qint64, ushort, uint, quint64, float, bool));
+  ADD_CONVERTERS(bool, 10, (char, short, int, qint64, uchar, ushort, uint, quint64, float, double));
 }
