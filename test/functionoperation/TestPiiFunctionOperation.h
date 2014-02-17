@@ -30,6 +30,11 @@ public:
   typedef PII_FUNCTION_OP_FOR(sum) SuperType;
   SumTestOperation() :
     SuperType(sum, "sum", "a", "b") {}
+
+  int defaultB() const { return 10; }
+
+  void setDefault() { setDefaultValue("b", &SumTestOperation::defaultB); }
+  void unsetDefault() { setDefaultValue("b", nullptr); }
 };
 
 class Sum2TestOperation : public PII_FUNCTION_OP_FOR(sum2)
@@ -53,6 +58,7 @@ private slots:
 #ifdef PII_CXX11
   void sumOperation();
   void sum2Operation();
+  void setDefaultValue();
 
 protected:
   void cleanup();

@@ -69,6 +69,30 @@ void TestPiiFunctionOperation::sum2Operation()
   QCOMPARE(outputValue("sum", 0), 3);
 }
 
+void TestPiiFunctionOperation::setDefaultValue()
+{
+  SumTestOperation* pOp = new SumTestOperation;
+  setOperation(pOp);
+  pOp->setDefault();
+
+  QVERIFY(connectInput("a"));
+  QVERIFY(start());
+  QVERIFY(sendObject("a", 20.0));
+  QCOMPARE(outputValue("sum", 0.0), 30.0);
+
+  QVERIFY(stop());
+  pOp->unsetDefault();
+
+  QVERIFY(start(ExpectFail));
+  QVERIFY(connectInput("b"));
+
+  QVERIFY(start());
+
+  QVERIFY(sendObject("a", 1.0));
+  QVERIFY(sendObject("b", 2));
+  QCOMPARE(outputValue("sum", 0.0), 3.0);
+}
+
 #endif
 
 QTEST_MAIN(TestPiiFunctionOperation)

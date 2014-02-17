@@ -87,25 +87,28 @@ namespace PiiFuncOpPrivate
   // The holder type must be resolved based on function argument
   // types. At that phase, it is not possible to know whether a getter
   // function or an input socket is used to retrieve the value at run
-  // time. Therefore, this struct separates the two cases at run
-  // time. This costs one comparison.
+  // time. Therefore, this struct separates the two cases at run time.
+  // This costs one comparison, which would be needed anyway since we
+  // need to support optional input sockets.
   template <class Object, class T> struct InputHolder
   {
     // Input parameters can be initialized by reading a socket...
     InputHolder(const char* socketName) :
       getter(0),
-      pSocket(new PiiInputSocket(socketName))
+      pSocket(new PiiInputSocket(socketName)),
+      bReadSocket(true)
     {}
     // ... or by calling a function. This version accepts any member
     // function pointer from a class derived from Object.
-    template <class Derived> InputHolder(T (Derived::*getter)()) :
-      getter(static_cast<T (Object::*)()>(getter)),
-      pSocket(0)
+    template <class Derived> InputHolder(T (Derived::* getter)() const) :
+      getter(static_cast<T (Object::*)() const>(getter)),
+      pSocket(0),
+      bReadSocket(false)
     {}
 
     void readValue(Object* obj, T& value)
     {
-      if (pSocket != 0)
+       if (bReadSocket)
         {
           if (pSocket->firstObject().type() != Pii::typeId<T>())
             PII_THROW_UNKNOWN_TYPE(pSocket);
@@ -117,8 +120,9 @@ namespace PiiFuncOpPrivate
 
     void emitValue(typename ParamTraits<T>::ValueType&) {}
 
-    T (Object::* getter)();
+    T (Object::* getter)() const;
     PiiInputSocket* pSocket;
+    bool bReadSocket;
   };
 
   template <class Object, class T> struct OutputHolder
@@ -173,15 +177,56 @@ namespace PiiFuncOpPrivate
     template <class Operation, class Holder>
     void operator() (Operation* op, Holder holder)
     {
-      op->addSocket(holder.pSocket);
+      if (holder.pSocket)
+        op->addSocket(holder.pSocket);
     }
+  };
+
+  struct DefaultValueSetter
+  {
+    template <class Object, class T>
+    void operator() (InputHolder<Object,T>& holder,
+                     const QString& name,
+                     T (Object::* getter)() const) const
+    {
+      if (holder.pSocket->objectName() == name)
+        {
+          holder.getter = getter;
+          holder.pSocket->setOptional(true);
+        }
+    }
+
+    template <class Object, class T>
+    void operator() (InputHolder<Object,T>& holder,
+                     const QString& name,
+                     nullptr_t) const
+    {
+      if (holder.pSocket->objectName() == name)
+        {
+          holder.getter = nullptr;
+          holder.pSocket->setOptional(false);
+        }
+    }
+
+    template <class... Args> void operator() (Args...) const {}
+  };
+
+  struct OptionalInputChecker
+  {
+    template <class Object, class T>
+    void operator() (InputHolder<Object,T>& holder)
+    {
+      holder.bReadSocket = holder.pSocket && holder.pSocket->isConnected();
+    }
+
+    template <class... Args> void operator() (Args...) const {}
   };
 
 }
 /// @endhide
 
 /**
- * An wrapper operation that makes it easy to make existing functions
+ * A wrapper operation that makes it easy to make existing functions
  * runnable by [PiiEngine].
  *
  *
@@ -210,6 +255,14 @@ namespace PiiFuncOpPrivate
 template <class Function, class... Args>
 class PiiFunctionOperation : public PiiDefaultOperation
 {
+public:
+  void check(bool reset)
+  {
+    PiiDefaultOperation::check(reset);
+
+    Pii::callWithTuples(PiiFuncOpPrivate::OptionalInputChecker(),
+                        _d()->holderPack);
+  }
 protected:
   /// @hide
   typedef PiiFunctionOperation<Function, Args...> ThisType;
@@ -281,6 +334,46 @@ protected:
     Pii::callWithTuples(PiiFuncOpPrivate::SocketAdder(),
                         Pii::makeTuple<sizeof...(Args)>(this),
                         d->holderPack);
+  }
+
+  /**
+   * Sets a default value for the given *input*. If the input is not
+   * connected, and the given *getter* function is not `nullptr`, the
+   * value returned by *getter* will be used instead of the input
+   * socket. Usually, *getter* is the READ accessor of a property with
+   * the same name as the input.
+   *
+   * Setting the default to a non-null value automatically marks the
+   * socket optional. If *getter* is `nullptr`, the socket will be
+   * made non-optional.
+   *
+   * ~~~(c++)
+   * setDefaultValue("threshold", // the name of an optional input
+   *                 &MyOperation::threshold); // pointer to member function
+   *
+   * setDefaultValue("threshold", nullptr); // removes default value
+   * ~~~
+   *
+   * ! The return type of *getter* must match the corresponding
+   *   function parameter type. Otherwise, the function call does
+   *   nothing. If the function takes in a const reference or pointer,
+   *   *getter* must return the corresponding value type.
+   */
+  template <class T, class Object>
+  void setDefaultValue(const QString& input, T (Object::* getter)() const)
+  {
+    Pii::callWithTuples(PiiFuncOpPrivate::DefaultValueSetter(),
+                        _d()->holderPack,
+                        Pii::makeTuple<sizeof...(Args)>(input),
+                        Pii::makeTuple<sizeof...(Args)>(static_cast<T (ThisType::*)() const>(getter)));
+  }
+
+  void setDefaultValue(const QString& input, nullptr_t)
+  {
+    Pii::callWithTuples(PiiFuncOpPrivate::DefaultValueSetter(),
+                        _d()->holderPack,
+                        Pii::makeTuple<sizeof...(Args)>(input),
+                        Pii::makeTuple<sizeof...(Args)>(nullptr));
   }
 
   void process()
