@@ -236,13 +236,35 @@
  * // printf("a"); printf("b"); printf("c");
  * ~~~
  */
-#  define PII_FOR_N(MACRO, N, ELEMENTS) \
-  PII_EXPAND(PII_JOIN(PII_FOR_, N) PII_LPAREN MACRO PII_COMMA PII_NULL_SEP PII_COMMA PII_REMOVE_PARENS(N, ELEMENTS) PII_RPAREN)
+#  define PII_FOR_N(MACRO, N, ELEMENTS)                 \
+  PII_EXPAND(PII_JOIN(PII_FOR_, N) PII_LPAREN           \
+             MACRO PII_COMMA                            \
+             PII_NULL PII_COMMA                         \
+             PII_ID PII_COMMA                           \
+             PII_REMOVE_PARENS(N, ELEMENTS) PII_RPAREN)
 /**
- * Repeats *MACRO* for each of the *N* elements in *ELEMENTS*,
- * placing *SEPARATOR* between each element. *SEPARATOR* will be
- * called with one parameter: the (zero-based) index of the current
- * element and the element. Use `PII_COMMA_SEP` to place a comma
+ * Same as [PII_FOR_N], but passes ARG(N) as the first parameter to
+ * *MACRO* instead of N.
+ *
+ * ~~~(c++)
+ * #define MYMACRO(A, B) A B;
+ *
+ * PII_FOR_N_ARG(MYMACRO, int PII_NULL, 3, (a, b, c));
+ * // Expands to
+ * // int a; int b; int c;
+ * ~~~
+ */
+#  define PII_FOR_N_ARG(MACRO, ARG, N, ELEMENTS)        \
+  PII_EXPAND(PII_JOIN(PII_FOR_, N) PII_LPAREN           \
+             MACRO PII_COMMA                            \
+             PII_NULL PII_COMMA                         \
+             ARG PII_COMMA                              \
+             PII_REMOVE_PARENS(N, ELEMENTS) PII_RPAREN)
+/**
+ * Repeats *MACRO* for each of the *N* elements in *ELEMENTS*, placing
+ * *SEPARATOR(N)* between each element. *SEPARATOR* will be called
+ * with one parameter: the (zero-based) index of the current element
+ * and the element itself. Use `PII_COMMA_SEP` to place a comma
  * between elements.
  *
  * ~~~(c++)
@@ -253,13 +275,47 @@
  * // int ia = 0 , ib = 1 , ic = 2;
  * ~~~
  */
-#  define PII_FOR_N_SEP(MACRO, SEPARATOR, N, ELEMENTS) \
-  PII_EXPAND(PII_JOIN(PII_FOR_, N) PII_LPAREN MACRO PII_COMMA SEPARATOR PII_COMMA PII_REMOVE_PARENS(N, ELEMENTS) PII_RPAREN)
+#  define PII_FOR_N_SEP(MACRO, SEPARATOR, N, ELEMENTS)  \
+  PII_EXPAND(PII_JOIN(PII_FOR_, N) PII_LPAREN           \
+             MACRO PII_COMMA                            \
+             SEPARATOR PII_COMMA                        \
+             PII_ID PII_COMMA                           \
+             PII_REMOVE_PARENS(N, ELEMENTS) PII_RPAREN)
+/**
+ * Same as [PII_FOR_N_SEP], but passes ARG(N) as the first parameter
+ * to *MACRO* instead of N.
+ */
+#  define PII_FOR_N_SEP_ARG(MACRO, SEPARATOR, ARG, N, ELEMENTS) \
+  PII_EXPAND(PII_JOIN(PII_FOR_, N) PII_LPAREN                   \
+             MACRO PII_COMMA                                    \
+             SEPARATOR PII_COMMA                                \
+             ARG PII_COMMA                                      \
+             PII_REMOVE_PARENS(N, ELEMENTS) PII_RPAREN)
 #else
-#  define PII_FOR_N(MACRO, N, ELEMENTS) \
-  PII_JOIN(PII_FOR_, N) PII_LPAREN MACRO PII_COMMA PII_NULL_SEP PII_COMMA PII_EXPAND(PII_JOIN(PII_REMOVE_PARENS_, N)ELEMENTS) PII_RPAREN
-#  define PII_FOR_N_SEP(MACRO, SEPARATOR, N, ELEMENTS) \
-  PII_JOIN(PII_FOR_, N) PII_LPAREN MACRO PII_COMMA SEPARATOR PII_COMMA PII_EXPAND(PII_JOIN(PII_REMOVE_PARENS_, N)ELEMENTS) PII_RPAREN
+#  define PII_FOR_N(MACRO, N, ELEMENTS)                          \
+  PII_JOIN(PII_FOR_, N) PII_LPAREN                               \
+  MACRO PII_COMMA                                                \
+  PII_NULL PII_COMMA                                             \
+  PII_ID PII_COMMA                                               \
+  PII_EXPAND(PII_JOIN(PII_REMOVE_PARENS_, N)ELEMENTS) PII_RPAREN
+#  define PII_FOR_N_ARG(MACRO, ARG, N, ELEMENTS)                 \
+  PII_JOIN(PII_FOR_, N) PII_LPAREN                               \
+  MACRO PII_COMMA                                                \
+  PII_NULL PII_COMMA                                             \
+  ARG PII_COMMA                                                  \
+  PII_EXPAND(PII_JOIN(PII_REMOVE_PARENS_, N)ELEMENTS) PII_RPAREN
+#  define PII_FOR_N_SEP(MACRO, SEPARATOR, N, ELEMENTS)           \
+  PII_JOIN(PII_FOR_, N) PII_LPAREN                               \
+  MACRO PII_COMMA                                                \
+  SEPARATOR PII_COMMA                                            \
+  PII_ID PII_COMMA                                               \
+  PII_EXPAND(PII_JOIN(PII_REMOVE_PARENS_, N)ELEMENTS) PII_RPAREN
+#  define PII_FOR_N_SEP_ARG(MACRO, SEPARATOR, ARG, N, ELEMENTS)  \
+  PII_JOIN(PII_FOR_, N) PII_LPAREN                               \
+  MACRO PII_COMMA                                                \
+  SEPARATOR PII_COMMA                                            \
+  ARG PII_COMMA                                                  \
+  PII_EXPAND(PII_JOIN(PII_REMOVE_PARENS_, N)ELEMENTS) PII_RPAREN
 #endif
 
 /**
@@ -269,8 +325,9 @@
 #define PII_REPEAT_N(MACRO, N) \
   PII_EXPAND(PII_JOIN(PII_REPEAT_, N) PII_LPAREN MACRO PII_RPAREN)
 
-#define PII_NULL_SEP(N)
+#define PII_NULL(N)
 #define PII_COMMA_SEP(N) ,
+#define PII_ID(X) X
 
 /**
  * Repeat *MACRO* for each element in *LIST*.
