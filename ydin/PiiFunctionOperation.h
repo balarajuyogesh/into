@@ -199,7 +199,7 @@ namespace PiiFuncOpPrivate
     template <class Object, class T>
     void operator() (InputHolder<Object,T>& holder,
                      const QString& name,
-                     nullptr_t) const
+                     std::nullptr_t) const
     {
       if (holder.pSocket->objectName() == name)
         {
@@ -368,7 +368,7 @@ protected:
                         Pii::makeTuple<sizeof...(Args)>(static_cast<T (ThisType::*)() const>(getter)));
   }
 
-  void setDefaultValue(const QString& input, nullptr_t)
+  void setDefaultValue(const QString& input, std::nullptr_t)
   {
     Pii::callWithTuples(PiiFuncOpPrivate::DefaultValueSetter(),
                         _d()->holderPack,
