@@ -658,14 +658,22 @@ namespace Pii
   }
 
   /**
-   * Returns the "modulus" of a floating point number. This function
-   * can be used in folding a floating point number to a predefined
-   * range. Its most typical use is in handling angles.
+   * Generic modulus function that works with both integer and
+   * floating-point types.
+   *
+   * The floating-point versions of this function can be used in
+   * folding a floating point number to a predefined range. Its most
+   * typical use is in handling angles.
    *
    * ~~~(c++)
    * double dAngle = Pii::mod(M_PI*3, M_PI*2); // returns M_PI
    * ~~~
    */
+  template <class T> inline T mod(T a, T b, typename OnlyNumeric<T>::Type = 0)
+  {
+    return a % b;
+  }
+
   inline float mod(float d1, float d2) { return fmodf(d1, d2); }
   inline double mod(double d1, double d2) { return fmod(d1, d2); }
 
