@@ -14,10 +14,11 @@
  */
 
 #include "TestPiiSocket.h"
-#include <PiiInputSocket.h>
-#include <PiiOutputSocket.h>
-#include <PiiProxySocket.h>
 #include <QtTest>
+
+TestPiiSocket::TestPiiSocket() :
+  a(""), b(""), e(""), h("")
+{}
 
 /*
   Capital letters represent proxies
@@ -29,10 +30,6 @@
  */
 void TestPiiSocket::isConnected()
 {
-  PiiOutputSocket a("");
-  PiiInputSocket b(""), e(""), h("");
-  PiiProxySocket c, d, f, g;
-
   QVERIFY(!a.isConnected());
   QVERIFY(!b.isConnected());
   QVERIFY(!e.isConnected());
@@ -66,12 +63,39 @@ void TestPiiSocket::isConnected()
   a.disconnectInput(&b);
   QVERIFY(!a.isConnected());
 
-  // Try to make a loop
   c.output()->connectInput(d.input());
+  c.output()->connectInput(&e);
+  a.connectInput(&b);
+}
+
+void TestPiiSocket::proxyLoop()
+{
+  // Try to make a loop
   g.output()->connectInput(c.input());
   QCOMPARE(g.output()->connectedInputs().size(), 1);
   QCOMPARE(g.output()->connectedInputs()[0],
            static_cast<PiiAbstractInputSocket*>(&h));
+}
+
+void TestPiiSocket::connectedInputs()
+{
+  QList<PiiAbstractInputSocket*> lstInputs = a.connectedInputs();
+  QCOMPARE(lstInputs.size(), 2);
+  QVERIFY(lstInputs.contains(&b));
+  QVERIFY(lstInputs.contains(c.input()));
+
+  lstInputs = PiiProxySocket::connectedInputs(c.input());
+  QCOMPARE(lstInputs.size(), 2);
+  QVERIFY(lstInputs.contains(&e));
+  QVERIFY(lstInputs.contains(&h));
+}
+
+void TestPiiSocket::root()
+{
+  QCOMPARE(PiiProxySocket::root(g.output()), &a);
+  QCOMPARE(PiiProxySocket::root(f.output()), &a);
+  QCOMPARE(PiiProxySocket::root(c.output()), &a);
+  QCOMPARE(PiiProxySocket::root(&a), &a);
 }
 
 QTEST_MAIN(TestPiiSocket)

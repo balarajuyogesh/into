@@ -131,6 +131,16 @@ void TestPiiUtil::findDependencies()
              (QLinkedList<QPair<int,int> >()
               << qMakePair(0,1) << qMakePair(1,2) << qMakePair(2,0) << qMakePair(8,8)));
   }
+  {
+    QLinkedList<QPair<int,int> > lstPairs;
+    lstPairs << qMakePair(6,7) << qMakePair(6,8);
+    QList<QList<int> > lstDeps(Pii::findDependencies(lstPairs, Pii::AnyLayeredOrder));
+    QCOMPARE(lstDeps.size(), 2);
+    QCOMPARE(lstDeps[0], QList<int>() << 6);
+    QCOMPARE(lstDeps[1].size(), 2);
+    QVERIFY(lstDeps[1].contains(7));
+    QVERIFY(lstDeps[1].contains(8));
+  }
 }
 
 void TestPiiUtil::splitQuoted()

@@ -17,13 +17,27 @@
 #define _TESTPIISOCKET_H
 
 #include <QObject>
+#include <PiiInputSocket.h>
+#include <PiiOutputSocket.h>
+#include <PiiProxySocket.h>
 
 class TestPiiSocket : public QObject
 {
   Q_OBJECT
 
+public:
+  TestPiiSocket();
+
 private slots:
   void isConnected();
+  void proxyLoop();
+  void connectedInputs();
+  void root();
+
+private:
+  PiiOutputSocket a;
+  PiiInputSocket b, e, h;
+  PiiProxySocket c, d, f, g;
 };
 
 
