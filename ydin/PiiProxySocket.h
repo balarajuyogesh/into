@@ -67,7 +67,7 @@ public:
   static PiiAbstractOutputSocket* root(PiiAbstractOutputSocket* output);
 
   /**
-   * Returns the inputs to which *input* is connected
+   * Returns the non-proxy inputs to which *input* is connected
    * (recursively). If *input* is not a proxy, returns a list
    * containing just *input*. If *input* is 0, returns an empty list.
    */
