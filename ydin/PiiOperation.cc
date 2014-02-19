@@ -18,6 +18,7 @@
 #include <PiiSerializationFactory.h>
 #include <PiiSerializableExport.h>
 #include "PiiYdinResources.h"
+#include <PiiMath.h>
 
 PII_DEFINE_VIRTUAL_METAOBJECT_FUNCTION(PiiOperation);
 PII_SERIALIZABLE_EXPORT(PiiOperation);
@@ -30,7 +31,8 @@ static int iOperationPtrMetaType = qRegisterMetaType<PiiOperationPtr>("PiiOperat
 PiiOperation::Data::Data() :
   stateMutex(QMutex::Recursive),
   bCachingProperties(false),
-  bApplyingPropertySet(false)
+  bApplyingPropertySet(false),
+  pmapMetaPropertyCache(0)
 {}
 
 PiiOperation::Data::~Data()
@@ -207,6 +209,42 @@ void PiiOperation::addPropertyToList(PropertyList& properties,
   properties << qMakePair(name, value);
 }
 
+QVariant PiiOperation::applyLimits(const char* property, const QVariant& value) const
+{
+  // Can apply limits to numbers only
+  if (value.type() == QVariant::Int)
+    return applyLimits<int>(property, value);
+  else if (value.type() == QVariant::Double)
+    return applyLimits<double>(property, value);
+  return value;
+}
+
+template <class T>
+QVariant PiiOperation::applyLimits(const char* property, const QVariant& value) const
+{
+  const QVariantMap mapRange(metaProperties(property));
+  if (mapRange.isEmpty())
+    return value;
+
+  T numericValue = value.value<T>();
+  T minValue = 0;
+  QVariantMap::const_iterator it = mapRange.find("min");
+  if (it != mapRange.end())
+    {
+      minValue = it->value<T>();
+      if (numericValue < minValue)
+        return *it;
+    }
+  it = mapRange.find("max");
+  if (it != mapRange.end() && numericValue > it->value<T>())
+    return *it;
+  it = mapRange.find("step");
+  if (it != mapRange.end())
+    return numericValue - Pii::mod(numericValue - minValue, it->value<T>());
+
+  return value;
+}
+
 bool PiiOperation::setProperty(const char* name, const QVariant& value)
 {
   QMutexLocker lock(&d->stateMutex);
@@ -227,7 +265,7 @@ bool PiiOperation::setProperty(const char* name, const QVariant& value)
           (level == WriteWhenStopped && currentState != Stopped))
         return false;
     }
-  return QObject::setProperty(name, value);
+  return QObject::setProperty(name, applyLimits(name, value));
 }
 
 bool PiiOperation::setProperty(const char* name, const PiiVariant& value)
@@ -235,9 +273,117 @@ bool PiiOperation::setProperty(const char* name, const PiiVariant& value)
   return setProperty(name, QVariant::fromValue(value));
 }
 
+bool PiiOperation::setProperty(const QString& name, const QVariant& value)
+{
+  return setProperty(qPrintable(name), value);
+}
+
 QVariant PiiOperation::property(const char* name) const
 {
   return QObject::property(name);
+}
+
+QVariant PiiOperation::property(const QString& name) const
+{
+  return property(qPrintable(name));
+}
+
+QVariant PiiOperation::parseNumber(const QString& number)
+{
+  bool bOk = false;
+  int i = number.toInt(&bOk);
+  if (bOk) return i;
+  double d = number.toDouble(&bOk);
+  if (bOk) return d;
+  return number;
+}
+
+void PiiOperation::parseRange(QVariantMap& map, const QString& range)
+{
+  QStringList lstParts(range.split(':'));
+  if (lstParts.size() member_of (2,3))
+    {
+      if (!lstParts[0].isEmpty())
+        map["min"] = parseNumber(lstParts[0]);
+      if (!lstParts.last().isEmpty())
+        map["max"] = parseNumber(lstParts.last());
+      if (lstParts.size() == 3 && !lstParts[1].isEmpty())
+        map["step"] = parseNumber(lstParts[1]);
+    }
+}
+
+void PiiOperation::parseProperty(QVariantMap& map, const QString& metaPropertyName, const QString& value)
+{
+  if (metaPropertyName == "range")
+    parseRange(map, value);
+  else
+    map[metaPropertyName] = parseNumber(value);
+}
+
+QVariant PiiOperation::metaProperty(const QString& propertyName, const QString& metaPropertyName) const
+{
+  if (d->pmapMetaPropertyCache ||
+      (d->pmapMetaPropertyCache = createMetaPropertyCache(metaObject())))
+    {
+      // Two-level lookup in class-specific cache
+      QMap<QString,QVariantMap>::const_iterator it = d->pmapMetaPropertyCache->find(propertyName);
+      if (it != d->pmapMetaPropertyCache->end())
+        {
+          QVariantMap::const_iterator it2 = it->find(metaPropertyName);
+          if (it2 != it->end())
+            return *it2;
+        }
+    }
+  return QVariant();
+}
+
+QVariantMap PiiOperation::metaProperties(const QString& propertyName) const
+{
+  if (d->pmapMetaPropertyCache ||
+      (d->pmapMetaPropertyCache == createMetaPropertyCache(metaObject())))
+    {
+      QMap<QString,QVariantMap>::const_iterator it = d->pmapMetaPropertyCache->find(propertyName);
+      if (it != d->pmapMetaPropertyCache->end())
+        return *it;
+    }
+  return QVariantMap();
+}
+
+const QMap<QString,QVariantMap>* PiiOperation::createMetaPropertyCache(const QMetaObject* metaObj)
+{
+  static QMutex cacheMutex;
+  QMutexLocker lock(&cacheMutex);
+
+  // If there is already a cache for the class, simply return a
+  // pointer to it.
+  MetaPropertyCache* pCache = metaPropertyCache();
+  MetaPropertyCache::iterator it = pCache->find(metaObj->className());
+  if (it != pCache->end())
+    return &(*it);
+
+  // Otherwise create a new cache.
+  QMap<QString,QVariantMap> mapCache;
+  // Parse all class info fields
+  for (int i=0; i<metaObj->classInfoCount(); ++i)
+    {
+      QMetaClassInfo info = metaObj->classInfo(i);
+      QStringList lstParts(QString(info.name()).split('.'));
+      // The info is a metaproperty if it begins with a property name.
+      if (lstParts.size() == 2 &&
+          metaObj->indexOfProperty(qPrintable(lstParts[0])) != -1)
+        {
+          // Add this property to the map of metaproperties
+          parseProperty(mapCache[lstParts[0]], lstParts[1], info.value());
+        }
+    }
+  return &(*pCache->insert(metaObj->className(), mapCache));
+}
+
+
+PiiOperation::MetaPropertyCache* PiiOperation::metaPropertyCache()
+{
+  static MetaPropertyCache cache;
+  return &cache;
 }
 
 PiiOperation* PiiOperation::clone() const
@@ -292,7 +438,7 @@ void PiiOperation::setProtectionLevel(const char* property, ProtectionLevel leve
       else
         d->lstProtectionLevels[iIndex].second = level;
     }
-  else if (iIndex != -1)// Remove protection
+  else if (iIndex != -1) // Remove protection
     d->lstProtectionLevels.removeAt(iIndex);
 }
 
@@ -311,3 +457,5 @@ PiiOperation::ProtectionLevel PiiOperation::protectionLevel(const QString& prope
 {
   return protectionLevel(qPrintable(property));
 }
+
+QVariant PiiOperation::socketData(PiiSocket*, int) const { return QVariant(); }

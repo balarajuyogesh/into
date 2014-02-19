@@ -19,7 +19,11 @@
 
 #include <PiiYdinUtil.h>
 
-CounterOperation::CounterOperation()
+CounterOperation::CounterOperation() :
+  _iProp1(0),
+  _dProp2(2.0),
+  _iProp3(0),
+  _iProp4(0)
 {
   setObjectName("counter");
   addSocket(new PiiInputSocket("input"));
@@ -74,6 +78,54 @@ void TestPiiDefaultOperation::initTestCase()
   QVERIFY(_engine.connectOutput("counter.output1", "buffer.input1"));
 }
 
+void TestPiiDefaultOperation::metaProperty()
+{
+  QCOMPARE(_pCounter->metaProperty("prop1", "min").toInt(), 0);
+  QCOMPARE(_pCounter->metaProperty("prop2", "min").toDouble(), 0.5);
+  QCOMPARE(_pCounter->metaProperty("prop2", "max").toDouble(), 6.0);
+  QCOMPARE(_pCounter->metaProperty("prop2", "step").toDouble(), 1.5);
+  QCOMPARE(_pCounter->metaProperties("prop3")["max"].toInt(), 255);
+  QCOMPARE(_pCounter->metaProperty("prop4", "min").toInt(), -10);
+  QCOMPARE(_pCounter->metaProperty("prop4", "step").toInt(), 2);
+  QCOMPARE(_pCounter->metaProperty("prop4", "max").toInt(), 10);
+
+  _pCounter->setProperty("prop1", -1);
+  QCOMPARE(_pCounter->prop1(), 0);
+
+  _pCounter->setProperty("prop1", 1);
+  QCOMPARE(_pCounter->prop1(), 1);
+
+  _pCounter->setProperty("prop2", 0);
+  QCOMPARE(_pCounter->prop2(), 0.5);
+
+  _pCounter->setProperty("prop2", 1.0);
+  QCOMPARE(_pCounter->prop2(), 0.5);
+
+  _pCounter->setProperty("prop2", 1.5);
+  QCOMPARE(_pCounter->prop2(), 0.5);
+
+  _pCounter->setProperty("prop2", 2.0000001);
+  QCOMPARE(_pCounter->prop2(), 2.0);
+
+  _pCounter->setProperty("prop2", 7);
+  QCOMPARE(_pCounter->prop2(), 6.0);
+
+  _pCounter->setProperty("prop3", 256);
+  QCOMPARE(_pCounter->prop3(), 255);
+
+  _pCounter->setProperty("prop3", -256);
+  QCOMPARE(_pCounter->prop3(), -256);
+
+  _pCounter->setProperty("prop4", -11);
+  QCOMPARE(_pCounter->prop4(), -10);
+
+  _pCounter->setProperty("prop4", 11);
+  QCOMPARE(_pCounter->prop4(), 10);
+
+  _pCounter->setProperty("prop4", 1);
+  QCOMPARE(_pCounter->prop4(), 0);
+}
+
 void TestPiiDefaultOperation::process()
 {
   QFETCH(int, threadCount);
@@ -89,8 +141,9 @@ void TestPiiDefaultOperation::process()
       QFAIL(qPrintable(ex.message()));
     }
 
-  QVERIFY(_engine.wait(PiiOperation::Stopped, 3000));
-  //PiiYdin::dumpOperation(&_engine)
+  QVERIFY(_engine.wait(PiiOperation::Stopped, 500));
+  //_engine.wait(PiiOperation::Stopped, 3000);
+  //PiiYdin::dumpOperation(&_engine);
 
   QCOMPARE(_pBuffer->lstData.size(), int(sequenceLength));
   QList<QPair<int,int> > lstData(_pBuffer->lstData);

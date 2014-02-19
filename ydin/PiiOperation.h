@@ -309,44 +309,24 @@ public:
   Q_INVOKABLE QStringList outputNames() const;
 
   /**
-   * Returns meta information associated with *socket*. This function
-   * can be used to query named properties of input and output
-   * sockets. Operations are required to provide at least the `name`
-   * property. Other properties can be used depending on application.
-   * Below is a short list of commonly used properies:
-   *
-   * - `name` - the name of the socket in the context of this
-   * operation. See socketName().
-   *
-   * - `min` - the minimum possible scalar value a socket can
-   * send/receive
-   *
-   * - `max` - the maximum possible scalar value a socket can
-   * send/receive
-   *
-   * - `resolution` - the resolution of the value. Integers have a
-   * resolution of 1. If the value can take values only in known
-   * steps, the `resolution` property specifies the step size.
-   *
-   * - `displayName` - a user-displayable name of the socket. May be
-   * translated.
-   *
-   * @param socket the socket whose properties are queried
-   *
-   * @param the name of the property to query
+   * Returns metadata associated with *socket*. The default
+   * implementation always returns an invalid variant, but this
+   * function makes it possible for subclasses to associate
+   * application-specific metadata to sockets. Such information may
+   * include, for example, the data type expected by or produced by a
+   * socket, minimum and maximum values for the acceptable value range
+   * of an input etc.
    *
    * @return the value of the property, or an invalid QVariant if the
-   * socket is not owned by this operation or the named property does
-   * not exist.
-   *
-   * @see PiiYdin::isNameProperty()
+   * socket is not owned by this operation or there is no data
+   * associated with *role*.
    */
-  //virtual QVariant socketProperty(PiiAbstractSocket* socket, const char* name) const;
+  virtual QVariant socketData(PiiSocket* socket, int role) const;
 
   /**
    * A convenience function for connecting a named output socket to a
    * named input socket in another operation. This is (almost)
-   * analogous to:
+   * equivalent to:
    *
    * ~~~(c++)
    * output("output")->connectInput(other->input(input));
@@ -432,11 +412,61 @@ public:
    * @see PiiDefaultOperation::setProperty()
    */
   virtual bool setProperty(const char* name, const QVariant& value);
+  Q_INVOKABLE bool setProperty(const QString& name, const QVariant& value);
 
   /**
    * Returns the value of the property identified by *name*.
    */
   virtual QVariant property(const char* name) const;
+  Q_INVOKABLE QVariant property(const QString& name) const;
+
+  /**
+   * Returns the value of a metaproperty associated with
+   * *propertyName*. PiiOperation extends Qt's metaobject system by
+   * allowing one to provide additional information related to
+   * properties. This information is mostly used by GUI tools.
+   *
+   * Metaproperties are set using the `Q_CLASSINFO` macro in the class
+   * declaration.  The general syntax for setting metaproperties is:
+   *
+   * ~~~(c++)
+   * Q_CLASSINFO("propertyName.metaPropertyName", "value")
+   * ~~~
+   *
+   * This function automatically parses numbers (`int`, `double`) and
+   * ranges. The "range" metaproperty is a shortcut that sets "min",
+   * "max", and "step" metaproperties at once. It can be used to
+   * specify allowable value range for a property. The general syntax
+   * for ranges is:
+   *
+   * ~~~(c++)
+   * Q_CLASSINFO("propertyName.range", "min:step:max")
+   * ~~~
+   *
+   * Any two of the three fields (min, step, max) can be omitted. The
+   * range can also left open. Some examples:
+   *
+   * ~~~(c++)
+   * Q_CLASSINFO("threshold.range", "0:255")
+   * Q_CLASSINFO("count.range", "0:")
+   * Q_CLASSINFO("humidity.range", "0.0:0.1:100.0")
+   * ~~~
+   *
+   * For example, assuming the metaproperty definitions above:
+   *
+   * ~~~(c++)
+   * QVariantMap range = pOp->metaProperties("humidity").toMap();
+   * // range["min"].toDouble() == 0.0
+   * // range["step"].toDouble() == 0.1
+   * // range["max"].toDouble() == 100.0
+   * ~~~
+   */
+  Q_INVOKABLE QVariant metaProperty(const QString& propertyName, const QString& metaPropertyName) const;
+
+  /**
+   * Returns all metaproperties associated with *propertyName*.
+   */
+  Q_INVOKABLE QVariantMap metaProperties(const QString& propertyName) const;
 
   /**
    * A convenience function that automatically creates a QVariant out
@@ -519,6 +549,7 @@ protected:
     bool bCachingProperties, bApplyingPropertySet;
     QString strPropertySetName;
     QMap<QString,PropertyList> mapCachedProperties;
+    mutable const QMap<QString,QVariantMap>* pmapMetaPropertyCache;
   } *d;
 
   PiiOperation(Data* d);
@@ -588,9 +619,21 @@ protected:
 
 private:
   int indexOf(const char* property) const;
-  void addPropertyToList(PropertyList& properties,
-                         const QString& name,
-                         const QVariant& value);
+  static void addPropertyToList(PropertyList& properties,
+                                const QString& name,
+                                const QVariant& value);
+  static void parseRange(QVariantMap& map, const QString& range);
+  static QVariant parseNumber(const QString& number);
+  static void parseProperty(QVariantMap& map, const QString& metaPropertyName, const QString& value);
+  QVariant applyLimits(const char* property, const QVariant& value) const;
+  template <class T>
+  QVariant applyLimits(const char* property, const QVariant& value) const;
+
+  // Keyed by 1) class name 2) property name 3) metaproperty name
+  typedef QMap<QString,QMap<QString,QVariantMap> > MetaPropertyCache;
+  static MetaPropertyCache* metaPropertyCache();
+  static const QMap<QString, QVariantMap>* createMetaPropertyCache(const QMetaObject* metaObj);
+
   PII_DISABLE_COPY(PiiOperation);
 };
 

@@ -1,5 +1,5 @@
 /* This file is part of Into.
- * Copyright (C) Intopii 2013.
+ * Copyright (C) Intopii 2014.
  * All rights reserved.
  *
  * Licensees holding a commercial Into license may use this file in
@@ -13,30 +13,24 @@
  * refer to LICENSE.AGPL3 for details.
  */
 
-#ifndef _TESTPIIDEFAULTOPERATION_H
-#define _TESTPIIDEFAULTOPERATION_H
+#ifndef _TESTOPERATION_H
+#define _TESTOPERATION_H
 
-#include <PiiProbeInput.h>
-#include <PiiEngine.h>
+#include <PiiDefaultOperation.h>
 
-#include "TestOperations.h"
-
-class TestPiiDefaultOperation : public QObject
+class TestOperation : public PiiDefaultOperation
 {
   Q_OBJECT
 
-private slots:
-  void initTestCase();
-  void metaProperty();
-  void process();
-  void process_data();
+public:
+  TestOperation()
+  {
+    addSocket(new PiiOutputSocket("output"));
+  }
+  QVariant socketData(PiiSocket*, int role) const { return role; }
 
-private:
-  enum { sequenceLength = 2048 };
-  PiiEngine _engine;
-  CounterOperation* _pCounter;
-  BufferOperation* _pBuffer;
+protected:
+  void process() {}
 };
 
-
-#endif //_TESTPIIDEFAULTOPERATION_H
+#endif //_TESTOPERATION_H

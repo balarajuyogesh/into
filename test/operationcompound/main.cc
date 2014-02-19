@@ -20,6 +20,8 @@
 
 #include <QtTest>
 
+#include "TestOperation.h"
+
 void TestPiiOperationCompound::initTestCase()
 {
   _compound.createInputProxy("input");
@@ -71,6 +73,17 @@ void TestPiiOperationCompound::clone()
   QCOMPARE(pCompound->outputProxy("output")->input()->connectedOutput(),
            pCompound->inputProxy("input")->output());
   delete pCompound;
+}
+
+void TestPiiOperationCompound::socketData()
+{
+  PiiOperationCompound* pCompound = _compound.clone();
+  TestOperation* pTest = new TestOperation;
+  pTest->connectOutput("output", pCompound, "input");
+  QCOMPARE(pTest->socketData(pTest->output("output"), 1).toInt(), 1);
+  QCOMPARE(pCompound->socketData(pCompound->output("output"), 1).toInt(), 1);
+  delete pCompound;
+  delete pTest;
 }
 
 void TestPiiOperationCompound::cleanupTestCase()

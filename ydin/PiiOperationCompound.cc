@@ -1170,3 +1170,53 @@ void PiiOperationCompound::connectAll(PiiAbstractOutputSocket* source, const End
         source->connectInput(pTarget);
     }
 }
+
+QVariant PiiOperationCompound::socketData(PiiSocket* socket, int role) const
+{
+  if (socket == 0)
+    return QVariant();
+
+  const PII_D;
+  if (socket->isOutput())
+    {
+      PiiAbstractOutputSocket* pOutput = static_cast<PiiAbstractOutputSocket*>(socket);
+      if (!d->lstOutputs.contains(pOutput))
+        return QVariant();
+
+      // Find the starting point of a possible chain of proxies (this
+      // is where data to this proxy originates).
+      pOutput = PiiProxySocket::root(pOutput);
+      // Can't do much if the socket isn't connected.
+      if (pOutput)
+        {
+          PiiOperation* pParent = pOutput->parentOperation();
+          if (pParent)
+            return pParent->socketData(pOutput, role);
+        }
+    }
+  else
+    {
+      PiiAbstractInputSocket* pInput = static_cast<PiiAbstractInputSocket*>(socket);
+      if (!d->lstInputs.contains(pInput))
+        return QVariant();
+
+      // Fetch the data from all connected inputs.
+      QList<PiiAbstractInputSocket*> lstInputs(PiiProxySocket::connectedInputs(pInput));
+      QVariantList lstValues;
+      for (int i=0; i<lstInputs.size(); ++i)
+        {
+          PiiOperation* pParent = lstInputs[i]->parentOperation();
+          if (pParent)
+            {
+              QVariant varValue(pParent->socketData(lstInputs[i], role));
+              if (varValue.isValid() && !lstValues.contains(varValue))
+                lstValues.append(varValue);
+            }
+        }
+      if (lstValues.size() == 1)
+        return lstValues[0];
+      else if (lstValues.size() > 1)
+        return lstValues;
+    }
+  return QVariant();
+}

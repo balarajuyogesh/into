@@ -625,6 +625,30 @@ public:
    */
   PiiOperationCompound* clone() const;
 
+  /**
+   * Returns data associated with *socket*. PiiOperationCompound
+   * doesn't provide storage for socket-specific data; it merely
+   * handles sockets exposed to its interface so that the call is
+   * passed to the operation that really owns *socket*.
+   *
+   * - If *socket* is an ordinary socket, the call will be directly
+   *   passed to its parent operation.
+   *
+   * - If *socket* is a proxy output, this function will find the
+   *   internal output connected to the proxy's input side (either
+   *   directly or recursively through other proxies) and pass the
+   *   call to its parent operation.
+   *
+   * - If *socket* is a proxy input, this function will find all input
+   *   sockets connected to the output side of the proxy (either
+   *   directly or recursively through other proxies). If only one of
+   *   the connected inputs contains the requested data, or if the
+   *   value is the same in all inputs, that value will be
+   *   returned. If the inputs have different values for the data,
+   *   every different value is returned as a QVariantList.
+   */
+  QVariant socketData(PiiSocket* socket, int role) const;
+
 protected:
   /// @hide
   class PII_YDIN_EXPORT Data;
