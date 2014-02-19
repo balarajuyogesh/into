@@ -233,3 +233,39 @@ PiiAbstractOutputSocket* PiiProxySocket::root(PiiAbstractOutputSocket* output)
     }
   return output;
 }
+
+QList<PiiAbstractInputSocket*> PiiProxySocket::connectedInputs(PiiAbstractInputSocket* input)
+{
+  QList<PiiAbstractInputSocket*> lstResult;
+  if (input == 0)
+    return lstResult;
+
+  PiiAbstractOutputSocket* pOutput = output(input);
+  // If input is part of a proxy, recurse to all connected inputs.
+  if (pOutput != 0)
+    {
+      QList<PiiAbstractInputSocket*> lstInputs(pOutput->connectedInputs());
+      for (int i=0; i<lstInputs.size(); ++i)
+        lstResult.append(connectedInputs(lstInputs[i]));
+    }
+  else
+    lstResult.append(input);
+
+  return lstResult;
+}
+
+bool PiiProxySocket::isConnected(PiiAbstractInputSocket* in, PiiAbstractOutputSocket* out)
+{
+  if (in == 0)
+    return false;
+
+  while (out != 0)
+    {
+      PiiAbstractInputSocket* pInput = input(out);
+      if (pInput == in)
+        return true;
+      out = pInput ? pInput->connectedOutput() : 0;
+    }
+
+  return false;
+}

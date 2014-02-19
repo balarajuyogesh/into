@@ -83,6 +83,24 @@ public:
   Q_INVOKABLE void reconnect(PiiAbstractOutputSocket* output, PiiAbstractInputSocket* input);
 
   /**
+   * Returns the number of connected input sockets. This is equivalent
+   * but faster than calling `connectedInputs().size()`.
+   */
+  Q_INVOKABLE int connectedInputCount() const;
+
+  /**
+   * Returns the fully-qualified names (FQN) of all connected
+   * inputs. The FQN is formed by concatenating the `objectName`
+   * properties of all parent operations of a socket. Therefore, a
+   * pointer to the input socket can be obtained by calling
+   * `input(FQN)` on the topmost enclosing operation (typically, a
+   * PiiEngine).
+   *
+   * @see PiiOperation::fullName()
+   */
+  Q_INVOKABLE QStringList connectedInputNames() const;
+
+  /**
    * Returns all inputs this socket is connected to.
    */
   QList<PiiAbstractInputSocket*> connectedInputs() const;

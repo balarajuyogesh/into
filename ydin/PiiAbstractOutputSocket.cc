@@ -51,6 +51,20 @@ PiiAbstractOutputSocket::~PiiAbstractOutputSocket()
   disconnectInputs();
 }
 
+int PiiAbstractOutputSocket::connectedInputCount() const
+{
+  return _d()->lstInputs.size();
+}
+
+QStringList PiiAbstractOutputSocket::connectedInputNames() const
+{
+  QList<PiiAbstractInputSocket*> lstInputs(connectedInputs());
+  QStringList lstFqns;
+  for (int i=0; i<lstInputs.size(); ++i)
+    lstFqns.append(lstInputs[i]->objectName());
+  return lstFqns;
+}
+
 QList<PiiAbstractInputSocket*> PiiAbstractOutputSocket::connectedInputs() const
 {
   const PII_D;
@@ -73,7 +87,10 @@ void PiiAbstractOutputSocket::updateInput(PiiAbstractInputSocket* socket)
 void PiiAbstractOutputSocket::connectInput(PiiAbstractInputSocket* input)
 {
   PII_D;
-  if (input != 0 && d->lstInputs.indexOf(input) == -1)
+  if (input != 0 &&
+      d->lstInputs.indexOf(input) == -1 &&
+      // disallow looping back to proxy input
+      !PiiProxySocket::isConnected(input, this))
     {
       // Disconnect old output
       if (input->connectedOutput() != 0)

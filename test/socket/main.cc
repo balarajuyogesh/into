@@ -65,6 +65,13 @@ void TestPiiSocket::isConnected()
   QVERIFY(!e.isConnected());
   a.disconnectInput(&b);
   QVERIFY(!a.isConnected());
+
+  // Try to make a loop
+  c.output()->connectInput(d.input());
+  g.output()->connectInput(c.input());
+  QCOMPARE(g.output()->connectedInputs().size(), 1);
+  QCOMPARE(g.output()->connectedInputs()[0],
+           static_cast<PiiAbstractInputSocket*>(&h));
 }
 
 QTEST_MAIN(TestPiiSocket)

@@ -66,6 +66,20 @@ public:
    */
   static PiiAbstractOutputSocket* root(PiiAbstractOutputSocket* output);
 
+  /**
+   * Returns the inputs to which *input* is connected
+   * (recursively). If *input* is not a proxy, returns a list
+   * containing just *input*. If *input* is 0, returns an empty list.
+   */
+  static QList<PiiAbstractInputSocket*> connectedInputs(PiiAbstractInputSocket* input);
+
+  /**
+   * Returns `true` if *input* is part of a proxy that is either
+   * directly or indirectly connected to the proxy that contains
+   * *output* and `false` otherwise.
+   */
+  static bool isConnected(PiiAbstractInputSocket* input, PiiAbstractOutputSocket* output);
+
 private:
   friend class PiiOperationCompound;
   // Probably an unortohodox solution, but hey, tests are important.
