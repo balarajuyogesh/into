@@ -564,10 +564,7 @@ namespace PiiYdin
 #ifdef Q_MOC_RUN
   Q_GADGET
 
-  Q_ENUMS(MatrixTypeId);
-  Q_ENUMS(ColorTypeId);
-  Q_ENUMS(ComplexTypeId);
-  Q_ENUMS(QtTypeId);
+  Q_ENUMS(MatrixTypeId ColorTypeId ComplexTypeId QtTypeId);
 public:
 #endif
   /// @internal
