@@ -107,7 +107,7 @@ PiiFrequencyCounter::PiiFrequencyCounter() :
 
   setDynamicInputCount(1);
 
-  connect(this, SIGNAL(stateChanged(int)), this, SLOT(stateChangeOccured(int)));
+  connect(this, SIGNAL(stateChanged(PiiOperation::State)), this, SLOT(stateChangeOccured(PiiOperation::State)));
   d->pEmitter = new PiiFreqOutputEmitter(this);
 }
 
@@ -245,7 +245,7 @@ void PiiFrequencyCounter::check(bool reset)
 
 /* This private slot takes care of stopping the execution of the
  *  emitter thread. */
-void PiiFrequencyCounter::stateChangeOccured(int state)
+void PiiFrequencyCounter::stateChangeOccured(PiiOperation::State state)
 {
   PII_D;
   if (state == Stopped)

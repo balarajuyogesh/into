@@ -16,6 +16,7 @@
 #include "PiiInputSocket.h"
 #include "PiiOutputSocket.h"
 #include "PiiYdinTypes.h"
+#include "PiiNullInputController.h"
 
 #include <QStringList>
 #include <QThread>
@@ -27,7 +28,7 @@ PiiInputSocket::Data::Data() :
   iGroupId(0),
   bConnected(false),
   bOptional(false),
-  pController(0),
+  pController(PiiNullInputController::instance()),
   iQueueStart(0),
   iQueueLength(0)
 {}

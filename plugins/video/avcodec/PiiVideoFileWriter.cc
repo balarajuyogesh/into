@@ -20,9 +20,7 @@
 PiiVideoFileWriter::Data::Data() :
   strOutputDirectory("."), strFileName("output.mpg"), iIndex(0),
   iWidth(0), iHeight(0), iFrameRate(25), pVideoWriter(0)
-
-{
-}
+{}
 
 PiiVideoFileWriter::PiiVideoFileWriter() :
   PiiDefaultOperation(new Data)
@@ -32,9 +30,11 @@ PiiVideoFileWriter::PiiVideoFileWriter() :
   d->pImageInput = new PiiInputSocket("image");
   addSocket(d->pImageInput);
 
-  connect(this, SIGNAL(stateChanged(int)), SLOT(deletePiiVideoWriter(int)), Qt::DirectConnection);
-
+  connect(this, SIGNAL(stateChanged(PiiOperation::State)),
+          SLOT(deletePiiVideoWriter(PiiOperation::State)),
+          Qt::DirectConnection);
 }
+
 PiiVideoFileWriter::~PiiVideoFileWriter()
 {
   PII_D;
@@ -87,7 +87,7 @@ void PiiVideoFileWriter::process()
 
 }
 
-void PiiVideoFileWriter::deletePiiVideoWriter(int state)
+void PiiVideoFileWriter::deletePiiVideoWriter(PiiOperation::State state)
 {
   PII_D;
 

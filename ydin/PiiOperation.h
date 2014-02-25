@@ -68,12 +68,16 @@
  * Furthermore, all connections between deleted sockets are
  * automatically deleted. Thus, one doesn't need to care about
  * deleting anything but the operation itself.
- *
  */
 class PII_YDIN_EXPORT PiiOperation : public QObject, public PiiConfigurable
 {
   Q_OBJECT
   Q_INTERFACES(PiiConfigurable)
+
+  /**
+   * The current state of the operation.
+   */
+  Q_PROPERTY(State state READ state NOTIFY stateChanged);
 
   /**
    * The name of the property set currently being cached. See
@@ -89,14 +93,31 @@ class PII_YDIN_EXPORT PiiOperation : public QObject, public PiiConfigurable
    */
   Q_PROPERTY(bool cachingProperties READ isCachingProperties);
 
-  Q_ENUMS(State ProtectionLevel);
+  /**
+   * Controls whether the operation is executed or not. When a
+   * [PiiEngine] is executed, only enabled operations are considered.
+   * This property makes it possible to selectively disable parts of
+   * an engine.
+   *
+   * An operation can be disabled either permanently of temporarily. A
+   * permanently disabled operation won't be started even if it could.
+   * An operation will be disabled temporarily if it fails or depends
+   * on an operation that cannot be started. A temporarily disabled
+   * operation will be automatically re-enabled at restart if its
+   * preconditions are met. There should rarely be a need to manually
+   * set *activityMode* to `TemporarilyDisabled`.
+   *
+   * This property can only be changed if the operation is currently
+   * stopped or paused.
+   */
+  Q_PROPERTY(ActivityMode activityMode READ activityMode WRITE setActivityMode NOTIFY activityModeChanged);
+
+  Q_ENUMS(State ProtectionLevel ActivityMode);
 
   PII_DECLARE_VIRTUAL_METAOBJECT_FUNCTION;
   PII_DEFAULT_SERIALIZATION_FUNCTION(QObject);
 
 public:
-
-  ~PiiOperation();
 
   /**
    * The state of an operation can assume six different values:
@@ -104,21 +125,21 @@ public:
    * - `Stopped` - the operation is not running.
    *
    * - `Starting` - the operation has received a [start()] signal, but
-   * it is not running yet.
+   *   it is not running yet.
    *
    * - `Running` - the operation is running.
    *
    * - `Pausing` - the operation has received a [pause()] signal, but
-   * it hasn't finished execution yet.
+   *   it hasn't finished execution yet.
    *
    * - `Paused` - the operation has finished execution due to a
-   * [pause()] command.
+   *   [pause()] command.
    *
    * - `Stopping` - the operation has received a [stop()] signal, but
-   * it hasn't stopped yet.
+   *   it hasn't stopped yet.
    *
    * - `Interrupted` - the operation has received an [interrupt()]
-   * signal, but it hasn't stopped yet.
+   *   signal, but it hasn't stopped yet.
    */
   enum State
     {
@@ -157,6 +178,15 @@ public:
       WriteNotAllowed
     };
 
+  enum ActivityMode
+  {
+    Enabled,
+    Disabled,
+    TemporarilyDisabled
+  };
+
+  ~PiiOperation();
+
   /**
    * Returns a string presentation of the given state.
    */
@@ -172,6 +202,10 @@ public:
    * This function is called by PiiEngine once for all operations
    * before any of them is started. This ensures there will be no
    * input into any operation before each of them have been checked.
+   *
+   * The function must be idempotent. That is, calling check() many
+   * times must leave the operation to the same as calling it once
+   * would.
    *
    * @param reset if `true`, reset the operation to its initial
    * state. This flag is true whenever the operation was interrupted
@@ -191,10 +225,10 @@ public:
    * This function will be called not only on start-up but also before
    * restarting after a [pause()] call.
    *
-   * Note that PiiOperationCompound (and PiiEngine) commands child
-   * operations in an arbitrary order. Therefore, objects may appear
-   * in the inputs of a operation before %start() is invoked. Any
-   * resetting action should take place in [check()].
+   * ! Note that PiiOperationCompound (and PiiEngine) commands child
+   *   operations in an arbitrary order. Therefore, objects may appear
+   *   in the inputs of a operation before %start() has been called
+   *   invoked. Any resetting action should take place in [check()].
    */
   virtual void start() = 0;
 
@@ -395,10 +429,10 @@ public:
    * may not change the values immediately. The properties will be
    * changed as data passes through the processing pipeline.
    *
-   * ! Reconfiguration may fail if operations are interrupted
-   * (either explicitly or due to a processing error) during
-   * reconfiguration. In such a case only a subset of operations may
-   * have applied the new properties.
+   * ! Reconfiguration may fail if operations are interrupted (either
+   *   explicitly or due to a processing error) during
+   *   reconfiguration. In such a case only a subset of operations may
+   *   have applied the new properties.
    */
   Q_INVOKABLE virtual void reconfigure(const QString& propertySetName = QString()) = 0;
 
@@ -508,6 +542,22 @@ public:
 
   bool isCompound() const;
 
+  void setActivityMode(ActivityMode activityMode);
+  ActivityMode activityMode() const;
+
+  /**
+   * Stores the cause of the last error. The error string will be
+   * cleared by [PiiOperationCompound::check()] when the configuration
+   * is started.
+   */
+  Q_INVOKABLE void setErrorString(const QString& errorString);
+  Q_INVOKABLE QString errorString() const;
+
+  /**
+   * Same as `!errorString().isEmpty()`.
+   */
+  Q_INVOKABLE bool hasError() const;
+
 signals:
   /**
    * Signals an error. The *message* should be a user-friendly
@@ -525,12 +575,10 @@ signals:
    * run an event loop in the receiving thread, the signal will be
    * lost. If you create a direct connection, you must explicitly
    * implement a mutual exclusion mechanism in the receiving slot.
-   *
-   * @param state the new state of the operation. The type of this
-   * value is actually PiiOperation::State, but `int` is used to
-   * avoid registering a new meta type.
    */
-  void stateChanged(int state);
+  void stateChanged(PiiOperation::State state);
+
+  void activityModeChanged(ActivityMode mode);
 
 protected:
   /// @hide
@@ -544,12 +592,15 @@ protected:
     virtual ~Data();
 
     virtual bool isCompound() const { return false; }
+    ActivityMode activityMode;
+    QString strLastError;
     ProtectionList lstProtectionLevels;
     QMutex stateMutex;
     bool bCachingProperties, bApplyingPropertySet;
     QString strPropertySetName;
     QMap<QString,PropertyList> mapCachedProperties;
     mutable const QMap<QString,QVariantMap>* pmapMetaPropertyCache;
+    QString strErrorString;
   } *d;
 
   PiiOperation(Data* d);
@@ -574,13 +625,13 @@ protected:
    * MyOperation::MyOperation()
    * {
    *   // Disallow changing of the processing mode
-   *   setWritePermission("processingMode", WriteNever);
+   *   setProtectionLevel("processingMode", WriteNever);
    * }
    * ~~~
    *
    * ! Protection is only effective if properties are set through
-   * setProperty(). Calling property setters directly bypasses the
-   * protection mechanism.
+   *   setProperty(). Calling property setters directly bypasses the
+   *   protection mechanism.
    */
   void setProtectionLevel(const char* property, ProtectionLevel level);
 
@@ -617,6 +668,14 @@ protected:
    */
   QMutex* stateLock();
 
+  /**
+   * Invoked each time setActivityMode(), even if *activityMode*
+   * doesn't change from its previous value. The default
+   * implementation does nothing. The call will be made while holding
+   * [stateLock()].
+   */
+  virtual void updateActivityMode(ActivityMode activityMode);
+
 private:
   int indexOf(const char* property) const;
   static void addPropertyToList(PropertyList& properties,
@@ -641,6 +700,7 @@ typedef PiiSharedPtr<PiiOperation> PiiOperationPtr;
 typedef QList<PiiAbstractInputSocket*> PiiInputSocketList;
 typedef QList<PiiAbstractOutputSocket*> PiiOutputSocketList;
 
+Q_DECLARE_METATYPE(PiiOperation::State);
 Q_DECLARE_METATYPE(PiiOperation*);
 Q_DECLARE_METATYPE(PiiOperationPtr);
 Q_DECLARE_METATYPE(QList<PiiAbstractInputSocket*>);

@@ -21,6 +21,7 @@
 #include "PiiDefaultFlowController.h"
 #include "PiiOneInputFlowController.h"
 #include "PiiOneGroupFlowController.h"
+#include "PiiNullInputController.h"
 
 PiiDefaultOperation::Data::Data() :
   pFlowController(0), pProcessor(0),
@@ -123,10 +124,6 @@ void PiiDefaultOperation::check(bool reset)
   PII_D;
   PiiBasicOperation::check(reset);
 
-  // Install input controller
-  for (int i=0; i<d->lstInputs.size(); ++i)
-    d->lstInputs[i]->setController(d->pProcessor);
-
   // Make all output sockets listeners to their connected inputs.
   for (int i=0; i<d->lstOutputs.size(); ++i)
     d->lstOutputs[i]->setInputListener();
@@ -134,6 +131,15 @@ void PiiDefaultOperation::check(bool reset)
   // Install flow controller
   delete d->pFlowController;
   d->pFlowController = createFlowController();
+
+  // If the operation is disabled or there is no flow controller (no
+  // connected inputs), disable input controller.
+  PiiInputController* pController =
+    activityMode() == Enabled && d->pFlowController != 0 ?
+    static_cast<PiiInputController*>(d->pProcessor) :
+    static_cast<PiiInputController*>(PiiNullInputController::instance());
+  for (int i=0; i<d->lstInputs.size(); ++i)
+    d->lstInputs[i]->setController(pController);
 
   if (reset)
     PiiFlowController::SyncListener::reset();
@@ -225,7 +231,7 @@ void PiiDefaultOperation::reconfigure(const QString& propertySetName)
   QMutexLocker lock(&d->stateMutex);
   if (d->state member_of (Paused, Stopped))
     // No tags this time.
-      PiiOperation::applyPropertySet(propertySetName);
+    PiiOperation::applyPropertySet(propertySetName);
   else
     d->pProcessor->reconfigure(propertySetName);
 }

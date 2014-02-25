@@ -23,14 +23,36 @@ class TestOperation : public PiiDefaultOperation
   Q_OBJECT
 
 public:
-  TestOperation()
+  TestOperation() :
+    bFail(false),
+    _iCount(0)
   {
+    addSocket(new PiiInputSocket("input"));
     addSocket(new PiiOutputSocket("output"));
+    inputAt(0)->setOptional(true);
   }
   QVariant socketData(PiiSocket*, int role) const { return role; }
 
+  void check(bool reset)
+  {
+    if (bFail)
+      PII_THROW(PiiExecutionException, "");
+    PiiDefaultOperation::check(reset);
+    _iCount = 0;
+  }
+
+  bool bFail;
+
 protected:
-  void process() {}
+  void process()
+  {
+    if (inputAt(0)->isConnected())
+      emitObject(readInput());
+    else
+      emitObject(_iCount++);
+  }
+private:
+  int _iCount;
 };
 
 #endif //_TESTOPERATION_H

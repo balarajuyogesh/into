@@ -68,13 +68,12 @@ class QLibrary;
  *     //handle possible start-up errors here
  *   }
  * ~~~
- *
  */
 class PII_YDIN_EXPORT PiiEngine : public PiiOperationCompound
 {
   Q_OBJECT
 
-  Q_ENUMS(FileFormat);
+  Q_ENUMS(FileFormat ErrorHandling)
 
   friend struct PiiSerialization::Accessor;
   PII_SEPARATE_SAVE_LOAD_MEMBERS
@@ -92,6 +91,17 @@ public:
    * PiiBinaryOutputArchive and PiiBinaryInputArchive.
    */
   enum FileFormat { TextFormat, BinaryFormat };
+
+  /**
+   * Error handling mode in execute().
+   *
+   * - `ThrowOnError` - any error in a child operation causes
+   *   execute() to fail and throw an exception.
+   *
+   * - `DisableFailingOperations` - failed child operations are
+   *   temporarily disabled and execute() will return normally.
+   */
+  enum ErrorHandling { ThrowOnError, DisableFailingOperations };
 
   class Plugin;
 
@@ -227,8 +237,15 @@ public:
    * be called. This is a convenience function that saves one from
    * manually performing the sanity check. If the engine is neither
    * `Stopped` nor `Paused`, this function does nothing.
+   *
+   * @param errorHandling the way errors in child operations are
+   * handled. By default, if any of the child operations fails to
+   * start (check() throws an error), the engine will also fail to
+   * start. Setting *errorHandling* to `DisableFailingOperations`
+   * causes all failing operations to turn into `TemporarilyDisabled`
+   * mode.
    */
-  void execute();
+  void execute(ErrorHandling erroHandling = ThrowOnError);
 
   /**
    * Creates a deep copy of the engine.

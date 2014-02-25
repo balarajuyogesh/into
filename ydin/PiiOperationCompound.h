@@ -19,6 +19,8 @@
 #include "PiiOperation.h"
 #include "PiiProxySocket.h"
 
+#include <PiiFunctional.h>
+
 #include <QMap>
 
 
@@ -325,7 +327,11 @@ public:
    * the operations is automatically released upon the destruction of
    * the compound object.
    *
-   * If the compound is not stopped, this function has no effect.
+   * If the compound is not stopped or paused or if you try to add an
+   * operation as a child to itself, this function has no effect.
+   *
+   * If *op* already has a parent operation, it will be removed from
+   * the old parent.
    *
    * PiiOperationCompound does its best to ensure that its children do
    * not have duplicate object names. If you don't set the object
@@ -655,36 +661,42 @@ protected:
   PII_UNSAFE_D_FUNC;
   PiiOperationCompound(Data* data);
 
-  struct Start { static void perform(PiiOperation* op) { op->start(); } };
-  struct Pause { static void perform(PiiOperation* op) { op->pause(); } };
-  struct Stop { static void perform(PiiOperation* op) { op->stop(); } };
-  struct Interrupt { static void perform(PiiOperation* op) { op->interrupt(); } };
+  struct Start { void operator() (PiiOperation* op) const { op->start(); } };
+  struct Pause { void operator() (PiiOperation* op) const { op->pause(); } };
+  struct Stop { void operator() (PiiOperation* op) const { op->stop(); } };
+  struct Interrupt { void operator() (PiiOperation* op) const { op->interrupt(); } };
 
-  struct StartPropertySet { static void perform(PiiOperation* op, const QString& n) { op->startPropertySet(n); } };
-  struct RemovePropertySet { static void perform(PiiOperation* op, const QString& n) { op->removePropertySet(n); } };
-  struct Reconfigure { static void perform(PiiOperation* op, const QString& n) { op->reconfigure(n); } };
-  struct EndPropertySet { static void perform(PiiOperation* op) { op->endPropertySet(); } };
+  struct StartPropertySet : Pii::BinaryFunction<PiiOperation*, QString, void>
+  { void operator() (PiiOperation* op, const QString& n) const { op->startPropertySet(n); } };
+  struct RemovePropertySet : Pii::BinaryFunction<PiiOperation*, QString, void>
+  { void operator() (PiiOperation* op, const QString& n) const { op->removePropertySet(n); } };
+  struct Reconfigure : Pii::BinaryFunction<PiiOperation*, QString, void>
+  { void operator() (PiiOperation* op, const QString& n) const { op->reconfigure(n); } };
+  struct EndPropertySet { void operator() (PiiOperation* op) const { op->endPropertySet(); } };
 
   /**
-   * Sends a command to all child operations. Use the action structures
-   * to specify the action to be taken. This function loops through
-   * the list of child operation and applies the action to each.
+   * Sends a command to all enabled child operations. Use the action
+   * structures to specify the action to be taken. This function loops
+   * through the list of child operation and applies the action to
+   * each. Returns the number of enabled child operations.
    *
    * ~~~(c++)
    * commandChildren(Start());
    * ~~~
    */
-  template <class Action> void commandChildren(const Action& action)
+  template <class Action> int commandChildren(const Action& action)
   {
     QList<PiiOperation*> lstOperations = childOperations();
+    int iEnabledCount = 0;
     for (int i=0; i<lstOperations.size(); ++i)
-      action.perform(lstOperations[i]);
-  }
-  template <class Action, class Param> void commandChildren(const Action& action, const Param& param)
-  {
-    QList<PiiOperation*> lstOperations = childOperations();
-    for (int i=0; i<lstOperations.size(); ++i)
-      action.perform(lstOperations[i], param);
+      {
+        if (lstOperations[i]->activityMode() == Enabled)
+          {
+            ++iEnabledCount;
+            action(lstOperations[i]);
+          }
+      }
+    return iEnabledCount;
   }
   /// @endhide
 
@@ -703,8 +715,10 @@ protected:
    */
   virtual void aboutToChangeState(State newState);
 
+  void updateActivityMode(ActivityMode mode);
+
 private slots:
-  void childStateChanged(int state);
+  void updateChildStates(PiiOperation::State state);
   void childDestroyed(QObject* op);
   void handleError(PiiOperation* sender, const QString& msg);
   void removeExposedInput(QObject* socket);
@@ -721,11 +735,23 @@ private:
   // and sub-operations
   struct OperationFinder;
 
+  struct ChildState
+  {
+    ChildState(State s = Stopped) :
+      state(s), bWasRunning(false), bEnabled(true)
+    {}
+    State state;
+    bool bWasRunning;
+    bool bEnabled;
+  };
+
   // Generic find function for sockets and UI components
   template <class Finder> typename Finder::Type find(Finder f, const QString& path) const;
 
   // One-level child lookup
   PiiOperation* findChildOperation(const QString& childName) const;
+
+  static bool dependsOnDisabled(PiiOperation* op);
 
   // State changing utilities
   bool checkSteadyStateChange(State newState, State intermediateState, State steadyState);
@@ -782,11 +808,9 @@ private:
   QList<PiiAbstractOutputSocket*> lstOutputs;
 
   /**
-   * States of child operations. In each pair, "first" is the state of
-   * the operation and "second" a flag that tells if the operation has
-   * been in Running state.
+   * States of child operations.
    */
-  QVector<QPair<State,bool> > vecChildStates;
+  QVector<ChildState> vecChildStates;
 
   bool bChecked, bWaiting;
 };

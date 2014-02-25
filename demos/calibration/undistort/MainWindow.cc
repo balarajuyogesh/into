@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
   updateButtonStates(PiiOperation::Stopped);
 }
 
-void MainWindow::updateButtonStates(int state)
+void MainWindow::updateButtonStates(PiiOperation::State state)
 {
   _pStopButton->setEnabled(state != PiiOperation::Stopped);
   _pStartButton->setEnabled(state == PiiOperation::Stopped);
@@ -70,7 +70,7 @@ PiiEngine* MainWindow::createEngine()
 {
   // Create engine
   PiiEngine* pEngine = new PiiEngine;
-  connect(pEngine, SIGNAL(stateChanged(int)), this, SLOT(updateButtonStates(int)));
+  connect(pEngine, SIGNAL(stateChanged(PiiOperation::State)), this, SLOT(updateButtonStates(PiiOperation::State)));
 
   // Create probe inputs for image display
   _pProbeInput1 = new PiiProbeInput;

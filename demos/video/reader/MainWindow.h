@@ -35,7 +35,7 @@ protected:
   PiiEngine* createEngine();
 
 private slots:
-  void updateButtonStates(int state);
+  void updateButtonStates(PiiOperation::State state);
 
 private:
   void init();

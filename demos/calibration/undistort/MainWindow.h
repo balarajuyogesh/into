@@ -39,7 +39,7 @@ signals:
   void updateImage(int);
 
 private slots:
-  void updateButtonStates(int state);
+  void updateButtonStates(PiiOperation::State state);
   void startButtonClicked();
   void changeDistortion(int value);
   void changeFocalLength(int value);

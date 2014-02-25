@@ -50,7 +50,10 @@ class PII_YDIN_EXPORT PiiProbeInput :
    * milliseconds. Setting this value to a positive value limits the
    * rate of signals emitted. Note that the emission interval affects
    * only outgoing signals; the last incoming object will be saved
-   * anyway. The default value is zero.
+   * anyway. Setting *signalInterval* to -1 disables the signal
+   * altogether. In this mode, the objects are just saved. The default
+   * value is zero, which means every incoming object will be
+   * signalled.
    */
   Q_PROPERTY(int signalInterval READ signalInterval WRITE setSignalInterval);
 

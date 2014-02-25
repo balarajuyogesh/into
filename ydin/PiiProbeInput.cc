@@ -75,25 +75,29 @@ bool PiiProbeInput::tryToReceive(PiiAbstractInputSocket*, const PiiVariant& obje
     {
       d->mutex.lock();
       d->varSavedObject = object;
-      // If enough time has passed since the last emission, emit
-      // again.
-      qint64 iElapsed = d->emissionTimer.milliseconds();
-      if (iElapsed >= d->iSignalInterval)
+      // Negative interval means no signals whatsoever
+      if (d->iSignalInterval >= 0)
         {
-          // If we had a timer running for a pending emission, kill it
-          // now.
-          if (d->iTimerId != -1)
-            killTimer(d->iTimerId);
-          d->emissionTimer.restart();
-          d->mutex.unlock();
-          emit objectReceived(object, this);
-          return true;
-        }
-      // Oops, too fast. Do we already have a timer running?
-      else if (d->iTimerId != -1)
-        {
-          // No, start it
-          d->iTimerId = startTimer(d->iSignalInterval - iElapsed, Qt::PreciseTimer);
+          // If enough time has passed since the last emission, emit
+          // again.
+          qint64 iElapsed = d->emissionTimer.milliseconds();
+          if (iElapsed >= d->iSignalInterval)
+            {
+              // If we had a timer running for a pending emission, kill it
+              // now.
+              if (d->iTimerId != -1)
+                killTimer(d->iTimerId);
+              d->emissionTimer.restart();
+              d->mutex.unlock();
+              emit objectReceived(object, this);
+              return true;
+            }
+          // Oops, too fast. Do we already have a timer running?
+          else if (d->iTimerId != -1)
+            {
+              // No, start it
+              d->iTimerId = startTimer(d->iSignalInterval - iElapsed, Qt::PreciseTimer);
+            }
         }
       d->mutex.unlock();
     }
@@ -112,5 +116,5 @@ bool PiiProbeInput::hasSavedObject() const { return _d()->varSavedObject.isValid
 void PiiProbeInput::setDiscardControlObjects(bool discardControlObjects) { _d()->bDiscardControlObjects = discardControlObjects; }
 bool PiiProbeInput::discardControlObjects() const { return _d()->bDiscardControlObjects; }
 
-void PiiProbeInput::setSignalInterval(int signalInterval) { _d()->iSignalInterval = qMax(0, signalInterval); }
+void PiiProbeInput::setSignalInterval(int signalInterval) { _d()->iSignalInterval = qMax(-1, signalInterval); }
 int PiiProbeInput::signalInterval() const { return _d()->iSignalInterval; }

@@ -86,6 +86,131 @@ void TestPiiOperationCompound::socketData()
   delete pTest;
 }
 
+void TestPiiOperationCompound::disabledOperations()
+{
+  PiiOperationCompound* pCompound = new PiiOperationCompound;
+  setOperation(pCompound);
+  /*    ,- b
+   * a -      ,- d
+   *    `- c -
+   *          `- e - f
+   */
+
+  TestOperation* a = new TestOperation;
+  TestOperation* b = new TestOperation;
+  TestOperation* c = new TestOperation;
+  TestOperation* d = new TestOperation;
+  TestOperation* e = new TestOperation;
+  TestOperation* f = new TestOperation;
+  pCompound->addOperation(a);
+  pCompound->addOperation(b);
+  pCompound->addOperation(c);
+  pCompound->addOperation(d);
+  pCompound->addOperation(e);
+  pCompound->addOperation(f);
+
+  a->connectOutput("output", b, "input");
+  a->connectOutput("output", c, "input");
+  c->connectOutput("output", d, "input");
+  c->connectOutput("output", e, "input");
+  e->connectOutput("output", f, "input");
+
+  pCompound->exposeInput(a->input("input"));
+
+  QVERIFY(start());
+  QVERIFY(stop());
+
+  QCOMPARE(a->activityMode(), PiiOperation::Enabled);
+  QCOMPARE(b->activityMode(), PiiOperation::Enabled);
+  QCOMPARE(c->activityMode(), PiiOperation::Enabled);
+  QCOMPARE(d->activityMode(), PiiOperation::Enabled);
+  QCOMPARE(e->activityMode(), PiiOperation::Enabled);
+  QCOMPARE(f->activityMode(), PiiOperation::Enabled);
+
+  c->setActivityMode(PiiOperation::Disabled);
+  QCOMPARE(c->activityMode(), PiiOperation::Disabled);
+  try
+    {
+      pCompound->check(true);
+    }
+  catch (PiiException& ex)
+    {
+      QFAIL(qPrintable(ex.message()));
+    }
+
+  QCOMPARE(a->activityMode(), PiiOperation::Enabled);
+  QCOMPARE(b->activityMode(), PiiOperation::Enabled);
+  QCOMPARE(c->activityMode(), PiiOperation::Disabled);
+  QCOMPARE(d->activityMode(), PiiOperation::TemporarilyDisabled);
+  QCOMPARE(e->activityMode(), PiiOperation::TemporarilyDisabled);
+  QCOMPARE(f->activityMode(), PiiOperation::TemporarilyDisabled);
+
+  QVERIFY(start());
+  QCOMPARE(pCompound->state(), PiiOperation::Running);
+  QVERIFY(stop());
+  QCOMPARE(pCompound->state(), PiiOperation::Stopped);
+
+  // Move c, d and e to a nested compound
+  PiiOperationCompound* pCompound2 = new PiiOperationCompound;
+  pCompound2->addOperation(c);
+  pCompound2->addOperation(d);
+  pCompound2->addOperation(e);
+
+  c->connectOutput("output", d, "input");
+  c->connectOutput("output", e, "input");
+  pCompound2->createInputProxy("input");
+  pCompound2->createOutputProxy("output");
+  pCompound2->inputProxy("input")->output()->connectInput(c->input("input"));
+  e->connectOutput("output", pCompound2->outputProxy("output")->input());
+
+  pCompound->addOperation(pCompound2);
+  a->connectOutput("output", pCompound2, "input");
+  pCompound2->connectOutput("output", f, "input");
+
+  c->setActivityMode(PiiOperation::Enabled);
+  e->setActivityMode(PiiOperation::Disabled);
+
+  try
+    {
+      pCompound->check(true);
+    }
+  catch (PiiException& ex)
+    {
+      QFAIL(qPrintable(ex.message()));
+    }
+
+  QCOMPARE(a->activityMode(), PiiOperation::Enabled);
+  QCOMPARE(b->activityMode(), PiiOperation::Enabled);
+  QCOMPARE(c->activityMode(), PiiOperation::Enabled);
+  QCOMPARE(d->activityMode(), PiiOperation::Enabled);
+  QCOMPARE(e->activityMode(), PiiOperation::Disabled);
+  QCOMPARE(f->activityMode(), PiiOperation::TemporarilyDisabled);
+  QCOMPARE(pCompound2->activityMode(), PiiOperation::Enabled);
+
+  QVERIFY(start());
+  QCOMPARE(pCompound->state(), PiiOperation::Running);
+  QVERIFY(stop());
+  QCOMPARE(pCompound->state(), PiiOperation::Stopped);
+
+  e->setActivityMode(PiiOperation::Enabled);
+  a->bFail = true;
+  QVERIFY(start(IgnoreFail));
+  QVERIFY(stop());
+
+  QCOMPARE(a->activityMode(), PiiOperation::TemporarilyDisabled);
+  QCOMPARE(b->activityMode(), PiiOperation::TemporarilyDisabled);
+  QCOMPARE(c->activityMode(), PiiOperation::TemporarilyDisabled);
+  QCOMPARE(d->activityMode(), PiiOperation::TemporarilyDisabled);
+  QCOMPARE(e->activityMode(), PiiOperation::TemporarilyDisabled);
+  QCOMPARE(f->activityMode(), PiiOperation::TemporarilyDisabled);
+  QCOMPARE(pCompound2->activityMode(), PiiOperation::TemporarilyDisabled);
+
+  pCompound2->setActivityMode(PiiOperation::Disabled);
+  QCOMPARE(c->activityMode(), PiiOperation::Disabled);
+  QCOMPARE(d->activityMode(), PiiOperation::Disabled);
+  QCOMPARE(e->activityMode(), PiiOperation::Disabled);
+}
+
 void TestPiiOperationCompound::cleanupTestCase()
 {
   setOperation(0);

@@ -94,7 +94,7 @@ protected:
   void process();
 
 private slots:
-  void stateChangeOccured(int state);
+  void stateChangeOccured(PiiOperation::State state);
 
 private:
   friend class PiiFreqOutputEmitter;

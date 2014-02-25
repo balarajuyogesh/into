@@ -74,7 +74,7 @@ protected:
   void process();
 
 private slots:
-  void deletePiiVideoWriter( int state );
+  void deletePiiVideoWriter(PiiOperation::State state);
 
 private:
   template <class T> void initPiiVideoWriter(const PiiVariant& obj);

@@ -355,6 +355,13 @@ protected:
    */
   virtual void aboutToChangeState(State newState);
 
+  /**
+   * Installs a dummy input controller to all input sockets if *mode*
+   * != `Active`. This makes it possible for other operations to push
+   * objects to disabled operations without blocking.
+   */
+  void updateActivityMode(ActivityMode mode);
+
 private:
   template <class T> void setNumberedSockets(QList<T*>& sockets,
                                              int count,

@@ -91,43 +91,108 @@ void PiiOperationCompound::check(bool reset)
 
   d->vecChildStates.resize(d->lstOperations.size());
   bool bError = false;
+  // Reset enabled/disabled states and check all child operations.
   for (int i=0; i<d->lstOperations.size(); ++i)
     {
+      PiiOperation* pOperation = d->lstOperations[i];
+      pOperation->setErrorString("");
+      if (pOperation->activityMode() == TemporarilyDisabled)
+        pOperation->setActivityMode(Enabled);
       try
         {
-          d->lstOperations[i]->check(d->lstOperations[i]->state() == Stopped);
+          pOperation->check(pOperation->state() == Stopped || reset);
+          d->vecChildStates[i] = ChildState(pOperation->state());
         }
       catch (PiiExecutionException& ex)
         {
+          // Disable failed children.
           bError = true;
-          compoundEx.addException(d->lstOperations[i]->objectName(), ex);
+          compoundEx.addException(pOperation->objectName(), ex);
+          pOperation->setErrorString(ex.message());
+          pOperation->setActivityMode(TemporarilyDisabled);
         }
-      d->vecChildStates[i] = qMakePair(d->lstOperations[i]->state(), false);
     }
-  if (bError)
-    throw compoundEx;
+
+  // Disable all children that depend on disabled operations even if
+  // they could otherwise be started. This must be done either
+  // recursively or iteratively, because disabling an operation may
+  // disable others. An iterative technique is used here.
+  bool bDisabledSome = false;
+  do
+    {
+      bDisabledSome = false;
+      for (int i=0; i<d->lstOperations.size(); ++i)
+        {
+          PiiOperation* pOperation = d->lstOperations[i];
+          if (pOperation->activityMode() == Enabled &&
+              dependsOnDisabled(pOperation))
+            {
+              pOperation->setActivityMode(TemporarilyDisabled);
+              bDisabledSome = true;
+            }
+        }
+    }
+  while (bDisabledSome);
+
+  // Cache the disabled status of all child operations. We need to do
+  // this because disabled children will not be started, which allows
+  // one to change their activity mode while the parent is running. We
+  // must know what the activity mode was when the operation was
+  // started.
+  for (int i=0; i<d->lstOperations.size(); ++i)
+    d->vecChildStates[i].bEnabled = d->lstOperations[i]->activityMode() == Enabled;
+
   if (reset)
     {
       resetProxies(d->lstInputs);
       resetProxies(d->lstOutputs);
     }
   d->bChecked = true;
+  if (bError)
+    throw compoundEx;
+}
+
+bool PiiOperationCompound::dependsOnDisabled(PiiOperation* op)
+{
+  // Take all inputs of op.
+  QList<PiiAbstractInputSocket*> lstInputs(op->inputs());
+  for (int i=0; i<lstInputs.size(); ++i)
+    {
+      // Find the root output for each.
+      PiiAbstractOutputSocket* pRootOutput = PiiProxySocket::root(lstInputs[i]->connectedOutput());
+      if (pRootOutput)
+        {
+          // Check if the parent operation is disabled.
+          PiiOperation* pRootParent = pRootOutput->parentOperation();
+          if (pRootParent && pRootParent->activityMode() != Enabled)
+            return true;
+        }
+    }
+  return false;
+}
+
+void PiiOperationCompound::updateActivityMode(ActivityMode mode)
+{
+  PII_D;
+  for (int i=0; i<d->lstOperations.size(); ++i)
+    d->lstOperations[i]->setActivityMode(mode);
+  d->activityMode = mode;
+  // A disabled operation must be restarted from scratch.
+  if (mode != Enabled)
+    setState(Stopped);
 }
 
 void PiiOperationCompound::start()
 {
   PII_D;
+  QMutexLocker lock(&d->stateMutex);
   if (!d->bChecked)
     return;
-  QMutexLocker lock(&d->stateMutex);
   if (d->state == Stopped || d->state == Paused)
     {
-      if (!d->lstOperations.isEmpty())
-        {
-          setState(Starting);
-          commandChildren(Start());
-        }
-      else
+      setState(Starting);
+      // If there are no enabled children, just turn to running.
+      if (commandChildren(Start()) == 0)
         setState(Running);
       d->bChecked = false;
     }
@@ -139,12 +204,9 @@ void PiiOperationCompound::pause()
   QMutexLocker lock(&d->stateMutex);
   if (d->state == Running)
     {
-      if (!d->lstOperations.isEmpty())
-        {
-          setState(Pausing);
-          commandChildren(Pause());
-        }
-      else
+      setState(Pausing);
+      // No enabled children -> pause immediately
+      if (commandChildren(Pause()) == 0)
         setState(Paused);
     }
 }
@@ -155,12 +217,9 @@ void PiiOperationCompound::stop()
   QMutexLocker lock(&d->stateMutex);
   if (d->state member_of (Starting, Running, Stopping))
     {
-      if (!d->lstOperations.isEmpty())
-        {
-          setState(Stopping);
-          commandChildren(Stop());
-        }
-      else
+      setState(Stopping);
+      // No enabled children -> stop immediately
+      if (commandChildren(Stop()) == 0)
         setState(Stopped);
     }
 }
@@ -171,13 +230,10 @@ void PiiOperationCompound::interrupt()
   // Since interrupt() is meant to really stop everything, we send the
   // signals even when the compound indicates it is already stopped.
   QMutexLocker lock(&d->stateMutex);
-  if (!d->lstOperations.isEmpty())
-    {
-      if (d->state != Stopped)
-        setState(Interrupted);
-      commandChildren(Interrupt());
-    }
-  else
+  if (d->state != Stopped)
+    setState(Interrupted);
+
+  if (commandChildren(Interrupt()) == 0)
     setState(Stopped);
 }
 
@@ -235,7 +291,7 @@ QString PiiOperationCompound::fullName(QObject* operation)
   return lstNames.join("/");
 }
 
-void PiiOperationCompound::childStateChanged(int state)
+void PiiOperationCompound::updateChildStates(PiiOperation::State state)
 {
   PII_D;
   QMutexLocker lock(&d->stateMutex);
@@ -243,15 +299,15 @@ void PiiOperationCompound::childStateChanged(int state)
   //piiDebug("%s %s, compound %s", sender()->metaObject()->className(), stateName((State)state), stateName(this->state()));
 
   int iIndex = d->lstOperations.indexOf(static_cast<PiiOperation*>(sender()));
-  d->vecChildStates[iIndex].first = (State)state;
+  d->vecChildStates[iIndex].state = state;
   if (state == Running)
-    d->vecChildStates[iIndex].second = true;
+    d->vecChildStates[iIndex].bWasRunning = true;
 
   switch (d->state)
     {
     case Stopped:
       // Stopped can change to Running
-      checkSteadyStateChange((State)state, Starting, Running);
+      checkSteadyStateChange(state, Starting, Running);
       break;
     case Starting:
       // Starting can change to running ...
@@ -261,23 +317,24 @@ void PiiOperationCompound::childStateChanged(int state)
           // Now, if any of the operations already stopped, we must
           // change state.
           for (int i=d->vecChildStates.size(); i--; )
-            if (d->vecChildStates[i].first member_of (Stopping, Stopped))
+            if (d->vecChildStates[i].bEnabled &&
+                d->vecChildStates[i].state member_of (Stopping, Stopped))
               {
-                checkSteadyStateChange(d->vecChildStates[i].first, Stopping, Stopped);
+                checkSteadyStateChange(d->vecChildStates[i].state, Stopping, Stopped);
                 break;
               }
         }
       // ... or stopped
       // If an operation that was already running stops, we won't
       // change state to Stopping yet.
-      else if ((State)state not_member_of (Stopping, Stopped) ||
-               !d->vecChildStates[iIndex].second)
-        checkSteadyStateChange((State)state, Stopping, Stopped);
+      else if (state not_member_of (Stopping, Stopped) ||
+               !d->vecChildStates[iIndex].bWasRunning)
+        checkSteadyStateChange(state, Stopping, Stopped);
       break;
     case Running:
       // Running can change to Paused or Stopped
-      if (!checkSteadyStateChange((State)state, Stopping, Stopped))
-        checkSteadyStateChange((State)state, Pausing, Paused);
+      if (!checkSteadyStateChange(state, Stopping, Stopped))
+        checkSteadyStateChange(state, Pausing, Paused);
       break;
     case Pausing:
       // Pausing can change to Paused ...
@@ -285,12 +342,12 @@ void PiiOperationCompound::childStateChanged(int state)
         setState(Paused);
       // ... or stopped
       else
-        checkSteadyStateChange((State)state, Stopping, Stopped);
+        checkSteadyStateChange(state, Stopping, Stopped);
       break;
     case Paused:
       // Paused can change to Stopped and Running
-      if (!checkSteadyStateChange((State)state, Stopping, Stopped))
-        checkSteadyStateChange((State)state, Starting, Running);
+      if (!checkSteadyStateChange(state, Stopping, Stopped))
+        checkSteadyStateChange(state, Starting, Running);
       break;
     case Stopping:
     case Interrupted:
@@ -309,7 +366,9 @@ bool PiiOperationCompound::checkChildStates(State state)
     // If the current state of a child is different from what we
     // expect, fail. But if we are checking for "Running", we need to
     // check if the child has been running.
-    if (d->vecChildStates[i].first != state && !(state == Running && d->vecChildStates[i].second))
+    if (d->vecChildStates[i].bEnabled &&
+        d->vecChildStates[i].state != state &&
+        !(state == Running && d->vecChildStates[i].bWasRunning))
       return false;
   return true;
 }
@@ -604,12 +663,18 @@ PiiOperation* PiiOperationCompound::childAt(int index) const
 
 void PiiOperationCompound::addOperation(PiiOperation* op)
 {
+  if (op == 0 || op == this) return;
+
   PII_D;
   QMutexLocker lock(&d->stateMutex);
   // Operations can only be added when the operation is stopped or
   // paused
-  if (op == 0 || d->state not_member_of (Stopped, Paused))
+  if (d->state not_member_of (Stopped, Paused))
     return;
+
+  PiiOperationCompound* pOldParent = qobject_cast<PiiOperationCompound*>(op->parent());
+  if (pOldParent)
+    pOldParent->removeOperation(op);
 
   if (!d->lstOperations.contains(op))
     {
@@ -627,13 +692,16 @@ void PiiOperationCompound::addOperation(PiiOperation* op)
 
       d->lstOperations.append(op);
       op->setParent(this);
+
       connect(op, SIGNAL(errorOccured(PiiOperation*,const QString&)),
-              SLOT(handleError(PiiOperation*,const QString&)), Qt::QueuedConnection);
-      connect(op, SIGNAL(stateChanged(int)), SLOT(childStateChanged(int)), Qt::QueuedConnection);
+              SLOT(handleError(PiiOperation*,const QString&)),
+              Qt::QueuedConnection);
+      connect(op, SIGNAL(stateChanged(PiiOperation::State)),
+              SLOT(updateChildStates(PiiOperation::State)),
+              Qt::QueuedConnection);
       connect(op, SIGNAL(destroyed(QObject*)), SLOT(childDestroyed(QObject*)), Qt::DirectConnection);
     }
 }
-
 
 void PiiOperationCompound::childDestroyed(QObject* op)
 {
@@ -832,7 +900,7 @@ PiiAbstractOutputSocket* PiiOperationCompound::output(const QString& path) const
 void PiiOperationCompound::startPropertySet(const QString& name)
 {
   PiiOperation::startPropertySet(name);
-  commandChildren(StartPropertySet(), name);
+  commandChildren(std::bind2nd(StartPropertySet(), name));
 }
 
 void PiiOperationCompound::endPropertySet()
@@ -843,12 +911,12 @@ void PiiOperationCompound::endPropertySet()
 
 void PiiOperationCompound::removePropertySet(const QString& name)
 {
-  commandChildren(RemovePropertySet(), name);
+  commandChildren(std::bind2nd(RemovePropertySet(), name));
 }
 
 void PiiOperationCompound::reconfigure(const QString& name)
 {
-  commandChildren(Reconfigure(), name);
+  commandChildren(std::bind2nd(Reconfigure(), name));
 }
 
 bool PiiOperationCompound::setProperty(const char* name, const QVariant& value)

@@ -64,12 +64,12 @@ PiiEngine* MainWindow::createEngine()
 
   _pProbeInput->connectOutput(pVideoFileReader->output("image"));
 
-  connect(pEngine, SIGNAL(stateChanged(int)), this, SLOT(updateButtonStates(int)));
+  connect(pEngine, SIGNAL(stateChanged(PiiOperation::State)), this, SLOT(updateButtonStates(PiiOperation::State)));
 
   return pEngine;
 }
 
-void MainWindow::updateButtonStates(int state)
+void MainWindow::updateButtonStates(PiiOperation::State state)
 {
   _pPlayButton->setEnabled(state != PiiOperation::Running);
   _pStopButton->setEnabled(state != PiiOperation::Stopped);

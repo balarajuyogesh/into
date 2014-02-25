@@ -71,22 +71,24 @@ PiiEngine::PiiEngine(Data* data) : PiiOperationCompound(data)
 PiiEngine::~PiiEngine()
 {}
 
-void PiiEngine::execute()
+void PiiEngine::execute(ErrorHandling errorHandling)
 {
   PII_D;
   QMutexLocker lock(&d->stateMutex);
   State s = state();
-  if (s == Stopped || s == Paused)
+  if (s member_of (Stopped, Paused))
     {
-      // Reset children if we were stopped
-      check(s == Stopped);
-      if (!d->lstOperations.isEmpty())
+      try
         {
-          setState(Starting);
-          commandChildren(Start());
+          // Reset children if we were stopped
+          check(s == Stopped);
         }
-      else
-        setState(Running);
+      catch (...)
+        {
+          if (errorHandling == ThrowOnError)
+            throw;
+        }
+      start();
     }
 }
 

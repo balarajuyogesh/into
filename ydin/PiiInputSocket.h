@@ -229,8 +229,11 @@ public:
 
   /**
    * Sets the input controller. The controller must be set before the
-   * input can receive objects. This is done automatically in
-   * PiiDefaultOperation::check().
+   * input can receive objects. This is done automatically by
+   * PiiDefaultOperation::check(), but you may need to install a
+   * controller yourself if your operation class isn't derived from
+   * PiiDefaultOperation. The default controller just ignores every
+   * object.
    */
   void setController(PiiInputController* controller);
 

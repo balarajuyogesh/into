@@ -37,7 +37,7 @@ protected:
 
 private slots:
   void urlActivated(const QString& imageUrl);
-  void updateButtonStates(int state);
+  void updateButtonStates(PiiOperation::State state);
   void startButtonClicked();
   void setFps(PiiVariant fpsObject);
 

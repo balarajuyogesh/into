@@ -15,25 +15,22 @@
 
 #include "PiiBasicOperation.h"
 #include "PiiYdinTypes.h"
+#include "PiiNullInputController.h"
 
 PiiBasicOperation::Data::Data() :
   state(PiiOperation::Stopped)
-{
-}
+{}
 
 PiiBasicOperation::Data::~Data()
-{
-}
+{}
 
 PiiBasicOperation::PiiBasicOperation() :
   PiiOperation(new Data)
-{
-}
+{}
 
 PiiBasicOperation::PiiBasicOperation(Data* data) :
   PiiOperation(data)
-{
-}
+{}
 
 PiiBasicOperation::~PiiBasicOperation()
 {
@@ -66,6 +63,18 @@ void PiiBasicOperation::check(bool reset)
 
   for (int i=d->lstOutputs.size(); i--; )
     d->lstOutputs[i]->reset();
+}
+
+void PiiBasicOperation::updateActivityMode(ActivityMode mode)
+{
+  if (mode != Enabled)
+    {
+      PII_D;
+      for (int i=0; i<d->lstInputs.size(); ++i)
+        d->lstInputs[i]->setController(PiiNullInputController::instance());
+      if (mode != Enabled)
+        setState(Stopped);
+    }
 }
 
 void PiiBasicOperation::interruptOutputs()

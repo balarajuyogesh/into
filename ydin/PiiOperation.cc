@@ -25,10 +25,12 @@ PII_SERIALIZABLE_EXPORT(PiiOperation);
 PII_SERIALIZABLE_EXPORT(PiiQVariantWrapper::Template<PiiOperation*>);
 PII_SERIALIZABLE_EXPORT(PiiQVariantWrapper::Template<PiiOperationPtr>);
 
+static int iOperationStateMetaType = qRegisterMetaType<PiiOperation::State>("PiiOperation::State");
 static int iOperationMetaType = qRegisterMetaType<PiiOperation*>("PiiOperation*");
 static int iOperationPtrMetaType = qRegisterMetaType<PiiOperationPtr>("PiiOperationPtr");
 
 PiiOperation::Data::Data() :
+  activityMode(Enabled),
   stateMutex(QMutex::Recursive),
   bCachingProperties(false),
   bApplyingPropertySet(false),
@@ -43,12 +45,12 @@ PiiOperation::PiiOperation() :
 {
   Q_UNUSED(iOperationMetaType); // suppresses compiler warning
   Q_UNUSED(iOperationPtrMetaType);
+  Q_UNUSED(iOperationStateMetaType);
 }
 
 PiiOperation::PiiOperation(Data* data) :
   d(data)
-{
-}
+{}
 
 PiiOperation::~PiiOperation()
 {
@@ -459,3 +461,25 @@ PiiOperation::ProtectionLevel PiiOperation::protectionLevel(const QString& prope
 }
 
 QVariant PiiOperation::socketData(PiiSocket*, int) const { return QVariant(); }
+
+void PiiOperation::setActivityMode(ActivityMode activityMode)
+{
+  QMutexLocker lock(&d->stateMutex);
+  if (state() member_of (Stopped, Paused))
+    {
+      if (activityMode != d->activityMode)
+        {
+          d->activityMode = activityMode;
+          emit activityModeChanged(activityMode);
+        }
+      updateActivityMode(activityMode);
+    }
+}
+
+PiiOperation::ActivityMode PiiOperation::activityMode() const { return d->activityMode; }
+void PiiOperation::updateActivityMode(ActivityMode) {}
+
+void PiiOperation::setErrorString(const QString& errorString) { d->strErrorString = errorString; }
+QString PiiOperation::errorString() const { return d->strErrorString; }
+
+bool PiiOperation::hasError() const { return !d->strErrorString.isEmpty(); }

@@ -1,5 +1,5 @@
 /* This file is part of Into.
- * Copyright (C) Intopii 2013.
+ * Copyright (C) Intopii 2014.
  * All rights reserved.
  *
  * Licensees holding a commercial Into license may use this file in
@@ -13,27 +13,15 @@
  * refer to LICENSE.AGPL3 for details.
  */
 
-#ifndef _TESTPIIOPERATIONCOMPOUND_H
-#define _TESTPIIOPERATIONCOMPOUND_H
+#include "PiiNullInputController.h"
 
-#include <PiiOperationTest.h>
-#include <PiiOperationCompound.h>
-
-class TestPiiOperationCompound : public PiiOperationTest
+bool PiiNullInputController::tryToReceive(PiiAbstractInputSocket*, const PiiVariant&) throw ()
 {
-  Q_OBJECT
+  return true;
+}
 
-private slots:
-  void initTestCase();
-  void serialize();
-  void clone();
-  void socketData();
-  void disabledOperations();
-  void cleanupTestCase();
-
-private:
-  PiiOperationCompound _compound;
-};
-
-
-#endif //_TESTPIIOPERATIONCOMPOUND_H
+PiiNullInputController* PiiNullInputController::instance()
+{
+  static PiiNullInputController controller;
+  return &controller;
+}
