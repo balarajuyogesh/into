@@ -95,7 +95,7 @@ protected:
   /**
    * Failure handling types in [start()].
    */
-  enum FailMode { ExpectSuccess, ExpectFail };
+  enum FailMode { ExpectSuccess, ExpectFail, IgnoreFail };
 
   PiiOperationTest();
 
@@ -132,9 +132,14 @@ protected:
    * etc. One needs to stop the tester (stop()) once the
    * test is finished.
    *
-   * @return `true` if the `mode` == ExpectSuccess and the operation
-   * was successfully started, or if `mode` == ExpectFail and the
-   * start-up fails, and `false` otherwise.
+   * If *mode* == `IgnoreFail`, the operation will be started even if
+   * it fails. This is probably only useful for testing compounds
+   * since they can ignore failing operations.
+   *
+   * @return `true` if the *mode* is either `ExpectSuccess` or
+   * `IgnoreFail` and the operation was successfully started, or if
+   * *mode* == `ExpectFail` and the start-up fails. Otherwise, `false`
+   * will be returned.
    */
   bool start(FailMode mode = ExpectSuccess);
 
@@ -262,6 +267,7 @@ private slots:
 
 private:
   typedef QMap<QString,PiiProbeInput*> ProbeMapType;
+  typedef QMap<QString,PiiAbstractInputSocket*> InputMapType;
 
   void connectInput(PiiAbstractInputSocket* input);
   PiiProbeInput* createProbe(PiiAbstractOutputSocket* output, const QString& name);
@@ -273,6 +279,7 @@ private:
     Data();
     PiiOperation* pOperation;
     ProbeMapType mapProbes;
+    InputMapType mapInputs;
   } *d;
 };
 

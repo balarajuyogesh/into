@@ -83,21 +83,12 @@ bool PiiOperationTest::start(FailMode mode)
       qDebug("Operation has not been set.");
       return false;
     }
+
+  createProbes();
   try
     {
-      createProbes();
       d->pOperation->check(d->pOperation->state() == PiiOperation::Stopped);
-      d->pOperation->start();
       if (mode == ExpectFail)
-        return false;
-      int iCount = 0;
-      while (d->pOperation->state() != PiiOperation::Running && iCount < 5)
-        {
-          QCoreApplication::processEvents();
-          PiiDelay::msleep(50);
-          ++iCount;
-        }
-      if (iCount == 5)
         return false;
     }
   catch (PiiException& ex)
@@ -108,6 +99,16 @@ bool PiiOperationTest::start(FailMode mode)
           return false;
         }
     }
+  d->pOperation->start();
+  int iCount = 0;
+  while (d->pOperation->state() != PiiOperation::Running && iCount < 5)
+    {
+      QCoreApplication::processEvents();
+      PiiDelay::msleep(50);
+      ++iCount;
+    }
+  if (iCount == 5)
+    return false;
   return true;
 }
 
@@ -212,9 +213,18 @@ bool PiiOperationTest::stop()
   if (d->pOperation != 0)
     {
       QList<PiiAbstractInputSocket*> lstInputs(d->pOperation->inputs());
+      bool bConnectedInput = false;
       for (int i=0; i<lstInputs.size(); ++i)
-        if (lstInputs[i]->controller() != 0)
-          lstInputs[i]->controller()->tryToReceive(lstInputs[i], PiiYdin::createStopTag());
+        {
+          if (lstInputs[i]->connectedOutput() != 0 && lstInputs[i]->controller() != 0)
+            {
+              lstInputs[i]->controller()->tryToReceive(lstInputs[i], PiiYdin::createStopTag());
+              bConnectedInput = true;
+            }
+        }
+
+      if (!bConnectedInput)
+        d->pOperation->stop();
 
       if (!d->pOperation->wait(1000))
         {
