@@ -17,13 +17,18 @@
 #include <PiiYdinTypes.h>
 
 PiiVideoFileReader::Data::Data() :
-  strFileName(""), iRepeatCount(1), pVideoReader(0), pFileNameInput(0), iFrameStep(1), iVideoIndex(0), bFileNameConnected(false), bTriggered(false)
-{
-}
+  strFileName(""),
+  iRepeatCount(1),
+  pVideoReader(0),
+  pFileNameInput(0),
+  iFrameStep(1),
+  iVideoIndex(0),
+  bFileNameConnected(false),
+  bTriggered(false)
+{}
 
 PiiVideoFileReader::PiiVideoFileReader() :
   PiiImageReaderOperation(new Data)
-
 {
   PII_D;
   d->pVideoReader = new PiiVideoReader;
