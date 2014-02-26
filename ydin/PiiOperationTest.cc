@@ -98,6 +98,8 @@ bool PiiOperationTest::start(FailMode mode)
           qDebug("%s", ex.message().toLocal8Bit().constData());
           return false;
         }
+      else if (mode == ExpectFail)
+        return true;
     }
   d->pOperation->start();
   int iCount = 0;

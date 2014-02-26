@@ -81,9 +81,9 @@ TestCase
   {
     compare(jsEngine.childCount(), 0);
     jsEngine.execute();
-    compare(jsEngine.state(), PiiOperation.Running);
+    compare(jsEngine.state, PiiOperation.Running);
     jsEngine.stop();
-    compare(jsEngine.state(), PiiOperation.Stopped);
+    compare(jsEngine.state, PiiOperation.Stopped);
   }
 
   function test_05_add_operations()

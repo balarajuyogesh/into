@@ -60,7 +60,7 @@ TestCase
 
   function test_02_state()
   {
-    compare(operation.state(), Into.PiiOperation.Stopped);
+    compare(operation.state, Into.PiiOperation.Stopped);
   }
 
   function test_03_inputs_and_outputs()
@@ -91,9 +91,13 @@ TestCase
   function test_05_reconfigure()
   {
     operation.startPropertySet("test");
-    operation.dynamicInputCount = 3;
+    // TODO must go through setProperty() because there is no way to
+    // intercept property setters/getters in QJSEngine.
+    operation.setProperty("dynamicInputCount", 3);
     compare(operation.dynamicInputCount, 2);
     operation.endPropertySet();
+    operation.reconfigure("test");
+    compare(operation.dynamicInputCount, 3);
   }
 
   function test_06_clone()
