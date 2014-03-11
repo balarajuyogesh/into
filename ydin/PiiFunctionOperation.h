@@ -50,91 +50,213 @@
 #  define PII_FUNCTION_OP_FOR(FUNCTION) Pii::Id<decltype(PiiFuncOpPrivate::resolveType(FUNCTION))>::Type
 #endif
 
+#define PII_FUNCOP_SET_CONVERTER(TYPE,CONVERTER) \
+  namespace PiiFuncOpPrivate                     \
+  {                                              \
+    template <> struct Converter<TYPE>           \
+    {                                            \
+      typedef CONVERTER Type;                    \
+    };                                           \
+  }
+
+#define PII_FUNCOP_SET_RETURN_CONVERTER(TYPE,CONVERTER) \
+  namespace PiiFuncOpPrivate                     \
+  {                                              \
+    template <> struct ReturnConverter<TYPE>     \
+    {                                            \
+      typedef CONVERTER Type;                    \
+    };                                           \
+  }
+
 /// @hide
 namespace PiiFuncOpPrivate
 {
-  template <class T> struct ParamTraits
+  template <class T> struct DefaultInputConverter
   {
-    typedef PiiInputSocket SocketType;
     typedef T ValueType;
-    static T toParam(ValueType value) { return value; }
+    static bool initialize(const PiiVariant& var, T& val) { return var.convertTo(val); }
+    static T toParam(T& val) { return val; }
   };
-  template <class T> struct ParamTraits<T*>
+
+  template <class T> struct DefaultOutputConverter
   {
-    typedef PiiOutputSocket SocketType;
     typedef T ValueType;
-    static T* toParam(ValueType& value) { return &value; }
+    static bool initialize(T&) { return true; }
+    static PiiVariant toVariant(const T& val) { return PiiVariant(val); }
   };
-  template <class T> struct ParamTraits<T&>
+
+  template <class T> struct DefaultConverter : DefaultInputConverter<T> {};
+  template <class T> struct DefaultConverter<T*> : DefaultOutputConverter<T>
   {
-    typedef PiiOutputSocket SocketType;
-    typedef T ValueType;
-    static T& toParam(ValueType& value) { return value; }
+    static T* toParam(T& value) { return &value; }
   };
-  template <class T> struct ParamTraits<const T*>
+  template <class T> struct DefaultConverter<T&> : DefaultOutputConverter<T>
   {
-    typedef PiiInputSocket SocketType;
-    typedef T ValueType;
-    static const T* toParam(ValueType& value) { return &value; }
+    static T& toParam(T& value) { return value; }
   };
-  template <class T> struct ParamTraits<const T&>
+  template <class T> struct DefaultConverter<const T*> : DefaultInputConverter<T>
   {
-    typedef PiiInputSocket SocketType;
-    typedef T ValueType;
-    static const T& toParam(const ValueType& value) { return value; }
+    static const T* toParam(const T& value) { return &value; }
   };
+  template <class T> struct DefaultConverter<const T&> : DefaultInputConverter<T>
+  {
+    static const T& toParam(const T& value) { return value; }
+  };
+  template <class T> struct DefaultReturnConverter : DefaultConverter<T*> {};
+
+  // Traits
+  template <class T> struct Converter { typedef DefaultConverter<T> Type; };
+  template <class T> struct ReturnConverter { typedef DefaultReturnConverter<T> Type; };
+  template <class T> struct IsInput : Pii::True {};
+  template <class T> struct IsInput<T*> : Pii::False {};
+  template <class T> struct IsInput<T&> : Pii::False {};
+  template <class T> struct IsInput<const T*> : Pii::True {};
+  template <class T> struct IsInput<const T&> : Pii::True {};
 
   // The holder type must be resolved based on function argument
   // types. At that phase, it is not possible to know whether a getter
   // function or an input socket is used to retrieve the value at run
-  // time. Therefore, this struct separates the two cases at run time.
-  // This costs one comparison, which would be needed anyway since we
-  // need to support optional input sockets.
+  // time. Therefore, this struct uses a function pointer to select
+  // the appropriate initializer.
   template <class Object, class T> struct InputHolder
   {
+    typedef typename Converter<T>::Type Conv;
+    typedef typename Conv::ValueType ValueType;
+
+    struct CastWrapper
+    {
+      virtual ~CastWrapper() {}
+      virtual void init(Object*, ValueType& value) const = 0;
+    };
+    template <class U> struct CastWrapperImpl : CastWrapper
+    {
+      CastWrapperImpl(U (Object::* getter)() const) : getter(getter) {}
+      void init(Object* obj, ValueType& value) const
+      {
+        value = static_cast<ValueType>((obj->*getter)());
+      }
+      U (Object::* getter)() const;
+    };
+
+
+    InputHolder(InputHolder&& other) :
+      pSocket(other.pSocket),
+      getter(other.getter),
+      pWrapper(other.pWrapper),
+      initializer(other.initializer)
+    {
+      other.pWrapper = nullptr;
+    }
     // Input parameters can be initialized by reading a socket...
     InputHolder(const char* socketName) :
-      getter(0),
       pSocket(new PiiInputSocket(socketName)),
-      bReadSocket(true)
+      getter(nullptr),
+      pWrapper(nullptr),
+      initializer(&InputHolder::initFromSocket)
     {}
     // ... or by calling a function. This version accepts any member
     // function pointer from a class derived from Object.
-    template <class Derived> InputHolder(T (Derived::* getter)() const) :
-      getter(static_cast<T (Object::*)() const>(getter)),
-      pSocket(0),
-      bReadSocket(false)
+    template <class Derived>
+    InputHolder(ValueType (Derived::* getter)() const,
+                const char* socketName = nullptr) :
+      pSocket(socketName ? new PiiInputSocket(socketName) : nullptr),
+      getter(static_cast<ValueType (Object::*)() const>(getter)),
+      pWrapper(nullptr),
+      initializer(&InputHolder::initByGetter)
+    {
+      if (pSocket)
+        pSocket->setOptional(true);
+    }
+    // Finally, this version accepts any getter whose return value is
+    // convertible to the target type.
+    template <class Derived, class U>
+    InputHolder(U (Derived::* getter)() const, const char* socketName = nullptr) :
+      pSocket(socketName ? new PiiInputSocket(socketName) : nullptr),
+      getter(nullptr),
+      pWrapper(new CastWrapperImpl<U>(static_cast<U (Object::*)() const>(getter))),
+      initializer(&InputHolder::initByCastedGetter)
     {}
 
-    void readValue(Object* obj, T& value)
+    ~InputHolder()
     {
-       if (bReadSocket)
-        {
-          if (pSocket->firstObject().type() != Pii::typeId<T>())
-            PII_THROW_UNKNOWN_TYPE(pSocket);
-          value = pSocket->firstObject().valueAs<T>();
-        }
-      else
-        value = (obj->*getter)();
+      delete pWrapper;
     }
 
-    void emitValue(typename ParamTraits<T>::ValueType&) {}
+    template <class Derived>
+    void setGetter(ValueType (Derived::* get)() const)
+    {
+      delete pWrapper;
+      pWrapper = 0;
+      getter = static_cast<ValueType (Object::*)() const>(get);
+    }
 
-    T (Object::* getter)() const;
+    template <class Derived, class U>
+    void setGetter(U (Derived::* get)() const)
+    {
+      getter = 0;
+      delete pWrapper;
+      pWrapper = new CastWrapperImpl<U>(get);
+    }
+
+    void setGetter(std::nullptr_t)
+    {
+      getter = 0;
+      delete pWrapper;
+      pWrapper = 0;
+    }
+
+    void initialize(Object* obj, ValueType& value) const
+    {
+      (this->*initializer)(obj, value);
+    }
+
+    void initFromSocket(Object*, ValueType& value) const
+    {
+      if (!Conv::initialize(pSocket->firstObject(), value))
+        PII_THROW_UNKNOWN_TYPE(pSocket);
+    }
+
+    void initByGetter(Object* obj, ValueType& value) const
+    {
+      value = (obj->*getter)();
+    }
+
+    void initByCastedGetter(Object* obj, ValueType& value) const
+    {
+      pWrapper->init(obj, value);
+    }
+
+    void check()
+    {
+      if (pSocket && pSocket->isConnected())
+        initializer = &InputHolder::initFromSocket;
+      else if (getter)
+        initializer = &InputHolder::initByGetter;
+      else if (pWrapper)
+        initializer = &InputHolder::initByCastedGetter;
+      else
+        PII_THROW(PiiExecutionException, QCoreApplication::translate("PiiFunctionOperation", "Input parameter has no data source."));
+    }
+
     PiiInputSocket* pSocket;
-    bool bReadSocket;
+    ValueType (Object::* getter)() const;
+    CastWrapper* pWrapper;
+    void (InputHolder::* initializer)(Object*, ValueType&) const;
   };
 
   template <class Object, class T> struct OutputHolder
   {
+    typedef typename Converter<T>::Type Conv;
+    typedef typename Conv::ValueType ValueType;
+
     OutputHolder(const char* socketName) :
       pSocket(new PiiOutputSocket(socketName))
     {}
 
-    void readValue(Object*, ...) {}
-    void emitValue(typename ParamTraits<T>::ValueType& value)
+    void initialize(Object*, ValueType& value) { Conv::initialize(value); }
+    void emitValue(ValueType& value)
     {
-      pSocket->emitObject(value); // may throw
+      pSocket->emitObject(Conv::toVariant(value)); // may throw
     }
 
     PiiOutputSocket* pSocket;
@@ -142,40 +264,40 @@ namespace PiiFuncOpPrivate
 
   // ParamHolder::Type is either InputHolder or OutputHolder,
   // depending on the type of the function parameter. Should use a
-  // template alias, but gcc doesn't support them until 4.7.
+  // template alias, but gcc doesn't support them until 4.7 or so.
   template <class Object, class T>
   struct ParamHolder
   {
-    typedef typename Pii::IfClass<Pii::IsSame<typename ParamTraits<T>::SocketType, PiiInputSocket>,
+    typedef typename Pii::IfClass<IsInput<T>,
                                   InputHolder<Object, T>,
                                   OutputHolder<Object, T>>::Type Type;
   };
 
-  struct ValueReader
+  struct Initializer
   {
     template <class Object, class Holder, class T>
     void operator() (Object operation,
                      Holder& holder,
                      T& value)
     {
-      holder.readValue(operation, value);
+      holder.initialize(operation, value);
     }
   };
 
   struct ValueEmitter
   {
-    template <class Holder, class T>
-    void operator() (Holder& holder,
-                     T& value)
+    template <class Object, class T, class U>
+    void operator() (OutputHolder<Object,T>& holder, U& value)
     {
       holder.emitValue(value);
     }
+    template <class... Args> void operator() (Args&...) const {}
   };
 
   struct SocketAdder
   {
     template <class Operation, class Holder>
-    void operator() (Operation* op, Holder holder)
+    void operator() (Operation* op, Holder& holder)
     {
       if (holder.pSocket)
         op->addSocket(holder.pSocket);
@@ -184,14 +306,14 @@ namespace PiiFuncOpPrivate
 
   struct DefaultValueSetter
   {
-    template <class Object, class T>
+    template <class Object, class T, class U>
     void operator() (InputHolder<Object,T>& holder,
                      const QString& name,
-                     T (Object::* getter)() const) const
+                     U (Object::* getter)() const) const
     {
-      if (holder.pSocket->objectName() == name)
+      if (holder.pSocket && holder.pSocket->objectName() == name)
         {
-          holder.getter = getter;
+          holder.setGetter(getter);
           holder.pSocket->setOptional(true);
         }
     }
@@ -201,27 +323,57 @@ namespace PiiFuncOpPrivate
                      const QString& name,
                      std::nullptr_t) const
     {
-      if (holder.pSocket->objectName() == name)
+      if (holder.pSocket && holder.pSocket->objectName() == name)
         {
-          holder.getter = nullptr;
+          holder.setGetter(nullptr);
           holder.pSocket->setOptional(false);
         }
     }
 
-    template <class... Args> void operator() (Args...) const {}
+    template <class... Args> void operator() (Args&...) const {}
   };
 
-  struct OptionalInputChecker
+  struct Checker
   {
     template <class Object, class T>
     void operator() (InputHolder<Object,T>& holder)
     {
-      holder.bReadSocket = holder.pSocket && holder.pSocket->isConnected();
+      holder.check();
     }
 
-    template <class... Args> void operator() (Args...) const {}
+    template <class... Args> void operator() (Args&...) const {}
   };
 
+  template <class Function> struct FunctionCaller
+  {
+    FunctionCaller(Function f) : f(f) {}
+    Function f;
+
+    template <class Object, class T>
+    void operator() (InputHolder<Object,T>& holder)
+    {
+      if (holder.pSocket)
+        f(holder.pSocket,
+          static_cast<T*>(nullptr),
+          static_cast<typename Converter<T>::Type::ValueType*>(nullptr));
+    }
+
+    template <class Object, class T>
+    void operator() (OutputHolder<Object,T>& holder)
+    {
+      f(holder.pSocket,
+        static_cast<T*>(nullptr),
+        static_cast<typename Converter<T>::Type::ValueType*>(nullptr));
+    }
+  };
+
+  template <class T> struct ValuePack : T
+  {
+    template <int I>
+    typename std::tuple_element<I,T>::type& at() { return std::get<I>(*this); }
+    template <int I>
+    const typename std::tuple_element<I,T>::type& at() const { return std::get<I>(*this); }
+  };
 }
 /// @endhide
 
@@ -229,9 +381,8 @@ namespace PiiFuncOpPrivate
  * A wrapper operation that makes it easy to make existing functions
  * runnable by [PiiEngine].
  *
- *
  * ~~~(c++)
- * PiiMatrix<uchar> detectEdges(PiiMatrix<uchar> image,
+ * PiiMatrix<uchar> detectEdges(const PiiMatrix<uchar>& image,
  *                              int threshold,
  *                              PiiMatrix<float>* gradient);
  *
@@ -251,6 +402,96 @@ namespace PiiFuncOpPrivate
  *             "gradient")  // output for the output-value parameter
  * {}
  * ~~~
+ *
+ * Each parameter type is associated with an *converter* that is
+ * responsible for creating a temporary object on the stack and for
+ * performing the required conversions from the temporary object to
+ * parameter type and PiiVariant. The converter performs slightly
+ * different tasks for input and output parameters. Every type except
+ * non-const pointers and non-const references is considered an input
+ * parameter.
+ *
+ * The process of calling a function is as follows:
+ *
+ * 1.  A temporary variable (`converter::ValueType`) is created for
+ *     each input parameter on the stack. The default constructor is
+ *     used.
+ *
+ *     Note that the type of the temporary variable may or may not be
+ *     the same as the actual parameter type. The default converter
+ *     uses a default-constructed value for output parameters and
+ *     initializes input parameters with the value read from a socket
+ *     or returned by a getter function. For pointers and references,
+ *     the corresponding value type is used.
+ *
+ *      In the example above, the `gradient` parameter would point to
+ *      a default-constructed [PiiMatrix<float>] on the stack.
+ *      Similarly, `image` would refer to a [PiiMatrix<uchar>] whose
+ *      value would be initialized with data read from an input
+ *      socket.
+ *
+ * 2.  The temporary variables are initialized using
+ *     `converter::initialize()`. The default converters do nothing
+ *     for output parameters. The value for an input parameter is
+ *     copied (and converted, if needed) from an input socket or a
+ *     getter function.
+ *
+ * 3.  The temporary variables are passed to the actual function
+ *     through `converter::toParam()`.
+ *
+ * 4.  When the function returns, all output parameters are converted
+ *     to [PiiVariant]s using `converter::toVariant()` and passed to
+ *     the corresponding output socket.
+ *
+ * ~~~(c++)
+ * struct MyType
+ * {
+ *   int number;
+ * };
+ *
+ * struct MyInputConverter
+ * {
+ *   typedef const MyType* ParamType; // Not actually required
+ *   typedef PiiSharedPtr<MyType> ValueType; // Required
+ *
+ *   // Converts a variant read from an input socket to the
+ *   // temporary type.
+ *   static bool initialize(const PiiVariant& variant, ValueType& value)
+ *   {
+ *     bool bOk = false;
+ *     value = new MyType{variant.convertTo<int>(&bOk)};
+ *     return bOk;
+ *   }
+ *   // Converts the temporary value to the actual parameter
+ *   // type so that it can be used in the function call.
+ *   static ParamType toParam(ValueType& value)
+ *   {
+ *     return value; // PiiSharedPtr automatically casts
+ *   }
+ * };
+ *
+ * struct MyOutputConverter
+ * {
+ *   typedef MyType* ParamType;
+ *   typedef PiiSharedPtr<MyType> ValueType;
+ *
+ *   static bool initialize(ValueType& value)
+ *   {
+ *     value = new MyType{42};
+ *   }
+ *   static ParamType toParam(ValueType& value)
+ *   {
+ *     return value;
+ *   }
+ *   static PiiVariant toVariant(const ValueType& value)
+ *   {
+ *     return PiiVariant(value->number);
+ *   }
+ * };
+ *
+ * PII_FUNCOP_SET_CONVERTER(const MyType*, MyInputConverter);
+ * PII_FUNCOP_SET_CONVERTER(MyType*, MyOutputConverter);
+ * ~~~
  */
 template <class Function, class... Args>
 class PiiFunctionOperation : public PiiDefaultOperation
@@ -260,7 +501,7 @@ public:
   {
     PiiDefaultOperation::check(reset);
 
-    Pii::callWithTuples(PiiFuncOpPrivate::OptionalInputChecker(),
+    Pii::callWithTuples(PiiFuncOpPrivate::Checker(),
                         _d()->holderPack);
   }
 protected:
@@ -273,52 +514,71 @@ protected:
     typedef typename PiiFuncOpPrivate::ParamHolder<ThisType, T>::Type Type;
   };
 
-  typedef std::tuple<typename ParamHolder<Args>::Type...> HolderPack;
-  typedef std::tuple<typename PiiFuncOpPrivate::ParamTraits<Args>::ValueType...> ValuePack;
-  typedef typename std::result_of<Function(Args...)>::type ReturnType;
-
-  class NonVoidData : public PiiDefaultOperation::Data
+  template <class T> struct Converter
   {
-  public:
-    NonVoidData(Function function,
-                const char* outputName,
-                typename ParamHolder<Args>::Type... holders) :
-      function(function),
-      pReturnOutput(new PiiOutputSocket(outputName)),
-      holderPack{holders...}
-    {}
-
-    void addReturnOutput(ThisType* op) const { op->addSocket(pReturnOutput); }
-
-    void callAndEmit(typename PiiFuncOpPrivate::ParamTraits<Args>::ValueType&... values) const
-    {
-      pReturnOutput->emitObject(function(PiiFuncOpPrivate::ParamTraits<Args>::toParam(values)...));
-    }
-
-    Function function;
-    PiiOutputSocket* pReturnOutput;
-    HolderPack holderPack;
+    typedef typename PiiFuncOpPrivate::Converter<T>::Type Type;
+    typedef typename Type::ValueType ValueType;
   };
+
+  typedef std::tuple<typename ParamHolder<Args>::Type...> HolderPack;
+  typedef PiiFuncOpPrivate::ValuePack<std::tuple<typename Converter<Args>::ValueType...>> ValuePack;
+  typedef typename std::result_of<Function(Args...)>::type ReturnType;
 
   class VoidData : public PiiDefaultOperation::Data
   {
   public:
     VoidData(Function function,
-             typename ParamHolder<Args>::Type... holders) :
+             typename ParamHolder<Args>::Type&&... holders) :
       function(function),
-      holderPack{holders...}
+      holderPack{std::forward<typename ParamHolder<Args>::Type>(holders)...}
     {}
 
     void addReturnOutput(ThisType*) const {}
 
-    void callAndEmit(typename PiiFuncOpPrivate::ParamTraits<Args>::ValueType&... values) const
+    void callAndEmit(typename Converter<Args>::ValueType&... values) const
     {
-      function(PiiFuncOpPrivate::ParamTraits<Args>::toParam(values)...);
+      function(Converter<Args>::Type::toParam(values)...);
+    }
+
+    template <class BinaryFunction>
+    void forEachSocket(BinaryFunction function)
+    {
+      Pii::callWithTuples(PiiFuncOpPrivate::FunctionCaller<BinaryFunction>(function),
+                          holderPack);
     }
 
     Function function;
     HolderPack holderPack;
   };
+
+  class NonVoidData : public VoidData
+  {
+  public:
+    NonVoidData(Function function,
+                const char* outputName,
+                typename ParamHolder<Args>::Type&&... holders) :
+      VoidData(function, std::forward<typename ParamHolder<Args>::Type>(holders)...),
+      pReturnOutput(new PiiOutputSocket(outputName))
+    {}
+
+    void addReturnOutput(ThisType* op) const { op->addSocket(pReturnOutput); }
+
+    void callAndEmit(typename Converter<Args>::ValueType&... values) const
+    {
+      pReturnOutput->emitObject(PiiFuncOpPrivate::ReturnConverter<ReturnType>::Type::
+                                toVariant(function(Converter<Args>::Type::toParam(values)...)));
+    }
+
+    template <class BinaryFunction>
+    void forEachSocket(BinaryFunction function)
+    {
+      function(pReturnOutput, static_cast<ReturnType*>(nullptr), static_cast<ReturnType*>(nullptr));
+      VoidData::forEachSocket(function);
+    }
+
+    PiiOutputSocket* pReturnOutput;
+  };
+
   typedef typename Pii::IfClass<Pii::IsVoid<ReturnType>, VoidData, NonVoidData>::Type Data;
   PII_D_FUNC;
   /// @endhide
@@ -331,9 +591,9 @@ protected:
     PII_D;
     d->addReturnOutput(this);
 
-    Pii::callWithTuples(PiiFuncOpPrivate::SocketAdder(),
-                        Pii::makeTuple<sizeof...(Args)>(this),
-                        d->holderPack);
+    Pii::callWithTuples(std::bind(PiiFuncOpPrivate::SocketAdder(),
+                                  this, std::placeholders::_1),
+                                  d->holderPack);
   }
 
   /**
@@ -362,6 +622,13 @@ protected:
   template <class T, class Object>
   void setDefaultValue(const QString& input, T (Object::* getter)() const)
   {
+    /* TODO bind() doesn't work here. Why?
+    using namespace std::placeholders;
+    Pii::callWithTuples(std::bind(PiiFuncOpPrivate::DefaultValueSetter(), _1,
+                                  input,
+                                  static_cast<T (ThisType::*)() const>(getter)),
+                        _d()->holderPack);
+    */
     Pii::callWithTuples(PiiFuncOpPrivate::DefaultValueSetter(),
                         _d()->holderPack,
                         Pii::makeTuple<sizeof...(Args)>(input),
@@ -376,17 +643,76 @@ protected:
                         Pii::makeTuple<sizeof...(Args)>(nullptr));
   }
 
+  /**
+   * Calls *function* for each auto-generated socket.
+   *
+   * @param function a function object that takes three parameters: a
+   * pointer to a socket, a null pointer to an object that has the
+   * same type as the corresponding input parameter and a null pointer
+   * to an object that has the same type as the stack-allocated
+   * temporary object.
+   *
+   * ~~~(c++)
+   * struct Func
+   * {
+   *   template <class Actual, class Temporary>
+   *   void operator() (PiiSocket* socket, Actual*, Temporary*)
+   *   {
+   *     // ...
+   *   }
+   * };
+   *
+   * forEachSocket(Func());
+   * ~~~
+   *
+   * It is possible to create overloaded versions of `operator()` in
+   * the function object. For example, there could be a different
+   * function function for [PiiInputSocket] and [PiiOutputSocket].
+   *
+   * If the function wrapped by PiiFunctionOperation has a return
+   * value, it is handled specially. Since there is no temporary
+   * value, `Actual` and `Temporary` will be the same type.
+   */
+  template <class BinaryFunction>
+  void forEachSocket(BinaryFunction function)
+  {
+    _d()->forEachSocket(function);
+  }
+
+  template <class Derived, class T>
+  typename ParamHolder<T>::Type optional(const char* name,
+                                         T (Derived::* getter)() const) const
+  {
+    return typename ParamHolder<T>::Type(getter, name);
+  }
+
+  template <class T, class Derived, class U>
+  typename ParamHolder<T>::Type optional(const char* name,
+                                         U (Derived::* getter)() const) const
+  {
+    return typename ParamHolder<T>::Type(getter, name);
+  }
+
   void process()
   {
+    process(&ThisType::nullInit);
+  }
+
+  template <class InitFunc> void process(InitFunc customInit)
+  {
     PII_D;
-    // Store function call parameters in the stack
+    // Store function call parameters in the stack and initialize them
+    // prior to the call. This fills the values by reading input
+    // sockets or calling property getters. We cannot use an uniform
+    // initialization because any of the conversions can throw an
+    // exception, which would leave the value pack into an
+    // inconsistent state and potentially leak memory.
     ValuePack values;
-    // Initialize values prior to the call. This fills the values by
-    // reading input sockets or calling property getters.
-    Pii::callWithTuples(PiiFuncOpPrivate::ValueReader(),
-                        Pii::makeTuple<sizeof...(Args)>(this),
+    using namespace std::placeholders;
+    Pii::callWithTuples(std::bind(PiiFuncOpPrivate::Initializer(), this, _1, _2),
                         d->holderPack,
                         values);
+    customInit(values);
 
     // Call the actual function and emit its return value (if any).
     // TODO: const handling
@@ -400,6 +726,8 @@ protected:
 
 private:
   friend class PiiFuncOpPrivate::SocketAdder;
+
+  static void nullInit(ValuePack&) {}
 };
 
 namespace PiiFuncOpPrivate
