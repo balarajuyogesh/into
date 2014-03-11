@@ -177,6 +177,7 @@ public:
   inline const Derived* self() const { return static_cast<const Derived*>(this); }
   inline Derived& selfRef() { return *static_cast<Derived*>(this); }
   inline const Derived& selfRef() const { return *static_cast<const Derived*>(this); }
+  inline Derived& mutableRef() const { return const_cast<Derived&>(selfRef()); }
 
   /**
    * Returns `true` if the matrix is empty, and `false` otherwise.
@@ -236,7 +237,7 @@ public:
                    Pii::Cast<typename Matrix::value_type, value_type>());
     return selfRef();
   }
-  
+
   /**
    * Applies the *adaptable binary function* to all elements of
    * this matrix and the corresponding element in *other*. The
