@@ -200,8 +200,22 @@ namespace Pii
     To operator() (const From& value) const { return To(value); }
   };
 
+  template <class T> struct ArrayLookup :
+  public UnaryFunction<int, T>
+  {
+    ArrayLookup(T* array) : array(array) {}
+    T& operator() (int i) const { return array[i]; }
+    T* array;
+  };
+
+  template <class T>
+  ArrayLookup<T> arrayLookup(T* array)
+  {
+    return ArrayLookup<T>(array);
+  }
+
   /**
-   * A unary function adaptor that makes the result of one unary
+   * a unary function adaptor that makes the result of one unary
    * function the argument of another. If function 1 is f(x) and
    * function 2 is g(x), the composition returns f(g(x)).
    *
@@ -500,10 +514,16 @@ namespace Pii
   struct BuildIndices<0, Indices...> : IndexList<Indices...> {};
 
   template <class... TupleArgs, class... Args>
-  BuildIndices<sizeof...(TupleArgs)> buildIndices(std::tuple<TupleArgs...>, Args...)
+  BuildIndices<sizeof...(TupleArgs)> buildIndices(const std::tuple<TupleArgs...>&, Args&&...)
   {
     return BuildIndices<sizeof...(TupleArgs)>{};
   }
+
+  template <std::size_t... Indices>
+  IndexList<Indices...> indexList(IndexList<Indices...>);
+
+  template <class... TupleArgs>
+  auto indexList(const std::tuple<TupleArgs...>& tuple) -> decltype(indexList(buildIndices(tuple)));
 
   template <class Function, class Tuple, std::size_t... Indices>
   inline auto callWithIndexedTuple(Function function,
@@ -530,11 +550,11 @@ namespace Pii
                             Tuple&& tuple)
     -> decltype(callWithIndexedTuple(function,
                                      std::forward<Tuple>(tuple),
-                                     buildIndices(tuple)))
+                                     buildIndices(std::forward<Tuple>(tuple))))
   {
     return callWithIndexedTuple(function,
                                 std::forward<Tuple>(tuple),
-                                buildIndices(tuple));
+                                buildIndices(std::forward<Tuple>(tuple)));
   }
 
   template <class ReturnType, class... Args, class Tuple>
@@ -543,7 +563,7 @@ namespace Pii
   {
     return callWithIndexedTuple(std::function<ReturnType(Args...)>(function),
                                 std::forward<Tuple>(tuple),
-                                buildIndices(tuple));
+                                buildIndices(std::forward<Tuple>(tuple)));
   }
 
   /**
@@ -561,9 +581,10 @@ namespace Pii
   }
 
   template <std::size_t I, class Function, class... Tuples>
-  void callWithIthMember(Function function, Tuples&&... tuples)
+  auto callWithIthMember(Function function, Tuples&&... tuples) ->
+    decltype(function(std::get<I>(std::forward<Tuples>(tuples))...))
   {
-    function(std::get<I>(std::forward<Tuples>(tuples))...);
+    return function(std::get<I>(std::forward<Tuples>(tuples))...);
   }
 
   template <class Function, class... Tuples, std::size_t... Indices>
@@ -606,7 +627,7 @@ namespace Pii
                              Tuples&&... tuples)
   {
     callWithIndexedTuples(function,
-                          buildIndices(tuples...),
+                          buildIndices(std::forward<Tuples>(tuples)...),
                           std::forward<Tuples>(tuples)...);
   }
 
