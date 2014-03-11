@@ -56,13 +56,40 @@ namespace PiiImage
    * // binary = 0 0 0 0 1 1 1 1 1
    * ~~~
    */
-  template <class T, class U = T> struct ThresholdFunction : public Pii::BinaryFunction<T,T,U>
+  template <class V, class R = V, class T = V>
+  struct ThresholdFunction : public Pii::BinaryFunction<V,T,R>
   {
-    ThresholdFunction(U value=1) : _value(value) {}
-    U operator() (T value, T threshold) const { return value < threshold ? U(0) : _value; }
+    ThresholdFunction(R value=1) : _value(value) {}
+    R operator() (V value, T threshold) const { return value < threshold ? R(0) : _value; }
 
   private:
-    const U _value;
+    const R _value;
+  };
+
+  template <class V, class R, class T> struct ThresholdFunction<PiiColor<V>, PiiColor<R>, T > :
+    public Pii::BinaryFunction<PiiColor<V>, T, PiiColor<R> >
+  {
+    ThresholdFunction(R value=1) : _value(value) {}
+    PiiColor<R> operator() (const PiiColor<V>& value, T threshold) const
+    {
+      return PiiColor<R>((V)value < threshold ? R(0) : _value);
+    }
+
+  private:
+    const R _value;
+  };
+
+  template <class V, class R, class T> struct ThresholdFunction<PiiColor4<V>, PiiColor4<R>, T > :
+    public Pii::BinaryFunction<PiiColor4<V>, T, PiiColor4<R> >
+  {
+    ThresholdFunction(R value=1) : _value(value) {}
+    PiiColor4<R> operator() (const PiiColor4<V>& value, T threshold) const
+    {
+      return PiiColor4<R>((V)value < threshold ? R(0) : _value);
+    }
+
+  private:
+    const R _value;
   };
 
   /**
@@ -80,13 +107,40 @@ namespace PiiImage
    * // mat = 1 1 1 1 0 0 0 0 0
    * ~~~
    */
-  template <class T, class U = T> struct InverseThresholdFunction : public Pii::BinaryFunction<T,T,U>
+  template <class V, class R = V, class T = V>
+  struct InverseThresholdFunction : public Pii::BinaryFunction<V,T,R>
   {
-    InverseThresholdFunction(U value=1) : _value(value) {}
-    U operator() (T value, T threshold) const { return value >= threshold ? U(0) : _value; }
+    InverseThresholdFunction(R value=1) : _value(value) {}
+    R operator() (V value, T threshold) const { return value >= threshold ? R(0) : _value; }
 
   private:
-    const U _value;
+    const R _value;
+  };
+
+  template <class V, class R, class T> struct InverseThresholdFunction<PiiColor<V>, PiiColor<R>, T > :
+    public Pii::BinaryFunction<PiiColor<V>, T, PiiColor<R> >
+  {
+    InverseThresholdFunction(R value=1) : _value(value) {}
+    PiiColor<R> operator() (const PiiColor<V>& value, T threshold) const
+    {
+      return PiiColor<R>((V)value >= threshold ? R(0) : _value);
+    }
+
+  private:
+    const R _value;
+  };
+
+  template <class V, class R, class T> struct InverseThresholdFunction<PiiColor4<V>, PiiColor4<R>, T > :
+    public Pii::BinaryFunction<PiiColor4<V>, T, PiiColor4<R> >
+  {
+    InverseThresholdFunction(R value=1) : _value(value) {}
+    PiiColor4<R> operator() (const PiiColor4<V>& value, T threshold) const
+    {
+      return PiiColor4<R>((V)value >= threshold ? R(0) : _value);
+    }
+
+  private:
+    const R _value;
   };
 
   /**
@@ -269,12 +323,23 @@ namespace PiiImage
     return AdaptiveThresholdFunction<ThresholdFunc>(func, relativeThreshold, absoluteThreshold);
   }
 
+  template <class Matrix, class Function>
+  inline PiiMatrix<typename Matrix::value_type> threshold(const Matrix& input,
+                                                          Function function,
+                                                          typename Matrix::value_type level)
+  {
+    typedef typename Matrix::value_type T;
+    PiiMatrix<T> matOutput(PiiMatrix<T>::uninitialized(input.rows(), input.columns()));
+    transform(input, matOutput, std::bind2nd(function, level));
+    return matOutput;
+  }
+
   /**
    * Thresholds an image.
    *
    * @param image original image.
    *
-   * @param threshold gray level value for thresholding the original
+   * @param level gray level value for thresholding the original
    * image. Note that the threshold value must be of the same type as
    * the image. Don't try to pass an `int` if the image is `uchar`.
    *
@@ -282,9 +347,9 @@ namespace PiiImage
    *
    * @see ThresholdFunction
    */
-  template <class T> inline PiiMatrix<T> threshold(const PiiMatrix<T>& image, T threshold)
+  template <class T> inline PiiMatrix<T> threshold(const PiiMatrix<T>& image, T level)
   {
-    return image.mapped(ThresholdFunction<T>(), threshold);
+    return threshold(image, ThresholdFunction<T>(), level);
   }
 
   /**
@@ -298,49 +363,49 @@ namespace PiiImage
    *
    * @see InverseThresholdFunction
    */
-  template <class T> inline PiiMatrix<T> inverseThreshold(const PiiMatrix<T>& image, T threshold)
+  template <class T> inline PiiMatrix<T> inverseThreshold(const PiiMatrix<T>& image, T level)
   {
-    return image.mapped(InverseThresholdFunction<T>(), threshold);
+    return threshold(image, InverseThresholdFunction<T>(), level);
   }
 
   /**
-   * Sets pixels above *threshold* to *threshold*.
+   * Sets pixels above *level* to *level*.
    *
    * @see CutFunction
    */
-  template <class T> inline PiiMatrix<T> cut(const PiiMatrix<T>& image, T threshold)
+  template <class T> inline PiiMatrix<T> cut(const PiiMatrix<T>& image, T level)
   {
-    return image.mapped(CutFunction<T>(), threshold);
+    return threshold(image, CutFunction<T>(), level);
   }
 
   /**
-   * Sets pixels below *threshold* to *threshold*.
+   * Sets pixels below *level* to *level*.
    *
    * @see InverseCutFunction
    */
-  template <class T> inline PiiMatrix<T> inverseCut( const PiiMatrix<T>& image, T threshold )
+  template <class T> inline PiiMatrix<T> inverseCut(const PiiMatrix<T>& image, T level)
   {
-    return image.mapped(InverseCutFunction<T>(), threshold);
+    return threshold(image, InverseCutFunction<T>(), level);
   }
 
   /**
-   * Sets pixels below *threshold* to zero.
+   * Sets pixels below *level* to zero.
    *
    * @see ZeroBelowFunction
    */
-  template <class T> inline PiiMatrix<T> zeroBelow(const PiiMatrix<T>& image, T threshold)
+  template <class T> inline PiiMatrix<T> zeroBelow(const PiiMatrix<T>& image, T level)
   {
-    return image.mapped(ZeroBelowFunction<T>(), threshold);
+    return threshold(image, ZeroBelowFunction<T>(), level);
   }
 
   /**
-   * Sets pixels above *threshold* to zero.
+   * Sets pixels above *level* to zero.
    *
    * @see ZeroAboveFunction
    */
-  template <class T> inline PiiMatrix<T> zeroAbove(const PiiMatrix<T>& image, T threshold)
+  template <class T> inline PiiMatrix<T> zeroAbove(const PiiMatrix<T>& image, T level)
   {
-    return image.mapped(ZeroAboveFunction<T>(), threshold);
+    return threshold(image, ZeroAboveFunction<T>(), level);
   }
 
   /**
