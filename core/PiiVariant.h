@@ -445,6 +445,12 @@ public:
   template <class T> inline T convertTo(bool* ok = 0) const;
 
   /**
+   * Converts to a preallocated memory location. Returns `true` if the
+   * conversion succeeded and `false` if not.
+   */
+  template <class T> inline bool convertTo(T& value) const;
+
+  /**
    * Returns `true` if there is a registered converter that can
    * convert this variant to the given type and `false` otherwise.
    * Note that the conversion may fail even if there is converter
@@ -768,15 +774,23 @@ namespace Pii
   }
 }
 
-template <class T> T PiiVariant::convertTo(bool* ok) const
+template <class T> bool PiiVariant::convertTo(T& value) const
 {
   if (_uiType == Pii::typeId<T>())
-    return *ptrAs<T>();
-  T value = T();
+    {
+      value = *ptrAs<T>();
+      return true;
+    }
   ConverterFunction convert = converter(_uiType, Pii::typeId<T>());
-  bool bOk = false;
   if (convert)
-    bOk = convert(this, &value);
+    return convert(this, &value);
+  return false;
+}
+
+template <class T> T PiiVariant::convertTo(bool* ok) const
+{
+  T value = T();
+  bool bOk = convertTo(value);
   if (ok) *ok = bOk;
   return value;
 }
