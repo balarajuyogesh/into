@@ -165,6 +165,23 @@ public:
       _ptr->release();
   }
 
+#ifdef PII_CXX11
+  PiiSharedPtr(PiiSharedPtr&& other) :
+    _ptr(other._ptr)
+  {
+    other._ptr = nullptr;
+  }
+
+  PiiSharedPtr& operator= (PiiSharedPtr&& other)
+  {
+    _ptr = other._ptr;
+    other._ptr = nullptr;
+    return *this;
+  }
+#endif
+
+  void swap(PiiSharedPtr& other) { qSwap(_ptr, other._ptr); }
+
   /**
    * Assigns a new value to this pointer and releases the old pointer.
    *
@@ -242,7 +259,11 @@ public:
   /**
    * Casts the shared pointer to the internal pointer type.
    */
-  operator T* () const { return unwrap(_ptr); }
+  operator T* () { return unwrap(_ptr); }
+  /**
+   * Casts the shared pointer to the internal pointer type.
+   */
+  operator const T* () const { return unwrap(_ptr); }
 
 private:
   template <class U> friend class PiiSharedPtr;
