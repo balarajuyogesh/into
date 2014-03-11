@@ -914,6 +914,44 @@ namespace PiiImage
    * If *templ* is larger than *image*, zero will be returned.
    */
   template <class T> double xorMatch(const PiiMatrix<T>& image, const PiiMatrix<T>& templ);
+
+  /**
+   * Transforms *input* to *function(output)*. This function calls
+   * *function* for each pixel except if the type of the input matrix
+   * is `unsigned char`. For such input, an optimized version based on
+   * table look-ups is used.
+   *
+   * @param input an input image
+   *
+   * @param output an output image. The output image must be
+   * initialized to the same size as the input
+   *
+   * @function an adaptable unary function to be applied to the input.
+   */
+  template <class Matrix, class UnaryFunction>
+  inline void transform(const Matrix& input,
+                        PiiMatrix<typename UnaryFunction::result_type>& output,
+                        UnaryFunction function,
+                        typename Pii::OnlyIf<!Pii::IsSame<typename Matrix::value_type, uchar>::boolValue>::Type = 0)
+  {
+    Pii::transform(input.begin(), input.end(), output.begin(), function);
+  }
+
+  template <class Matrix, class UnaryFunction>
+  inline void transform(const Matrix& input,
+                        PiiMatrix<typename UnaryFunction::result_type>& output,
+                        UnaryFunction function,
+                        typename Pii::OnlyIf<Pii::IsSame<typename Matrix::value_type, uchar>::boolValue>::Type = 0)
+  {
+    typedef typename UnaryFunction::result_type R;
+    R map[256];
+    for (int i=0; i<256; ++i)
+      map[i] = function(uchar(i));
+
+    Pii::transform(input.begin(), input.end(), output.begin(),
+                   Pii::arrayLookup(map));
+  }
+
 }
 
 #include "PiiImage-templates.h"
