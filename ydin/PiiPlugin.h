@@ -68,7 +68,7 @@ typedef const char* (*pii_plugin_function)();
   extern "C" PII_PLUGIN_RETURN_SPEC PII_PLUGIN_NAME_FUNCTION() { return PII_STRINGIZE(PLUGIN_NAME); } \
   extern "C" PII_PLUGIN_RETURN_SPEC PII_PLUGIN_VERSION_FUNCTION() { return INTO_VERSION_STR; } \
   static const char* pluginName() { return PII_STRINGIZE(PLUGIN_NAME); } \
-  static PiiClassInfoRegisterer PII_JOIN(classInfoOf,PLUGIN_NAME)("plugins", PII_STRINGIZE(PLUGIN_NAME))
+  static PiiClassInfoRegisterer PII_JOIN(classInfo,__LINE__)("plugins", PII_STRINGIZE(PLUGIN_NAME))
 
 /**
  * Registers an operation to Ydin's global resource database. This
@@ -95,11 +95,11 @@ typedef const char* (*pii_plugin_function)();
   PII_SERIALIZATION_NAME(CLASS_NAME);                                   \
   PII_SERIALIZABLE_EXPORT(CLASS_NAME);                                  \
   static PiiClassInfoRegisterer                                         \
-    PII_JOIN(classInfoOf,CLASS_NAME)(pluginName(),                      \
-                                     PII_STRINGIZE(CLASS_NAME),         \
-                                     PiiYdin::operationResourceName(static_cast<CLASS_NAME*>(0)), \
-                                     0,                                 \
-                                     PiiYdin::qMetaObject<CLASS_NAME>())
+    PII_JOIN(classInfo,__LINE__)(pluginName(),                          \
+                                 PII_STRINGIZE(CLASS_NAME),             \
+                                 PiiYdin::operationResourceName(static_cast<CLASS_NAME*>(0)), \
+                                 0,                                     \
+                                 PiiYdin::qMetaObject<CLASS_NAME>())
 /**
  * Same as [PII_REGISTER_OPERATION], but for operations that
  * implement a special `Void` constructor for deserialization
@@ -113,11 +113,11 @@ typedef const char* (*pii_plugin_function)();
   PII_INSTANTIATE_ARCHIVE_FACTORY(CLASS_NAME, PiiGenericInputArchive);  \
   PII_SERIALIZABLE_EXPORT(CLASS_NAME);                                  \
   static PiiClassInfoRegisterer                                         \
-    PII_JOIN(classInfoOf,CLASS_NAME)(pluginName(),                      \
-                                     PII_STRINGIZE(CLASS_NAME),         \
-                                     PiiYdin::operationResourceName(static_cast<CLASS_NAME*>(0)), \
-                                     0,                                 \
-                                     PiiYdin::qMetaObject<CLASS_NAME>())
+    PII_JOIN(classInfo,__LINE__)(pluginName(),                          \
+                                 PII_STRINGIZE(CLASS_NAME),             \
+                                 PiiYdin::operationResourceName(static_cast<CLASS_NAME*>(0)), \
+                                 0,                                     \
+                                 PiiYdin::qMetaObject<CLASS_NAME>())
 
 /**
  * Use this macro to register operation compounds. An alias for
@@ -171,11 +171,11 @@ typedef const char* (*pii_plugin_function)();
   PII_DEFINE_SPECIALIZED_VIRTUAL_METAOBJECT_FUNCTION(CLASS_NAME, PRIMITIVE); \
   PII_SERIALIZATION_NAME_CUSTOM(CLASS_NAME::Template<PRIMITIVE>, PII_STRINGIZE(CLASS_NAME<PRIMITIVE>)); \
   PII_SERIALIZABLE_EXPORT(CLASS_NAME::Template<PRIMITIVE>); \
-  static PiiClassInfoRegisterer PII_JOIN3(classInfoOf,CLASS_NAME,PRIMITIVE)(pluginName(), \
-                                                                            PII_STRINGIZE(CLASS_NAME<PRIMITIVE>), \
-                                                                            PiiYdin::operationResourceName(static_cast<CLASS_NAME*>(0)), \
-                                                                            0, \
-                                                                            PiiYdin::qMetaObject<CLASS_NAME>())
+  static PiiClassInfoRegisterer PII_JOIN3(classInfo,PRIMITIVE,__LINE__)(pluginName(), \
+                                                                        PII_STRINGIZE(CLASS_NAME<PRIMITIVE>), \
+                                                                        PiiYdin::operationResourceName(static_cast<CLASS_NAME*>(0)), \
+                                                                        0, \
+                                                                        PiiYdin::qMetaObject<CLASS_NAME>())
 
 /// @internal
 #define PII_POINTER_DIFF(CLASS, SUPERCLASS) reinterpret_cast<ptrdiff_t>(static_cast<SUPERCLASS*>(reinterpret_cast<CLASS*>(1)))-1
@@ -214,11 +214,11 @@ typedef const char* (*pii_plugin_function)();
 #define PII_REGISTER_CLASS(CLASS, SUPERCLASS) \
   PII_SERIALIZATION_NAME(CLASS); \
   PII_INSTANTIATE_FACTORY(CLASS); \
-  static PiiClassInfoRegisterer PII_JOIN(classInfoOf,CLASS)(pluginName(), \
-                                                            PII_STRINGIZE(CLASS), \
-                                                            PiiYdin::resourceName<SUPERCLASS >(), \
-                                                            PII_POINTER_DIFF(CLASS, SUPERCLASS), \
-                                                            PiiYdin::qMetaObject<CLASS>())
+  static PiiClassInfoRegisterer PII_JOIN(classInfo,__LINE__)(pluginName(), \
+                                                             PII_STRINGIZE(CLASS), \
+                                                             PiiYdin::resourceName<SUPERCLASS >(), \
+                                                             PII_POINTER_DIFF(CLASS, SUPERCLASS), \
+                                                             PiiYdin::qMetaObject<CLASS>())
 /**
  * Same as [PII_REGISTER_CLASS], but also registers serializers for
  * `CLASS`, which must be serializable.
@@ -226,11 +226,11 @@ typedef const char* (*pii_plugin_function)();
 #define PII_REGISTER_SERIALIZABLE_CLASS(CLASS, SUPERCLASS) \
   PII_SERIALIZATION_NAME(CLASS); \
   PII_SERIALIZABLE_EXPORT(CLASS); \
-  static PiiClassInfoRegisterer PII_JOIN(classInfoOf,CLASS)(pluginName(), \
-                                                            PII_STRINGIZE(CLASS), \
-                                                            PiiYdin::resourceName<SUPERCLASS >(), \
-                                                            PII_POINTER_DIFF(CLASS, SUPERCLASS), \
-                                                            PiiYdin::qMetaObject<CLASS>())
+  static PiiClassInfoRegisterer PII_JOIN(classInfo,__LINE__)(pluginName(), \
+                                                             PII_STRINGIZE(CLASS), \
+                                                             PiiYdin::resourceName<SUPERCLASS >(), \
+                                                             PII_POINTER_DIFF(CLASS, SUPERCLASS), \
+                                                             PiiYdin::qMetaObject<CLASS>())
 
 /**
  * Same as [PII_REGISTER_CLASS] but for class templates. This macro
@@ -239,11 +239,11 @@ typedef const char* (*pii_plugin_function)();
 #define PII_REGISTER_CLASS_TEMPLATE(CLASS, TYPE, SUPERCLASS) \
   PII_SERIALIZATION_NAME_CUSTOM(CLASS<TYPE >, CLASS<TYPE>); \
   PII_INSTANTIATE_FACTORY(CLASS<TYPE >); \
-  static PiiClassInfoRegisterer PII_JOIN3(classInfoOf,CLASS,TYPE)(pluginName(), \
-                                                                  PII_STRINGIZE(CLASS<TYPE>), \
-                                                                  PiiYdin::resourceName<SUPERCLASS >(), \
-                                                                  PII_POINTER_DIFF(CLASS, SUPERCLASS) ,\
-                                                                  PiiYdin::qMetaObject<CLASS>())
+  static PiiClassInfoRegisterer PII_JOIN3(classInfo,TYPE,__LINE__)(pluginName(), \
+                                                                   PII_STRINGIZE(CLASS<TYPE>), \
+                                                                   PiiYdin::resourceName<SUPERCLASS >(), \
+                                                                   PII_POINTER_DIFF(CLASS, SUPERCLASS) , \
+                                                                   PiiYdin::qMetaObject<CLASS>())
 
 
 /// @internal
