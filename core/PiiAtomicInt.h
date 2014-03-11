@@ -48,10 +48,10 @@ public:
   int load() const { return _value.load(); }
   void store(int value) { _value.store(value); }
 
-  int operator++ () { return _value++; }
-  int operator++ (int) { return ++_value; }
-  int operator-- () { return _value--; }
-  int operator-- (int) { return --_value; }
+  int operator++ () { return ++_value; }
+  int operator++ (int) { return _value++; }
+  int operator-- () { return --_value; }
+  int operator-- (int) { return _value--; }
   int operator+= (int value) { return _value += value; }
   int operator-= (int value) { return _value -= value; }
 
