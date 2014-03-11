@@ -81,6 +81,7 @@
 #  define PII_MOVE std::move
 #else
 #  define PII_MOVE
+#  define static_assert(EXPR,MSG) typedef typename ::Pii::StaticAssert<(EXPR)>::Type _PiiStaticAssert_
 #endif
 
 #define PII_TYPEMAP(NAME) namespace NAME
@@ -106,8 +107,12 @@
 #include "PiiValueSet.h"
 /// @endhide
 
+
 namespace Pii
 {
+  template <bool b> struct StaticAssert {};
+  template <> struct StaticAssert<true> { typedef void Type; };
+
   PII_CORE_EXPORT int intoVersion();
   PII_CORE_EXPORT const char* intoVersionString();
 }
