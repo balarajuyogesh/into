@@ -55,10 +55,22 @@
  */
 
 #include <QString>
-#include <QDebug>
 #include <cstdarg>
 #include "PiiGlobal.h"
 #include "PiiPreprocessor.h"
+
+#ifndef PII_NO_QT
+#  include <QDebug>
+#else
+enum QtMsgType
+{
+  QtDebugMsg,
+  QtWarningMsg,
+  QtCriticalMsg,
+  QtFatalMsg,
+  QtSystemMsg = QtCriticalMsg
+};
+#endif
 
 #ifndef PII_LOG_MODULE
 #  define PII_LOG_MODULE Into
@@ -101,11 +113,6 @@ inline void PII_PRINTF_ATTR(3,4) piiLog(const char* module, QtMsgType level, con
   piiLogv(module, level, msg, argp);
   va_end(argp);
 }
-
-/**
- * Converts *str* to local 8-bit representation.
- */
-#define piiPrintable(STR) (STR).toLocal8Bit().constData()
 
 inline void piiLog(const char* module, QtMsgType level, const QString& msg)
 {

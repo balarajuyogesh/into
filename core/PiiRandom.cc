@@ -16,13 +16,14 @@
 #include "PiiRandom.h"
 #include "PiiMath.h"
 #include <QDateTime>
+#include <algorithm>
 
 namespace Pii
 {
   void seedRandom()
   {
-    QTime now(QTime::currentTime());
-    seedRandom(QDateTime::currentDateTime().toTime_t() ^ now.msec());
+    QDateTime now(QDateTime::currentDateTime());
+    seedRandom(now.toTime_t() ^ now.time().msec());
   }
 
   PiiMatrix<double> uniformRandomMatrix(int rows, int columns)
@@ -53,5 +54,51 @@ namespace Pii
     for (PiiMatrix<double>::iterator i=result.begin(); i != result.end(); ++i)
       *i = normalRandom();
     return result;
+  }
+
+  void selectRandomly(QVector<int>& indices, int n, int max)
+  {
+    indices.clear();
+    if (n <= 0)
+      return;
+    else if (n < max/2)
+      {
+        indices.reserve(n);
+        int iRandom = std::rand() % max;
+        // The first one cannot already be there
+        indices.append(iRandom);
+        // The rest can. Generate n-1 distinct indices.
+        while (--n)
+          {
+            QVector<int>::iterator i;
+            do
+              {
+                iRandom = std::rand() % max;
+                // Binary search
+                i = std::lower_bound(indices.begin(),
+                                     indices.end(),
+                                     iRandom);
+              }
+            while (*i == iRandom);
+            indices.insert(i, iRandom);
+          }
+      }
+    else
+      {
+        indices.resize(max);
+        Pii::generateN(indices.begin(), max, Pii::CountFunction<int>());
+        if (n < max)
+          {
+            shuffle(indices);
+            indices.resize(n);
+          }
+      }
+  }
+
+  QVector<int> selectRandomly(int n, int max)
+  {
+    QVector<int> vecResult;
+    selectRandomly(vecResult, n, max);
+    return vecResult;
   }
 }

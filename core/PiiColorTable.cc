@@ -22,7 +22,7 @@ namespace Pii
     QVector<QRgb> vecGray;
     vecGray.reserve(256);
     for (int i=0; i<256; ++i)
-      vecGray << qRgb(i,i,i);
+      vecGray.push_back(qRgb(i,i,i));
     return vecGray;
   }
 

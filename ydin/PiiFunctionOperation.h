@@ -566,7 +566,7 @@ protected:
     void callAndEmit(typename Converter<Args>::ValueType&... values) const
     {
       pReturnOutput->emitObject(PiiFuncOpPrivate::ReturnConverter<ReturnType>::Type::
-                                toVariant(function(Converter<Args>::Type::toParam(values)...)));
+                                toVariant(this->function(Converter<Args>::Type::toParam(values)...)));
     }
 
     template <class BinaryFunction>

@@ -9,19 +9,34 @@
 INTO_LIB_VERSION = 2.0.0
 win32:INTO_LIBV=2
 
-isEmpty(MODE) { MODE = debug }
+# If MODE is not explicitly set, inspect CONFIG
+isEmpty(MODE) {
+  debug {
+    MODE = debug
+  } else {
+    MODE = release
+  }
+}
 
 MODE = $$lower($$MODE)
-!equals(MODE,debug):!equals(MODE,release) { error(Mode must be either debug or release.) }
+!equals(MODE,debug):!equals(MODE,release) { error(Build mode must be either debug or release.) }
 
-CONFIG += qt thread warn_on exceptions $$MODE
+CONFIG *= $$MODE
 
 isEmpty(INTODIR) { INTODIR = $$PWD }
-QT += network
 
 DESTDIR = $$MODE
 OBJECTS_DIR = $$MODE
 MOC_DIR = $$MODE
+
+CONFIG += thread warn_on exceptions
+qt {
+  QT += network
+} else {
+  QT =
+  INCLUDEPATH += $$INTODIR/core/stdwrapper
+  DEFINES += PII_NO_QT
+}
 
 INCLUDEPATH += . \
   $$INTODIR/core \

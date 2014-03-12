@@ -19,7 +19,9 @@
 #include "PiiGlobal.h"
 #include "PiiResourceStatement.h"
 #include "PiiTypeTraits.h"
-#include "PiiUtil.h"
+#ifndef PII_NO_QT
+#  include "PiiUtil.h"
+#endif
 
 #include <QStringList>
 
@@ -279,7 +281,7 @@ template <class Filter> QList<PiiResourceStatement> PiiResourceDatabase::select(
   QList<PiiResourceStatement> lstResult;
   for (int i=0; i<d->lstStatements.size(); ++i)
     if (filter(d->lstStatements[i]))
-      lstResult.append(d->lstStatements[i]);
+      lstResult.push_back(d->lstStatements[i]);
   return lstResult;
 }
 
@@ -293,7 +295,7 @@ QList<typename Selector::ValueType> PiiResourceDatabase::select(Selector selecto
       {
         ValueType selected = selector(d->lstStatements[i]);
         if (!lstResult.contains(selected))
-          lstResult.append(selected);
+          lstResult.push_back(selected);
       }
   return lstResult;
 }

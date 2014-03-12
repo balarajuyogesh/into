@@ -109,7 +109,7 @@ public:
   }
 
 private:
-  mutable QAtomicInt _ref;
+  mutable PiiAtomicInt _ref;
 };
 
 /// @hide

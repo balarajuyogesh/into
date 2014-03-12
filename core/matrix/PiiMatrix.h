@@ -506,9 +506,9 @@ public:
 
   PiiMatrix& operator= (const PiiSubmatrix<PiiMatrix>& other)
   {
-    auto pNewD = other.source().createReference(other.rows(),
-                                                other.columns(),
-                                                const_cast<T*>(other.rowBegin(0)))
+    PiiMatrixData* pNewD = other.source().createReference(other.rows(),
+                                                          other.columns(),
+                                                          const_cast<T*>(other.rowBegin(0)))
       ->makeImmutable();
     d->release();
     d = pNewD;

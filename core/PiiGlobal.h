@@ -101,8 +101,24 @@
 #endif
 
 #ifndef PII_NO_QT
+/**
+ * Converts *str* to local 8-bit representation.
+ */
+#  define piiPrintable(STR) (STR).toLocal8Bit().constData()
 #  include "PiiLog.h"
 #  include "PiiSynchronized.h"
+#  define PII_ITERATOR_VALUE(IT) (IT).value()
+#  define PII_ITERATOR_KEY(IT) (IT).key()
+#else
+#  include <cstdio>
+#  define piiDebug printf
+#  define piiWarning printf
+#  define piiCritical printf
+#  define piiFatal printf
+#  define piiPrintable(STR) (STR).c_str()
+// Map-like types in stl use std::pair as value_type
+#  define PII_ITERATOR_VALUE(IT) (IT)->second
+#  define PII_ITERATOR_KEY(IT) (IT)->first
 #endif
 #include "PiiValueSet.h"
 /// @endhide

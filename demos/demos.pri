@@ -8,10 +8,10 @@
 isEmpty(INTODIR) { INTODIR = ../../ }
 exists(../base.pri) {
   include(../base.pri)
-  include(../plugindeps.pri)
+  include(../moduledeps.pri)
 } else {
   include($$INTODIR/base.pri)
-  include($$INTODIR/plugindeps.pri)
+  include($$INTODIR/moduledeps.pri)
 }
 
 INCLUDEPATH += $$INTODIR/demos/utils

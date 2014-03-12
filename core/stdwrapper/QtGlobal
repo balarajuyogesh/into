@@ -1,1 +1,1 @@
-#include "QtGlobal.h"
+#include <qtglobal.h>

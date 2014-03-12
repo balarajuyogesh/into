@@ -2,22 +2,27 @@ include(qt5.pri)
 
 TEMPLATE = subdirs
 
-SUBDIRS  = core \
-           ydin \
-           gui \
-           plugins \
-           script \
-           test \
-           demos
+contains(CONFIG,qt) {
+  SUBDIRS  = core \
+             ydin \
+             gui \
+             modules \
+             script \
+             test \
+             demos
 
-ydin.depends += core
-gui.depends += ydin
-plugins.depends += ydin
-script.depends += ydin
-test.depends += plugins
-demos.depends += plugins
+  ydin.depends += core
+  gui.depends += ydin
+  modules.depends += ydin
+  script.depends += ydin
+  test.depends += modules
+  demos.depends += modules
 
-qt5: {
-  SUBDIRS += qml
-  qml.depends += ydin
+  qt5: {
+    SUBDIRS += qml
+    qml.depends += ydin
+  }
+} else {
+  SUBDIRS = core modules
+  modules.depends += core
 }

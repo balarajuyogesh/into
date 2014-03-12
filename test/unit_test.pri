@@ -4,7 +4,7 @@ current_path = ..
 for(level, levels) {
   exists($$current_path/base.pri) {
     include($$current_path/base.pri)
-    include($$current_path/plugindeps.pri)
+    include($$current_path/moduledeps.pri)
     break()
   } else {
     current_path = $$current_path/..

@@ -1,3 +1,2 @@
 include(../unit_test.pri)
-INCLUDEPATH += $$INTODIR/plugins/image
-
+INCLUDEPATH += $$INTODIR/modules/image/lib

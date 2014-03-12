@@ -14,10 +14,13 @@
  */
 
 #include "PiiVariant.h"
-#include <PiiSerializableExport.h>
-#include <PiiSerializationTraits.h>
-#include <PiiSerialization.h>
-#include <PiiQVariantWrapper.h>
+
+#ifndef PII_NO_QT
+#  include <PiiSerializableExport.h>
+#  include <PiiSerializationTraits.h>
+#  include <PiiSerialization.h>
+#  include <PiiQVariantWrapper.h>
+#endif
 
 PII_REGISTER_VARIANT_TYPE(char);
 PII_REGISTER_VARIANT_TYPE(bool);
@@ -34,6 +37,7 @@ PII_REGISTER_VARIANT_TYPE(unsigned int);
 PII_REGISTER_VARIANT_TYPE(quint64);
 //PII_REGISTER_VARIANT_TYPE(unsigned long long);
 
+#ifndef PII_NO_QT
 // Register PiiVariant as a Qt metatype.
 int iPiiVariantTypeId = qRegisterMetaType<PiiVariant>("PiiVariant");
 int iPiiVariantListTypeId = qRegisterMetaType<PiiVariantList>("PiiVariantList");
@@ -43,11 +47,13 @@ PII_SERIALIZABLE_EXPORT(PiiVariantList);
 PII_SERIALIZABLE_EXPORT(PiiQVariantWrapper::Template<PiiVariant>);
 PII_SERIALIZABLE_EXPORT(PiiQVariantWrapper::Template<PiiVariantList>);
 
+// Save a few bytes by not repeating the string.
+const char* PiiVariant::pValueStr = "value";
+#endif
+
 // Initializes default conversion functions
 PiiVariant::ConvertInit PiiVariant::_convertInit;
 
-// Save a few bytes by not repeating the string.
-const char* PiiVariant::pValueStr = "value";
 
 QHash<unsigned int, PiiVariant::VTable*>* PiiVariant::hashVTables()
 {
@@ -129,7 +135,7 @@ PiiVariant::ConverterFunction PiiVariant::converter(uint fromType, uint toType)
   quint64 uiKey = toKey(fromType, toType);
   ConverterMap::iterator it = pMap->find(uiKey);
   if (it != pMap->end())
-    return *it;
+    return PII_ITERATOR_VALUE(it);
   return 0;
 }
 

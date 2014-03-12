@@ -169,7 +169,7 @@
 
 #include "PiiRegistrationImpl.h"
 
-#ifdef PII_USED_AS_QVARIANT
+#if defined(PII_USED_AS_QVARIANT) && !defined(PII_NO_QT)
 #  undef PII_SERIALIZABLE_CLASS_VERSION
 #  undef PII_VIRTUAL_METAOBJECT
 #  undef PII_NO_TRACKING

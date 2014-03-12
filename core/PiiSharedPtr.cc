@@ -16,7 +16,6 @@
 /* HACK
  *
  * An empty file that makes inline dllexport functions work in MSVC++.
- * God bless Microsoft.
  */
 
 #include "PiiSharedPtr.h"

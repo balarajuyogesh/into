@@ -85,6 +85,7 @@ namespace Pii
   template <class Stream, class Matrix> void matlabPrint(Stream& out,
                                                          const Matrix& mat);
 
+#ifndef PII_NO_QT
   /**
    * Parse a string that describes a matrix in Matlab syntax. The
    * parser accepts non-complex numbers, and does not require newlines
@@ -98,6 +99,7 @@ namespace Pii
    * ~~~
    */
   PII_CORE_EXPORT PiiMatrix<double> matlabParse(const QString& str);
+#endif
 
   /**
    * Different ways of extending matrices. Matrices are often enlarged

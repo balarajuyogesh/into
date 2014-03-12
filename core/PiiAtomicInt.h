@@ -30,12 +30,29 @@
 #  ifdef PII_CXX11
 #    include <atomic>
 typedef std::atomic_int PiiAtomicIntImpl;
+#  elif !defined(PII_ATOMIC_INT_IMPL)
+// This is a dummy, absolutely non-atomic implementation.
+struct PiiAtomicIntImpl
+{
+  PiiAtomicIntImpl(int i = 0) : i(i) {}
+  int operator= (int val) { return i = val; }
+  int operator= (const PiiAtomicIntImpl& other) { return i = other.i; }
+  int load() const { return i; }
+  void store(int val) { i = val; }
+  int operator++ () { return ++i; }
+  int operator++ (int) { return i++; }
+  int operator+= (int val) { return i += val; }
+  int operator-- () { return --i; }
+  int operator-- (int) { return i--; }
+  int operator-= (int val) { return i -= val; }
+  int i;
+};
 #  else
 // If C++11 support is not available, you need to have another class
-// that implements the same interface in a file called atomic.h. You
-// must also have a typedef that aliases your type as PiiAtomicIntImpl
-// (see above).
-#    include <atomic.h>
+// that implements the same interface as std::atomi_int and let us
+// know the type name by setting the PII_ATOMIC_INT_IMPL preprocessor
+// variable.
+typedef PII_ATOMIC_INT_IMPL PiiAtomicIntImpl;
 #  endif
 
 class PII_CORE_EXPORT PiiAtomicInt

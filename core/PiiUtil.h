@@ -274,69 +274,6 @@ namespace Pii
   }
 
   /**
-   * Randomize the order of elements in a collection.
-   *
-   * ~~~(c++)
-   * QList<int> lst;
-   * lst << 1 << 2 << 3;
-   * Pii::shuffle(lst);
-   * ~~~
-   */
-  template <class Collection> inline void shuffle(Collection& lst)
-  {
-    shuffle(lst.begin(), lst.end());
-  }
-
-
-  /**
-   * Select randomly *n* distinct integers that are smaller than
-   * *max*. This function can be used to take a random sample of a
-   * collection.
-   *
-   * ~~~(c++)
-   * QStringList lstNames;
-   * lstNames << "foo" << "bar" << "etc";
-   * QVector<int> indices = Pii::selectRandomly(2, lstNames.size());
-   * for (int i=0; i<indices.size(); ++i)
-   *   qDebug(qPrintable(lstNames[indices[i]]));
-   * ~~~
-   *
-   * @return randomly selected indices. If *n* is larger than *max*,
-   * *max* indices will returned.
-   *
-   * @see selectRandomly(Collection&, const Collection&, int)
-   */
-  QVector<int> PII_CORE_EXPORT selectRandomly(int n, int max);
-
-  /**
-   *
-   * Randomly selects *n* distinct integers in [0, max-1] and stores
-   * them to *indices*. This version is better suited for selecting a
-   * small number of indices in tight loops.
-   */
-  void PII_CORE_EXPORT selectRandomly(QVector<int>& indices, int n, int max);
-
-  /**
-   * Select randomly *n* elements from *source* and insert them to
-   * *target*. The `Collection` type must have size() and append()
-   * member functions defined.
-   *
-   * ~~~(c++)
-   * QStringList lstNames;
-   * lstNames << "foo" << "bar" << "etc";
-   * QStringList selected;
-   * Pii::selectRandomly(selected, lstNames, 2);
-   * ~~~
-   */
-  template <class Collection>
-  void selectRandomly(Collection& target, const Collection& source, int n)
-  {
-   QVector<int> indices = selectRandomly(n, source.size());
-   for (int i=0; i<indices.size(); ++i)
-     target.append(source[indices[i]]);
-  }
-
-  /**
    * Find all parent objects of `obj` up to `maxParents` parent
    * objects. By default, all parents are returned. If a template
    * parameter is specified, only parents matching the given type are
@@ -720,7 +657,7 @@ namespace Pii
   PII_CORE_EXPORT double toDouble(const QString& number, bool* ok = 0);
 
   /**
-   * Convert a string to any type.
+   * Converts a string to any type.
    */
   template <class T> inline T stringTo(const QString& number, bool* ok = 0) { return T(number.toInt(ok)); }
   template <> inline short stringTo<short>(const QString& number, bool* ok) { return number.toShort(ok); }

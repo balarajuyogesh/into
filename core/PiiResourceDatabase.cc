@@ -77,7 +77,7 @@ PiiResourceStatement PiiResourceDatabase::literal(int subject, const QString& pr
 int PiiResourceDatabase::generateId()
 {
   // PENDING overflow handling
-  return d->lstStatements.size() > 0 ? d->lstStatements.last().id() + 1 : 0;
+  return d->lstStatements.size() > 0 ? d->lstStatements.back().id() + 1 : 0;
 }
 
 int PiiResourceDatabase::addStatement(const PiiResourceStatement& statement)
@@ -85,7 +85,7 @@ int PiiResourceDatabase::addStatement(const PiiResourceStatement& statement)
   PiiResourceStatement copy(statement);
   int id = generateId();
   copy.setId(id);
-  d->lstStatements << copy;
+  d->lstStatements.push_back(copy);
   return id;
 }
 
@@ -101,14 +101,14 @@ QList<int> PiiResourceDatabase::addStatements(const QList<PiiResourceStatement>&
       if (s.subject() == "#" && i != 0)
         {
           if (s.type() != PiiResourceStatement::Pointer)
-            lstIds << addStatement(PiiResourceStatement(QString("#%1").arg(id), s.predicate(), s.object(), s.type()));
+            lstIds.push_back(addStatement(PiiResourceStatement(QString("#%1").arg(id), s.predicate(), s.object(), s.type())));
           else
-            lstIds << addStatement(PiiResourceStatement(id, s.predicate(), s.object(), s.type()));
+            lstIds.push_back(addStatement(PiiResourceStatement(id, s.predicate(), s.object(), s.type())));
         }
       else
         {
           id = addStatement(s);
-          lstIds << id;
+          lstIds.push_back(id);
         }
     }
   return lstIds;
@@ -148,13 +148,13 @@ void PiiResourceDatabase::dump() const
     {
       QString strStatement("(%1, %2, %4) #%3");
       strStatement = strStatement
-        .arg(d->lstStatements[i].subject(),
-             d->lstStatements[i].predicate())
+        .arg(d->lstStatements[i].subject())
+        .arg(d->lstStatements[i].predicate())
         .arg(d->lstStatements[i].id());
       if (d->lstStatements[i].type() == PiiResourceStatement::Literal)
         strStatement = strStatement.arg(QString("\"%1\"").arg(d->lstStatements[i].object()));
       else
         strStatement = strStatement.arg(d->lstStatements[i].object());
-      qDebug("%s", strStatement.toLocal8Bit().constData());
+      piiWarning("%s", piiPrintable(strStatement));
     }
 }

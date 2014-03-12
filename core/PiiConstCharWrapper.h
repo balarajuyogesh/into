@@ -40,5 +40,16 @@ struct PII_CORE_EXPORT PiiConstCharWrapper
  */
 PII_CORE_EXPORT uint qHash(const PiiConstCharWrapper& key);
 
+namespace std
+{
+  template <class T> struct hash;
+  template <> struct hash<PiiConstCharWrapper>
+  {
+    std::size_t operator() (const PiiConstCharWrapper& key) const
+    {
+      return qHash(key);
+    }
+  };
+}
 
 #endif //_PIICONSTCHARWRAPPER

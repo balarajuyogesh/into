@@ -19,6 +19,7 @@
 
 #include <PiiTypeTraits.h>
 #include <PiiMetaTemplate.h>
+#include <stddef.h>
 
 // Used in the usual case when stride is counted in columns.
 template <class T> struct PiiStrideHandler

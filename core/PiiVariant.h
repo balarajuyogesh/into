@@ -17,14 +17,18 @@
 #define _PIIVARIANT_H
 
 #include "PiiSharedPtr.h"
-#include "PiiTemplateExport.h"
 #include "PiiTypeTraits.h"
-#include <PiiSerialization.h>
-#include <PiiSerializationException.h>
-#include <PiiSerializer.h>
-#include <PiiNameValuePair.h>
+#include "PiiTemplateExport.h"
 #include <QHash>
-#include <QVariant>
+#include <QMap>
+#include <QList>
+
+#ifndef PII_NO_QT
+#  include <PiiSerialization.h>
+#  include <PiiSerializationException.h>
+#  include <PiiSerializer.h>
+#  include <PiiNameValuePair.h>
+#endif
 
 class PiiGenericOutputArchive;
 class PiiGenericInputArchive;
@@ -151,6 +155,7 @@ PII_TYPEMAP(PiiVariantValueMap)
  */
 class PII_CORE_EXPORT PiiVariant
 {
+#ifndef PII_NO_QT
   friend struct PiiSerialization::Accessor;
   static const char* pValueStr;
 
@@ -210,7 +215,7 @@ class PII_CORE_EXPORT PiiVariant
       var._pVTable->load(ar, var);
     }
   };
-
+#endif // PII_NO_QT
 
 public:
   /**
@@ -636,6 +641,7 @@ template <class T> struct PiiVariant::SmallObjectFunctions
     *to.ptrAs<T>() = *from.ptrAs<T>();
   }
 
+#ifndef PII_NO_QT
   static void saveImpl(PiiGenericOutputArchive& archive, const PiiVariant& var)
   {
     archive << *var.ptrAs<T>();
@@ -646,6 +652,7 @@ template <class T> struct PiiVariant::SmallObjectFunctions
     T* obj = new (var._buffer) T;
     archive >> *obj;
   }
+#endif
 };
 
 template <class T> struct PiiVariant::LargeObjectFunctions
@@ -665,6 +672,7 @@ template <class T> struct PiiVariant::LargeObjectFunctions
     *to.ptrAs<T>() = *from.ptrAs<T>();
   }
 
+#ifndef PII_NO_QT
   static void saveImpl(PiiGenericOutputArchive& archive, const PiiVariant& var)
   {
     archive << *var.ptrAs<T>();
@@ -675,6 +683,7 @@ template <class T> struct PiiVariant::LargeObjectFunctions
     var._pointer = new T;
     archive >> *reinterpret_cast<T*>(var._pointer);
   }
+#endif
 };
 
 template <class T> struct PiiVariant::VTableImpl :
@@ -691,8 +700,10 @@ template <class T> struct PiiVariant::VTableImpl :
     this->constructCopy = ParentType::constructCopyImpl;
     this->destruct = ParentType::destructImpl;
     this->copy = ParentType::copyImpl;
+#ifndef PII_NO_QT
     this->save = ParentType::saveImpl;
     this->load = ParentType::loadImpl;
+#endif
 
     PiiVariant::hashVTables()->insert(type, this);
   }
@@ -731,14 +742,17 @@ PII_PRIMITIVE_VARIANT_DECL(double, d, Double);
 PII_PRIMITIVE_VARIANT_DECL(bool, b, Bool);
 PII_PRIMITIVE_VARIANT_DECL(void*, p, VoidPtr);
 
+typedef QList<PiiVariant> PiiVariantList;
+
+#ifndef PII_NO_QT
 extern PII_CORE_EXPORT int iPiiVariantTypeId;
 Q_DECLARE_METATYPE(PiiVariant);
 
-PII_SERIALIZATION_TRACKING(PiiVariant, false);
-
 extern PII_CORE_EXPORT int iPiiVariantListTypeId;
-typedef QList<PiiVariant> PiiVariantList;
 Q_DECLARE_METATYPE(PiiVariantList);
+#endif
+
+PII_SERIALIZATION_TRACKING(PiiVariant, false);
 
 #define PII_SERIALIZABLE_CLASS PiiVariant
 #define PII_BUILDING_LIBRARY PII_BUILDING_CORE
@@ -752,6 +766,8 @@ Q_DECLARE_METATYPE(PiiVariantList);
 
 /// @endhide
 
+#ifndef PII_NO_QT
+#include <QVariant>
 namespace Pii
 {
   /**
@@ -773,6 +789,7 @@ namespace Pii
     return QVariant::fromValue(PiiVariant(value));
   }
 }
+#endif
 
 template <class T> bool PiiVariant::convertTo(T& value) const
 {

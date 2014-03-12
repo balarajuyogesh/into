@@ -14,6 +14,8 @@
  */
 
 #include "PiiMatrixUtil.h"
+
+#ifndef PII_NO_QT
 #include <QRegExp>
 #include <QStringList>
 
@@ -60,3 +62,4 @@ namespace Pii
     return result;
   }
 }
+#endif // PII_NO_QT

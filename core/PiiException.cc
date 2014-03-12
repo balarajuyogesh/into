@@ -15,9 +15,11 @@
 
 #include "PiiException.h"
 
+#ifndef PII_NO_QT
 PII_DEFINE_VIRTUAL_METAOBJECT_FUNCTION(PiiException);
-#include "PiiSerializableExport.h"
+#  include "PiiSerializableExport.h"
 PII_SERIALIZABLE_EXPORT(PiiException);
+#endif
 
 PiiException::Data::Data()
 {}
@@ -84,7 +86,9 @@ QString PiiException::toString() const
   QString str;
   if (!d->strLocation.isEmpty())
     str += d->strLocation + ": ";
+#ifndef PII_NO_QT
   str += piiMetaObject()->className();
+#endif
   str += '(';
   str += d->strMessage;
   str += ')';
