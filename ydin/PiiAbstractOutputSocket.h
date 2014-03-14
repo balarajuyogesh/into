@@ -96,7 +96,7 @@ public:
    * `input(FQN)` on the topmost enclosing operation (typically, a
    * PiiEngine).
    *
-   * @see PiiOperation::fullName()
+   * @see PiiSocket::fullName()
    */
   Q_INVOKABLE QStringList connectedInputNames() const;
 

@@ -68,14 +68,31 @@ void TestPiiDefaultOperation::initTestCase()
   pGenerator->setProperty("integerOutput", true);
 
   _pCounter = new CounterOperation;
+  _pCounter->setObjectName("counter");
   _engine.addOperation(_pCounter);
 
   _pBuffer = new BufferOperation;
+  _pBuffer->setObjectName("buffer");
   _engine.addOperation(_pBuffer);
 
   QVERIFY(_engine.connectOutput("generator.output", "counter.input"));
   QVERIFY(_engine.connectOutput("counter.output0", "buffer.input0"));
   QVERIFY(_engine.connectOutput("counter.output1", "buffer.input1"));
+}
+
+void TestPiiDefaultOperation::fullName()
+{
+  QCOMPARE(_pCounter->objectName(), _pCounter->fullName());
+  QCOMPARE(_pCounter->fullName(), QString("counter"));
+  QCOMPARE(_pBuffer->fullName(), QString("buffer"));
+  QCOMPARE(_pBuffer->input("input0")->fullName(), QString("buffer.input0"));
+  QCOMPARE(_pCounter->output("output0")->fullName(), QString("counter.output0"));
+}
+
+void TestPiiDefaultOperation::connectedInputNames()
+{
+  QCOMPARE(_pCounter->output("output0")->connectedInputNames(),
+           QStringList() << "buffer.input0");
 }
 
 void TestPiiDefaultOperation::metaProperty()

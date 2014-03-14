@@ -115,6 +115,15 @@ QStringList PiiOperation::outputNames() const
   return lstResult;
 }
 
+QString PiiOperation::fullName() const
+{
+  QString strName;
+  QList<PiiOperation*> lstParent = Pii::findAllParents<PiiOperation*>(this);
+  for (int i=lstParent.size()-2; i>=0; --i)
+    strName += lstParent[i]->objectName() + '.';
+  return strName + objectName();
+}
+
 bool PiiOperation::connectOutput(const QString& outputName, PiiAbstractInputSocket* input)
 {
   PiiAbstractOutputSocket *out = output(outputName);

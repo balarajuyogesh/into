@@ -28,6 +28,7 @@ private slots:
   void serialize();
   void clone();
   void socketData();
+  void fullName();
   void disabledOperations();
   void cleanupTestCase();
 

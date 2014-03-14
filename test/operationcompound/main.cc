@@ -86,6 +86,23 @@ void TestPiiOperationCompound::socketData()
   delete pTest;
 }
 
+void TestPiiOperationCompound::fullName()
+{
+  PiiOperationCompound* pCompound1 = _compound.clone();
+  PiiOperationCompound* pCompound2 = _compound.clone();
+  pCompound1->setObjectName("c1");
+  pCompound2->setObjectName("c2");
+  TestOperation* pTest = new TestOperation;
+  pTest->setObjectName("test");
+  pCompound2->addOperation(pTest);
+  pCompound1->addOperation(pCompound2);
+
+  QCOMPARE(pTest->fullName(), QString("c2.test"));
+  QCOMPARE(pTest->output("output")->fullName(), QString("c2.test.output"));
+  QCOMPARE(pTest->input("input")->fullName(), QString("c2.test.input"));
+  delete pCompound1;
+}
+
 void TestPiiOperationCompound::disabledOperations()
 {
   PiiOperationCompound* pCompound = new PiiOperationCompound;

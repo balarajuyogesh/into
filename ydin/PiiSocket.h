@@ -58,10 +58,10 @@ public:
   /**
    * Returns the fully-qualified name (FQN) of the socket. The FQN is
    * formed by concatenating the `objectName` properties of all parent
-   * operations of the socket, using dots (.) as separators. The FQN
-   * can be passed to the input() or output() function of the topmost
-   * enclosing operation (usually a PiiEngine) to get a pointer to
-   * this socket.
+   * operations of the socket except the topmost one, using dots (.)
+   * as separators. The FQN can be passed to the input() or output()
+   * function of the topmost enclosing operation (usually a PiiEngine)
+   * to get a pointer to this socket.
    */
   Q_INVOKABLE QString fullName() const;
 

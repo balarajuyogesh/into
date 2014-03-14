@@ -15,7 +15,6 @@
 
 #include "PiiSocket.h"
 #include "PiiOperation.h"
-#include <PiiUtil.h>
 
 PiiSocket::Data::Data(Type t) :
   type(t)
@@ -49,14 +48,10 @@ bool PiiSocket::isOutput() const
 
 QString PiiSocket::fullName() const
 {
-  QList<PiiOperation*> lstParents(Pii::findAllParents<PiiOperation*>(this));
-  QString strParentNames;
-  for (int i=0; i<lstParents.size(); ++i)
-    {
-      strParentNames.append(lstParents[i]->objectName());
-      strParentNames.append('.');
-    }
-  return strParentNames + objectName();
+  PiiOperation* pParent = parentOperation();
+  if (pParent)
+    return pParent->fullName() + '.' + objectName();
+  return objectName();
 }
 
 PiiOperation* PiiSocket::parentOperation() const

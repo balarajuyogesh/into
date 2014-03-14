@@ -61,7 +61,7 @@ QStringList PiiAbstractOutputSocket::connectedInputNames() const
   QList<PiiAbstractInputSocket*> lstInputs(connectedInputs());
   QStringList lstFqns;
   for (int i=0; i<lstInputs.size(); ++i)
-    lstFqns.append(lstInputs[i]->objectName());
+    lstFqns.append(lstInputs[i]->fullName());
   return lstFqns;
 }
 

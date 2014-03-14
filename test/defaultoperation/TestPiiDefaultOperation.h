@@ -27,6 +27,8 @@ class TestPiiDefaultOperation : public QObject
 
 private slots:
   void initTestCase();
+  void fullName();
+  void connectedInputNames();
   void metaProperty();
   void process();
   void process_data();

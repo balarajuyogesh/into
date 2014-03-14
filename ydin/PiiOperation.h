@@ -343,6 +343,16 @@ public:
   Q_INVOKABLE QStringList outputNames() const;
 
   /**
+   * Returns the fully-qualified name (FQN) of the operation. The FQN
+   * is formed by concatenating the `objectName` properties of all
+   * parents of the operation except the topmost one, using dots (.)
+   * as separators. The FQN can be passed to the childOperation()
+   * function of the topmost enclosing operation (usually a PiiEngine)
+   * to get a pointer to this operation.
+   */
+  Q_INVOKABLE QString fullName() const;
+
+  /**
    * Returns metadata associated with *socket*. The default
    * implementation always returns an invalid variant, but this
    * function makes it possible for subclasses to associate
