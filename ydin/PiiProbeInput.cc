@@ -51,7 +51,7 @@ PiiProbeInput::PiiProbeInput(PiiAbstractOutputSocket* output, const QObject* rec
   PiiAbstractInputSocket("probe", new Data)
 {
   connectOutput(output);
-  QObject::connect(this, SIGNAL(objectReceived(PiiVariant,PiiProbeInput*)), receiver, slot, type);
+  connect(this, SIGNAL(objectReceived(PiiVariant,PiiProbeInput*)), receiver, slot, type);
 }
 
 PiiProbeInput::~PiiProbeInput()
@@ -63,6 +63,7 @@ void PiiProbeInput::timerEvent(QTimerEvent*)
   d->mutex.lock();
   PiiVariant varSavedObject = d->varSavedObject;
   d->emissionTimer.restart();
+  d->iTimerId = -1;
   d->mutex.unlock();
 
   emit objectReceived(varSavedObject, this);
@@ -86,14 +87,17 @@ bool PiiProbeInput::tryToReceive(PiiAbstractInputSocket*, const PiiVariant& obje
               // If we had a timer running for a pending emission, kill it
               // now.
               if (d->iTimerId != -1)
-                killTimer(d->iTimerId);
+                {
+                  killTimer(d->iTimerId);
+                  d->iTimerId = -1;
+                }
               d->emissionTimer.restart();
               d->mutex.unlock();
               emit objectReceived(object, this);
               return true;
             }
           // Oops, too fast. Do we already have a timer running?
-          else if (d->iTimerId != -1)
+          else if (d->iTimerId == -1)
             {
               // No, start it
               d->iTimerId = startTimer(d->iSignalInterval - iElapsed, Qt::PreciseTimer);
@@ -116,5 +120,17 @@ bool PiiProbeInput::hasSavedObject() const { return _d()->varSavedObject.isValid
 void PiiProbeInput::setDiscardControlObjects(bool discardControlObjects) { _d()->bDiscardControlObjects = discardControlObjects; }
 bool PiiProbeInput::discardControlObjects() const { return _d()->bDiscardControlObjects; }
 
-void PiiProbeInput::setSignalInterval(int signalInterval) { _d()->iSignalInterval = qMax(-1, signalInterval); }
+void PiiProbeInput::setSignalInterval(int signalInterval)
+{
+  PII_D;
+  d->mutex.lock();
+  d->iSignalInterval = qMax(-1, signalInterval);
+  if (d->iTimerId != -1)
+    {
+      killTimer(d->iTimerId);
+      d->iTimerId = -1;
+    }
+  d->mutex.unlock();
+}
+
 int PiiProbeInput::signalInterval() const { return _d()->iSignalInterval; }

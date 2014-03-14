@@ -42,6 +42,7 @@ SUBDIRS = algorithm \
           perceptron \
           pisooperation \
           planerotation \
+          probeinput \
           qimage \
           quantizer \
           ransac \
