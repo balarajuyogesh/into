@@ -26,7 +26,7 @@ Change the paths to match your installation of Qt and Into.
 
 To build and deploy locally, type
 
-    qmake -r
+    qmake -r MODE=release
     make
     cd lib
     ./createlinks.sh release
@@ -122,8 +122,9 @@ Pass configuration options to qmake with
 
 Pass variables to qmake with
 
-    qmake -r "VAR = value"
+    qmake -r "VAR=value"
 
+- `MODE`: build mode, either `debug` or `release`
 - `INSTALL_PATH`: where `make install` deploys libraries. Default is
   `/usr/lib`.
 - `PLUGIN_INSTALL_PATH`: where `make install` deploys plug-in

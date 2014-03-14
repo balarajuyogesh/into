@@ -19,7 +19,13 @@ isEmpty(MODE) {
 }
 
 MODE = $$lower($$MODE)
-!equals(MODE,debug):!equals(MODE,release) { error(Build mode must be either debug or release.) }
+equals(MODE,debug) {
+  CONFIG -= release
+} else:equals(MODE,release) {
+  CONFIG -= debug
+} else {
+  error(Build mode must be either debug or release.)
+}
 
 CONFIG *= $$MODE
 
