@@ -277,7 +277,8 @@ namespace Pii
    * Find all parent objects of `obj` up to `maxParents` parent
    * objects. By default, all parents are returned. If a template
    * parameter is specified, only parents matching the given type are
-   * returned.
+   * returned. In the returned list, the closest parent comes first
+   * and the furthes one last.
    *
    * ~~~(c++)
    * QList<MyObj*> parents = Pii::findAllParents<MyObj*>(obj);
