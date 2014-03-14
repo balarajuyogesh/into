@@ -79,8 +79,10 @@
 
 #ifdef PII_CXX11
 #  define PII_MOVE std::move
+#  define PII_CONSTEXPR constexpr
 #else
 #  define PII_MOVE
+#  define PII_CONSTEXPR
 #  define static_assert(EXPR,MSG) typedef typename ::Pii::StaticAssert<(EXPR)>::Type _PiiStaticAssert_
 #endif
 
