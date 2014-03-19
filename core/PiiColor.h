@@ -110,6 +110,7 @@ public:
    * The content type.
    */
   typedef typename PiiColorBaseTraits<T>::Type Type;
+  typedef typename PiiColorBaseTraits<T>::Type value_type;
   /**
    * An stl-style const iterator to the first color channel. Note that
    * the first color channel in the RGB space is B.
