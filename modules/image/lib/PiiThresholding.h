@@ -39,9 +39,9 @@ namespace PiiImage
   template <class T> int otsuThreshold(const PiiMatrix<T>& histogram);
 
   /**
-   * %ThresholdFunction compares two values and outputs either 0 or 1
-   * based on the comparison result. You can use this struct for
-   * example with PiiMatrix<T>::map():
+   * ThresholdFunction returns 0 if value < threshold and a
+   * user-specified value (default 1) otherwise. You can use this
+   * struct for example with PiiMatrix<T>::map():
    *
    * ~~~(c++)
    * int threshold = 5;
@@ -93,19 +93,9 @@ namespace PiiImage
   };
 
   /**
-   * %InverseThresholdFunction compares two values and outputs either 0
-   * or 1 based on the comparison result. Works analogously to
-   * ThresholdFunction, but outputs one if `value` is smaller than or
-   * equal to `threshold`. You can use this struct for
-   * example with PiiMatrix<T>::binaryOp():
-   *
-   * ~~~(c++)
-   * int threshold = 5;
-   * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
-   * mat.binaryOp(PiiImage::InverseThresholdFunction<int>(), threshold);
-   *
-   * // mat = 1 1 1 1 0 0 0 0 0
-   * ~~~
+   * InverseThresholdFunction returns 0 if value >= threshold and a
+   * user-specified value (default 1) otherwise. Otherwise works the
+   * same way as [ThresholdFunction].
    */
   template <class V, class R = V, class T = V>
   struct InverseThresholdFunction : public Pii::BinaryFunction<V,T,R>
@@ -144,7 +134,7 @@ namespace PiiImage
   };
 
   /**
-   * %TwoLevelThresholdFunction compares its input argument to two
+   * TwoLevelThresholdFunction compares its input argument to two
    * thresholds and returns one if the argument is in between them
    * (inclusive).
    *
@@ -173,8 +163,8 @@ namespace PiiImage
   };
 
   /**
-   * %InverseTwoLevelThresholdFunction works analogously to
-   * TwoLevelThresholdFunction, but inverses the result.
+   * InverseTwoLevelThresholdFunction works analogously to
+   * [TwoLevelThresholdFunction], but inverses the result.
    *
    * ~~~(c++)
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
