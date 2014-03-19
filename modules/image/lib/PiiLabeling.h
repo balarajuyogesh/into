@@ -117,6 +117,13 @@ namespace PiiImage
     int _iSizeThreshold;
   };
 
+  template <class Matrix, class UnaryOp, class Limiter>
+  void labelImage(const Matrix& mat,
+                  PiiMatrix<int>& labels,
+                  UnaryOp rule,
+                  Limiter limiter,
+                  int* labelCount = 0);
+
   /**
    * Labels an image using 4-connectivity. This function uses the
    * two-pass algorithm found in most computer vision textbooks.
@@ -152,24 +159,46 @@ namespace PiiImage
    */
   template <class Matrix, class UnaryOp, class Limiter>
   PiiMatrix<int> labelImage(const Matrix& mat,
-                            UnaryOp rule, Limiter limiter, int* labelCount = 0)
+                            UnaryOp rule,
+                            Limiter limiter,
+                            int* labelCount = 0)
   {
-    int iCols = mat.columns();
-    int iRows = mat.rows();
+    PiiMatrix<int> matLabels(mat.rows(), mat.columns());
+    labelImage(mat, matLabels, rule, limiter, labelCount);
+    return matLabels;
+  }
+
+  /**
+   * This version writes the labels to a preallocated output image
+   * *labels*. The size of the output image must be the same as the
+   * input, and it must be initialized to zeros.
+   */
+  template <class Matrix, class UnaryOp, class Limiter>
+  void labelImage(const Matrix& mat,
+                  PiiMatrix<int>& labels,
+                  UnaryOp rule,
+                  Limiter limiter,
+                  int* labelCount = 0)
+  {
+    if (mat.isEmpty())
+      {
+        if (labelCount) *labelCount = 0;
+        return;
+      }
+
+    const int iCols = mat.columns();
+    const int iRows = mat.rows();
     int iLabelIndex = 0;
 
     QVector<int> vecLabels(1);
     vecLabels.reserve(64);
     limiter.setInitialLabels(vecLabels);
 
-    PiiMatrix<int> matResult(iRows, iCols);
-    if (matResult.isEmpty())
-      return matResult;
 
     int *pCurrent, *pUp, *pLeft;
 
     typename Matrix::const_row_iterator sourceRow = mat.rowBegin(0);
-    pCurrent = matResult[0];
+    pCurrent = labels[0];
     pLeft = pCurrent-1;
 
 #define PII_CREATE_NEW_LABEL                          \
@@ -205,7 +234,7 @@ namespace PiiImage
       {
         sourceRow = mat.rowBegin(r);
         pUp = pCurrent;
-        pCurrent = matResult[r];
+        pCurrent = labels[r];
         pLeft = pCurrent-1;
         c = 0;
         // Handle first pixel
@@ -292,15 +321,13 @@ namespace PiiImage
     //Finally, alter mapped labels
     for (int r=0; r<iRows; ++r)
       {
-        int* pRow = matResult.row(r);
+        int* pRow = labels[r];
         for (int c=0; c<iCols; ++c)
           pRow[c] = vecLabels[pRow[c]];
       }
 
     if (labelCount != 0)
       *labelCount = iLabelIndex;
-
-    return matResult;
   }
 
   /**
@@ -322,7 +349,7 @@ namespace PiiImage
   }
 
   /**
-   * Label all 4-connected objects whose size (in pixels) is larger
+   * Labels all 4-connected objects whose size (in pixels) is larger
    * than `sizeLimit`.
    *
    * @param mat a matrix to be labeled. All non-zero values are
@@ -435,10 +462,17 @@ namespace PiiImage
   PII_IMAGE_EXPORT void connectRunsRecursively(LabelInfo& info, int rowIndex, int start, int end);
   PII_IMAGE_EXPORT void markToBuffer(LabelInfo& info, int rowIndex, int start, int end);
 
+  template <class Matrix, class UnaryOp1, class UnaryOp2>
+  void labelImage(const Matrix& mat,
+                  PiiMatrix<int>& labels,
+                  UnaryOp1 rule1, UnaryOp2 rule2,
+                  Connectivity connectivity,
+                  int labelIncrement = 1,
+                  int* labelCount = 0);
   /// @endhide
 
   /**
-   * Label connected components. This function uses a recursive
+   * Labels connected components. This function uses a recursive
    * algorithm for finding connected components. It supports both
    * 8-connected and 4-connected components. This function performs
    * not only labeling but also hysteresis thresholding.
@@ -494,12 +528,29 @@ namespace PiiImage
                             int labelIncrement = 1,
                             int* labelCount = 0)
   {
-    QVector<RunList> lstRuns(mat.rows());
     PiiMatrix<int> matLabels(mat.rows(), mat.columns());
+    labelImage(mat, matLabels, rule1, rule2, connectivity, labelIncrement, labelCount);
+    return matLabels;
+  }
+
+  /**
+   * This version writes the labels to a preallocated output image
+   * *labels*. The size of the output image must be the same as the
+   * input, and it must be initialized to zeros.
+   */
+  template <class Matrix, class UnaryOp1, class UnaryOp2>
+  void labelImage(const Matrix& mat,
+                  PiiMatrix<int>& labels,
+                  UnaryOp1 rule1, UnaryOp2 rule2,
+                  Connectivity connectivity,
+                  int labelIncrement = 1,
+                  int* labelCount = 0)
+  {
+    QVector<RunList> lstRuns(mat.rows());
     int iLabelIndex = labelIncrement == 0 ? 1 : 0;
     int iConnectivityShift = connectivity == Connect8 ? 0 : 1;
 
-    LabelInfo info(lstRuns, matLabels, iLabelIndex, iConnectivityShift);
+    LabelInfo info(lstRuns, labels, iLabelIndex, iConnectivityShift);
 
     const int iRows = mat.rows(), iCols = mat.columns();
 
@@ -565,8 +616,6 @@ namespace PiiImage
     // Store return-value parameter if needed
     if (labelCount != 0)
       *labelCount = iLabelIndex;
-
-    return info.matLabels;
   }
 }
 
