@@ -23,7 +23,7 @@
 #include <QStringList>
 
 template <class T> struct PiiColorPercentiles::GrayPercentiles :
-  PiiImage::GrayHistogramHandler<T>
+  PiiGrayHistogramHandler<T>
 {
   GrayPercentiles(PiiColorPercentiles::Data* data) : d(data) {}
   PiiMatrix<int> calculate();
@@ -31,7 +31,7 @@ template <class T> struct PiiColorPercentiles::GrayPercentiles :
 };
 
 template <class T> struct PiiColorPercentiles::ColorPercentiles :
-  PiiImage::ColorHistogramHandler<T>
+  PiiColorHistogramHandler<T>
 {
   ColorPercentiles(PiiColorPercentiles::Data* data) : d(data) {}
   PiiMatrix<int> calculate();

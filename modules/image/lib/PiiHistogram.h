@@ -19,7 +19,6 @@
 #include "PiiQuantizer.h"
 #include "PiiImage.h"
 #include <PiiMath.h>
-#include <PiiVariant.h>
 
 namespace PiiImage
 {
@@ -230,67 +229,6 @@ namespace PiiImage
    * @return an image with enhanced contrast
    */
   template <class T> PiiMatrix<T> equalize(const PiiMatrix<T>& img, unsigned int levels = 0);
-
-  /// @hide
-  struct HistogramHandler
-  {
-    HistogramHandler() :
-      iPixelCount(0),
-      iLevels(256),
-      bNormalized(false)
-    {}
-
-    virtual ~HistogramHandler() {}
-
-    static inline bool acceptsManyRegions() { return true; }
-
-    static void addToVariant(PiiVariant& variant, const PiiMatrix<int>& histogram)
-    {
-      if (!variant.isValid())
-        variant = PiiVariant(histogram);
-      else
-        variant.valueAs<PiiMatrix<int> >() += histogram;
-    }
-
-    void initialize(int levels, bool normalized)
-    {
-      iPixelCount = 0;
-      iLevels = levels;
-      bNormalized = normalized;
-    }
-
-    int iPixelCount;
-    int iLevels;
-    int bNormalized;
-  };
-
-  template <class T> struct GrayHistogramHandler : HistogramHandler
-  {
-    void initialize(int levels, bool normalized);
-    void operator() (const PiiMatrix<T>& image);
-    template <class Roi> void operator() (const PiiMatrix<T>& image, const Roi& roi);
-    void normalize();
-
-    PiiVariant varHistogram;
-  };
-
-  template <class Clr> struct ColorHistogramHandler : HistogramHandler
-  {
-    ColorHistogramHandler()
-    {
-      baCalculate[0] = baCalculate[1] = baCalculate[2] = true;
-    }
-
-    void initialize(int levels, bool normalized);
-    void operator() (const PiiMatrix<Clr>& image);
-    template <class Roi> void operator() (const PiiMatrix<Clr>& image, const Roi& roi);
-    void normalize();
-
-    PiiVariant varHistograms[3];
-    PiiMatrix<typename Clr::Type> channelImages[3];
-    bool baCalculate[3];
-  };
-  /// @endhide
 };
 
 #include "PiiHistogram-templates.h"
