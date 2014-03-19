@@ -37,7 +37,7 @@ colors.depends += image
 classification.depends += image
 texture.depends += image
 transforms.depends += image
-camera.depends += image geometry
+camera.depends += image geometry colors
 matching.depends += geometry classification optimization
 calibration.depends += classification optimization
 
