@@ -141,10 +141,6 @@ private:
   template <class T> void convert(void *frameBuffer, Pii::PtrOwnership ownership, int frameIndex, qint64 elapsedTime);
   template <class T> void emitImage(const PiiMatrix<T>& image, Pii::PtrOwnership ownership, int frameIndex, qint64 elapsedTime);
 
-  template <class T> PiiMatrix<PiiColor<T> > yuv411toRgb(void *frameBuffer, int width, int height);
-  template <class T> PiiMatrix<PiiColor<T> > yuv422toRgb(void *frameBuffer, int width, int height);
-  template <class T> void yuvToRgb(PiiColor<T> *data, int y, int u, int v);
-
   void init();
 protected:
   /// @internal

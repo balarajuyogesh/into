@@ -1,1 +1,1 @@
-DEPENDENCIES = Image Geometry
+DEPENDENCIES = Image Geometry Colors

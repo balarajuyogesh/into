@@ -16,6 +16,7 @@
 #include "PiiCameraOperation.h"
 #include <PiiMatrix.h>
 #include <PiiBayerConverter.h>
+#include <PiiColors.h>
 #include <PiiUtil.h>
 #include <PiiYdinResources.h>
 
@@ -240,7 +241,8 @@ template <class T> void PiiCameraOperation::convert(void *frameBuffer,
         {
         case PiiCamera::Yuv411Format:
           {
-            emitImage(yuv411toRgb<T>(frameBuffer, d->iImageWidth, d->iImageHeight),
+            emitImage(PiiColors::yuv411toRgb<PiiColor<T> >(reinterpret_cast<T*>(frameBuffer),
+                                                           d->iImageWidth, d->iImageHeight),
                       Pii::ReleaseOwnership, frameIndex, elapsedTime);
 
             // Free frameBuffer-memory if necessary
@@ -251,7 +253,8 @@ template <class T> void PiiCameraOperation::convert(void *frameBuffer,
           }
         case PiiCamera::Yuv422Format:
           {
-            emitImage(yuv422toRgb<T>(frameBuffer, d->iImageWidth, d->iImageHeight),
+            emitImage(PiiColors::yuv422toRgb<PiiColor<T> >(reinterpret_cast<T*>(frameBuffer),
+                                                           d->iImageWidth, d->iImageHeight),
                       Pii::ReleaseOwnership, frameIndex, elapsedTime);
 
             // Free frameBuffer-memory if necessary
@@ -456,62 +459,3 @@ bool PiiCameraOperation::copyImage() const
 {
   return _d()->bCopyImage;
 }
-
-template <class T> PiiMatrix<PiiColor<T> > PiiCameraOperation::yuv411toRgb(void *frameBuffer, int width, int height)
-{
-  PiiMatrix<PiiColor<T> > matrix(height, width);
-
-  int y1, y2, y3, y4, u, v;
-  int length = 6*width*height/4;
-  int index = 0;
-  PiiColor<T> *pData = matrix.row(0);
-  T *pBuffer = static_cast<T*>(frameBuffer);
-
-  for (int i=0; i<length; i+=6, index+=4)
-    {
-      u = pBuffer[i+0] - 128;
-      y1 = pBuffer[i+1];
-      y2 = pBuffer[i+2];
-      v = pBuffer[i+3] - 128;
-      y3 = pBuffer[i+4];
-      y4 = pBuffer[i+5];
-
-      yuvToRgb<T>(&pData[index], y1,u,v);
-      yuvToRgb<T>(&pData[index+1], y2,u,v);
-      yuvToRgb<T>(&pData[index+2], y3,u,v);
-      yuvToRgb<T>(&pData[index+3],y4,u,v);
-    }
-
-  return matrix;
-}
-
-template <class T> PiiMatrix<PiiColor<T> > PiiCameraOperation::yuv422toRgb(void *frameBuffer, int width, int height)
-{
-  PiiMatrix<PiiColor<T> > matrix(height, width);
-
-  int y1, y2, u, v;
-  int length = 2*width*height;
-  int index = 0;
-  PiiColor<T> *pData = matrix.row(0);
-  T *pBuffer = static_cast<T*>(frameBuffer);
-
-  for (int i=0; i<length; i+=4, index+=2)
-    {
-      y1 = pBuffer[i+0];
-      u = pBuffer[i+1] - 128;
-      y2 = pBuffer[i+2];
-      v = pBuffer[i+3] - 128;
-
-      yuvToRgb<T>(&pData[index], y1,u,v);
-      yuvToRgb<T>(&pData[index+1],y2,u,v);
-    }
-  return matrix;
-}
-
-template <class T> void PiiCameraOperation::yuvToRgb(PiiColor<T>* data, int y, int u, int v)
-{
-  data->c0 = (T)qBound(0, int(y + 1.370705*v), 255);
-  data->c1 = (T)qBound(0, int(y - 0.698001 * v - 0.337633*u), 255);
-  data->c2 = (T)qBound(0, int(y + 1.732446*u), 255);
-}
-
