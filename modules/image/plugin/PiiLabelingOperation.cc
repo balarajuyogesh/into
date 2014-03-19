@@ -72,7 +72,7 @@ template <class T> void PiiLabelingOperation::operate(const PiiVariant& obj)
                                                                 &iLabels));
       else
         d->pLabeledImageOutput->emitObject(PiiImage::labelImage(image,
-                                                                std::bind2nd(std::less<T>(),
+                                                                std::bind2nd(std::less_equal<T>(),
                                                                              T(d->dThreshold)),
                                                                 PiiImage::DefaultLabelingLimiter(),
                                                                 &iLabels));
@@ -89,10 +89,10 @@ template <class T> void PiiLabelingOperation::operate(const PiiVariant& obj)
                                                             &iLabels));
   else
     d->pLabeledImageOutput->emitObject(PiiImage::labelImage(image,
-                                                            std::bind2nd(std::less<T>(),
+                                                            std::bind2nd(std::less_equal<T>(),
                                                                          T(qMin(double(PiiImage::Traits<T>::max()),
                                                                                 d->dThreshold + d->dHysteresis))),
-                                                            std::bind2nd(std::less<T>(),
+                                                            std::bind2nd(std::less_equal<T>(),
                                                                          T(d->dThreshold)),
                                                             d->connectivity,
                                                             1,
