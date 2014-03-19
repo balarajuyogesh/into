@@ -353,6 +353,12 @@ public:
   Q_INVOKABLE QString fullName() const;
 
   /**
+   * Returns the parent of this operation, or zero if the operation
+   * has no parent operation.
+   */
+  Q_INVOKABLE PiiOperation* parentOperation() const;
+
+  /**
    * Returns metadata associated with *socket*. The default
    * implementation always returns an invalid variant, but this
    * function makes it possible for subclasses to associate
@@ -503,6 +509,22 @@ public:
    * // range["min"].toDouble() == 0.0
    * // range["step"].toDouble() == 0.1
    * // range["max"].toDouble() == 100.0
+   * ~~~
+   *
+   * It is also possible to add dynamic metaproperties whose value is
+   * retrieved using a function. For this, PiiOperation uses a naming
+   * convention. If there is an invokable function or a slot called
+   * `propertyName_metaPropertyName` that takes no arguments, then
+   * that function will be used as a getter for the metaproperty's
+   * value. The function must return a QVariant.
+   *
+   * Let's assume we want the `max` metaproperty of `threshold` to be
+   * variable:
+   *
+   * ~~~(c++)
+   * // ...
+   * private slots:
+   *   QVariant threshold_max() const { return rand(); }
    * ~~~
    */
   Q_INVOKABLE QVariant metaProperty(const QString& propertyName, const QString& metaPropertyName) const;
@@ -692,11 +714,12 @@ private:
                                 const QString& name,
                                 const QVariant& value);
   static void parseRange(QVariantMap& map, const QString& range);
-  static QVariant parseNumber(const QString& number);
+  static QVariant parsePrimitive(const QString& value);
   static void parseProperty(QVariantMap& map, const QString& metaPropertyName, const QString& value);
   QVariant applyLimits(const char* property, const QVariant& value) const;
   template <class T>
   QVariant applyLimits(const char* property, const QVariant& value) const;
+  QVariant readDynamicMetaProperty(const QVariant& var) const;
 
   // Keyed by 1) class name 2) property name 3) metaproperty name
   typedef QMap<QString,QMap<QString,QVariantMap> > MetaPropertyCache;

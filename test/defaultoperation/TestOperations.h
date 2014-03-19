@@ -46,6 +46,9 @@ public:
   void setProp4(int prop4) { _iProp4 = prop4; }
   int prop4() const { return _iProp4; }
 
+private slots:
+  QVariant prop1_itself() const { return _iProp1; }
+
 protected:
   void process();
   int _iProp1;

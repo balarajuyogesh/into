@@ -25,6 +25,8 @@ PII_SERIALIZABLE_EXPORT(PiiOperation);
 PII_SERIALIZABLE_EXPORT(PiiQVariantWrapper::Template<PiiOperation*>);
 PII_SERIALIZABLE_EXPORT(PiiQVariantWrapper::Template<PiiOperationPtr>);
 
+Q_DECLARE_METATYPE(QMetaMethod);
+
 static int iOperationStateMetaType = qRegisterMetaType<PiiOperation::State>("PiiOperation::State");
 static int iOperationMetaType = qRegisterMetaType<PiiOperation*>("PiiOperation*");
 static int iOperationPtrMetaType = qRegisterMetaType<PiiOperationPtr>("PiiOperationPtr");
@@ -122,6 +124,11 @@ QString PiiOperation::fullName() const
   for (int i=lstParent.size()-2; i>=0; --i)
     strName += lstParent[i]->objectName() + '.';
   return strName + objectName();
+}
+
+PiiOperation* PiiOperation::parentOperation() const
+{
+  return qobject_cast<PiiOperation*>(parent());
 }
 
 bool PiiOperation::connectOutput(const QString& outputName, PiiAbstractInputSocket* input)
@@ -233,25 +240,21 @@ QVariant PiiOperation::applyLimits(const char* property, const QVariant& value) 
 template <class T>
 QVariant PiiOperation::applyLimits(const char* property, const QVariant& value) const
 {
-  const QVariantMap mapRange(metaProperties(property));
-  if (mapRange.isEmpty())
-    return value;
-
   T numericValue = value.value<T>();
   T minValue = 0;
-  QVariantMap::const_iterator it = mapRange.find("min");
-  if (it != mapRange.end())
+  QVariant varTmp = metaProperty(property, "min");
+  if (varTmp.isValid())
     {
-      minValue = it->value<T>();
+      minValue = varTmp.value<T>();
       if (numericValue < minValue)
-        return *it;
+        return varTmp;
     }
-  it = mapRange.find("max");
-  if (it != mapRange.end() && numericValue > it->value<T>())
-    return *it;
-  it = mapRange.find("step");
-  if (it != mapRange.end())
-    return numericValue - Pii::mod(numericValue - minValue, it->value<T>());
+  varTmp = metaProperty(property, "max");
+  if (varTmp.isValid() && numericValue > varTmp.value<T>())
+    return varTmp;
+  varTmp = metaProperty(property, "step");
+  if (varTmp.isValid())
+    return numericValue - Pii::mod(numericValue - minValue, varTmp.value<T>());
 
   return value;
 }
@@ -299,14 +302,18 @@ QVariant PiiOperation::property(const QString& name) const
   return property(qPrintable(name));
 }
 
-QVariant PiiOperation::parseNumber(const QString& number)
+QVariant PiiOperation::parsePrimitive(const QString& value)
 {
   bool bOk = false;
-  int i = number.toInt(&bOk);
+  int i = value.toInt(&bOk);
   if (bOk) return i;
-  double d = number.toDouble(&bOk);
+  double d = value.toDouble(&bOk);
   if (bOk) return d;
-  return number;
+  else if (value == "true")
+    return true;
+  else if (value == "false")
+    return false;
+  return value;
 }
 
 void PiiOperation::parseRange(QVariantMap& map, const QString& range)
@@ -315,11 +322,11 @@ void PiiOperation::parseRange(QVariantMap& map, const QString& range)
   if (lstParts.size() member_of (2,3))
     {
       if (!lstParts[0].isEmpty())
-        map["min"] = parseNumber(lstParts[0]);
+        map["min"] = parsePrimitive(lstParts[0]);
       if (!lstParts.last().isEmpty())
-        map["max"] = parseNumber(lstParts.last());
+        map["max"] = parsePrimitive(lstParts.last());
       if (lstParts.size() == 3 && !lstParts[1].isEmpty())
-        map["step"] = parseNumber(lstParts[1]);
+        map["step"] = parsePrimitive(lstParts[1]);
     }
 }
 
@@ -328,7 +335,15 @@ void PiiOperation::parseProperty(QVariantMap& map, const QString& metaPropertyNa
   if (metaPropertyName == "range")
     parseRange(map, value);
   else
-    map[metaPropertyName] = parseNumber(value);
+    map[metaPropertyName] = parsePrimitive(value);
+}
+
+QVariant PiiOperation::readDynamicMetaProperty(const QVariant& var) const
+{
+  QVariant varReturn;
+  var.value<QMetaMethod>().invoke(const_cast<PiiOperation*>(this),
+                                  Q_RETURN_ARG(QVariant, varReturn));
+  return varReturn;
 }
 
 QVariant PiiOperation::metaProperty(const QString& propertyName, const QString& metaPropertyName) const
@@ -342,7 +357,14 @@ QVariant PiiOperation::metaProperty(const QString& propertyName, const QString& 
         {
           QVariantMap::const_iterator it2 = it->find(metaPropertyName);
           if (it2 != it->end())
-            return *it2;
+            {
+              // We found an entry. If it is a static value (not a
+              // method), return it.
+              if (it2->userType() != qMetaTypeId<QMetaMethod>())
+                return *it2;
+              // Otherwise call the method
+              return readDynamicMetaProperty(*it2);
+            }
         }
     }
   return QVariant();
@@ -355,7 +377,16 @@ QVariantMap PiiOperation::metaProperties(const QString& propertyName) const
     {
       QMap<QString,QVariantMap>::const_iterator it = d->pmapMetaPropertyCache->find(propertyName);
       if (it != d->pmapMetaPropertyCache->end())
-        return *it;
+        {
+          // Copy cached map and update dynamic metaproperties.
+          QVariantMap mapResult(*it);
+          for (QVariantMap::iterator it2 = mapResult.begin(); it2 != mapResult.end(); ++it2)
+            {
+              if (it2->userType() == qMetaTypeId<QMetaMethod>())
+                it2.value() = readDynamicMetaProperty(*it2);
+            }
+          return mapResult;
+        }
     }
   return QVariantMap();
 }
@@ -387,6 +418,29 @@ const QMap<QString,QVariantMap>* PiiOperation::createMetaPropertyCache(const QMe
           parseProperty(mapCache[lstParts[0]], lstParts[1], info.value());
         }
     }
+
+  // Parse all registered functions and see if they can be matched to
+  // properties using the propname_metapropname convention.
+  for (int i=0; i<metaObj->methodCount(); ++i)
+    {
+      QMetaMethod method = metaObj->method(i);
+      if (method.parameterCount() > 0 || method.returnType() != qMetaTypeId<QVariant>())
+        continue;
+      QByteArray aMethodName(method.name()); // TODO Qt4 support
+      int iUnderScoreIndex = aMethodName.indexOf('_');
+      if (iUnderScoreIndex <= 0 || iUnderScoreIndex == aMethodName.length()-1)
+        continue;
+      QByteArray aPropName(aMethodName.left(iUnderScoreIndex));
+      // If there is property to which this method can be matched, add
+      // the metamethod to cache so that it can be called when the
+      // property is fetched.
+      if (metaObj->indexOfProperty(aPropName.constData()) != -1)
+        {
+          QByteArray aMetaPropName(aMethodName.mid(iUnderScoreIndex+1));
+          mapCache[aPropName][aMetaPropName] = QVariant::fromValue(method);
+        }
+    }
+
   return &(*pCache->insert(metaObj->className(), mapCache));
 }
 
