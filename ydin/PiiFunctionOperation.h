@@ -175,7 +175,10 @@ namespace PiiFuncOpPrivate
       getter(nullptr),
       pWrapper(new CastWrapperImpl<U>(static_cast<U (Object::*)() const>(getter))),
       initializer(&InputHolder::initByCastedGetter)
-    {}
+    {
+      if (pSocket)
+        pSocket->setOptional(true);
+    }
 
     ~InputHolder()
     {
