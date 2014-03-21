@@ -910,8 +910,9 @@ namespace PiiColors
     return matResult;
   }
 
-  template <class T> inline void yuvToRgb(PiiColor<T>& data, int y, int u, int v)
+  template <class Color> inline void yuvToRgb(Color& data, int y, int u, int v)
   {
+    typedef typename Color::value_type T;
     data.c0 = T(qBound(0, int(y + 1.370705*v), 255));
     data.c1 = T(qBound(0, int(y - 0.698001 * v - 0.337633*u), 255));
     data.c2 = T(qBound(0, int(y + 1.732446*u), 255));
