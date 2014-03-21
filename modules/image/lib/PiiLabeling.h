@@ -41,17 +41,19 @@ namespace PiiImage
 
   /**
    * An object size limiter for [labelImage()]. This class counts the
-   * occurrences of each label and removes all objects smaller than or
-   * equal to than the specified threshold
+   * occurrences of each label and removes all objects smaller than
+   * *minimumSize*. If *minimumSize* is -N, retains the N largest
+   * objects.
    */
   class ObjectSizeLimiter
   {
   public:
     /**
-     * Creates a size limiter that only accepts objects larger than
-     * `sizeThreshold`.
+     * Creates a size limiter that only accepts objects whose size is
+     * at least `minimumSize`. Negative value retains N biggest
+     * objects.
      */
-    inline ObjectSizeLimiter(int sizeThreshold) : _iSizeThreshold(sizeThreshold) {}
+    inline ObjectSizeLimiter(int minimumSize) : _iMinimumSize(minimumSize) {}
     /**
      * Called by labelImage() to store the intial set of labels. The
      * labels are just cloned and stored.
@@ -76,45 +78,81 @@ namespace PiiImage
       ++_vecCounts[label];
     }
     /**
-     * Retains all labels with more than `sizeThreshold` histogram
+     * Retains all labels with more than `minimumSize` histogram
      * entries. Sets all other labels to zero. The input vector labels
      * maps labels to final label indices.
      */
     inline void limitLabels(QVector<int>& labels)
     {
-      QVector<int> vecTotals(labels.size());
-      for (int l=labels.size(); l--; )
-        vecTotals[labels[l]] += _vecCounts[l];
-
-      if (_iSizeThreshold > 0)
+      const int iLabelCnt = labels.size();
+      if (_iMinimumSize == 0)
+        return;
+      else if (_iMinimumSize > 0)
         {
-          // Zero out all labels whose total count doesn't exceed threshold.
-          for (int l=labels.size(); l--; )
-            if (vecTotals[labels[l]] <= _iSizeThreshold)
+          QVector<int> vecTotals(iLabelCnt);
+          for (int l=0; l<iLabelCnt; ++l)
+            vecTotals[labels[l]] += _vecCounts[l];
+
+          // Zero out all labels whose total count is smaller than
+          // threshold.
+          for (int l=0; l<iLabelCnt; ++l)
+            if (vecTotals[labels[l]] < _iMinimumSize)
               labels[l] = 0;
         }
-      else
+      else if (_iMinimumSize == -1)
         {
+          QVector<int> vecTotals(iLabelCnt);
+          for (int l=0; l<iLabelCnt; ++l)
+            vecTotals[labels[l]] += _vecCounts[l];
+
           // Find the maximum pixel count
           int iMaxIndex = -1, iMaxCount = 0;
-          for (int i=vecTotals.size(); i--; )
+          for (int l=0; l<iLabelCnt; ++l)
             {
-              if (vecTotals[i] > iMaxCount)
+              if (vecTotals[l] > iMaxCount)
                 {
-                  iMaxCount = vecTotals[i];
-                  iMaxIndex = i;
+                  iMaxCount = vecTotals[l];
+                  iMaxIndex = l;
                 }
             }
-          // Zero out all labels that point to anything else than the biggest one.
-          for (int l=labels.size(); l--; )
+          // Zero out all labels that point to anything else than the
+          // biggest one.
+          for (int l=0; l<iLabelCnt; ++l)
             if (labels[l] != iMaxIndex)
               labels[l] = 0;
+        }
+      else if (-_iMinimumSize < iLabelCnt)
+        {
+          QVector<QPair<int,int> > vecTotals(iLabelCnt);
+          // Store label indices (we are going to sort the array)
+          for (int l=0; l<iLabelCnt; ++l)
+            vecTotals[l].second = l;
+          for (int l=0; l<iLabelCnt; ++l)
+            vecTotals[labels[l]].first += _vecCounts[l];
+          std::sort(vecTotals.begin(), vecTotals.end(), std::greater<QPair<int,int> >());
+          int iRetainedCount = -_iMinimumSize;
+          // Optimization: don't waste time in comparing to zeros in
+          // the inner loop below.
+          while (iRetainedCount && vecTotals[iRetainedCount-1].first == 0)
+            --iRetainedCount;
+          if (iRetainedCount)
+            {
+              // Zero out everything except the N biggest ones
+              for (int l=0; l<iLabelCnt; ++l)
+                {
+                  for (int i=0; i<iRetainedCount; ++i)
+                    if (vecTotals[i].second == labels[l]) // this is one of the big boys
+                      goto next_l;
+                  labels[l] = 0;
+                next_l:;
+                }
+            }
         }
     }
 
   private:
     QVector<int> _vecCounts;
-    int _iSizeThreshold;
+    int _iMinimumSize;
   };
 
   template <class Matrix, class UnaryOp, class Limiter>
@@ -356,8 +394,8 @@ namespace PiiImage
    * treated as objects.
    *
    * @param sizeLimit only label objects larger than this. Smaller
-   * objects will be set to zero. If *sizeLimit* is negative or zero,
-   * only the largest object will be retained.
+   * objects will be set to zero. If *sizeLimit* is zero, only the
+   * largest object will be retained.
    *
    * @param labelCount an optional output-value parameter that stores
    * the number of labels found
@@ -368,7 +406,9 @@ namespace PiiImage
                                                          int sizeLimit, int* labelCount = 0)
   {
     typedef typename Matrix::value_type T;
-    return labelImage(mat, std::bind2nd(std::not_equal_to<T>(), T(0)), ObjectSizeLimiter(sizeLimit), labelCount);
+    return labelImage(mat, std::bind2nd(std::not_equal_to<T>(), T(0)),
+                      ObjectSizeLimiter(sizeLimit ? sizeLimit+1 : -1),
+                      labelCount);
   }
 
 
