@@ -358,6 +358,12 @@ namespace PiiCamera
     Type operator()(int r, int g, int b) const { return Type((r+g+b)/3); }
   };
 
+  template <class T, class Decoder, class Pixel>
+  void bayerToRgb(const PiiMatrix<T>& encoded,
+                  PiiMatrix<typename Pixel::Type>& result,
+                  Decoder decoder,
+                  Pixel pixel);
+
   /**
    * Convert a Bayer-encoded color image to RGB colors. Use the
    * BayerConversionTraits structure to control the way colors are
@@ -403,21 +409,37 @@ namespace PiiCamera
    * See the documentation of RgbPixel on how to create your own pixel
    * types.
    */
-  template <class T, class Decoder, class Pixel> PiiMatrix<typename Pixel::Type>
-  bayerToRgb(const PiiMatrix<T>& encoded,
-             Decoder decoder,
-             Pixel pixel)
+  template <class T, class Decoder, class Pixel>
+  PiiMatrix<typename Pixel::Type> bayerToRgb(const PiiMatrix<T>& encoded,
+                                             Decoder decoder,
+                                             Pixel pixel)
+  {
+    typedef typename Pixel::Type U;
+    PiiMatrix<U> matResult(PiiMatrix<T>::uninitialized(encoded.rows(), encoded.columns()));
+    bayerToRgb(encoded, matResult, decoder, pixel);
+    return matResult;
+  }
+
+  /**
+   * This version stores the decoded color data into *result*, which
+   * must be preallocated by the caller. The size of *result* must be
+   * the same as that of *encoded*.
+   */
+  template <class T, class Decoder, class Pixel>
+  void bayerToRgb(const PiiMatrix<T>& encoded,
+                  PiiMatrix<typename Pixel::Type>& result,
+                  Decoder decoder,
+                  Pixel pixel)
   {
     typedef typename Pixel::Type U;
 
     // Cannot handle too small input
     if (encoded.rows() < 2 || encoded.columns() < 2)
-      return PiiMatrix<U>(encoded.rows(), encoded.columns());
+      return;
 
     // PENDING all loops could be optimized to step two pixels at a
     // time. The c & 1 or r & 1 comparison could be avoided.
 
-    PiiMatrix<U> result(PiiMatrix<T>::uninitialized(encoded.rows(), encoded.columns()));
     U* resultRow = result.row(0);
 
     // Pointers to the previous, current, and next row
@@ -592,8 +614,6 @@ namespace PiiCamera
                                decoder.interpolatorG00.bottomRight(row0, row1),
                                decoder.interpolatorB00.bottomRight(row0, row1));
       }
-
-    return result;
   }
 
   /**
