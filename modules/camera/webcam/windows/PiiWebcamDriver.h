@@ -63,7 +63,12 @@ DECLARE_INTERFACE_(IVideoProcAmp,IUnknown)
 };
 #undef INTERFACE
 
-#define INTERFACE IAMStreamConfig
+/* NOTE: It is too much of a chore to keep up with all different
+ * configurations. New Mingw versions ship with headers that have
+ * IAMStreamConfig already defined. If yours doesn't, uncomment
+ * the following block.
+ */
+/* #define INTERFACE IAMStreamConfig
 DECLARE_INTERFACE_(IAMStreamConfig,IUnknown)
 {
   STDMETHOD(QueryInterface)(THIS_ REFIID,PVOID*) PURE;
@@ -74,7 +79,7 @@ DECLARE_INTERFACE_(IAMStreamConfig,IUnknown)
   STDMETHOD(GetNumberOfCapabilities)(THIS_ int*,int*) PURE;
   STDMETHOD(GetStreamCaps)(THIS_ int,AM_MEDIA_TYPE**,BYTE*) PURE;
 };
-#undef INTERFACE
+#undef INTERFACE*/
 
 #define INTERFACE ISampleGrabberCB
 DECLARE_INTERFACE_(ISampleGrabberCB,IUnknown)
