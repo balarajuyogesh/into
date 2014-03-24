@@ -20,7 +20,7 @@
 #include <PiiColor.h>
 
 template <class T> struct PiiHistogramOperation::GrayHistogram :
-  PiiImage::GrayHistogramHandler<T>
+  PiiGrayHistogramHandler<T>
 {
   GrayHistogram(PiiHistogramOperation* parent) : pParent(parent) {}
 
@@ -34,7 +34,7 @@ template <class T> struct PiiHistogramOperation::GrayHistogram :
 };
 
 template <class T> struct PiiHistogramOperation::ColorHistogram :
-  PiiImage::ColorHistogramHandler<T>
+  PiiColorHistogramHandler<T>
 {
   ColorHistogram(PiiHistogramOperation* parent) : pParent(parent)
   {

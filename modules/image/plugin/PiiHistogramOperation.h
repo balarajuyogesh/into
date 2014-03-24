@@ -20,6 +20,7 @@
 #include <PiiMatrix.h>
 #include "PiiImageGlobal.h"
 #include "PiiRoi.h"
+#include "PiiHistogramHandler.h"
 
 /**
  * An operation that calculates the histogram of a gray-scale or a
@@ -110,7 +111,7 @@ private:
 
     bool bNormalized;
     PiiImage::RoiType roiType;
-    PiiImage::HistogramHandler* pHistogram;
+    PiiHistogramHandler* pHistogram;
     unsigned int uiPreviousType;
   };
   PII_D_FUNC;

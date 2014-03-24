@@ -30,6 +30,7 @@ private slots:
   void fullName();
   void connectedInputNames();
   void metaProperty();
+  void metaProperties();
   void process();
   void process_data();
 

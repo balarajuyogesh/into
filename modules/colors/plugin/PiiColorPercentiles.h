@@ -20,6 +20,7 @@
 #include <QPair>
 #include <PiiMatrix.h>
 #include <PiiImage.h>
+#include <PiiHistogramHandler.h>
 
 class QStringList;
 template <class T> class QList;
@@ -227,7 +228,7 @@ private:
     PiiInputSocket* pRoiInput;
 
     PiiImage::RoiType roiType;
-    PiiImage::HistogramHandler* pPercentiles;
+    PiiHistogramHandler* pPercentiles;
     unsigned int uiPreviousType;
   };
   PII_D_FUNC;

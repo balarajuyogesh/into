@@ -17,6 +17,8 @@
 # error "Never use <PiiHistogram-templates.h> directly; include <PiiHistogram.h> instead."
 #endif
 
+#include <PiiAlgorithm.h>
+#include <PiiFunctional.h>
 
 namespace PiiImage
 {
@@ -89,14 +91,7 @@ namespace PiiImage
   template <class T, class U> PiiMatrix<U> backProject(const PiiMatrix<T>& img, const PiiMatrix<U>& histogram)
   {
     PiiMatrix<U> result(PiiMatrix<U>::uninitialized(img.rows(), img.columns()));
-    const U* pHistogram = histogram.row(0);
-    for (int r=img.rows(); r--; )
-      {
-        const T* sourceRow = img.row(r);
-        U* targetRow = result.row(r);
-        for (int c=img.columns(); c--; )
-          targetRow[c] = pHistogram[(int)sourceRow[c]];
-      }
+    Pii::transform(img.begin(), img.end(), result.begin(), Pii::arrayLookup(histogram[0]));
     return result;
   }
 
@@ -104,12 +99,13 @@ namespace PiiImage
                                                        const PiiMatrix<U>& histogram)
   {
     PiiMatrix<U> result(PiiMatrix<U>::uninitialized(ch1.rows(), ch1.columns()));
-    for (int r=ch1.rows(); r--; )
+    const int iRows = ch1.rows(), iCols = ch1.columns();
+    for (int r=0; r<iRows; ++r)
       {
         const T* ch1Row = ch1.row(r);
         const T* ch2Row = ch2.row(r);
         U* targetRow = result.row(r);
-        for (int c=ch1.columns(); c--; )
+        for (int c=0; c<iCols; ++c)
           targetRow[c] = histogram((int)ch1Row[c], (int)ch2Row[c]);
       }
     return result;
@@ -145,78 +141,5 @@ namespace PiiImage
         pNewDist[j] = i;
       }
     return backProject(img, newDist);
-  }
-
-  template <class T> void GrayHistogramHandler<T>::operator() (const PiiMatrix<T>& image)
-  {
-    iPixelCount += image.rows() * image.columns();
-    addToVariant(varHistogram, histogram(image, iLevels));
-  }
-
-  template <class T> template <class Roi>
-  void GrayHistogramHandler<T>::operator() (const PiiMatrix<T>& image, const Roi& roi)
-  {
-    PiiMatrix<int> matHistogram(histogram(image, roi, iLevels));
-    if (bNormalized)
-      iPixelCount += Pii::sum<int>(matHistogram);
-    addToVariant(varHistogram, matHistogram);
-  }
-
-  template <class T> void GrayHistogramHandler<T>::normalize()
-  {
-    if (iPixelCount != 0)
-      varHistogram = PiiVariant(varHistogram.valueAs<const PiiMatrix<int> >()
-                                .mapped(std::multiplies<float>(), 1.0 / iPixelCount));
-  }
-
-  template <class T> void GrayHistogramHandler<T>::initialize(int levels, bool normalized)
-  {
-    HistogramHandler::initialize(levels, normalized);
-    varHistogram = PiiVariant();
-  }
-
-  template <class Clr> void ColorHistogramHandler<Clr>::operator() (const PiiMatrix<Clr>& image)
-  {
-    PiiImage::separateChannels(image, channelImages);
-    iPixelCount += image.rows() * image.columns();
-    for (int i=0; i<3; ++i)
-      if (baCalculate[i])
-        addToVariant(varHistograms[i], histogram(channelImages[i], iLevels));
-  }
-
-  template <class Clr> template <class Roi>
-  void ColorHistogramHandler<Clr>::operator() (const PiiMatrix<Clr>& image, const Roi& roi)
-  {
-    PiiImage::separateChannels(image, channelImages);
-    bool bMustCount = bNormalized;
-    for (int i=0; i<3; ++i)
-      {
-        if (baCalculate[i])
-          {
-            PiiMatrix<int> matHistogram(histogram(channelImages[i], roi, iLevels));
-            if (bMustCount)
-              {
-                iPixelCount += Pii::sum<int>(matHistogram);
-                bMustCount = false;
-              }
-            addToVariant(varHistograms[i], matHistogram);
-          }
-      }
-  }
-
-  template <class Clr> void ColorHistogramHandler<Clr>::normalize()
-  {
-    if (iPixelCount != 0)
-      for (int i=0; i<3; ++i)
-        if (baCalculate[i])
-          varHistograms[i] = PiiVariant(varHistograms[i].valueAs<const PiiMatrix<int> >()
-                                        .mapped(std::multiplies<float>(), 1.0 / iPixelCount));
-  }
-
-  template <class Clr> void ColorHistogramHandler<Clr>::initialize(int levels, bool normalized)
-  {
-    HistogramHandler::initialize(levels, normalized);
-    for (int i=0; i<3; ++i)
-      varHistograms[i] = PiiVariant();
   }
 }

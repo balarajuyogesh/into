@@ -889,6 +889,35 @@ namespace PiiColors
     return colorImage.mapped(std::bind1st(GenericConversion<Clr>(), conversionMatrix));
   }
 
+  template <class Color>
+  void yuv411toRgb(const typename Color::value_type *yuvData, Color* rgbData, int width, int height);
+  template <class Color>
+  void yuv422toRgb(const typename Color::value_type *yuvData, Color* rgbData, int width, int height);
+
+  template <class Color>
+  PiiMatrix<Color> yuv411toRgb(const typename Color::value_type *yuvData, int width, int height)
+  {
+    PiiMatrix<Color> matResult(PiiMatrix<Color>::uninitialized(height, width));
+    yuv411toRgb(yuvData, matResult[0], width, height);
+    return matResult;
+  }
+
+  template <class Color>
+  PiiMatrix<Color> yuv422toRgb(const typename Color::value_type *yuvData, int width, int height)
+  {
+    PiiMatrix<Color> matResult(PiiMatrix<Color>::uninitialized(height, width));
+    yuv422toRgb(yuvData, matResult[0], width, height);
+    return matResult;
+  }
+
+  template <class Color> inline void yuvToRgb(Color& data, int y, int u, int v)
+  {
+    typedef typename Color::value_type T;
+    data.c0 = T(qBound(0, int(y + 1.370705*v), 255));
+    data.c1 = T(qBound(0, int(y - 0.698001 * v - 0.337633*u), 255));
+    data.c2 = T(qBound(0, int(y + 1.732446*u), 255));
+  }
+
   /**
    * A conversion matrix from RGB to the maximally independent color
    * space of Ohta and Kanade.

@@ -141,6 +141,34 @@ void TestPiiDefaultOperation::metaProperty()
 
   _pCounter->setProperty("prop4", 1);
   QCOMPARE(_pCounter->prop4(), 0);
+
+  _pCounter->setProperty("prop1", 1);
+  QCOMPARE(_pCounter->metaProperty("prop1", "itself").toInt(), 1);
+
+  _pCounter->setProperty("prop1", 2);
+  QCOMPARE(_pCounter->metaProperty("prop1", "itself").toInt(), 2);
+}
+
+void TestPiiDefaultOperation::metaProperties()
+{
+  {
+    _pCounter->setProperty("prop1", 3142);
+    QVariantMap props(_pCounter->metaProperties("prop1"));
+    QCOMPARE(props["min"].toInt(), 0);
+    QCOMPARE(props["itself"].toInt(), 3142);
+  }
+  {
+    _pCounter->setProperty("prop1", 10);
+    QVariantMap props(_pCounter->metaProperties("prop1"));
+    QCOMPARE(props["min"].toInt(), 0);
+    QCOMPARE(props["itself"].toInt(), 10);
+  }
+  {
+    QVariantMap props(_pCounter->metaProperties("prop2"));
+    QCOMPARE(props["min"].toDouble(), 0.5);
+    QCOMPARE(props["max"].toDouble(), 6.0);
+    QCOMPARE(props["step"].toDouble(), 1.5);
+  }
 }
 
 void TestPiiDefaultOperation::process()

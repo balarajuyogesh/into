@@ -41,17 +41,19 @@ namespace PiiImage
 
   /**
    * An object size limiter for [labelImage()]. This class counts the
-   * occurrences of each label and removes all objects smaller than or
-   * equal to than the specified threshold
+   * occurrences of each label and removes all objects smaller than
+   * *minimumSize*. If *minimumSize* is -N, retains the N largest
+   * objects.
    */
   class ObjectSizeLimiter
   {
   public:
     /**
-     * Creates a size limiter that only accepts objects larger than
-     * `sizeThreshold`.
+     * Creates a size limiter that only accepts objects whose size is
+     * at least `minimumSize`. Negative value retains N biggest
+     * objects.
      */
-    inline ObjectSizeLimiter(int sizeThreshold) : _iSizeThreshold(sizeThreshold) {}
+    inline ObjectSizeLimiter(int minimumSize) : _iMinimumSize(minimumSize) {}
     /**
      * Called by labelImage() to store the intial set of labels. The
      * labels are just cloned and stored.
@@ -76,46 +78,89 @@ namespace PiiImage
       ++_vecCounts[label];
     }
     /**
-     * Retains all labels with more than `sizeThreshold` histogram
+     * Retains all labels with more than `minimumSize` histogram
      * entries. Sets all other labels to zero. The input vector labels
      * maps labels to final label indices.
      */
     inline void limitLabels(QVector<int>& labels)
     {
-      QVector<int> vecTotals(labels.size());
-      for (int l=labels.size(); l--; )
-        vecTotals[labels[l]] += _vecCounts[l];
-
-      if (_iSizeThreshold > 0)
+      const int iLabelCnt = labels.size();
+      if (_iMinimumSize == 0)
+        return;
+      else if (_iMinimumSize > 0)
         {
-          // Zero out all labels whose total count doesn't exceed threshold.
-          for (int l=labels.size(); l--; )
-            if (vecTotals[labels[l]] <= _iSizeThreshold)
+          QVector<int> vecTotals(iLabelCnt);
+          for (int l=0; l<iLabelCnt; ++l)
+            vecTotals[labels[l]] += _vecCounts[l];
+
+          // Zero out all labels whose total count is smaller than
+          // threshold.
+          for (int l=0; l<iLabelCnt; ++l)
+            if (vecTotals[labels[l]] < _iMinimumSize)
               labels[l] = 0;
         }
-      else
+      else if (_iMinimumSize == -1)
         {
+          QVector<int> vecTotals(iLabelCnt);
+          for (int l=0; l<iLabelCnt; ++l)
+            vecTotals[labels[l]] += _vecCounts[l];
+
           // Find the maximum pixel count
           int iMaxIndex = -1, iMaxCount = 0;
-          for (int i=vecTotals.size(); i--; )
+          for (int l=0; l<iLabelCnt; ++l)
             {
-              if (vecTotals[i] > iMaxCount)
+              if (vecTotals[l] > iMaxCount)
                 {
-                  iMaxCount = vecTotals[i];
-                  iMaxIndex = i;
+                  iMaxCount = vecTotals[l];
+                  iMaxIndex = l;
                 }
             }
-          // Zero out all labels that point to anything else than the biggest one.
-          for (int l=labels.size(); l--; )
+          // Zero out all labels that point to anything else than the
+          // biggest one.
+          for (int l=0; l<iLabelCnt; ++l)
             if (labels[l] != iMaxIndex)
               labels[l] = 0;
+        }
+      else if (-_iMinimumSize < iLabelCnt)
+        {
+          QVector<QPair<int,int> > vecTotals(iLabelCnt);
+          // Store label indices (we are going to sort the array)
+          for (int l=0; l<iLabelCnt; ++l)
+            vecTotals[l].second = l;
+          for (int l=0; l<iLabelCnt; ++l)
+            vecTotals[labels[l]].first += _vecCounts[l];
+          std::sort(vecTotals.begin(), vecTotals.end(), std::greater<QPair<int,int> >());
+          int iRetainedCount = -_iMinimumSize;
+          // Optimization: don't waste time in comparing to zeros in
+          // the inner loop below.
+          while (iRetainedCount && vecTotals[iRetainedCount-1].first == 0)
+            --iRetainedCount;
+          if (iRetainedCount)
+            {
+              // Zero out everything except the N biggest ones
+              for (int l=0; l<iLabelCnt; ++l)
+                {
+                  for (int i=0; i<iRetainedCount; ++i)
+                    if (vecTotals[i].second == labels[l]) // this is one of the big boys
+                      goto next_l;
+                  labels[l] = 0;
+                next_l:;
+                }
+            }
         }
     }
 
   private:
     QVector<int> _vecCounts;
-    int _iSizeThreshold;
+    int _iMinimumSize;
   };
+
+  template <class Matrix, class UnaryOp, class Limiter>
+  void labelImage(const Matrix& mat,
+                  PiiMatrix<int>& labels,
+                  UnaryOp rule,
+                  Limiter limiter,
+                  int* labelCount = 0);
 
   /**
    * Labels an image using 4-connectivity. This function uses the
@@ -152,24 +197,46 @@ namespace PiiImage
    */
   template <class Matrix, class UnaryOp, class Limiter>
   PiiMatrix<int> labelImage(const Matrix& mat,
-                            UnaryOp rule, Limiter limiter, int* labelCount = 0)
+                            UnaryOp rule,
+                            Limiter limiter,
+                            int* labelCount = 0)
   {
-    int iCols = mat.columns();
-    int iRows = mat.rows();
+    PiiMatrix<int> matLabels(mat.rows(), mat.columns());
+    labelImage(mat, matLabels, rule, limiter, labelCount);
+    return matLabels;
+  }
+
+  /**
+   * This version writes the labels to a preallocated output image
+   * *labels*. The size of the output image must be the same as the
+   * input, and it must be initialized to zeros.
+   */
+  template <class Matrix, class UnaryOp, class Limiter>
+  void labelImage(const Matrix& mat,
+                  PiiMatrix<int>& labels,
+                  UnaryOp rule,
+                  Limiter limiter,
+                  int* labelCount = 0)
+  {
+    if (mat.isEmpty())
+      {
+        if (labelCount) *labelCount = 0;
+        return;
+      }
+
+    const int iCols = mat.columns();
+    const int iRows = mat.rows();
     int iLabelIndex = 0;
 
     QVector<int> vecLabels(1);
     vecLabels.reserve(64);
     limiter.setInitialLabels(vecLabels);
 
-    PiiMatrix<int> matResult(iRows, iCols);
-    if (matResult.isEmpty())
-      return matResult;
 
     int *pCurrent, *pUp, *pLeft;
 
     typename Matrix::const_row_iterator sourceRow = mat.rowBegin(0);
-    pCurrent = matResult[0];
+    pCurrent = labels[0];
     pLeft = pCurrent-1;
 
 #define PII_CREATE_NEW_LABEL                          \
@@ -205,7 +272,7 @@ namespace PiiImage
       {
         sourceRow = mat.rowBegin(r);
         pUp = pCurrent;
-        pCurrent = matResult[r];
+        pCurrent = labels[r];
         pLeft = pCurrent-1;
         c = 0;
         // Handle first pixel
@@ -292,15 +359,13 @@ namespace PiiImage
     //Finally, alter mapped labels
     for (int r=0; r<iRows; ++r)
       {
-        int* pRow = matResult.row(r);
+        int* pRow = labels[r];
         for (int c=0; c<iCols; ++c)
           pRow[c] = vecLabels[pRow[c]];
       }
 
     if (labelCount != 0)
       *labelCount = iLabelIndex;
-
-    return matResult;
   }
 
   /**
@@ -322,15 +387,15 @@ namespace PiiImage
   }
 
   /**
-   * Label all 4-connected objects whose size (in pixels) is larger
+   * Labels all 4-connected objects whose size (in pixels) is larger
    * than `sizeLimit`.
    *
    * @param mat a matrix to be labeled. All non-zero values are
    * treated as objects.
    *
    * @param sizeLimit only label objects larger than this. Smaller
-   * objects will be set to zero. If *sizeLimit* is negative or zero,
-   * only the largest object will be retained.
+   * objects will be set to zero. If *sizeLimit* is zero, only the
+   * largest object will be retained.
    *
    * @param labelCount an optional output-value parameter that stores
    * the number of labels found
@@ -341,7 +406,9 @@ namespace PiiImage
                                                          int sizeLimit, int* labelCount = 0)
   {
     typedef typename Matrix::value_type T;
-    return labelImage(mat, std::bind2nd(std::not_equal_to<T>(), T(0)), ObjectSizeLimiter(sizeLimit), labelCount);
+    return labelImage(mat, std::bind2nd(std::not_equal_to<T>(), T(0)),
+                      ObjectSizeLimiter(sizeLimit ? sizeLimit+1 : -1),
+                      labelCount);
   }
 
 
@@ -435,10 +502,17 @@ namespace PiiImage
   PII_IMAGE_EXPORT void connectRunsRecursively(LabelInfo& info, int rowIndex, int start, int end);
   PII_IMAGE_EXPORT void markToBuffer(LabelInfo& info, int rowIndex, int start, int end);
 
+  template <class Matrix, class UnaryOp1, class UnaryOp2>
+  void labelImage(const Matrix& mat,
+                  PiiMatrix<int>& labels,
+                  UnaryOp1 rule1, UnaryOp2 rule2,
+                  Connectivity connectivity,
+                  int labelIncrement = 1,
+                  int* labelCount = 0);
   /// @endhide
 
   /**
-   * Label connected components. This function uses a recursive
+   * Labels connected components. This function uses a recursive
    * algorithm for finding connected components. It supports both
    * 8-connected and 4-connected components. This function performs
    * not only labeling but also hysteresis thresholding.
@@ -494,12 +568,29 @@ namespace PiiImage
                             int labelIncrement = 1,
                             int* labelCount = 0)
   {
-    QVector<RunList> lstRuns(mat.rows());
     PiiMatrix<int> matLabels(mat.rows(), mat.columns());
+    labelImage(mat, matLabels, rule1, rule2, connectivity, labelIncrement, labelCount);
+    return matLabels;
+  }
+
+  /**
+   * This version writes the labels to a preallocated output image
+   * *labels*. The size of the output image must be the same as the
+   * input, and it must be initialized to zeros.
+   */
+  template <class Matrix, class UnaryOp1, class UnaryOp2>
+  void labelImage(const Matrix& mat,
+                  PiiMatrix<int>& labels,
+                  UnaryOp1 rule1, UnaryOp2 rule2,
+                  Connectivity connectivity,
+                  int labelIncrement = 1,
+                  int* labelCount = 0)
+  {
+    QVector<RunList> lstRuns(mat.rows());
     int iLabelIndex = labelIncrement == 0 ? 1 : 0;
     int iConnectivityShift = connectivity == Connect8 ? 0 : 1;
 
-    LabelInfo info(lstRuns, matLabels, iLabelIndex, iConnectivityShift);
+    LabelInfo info(lstRuns, labels, iLabelIndex, iConnectivityShift);
 
     const int iRows = mat.rows(), iCols = mat.columns();
 
@@ -565,8 +656,6 @@ namespace PiiImage
     // Store return-value parameter if needed
     if (labelCount != 0)
       *labelCount = iLabelIndex;
-
-    return info.matLabels;
   }
 }
 

@@ -334,10 +334,9 @@ public:
 
   /**
    * Called just after the driver has stopped capturing frames. If
-   * state is true the driver has normally stopped capturing. If state
-   * is false, then there was something wrong.
+   * *success* is `true` the driver stopped normally.
    */
-  virtual void captureFinished(bool state);
+  virtual void captureFinished(bool success);
 
   /**
    * Called when an error occurs while capturing images.

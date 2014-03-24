@@ -347,4 +347,47 @@ namespace PiiColors
                PII_LAB_F(fz, whitePoint.xyzZ));
 #undef PII_LAB_F
   }
+
+  template <class Color>
+  void yuv411toRgb(const typename Color::value_type *yuvData, Color* rgbData, int width, int height)
+  {
+    typedef typename Color::value_type T;
+    int y1, y2, y3, y4, u, v;
+    int iDataLen = 6 * width * height / 4;
+    int iRgbIndex = 0;
+
+    for (int i=0; i<iDataLen; i+=6, iRgbIndex+=4)
+      {
+        u = yuvData[i] - 128;
+        y1 = yuvData[i+1];
+        y2 = yuvData[i+2];
+        v = yuvData[i+3] - 128;
+        y3 = yuvData[i+4];
+        y4 = yuvData[i+5];
+
+        yuvToRgb(rgbData[iRgbIndex], y1, u, v);
+        yuvToRgb(rgbData[iRgbIndex+1], y2, u, v);
+        yuvToRgb(rgbData[iRgbIndex+2], y3, u, v);
+        yuvToRgb(rgbData[iRgbIndex+3], y4, u, v);
+      }
+  }
+
+  template <class Color>
+  void yuv422toRgb(const typename Color::value_type *yuvData, Color* rgbData, int width, int height)
+  {
+    int y1, y2, u, v;
+    int iDataLen = 2 * width * height;
+    int iRgbIndex = 0;
+
+    for (int i=0; i<iDataLen; i+=4, iRgbIndex+=2)
+      {
+        y1 = yuvData[i];
+        u = yuvData[i+1] - 128;
+        y2 = yuvData[i+2];
+        v = yuvData[i+3] - 128;
+
+        yuvToRgb(rgbData[iRgbIndex], y1, u, v);
+        yuvToRgb(rgbData[iRgbIndex+1], y2, u, v);
+      }
+  }
 }

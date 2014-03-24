@@ -1241,7 +1241,7 @@ void TestPiiImage::cumulative()
             QCOMPARE(cum(r,c),4);
           else
             {
-              int val = c*4 + 4;	
+              int val = c*4 + 4;
               QCOMPARE(cum(r,c), val);
             }
         }
@@ -1464,6 +1464,50 @@ void TestPiiImage::labelImage()
                       1,1,1,
                       0,1,0);
   QVERIFY(Pii::equals(PiiImage::labelImage(mat7), mat7));
+
+  PiiMatrix<int> mat8(10,10,
+                      2,2,0,1,1,0,4,4,0,3,
+                      2,2,0,1,1,0,4,4,0,3,
+                      0,0,0,1,1,0,4,4,0,3,
+                      1,1,1,1,1,0,4,4,0,3,
+                      1,1,1,1,1,0,4,4,0,3,
+                      0,0,0,0,0,0,4,4,0,3,
+                      4,4,4,4,4,4,4,4,0,3,
+                      4,4,4,4,4,4,4,4,0,3,
+                      0,0,0,0,0,0,0,0,0,3,
+                      3,3,3,3,3,3,3,3,3,3);
+  PiiMatrix<int> matResult(mat8);
+  matResult(matResult == 2) = 0;
+  matResult(matResult == 4) = 2;
+
+  // Find three largest objects
+  QVERIFY(Pii::equals(PiiImage::labelImage(mat8,
+                                           std::bind2nd(std::greater<int>(), 0),
+                                           PiiImage::ObjectSizeLimiter(-3)),
+                      matResult));
+
+  // Test that the correct objects are found with any parameter value
+  // (don't care about actual label values here)
+  QVERIFY(Pii::equals(PiiImage::labelImage(mat8,
+                                           std::bind2nd(std::greater<int>(), 0),
+                                           PiiImage::ObjectSizeLimiter(-4)) > 0,
+                      mat8 > 0));
+  QVERIFY(Pii::equals(PiiImage::labelImage(mat8,
+                                           std::bind2nd(std::greater<int>(), 0),
+                                           PiiImage::ObjectSizeLimiter(-999)) > 0,
+                      mat8 > 0));
+  QVERIFY(Pii::equals(PiiImage::labelImage(mat8,
+                                           std::bind2nd(std::greater<int>(), 0),
+                                           PiiImage::ObjectSizeLimiter(0)) > 0,
+                      mat8 > 0));
+  QVERIFY(Pii::equals(PiiImage::labelImage(mat8,
+                                           std::bind2nd(std::greater<int>(), 0),
+                                           PiiImage::ObjectSizeLimiter(-1)) > 0,
+                      mat8 > 3));
+  QVERIFY(Pii::equals(PiiImage::labelImage(mat8,
+                                           std::bind2nd(std::greater<int>(), 0),
+                                           PiiImage::ObjectSizeLimiter(-2)) > 0,
+                      mat8 > 2));
 }
 
 void TestPiiImage::labelLargerThan()
