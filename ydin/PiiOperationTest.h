@@ -210,6 +210,12 @@ protected:
   bool stop();
 
   /**
+   * Pauses the operation. Returns `true` if the operation paused
+   * within a second, `false` otherwise.
+   */
+  bool pause();
+
+  /**
    * Returns the names of outputs that have received output.
    */
   QStringList outputsWithData() const;
@@ -272,6 +278,7 @@ private:
   void connectInput(PiiAbstractInputSocket* input);
   PiiProbeInput* createProbe(PiiAbstractOutputSocket* output, const QString& name);
   void createProbes();
+  bool sendTag(const PiiVariant& tag);
 
   class Data
   {

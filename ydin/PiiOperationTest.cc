@@ -19,6 +19,7 @@
 #include <PiiSerializableExport.h> // MSVC
 #include <QCoreApplication>
 #include <PiiDelay.h>
+#include <PiiTimer.h>
 #include <QDebug>
 
 PiiOperationTest::Data::Data() :
@@ -101,16 +102,18 @@ bool PiiOperationTest::start(FailMode mode)
       else if (mode == ExpectFail)
         return true;
     }
-  d->pOperation->start();
-  int iCount = 0;
-  while (d->pOperation->state() != PiiOperation::Running && iCount < 5)
+
+  if (d->pOperation->state() != PiiOperation::Paused ||
+      !sendTag(PiiVariant(PiiSocketState())))
+    d->pOperation->start();
+
+  PiiTimer timer;
+  while (d->pOperation->state() != PiiOperation::Running)
     {
       QCoreApplication::processEvents();
-      PiiDelay::msleep(50);
-      ++iCount;
+      if (timer.milliseconds() > 1000)
+        return false;
     }
-  if (iCount == 5)
-    return false;
   return true;
 }
 
@@ -210,28 +213,51 @@ void PiiOperationTest::createProbes()
     }
 }
 
+bool PiiOperationTest::sendTag(const PiiVariant& tag)
+{
+  QList<PiiAbstractInputSocket*> lstInputs(d->pOperation->inputs());
+  bool bConnectedInput = false;
+  for (int i=0; i<lstInputs.size(); ++i)
+    {
+      if (lstInputs[i]->connectedOutput() != 0 && lstInputs[i]->controller() != 0)
+        {
+          lstInputs[i]->controller()->tryToReceive(lstInputs[i], tag);
+          bConnectedInput = true;
+        }
+    }
+  return bConnectedInput;
+}
+
 bool PiiOperationTest::stop()
 {
   if (d->pOperation != 0)
     {
-      QList<PiiAbstractInputSocket*> lstInputs(d->pOperation->inputs());
-      bool bConnectedInput = false;
-      for (int i=0; i<lstInputs.size(); ++i)
-        {
-          if (lstInputs[i]->connectedOutput() != 0 && lstInputs[i]->controller() != 0)
-            {
-              lstInputs[i]->controller()->tryToReceive(lstInputs[i], PiiYdin::createStopTag());
-              bConnectedInput = true;
-            }
-        }
-
-      if (!bConnectedInput)
+      if (!sendTag(PiiYdin::createStopTag()))
         d->pOperation->stop();
 
       if (!d->pOperation->wait(1000))
         {
           d->pOperation->interrupt();
           return d->pOperation->wait(1000);
+        }
+      return true;
+    }
+  return false;
+}
+
+bool PiiOperationTest::pause()
+{
+  if (d->pOperation != 0)
+    {
+      if (!sendTag(PiiYdin::createPauseTag()))
+        d->pOperation->pause();
+
+      PiiTimer timer;
+      while (d->pOperation->state() != PiiOperation::Paused)
+        {
+          QCoreApplication::processEvents();
+          if (timer.milliseconds() > 1000)
+            return false;
         }
       return true;
     }
