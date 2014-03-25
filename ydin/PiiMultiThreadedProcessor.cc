@@ -214,12 +214,12 @@ void PiiMultiThreadedProcessor::threadFinished(PiiMultiProcessorThread* thread)
       startEmit(thread->id());
       if (_pParentOp->state() == PiiOperation::Pausing)
         {
-          _pParentOp->sendTag(PiiYdin::createPauseTag());
+          try { _pParentOp->operationPaused(); } catch (...) {}
           synchronized (_pStateMutex) _pParentOp->setState(PiiOperation::Paused);
         }
       else
         {
-          _pParentOp->sendTag(PiiYdin::createStopTag());
+          try { _pParentOp->operationStopped(); } catch (...) {}
           synchronized (_pStateMutex) _pParentOp->setState(PiiOperation::Stopped);
         }
       endEmit(thread->id());
@@ -344,9 +344,15 @@ void PiiMultiThreadedProcessor::finish(Qt::HANDLE callingThreadId, PiiOperation:
   else
     {
       startEmit(callingThreadId);
-      _pParentOp->sendTag(finalState == PiiOperation::Stopped ?
-                          PiiYdin::createStopTag() :
-                          PiiYdin::createPauseTag()); // may throw
+      try
+        {
+          if (finalState == PiiOperation::Paused)
+            _pParentOp->operationPaused(); // throws
+          else
+            _pParentOp->operationStopped(); // throws
+        }
+      catch (...)
+        {}
       synchronized (_pStateMutex) _pParentOp->setState(finalState);
       endEmit(callingThreadId);
     }

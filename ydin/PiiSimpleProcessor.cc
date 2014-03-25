@@ -231,17 +231,13 @@ void PiiSimpleProcessor::stop(PiiOperation::State finalState)
 
       try
         {
-          _pParentOp->sendTag(finalState == PiiOperation::Stopped ?
-                              PiiYdin::createStopTag() :
-                              PiiYdin::createPauseTag());
+          if (finalState == PiiOperation::Paused)
+            _pParentOp->operationPaused(); // throws
+          else
+            _pParentOp->operationStopped(); // throws
         }
-      catch (PiiExecutionException& ex)
-        {
-          emit _pParentOp->errorOccured(_pParentOp,
-                                        QCoreApplication::translate("PiiDefaultOperation",
-                                                                    "Finishing %1 failed. %2")
-                                        .arg(_pParentOp->metaObject()->className()).arg(ex.message()));
-        }
+      catch (...)
+        {}
     }
   else
     _pStateMutex->unlock();
