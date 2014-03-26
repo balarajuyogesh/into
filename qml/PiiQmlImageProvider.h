@@ -55,6 +55,8 @@ class PiiQmlImageProvider :
 {
   Q_OBJECT
 public:
+  typedef QImage (*Converter)(const PiiVariant& variant);
+
   PiiQmlImageProvider();
   ~PiiQmlImageProvider();
 
@@ -72,6 +74,14 @@ public:
    *   ignored by this function, but forces QML to reload the image.
    */
   QImage requestImage(const QString& slot, QSize* size, const QSize& requestedSize);
+
+  /**
+   * Sets a custom converter function for the given *typeId*.
+   * PiiQmlImageProvider converts [PiiMatrix] instances to QImages.
+   * All other types are passed to a custom converter if such a
+   * converter exists.
+   */
+  static void setConverter(int typeId, Converter converter);
 
 public slots:
   /**
@@ -148,6 +158,9 @@ private slots:
 
 private:
   template <class T> inline QImage matrixToQImage(const PiiVariant& image);
+
+  typedef QMap<int,Converter> ConverterMap;
+  static ConverterMap* converterMap();
 
   struct Slot;
   class Data;

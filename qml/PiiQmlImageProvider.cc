@@ -110,6 +110,12 @@ QImage PiiQmlImageProvider::requestImage(const QString& slot, QSize* size, const
     {
       PII_ALL_IMAGE_CASES(qImage = matrixToQImage, varImage);
     default:
+      {
+        ConverterMap* pMap = converterMap();
+        ConverterMap::iterator it = pMap->find(varImage.type());
+        if (it != pMap->end())
+          return (*it)(varImage);
+      }
       return QImage();
     }
 
@@ -262,4 +268,18 @@ bool PiiQmlImageProvider::storeImage(const QString& slot, const PiiVariant& imag
 void PiiQmlImageProvider::storeImage(const PiiVariant& image, PiiProbeInput* sender)
 {
   storeImage(sender->objectName(), image);
+}
+
+PiiQmlImageProvider::ConverterMap* PiiQmlImageProvider::converterMap()
+{
+  static ConverterMap map;
+  return &map;
+}
+
+void PiiQmlImageProvider::setConverter(int id, Converter converter)
+{
+  if (converter)
+    converterMap()->insert(id, converter);
+  else
+    converterMap()->remove(id);
 }
