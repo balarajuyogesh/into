@@ -71,6 +71,7 @@ void PiiProbeInput::timerEvent(QTimerEvent*)
   d->mutex.lock();
   PiiVariant varSavedObject = d->varSavedObject;
   d->emissionTimer.restart();
+  killTimer(d->iTimerId);
   d->iTimerId = -1;
   d->mutex.unlock();
 
