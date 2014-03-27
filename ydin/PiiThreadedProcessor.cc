@@ -81,11 +81,11 @@ void PiiThreadedProcessor::start()
 
 void PiiThreadedProcessor::interrupt()
 {
-  {
-    QMutexLocker lock(_pStateMutex);
-    if (_pParentOp->state() != PiiOperation::Stopped)
-      _pParentOp->setState(PiiOperation::Interrupted);
-  }
+  synchronized (_pStateMutex)
+    {
+      if (_pParentOp->state() != PiiOperation::Stopped)
+        _pParentOp->setState(PiiOperation::Interrupted);
+    }
 
   // This ensures the signal is handled even if runner is waiting for
   // input.
