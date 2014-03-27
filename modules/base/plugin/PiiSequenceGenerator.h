@@ -112,6 +112,7 @@ private:
   {
   public:
     Data();
+    void checkValue();
     double dSequenceStart;
     double dSequenceEnd;
     double dStep;
@@ -120,7 +121,6 @@ private:
     bool bIntegerOutput;
     double dCurrentValue, dCurrentStep;
     int iCurrentRepeatCount;
-    bool bAutoExit;
   };
   PII_D_FUNC;
 };

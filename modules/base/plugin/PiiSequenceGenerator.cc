@@ -19,9 +19,10 @@
 
 PiiSequenceGenerator::Data::Data() :
   dSequenceStart(0), dSequenceEnd(1), dStep(1),
-  sequenceMode(Repeat), iRepeatCount(0), bIntegerOutput(false)
-{
-}
+  sequenceMode(Repeat), iRepeatCount(0), bIntegerOutput(false),
+  dCurrentValue(0), dCurrentStep(1),
+  iCurrentRepeatCount(0)
+{}
 
 PiiSequenceGenerator::PiiSequenceGenerator() :
   PiiDefaultOperation(new Data)
@@ -39,15 +40,9 @@ void PiiSequenceGenerator::check(bool reset)
   if (reset)
     {
       PII_D;
-      if (d->dSequenceStart > d->dSequenceEnd)
-        PII_THROW(PiiExecutionException, tr("Sequence start (%1) is greater than sequence end (%2).").arg(d->dSequenceStart).arg(d->dSequenceEnd));
-      if (d->dStep > d->dSequenceEnd - d->dSequenceStart)
-        PII_THROW(PiiExecutionException, tr("Sequence step (%1) is larger than sequence length (%2).").arg(d->dStep).arg(d->dSequenceEnd-d->dSequenceStart));
-
       d->dCurrentValue = d->dStep < 0 ? d->dSequenceEnd : d->dSequenceStart;
       d->dCurrentStep = d->dStep;
       d->iCurrentRepeatCount = 0;
-      d->bAutoExit = !inputAt(0)->isConnected() && d->iRepeatCount > 0;
     }
 }
 
@@ -68,7 +63,8 @@ void PiiSequenceGenerator::process()
       (d->dCurrentStep > 0 && d->dCurrentValue > d->dSequenceEnd))
     {
       // Do we need to bail out?
-      if (d->bAutoExit &&
+      if (!inputAt(0)->isConnected() &&
+          d->iRepeatCount > 0 &&
           ++d->iCurrentRepeatCount >= d->iRepeatCount)
         operationStopped();
 
@@ -82,12 +78,38 @@ void PiiSequenceGenerator::process()
     }
 }
 
+void PiiSequenceGenerator::Data::checkValue()
+{
+  dCurrentValue = qBound(dSequenceStart, dCurrentValue, dSequenceEnd);
+}
 
-void PiiSequenceGenerator::setSequenceStart(double sequenceStart) { _d()->dSequenceStart = sequenceStart; }
+void PiiSequenceGenerator::setSequenceStart(double sequenceStart)
+{
+  PII_D;
+  d->dSequenceStart = sequenceStart;
+  if (d->dSequenceEnd < sequenceStart)
+    d->dSequenceEnd = sequenceStart;
+  d->checkValue();
+}
 double PiiSequenceGenerator::sequenceStart() const { return _d()->dSequenceStart; }
-void PiiSequenceGenerator::setSequenceEnd(double sequenceEnd) { _d()->dSequenceEnd = sequenceEnd; }
+void PiiSequenceGenerator::setSequenceEnd(double sequenceEnd)
+{
+  PII_D;
+  d->dSequenceEnd = sequenceEnd;
+  if (d->dSequenceStart > sequenceEnd)
+    d->dSequenceStart = sequenceEnd;
+  d->checkValue();
+}
 double PiiSequenceGenerator::sequenceEnd() const { return _d()->dSequenceEnd; }
-void PiiSequenceGenerator::setStep(double step) { _d()->dStep = step; }
+void PiiSequenceGenerator::setStep(double step)
+{
+  PII_D;
+  if (step > 0)
+    d->dStep = qMin(step, d->dSequenceEnd - d->dSequenceStart);
+  else
+    d->dStep = qMin(-step, d->dSequenceEnd - d->dSequenceStart);
+  d->dCurrentStep = d->dStep;
+}
 double PiiSequenceGenerator::step() const { return _d()->dStep; }
 void PiiSequenceGenerator::setSequenceMode(const SequenceMode& sequenceMode) { _d()->sequenceMode = sequenceMode; }
 PiiSequenceGenerator::SequenceMode PiiSequenceGenerator::sequenceMode() const { return _d()->sequenceMode; }
