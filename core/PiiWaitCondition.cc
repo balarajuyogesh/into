@@ -17,7 +17,7 @@
 
 PiiWaitCondition::PiiWaitCondition(QueueMode mode) :
   _bQueue(mode == Queue), _iWaiters(0), _iWakeSignals(0)
-{ }
+{}
 
 bool PiiWaitCondition::wait(unsigned long time)
 {
@@ -29,13 +29,13 @@ bool PiiWaitCondition::wait(unsigned long time)
     {
       //we are queuing signals -> just decrement by one
       if (_bQueue)
-        _iWakeSignals--;
+        --_iWakeSignals;
       //we just need one signal -> clear the queue
       else
         _iWakeSignals = 0;
       return true;
     }
-  _iWaiters++;
+  ++_iWaiters;
 
   //Unlock the mutex and wait for a signal. The mutex is atomically
   //unlocked at the time this thread enters suspended mode and
@@ -48,7 +48,7 @@ void PiiWaitCondition::wakeOne()
   _mutex.lock();
   //if no thread is waiting, build up a queue
   if (_iWaiters == 0)
-    _iWakeSignals++;
+    ++_iWakeSignals;
   else
     {
       // Somebody is waiting: wake one up
@@ -58,7 +58,7 @@ void PiiWaitCondition::wakeOne()
       // wakeOne() calls may be invoked before wait() finishes.
       // Therefore, the waiter count must be decreased before the
       // wait() call actually returns.
-      _iWaiters--;
+      --_iWaiters;
     }
   _mutex.unlock();
 }
