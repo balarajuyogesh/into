@@ -56,5 +56,5 @@ QString PiiSocket::fullName() const
 
 PiiOperation* PiiSocket::parentOperation() const
 {
-  return Pii::findFirstParent<PiiOperation*>(this);
+  return qobject_cast<PiiOperation*>(parent());
 }

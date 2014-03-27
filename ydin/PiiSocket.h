@@ -62,6 +62,9 @@ public:
    * as separators. The FQN can be passed to the input() or output()
    * function of the topmost enclosing operation (usually a PiiEngine)
    * to get a pointer to this socket.
+   *
+   * If the socket is not directly connected to an operation, this
+   * function returns `objectName()`.
    */
   Q_INVOKABLE QString fullName() const;
 
