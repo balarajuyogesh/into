@@ -26,6 +26,7 @@
 
 #include <QMutex>
 
+class PiiOperationCompound;
 
 /**
  * Declares a virtual piiMetaObject() function and implements a
@@ -356,7 +357,7 @@ public:
    * Returns the parent of this operation, or zero if the operation
    * has no parent operation.
    */
-  Q_INVOKABLE PiiOperation* parentOperation() const;
+  Q_INVOKABLE PiiOperationCompound* parentOperation() const;
 
   /**
    * Returns metadata associated with *socket*. The default

@@ -14,6 +14,7 @@
  */
 
 #include "PiiOperation.h"
+#include "PiiOperationCompound.h"
 #include <PiiUtil.h>
 #include <PiiSerializationFactory.h>
 #include <PiiSerializableExport.h>
@@ -120,15 +121,21 @@ QStringList PiiOperation::outputNames() const
 QString PiiOperation::fullName() const
 {
   QString strName;
-  QList<PiiOperation*> lstParent = Pii::findAllParents<PiiOperation*>(this);
-  for (int i=lstParent.size()-2; i>=0; --i)
-    strName += lstParent[i]->objectName() + '.';
+  const PiiOperationCompound* pParent1 = parentOperation();
+  const PiiOperationCompound* pParent2 = pParent1 ? pParent1->parentOperation() : 0;
+  while (pParent2)
+    {
+      strName.prepend('.');
+      strName.prepend(pParent1->objectName());
+      pParent1 = pParent2;
+      pParent2 = pParent2->parentOperation();
+    }
   return strName + objectName();
 }
 
-PiiOperation* PiiOperation::parentOperation() const
+PiiOperationCompound* PiiOperation::parentOperation() const
 {
-  return qobject_cast<PiiOperation*>(parent());
+  return qobject_cast<PiiOperationCompound*>(parent());
 }
 
 bool PiiOperation::connectOutput(const QString& outputName, PiiAbstractInputSocket* input)
