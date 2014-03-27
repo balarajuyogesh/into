@@ -87,8 +87,14 @@ void PiiDefaultOperation::setThreadCount(int threadCount)
 
   if (isAcceptableThreadCount(threadCount))
     {
-      d->iThreadCount = threadCount;
-      createProcessor();
+      if (d->iThreadCount != threadCount)
+        {
+          // Changing the processor while paused is not possible.
+          if (state() == Paused)
+            d->pProcessor->stop();
+          d->iThreadCount = threadCount;
+          createProcessor();
+        }
     }
 }
 
