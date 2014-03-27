@@ -44,4 +44,24 @@ void TestPiiBits::ror()
   QCOMPARE(Pii::ror((unsigned short)0x11,1),(unsigned short)0x8008);
   QCOMPARE(Pii::ror(0x11u,1),0x80000008u);
 }
+
+void TestPiiBits::lastOneBit()
+{
+  int i = 0;
+  QCOMPARE(Pii::lastOneBit(i), -1);
+  i = 0x10;
+  QCOMPARE(Pii::lastOneBit(i), 4);
+  i = 0x11;
+  QCOMPARE(Pii::lastOneBit(i), 4);
+  i = 0x11;
+  QCOMPARE(Pii::lastOneBit(i), 4);
+  i = 0x3ffff;
+  QCOMPARE(Pii::lastOneBit(i), 17);
+
+  ushort u = 0;
+  QCOMPARE(Pii::lastOneBit(u), -1);
+  u = 0xffff;
+  QCOMPARE(Pii::lastOneBit(u), 15);
+}
+
 QTEST_MAIN(TestPiiBits)

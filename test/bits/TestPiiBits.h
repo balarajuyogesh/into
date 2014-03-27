@@ -25,6 +25,7 @@ class TestPiiBits : public QObject
 private slots:
   void rol();
   void ror();
+  void lastOneBit();
 };
 
 

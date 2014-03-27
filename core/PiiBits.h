@@ -235,6 +235,9 @@ namespace Pii
   template <> inline short signMask() { return SHRT_MIN; }
   template <> inline int signMask() { return INT_MIN; }
   template <> inline long signMask() { return LONG_MIN; }
+  template <> inline ushort signMask() { return SHRT_MIN; }
+  template <> inline uint signMask() { return INT_MIN; }
+  template <> inline ulong signMask() { return LONG_MIN; }
 
   /**
    * Find the index of the first bit set to one. The function returns
@@ -271,6 +274,7 @@ namespace Pii
           return i;
         c <<= 1;
       }
+    return -1;
   }
 
   /**
