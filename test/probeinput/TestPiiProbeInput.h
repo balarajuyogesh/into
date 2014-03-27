@@ -36,6 +36,7 @@ private slots:
 
 private:
   void sendNumbers();
+  void send(const PiiVariant& obj);
 
   PiiProbeInput* _pProbe;
   int _iCount;

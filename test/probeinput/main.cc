@@ -30,9 +30,14 @@ TestPiiProbeInput::TestPiiProbeInput() :
   _pProbe->setParent(this);
 }
 
+void TestPiiProbeInput::send(const PiiVariant& value)
+{
+  QVERIFY(_pProbe->controller()->tryToReceive(0, value));
+}
+
 void TestPiiProbeInput::tryToReceive()
 {
-  QVERIFY(_pProbe->tryToReceive(0, PiiVariant(1)));
+  send(PiiVariant(1));
   QCOMPARE(_iCount, 1);
   QCOMPARE(_varSaved.convertTo<int>(), 1);
 }
@@ -44,12 +49,12 @@ void TestPiiProbeInput::savedObject()
 
 void TestPiiProbeInput::discardControlObjects()
 {
-  QVERIFY(_pProbe->tryToReceive(0, PiiYdin::createStartTag()));
+  send(PiiYdin::createStartTag());
   QCOMPARE(_varSaved.type(), uint(PiiYdin::SynchronizationTagType));
-  QVERIFY(_pProbe->tryToReceive(0, PiiVariant(2)));
+  send(PiiVariant(2));
   QCOMPARE(_iCount, 3);
   _pProbe->setDiscardControlObjects(true);
-  QVERIFY(_pProbe->tryToReceive(0, PiiYdin::createStartTag()));
+  send(PiiYdin::createStartTag());
   QCOMPARE(_iCount, 3);
   QCOMPARE(_varSaved.type(), uint(PiiVariant::IntType));
 }
@@ -76,9 +81,9 @@ void TestPiiProbeInput::signalInterval()
   _pProbe->setSignalInterval(100);
   // Make sure no pending emission will screw us
   PiiDelay::msleep(110);
-  _pProbe->tryToReceive(0, PiiVariant(0));
-  _pProbe->tryToReceive(0, PiiVariant(1));
-  _pProbe->tryToReceive(0, PiiVariant(2));
+  send(PiiVariant(0));
+  send(PiiVariant(1));
+  send(PiiVariant(2));
   QCOMPARE(_iCount, 1);
   _iCount = 0;
   PiiDelay::msleep(110);
@@ -90,7 +95,7 @@ void TestPiiProbeInput::signalInterval()
 void TestPiiProbeInput::sendNumbers()
 {
   for (int i=0; i<1000000; ++i)
-    _pProbe->tryToReceive(0, PiiVariant(i));
+    send(PiiVariant(i));
 }
 
 void TestPiiProbeInput::count(const PiiVariant& obj, PiiProbeInput*)

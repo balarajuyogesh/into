@@ -22,16 +22,24 @@
 
 static int iProbeInputMetaType = qRegisterMetaType<PiiProbeInput*>("PiiProbeInput*");
 
-class PiiProbeInput::Data : public PiiAbstractInputSocket::Data
+class PiiProbeInput::Data :
+  public PiiAbstractInputSocket::Data,
+  public PiiInputController
 {
 public:
-  Data() :
-    PiiAbstractInputSocket::Data(),
+  Data(PiiProbeInput* owner) :
+    q(owner),
     bDiscardControlObjects(false),
     iSignalInterval(0),
     iTimerId(-1)
   {}
 
+  /*
+   * Emits [objectReceived()] and saves the received object.
+   */
+  bool tryToReceive(PiiAbstractInputSocket* sender, const PiiVariant& object) throw ();
+
+  PiiProbeInput* q;
   PiiVariant varSavedObject;
   bool bDiscardControlObjects;
   int iSignalInterval;
@@ -41,14 +49,14 @@ public:
 };
 
 PiiProbeInput::PiiProbeInput(const QString& name) :
-  PiiAbstractInputSocket(name, new Data)
+  PiiAbstractInputSocket(name, new Data(this))
 {
   Q_UNUSED(iProbeInputMetaType);
 }
 
 PiiProbeInput::PiiProbeInput(PiiAbstractOutputSocket* output, const QObject* receiver,
                              const char* slot, Qt::ConnectionType type) :
-  PiiAbstractInputSocket("probe", new Data)
+  PiiAbstractInputSocket("probe", new Data(this))
 {
   connectOutput(output);
   connect(this, SIGNAL(objectReceived(PiiVariant,PiiProbeInput*)), receiver, slot, type);
@@ -69,49 +77,45 @@ void PiiProbeInput::timerEvent(QTimerEvent*)
   emit objectReceived(varSavedObject, this);
 }
 
-bool PiiProbeInput::tryToReceive(PiiAbstractInputSocket*, const PiiVariant& object) throw ()
+bool PiiProbeInput::Data::tryToReceive(PiiAbstractInputSocket*, const PiiVariant& object) throw ()
 {
-  PII_D;
-  if (!(d->bDiscardControlObjects && PiiYdin::isControlType(object.type())))
+  if (!(bDiscardControlObjects && PiiYdin::isControlType(object.type())))
     {
-      d->mutex.lock();
-      d->varSavedObject = object;
+      mutex.lock();
+      varSavedObject = object;
       // Negative interval means no signals whatsoever
-      if (d->iSignalInterval >= 0)
+      if (iSignalInterval >= 0)
         {
           // If enough time has passed since the last emission, emit
           // again.
-          qint64 iElapsed = d->emissionTimer.milliseconds();
-          if (iElapsed >= d->iSignalInterval)
+          qint64 iElapsed = emissionTimer.milliseconds();
+          if (iElapsed >= iSignalInterval)
             {
               // If we had a timer running for a pending emission, kill it
               // now.
-              if (d->iTimerId != -1)
+              if (iTimerId != -1)
                 {
-                  killTimer(d->iTimerId);
-                  d->iTimerId = -1;
+                  q->killTimer(iTimerId);
+                  iTimerId = -1;
                 }
-              d->emissionTimer.restart();
-              d->mutex.unlock();
-              emit objectReceived(object, this);
+              emissionTimer.restart();
+              mutex.unlock();
+              emit q->objectReceived(object, q);
               return true;
             }
           // Oops, too fast. Do we already have a timer running?
-          else if (d->iTimerId == -1)
+          else if (iTimerId == -1)
             {
               // No, start it
-              d->iTimerId = startTimer(d->iSignalInterval - iElapsed, Qt::PreciseTimer);
+              iTimerId = q->startTimer(iSignalInterval - iElapsed, Qt::PreciseTimer);
             }
         }
-      d->mutex.unlock();
+      mutex.unlock();
     }
   return true;
 }
 
-PiiInputController* PiiProbeInput::controller() const
-{
-  return const_cast<PiiProbeInput*>(this);
-}
+PiiInputController* PiiProbeInput::controller() const { return const_cast<Data*>(_d()); }
 
 PiiVariant PiiProbeInput::savedObject() const { return _d()->varSavedObject; }
 void PiiProbeInput::setSavedObject(const PiiVariant& obj) { _d()->varSavedObject = obj; }

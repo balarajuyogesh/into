@@ -26,8 +26,7 @@
  * also saves the last received object.
  */
 class PII_YDIN_EXPORT PiiProbeInput :
-  public PiiAbstractInputSocket,
-  public PiiInputController
+  public PiiAbstractInputSocket
 {
   Q_OBJECT
 
@@ -85,11 +84,6 @@ public:
                 const char* slot, Qt::ConnectionType = Qt::AutoConnection);
 
   ~PiiProbeInput();
-
-  /**
-   * Emits [objectReceived()] and saves the received object.
-   */
-  bool tryToReceive(PiiAbstractInputSocket* sender, const PiiVariant& object) throw ();
 
   PiiVariant savedObject() const;
   void setSavedObject(const PiiVariant& obj);
