@@ -167,12 +167,24 @@ namespace PiiNetwork
     PII_THROW(PiiException, tr("The requested file is too big."));
   }
 
+#ifdef Q_OS_WIN
+  static inline QString fixPath(const QString& path)
+  {
+    return path.startsWith('/') ? path.mid(1) : path;
+  }
+#else
+  static inline const QString& fixPath(const QString& path)
+  {
+    return path;
+  }
+#endif
+
   static void readLocalFile(const QString& name,
                             QIODevice* device,
                             qint64 maxSize,
                             PiiProgressController* controller)
   {
-    QFile file(name);
+    QFile file(fixPath(name));
     if (!file.open(QIODevice::ReadOnly))
       PII_THROW(PiiIOException, tr("Cannot open %1 for reading.").arg(name));
     if (maxSize != 0 && QFileInfo(name).size() > maxSize)
@@ -323,7 +335,7 @@ namespace PiiNetwork
 
   static void writeLocalFile(const QString& fileName, QIODevice* contents, PiiProgressController* controller)
   {
-    QFile f(fileName);
+    QFile f(fixPath(fileName));
     if (!f.open(QIODevice::WriteOnly))
       PII_THROW(PiiNetworkException, tr("%1 is not writable.").arg(fileName));
     if (PiiNetwork::passData(contents, &f, 0, controller) == -1)
@@ -393,7 +405,7 @@ namespace PiiNetwork
 
   static void deleteLocalFile(const QString& path)
   {
-    QFileInfo info(path);
+    QFileInfo info(fixPath(path));
     if (!info.exists())
       PII_THROW_HTTP_ERROR(NotFoundStatus);
 
@@ -440,7 +452,7 @@ namespace PiiNetwork
 
   static void makeLocalDirectory(const QString& path)
   {
-    QDir dir(path);
+    QDir dir(fixPath(path));
     QString strName = dir.dirName();
     dir.cdUp();
     if (!dir.exists())
