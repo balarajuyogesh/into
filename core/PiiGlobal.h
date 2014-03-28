@@ -23,7 +23,7 @@
 
 #include <QtGlobal>
 
-#if defined(_WIN32)
+#if defined(Q_OS_WIN)
 #  define PII_DECL_EXPORT __declspec(dllexport)
 #  define PII_DECL_IMPORT __declspec(dllimport)
 #elif defined(__GNUC__)

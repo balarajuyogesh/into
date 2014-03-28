@@ -16,6 +16,14 @@
 #ifndef _QTGLOBAL_H
 #define _QTGLOBAL_H
 
+#if defined(_WIN32) || defined(__WIN32__) || defined(_MSC_VER)
+#  define Q_OS_WIN
+#elif defined(__APPLE__)
+#  define Q_OS_MAC
+#elif defined(__linux__)
+#  define Q_OS_LINUX
+#endif
+
 inline void qt_noop(void) {}
 
 #define Q_DECLARE_FLAGS(A,B) typedef int A
@@ -37,7 +45,7 @@ typedef short qint16;
 typedef unsigned short quint16;
 typedef int qint32;
 typedef unsigned int quint32;
-#if defined(_WIN32) && !defined(__GNUC__)
+#if defined(Q_OS_WIN) && !defined(__GNUC__)
 typedef __int64 qint64;
 typedef unsigned __int64 quint64;
 #else
