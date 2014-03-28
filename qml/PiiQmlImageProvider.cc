@@ -236,7 +236,8 @@ int PiiQmlImageProvider::updateInterval(const QString& slot) const
 
 bool PiiQmlImageProvider::storeImage(const QString& slot, const PiiVariant& image)
 {
-  if (image.type() member_of<uint> PII_ALL_IMAGE_TYPES)
+  if (image.type() member_of<uint> PII_ALL_IMAGE_TYPES ||
+      image.canConvert(Pii::typeId<QImage>()))
     {
       QMutexLocker lock(&d->slotMutex);
       Slot& s = d->mapSlots[slot];
