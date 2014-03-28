@@ -31,6 +31,8 @@ public:
   SumTestOperation() :
     SuperType(sum, "sum", "a", "b") {}
 
+  void checkSockets();
+
   int defaultB() const { return 10; }
 
   void setDefault() { setDefaultValue("b", &SumTestOperation::defaultB); }
@@ -44,6 +46,8 @@ public:
   typedef PII_FUNCTION_OP_FOR(sum2) SuperType;
   Sum2TestOperation() :
     SuperType(sum2, "a", "b", "sum") {}
+
+  void checkSockets();
 };
 
 #endif
@@ -59,6 +63,7 @@ private slots:
   void sumOperation();
   void sum2Operation();
   void setDefaultValue();
+  void socketAt();
 
 protected:
   void cleanup();

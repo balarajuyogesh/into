@@ -20,6 +20,26 @@
 double sum(double a, int b) { return a + b; }
 void sum2(double a, int b, int* c) { *c = a + b; }
 
+void SumTestOperation::checkSockets()
+{
+  QCOMPARE(socketAt<0>(), outputAt(0));
+  QCOMPARE(socketAt<1>(), inputAt(0));
+  QCOMPARE(socketAt<2>(), inputAt(1));
+  QCOMPARE(socketAt<0>(), output("sum"));
+  QCOMPARE(socketAt<1>(), input("a"));
+  QCOMPARE(socketAt<2>(), input("b"));
+}
+
+void Sum2TestOperation::checkSockets()
+{
+  QCOMPARE(socketAt<0>(), inputAt(0));
+  QCOMPARE(socketAt<1>(), inputAt(1));
+  QCOMPARE(socketAt<2>(), outputAt(0));
+  QCOMPARE(socketAt<0>(), input("a"));
+  QCOMPARE(socketAt<1>(), input("b"));
+  QCOMPARE(socketAt<2>(), output("sum"));
+}
+
 void TestPiiFunctionOperation::initTestCase()
 {
 #ifndef PII_CXX11
@@ -91,6 +111,14 @@ void TestPiiFunctionOperation::setDefaultValue()
   QVERIFY(sendObject("a", 1.0));
   QVERIFY(sendObject("b", 2));
   QCOMPARE(outputValue("sum", 0.0), 3.0);
+}
+
+void TestPiiFunctionOperation::socketAt()
+{
+  SumTestOperation s1;
+  Sum2TestOperation s2;
+  s1.checkSockets();
+  s2.checkSockets();
 }
 
 #endif

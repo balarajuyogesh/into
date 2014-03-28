@@ -20,6 +20,7 @@
 
 #include "PiiDefaultOperation.h"
 #include <PiiFunctional.h>
+#include <PiiMetaTemplate.h>
 #include <type_traits>
 #include <functional>
 #include <tuple>
@@ -372,9 +373,9 @@ namespace PiiFuncOpPrivate
 
   template <class T> struct ValuePack : T
   {
-    template <int I>
+    template <std::size_t I>
     typename std::tuple_element<I,T>::type& at() { return std::get<I>(*this); }
-    template <int I>
+    template <std::size_t I>
     const typename std::tuple_element<I,T>::type& at() const { return std::get<I>(*this); }
   };
 }
@@ -550,6 +551,13 @@ protected:
                           holderPack);
     }
 
+    template <std::size_t I>
+    decltype(std::declval<typename std::tuple_element<I, HolderPack>::type>().pSocket)
+      socketAt() const
+    {
+      return std::get<I>(holderPack).pSocket;
+    }
+
     Function function;
     HolderPack holderPack;
   };
@@ -577,6 +585,22 @@ protected:
     {
       function(pReturnOutput, static_cast<ReturnType*>(nullptr), static_cast<ReturnType*>(nullptr));
       VoidData::forEachSocket(function);
+    }
+
+    template <std::size_t I> struct GetParam
+    {
+      static decltype(std::declval<VoidData>().template socketAt<I>()) call(const VoidData* d) { return d->socketAt<I>(); }
+    };
+    struct GetReturn
+    {
+      static PiiOutputSocket* call(const NonVoidData* d) { return d->pReturnOutput; }
+    };
+
+    template <std::size_t I>
+    decltype(Pii::If<I != 0, GetParam<I-1>, GetReturn>::Type::call(std::declval<const NonVoidData*>()))
+      socketAt() const
+    {
+      return Pii::If<I != 0, GetParam<I-1>, GetReturn>::Type::call(this);
     }
 
     PiiOutputSocket* pReturnOutput;
@@ -696,11 +720,61 @@ protected:
     return typename ParamHolder<T>::Type(getter, name);
   }
 
+  /**
+   * Returns the socket corresponding to the Ith function parameter.
+   * If the function has a return value, it is regarded as the first
+   * parameter. Depending on the type of the parameter, the returned
+   * value is either [PiiInputSocket]* or [PiiOutputSocket]*. The
+   * important difference between this function and e.g.
+   * [PiiBasicOperation::inputAt()] is that this function is evaluated
+   * at compile time and can be inlined.
+   *
+   * ~~~(c++)
+   * void MyDerivedOperation::func()
+   * {
+   *   // If the wrapped function has a return value, this returns the
+   *   // corresponding output socket.
+   *   if (!socketAt<0>()->isConnected())
+   *     qDebug("Output not connected!");
+   * }
+   * ~~~
+   */
+  template <std::size_t I>
+  decltype(std::declval<Data>().template socketAt<I>()) socketAt() const
+  {
+    return _d()->socketAt<I>();
+  }
+
+  /**
+   * Calls the wrapped function.
+   */
   void process()
   {
     process(&ThisType::nullInit);
   }
 
+  /**
+   * Calls the wrapped function, but passes the stack-allocated
+   * function call arguments to *customInit* before the call.
+   *
+   * @param customInit any callable object that takes a `ValuePack&`
+   * as its only argument. The value pack contains all function
+   * parameters (but not the return value) in declaration order.
+   * Parameters can be accessed using the at() function as shown
+   * below.
+   *
+   * ~~~(c++)
+   * void MyDerivedOperation::init(ValuePack& args) // static member
+   * {
+   *   args.at<0>() = 1; // modify first argument
+   * }
+   *
+   * void MyDerivedOperation::process()
+   * {
+   *   SuperType::process(&MyDerivedOperation::init);
+   * }
+   * ~~~
+   */
   template <class InitFunc> void process(InitFunc customInit)
   {
     PII_D;
