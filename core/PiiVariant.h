@@ -458,7 +458,7 @@ public:
   /**
    * Returns `true` if there is a registered converter that can
    * convert this variant to the given type and `false` otherwise.
-   * Note that the conversion may fail even if there is converter
+   * Note that the conversion may fail even if there is a converter
    * available.
    */
   bool canConvert(uint toType) const;
