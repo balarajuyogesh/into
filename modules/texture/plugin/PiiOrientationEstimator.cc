@@ -182,10 +182,10 @@ void PiiOrientationEstimator::estimateGradient(const PiiMatrix<float>& gradientX
 {
   PII_D;
   // Calculate gradient strength and direction
-  PiiMatrix<float> magnitude = gradientX.mapped(Pii::Hypotenuse<float>(), gradientY);
+  PiiMatrix<float> magnitude(gradientX.mapped(Pii::Hypotenuse<float>(), gradientY));
   PiiMatrix<float> direction = d->iAngles < 90 ?
-    gradientY.mapped(Pii::FastestAtan2<float>(), gradientX) : // if 4 dgr accuracy is enough, use a crude approximation
-    gradientY.mapped(Pii::Atan2<float>(), gradientX); // else use pretty good approximation
+    Pii::matrix(gradientY.mapped(Pii::FastestAtan2<float>(), gradientX)) : // if 4 dgr accuracy is enough, use a crude approximation
+    Pii::matrix(gradientY.mapped(Pii::Atan2<float>(), gradientX)); // else use pretty good approximation
 
   // Initialize orientation histogram
   PiiMatrix<float> matResult(1, d->iAngles);

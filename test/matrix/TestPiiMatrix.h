@@ -41,6 +41,8 @@ private slots:
   void submatrix();
   void uninitialized();
   void reserve();
+  void mapped();
+  void map();
 
 private:
   template <class Matrix> void setTo(Matrix& matrix, typename Matrix::value_type value);

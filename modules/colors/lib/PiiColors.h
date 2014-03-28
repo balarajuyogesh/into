@@ -406,7 +406,7 @@ namespace PiiColors
    */
   template <class T> inline PiiMatrix<T> correctGamma(const PiiMatrix<T>& image, double gamma)
   {
-    return image.mapped(CorrectGamma<T>(gamma));
+    return Pii::matrix(image.mapped(CorrectGamma<T>(gamma)));
   }
 
   /**
@@ -418,7 +418,7 @@ namespace PiiColors
    */
   template <class T> inline PiiMatrix<T> correctGamma(const PiiMatrix<T>& image, double gamma, double maximum)
   {
-    return image.mapped(CorrectGammaScaled<T>(gamma, maximum));
+    return Pii::matrix(image.mapped(CorrectGammaScaled<T>(gamma, maximum)));
   }
 
   /**
@@ -511,7 +511,7 @@ namespace PiiColors
    */
   template <class Clr> struct HsvToRgb : Pii::UnaryFunction<Clr>
   {
-    Clr operator() (const Clr& clr) { return hsvToRgb(clr); }
+    Clr operator() (const Clr& clr) const { return hsvToRgb(clr); }
   };
 
   /**
@@ -521,7 +521,7 @@ namespace PiiColors
    */
   template <class Clr> inline PiiMatrix<Clr> rgbToHsv(const PiiMatrix<Clr>& rgbColorImage)
   {
-    return rgbColorImage.mapped(RgbToHsv<Clr>());
+    return Pii::matrix(rgbColorImage.mapped(RgbToHsv<Clr>()));
   }
 
   /**
@@ -531,7 +531,7 @@ namespace PiiColors
    */
   template <class Clr> inline PiiMatrix<Clr> hsvToRgb(const PiiMatrix<Clr>& hsvColorImage)
   {
-    return hsvColorImage.mapped(HsvToRgb<Clr>());
+    return Pii::matrix(hsvColorImage.mapped(HsvToRgb<Clr>()));
   }
 
   /**
@@ -558,7 +558,7 @@ namespace PiiColors
    */
   template <class Clr> inline PiiMatrix<Clr> reverseColors(const PiiMatrix<Clr>& clrImage)
   {
-    return clrImage.mapped(ReverseColors<Clr>());
+    return Pii::matrix(clrImage.mapped(ReverseColors<Clr>()));
   }
 
   /**
@@ -620,7 +620,7 @@ namespace PiiColors
    */
   template <class Clr> inline PiiMatrix<Clr> xyzToLab(const PiiMatrix<Clr>& xyzColorImage, const Clr& whitePoint)
   {
-    return xyzColorImage.mapped(XyzToLab<Clr>(), whitePoint);
+    return Pii::matrix(xyzColorImage.mapped(XyzToLab<Clr>(), whitePoint));
   }
 
   /**
@@ -630,7 +630,7 @@ namespace PiiColors
    */
   template <class Clr> inline PiiMatrix<Clr> labToXyz(const PiiMatrix<Clr>& labColorImage, const Clr& whitePoint)
   {
-    return labColorImage.mapped(LabToXyz<Clr>(), whitePoint);
+    return Pii::matrix(labColorImage.mapped(LabToXyz<Clr>(), whitePoint));
   }
 
   /**
@@ -660,7 +660,7 @@ namespace PiiColors
    */
   template <class Clr> inline PiiMatrix<float> rgbToY709(const PiiMatrix<Clr>& clrImage)
   {
-    return clrImage.mapped(RgbToY709<Clr>());
+    return Pii::matrix(clrImage.mapped(RgbToY709<Clr>()));
   }
 
   /**
@@ -723,7 +723,7 @@ namespace PiiColors
    */
   template <class T> inline PiiMatrix<T> rgbToYpbpr(const PiiMatrix<T>& image)
   {
-    return image.mapped(RgbToYpbpr<T>());
+    return Pii::matrix(image.mapped(RgbToYpbpr<T>()));
   }
 
   /**
@@ -740,7 +740,7 @@ namespace PiiColors
    */
   template <class T> inline PiiMatrix<T> ypbprToRgb(const PiiMatrix<T>& image)
   {
-    return image.mapped(YpbprToRgb<T>());
+    return Pii::matrix(image.mapped(YpbprToRgb<T>()));
   }
 
   /// @internal Rounds and bounds color channels
@@ -828,7 +828,7 @@ namespace PiiColors
   template <class T> inline PiiMatrix<T> rgbToYcbcr(const PiiMatrix<T>& image,
                                                     double maximum = PiiImage::Traits<T>::max())
   {
-    return image.mapped(RgbToYcbcr<T>(maximum));
+    return Pii::matrix(image.mapped(RgbToYcbcr<T>(maximum)));
   }
 
   /**
@@ -850,7 +850,7 @@ namespace PiiColors
   template <class T> inline PiiMatrix<T> ycbcrToRgb(const PiiMatrix<T>& image,
                                                     double maximum = PiiImage::Traits<T>::max())
   {
-    return image.mapped(YcbcrToRgb<T>(maximum));
+    return Pii::matrix(image.mapped(YcbcrToRgb<T>(maximum)));
   }
 
   /**
@@ -886,7 +886,7 @@ namespace PiiColors
   template <class Clr> inline PiiMatrix<PiiColor<float> > genericConversion(const PiiMatrix<Clr>& colorImage,
                                                                             const PiiMatrix<float>& conversionMatrix)
   {
-    return colorImage.mapped(std::bind1st(GenericConversion<Clr>(), conversionMatrix));
+    return Pii::matrix(colorImage.mapped(std::bind1st(GenericConversion<Clr>(), conversionMatrix)));
   }
 
   template <class Color>

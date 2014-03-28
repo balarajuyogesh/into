@@ -51,7 +51,7 @@ namespace PiiImage
    * // mat = 0 0 0 0 1 1 1 1 1
    *
    * const PiiMatrix<int> mat2(1,9,1,2,3,4,5,6,7,8,9);
-   * PiiMatrix<bool> binary = mat2.mapped(PiiImage::ThresholdFunction<int,bool>(), 5);
+   * PiiMatrix<bool> binary(mat2.mapped(PiiImage::ThresholdFunction<int,bool>(), 5));
    *
    * // binary = 0 0 0 0 1 1 1 1 1
    * ~~~

@@ -53,6 +53,8 @@ namespace Pii
 }
 
 template <class Matrix> struct PiiMatrixTraits;
+template <class Matrix, class UnaryFunction> class PiiUnaryMatrixTransform;
+template <class Matrix1, class Matrix2, class BinaryFunction> class PiiBinaryMatrixTransform;
 
 #define PII_MATRIX_SCALAR_ASSIGNMENT_OPERATOR(OPERATOR, FUNCTION) \
 Derived& operator OPERATOR ## = (typename PiiMatrixTraits<Derived>::value_type value) \
@@ -296,6 +298,62 @@ public:
     return selfRef();
   }
 
+  /**
+   * Applies the *adaptable binary function* `op` to all
+   * elements of this matrix and the corresponding elements in
+   * *other*. The matrices must be of equal size. The result is returned
+   * in a new matrix. For example, to explicitly apply the addition
+   * operation, do this:
+   *
+   * ~~~(c++)
+   * PiiMatrix<int> a, b;
+   * PiiMatrix<int> c(a.mapped(std::plus<int>(), b));
+   * ~~~
+   *
+   * @exception PiiMathException& if this matrix is not equal to
+   * *other* in size.
+   */
+  template <class BinaryFunc, class Matrix>
+  PiiBinaryMatrixTransform<Derived, Matrix, BinaryFunc>
+  mapped(BinaryFunc op, const PiiConceptualMatrix<Matrix>& other) const;
+
+  /**
+   * Applies a binary function to all elements of this matrix and the
+   * scalar *value*. The result is returned in a new matrix. An
+   * example:
+   *
+   * ~~~(c++)
+   * PiiMatrix<int> a;
+   * PiiMatrix<int> c(a.mapped(std::plus<int>(), 5));
+   * ~~~
+   */
+  template <class BinaryFunc>
+  PiiUnaryMatrixTransform<Derived, std::binder2nd<BinaryFunc> >
+  mapped(BinaryFunc op, typename BinaryFunc::second_argument_type value) const;
+
+  /**
+   * Creates a matrix that contains the result of applying a unary
+   * function to all elements in this matrix. For example, to create a
+   * negation of a matrix, do the following:
+   *
+   * ~~~(c++)
+   * PiiMatrix<int> a;
+   * PiiMatrix<int> b(a.mapped(std::negate<int>());
+   *
+   * // Different result type (convert complex numbers to real numbers)
+   * PiiMatrix<std::complex<float> > a;
+   * PiiMatrix<float> b(a.mapped(Pii::Abs<std::complex<float> >()));
+   * ~~~
+   */
+  template <class UnaryFunc>
+  PiiUnaryMatrixTransform<Derived, UnaryFunc> mapped(UnaryFunc op) const;
+
+  template <class T>
+  PiiUnaryMatrixTransform<Derived, Pii::Cast<value_type,T> > cast() const
+  {
+    return mapped(Pii::Cast<value_type,T>());
+  }
+
 protected:
   void fixIndices(int &r, int &c, int &rows, int &columns) const
   {
@@ -324,7 +382,6 @@ PiiSubmatrix<Derived> PiiConceptualMatrix<Derived>::operator() (int r, int c, in
 }
 
 
-template <class Matrix, class UnaryFunction> class PiiUnaryMatrixTransform;
 template <class Matrix, class UnaryFunction>
 struct PiiMatrixTraits<PiiUnaryMatrixTransform<Matrix, UnaryFunction> >
 {
@@ -409,7 +466,6 @@ private:
   UnaryFunction _func;
 };
 
-template <class Matrix1, class Matrix2, class BinaryFunction> class PiiBinaryMatrixTransform;
 template <class Matrix1, class Matrix2, class BinaryFunction>
 struct PiiMatrixTraits<PiiBinaryMatrixTransform<Matrix1, Matrix2, BinaryFunction> >
 {
@@ -536,6 +592,28 @@ namespace Pii
 }
 
 /// @hide
+template <class Derived> template <class UnaryFunc>
+PiiUnaryMatrixTransform<Derived, UnaryFunc>
+PiiConceptualMatrix<Derived>::mapped(UnaryFunc func) const
+{
+  return Pii::unaryMatrixTransform(selfRef(), func);
+}
+
+template <class Derived> template <class BinaryFunc>
+PiiUnaryMatrixTransform<Derived, std::binder2nd<BinaryFunc> >
+PiiConceptualMatrix<Derived>::mapped(BinaryFunc func, typename BinaryFunc::second_argument_type value) const
+{
+  return Pii::unaryMatrixTransform(selfRef(), std::bind2nd(func, value));
+}
+
+template <class Derived> template <class BinaryFunc, class Matrix>
+PiiBinaryMatrixTransform<Derived, Matrix, BinaryFunc>
+PiiConceptualMatrix<Derived>::mapped(BinaryFunc func, const PiiConceptualMatrix<Matrix>& matrix) const
+{
+  PII_MATRIX_CHECK_EQUAL_SIZE(selfRef(), matrix);
+  return Pii::binaryMatrixTransform(selfRef(), matrix.selfRef(), func);
+}
+
 #define PII_COMBINE_TYPES(T,U) typename Pii::Combine<T,U>::Type
 
 // For operators like operator- () and operator! ()

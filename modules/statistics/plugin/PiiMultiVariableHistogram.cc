@@ -117,9 +117,9 @@ void PiiMultiVariableHistogram::setInputCount(int cnt)
 
 template <class T> PiiMatrix<int> PiiMultiVariableHistogram::scale(const PiiVariant& obj, double factor)
 {
-  return obj.valueAs<PiiMatrix<T> >().mapped(Pii::unaryCompose(Pii::Round<int>(),
-                                                               std::bind2nd(std::multiplies<double>(),
-                                                                            factor)));
+  return Pii::matrix(obj.valueAs<PiiMatrix<T> >().mapped(Pii::unaryCompose(Pii::Round<int>(),
+                                                                           std::bind2nd(std::multiplies<double>(),
+                                                                                        factor))));
 }
 
 void PiiMultiVariableHistogram::process()
@@ -188,8 +188,8 @@ void PiiMultiVariableHistogram::process()
     marginalHistograms(lstMatrices, iRows, iColumns, &matResult);
 
   if (d->bNormalized)
-    d->pHistogramOutput->emitObject(matResult.mapped(std::bind2nd(std::multiplies<double>(),
-                                                                  1.0 / Pii::sum<double>(matResult))));
+    d->pHistogramOutput->emitObject(Pii::matrix(matResult.mapped(std::bind2nd(std::multiplies<double>(),
+                                                                              1.0 / Pii::sum<double>(matResult)))));
   else
     d->pHistogramOutput->emitObject(matResult);
 }

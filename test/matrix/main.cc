@@ -922,4 +922,36 @@ void TestPiiMatrix::reserve()
   QCOMPARE(mat2.rows(), 1);
 }
 
+void TestPiiMatrix::mapped()
+{
+  PiiMatrix<int> mat(3, 3,
+                     1, 2, 3,
+                     4, 5, 6,
+                     7, 8, 9);
+  QVERIFY(Pii::equals(mat.cast<double>(),
+                      PiiMatrix<double>(3, 3,
+                                        1., 2., 3.,
+                                        4., 5., 6.,
+                                        7., 8., 9.)));
+  QVERIFY(Pii::equals(mat.mapped(std::plus<int>(), 1),
+                      PiiMatrix<int>(3, 3,
+                                     2, 3, 4,
+                                     5, 6, 7,
+                                     8, 9, 10)));
+  QVERIFY(Pii::equals(mat.mapped(std::plus<int>(), 2).mapped(std::minus<int>(), 2), mat));
+  QVERIFY(Pii::equals(mat.mapped(std::minus<int>(), mat), PiiMatrix<int>(3,3)));
+
+}
+void TestPiiMatrix::map()
+{
+  PiiMatrix<int> mat(3, 3,
+                     1, 2, 3,
+                     4, 5, 6,
+                     7, 8, 9);
+  mat.map(std::plus<int>(), mat);
+  mat.map(std::minus<int>(), mat);
+  mat.map(std::plus<int>(), 1);
+  QVERIFY(Pii::equals(mat, PiiMatrix<int>::constant(3,3, 1)));
+}
+
 QTEST_MAIN(TestPiiMatrix)

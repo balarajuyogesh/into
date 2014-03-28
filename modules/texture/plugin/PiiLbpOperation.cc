@@ -373,8 +373,8 @@ void PiiLbpOperation::AnyLbp::normalize()
         const PiiMatrix<int>& matHistogram = vecResults[i].valueAs<PiiMatrix<int> >();
         float fPixelCount = Pii::sum<int>(matHistogram);
         if (fPixelCount > 0)
-          vecResults[i] = PiiVariant(matHistogram.mapped(std::bind2nd(std::multiplies<float>(),
-                                                                      1.0f / fPixelCount)));
+          vecResults[i] = PiiVariant(Pii::matrix(matHistogram.mapped(std::bind2nd(std::multiplies<float>(),
+                                                                                  1.0f / fPixelCount))));
       }
 }
 

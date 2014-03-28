@@ -93,7 +93,7 @@ template <class S> void PiiFftOperation::Template<T>::operateForward(const PiiVa
   const PiiMatrix<S>& image = obj.valueAs<PiiMatrix<S> >();
 
   ResultType result = d->bSubtractMean ?
-    d->fft.forwardFft(image.mapped(std::minus<FloatType>(), Pii::mean<FloatType>(image))) :
+    d->fft.forwardFft(Pii::matrix(image.mapped(std::minus<FloatType>(), Pii::mean<FloatType>(image)))) :
     d->fft.forwardFft(image);
 
   if (d->bShift)
@@ -102,7 +102,7 @@ template <class S> void PiiFftOperation::Template<T>::operateForward(const PiiVa
   emitObject(result);
 
   if (d->bPowerSpectrumConnected)
-    emitObject(result.mapped(Pii::AbsPow<std::complex<T> >(), 2), 1);
+    emitObject(Pii::matrix(result.mapped(Pii::AbsPow<std::complex<T> >(), 2)), 1);
 }
 
 template <class T>

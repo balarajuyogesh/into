@@ -24,12 +24,12 @@ namespace PiiImage
 {
   template <class T> struct TophatFunction : public Pii::BinaryFunction<T>
   {
-    T operator() (T firstValue, T secondValue) { return bool(secondValue) - bool(firstValue); }
+    T operator() (T firstValue, T secondValue) const { return bool(secondValue) - bool(firstValue); }
   };
 
   template <class T> struct BottomhatFunction : public Pii::BinaryFunction<T>
   {
-    T operator() (T firstValue, T secondValue) { return bool(firstValue) - bool(secondValue); }
+    T operator() (T firstValue, T secondValue) const { return bool(firstValue) - bool(secondValue); }
   };
 
 
@@ -464,7 +464,7 @@ namespace PiiImage
     typedef typename Matrix::value_type T;
     if (amount == 1)
       // Subtract border from original image
-      return image.mapped(BottomhatFunction<T>(), border(image));
+      return Pii::matrix(image.mapped(BottomhatFunction<T>(), border(image)));
     else
       {
         PiiMatrix<T> result(image);

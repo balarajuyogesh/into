@@ -67,8 +67,8 @@ void PiiHistogramCollector::emitHistogram()
   if (!d->bNormalized)
     outputAt(1)->emitObject(d->matHistogram);
   else
-    outputAt(1)->emitObject(d->matHistogram.mapped(std::multiplies<float>(),
-                                                   1.0 / Pii::sum<int>(d->matHistogram)));
+    outputAt(1)->emitObject(Pii::matrix(d->matHistogram.mapped(std::multiplies<float>(),
+                                                               1.0 / Pii::sum<int>(d->matHistogram))));
   outputAt(2)->emitObject(d->matX);
 }
 

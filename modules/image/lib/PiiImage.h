@@ -372,7 +372,7 @@ namespace PiiImage
    */
   template <class T> PiiMatrix<float> gradientDirection(const PiiMatrix<T>& gradX, const PiiMatrix<T>& gradY)
   {
-    return gradY.mapped(Pii::FastAtan2<T>(), gradX);
+    return Pii::matrix(gradY.mapped(Pii::FastAtan2<T>(), gradX));
   }
 
   /**
@@ -401,8 +401,8 @@ namespace PiiImage
   template <class T> PiiMatrix<T> gradientMagnitude(const PiiMatrix<T>& gradX, const PiiMatrix<T>& gradY, bool fast = true)
   {
     if (fast)
-      return gradX.mapped(Pii::AbsSum<T>(), gradY);
-    return gradX.mapped(Pii::Hypotenuse<T>(), gradY);
+      return Pii::matrix(gradX.mapped(Pii::AbsSum<T>(), gradY));
+    return Pii::matrix(gradX.mapped(Pii::Hypotenuse<T>(), gradY));
   }
 
   /**

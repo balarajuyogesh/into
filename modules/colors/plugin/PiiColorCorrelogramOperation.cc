@@ -112,8 +112,8 @@ template <class T> void PiiColorCorrelogramOperation::processGray(const PiiVaria
   if (d->bQuantize)
     {
       double dScale = double(d->iLevels) / PiiImage::Traits<T>::max();
-      d->pOutput->emitObject(PiiColors::autocorrelogram(img.mapped(Pii::unaryCompose(Pii::Round<T>(),
-                                                                                     std::bind2nd(std::multiplies<double>(), dScale))),
+      d->pOutput->emitObject(PiiColors::autocorrelogram(Pii::matrix(img.mapped(Pii::unaryCompose(Pii::Round<T>(),
+                                                                                                 std::bind2nd(std::multiplies<double>(), dScale)))),
                                                         d->lstDistances,
                                                         d->iLevels));
     }

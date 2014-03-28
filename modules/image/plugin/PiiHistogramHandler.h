@@ -98,8 +98,8 @@ void PiiGrayHistogramHandler<T>::operator() (const PiiMatrix<T>& image, const Ro
 template <class T> void PiiGrayHistogramHandler<T>::normalize()
 {
   if (iPixelCount != 0)
-    varHistogram = PiiVariant(varHistogram.valueAs<const PiiMatrix<int> >()
-                              .mapped(std::multiplies<float>(), 1.0 / iPixelCount));
+    varHistogram = PiiVariant(Pii::matrix(varHistogram.valueAs<const PiiMatrix<int> >()
+                                          .mapped(std::multiplies<float>(), 1.0 / iPixelCount)));
 }
 
 template <class T> void PiiGrayHistogramHandler<T>::initialize(int levels, bool normalized)
@@ -142,8 +142,8 @@ template <class Clr> void PiiColorHistogramHandler<Clr>::normalize()
   if (iPixelCount != 0)
     for (int i=0; i<3; ++i)
       if (baCalculate[i])
-        varHistograms[i] = PiiVariant(varHistograms[i].valueAs<const PiiMatrix<int> >()
-                                      .mapped(std::multiplies<float>(), 1.0 / iPixelCount));
+        varHistograms[i] = PiiVariant(Pii::matrix(varHistograms[i].valueAs<const PiiMatrix<int> >()
+                                                  .mapped(std::multiplies<float>(), 1.0 / iPixelCount)));
 }
 
 template <class Clr> void PiiColorHistogramHandler<Clr>::initialize(int levels, bool normalized)

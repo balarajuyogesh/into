@@ -153,11 +153,13 @@ template <class T> void PiiThresholdingOperation::threshold(const PiiMatrix<T>& 
           {
             double otherThreshold = d->dAbsoluteThreshold + d->dRelativeThreshold;
             if (!d->bInverse)
-              d->pBinaryImageOutput->emitObject(image.mapped(PiiImage::TwoLevelThresholdFunction<T>(T(qMin(d->dAbsoluteThreshold, otherThreshold)),
-                                                                                                    T(qMax(d->dAbsoluteThreshold, otherThreshold)))));
+              d->pBinaryImageOutput->emitObject(Pii::matrix(image.mapped(
+                PiiImage::TwoLevelThresholdFunction<T>(T(qMin(d->dAbsoluteThreshold, otherThreshold)),
+                                                       T(qMax(d->dAbsoluteThreshold, otherThreshold))))));
             else
-              d->pBinaryImageOutput->emitObject(image.mapped(PiiImage::InverseTwoLevelThresholdFunction<T>(T(qMin(d->dAbsoluteThreshold, otherThreshold)),
-                                                                                                           T(qMax(d->dAbsoluteThreshold, otherThreshold)))));
+              d->pBinaryImageOutput->emitObject(Pii::matrix(image.mapped(
+                PiiImage::InverseTwoLevelThresholdFunction<T>(T(qMin(d->dAbsoluteThreshold, otherThreshold)),
+                                                              T(qMax(d->dAbsoluteThreshold, otherThreshold))))));
           }
           d->pThresholdOutput->emitObject(d->dAbsoluteThreshold);
           return;
