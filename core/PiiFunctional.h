@@ -519,6 +519,18 @@ namespace Pii
     return BuildIndices<sizeof...(TupleArgs)>{};
   }
 
+  template <std::size_t N, std::size_t... Indices>
+  struct BuildReverseIndices : BuildReverseIndices<N-1, Indices..., N-1> {};
+
+  template <std::size_t... Indices>
+  struct BuildReverseIndices<0, Indices...> : IndexList<Indices...> {};
+
+  template <class... TupleArgs, class... Args>
+  BuildReverseIndices<sizeof...(TupleArgs)> buildReverseIndices(const std::tuple<TupleArgs...>&, Args&&...)
+  {
+    return BuildReverseIndices<sizeof...(TupleArgs)>{};
+  }
+
   template <std::size_t... Indices>
   IndexList<Indices...> indexList(IndexList<Indices...>);
 
@@ -626,8 +638,16 @@ namespace Pii
   inline void callWithTuples(Function function,
                              Tuples&&... tuples)
   {
+    /* Work around a GCC bug
+       http://gcc.gnu.org/bugzilla/show_bug.cgi?id=51253
+       TODO: replace with a GCC version check once the bug is fixed
+    */
     callWithIndexedTuples(function,
+#ifdef __GNUC__
+                          buildReverseIndices(std::forward<Tuples>(tuples)...),
+#else
                           buildIndices(std::forward<Tuples>(tuples)...),
+#endif
                           std::forward<Tuples>(tuples)...);
   }
 
