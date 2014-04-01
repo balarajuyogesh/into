@@ -351,7 +351,6 @@ namespace PiiColors
   template <class Color>
   void yuv411toRgb(const typename Color::value_type *yuvData, Color* rgbData, int width, int height)
   {
-    typedef typename Color::value_type T;
     int y1, y2, y3, y4, u, v;
     int iDataLen = 6 * width * height / 4;
     int iRgbIndex = 0;
