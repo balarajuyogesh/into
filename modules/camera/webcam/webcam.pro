@@ -4,6 +4,8 @@ include(../../module.pri)
 TARGET = piiwebcamdriver
 DEFINES += PII_BUILD_WEBCAMDRIVER
 
+SOURCES += *.cc
+
 # Webcam driver for Linux
 unix {
     HEADERS       += linux/*.h
