@@ -380,7 +380,7 @@ QVariant PiiOperation::metaProperty(const QString& propertyName, const QString& 
 QVariantMap PiiOperation::metaProperties(const QString& propertyName) const
 {
   if (d->pmapMetaPropertyCache ||
-      (d->pmapMetaPropertyCache == createMetaPropertyCache(metaObject())))
+      (d->pmapMetaPropertyCache = createMetaPropertyCache(metaObject())))
     {
       QMap<QString,QVariantMap>::const_iterator it = d->pmapMetaPropertyCache->find(propertyName);
       if (it != d->pmapMetaPropertyCache->end())
