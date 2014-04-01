@@ -145,21 +145,21 @@ namespace PiiImage
    * // mat = 0 0 0 0 1 1 1 0 0
    * ~~~
    */
-  template <class T, class U = T> class TwoLevelThresholdFunction : public Pii::BinaryFunction<T,T,U>
+  template <class V, class R = V, class T = V> class TwoLevelThresholdFunction :
+    public Pii::UnaryFunction<V,R>
   {
   public:
     /**
-     * Contruct a two-level threshold function that requires returns
-     * one iff the input value is between the given two values
-     * (inclusive).
+     * Contruct a two-level threshold function that returns one iff
+     * the input value is between the given two values (inclusive).
      */
-    TwoLevelThresholdFunction(T lowThreshold, T highThreshold, U value=1) :
+    TwoLevelThresholdFunction(T lowThreshold, T highThreshold, R value=1) :
       _lowThreshold(lowThreshold), _highThreshold(highThreshold), _value(value) {}
-    U operator() (T value) const { return value >= _lowThreshold && value <= _highThreshold ? _value : U(0); }
+    R operator() (V value) const { return value >= _lowThreshold && value <= _highThreshold ? _value : R(0); }
 
   private:
     T _lowThreshold, _highThreshold;
-    U _value;
+    R _value;
   };
 
   /**
@@ -173,7 +173,8 @@ namespace PiiImage
    * // mat = 1 1 1 1 0 0 0 1 1
    * ~~~
    */
-  template <class T, class U = T> class InverseTwoLevelThresholdFunction : public Pii::BinaryFunction<T,T,U>
+  template <class V, class R = V, class T = V> class InverseTwoLevelThresholdFunction :
+    public Pii::UnaryFunction<V,R>
   {
   public:
     /**
@@ -181,13 +182,13 @@ namespace PiiImage
      * zero iff the input value is between the given two values
      * (inclusive).
      */
-    InverseTwoLevelThresholdFunction(T lowThreshold, T highThreshold, U value=1) :
+    InverseTwoLevelThresholdFunction(T lowThreshold, T highThreshold, R value=1) :
       _lowThreshold(lowThreshold), _highThreshold(highThreshold), _value(value) {}
-    U operator() (T value) const { return value >= _lowThreshold && value <= _highThreshold ? U(0) : _value; }
+    R operator() (V value) const { return value >= _lowThreshold && value <= _highThreshold ? R(0) : _value; }
 
   private:
     T _lowThreshold, _highThreshold;
-    U _value;
+    R _value;
   };
 
   /**
