@@ -85,8 +85,8 @@ void PiiCameraDriver::setListener(Listener* listener) { d->pListener = listener;
 PiiCameraDriver::Listener* PiiCameraDriver::listener() const { return d->pListener; }
 
 PiiCameraDriver::Listener::~Listener() {}
-void PiiCameraDriver::Listener::frameCaptured(int /*frameIndex*/, void* /*frameBuffer*/, qint64 /*elapsedTime*/) {}
-void PiiCameraDriver::Listener::framesMissed(int /*startIndex*/, int /*endIndex*/) {}
+void PiiCameraDriver::Listener::frameCaptured(uint /*frameIndex*/, void* /*frameBuffer*/, qint64 /*elapsedTime*/) {}
+void PiiCameraDriver::Listener::framesMissed(uint /*startIndex*/, uint /*endIndex*/) {}
 void PiiCameraDriver::Listener::captureFinished(bool /*state*/) {}
 void PiiCameraDriver::Listener::captureError(const QString& /*message*/) {}
 

@@ -243,7 +243,7 @@ public:
    *
    * @return the frame buffer's memory address
    */
-  virtual void* frameBuffer(int frameIndex = 0) const = 0;
+  virtual void* frameBuffer(uint frameIndex = 0) const = 0;
 
   /**
    * Sets the listener that handles received image frames.
@@ -309,7 +309,7 @@ public:
    * previous frame. Zero (the default value) means that the driver
    * can't measure the time.
    */
-  virtual void frameCaptured(int frameIndex, void *frameBuffer = 0, qint64 elapsedTime = 0);
+  virtual void frameCaptured(uint frameIndex, void *frameBuffer = 0, qint64 elapsedTime = 0);
 
   /**
    * Called when the driver notices that the receiver cannot process
@@ -330,7 +330,7 @@ public:
    * avoid trouble, it is best not to access the driver from the
    * implementation of this function. You have been warned.
    */
-  virtual void framesMissed(int startIndex, int endIndex);
+  virtual void framesMissed(uint startIndex, uint endIndex);
 
   /**
    * Called just after the driver has stopped capturing frames. If

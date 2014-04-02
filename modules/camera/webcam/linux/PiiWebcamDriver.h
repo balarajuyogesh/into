@@ -40,17 +40,17 @@ class PII_WEBCAMDRIVER_EXPORT PiiWebcamDriver : public PiiCameraDriver
   Q_OBJECT
 
   /**
-   * The size of the frame buffer.
+   * The number of buffers in the frame buffer ring.
    */
   Q_PROPERTY(int frameBufferCount READ frameBufferCount WRITE setFrameBufferCount);
 
   /**
-   * Set frameRect. QRect(x y width height).
+   * The size of an image frame.
    */
   Q_PROPERTY(QRect frameRect READ frameRect WRITE setFrameRect);
 
   /**
-   * frameSizes description
+   * Supported frame sizes.
    */
   Q_PROPERTY(QVariantList frameSizes READ frameSizes);
 
@@ -70,7 +70,7 @@ public:
   bool close();
   bool startCapture(int frames);
   bool stopCapture();
-  void* frameBuffer(int frameIndex) const;
+  void* frameBuffer(uint frameIndex) const;
   bool isOpen() const;
   bool isCapturing() const;
   bool triggerImage();
@@ -84,16 +84,16 @@ public:
   QSize resolution() const;
 
   int frameBufferCount() const;
-  QRect frameRect() const;
-
   bool setFrameBufferCount(int frameBufferCount);
+
+  QRect frameRect() const;
   bool setFrameRect(const QRect& frameRect);
   QVariantList frameSizes() const;
 
+private slots:
+  void deleteCaptureThread();
 private:
-  int frameIndex(int frameIndex) const;
   void capture();
-  void stopCapturing();
 
   bool requiresInitialization(const char* name) const;
 
@@ -102,16 +102,16 @@ private:
   int readIntValue(const char* name, int defaultValue = 0, bool *ok = 0) const;
 
   // v4l-functions
-  void grabFrame(int fd, void **buffer, int timeout);
+  bool grabFrame(int fd, void **buffer, int timeout);
   bool requeueBuffers(int fd);
-  bool startAcquisition(int fd);
-  bool stopAcquisition(int fd);
+  bool startVideoStream(int fd);
+  bool stopVideoStream(int fd);
   bool registerFrameBuffers(int fd);
   bool deregisterFrameBuffers();
 
   QFile _fileDevice;
   QStringList _lstCriticalProperties;
-  bool _bOpen, _bCapturingRunning;
+  bool _bOpen;
   QString _strBaseDir, _strCameraId, _strDevice;
 
   struct WebcamBuffer
@@ -125,9 +125,9 @@ private:
   QVector<v4l2_buffer> _vecReservedBuffers;
   QVector<void*> _vecBufferPointers;
 
-  QThread *_pCapturingThread;
-  QMutex _frameBufMutex;
-  unsigned int _iFrameIndex;
+  QThread *_pCaptureThread;
+  QMutex _captureMutex;
+  unsigned int _uiFrameIndex;
   int _iMaxFrames, _iHandledFrameCount;
   PiiWaitCondition _triggerWaitCondition;
   PiiCameraDriver::TriggerMode _triggerMode;

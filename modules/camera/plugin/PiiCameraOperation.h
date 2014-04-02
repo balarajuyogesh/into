@@ -89,8 +89,8 @@ public:
   void stop();
 
   // Listener functions
-  void frameCaptured(int frameIndex, void *frameBuffer, qint64 elapsedTime);
-  void framesMissed(int startIndex, int endIndex);
+  void frameCaptured(uint frameIndex, void *frameBuffer, qint64 elapsedTime);
+  void framesMissed(uint startIndex, uint endIndex);
   void captureFinished(bool state);
   void captureError(const QString& message);
 

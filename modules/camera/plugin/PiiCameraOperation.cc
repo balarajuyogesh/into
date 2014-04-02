@@ -165,7 +165,7 @@ void PiiCameraOperation::stop()
   d->pauseWaitCondition.wakeAll();
 }
 
-void PiiCameraOperation::frameCaptured(int frameIndex, void *frameBuffer, qint64 elapsedTime)
+void PiiCameraOperation::frameCaptured(uint frameIndex, void *frameBuffer, qint64 elapsedTime)
 {
   PII_D;
 
@@ -431,7 +431,7 @@ QString PiiCameraOperation::cameraId() const
   return _d()->strCameraId;
 }
 
-void PiiCameraOperation::framesMissed(int /*startIndex*/, int endIndex)
+void PiiCameraOperation::framesMissed(uint /*startIndex*/, uint endIndex)
 {
   PII_D;
   d->iMaxMissedIndex = endIndex;

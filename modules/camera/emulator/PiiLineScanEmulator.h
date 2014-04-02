@@ -169,7 +169,7 @@ public:
   bool close();
   bool startCapture(int frames);
   bool stopCapture();
-  void* frameBuffer(int frameIndex) const;
+  void* frameBuffer(uint frameIndex) const;
   bool isOpen() const;
   bool isCapturing() const;
   bool triggerImage();
@@ -185,7 +185,7 @@ public:
   bool setTriggerRate(double triggerRate);
   bool setFrameSize(const QSize& frameSize);
   bool setFrameRect(const QRect& frameRect);
-  bool setFrameBufferCount(int frameBufferCount) { _iFrameBufferCount = frameBufferCount; return true; }
+  bool setFrameBufferCount(int frameBufferCount);
   bool setDefectImagePattern(const QString& defectImagePattern) { _strDefectImagePattern = defectImagePattern; return true; }
   bool setDefectProbability(double defectProbability)
   {

@@ -57,24 +57,25 @@ IPin* getPin(IBaseFilter *filter, PIN_DIRECTION direction, int num)
   return pRetPin;
 }
 
-PiiWebcamDriver::PiiWebcamDriver() : _bInitialized(false),
-                                     _pGraphBuilder(0),
-                                     _pMediaControl(0),
-                                     _pMediaEvent(0),
-                                     _pSourceFilter(0),
-                                     _pSourceFilterOut(0),
-                                     _pStreamConfig(0),
-                                     _pCallback(0),
-                                     _resolution(0,0),
-                                     _frameSize(0,0),
-                                     _imageFormat(PiiCamera::InvalidFormat),
-                                     _bOpen(false),
-                                     _bCapturingRunning(false),
-                                     _strCameraId(""),
-                                     _pCapturingThread(0),
-                                     _iFrameIndex(-1),
-                                     _iMaxFrames(0),
-                                     _iBitsPerPixel(8)
+PiiWebcamDriver::PiiWebcamDriver() :
+  _bInitialized(false),
+  _pGraphBuilder(0),
+  _pMediaControl(0),
+  _pMediaEvent(0),
+  _pSourceFilter(0),
+  _pSourceFilterOut(0),
+  _pStreamConfig(0),
+  _pCallback(0),
+  _resolution(0,0),
+  _frameSize(0,0),
+  _imageFormat(PiiCamera::InvalidFormat),
+  _bOpen(false),
+  _bCapturingRunning(false),
+  _strCameraId(""),
+  _pCapturingThread(0),
+  _uiFrameIndex(-1),
+  _iMaxFrames(0),
+  _iBitsPerPixel(8)
 {
   _lstCriticalProperties << "imageFormat"
                          << "frameRect"
@@ -226,8 +227,6 @@ bool PiiWebcamDriver::initCamera(const QString& cameraId)
 
 void PiiWebcamDriver::initialize(const QString& cameraId)
 {
-  piiDebug("PiiWebcamDriver::initialize(%s)", qPrintable(cameraId));
-
   if (_bCapturingRunning)
     PII_THROW(PiiCameraDriverException, tr("Capturing is running. Stop the capture first."));
 
@@ -463,7 +462,6 @@ bool PiiWebcamDriver::initSelectedValues()
 
 bool PiiWebcamDriver::close()
 {
-  qDebug("PiiWebcamDriver::close()");
   if (!_bOpen)
     return false;
 
@@ -505,7 +503,7 @@ bool PiiWebcamDriver::startCapture(int frames)
     _pCapturingThread = Pii::createAsyncCall(this, &PiiWebcamDriver::capture);
 
   _bCapturingRunning = true;
-  _iFrameIndex = -1;
+  _uiFrameIndex = -1;
   _iMaxFrames = _triggerMode == PiiCameraDriver::SoftwareTrigger ? 0 : frames;
 
   // Start acquisition
@@ -568,13 +566,13 @@ void PiiWebcamDriver::capture()
           //memcpy _pFrame
           void *pDestination = malloc(iBytes);
           memcpy(pDestination, pSource, iBytes);
-          listener()->frameCaptured(++_iFrameIndex, pDestination, 0);
+          listener()->frameCaptured(++_uiFrameIndex, pDestination, 0);
         }
       else
         listener()->frameCaptured(-1,0,0);
 
       // Check if we must stop capturing
-      if (_iMaxFrames > 0 && _iFrameIndex >= _iMaxFrames)
+      if (_iMaxFrames > 0 && int(_uiFrameIndex) >= _iMaxFrames)
         _bCapturingRunning = false;
     }
 
@@ -588,7 +586,6 @@ void PiiWebcamDriver::capture()
 
 bool PiiWebcamDriver::startAcquisition()
 {
-  qDebug("PiiWebcamDriver::startAcquisition()");
   if (_pMediaControl != 0 && _triggerMode != PiiCameraDriver::SoftwareTrigger)
     _pMediaControl->Run();
 
@@ -597,7 +594,6 @@ bool PiiWebcamDriver::startAcquisition()
 
 bool PiiWebcamDriver::stopAcquisition()
 {
-  qDebug("PiiWebcamDriver::stopAcquisition()");
   if (_pMediaControl != 0)
     {
       _pMediaControl->Stop();
@@ -608,7 +604,7 @@ bool PiiWebcamDriver::stopAcquisition()
   return true;
 }
 
-void* PiiWebcamDriver::frameBuffer(int index) const
+void* PiiWebcamDriver::frameBuffer(uint /*index*/) const
 {
   return 0;
 }

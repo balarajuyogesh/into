@@ -18,6 +18,7 @@
 #include <PiiAsyncCall.h>
 #include <PiiDelay.h>
 #include <PiiRandom.h>
+#include <PiiBits.h>
 
 #include <QMutexLocker>
 #include <QDir>
@@ -43,7 +44,7 @@ PiiLineScanEmulator::PiiLineScanEmulator() :
   _iHeight(-1),
   _iOffsetX(0),
   _iOffsetY(0),
-  _iFrameBufferCount(5),
+  _iFrameBufferCount(4),
   _strDefectImagePattern(""),
   _dDefectProbability(0.0),
   _backgroundColor(Qt::gray),
@@ -390,11 +391,9 @@ void PiiLineScanEmulator::releaseFrames(int start, int end)
     }
 }
 
-void* PiiLineScanEmulator::frameBuffer(int frameIndex) const
+void* PiiLineScanEmulator::frameBuffer(uint frameIndex) const
 {
   frameIndex %= _vecBufferPointers.size();
-  if (frameIndex < 0)
-    frameIndex += _vecBufferPointers.size();
 
   return _vecBufferPointers[frameIndex];
 }
@@ -770,4 +769,11 @@ void PiiLineScanEmulator::updateTotalDefRate(double currRowDefRate)
   else if (_dTempProbability < 1)
     _dTempProbability += qMin(0.001, _dDefectProbability*0.1);
 
+}
+
+bool PiiLineScanEmulator::setFrameBufferCount(int frameBufferCount)
+{
+  // Round frame buffer count up to closest power of two
+  _iFrameBufferCount = 1 << Pii::lastOneBit((qMax(2,frameBufferCount)-1));
+  return true;
 }

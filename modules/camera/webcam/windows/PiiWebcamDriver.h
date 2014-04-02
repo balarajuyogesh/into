@@ -160,7 +160,7 @@ public:
   bool close();
   bool startCapture(int frames);
   bool stopCapture();
-  void* frameBuffer(int frameIndex) const;
+  void* frameBuffer(uint frameIndex) const;
   bool isOpen() const;
   bool isCapturing() const;
   bool triggerImage();
@@ -221,7 +221,7 @@ private:
 
   QThread *_pCapturingThread;
   QMutex _frameBufMutex;
-  unsigned int _iFrameIndex;
+  unsigned int _uiFrameIndex;
   int _iMaxFrames;
   PiiWaitCondition _triggerWaitCondition;
   PiiCameraDriver::TriggerMode _triggerMode;
