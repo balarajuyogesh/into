@@ -3,19 +3,18 @@ MODULE = camera/webcam
 include(../../module.pri)
 TARGET = piiwebcamdriver
 DEFINES += PII_BUILD_WEBCAMDRIVER
+LIBS += -lpiiydin$$INTO_LIBV
 
-SOURCES += *.cc
-
-# Webcam driver for Linux
-unix {
-    HEADERS       += linux/*.h
-    SOURCES       += linux/*.cc
-    INCLUDEPATH   += linux
+linux {
+  SUBFOLDER = linux
+} else:win32 {
+  SUBFOLDER = windows
+} else {
+  warning(No webcam support for your platform)
 }
 
-# FireWire driver for Windows
-win32 {
-    HEADERS     += windows/*.h
-    SOURCES     += windows/*.cc
-    INCLUDEPATH += windows
+!isEmpty(SUBFOLDER) {
+    HEADERS       += $$SUBFOLDER/*.h
+    SOURCES       += *.cc $$SUBFOLDER/*.cc
+    INCLUDEPATH   += $$SUBFOLDER
 }
