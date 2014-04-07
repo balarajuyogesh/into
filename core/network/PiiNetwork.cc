@@ -170,7 +170,9 @@ namespace PiiNetwork
 #ifdef Q_OS_WIN
   static inline QString fixPath(const QString& path)
   {
-    return path.startsWith('/') ? path.mid(1) : path;
+    // If path begins with a slash and a drive letter, remove the
+    // slash.
+    return path.contains(QRegExp("^/[a-z]:", Qt::CaseInsensitive)) ? path.mid(1) : path;
   }
 #else
   static inline const QString& fixPath(const QString& path)
