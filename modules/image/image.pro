@@ -1,6 +1,11 @@
 MODULE = Image
 include(../module.pri)
-enabled(fast): SOURCES += $$INTODIR/3rdparty/fast/*.cc
+enabled(fast) {
+  SOURCES += $$INTODIR/3rdparty/fast/*.cc
+  defined(HEADER_INSTALL_PATH, var) {
+    headers.files += $$INTODIR/3rdparty/fast/*.h
+  }
+}
 qt {
   SOURCES += rawimage/*.cc
   HEADERS += rawimage/*.h

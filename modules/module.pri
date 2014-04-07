@@ -8,7 +8,7 @@
 # prefix.
 
 isEmpty(MODULE) {
-  error(You must define MODULE before including piiplugin.pri)
+  error(You must define MODULE before including module.pri)
 }
 
 isEmpty(INTODIR) {
@@ -42,13 +42,13 @@ win32-msvc*: QMAKE_LFLAGS_WINDOWS_DLL += /OPT:NOREF
 
 include(../moduledeps.pri)
 
-defined(PLUGIN_INSTALL_PATH, var) {
-  INSTALL_PATH = $$PLUGIN_INSTALL_PATH
+defined(MODULE_INSTALL_PATH, var) {
+  INSTALL_PATH = $$MODULE_INSTALL_PATH
 } else {
   !defined(INSTALL_PATH, var) {
-    INSTALL_PATH = /usr/lib/into/plugins
+    INSTALL_PATH = /usr/lib/into/modules
   } else {
-    INSTALL_PATH = $$INSTALL_PATH/plugins
+    INSTALL_PATH = $$INSTALL_PATH/modules
   }
 }
 include(../libinstall.pri)
