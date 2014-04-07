@@ -39,7 +39,7 @@ class PiiGenericInputArchive;
  * @relates PiiVariant
  */
 #define PII_DECLARE_VARIANT_TYPE(TYPE, ID) \
-  namespace Pii { template <> inline PII_CONSTEXPR unsigned int typeId<TYPE >() { return ID; } }
+  namespace Pii { template <> inline constexpr unsigned int typeId<TYPE >() { return ID; } }
 
 /**
  * Declares a new custom variant type that will be made available to
@@ -592,7 +592,7 @@ namespace Pii
    * type. One should write more specializations for custom types.
    * There is no default implementation.
    */
-  template <class T> inline PII_CONSTEXPR unsigned int typeId();
+  template <class T> inline constexpr unsigned int typeId();
 }
 
 /// @hide
