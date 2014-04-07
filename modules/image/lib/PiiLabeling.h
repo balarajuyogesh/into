@@ -500,6 +500,7 @@ namespace PiiImage
   };
 
   PII_IMAGE_EXPORT void connectRunsRecursively(LabelInfo& info, int rowIndex, int start, int end);
+  PII_IMAGE_EXPORT void connectRuns(LabelInfo& info, int rowIndex, int start, int end);
   PII_IMAGE_EXPORT void markToBuffer(LabelInfo& info, int rowIndex, int start, int end);
 
   template <class Matrix, class UnaryOp1, class UnaryOp2>
@@ -640,8 +641,8 @@ namespace PiiImage
                 pNode->seed = false;
                 // Mark and connect recursively
                 markToBuffer(info, rowIndex, pNode->start, end);
-                connectRunsRecursively(info, rowIndex - 1, pNode->start, end);
-                connectRunsRecursively(info, rowIndex + 1, pNode->start, end);
+                connectRuns(info, rowIndex - 1, pNode->start, end);
+                connectRuns(info, rowIndex + 1, pNode->start, end);
                 // This run has been handled now. Get rid of it.
                 lstRuns[rowIndex].remove(pNode);
                 RunNode* pNodeToDelete = pNode;

@@ -14,6 +14,7 @@
  */
 
 #include "PiiLabeling.h"
+#include <QStack>
 
 namespace PiiImage
 {
@@ -58,6 +59,57 @@ namespace PiiImage
         RunNode* pNodeToDelete = pNode;
         pNode = pNode->next;
         delete pNodeToDelete;
+      }
+  }
+
+  // On row rowIndex, find all runs that overlap with the range
+  // start-end.
+  void connectRuns(LabelInfo& info, int rowIndex, int start, int end)
+  {
+    struct RecursiveCall
+    {
+      int rowIndex;
+      int start;
+      int end;
+    };
+
+    QStack<RecursiveCall>  localStack;
+    RecursiveCall currentCall = { rowIndex, start, end };
+    localStack.push(currentCall);
+
+    while (!localStack.isEmpty())
+      {
+        currentCall = localStack.pop();
+        // Out of image boundaries...
+        if (currentCall.rowIndex < 0 || currentCall.rowIndex >= info.lstRuns.size())
+          continue; // to next item in the local stack
+
+        // Go through all runs on this row and find the overlapping ones
+        for (RunNode* pNode = info.lstRuns[currentCall.rowIndex].first; pNode != 0;)
+          {
+            // No overlap
+            if (currentCall.start > pNode->end ||
+            currentCall.end < pNode->start)
+              {
+                pNode = pNode->next;
+                continue; // to the next node
+              }
+
+            // Invalidate the current run to prevent loops in "recursion"
+            int end = pNode->end;
+            pNode->end = -1;
+            pNode->seed = false;
+            // Mark the run and push "recursion" calls to the stack
+            markToBuffer(info, currentCall.rowIndex, pNode->start, end);
+            localStack.push(RecursiveCall{currentCall.rowIndex-1, pNode->start, end});
+            localStack.push(RecursiveCall{currentCall.rowIndex+1, pNode->start, end});
+
+            // Destroy current node
+            info.lstRuns[currentCall.rowIndex].remove(pNode);
+            RunNode* pNodeToDelete = pNode;
+            pNode = pNode->next;
+            delete pNodeToDelete;
+          }
       }
   }
 }
