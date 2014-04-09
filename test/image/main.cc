@@ -1031,10 +1031,10 @@ void TestPiiImage::adaptiveThreshold()
                                              1,1,1,
                                              0,0,0,
                                              0,0,0)));
-  PiiMatrix<bool> matMask(3,3,
-                          1,1,1,
-                          1,1,0,
-                          1,0,0);
+  const PiiMatrix<bool> matMask(3,3,
+                                1,1,1,
+                                1,1,0,
+                                1,0,0);
   result = PiiImage::adaptiveThreshold(source,
                                        matMask,
                                        std::greater<float>(),
