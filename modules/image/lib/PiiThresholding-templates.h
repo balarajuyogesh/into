@@ -74,11 +74,12 @@ namespace PiiImage
   }
 
   template <class Image, class IntegralImage, class PixelCounter, class BinaryFunction>
-  PiiMatrix<typename BinaryFunction::result_type> adaptiveThresholdImpl(const Image& image,
-                                                                        const IntegralImage& integral,
-                                                                        const PixelCounter& counter,
-                                                                        BinaryFunction func,
-                                                                        int windowRows, int windowColumns)
+  void adaptiveThresholdImpl(const Image& image,
+                             PiiMatrix<typename BinaryFunction::result_type>& matThresholded,
+                             const IntegralImage& integral,
+                             const PixelCounter& counter,
+                             BinaryFunction func,
+                             int windowRows, int windowColumns)
   {
     typedef typename BinaryFunction::result_type T;
     typedef typename Image::const_row_iterator ImageRow;
@@ -86,8 +87,6 @@ namespace PiiImage
     // Use at least float for the mean.
     typedef typename Pii::Combine<typename Image::value_type,float>::Type M;
 
-    // Initialize result image
-    PiiMatrix<T> matThresholded(PiiMatrix<T>::uninitialized(image.rows(), image.columns()));
     if (windowColumns <= 0)
       windowColumns = windowRows;
     int iHalfRows = windowRows/2, iHalfCols = windowColumns/2;
@@ -115,23 +114,24 @@ namespace PiiImage
                               counter.countPixels(r1, c1, r2, c2));
           }
       }
-    return matThresholded;
   }
 
   template <class Image, class PixelCounter, class BinaryFunction>
-  inline PiiMatrix<typename BinaryFunction::result_type> adaptiveThresholdImpl(const Image& image,
-                                                                               const PixelCounter& counter,
-                                                                               BinaryFunction func,
-                                                                               int windowRows,
-                                                                               int windowColumns)
+  inline void adaptiveThresholdImpl(const Image& image,
+                                    PiiMatrix<typename BinaryFunction::result_type>& matThresholded,
+                                    const PixelCounter& counter,
+                                    BinaryFunction func,
+                                    int windowRows,
+                                    int windowColumns)
   {
     typedef typename Pii::Combine<typename Image::value_type,int>::Type I;
-    return adaptiveThresholdImpl(image,
-                                 Pii::cumulativeSum<I,Image>(image, Pii::ZeroBorderCumulativeSum),
-                                 counter,
-                                 func,
-                                 windowRows,
-                                 windowColumns);
+    adaptiveThresholdImpl(image,
+                          matThresholded,
+                          Pii::cumulativeSum<I,Image>(image, Pii::ZeroBorderCumulativeSum),
+                          counter,
+                          func,
+                          windowRows,
+                          windowColumns);
   }
 
   template <class T, class U=bool> struct RoiMaskFunction : Pii::BinaryFunction<T,U,T>
@@ -161,16 +161,37 @@ namespace PiiImage
   };
 
   template <class Matrix, class BinaryFunction>
+  void adaptiveThreshold(const Matrix& image,
+                         PiiMatrix<typename BinaryFunction::result_type>& matThresholded,
+                         BinaryFunction func,
+                         float relativeThreshold,
+                         float absoluteThreshold,
+                         int windowRows, int windowColumns)
+  {
+     adaptiveThreshold(image,
+                       matThresholded,
+                       adaptiveThresholdFunction(func, relativeThreshold, absoluteThreshold),
+                       windowRows,
+                       windowColumns);
+  }
+
+  template <class Matrix, class BinaryFunction>
   PiiMatrix<typename BinaryFunction::result_type> adaptiveThreshold(const Matrix& image,
                                                                     BinaryFunction func,
                                                                     float relativeThreshold,
                                                                     float absoluteThreshold,
                                                                     int windowRows, int windowColumns)
   {
-    return adaptiveThreshold(image,
-                             adaptiveThresholdFunction(func, relativeThreshold, absoluteThreshold),
-                             windowRows,
-                             windowColumns);
+    typedef typename BinaryFunction::result_type T;
+    PiiMatrix<T> matThresholded(PiiMatrix<T>::uninitialized(image.rows(), image.columns()));
+    adaptiveThreshold(image,
+                      matThresholded,
+                      func,
+                      relativeThreshold,
+                      absoluteThreshold,
+                      windowRows,
+                      windowColumns);
+    return matThresholded;
   }
 
   template <class Matrix, class BinaryFunction>
@@ -178,11 +199,28 @@ namespace PiiImage
                                                                     BinaryFunction func,
                                                                     int windowRows, int windowColumns)
   {
-    return adaptiveThresholdImpl(image,
-                                 DefaultPixelCounter(),
-                                 func,
-                                 windowRows,
-                                 windowColumns);
+    typedef typename BinaryFunction::result_type T;
+    PiiMatrix<T> matThresholded(PiiMatrix<T>::uninitialized(image.rows(), image.columns()));
+    adaptiveThreshold(image,
+                      matThresholded,
+                      func,
+                      windowRows,
+                      windowColumns);
+     return matThresholded;
+  }
+
+  template <class Matrix, class BinaryFunction>
+  void adaptiveThreshold(const Matrix& image,
+                         PiiMatrix<typename BinaryFunction::result_type>& matThresholded,
+                         BinaryFunction func,
+                         int windowRows, int windowColumns)
+  {
+     adaptiveThresholdImpl(image,
+                           matThresholded,
+                           DefaultPixelCounter(),
+                           func,
+                           windowRows,
+                           windowColumns);
   }
 
   template <class Matrix, class BinaryFunction>
@@ -191,19 +229,35 @@ namespace PiiImage
                                                                     BinaryFunction func,
                                                                     int windowRows, int windowColumns)
   {
-    return adaptiveThresholdImpl(Pii::binaryMatrixTransform(image.selfRef(),
-                                                            roiMask,
-                                                            RoiMaskFunction<typename Matrix::value_type>()),
-                                 RoiMaskPixelCounter<bool>(roiMask),
-                                 func,
-                                 windowRows,
-                                 windowColumns);
+    typedef typename BinaryFunction::result_type T;
+    PiiMatrix<T> matThresholded(PiiMatrix<T>::uninitialized(image.rows(), image.columns()));
+    adaptiveThresholdImpl(Pii::binaryMatrixTransform(image.selfRef(),
+                                                     roiMask,
+                                                     RoiMaskFunction<typename Matrix::value_type>()),
+                          matThresholded,
+                          RoiMaskPixelCounter<bool>(roiMask),
+                          func,
+                          windowRows,
+                          windowColumns);
+    return matThresholded;
   }
 
   template <class TernaryFunction, class Matrix>
   PiiMatrix<typename TernaryFunction::result_type> adaptiveThresholdVar(const Matrix& image,
                                                                         TernaryFunction func,
                                                                         int windowRows, int windowColumns)
+  {
+    typedef typename TernaryFunction::result_type T;
+    PiiMatrix<T> matThresholded(PiiMatrix<T>::uninitialized(image.rows(), image.columns()));
+    adaptiveThresholdVar(image, matThresholded, func, windowRows, windowColumns);
+    return matThresholded;
+  }
+
+  template <class TernaryFunction, class Matrix>
+  void adaptiveThresholdVar(const Matrix& image,
+                            PiiMatrix<typename TernaryFunction::result_type>& matThresholded,
+                            TernaryFunction func,
+                            int windowRows, int windowColumns)
   {
     /* Variance s² = 1/N sum(x - u)²
      *
@@ -218,6 +272,7 @@ namespace PiiImage
 
     typedef typename TernaryFunction::result_type T;
     typedef typename Matrix::const_row_iterator ImageRow;
+
     // Use at least int accuracy for the integral image
     typedef typename Pii::Combine<typename Matrix::value_type,int>::Type I;
     // Use at least long long accuracy for the integral image of squares
@@ -228,8 +283,6 @@ namespace PiiImage
     // Integral image of squares
     PiiMatrix<I2> matIntegral2 = Pii::cumulativeSum(image, Pii::Square<I2>(), Pii::ZeroBorderCumulativeSum);
 
-    // Initialize result image
-    PiiMatrix<T> matThresholded(PiiMatrix<T>::uninitialized(image.rows(), image.columns()));
     if (windowColumns <= 0)
       windowColumns = windowRows;
     int iHalfRows = windowRows/2, iHalfCols = windowColumns/2;
@@ -238,7 +291,7 @@ namespace PiiImage
 
     const I* pPrevRow, *pNextRow;
     const I2* pPrevRow2, *pNextRow2;
-    ImageRow source;
+
     T* pTarget;
     for (int r=0; r<iRows; ++r)
       {
@@ -250,7 +303,8 @@ namespace PiiImage
         pPrevRow2 = matIntegral2[r1];
         pNextRow2 = matIntegral2[r2];
         pTarget = matThresholded[r];
-        source = image[r];
+        ImageRow pSource = image[r];
+
         for (int c=0; c<iCols; ++c)
           {
             c1 = qMax(c-iHalfCols, 0);
@@ -260,12 +314,11 @@ namespace PiiImage
             double dVar = double(pNextRow2[c2] + pPrevRow2[c1] - pNextRow2[c1] - pPrevRow2[c2]) / iCount // sum(x²)/N
               - Pii::square(dMean);
 
-            pTarget[c] = func(source[c],
+            pTarget[c] = func(pSource[c],
                               dMean,
                               dVar);
           }
       }
-    return matThresholded;
   }
 }
 
