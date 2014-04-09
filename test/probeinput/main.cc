@@ -73,14 +73,15 @@ void TestPiiProbeInput::signalInterval()
   int iMs = t.milliseconds();
   delete pThr1;
   delete pThr2;
-  QVERIFY(_iCount <= iMs/100);
-  QVERIFY(_iCount >= iMs/100-1);
   //qDebug("2.000.000 objects, %d signals, %d ms", _iCount, iMs);
+  QVERIFY(_iCount <= iMs/100+1);
+  QVERIFY(_iCount >= iMs/100-1);
   _iCount = 0;
   // Resets the timer
   _pProbe->setSignalInterval(100);
   // Make sure no pending emission will screw us
   PiiDelay::msleep(110);
+  QCoreApplication::processEvents();
   send(PiiVariant(0));
   send(PiiVariant(1));
   send(PiiVariant(2));

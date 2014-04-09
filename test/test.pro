@@ -55,6 +55,7 @@ SUBDIRS = algorithm \
           stereotriangulator \
           stringformatter \
           timer \
+          threadsafetimer \
           tracking \
           transforms \
           typetraits \
