@@ -72,8 +72,7 @@ void PiiBasicOperation::updateActivityMode(ActivityMode mode)
       PII_D;
       for (int i=0; i<d->lstInputs.size(); ++i)
         d->lstInputs[i]->setController(PiiNullInputController::instance());
-      if (mode != Enabled)
-        setState(Stopped);
+      setState(Stopped);
     }
 }
 
