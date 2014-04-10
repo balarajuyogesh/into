@@ -747,6 +747,16 @@ namespace Pii
   PiiMatrix<typename UnaryFunction::result_type> cumulativeSum(const Matrix& matrix,
                                                                UnaryFunction func,
                                                                CumulativeSumMode mode);
+  /**
+   * This version uses a preallocated output matrix. It is the
+   * responsibility of the caller to make sure the output has correct
+   * size.
+   */
+  template <class UnaryFunction, class InputMatrix, class OutputMatrix>
+  void cumulativeSum(const InputMatrix& matrix,
+                     OutputMatrix& result,
+                     UnaryFunction func,
+                     CumulativeSumMode mode);
 
   /**
    * Calculates two-dimensional cumulative sum of a matrix. In
