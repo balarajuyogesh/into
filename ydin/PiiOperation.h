@@ -702,10 +702,10 @@ protected:
   QMutex* stateLock();
 
   /**
-   * Invoked each time setActivityMode(), even if *activityMode*
-   * doesn't change from its previous value. The default
-   * implementation does nothing. The call will be made while holding
-   * [stateLock()].
+   * Invoked each time setActivityMode() is called, even if
+   * *activityMode* doesn't change from its previous value. The
+   * default implementation does nothing. The call will be made while
+   * holding [stateLock()].
    */
   virtual void updateActivityMode(ActivityMode activityMode);
 

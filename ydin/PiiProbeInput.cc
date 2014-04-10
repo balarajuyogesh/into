@@ -38,9 +38,7 @@ public:
     emissionTimer.setSingleShot(true);
   }
 
-  /*
-   * Emits [objectReceived()] and saves the received object.
-   */
+  // Emits [objectReceived()] and saves the received object.
   bool tryToReceive(PiiAbstractInputSocket* sender, const PiiVariant& object) throw ();
 
   PiiProbeInput* q;
