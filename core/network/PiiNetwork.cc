@@ -167,19 +167,19 @@ namespace PiiNetwork
     PII_THROW(PiiException, tr("The requested file is too big."));
   }
 
-#ifdef Q_OS_WIN
   static inline QString fixPath(const QString& path)
   {
+    QString strPath(path);
+    if (strPath.startsWith("file://"))
+      strPath = strPath.mid(7);
+#ifdef Q_OS_WIN
     // If path begins with a slash and a drive letter, remove the
     // slash.
-    return path.contains(QRegExp("^/[a-z]:", Qt::CaseInsensitive)) ? path.mid(1) : path;
-  }
+    return strPath.contains(QRegExp("^/[a-z]:", Qt::CaseInsensitive)) ? strPath.mid(1) : strPath;
 #else
-  static inline const QString& fixPath(const QString& path)
-  {
-    return path;
-  }
+    return strPath;
 #endif
+  }
 
   static void readLocalFile(const QString& name,
                             QIODevice* device,
@@ -195,6 +195,12 @@ namespace PiiNetwork
       PII_THROW(PiiIOException, tr("Reading data from %1 failed.").arg(name));
   }
 
+  static bool isLocalFile(const QString& uri)
+  {
+    return uri.startsWith("file://") ||
+      !uri.contains(QRegExp("^[a-zA-Z0-9+.-]+://"));
+  }
+
   static void readFile(const QString& uri,
                        const QString& method,
                        const PiiMimeHeader& requestHeaders,
@@ -204,10 +210,10 @@ namespace PiiNetwork
                        qint64 maxSize,
                        PiiProgressController* controller = 0)
   {
-    if (uri.startsWith("file://"))
+    if (isLocalFile(uri))
       {
         if (device)
-          readLocalFile(uri.mid(7), device, maxSize, controller);
+          readLocalFile(uri, device, maxSize, controller);
         return;
       }
 
@@ -350,9 +356,9 @@ namespace PiiNetwork
                       PiiHttpResponseHeader* header = 0,
                       PiiProgressController* controller = 0)
   {
-    if (uri.startsWith("file://"))
+    if (isLocalFile(uri))
       {
-        writeLocalFile(uri.mid(7), contents, controller);
+        writeLocalFile(uri, contents, controller);
         return;
       }
 
@@ -424,9 +430,9 @@ namespace PiiNetwork
                   const PiiMimeHeader& requestHeaders,
                   PiiHttpResponseHeader* header)
   {
-    if (uri.startsWith("file://"))
+    if (isLocalFile(uri))
       {
-        deleteLocalFile(uri.mid(7));
+        deleteLocalFile(uri);
         return;
       }
 
@@ -467,9 +473,9 @@ namespace PiiNetwork
                      const PiiMimeHeader& requestHeaders,
                      PiiHttpResponseHeader* header)
   {
-    if (uri.startsWith("file://"))
+    if (isLocalFile(uri))
       {
-        makeLocalDirectory(uri.mid(7));
+        makeLocalDirectory(uri);
         return;
       }
     PiiNetworkClient client;
