@@ -517,17 +517,10 @@ namespace PiiImage
                                                                     float absoluteThreshold,
                                                                     int windowRows, int windowColumns);
 
-  /**
-   * the local mean as parameters.
-   */
   template <class Matrix, class BinaryFunction>
   PiiMatrix<typename BinaryFunction::result_type> adaptiveThreshold(const Matrix& image,
                                                                     BinaryFunction func,
                                                                     int windowRows, int windowColumns);
-  /**
-   * entry in *roiMask* evaluates to `true`. The *image* and
-   * *roiMask* matrices must match in size.
-   */
   template <class Matrix, class BinaryFunction>
   PiiMatrix<typename BinaryFunction::result_type> adaptiveThreshold(const Matrix& image,
                                                                     const PiiMatrix<bool>& roiMask,

@@ -308,7 +308,7 @@ namespace PiiImage
   template <class T> PiiMatrix<T> makeFilter(PrebuiltFilterType type, unsigned int size=3);
 
   /**
-   * Decompose a two-dimensional filter into two one-dimensional
+   * Decomposes a two-dimensional filter into two one-dimensional
    * filters. This function decomposes a matrix A into a row vector H
    * and column vector V so that A = VH.
    *
@@ -494,7 +494,7 @@ namespace PiiImage
    *                                                     Pii::ExtendZeros);
    * ~~~
    *
-   * ! It is not a good idea to use `unsigned` `char` as the
+   * ! It is not a good idea to use `unsigned char` as the
    * result type. If the filters are `double`, use `double` as the
    * output type.
    */

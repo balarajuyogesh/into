@@ -50,8 +50,7 @@ namespace PiiDsp
 
   /**
    * Two-dimensional convolution of two matrices. The size of
-   * the resulting matrix will be (M+O-1)x(N+P-1) if the input
-   * matrices are of sizes MxN and OxP. Make sure b is not larger
+   * resulting matrix depends on *mode*. Make sure b is not larger
    * than a.
    *
    * @param a source matrix
@@ -108,9 +107,7 @@ namespace PiiDsp
 
   /**
    * Two-dimensional filter of two matrices. The size of the resulting
-   * matrix will be (M+O-1)x(N+P-1) if the input matrices are of sizes
-   * MxN and OxP. Make sure that b is smaller than a. The type of the
-   * filter determines output type.
+   * matrix depends on *mode*. Make sure that b is smaller than a.
    *
    * @param a source matrix
    *
