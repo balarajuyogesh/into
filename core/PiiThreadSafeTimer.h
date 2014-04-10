@@ -19,7 +19,7 @@
 #include "PiiGlobal.h"
 #include <QObject>
 #include <QThread>
-#include <QMap>
+#include <QMultiMap>
 #include <QMutex>
 #include <QWaitCondition>
 
@@ -109,7 +109,7 @@ public:
   static inline qint64 currentTime();
   QMutex _eventMapMutex;
   QWaitCondition _eventCondition;
-  QMap<qint64,PiiThreadSafeTimer*> _mapEvents;
+  QMultiMap<qint64,PiiThreadSafeTimer*> _mapEvents;
 };
 
 #endif //_PIITHREADSAFETIMER_H

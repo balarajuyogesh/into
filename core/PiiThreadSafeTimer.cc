@@ -56,8 +56,11 @@ PiiThreadSafeTimer::~PiiThreadSafeTimer()
 void PiiThreadSafeTimer::startThread()
 {
   _pTimerThread = new PiiTimerThread;
-  _pTimerThread->start();
-  _pTimerThread->_eventCondition.wait(&_threadMutex);
+  synchronized (_pTimerThread->_eventMapMutex)
+    {
+      _pTimerThread->start();
+      _pTimerThread->_eventCondition.wait(&_pTimerThread->_eventMapMutex);
+    }
 }
 
 void PiiThreadSafeTimer::stopThread()
@@ -76,6 +79,8 @@ void PiiThreadSafeTimer::start(int interval)
 {
   synchronized (_pTimerThread->_eventMapMutex)
     {
+      if (isActive())
+        _pTimerThread->removeEvent(this);
       d->iInterval = interval;
       _pTimerThread->addEvent(this);
     }
@@ -103,9 +108,14 @@ void PiiThreadSafeTimer::setInterval(int interval)
 {
   synchronized (_pTimerThread->_eventMapMutex)
     {
-      d->iInterval = qMax(0, interval);
-      if (d->iNextFiringTime != 0)
-        _pTimerThread->addEvent(this);
+      if (isActive())
+        {
+          _pTimerThread->removeEvent(this);
+          d->iInterval = qMax(0, interval);
+          _pTimerThread->addEvent(this);
+        }
+      else
+        d->iInterval = qMax(0, interval);
     }
 }
 int PiiThreadSafeTimer::interval() const { return d->iInterval; }
@@ -132,7 +142,7 @@ void PiiTimerThread::run()
       if (!PiiThreadSafeTimer::_pTimerThread)
         break;
       qint64 iCurrentTime = currentTime();
-      QMap<qint64,PiiThreadSafeTimer*>::iterator it = _mapEvents.begin();
+      QMultiMap<qint64,PiiThreadSafeTimer*>::iterator it = _mapEvents.begin();
       // Send all events whose time has passed
       while (it != _mapEvents.end() && it.key() <= iCurrentTime)
         {
@@ -162,36 +172,23 @@ void PiiTimerThread::run()
   _eventMapMutex.unlock();
 }
 
+// _eventMapMutex must be locked when calling this function
 void PiiTimerThread::addEvent(PiiThreadSafeTimer* timer)
 {
   qint64 iFiringTime = currentTime() + timer->d->iInterval;
-  if (timer->isActive())
-    removeEvent(timer);
   // If this event is the next one in the queue, wake up the sender thread.
   if (_mapEvents.isEmpty() || _mapEvents.constBegin().key() > iFiringTime)
     _eventCondition.wakeOne();
   _mapEvents.insert(timer->d->iNextFiringTime = iFiringTime, timer);
 }
 
-// Finds the timer based on its firing time (faster than reverse lookup)
 // _eventMapMutex must be locked when calling this function
 void PiiTimerThread::removeEvent(PiiThreadSafeTimer* timer)
 {
-  // Find the first timer that has the same firing time
-  QMap<qint64,PiiThreadSafeTimer*>::iterator it = _mapEvents.find(timer->d->iNextFiringTime);
-  while (it != _mapEvents.end())
+  QMultiMap<qint64,PiiThreadSafeTimer*>::iterator it = _mapEvents.find(timer->d->iNextFiringTime, timer);
+  if (it != _mapEvents.end())
     {
-      // Found it -> remove
-      if (it.value() == timer)
-        {
-          _mapEvents.erase(it);
-          timer->d->iNextFiringTime = 0;
-          return;
-        }
-      // This is already a different timer
-      else if (it.key() != timer->d->iNextFiringTime)
-        return;
-      ++it;
+      _mapEvents.erase(it);
+      timer->d->iNextFiringTime = 0;
     }
 }
-
