@@ -36,22 +36,22 @@ void TestPiiThreadSafeTimer::oneThread()
   QVERIFY(timer.remainingTime() > 0);
   QVERIFY(timer.remainingTime() <= 10);
   PiiDelay::msleep(100);
-  QVERIFY(_iCount > 8);
-  QVERIFY(_iCount < 12);
+  QVERIFY(_iCount.load() > 8);
+  QVERIFY(_iCount.load() < 12);
   QVERIFY(timer.isActive());
   // A stopped timer should not change value.
   timer.stop();
   QCOMPARE(timer.remainingTime(), -1);
   QVERIFY(!timer.isActive());
-  int iCurrentCount = _iCount;
+  int iCurrentCount = _iCount.load();
   PiiDelay::msleep(100);
-  QCOMPARE(_iCount, iCurrentCount);
+  QCOMPARE(_iCount.load(), iCurrentCount);
 
   _iCount = 0;
   timer.setSingleShot(true);
   timer.start(10);
   PiiDelay::msleep(50);
-  QCOMPARE(_iCount, 1);
+  QCOMPARE(_iCount.load(), 1);
   QVERIFY(!timer.isActive());
 
   _iCount = 0;
@@ -62,7 +62,7 @@ void TestPiiThreadSafeTimer::oneThread()
   // Stop immediately
   timer.stop();
   QVERIFY(!timer.isActive());
-  QCOMPARE(_iCount, 0);
+  QCOMPARE(_iCount.load(), 0);
 
   _iCount = 0;
   // Start ...
@@ -73,7 +73,7 @@ void TestPiiThreadSafeTimer::oneThread()
   timer.setInterval(10);
   timer.setSingleShot(true);
   PiiDelay::msleep(30);
-  QCOMPARE(_iCount, 1);
+  QCOMPARE(_iCount.load(), 1);
   QVERIFY(!timer.isActive());
 }
 
@@ -95,7 +95,20 @@ void TestPiiThreadSafeTimer::twoThreads()
   pThread->wait();
   PiiDelay::msleep(20);
   QVERIFY(!timer.isActive());
-  QCOMPARE(_iCount, 1);
+  QCOMPARE(_iCount.load(), 1);
+}
+
+void TestPiiThreadSafeTimer::manyTimers()
+{
+  _iCount = 0;
+  QList<QThread*> lstThreads;
+  for (int i=0; i<5; ++i)
+    lstThreads << Pii::asyncCall(this, &TestPiiThreadSafeTimer::runTimer);
+
+  for (int i=0; i<5; ++i)
+    lstThreads[i]->wait();
+
+  QCOMPARE(_iCount.load(), 5*100);
 }
 
 void TestPiiThreadSafeTimer::stopTimer(PiiThreadSafeTimer* timer)
@@ -107,6 +120,22 @@ void TestPiiThreadSafeTimer::stopTimer(PiiThreadSafeTimer* timer)
     }
   timer->start(10);
   timer->setSingleShot(true);
+}
+
+void TestPiiThreadSafeTimer::runTimer()
+{
+  PiiThreadSafeTimer timer;
+  timer.setSingleShot(true);
+  connect(&timer, SIGNAL(timeout()), this, SLOT(count()), Qt::DirectConnection);
+  for (int i=0; i<100; ++i)
+    {
+      timer.start(1);
+      do
+        {
+          PiiDelay::msleep(1);
+        }
+      while (timer.isActive());
+    }
 }
 
 void TestPiiThreadSafeTimer::count()

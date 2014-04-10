@@ -17,6 +17,7 @@
 #define _TESTPIITHREADSAFETIMER_H
 
 #include <QObject>
+#include <PiiAtomicInt.h>
 
 class PiiThreadSafeTimer;
 
@@ -30,15 +31,17 @@ public:
 private slots:
   void oneThread();
   void twoThreads();
+  void manyTimers();
 
 protected slots:
   void count();
 
 private:
   void stopTimer(PiiThreadSafeTimer* timer);
+  void runTimer();
 
   bool _bStopperRunning;
-  int _iCount;
+  PiiAtomicInt _iCount;
   PiiThreadSafeTimer* _pCurrentTimer;
 };
 
