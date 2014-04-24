@@ -23,7 +23,7 @@ system is at the *aperture* of the camera, which is also called the
 origin in the negative direction of the *z* axis. The focal length *f*
 can be thought of as a scaling factor from normalized (unitless)
 coordinates to pixels. The value of *f* can actually be different for
-*x* and `y` axes to allow non-square pixels. Physically, focal length
+*x* and *y* axes to allow non-square pixels. Physically, focal length
 is the distance between the aperture (camera origin) and the image
 plane, in pixels. Thus, smaller pixels mean larger focal length and
 vice versa.
@@ -244,7 +244,7 @@ Transformations between coordinate systems are performed as follows:
   to a line in the 3D space. The points on the line (in the camera
   reference frame) satisfy the equation \(X_c = [ x_n z, y_n z, z
   ]^T\), where z is a free variable. To find z, at least two cameras
-  need to be used. Please refer to @ref calibration_stereo for
+  need to be used. Please see the next chapter on stereo imaging for
   details.
 
 
@@ -278,4 +278,3 @@ approximation can be obtained if many cameras are
 used. PiiStereoTriangulator does just that: it considers all possible
 pairings of cameras and uses the stereo triangulation technique to
 find the most likely 3D location by averaging over all stereo pairs.
-

@@ -449,9 +449,9 @@ namespace PiiCalibration
                                                                  double zValue = NAN);
 
   /**
-   * Convert a rotation vector `rotation` to a rotation matrix. This
+   * Converts a rotation vector `rotation` to a rotation matrix. This
    * function converts the three-dimensional column vector \(V =
-   * [v_x,v_y,v_z]^T\( to a rotation matrix \)R\) as follows:
+   * [v_x,v_y,v_z]^T\) to a rotation matrix \(R\) as follows:
    *
    * \[
    * R = e^{M\theta} = I + M \sin(\theta) +
@@ -478,7 +478,7 @@ namespace PiiCalibration
   PII_CALIBRATION_EXPORT PiiMatrix<double> rotationVectorToMatrix(const PiiVector<double,3>& rotation);
 
   /**
-   * Convert a rotation matrix to a rotation vector. The direction of
+   * Converts a rotation matrix to a rotation vector. The direction of
    * the rotation vector tells the rotation axis, and its length is
    * equal to the rotation angle. Given a rotation matrix R, the
    * rotation vector V is derived as follows (see
