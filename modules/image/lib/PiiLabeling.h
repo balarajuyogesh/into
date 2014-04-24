@@ -19,6 +19,7 @@
 #include "PiiImageGlobal.h"
 #include <PiiMatrix.h>
 #include <QVector>
+#include <QPair>
 #include <functional>
 
 namespace PiiImage
