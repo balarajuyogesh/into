@@ -178,7 +178,7 @@ typedef const char* (*pii_plugin_function)();
                                                                         PiiYdin::qMetaObject<CLASS_NAME>())
 
 /// @internal
-#define PII_POINTER_DIFF(CLASS, SUPERCLASS) reinterpret_cast<ptrdiff_t>(static_cast<SUPERCLASS*>(reinterpret_cast<CLASS*>(1)))-1
+#define PII_POINTER_DIFF(CLASS, SUPERCLASS) reinterpret_cast<std::ptrdiff_t>(static_cast<SUPERCLASS*>(reinterpret_cast<CLASS*>(1)))-1
 
 /**
  * Registers *CLASS* as an instantiable object to the resource

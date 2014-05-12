@@ -843,7 +843,7 @@ public:
    *
    * @see isMatrixType()
    */
-  inline size_t matrixStride(const PiiVariant& obj)
+  inline std::size_t matrixStride(const PiiVariant& obj)
   {
     return obj.valueAs<PiiTypelessMatrix>().stride();
   }

@@ -47,7 +47,7 @@
  * public:
  *   MyClass(int value) : _iMember(value) {}
  *
- *   void* operator new (size_t size)
+ *   void* operator new (std::size_t size)
  *   {
  *     void* ptr = _manager.allocate(size);
  *     // Fall back to the default implementation if the manager is already full.
@@ -110,13 +110,13 @@ public:
    * Note that the initial values cannot be changed once the memory
    * manager has been constructed.
    */
-  PiiSimpleMemoryManager(size_t memorySize, size_t blockSize);
+  PiiSimpleMemoryManager(std::size_t memorySize, std::size_t blockSize);
 
   /**
    * Creates a new memory manager that uses a preallocated block of
    * memory.
    */
-  PiiSimpleMemoryManager(void* buffer, size_t memorySize, size_t blockSize);
+  PiiSimpleMemoryManager(void* buffer, std::size_t memorySize, std::size_t blockSize);
 
   /**
    * Deallocates the memory buffer.
@@ -134,7 +134,7 @@ public:
    * @return a pointer to the allocated memory or 0 if the requsted
    * number of bytes cannot be reserved.
    */
-  void* allocate(size_t bytes);
+  void* allocate(std::size_t bytes);
 
   /**
    * Deallocate a previously allocated buffer. If `buffer` is not
@@ -158,7 +158,7 @@ public:
    * Returns the size of one memory block. Note that this value may be
    * larger than what was initially requested due to memory alignment.
    */
-  size_t blockSize() const;
+  std::size_t blockSize() const;
 
 private:
   class Data;

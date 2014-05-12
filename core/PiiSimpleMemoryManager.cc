@@ -43,7 +43,7 @@
 class PiiSimpleMemoryManager::Data
 {
 public:
-  Data(void* memory, bool own, size_t memorySize, size_t blockSize) :
+  Data(void* memory, bool own, std::size_t memorySize, std::size_t blockSize) :
     // Align blocks to 16-byte boundaries
     stBlockSize(Pii::alignAddress(blockSize + sizeof(void*), 0xf)),
     bOwn(own),
@@ -51,20 +51,20 @@ public:
     pHead(0) // Initialize the manager as fully allocated
   {
     // Align first block
-    size_t stStartAddress = reinterpret_cast<size_t>(Pii::alignAddress(pMemory, 0xf));
+    std::size_t stStartAddress = reinterpret_cast<std::size_t>(Pii::alignAddress(pMemory, 0xf));
     // Bytes available after alignment
-    size_t stBytesAvailable = reinterpret_cast<size_t>(pMemory) + memorySize - stStartAddress;
+    std::size_t stBytesAvailable = reinterpret_cast<std::size_t>(pMemory) + memorySize - stStartAddress;
     // Total number of blocks
     ulBlockCount = ulong(stBytesAvailable/stBlockSize);
     // Start of last block
     pLastAddress = reinterpret_cast<void*>(stStartAddress + (ulBlockCount-1) * stBlockSize);
 
-    size_t stFullBlockSize = stBlockSize;
+    std::size_t stFullBlockSize = stBlockSize;
     // This is the number of bytes available to the user
     stBlockSize -= sizeof(void*);
 
     // Optimization...
-    stLastAddress = size_t(pLastAddress) - size_t(pMemory);
+    stLastAddress = std::size_t(pLastAddress) - std::size_t(pMemory);
 
     // Since head is now zero, the buffer is full. We need to release
     // all memory blocks.
@@ -75,25 +75,25 @@ public:
 
   ~Data()
   {
-    if (bOwn) free(pMemory);
+    if (bOwn) std::free(pMemory);
   }
 
-  void* allocate(size_t bytes);
+  void* allocate(std::size_t bytes);
   bool deallocate(void* ptr);
 
-  size_t stBlockSize;
+  std::size_t stBlockSize;
   bool bOwn;
   void *pMemory, *pLastAddress, *pHead;
   ulong ulBlockCount;
-  size_t stLastAddress;
+  std::size_t stLastAddress;
   QMutex mutex;
 };
 
-PiiSimpleMemoryManager::PiiSimpleMemoryManager(size_t memorySize, size_t blockSize) :
-  d(new Data(malloc(memorySize), true, memorySize, blockSize)) // Allocate memory block from heap
+PiiSimpleMemoryManager::PiiSimpleMemoryManager(std::size_t memorySize, std::size_t blockSize) :
+  d(new Data(std::malloc(memorySize), true, memorySize, blockSize)) // Allocate memory block from heap
 {}
 
-PiiSimpleMemoryManager::PiiSimpleMemoryManager(void* memory, size_t memorySize, size_t blockSize) :
+PiiSimpleMemoryManager::PiiSimpleMemoryManager(void* memory, std::size_t memorySize, std::size_t blockSize) :
   d(new Data(memory, false, memorySize, blockSize))
 {}
 
@@ -102,7 +102,7 @@ PiiSimpleMemoryManager::~PiiSimpleMemoryManager()
   delete d;
 }
 
-void* PiiSimpleMemoryManager::allocate(size_t bytes)
+void* PiiSimpleMemoryManager::allocate(std::size_t bytes)
 {
   // No need to allocate anything.
   if (bytes == 0)
@@ -112,7 +112,7 @@ void* PiiSimpleMemoryManager::allocate(size_t bytes)
   return d->allocate(bytes);
 }
 
-void* PiiSimpleMemoryManager::Data::allocate(size_t bytes)
+void* PiiSimpleMemoryManager::Data::allocate(std::size_t bytes)
 {
   // Do we have free blocks? Can we allocate this many bytes?
   if (pHead != 0 && bytes <= stBlockSize)
@@ -136,7 +136,7 @@ bool PiiSimpleMemoryManager::deallocate(void* buffer)
 bool PiiSimpleMemoryManager::Data::deallocate(void* buffer)
 {
   //if (buffer >= pMemory && buffer <= pLastAddress)
-  if (size_t(buffer) - size_t(pMemory) <= stLastAddress)
+  if (std::size_t(buffer) - std::size_t(pMemory) <= stLastAddress)
     {
       // Make the pointer at the end of the released buffer to point
       // to the old head.
@@ -153,7 +153,7 @@ ulong PiiSimpleMemoryManager::blockCount() const
   return d->ulBlockCount;
 }
 
-size_t PiiSimpleMemoryManager::blockSize() const
+std::size_t PiiSimpleMemoryManager::blockSize() const
 {
   return d->stBlockSize;
 }

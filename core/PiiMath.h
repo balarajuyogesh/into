@@ -389,10 +389,10 @@ namespace Pii
    */
   template <class T> T gcd(T number1, T number2);
 
-  inline char abs(char value) { return (char)::abs(value); }
-  inline short abs(short value) { return (short)::abs(value); }
-  inline int abs(int value) { return ::abs(value); }
-  inline long abs(long value) { return ::labs(value); }
+  inline char abs(char value) { return (char)std::abs(value); }
+  inline short abs(short value) { return (short)std::abs(value); }
+  inline int abs(int value) { return std::abs(value); }
+  inline long abs(long value) { return std::labs(value); }
   inline long long abs(long long value)
   {
 #ifdef __USE_ISOC99
@@ -2568,11 +2568,11 @@ namespace Pii
   template <class T> inline bool almostEqualRel(const T& a, const T& b,
                                                 const typename Abs<T>::result_type& tol = Numeric<T>::tolerance())
   {
-    const typename Abs<T>::result_type minVal = min<typename Abs<T>::result_type>(abs(a), abs(b));
+    const typename Abs<T>::result_type minVal = min<typename Abs<T>::result_type>(std::abs(a), std::abs(b));
     if(minVal != 0)
-      return (abs(a-b) <= tol * minVal);
+      return (std::abs(a-b) <= tol * minVal);
     else
-      return (abs(a-b) <= tol);
+      return (std::abs(a-b) <= tol);
   }
 
   /**

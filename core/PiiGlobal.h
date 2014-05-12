@@ -23,13 +23,13 @@
 
 #include <QtGlobal>
 
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WIN) || defined(__TI_COMPILER_VERSION__)
 #  define PII_DECL_EXPORT __declspec(dllexport)
 #  define PII_DECL_IMPORT __declspec(dllimport)
 #elif defined(__GNUC__)
 #  define PII_DECL_EXPORT __attribute__ ((visibility("default")))
 #  define PII_DECL_IMPORT __attribute__ ((visibility("default")))
-#else
+#else 
 #  define PII_DECL_EXPORT
 #  define PII_DECL_IMPORT
 #endif
@@ -113,10 +113,10 @@
 #  define PII_ITERATOR_KEY(IT) (IT).key()
 #else
 #  include <cstdio>
-#  define piiDebug printf
-#  define piiWarning printf
-#  define piiCritical printf
-#  define piiFatal printf
+#  define piiDebug std::printf
+#  define piiWarning std::printf
+#  define piiCritical std::printf
+#  define piiFatal std::printf
 #  define piiPrintable(STR) (STR).c_str()
 // Map-like types in stl use std::pair as value_type
 #  define PII_ITERATOR_VALUE(IT) (IT)->second

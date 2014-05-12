@@ -37,7 +37,7 @@ struct PII_CORE_EXPORT PiiMatrixData
     bufferType(InternalBuffer)
   {}
 
-  PiiMatrixData(int rows, int columns, size_t stride) :
+  PiiMatrixData(int rows, int columns, std::size_t stride) :
     iRefCount(1),
     iLastRef(1),
     iRows(rows),
@@ -54,7 +54,7 @@ struct PII_CORE_EXPORT PiiMatrixData
   int iLastRef;
   int iRows, iColumns;
   // Number of bytes between beginnings of successive rows.
-  size_t iStride;
+  std::size_t iStride;
   // Size of allocated buffer in rows
   int iCapacity;
   // Points to the source data if this matrix is a subwindow of
@@ -68,14 +68,14 @@ struct PII_CORE_EXPORT PiiMatrixData
   const void* row(int index) const { return static_cast<const char*>(pBuffer) + iStride * index; }
 
   // Aligns row width to a four-byte boundary
-  static size_t alignedWidth(size_t bytes) { return (bytes + 3) & ~3; }
+  static std::size_t alignedWidth(std::size_t bytes) { return (bytes + 3) & ~3; }
   // Returns a pointer to the beginning of an internally allocated buffer.
   char* bufferAddress() { return reinterpret_cast<char*>(this) + sizeof(*this); }
 
   void reserve() { iRefCount.ref(); }
   void release() { if (iRefCount-- == iLastRef) destroy(); }
 
-  PiiMatrixData* clone(int capacity, size_t bytesPerRow);
+  PiiMatrixData* clone(int capacity, std::size_t bytesPerRow);
 
   PiiMatrixData* makeImmutable()
   {
@@ -87,11 +87,11 @@ struct PII_CORE_EXPORT PiiMatrixData
   }
 
   static PiiMatrixData* sharedNull();
-  static PiiMatrixData* allocate(int rows, int columns, size_t stride);
+  static PiiMatrixData* allocate(int rows, int columns, std::size_t stride);
   static PiiMatrixData* reallocate(PiiMatrixData* d, int rows);
-  static PiiMatrixData* createUninitializedData(int rows, int columns, size_t bytesPerRow, size_t stride = 0);
-  static PiiMatrixData* createInitializedData(int rows, int columns, size_t bytesPerRow, size_t stride = 0);
-  static PiiMatrixData* createReferenceData(int rows, int columns, size_t stride, void* buffer);
+  static PiiMatrixData* createUninitializedData(int rows, int columns, std::size_t bytesPerRow, std::size_t stride = 0);
+  static PiiMatrixData* createInitializedData(int rows, int columns, std::size_t bytesPerRow, std::size_t stride = 0);
+  static PiiMatrixData* createReferenceData(int rows, int columns, std::size_t stride, void* buffer);
 
   void destroy();
 };

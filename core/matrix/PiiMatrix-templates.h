@@ -26,7 +26,7 @@ template <class T> class PiiMatrixColumnIterator
 public:
   // stl compatibility typedefs
   typedef std::random_access_iterator_tag iterator_category;
-  typedef ptrdiff_t difference_type;
+  typedef std::ptrdiff_t difference_type;
   typedef typename Pii::ToNonConst<T>::Type value_type;
   typedef typename Pii::IfClass<Pii::IsConst<T>,
                                 const PiiMatrix<value_type>&,
@@ -34,7 +34,7 @@ public:
   typedef T* pointer;
   typedef T& reference;
 
-  PiiMatrixColumnIterator(pointer ptr, size_t stride) :
+  PiiMatrixColumnIterator(pointer ptr, std::size_t stride) :
     _ptr(ptr), _iStride(stride)
   {}
   PiiMatrixColumnIterator(const PiiMatrixColumnIterator &other) :
@@ -55,7 +55,7 @@ public:
     _iStride = other._iStride;
     return *this;
   }
-  reference operator[] (int i) const { return *reinterpret_cast<pointer>((char*)_ptr + i * ptrdiff_t(_iStride)); }
+  reference operator[] (int i) const { return *reinterpret_cast<pointer>((char*)_ptr + i * std::ptrdiff_t(_iStride)); }
   bool operator== (const PiiMatrixColumnIterator& other) const { return _ptr == other._ptr; }
   bool operator!= (const PiiMatrixColumnIterator& other) const { return  _ptr != other._ptr; }
   bool operator< (const PiiMatrixColumnIterator& other) const { return _ptr < other._ptr; }
@@ -99,13 +99,13 @@ public:
   difference_type operator- (const PiiMatrixColumnIterator& other) const
   {
     return _iStride != 0 ?
-      ((char*)(_ptr) - (char*)(other._ptr)) / ptrdiff_t(_iStride) :
+      ((char*)(_ptr) - (char*)(other._ptr)) / std::ptrdiff_t(_iStride) :
       0;
   }
 
 private:
   pointer _ptr;
-  size_t _iStride;
+  std::size_t _iStride;
 };
 
 /***** Submatrix specialization *****/
@@ -224,9 +224,9 @@ typename PiiMatrix<T>::Traits::row_iterator PiiMatrix<T,-1,-1>::insertRow(int in
 template <class T> typename PiiMatrix<T>::Traits::row_iterator PiiMatrix<T,-1,-1>::insertRow(int index)
 {
   detach();
-  size_t iBytesPerRow = columns() * sizeof(T);
+  std::size_t iBytesPerRow = columns() * sizeof(T);
   T* pNewRow = static_cast<T*>(PiiTypelessMatrix::insertRow(index, iBytesPerRow));
-  memset(pNewRow, 0, iBytesPerRow);
+  std::memset(pNewRow, 0, iBytesPerRow);
   return pNewRow;
 }
 
@@ -316,16 +316,16 @@ template <class T> void PiiMatrix<T,-1,-1>::resize(int rows, int columns)
   PiiTypelessMatrix::resize(rows, columns, sizeof(T));
   if (columns > iOldC)
     {
-      const size_t iBytes = sizeof(T) * (columns - iOldC);
+      const std::size_t iBytes = sizeof(T) * (columns - iOldC);
       for (int i=0; i<rows; ++i)
-        memset(static_cast<T*>(this->d->row(i)) + iOldC, 0, iBytes);
+        std::memset(static_cast<T*>(this->d->row(i)) + iOldC, 0, iBytes);
     }
   if (rows > iOldR)
     {
-      const size_t iBytes = sizeof(T) * columns;
+      const std::size_t iBytes = sizeof(T) * columns;
       if (iBytes > 0)
         for (int i=iOldR; i<rows; ++i)
-          memset(static_cast<T*>(this->d->row(i)), 0, iBytes);
+          std::memset(static_cast<T*>(this->d->row(i)), 0, iBytes);
     }
 }
 

@@ -247,7 +247,7 @@ public:
   }
 
 private:
-  PiiQImage(void* data, int rows, int columns, size_t stride,
+  PiiQImage(void* data, int rows, int columns, std::size_t stride,
                   Pii::PtrOwnership ownership);
   PiiQImage(const PiiMatrix<T>& matrix);
 
@@ -266,15 +266,15 @@ typedef PiiQImage<PiiColor4<uchar> > PiiColorQImage;
 template <class T> struct PiiQImageTraits
 {
   enum { Format = QImage::Format_Indexed8 };
-  static inline void memcpy(uchar* to, const T* from, size_t pixels)
+  static inline void memcpy(uchar* to, const T* from, std::size_t pixels)
   {
-    for (size_t i=0; i<pixels; ++i)
+    for (std::size_t i=0; i<pixels; ++i)
       to[i] = uchar(from[i]);
   }
 };
 template <class T> struct PiiCompatibleQImageTraits
 {
-  static inline void memcpy(uchar* to, const T* from, size_t pixels) { ::memcpy(to, from, pixels*sizeof(T)); }
+  static inline void memcpy(uchar* to, const T* from, std::size_t pixels) { ::memcpy(to, from, pixels*sizeof(T)); }
 };
 template <> struct PiiQImageTraits<char> : PiiCompatibleQImageTraits<char>
 {
@@ -295,9 +295,9 @@ template <> struct PiiQImageTraits<PiiColor4<uchar> > : PiiCompatibleQImageTrait
 template <> struct PiiQImageTraits<PiiColor<uchar> >
 {
   enum { Format = QImage::Format_RGB32 };
-  static inline void memcpy(uchar* to, const PiiColor<uchar>* from, size_t pixels)
+  static inline void memcpy(uchar* to, const PiiColor<uchar>* from, std::size_t pixels)
   {
-    for (size_t i=0; i<pixels; ++i, to+=4,  ++from)
+    for (std::size_t i=0; i<pixels; ++i, to+=4,  ++from)
       {
         *to = from->channels[0];
         to[1] = from->channels[1];
@@ -310,9 +310,9 @@ template <> struct PiiQImageTraits<PiiColor<char> > : PiiQImageTraits<PiiColor<u
 template <> struct PiiQImageTraits<float>
 {
   enum { Format = QImage::Format_Indexed8 };
-  static inline void memcpy(uchar* to, const float* from, size_t pixels)
+  static inline void memcpy(uchar* to, const float* from, std::size_t pixels)
   {
-    for (size_t i=0; i<pixels; ++i)
+    for (std::size_t i=0; i<pixels; ++i)
       to[i] = uchar(from[i]*255);
   }
 };
@@ -357,7 +357,7 @@ PiiQImage<T>* PiiQImage<T>::create(const PiiMatrix<U>& matrix)
   return create(tmp);
 }
 
-template <class T> PiiQImage<T>::PiiQImage(void* data, int rows, int columns, size_t stride,
+template <class T> PiiQImage<T>::PiiQImage(void* data, int rows, int columns, std::size_t stride,
                                            Pii::PtrOwnership ownership) :
   QImage(static_cast<uchar*>(data), columns, rows, stride, (QImage::Format)PiiQImageTraits<T>::Format),
   PiiMatrix<T>(rows, columns, data, ownership, stride)

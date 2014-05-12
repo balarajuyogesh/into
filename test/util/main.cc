@@ -49,7 +49,7 @@ struct ArrayCopyTestClass
 void TestPiiUtil::arrayCopy()
 {
   {
-    const size_t size = 5;
+    const std::size_t size = 5;
     const int arrayFrom[size] = {1,2,3,4,5};
     int arrayTo[size];
     QVERIFY( memcmp(arrayFrom, arrayTo, sizeof(arrayFrom)) != 0 );

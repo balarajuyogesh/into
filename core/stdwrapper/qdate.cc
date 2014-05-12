@@ -22,12 +22,12 @@ QDate::QDate() :
 
 QDate::QDate(int y, int m, int d)
 {
-  struct tm t;
-  memset(&t, 0, sizeof(struct tm));
+  struct std::tm t;
+  std::memset(&t, 0, sizeof(struct std::tm));
   t.tm_year = y;
   t.tm_mon = m;
   t.tm_mday = d;
-  _time = mktime(&t);
+  _time = std::mktime(&t);
 }
 
 QDate::QDate(const QDate& other) :
@@ -47,9 +47,13 @@ int QDate::day() const { return gmtime(3); }
 
 int QDate::gmtime(int field) const
 {
-  union { struct tm stm; int fields[sizeof(struct tm)/sizeof(int)]; } t;
+  union { struct std::tm stm; int fields[sizeof(struct std::tm)/sizeof(int)]; } t;
 #ifdef _MSC_VER
   _gmtime_s(&t.stm, &_time);
+#elif defined(__TI_COMPILER_VERSION__) 
+  struct std::tm* ptm;
+  ptm = std::gmtime(&_time);
+  t.stm = *ptm;
 #else
   gmtime_r(&_time, &t.stm);
 #endif
@@ -59,7 +63,7 @@ int QDate::gmtime(int field) const
 QDate QDate::currentDate()
 {
   QDate result;
-  time(&result._time);
+  std::time(&result._time);
   return result;
 }
 

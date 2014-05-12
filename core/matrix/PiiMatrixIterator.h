@@ -24,11 +24,11 @@
 // Used in the usual case when stride is counted in columns.
 template <class T> struct PiiStrideHandler
 {
-  static inline T add(T it, size_t offset) { return it + offset; }
+  static inline T add(T it, std::size_t offset) { return it + offset; }
 
-  static inline int rowDiff(T it1, T it2, size_t stride)
+  static inline int rowDiff(T it1, T it2, std::size_t stride)
   {
-    return (it1 - it2) / ptrdiff_t(stride);
+    return (it1 - it2) / std::ptrdiff_t(stride);
   }
 };
 
@@ -37,15 +37,15 @@ template <class T> struct PiiStrideHandler
 // a const pointer.
 template <class T> struct PiiStrideHandler<T*>
 {
-  static inline T* add(T* ptr, size_t offset)
+  static inline T* add(T* ptr, std::size_t offset)
   {
     // C-style casts to avoid const handling
     return (T*)((char*)(ptr) + offset);
   }
 
-  static inline int rowDiff(T* ptr1, T* ptr2, size_t stride)
+  static inline int rowDiff(T* ptr1, T* ptr2, std::size_t stride)
   {
-    return ((char*)(ptr1) - (char*)(ptr2)) / ptrdiff_t(stride);
+    return ((char*)(ptr1) - (char*)(ptr2)) / std::ptrdiff_t(stride);
   }
 };
 
@@ -60,11 +60,11 @@ public:
   typedef typename std::iterator_traits<T>::pointer pointer;
   typedef typename std::iterator_traits<T>::reference reference;
 
-  PiiMatrixIterator(T firstRow, int columns, size_t stride) :
+  PiiMatrixIterator(T firstRow, int columns, std::size_t stride) :
     _firstRow(firstRow), _row(firstRow), _iColumn(0), _iColumns(columns), _sStride(stride)
   {}
 
-  PiiMatrixIterator(T firstRow, T row, int columns, size_t stride) :
+  PiiMatrixIterator(T firstRow, T row, int columns, std::size_t stride) :
     _firstRow(firstRow), _row(row), _iColumn(0), _iColumns(columns), _sStride(stride)
   {}
 
@@ -89,7 +89,7 @@ public:
     _sStride = other._sStride;
     return *this;
   }
-  inline T addPtr(size_t offset) const { return Stride::add(_row, offset); }
+  inline T addPtr(std::size_t offset) const { return Stride::add(_row, offset); }
   reference operator[] (int i) const { return *(*this + i); }
   bool operator== (const PiiMatrixIterator& other) const { return (_row + _iColumn) == (other._row + other._iColumn); }
   bool operator!= (const PiiMatrixIterator& other) const { return  (_row + _iColumn) != (other._row + other._iColumn); }
@@ -166,5 +166,5 @@ public:
 private:
   T _firstRow, _row;
   int _iColumn, _iColumns;
-  size_t _sStride;
+  std::size_t _sStride;
 };

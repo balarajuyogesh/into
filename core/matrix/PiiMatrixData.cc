@@ -24,16 +24,16 @@ PiiMatrixData* PiiMatrixData::sharedNull()
   return &nullData;
 }
 
-PiiMatrixData* PiiMatrixData::allocate(int rows, int columns, size_t stride)
+PiiMatrixData* PiiMatrixData::allocate(int rows, int columns, std::size_t stride)
 {
-  void* bfr = malloc(sizeof(PiiMatrixData) + rows * stride);
+  void* bfr = std::malloc(sizeof(PiiMatrixData) + rows * stride);
   return new (bfr) PiiMatrixData(rows, columns, stride);
 }
 
 PiiMatrixData* PiiMatrixData::reallocate(PiiMatrixData* d, int rows)
 {
   // This may move the contents of d into a new memory location
-  d = static_cast<PiiMatrixData*>(realloc(d, sizeof(PiiMatrixData) + rows * d->iStride));
+  d = static_cast<PiiMatrixData*>(std::realloc(d, sizeof(PiiMatrixData) + rows * d->iStride));
   // If the data buffer is internal, we need to fix the data pointer
   if (d->bufferType == InternalBuffer)
     d->pBuffer = d->bufferAddress();
@@ -43,13 +43,13 @@ PiiMatrixData* PiiMatrixData::reallocate(PiiMatrixData* d, int rows)
 void PiiMatrixData::destroy()
 {
   if (bufferType == ExternalOwnBuffer)
-    free(pBuffer);
+    std::free(pBuffer);
   else if (pSourceData != 0)
     pSourceData->release();
-  free(this);
+  std::free(this);
 }
 
-PiiMatrixData* PiiMatrixData::createUninitializedData(int rows, int columns, size_t bytesPerRow, size_t stride)
+PiiMatrixData* PiiMatrixData::createUninitializedData(int rows, int columns, std::size_t bytesPerRow, std::size_t stride)
 {
   if (stride < bytesPerRow)
     stride = alignedWidth(bytesPerRow);
@@ -62,14 +62,14 @@ PiiMatrixData* PiiMatrixData::createUninitializedData(int rows, int columns, siz
   return pData;
 }
 
-PiiMatrixData* PiiMatrixData::createInitializedData(int rows, int columns, size_t bytesPerRow, size_t stride)
+PiiMatrixData* PiiMatrixData::createInitializedData(int rows, int columns, std::size_t bytesPerRow, std::size_t stride)
 {
   PiiMatrixData* pData = createUninitializedData(rows, columns, bytesPerRow, stride);
-  memset(pData->pBuffer, 0, pData->iStride * rows);
+  std::memset(pData->pBuffer, 0, pData->iStride * rows);
   return pData;
 }
 
-PiiMatrixData* PiiMatrixData::createReferenceData(int rows, int columns, size_t stride, void* buffer)
+PiiMatrixData* PiiMatrixData::createReferenceData(int rows, int columns, std::size_t stride, void* buffer)
 {
   PiiMatrixData* pData = allocate(0, columns, stride);
   pData->iRows = rows;
@@ -79,7 +79,7 @@ PiiMatrixData* PiiMatrixData::createReferenceData(int rows, int columns, size_t 
   return pData;
 }
 
-PiiMatrixData* PiiMatrixData::clone(int capacity, size_t bytesPerRow)
+PiiMatrixData* PiiMatrixData::clone(int capacity, std::size_t bytesPerRow)
 {
   PiiMatrixData* pData;
   int iNewRows = qMax(capacity, iRows);
@@ -92,12 +92,12 @@ PiiMatrixData* PiiMatrixData::clone(int capacity, size_t bytesPerRow)
 
   // Equal strides -> can copy the full contents at once
   if (pData->iStride == iStride)
-    memcpy(pData->pBuffer, pBuffer, iStride * iRows);
+    std::memcpy(pData->pBuffer, pBuffer, iStride * iRows);
   // Need to copy each row separately
   else
     {
       for (int i=0; i<iRows; ++i)
-        memcpy(pData->row(i), row(i), bytesPerRow);
+        std::memcpy(pData->row(i), row(i), bytesPerRow);
     }
   pData->iRows = iRows;
   return pData;

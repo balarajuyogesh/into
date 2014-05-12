@@ -54,7 +54,7 @@ public:
 
   PiiMatrix()
   {
-    memset(_data, 0, byteCount());
+    std::memset(_data, 0, byteCount());
   }
 
   PiiMatrix(const PiiMatrix& other)
@@ -143,10 +143,10 @@ public:
   T* row(int r) { return _data + r*columnCount; }
   const T* row(int r) const { return _data + r*columnCount; }
 
-  static size_t stride() { return columnCount * sizeof(T); }
+  static std::size_t stride() { return columnCount * sizeof(T); }
 
 private:
-  static inline size_t byteCount() { return rowCount * columnCount * sizeof(T); }
+  static inline std::size_t byteCount() { return rowCount * columnCount * sizeof(T); }
 
   T _data[rowCount * columnCount];
 };
@@ -192,7 +192,7 @@ public:
    * may be anything, but always larger than or equal to the number of
    * columns.
    */
-  size_t stride() const { return d->iStride; }
+  std::size_t stride() const { return d->iStride; }
 
   /**
    * Returns the maximum number or rows that can be stored in the
@@ -216,18 +216,18 @@ protected:
   PiiTypelessMatrix(PiiMatrixData* data) : d(data) {}
 
   PiiMatrixData* createReference(int rows, int columns, void* buffer) const;
-  void cloneAndReplaceData(int capacity, size_t bytesPerRow);
+  void cloneAndReplaceData(int capacity, std::size_t bytesPerRow);
 
-  void* appendRow(size_t bytesPerRow);
-  void* insertRow(int index, size_t bytesPerRow);
-  void removeRow(int index, size_t bytesPerRow);
-  void removeRows(int index, int cnt, size_t bytesPerRow);
-  void reserve(int rows, size_t bytesPerRow);
-  void* appendColumn(size_t bytesPerItem);
-  void* insertColumn(int index, size_t bytesPerItem);
-  void removeColumn(int index, size_t bytesPerItem);
-  void removeColumns(int index, int cnt, size_t bytesPerItem);
-  void resize(int rows, int columns, size_t bytesPerItem);
+  void* appendRow(std::size_t bytesPerRow);
+  void* insertRow(int index, std::size_t bytesPerRow);
+  void removeRow(int index, std::size_t bytesPerRow);
+  void removeRows(int index, int cnt, std::size_t bytesPerRow);
+  void reserve(int rows, std::size_t bytesPerRow);
+  void* appendColumn(std::size_t bytesPerItem);
+  void* insertColumn(int index, std::size_t bytesPerItem);
+  void removeColumn(int index, std::size_t bytesPerItem);
+  void removeColumns(int index, int cnt, std::size_t bytesPerItem);
+  void resize(int rows, int columns, std::size_t bytesPerItem);
 
   PiiMatrixData* d;
   /// @endhide
@@ -407,7 +407,7 @@ public:
    *
    * @see PiiTypelessMatrix::stride()
    */
-  PiiMatrix(int rows, int columns, const T* data, size_t stride = 0) :
+  PiiMatrix(int rows, int columns, const T* data, std::size_t stride = 0) :
     PiiTypelessMatrix(PiiMatrixData::createReferenceData(rows, columns,
                                                          qMax(stride, sizeof(T)*columns),
                                                          const_cast<T*>(data))->makeImmutable())
@@ -434,7 +434,7 @@ public:
    * mat = 0; // sets all elements in bfr to zeros
    * ~~~
    */
-  PiiMatrix(int rows, int columns, void* data, Pii::PtrOwnership ownership, size_t stride = 0) :
+  PiiMatrix(int rows, int columns, void* data, Pii::PtrOwnership ownership, std::size_t stride = 0) :
     PiiTypelessMatrix(PiiMatrixData::createReferenceData(rows, columns,
                                                          qMax(stride, sizeof(T)*columns),
                                                          data))
@@ -772,9 +772,9 @@ public:
   typename Traits::row_iterator appendRow()
   {
     detach();
-    size_t iBytesPerRow = sizeof(T) * d->iColumns;
+    std::size_t iBytesPerRow = sizeof(T) * d->iColumns;
     void* pRow = PiiTypelessMatrix::appendRow(iBytesPerRow);
-    memset(pRow, 0, iBytesPerRow);
+    std::memset(pRow, 0, iBytesPerRow);
     return static_cast<T*>(pRow);
   }
 
@@ -986,7 +986,7 @@ public:
    * larger than `sizeof(T)*columns`, matrix rows will be
    * padded to *stride* bytes.
    */
-  static PiiMatrix uninitialized(int rows, int columns, size_t stride = 0)
+  static PiiMatrix uninitialized(int rows, int columns, std::size_t stride = 0)
   {
     return PiiMatrix(PiiMatrixData::createUninitializedData(rows, columns,
                                                             columns * sizeof(T),
@@ -1015,7 +1015,7 @@ public:
    * `sizeof(T)*columns`, matrix rows will be padded to
    * *stride* bytes.
    */
-  static PiiMatrix padded(int rows, int columns, size_t stride)
+  static PiiMatrix padded(int rows, int columns, std::size_t stride)
   {
     return PiiMatrix(PiiMatrixData::createInitializedData(rows, columns,
                                                           columns * sizeof(T),

@@ -21,7 +21,7 @@ uint qHash(const PiiConstCharWrapper& key)
   uint g;
 
   const char* p = key.ptr;
-  int n = strlen(p);
+  int n = std::strlen(p);
   while (n--)
     {
       h = (h << 4) + (*p++);

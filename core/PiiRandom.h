@@ -34,8 +34,8 @@ namespace Pii
    */
   inline double uniformRandom()
   {
-#ifdef Q_OS_WIN
-    return double(rand()) * 1.0/RAND_MAX;
+#if defined(Q_OS_WIN) || defined(__TI_COMPILER_VERSION__)
+    return double(std::rand()) * 1.0/RAND_MAX;
 #else
     return drand48();
 #endif
@@ -91,8 +91,8 @@ namespace Pii
    */
   inline void seedRandom(long value)
   {
-#ifdef Q_OS_WIN
-    srand(static_cast<unsigned int>(value));
+#if defined(Q_OS_WIN) || defined(__TI_COMPILER_VERSION__)
+    std::srand(static_cast<unsigned int>(value));
 #else
     srand48(value);
 #endif

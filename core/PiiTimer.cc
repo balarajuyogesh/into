@@ -16,7 +16,7 @@
 #include "PiiTimer.h"
 #include <ctime>
 
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WIN) 
 #include <windows.h>
 
 #ifndef CLOCK_MONOTONIC
@@ -43,7 +43,7 @@ static LARGE_INTEGER getFILETIMEoffset()
   return t;
 }
 
-#if QT_VERSION < 0x050000
+#if QT_VERSION < 0x050000 
 
 struct timespec
 {
@@ -123,6 +123,19 @@ int clock_gettime(int, timespec* tp)
     Pii::timeBaseInfo.data.numer / Pii::timeBaseInfo.data.denom;
   tp->tv_sec = uiTime / 1000000000;
   tp->tv_nsec = uiTime % 1000000000;
+  return 0;
+}
+#elif defined (__TI_COMPILER_VERSION__)
+#define CLOCK_MONOTONIC 0
+struct timespec
+{
+  std::time_t tv_sec;
+  long tv_nsec;
+};
+int clock_gettime(int, timespec* tp)
+{
+  // TODO: returns only second accuracy
+  tp->tv_sec = std::time(0);
   return 0;
 }
 #endif

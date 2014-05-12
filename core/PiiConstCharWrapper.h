@@ -27,8 +27,8 @@
 struct PII_CORE_EXPORT PiiConstCharWrapper
 {
   PiiConstCharWrapper(const char* p) : ptr(p) {}
-  bool operator== (const PiiConstCharWrapper& other) const { return !strcmp(ptr, other.ptr); }
-  bool operator< (const PiiConstCharWrapper& other) const { return strcmp(ptr, other.ptr) < 0; }
+  bool operator== (const PiiConstCharWrapper& other) const { return !std::strcmp(ptr, other.ptr); }
+  bool operator< (const PiiConstCharWrapper& other) const { return std::strcmp(ptr, other.ptr) < 0; }
   operator const char* () const { return ptr; }
   const char* ptr;
 };

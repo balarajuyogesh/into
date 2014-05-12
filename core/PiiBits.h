@@ -294,9 +294,9 @@ namespace Pii
    * divisible by `bitMask` + 1. If `address` is already aligned,
    * it'll be returned unmodified.
    */
-  template <class T> inline T alignAddress(T address, size_t bitMask)
+  template <class T> inline T alignAddress(T address, std::size_t bitMask)
   {
-    return T((size_t(address) + bitMask) & ~bitMask);
+    return T((std::size_t(address) + bitMask) & ~bitMask);
   }
 
   /* NOTE

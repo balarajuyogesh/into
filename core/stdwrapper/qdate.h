@@ -38,11 +38,11 @@ public:
 
 private:
   friend class QDateTime;
-  QDate(time_t time);
+  QDate(std::time_t time);
 
   int gmtime(int field) const;
 
-  time_t _time;
+  std::time_t _time;
 };
 
 #endif //_QDATE_H

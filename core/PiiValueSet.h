@@ -75,7 +75,7 @@ namespace std
 namespace Pii
 {
   template <class T> inline bool valueSetEqual(T v1, T v2) { return v1 == v2; }
-  inline bool valueSetEqual(const char* v1, const char* v2) { return !strcmp(v1, v2); }
+  inline bool valueSetEqual(const char* v1, const char* v2) { return !std::strcmp(v1, v2); }
 }
 
 template <class T, int N> struct PiiValueSet

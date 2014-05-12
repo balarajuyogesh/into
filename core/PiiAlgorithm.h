@@ -42,7 +42,7 @@ namespace Pii
    * *value*. Returns *begin* + *n*.
    */
   template <class Iterator>
-  Iterator fillN(Iterator begin, size_t n, typename std::iterator_traits<Iterator>::value_type value)
+  Iterator fillN(Iterator begin, std::size_t n, typename std::iterator_traits<Iterator>::value_type value)
   {
     for (; n > 0; --n, ++begin)
       *begin = value;
@@ -82,7 +82,7 @@ namespace Pii
    * value returned by *generatore*. Returns *begin* + *n*.
    */
   template <class Iterator, class Generator>
-  Iterator generateN(Iterator begin, size_t n, Generator generator)
+  Iterator generateN(Iterator begin, std::size_t n, Generator generator)
   {
     for (; n > 0; --n, ++begin)
       *begin = generator();
@@ -124,7 +124,7 @@ namespace Pii
    * iteration. Returns *begin* + *n*.
    */
   template <class Iterator>
-  Iterator sequenceN(Iterator begin, size_t n,
+  Iterator sequenceN(Iterator begin, std::size_t n,
                     typename std::iterator_traits<Iterator>::value_type initialValue,
                     typename std::iterator_traits<Iterator>::value_type step)
   {
@@ -140,7 +140,7 @@ namespace Pii
    * *begin* + *end*.
    */
   template <class Iterator>
-  inline Iterator sequenceN(Iterator begin, size_t n,
+  inline Iterator sequenceN(Iterator begin, std::size_t n,
                             typename std::iterator_traits<Iterator>::value_type initialValue)
   {
     return sequenceN(begin, n, initialValue, 1);
@@ -172,7 +172,7 @@ namespace Pii
    * *begin* + *n*.
    */
   template <class Iterator, class UnaryFunction>
-  Iterator mapN(Iterator begin, size_t n, UnaryFunction func)
+  Iterator mapN(Iterator begin, std::size_t n, UnaryFunction func)
   {
     for (; n > 0; --n, ++begin)
       *begin = func(*begin);
@@ -230,7 +230,7 @@ namespace Pii
    * modifies the elements in place and works slightly faster.
    */
   template <class Iterator1, class Iterator2, class BinaryFunction>
-  void mapN(Iterator1 begin1, size_t n, Iterator2 begin2, BinaryFunction func)
+  void mapN(Iterator1 begin1, std::size_t n, Iterator2 begin2, BinaryFunction func)
   {
     for (; n > 0; --n)
       {
@@ -252,7 +252,7 @@ namespace Pii
   }
 
   template <class Iterator1, class Iterator2>
-  void swapN(Iterator1 begin1, size_t n, Iterator2 begin2)
+  void swapN(Iterator1 begin1, std::size_t n, Iterator2 begin2)
   {
     for (; n > 0; --n)
       {
@@ -279,7 +279,7 @@ namespace Pii
    * Returns *output* + *n*.
    */
   template <class InputIterator, class OutputIterator>
-  OutputIterator copyN(InputIterator begin, size_t n, OutputIterator output)
+  OutputIterator copyN(InputIterator begin, std::size_t n, OutputIterator output)
   {
     for (; n > 0; --n, ++begin, ++output)
       *output = PII_MOVE(*begin);
@@ -364,7 +364,7 @@ namespace Pii
    * Returns the inner product of two *n*-dimensional vectors.
    */
   template <class InputIterator1, class InputIterator2, class T>
-  T innerProductN(InputIterator1 begin1, size_t n, InputIterator2 begin2, T initialValue)
+  T innerProductN(InputIterator1 begin1, std::size_t n, InputIterator2 begin2, T initialValue)
   {
     for (; n > 0; --n, ++begin1, ++begin2)
       initialValue += T(*begin1) * T(*begin2);
@@ -391,7 +391,7 @@ namespace Pii
    * *output*. Returns *output* + *n*.
    */
   template <class InputIterator, class OutputIterator, class UnaryFunction>
-  OutputIterator transformN(InputIterator begin, size_t n,
+  OutputIterator transformN(InputIterator begin, std::size_t n,
                             OutputIterator output, UnaryFunction func)
   {
     for (; n > 0; --n, ++begin, ++output)
@@ -425,7 +425,7 @@ namespace Pii
    * *output*. Returns *output* + *n*.
    */
   template <class InputIterator1, class InputIterator2, class OutputIterator, class BinaryFunction>
-  OutputIterator transformN(InputIterator1 begin1, size_t n,
+  OutputIterator transformN(InputIterator1 begin1, std::size_t n,
                             InputIterator2 begin2, OutputIterator output,
                             BinaryFunction func)
   {
@@ -461,7 +461,7 @@ namespace Pii
    * This fuction works in the range [*begin*, *begin* + *n*).
    */
   template <class InputIterator, class BinaryFunction, class T>
-  T accumulateN(InputIterator begin, size_t n,
+  T accumulateN(InputIterator begin, std::size_t n,
                 BinaryFunction func, T initialValue)
   {
     for (; n > 0; --n, ++begin)
@@ -586,13 +586,13 @@ namespace Pii
    *
    * @param size the number of elements in the array
    */
-  template <class Iterator> void shuffleN(Iterator begin, size_t n)
+  template <class Iterator> void shuffleN(Iterator begin, std::size_t n)
   {
-    for (size_t i=0; i<n; ++i)
+    for (std::size_t i=0; i<n; ++i)
       {
         // PENDING rand() limits iNewIndex to RAND_MAX
         // Randomize a new location for each element
-        size_t iNewIndex = size_t(::rand()) % n;
+        std::size_t iNewIndex = std::size_t(std::rand()) % n;
         if (iNewIndex != i)
           qSwap(begin[i], begin[iNewIndex]);
       }

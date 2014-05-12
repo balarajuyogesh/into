@@ -16,6 +16,7 @@
 #include "PiiMath.h"
 #include "PiiPseudoInverse.h"
 
+
 namespace Pii
 {
   double calculateThirdSide(double a, double b, double angle)

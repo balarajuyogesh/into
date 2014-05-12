@@ -27,7 +27,7 @@ public:
   PiiClassInfoRegisterer(const char* parent,
                          const char* child,
                          const char* superClass = 0,
-                         ptrdiff_t offset = 0,
+                         std::ptrdiff_t offset = 0,
                          const QMetaObject* metaObject = 0);
 
   ~PiiClassInfoRegisterer();

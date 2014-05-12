@@ -59,9 +59,9 @@ void TestPiiMatrix::constructors()
   }
   {
     PiiMatrix<char> mat1(3, 3);
-    QCOMPARE(mat1.stride(), size_t(4));
+    QCOMPARE(mat1.stride(), std::size_t(4));
     PiiMatrix<char> mat2(1, 7);
-    QCOMPARE(mat2.stride(), size_t(8));
+    QCOMPARE(mat2.stride(), std::size_t(8));
   }
   {
     PiiMatrix<int> mat1(3,3);
@@ -583,13 +583,13 @@ void TestPiiMatrix::iterators()
   {
     // Iterating over an empty matrix should work fine.
     PiiMatrix<bool> empty;
-    QCOMPARE(empty.constBegin() - empty.constEnd(), ptrdiff_t(0));
-    QCOMPARE(empty.begin() - empty.end(), ptrdiff_t(0));
+    QCOMPARE(empty.constBegin() - empty.constEnd(), std::ptrdiff_t(0));
+    QCOMPARE(empty.begin() - empty.end(), std::ptrdiff_t(0));
     QCOMPARE(empty.constRowBegin(0), static_cast<const bool*>(0));
     QVERIFY(empty.constRowBegin(0) == empty.constRowEnd(0));
-    QCOMPARE(empty.constRowBegin(0) - empty.constRowEnd(0), ptrdiff_t(0));
+    QCOMPARE(empty.constRowBegin(0) - empty.constRowEnd(0), std::ptrdiff_t(0));
     QVERIFY(empty.constColumnBegin(0) == empty.constColumnEnd(0));
-    QCOMPARE(empty.constColumnBegin(0) - empty.constColumnEnd(0), ptrdiff_t(0));
+    QCOMPARE(empty.constColumnBegin(0) - empty.constColumnEnd(0), std::ptrdiff_t(0));
     for (PiiMatrix<bool>::iterator i = empty.begin(); i != empty.end(); ++i) *i = false;
   }
   {
@@ -608,8 +608,8 @@ void TestPiiMatrix::iterators()
           }
       }
     QVERIFY(matInt.end() == iter);
-    QCOMPARE(matInt.end() - matInt.begin(), ptrdiff_t(6));
-    QCOMPARE(matInt.begin() - matInt.end(), ptrdiff_t(-6));
+    QCOMPARE(matInt.end() - matInt.begin(), std::ptrdiff_t(6));
+    QCOMPARE(matInt.begin() - matInt.end(), std::ptrdiff_t(-6));
     iter = matInt.begin();
     QCOMPARE(iter[0], -8);
     QCOMPARE(iter[1], 6);
@@ -654,7 +654,7 @@ void TestPiiMatrix::iterators()
                         1, 2,
                         3, 4,
                         5, 6);
-    QCOMPARE(mat.stride(), size_t(4));
+    QCOMPARE(mat.stride(), std::size_t(4));
     for (int r=0; r<mat.rows(); ++r)
       for (PiiMatrix<char>::row_iterator i = mat.rowBegin(r); i < mat.rowEnd(r); ++i)
         *i += 2;
@@ -690,15 +690,15 @@ void TestPiiMatrix::iterators()
       PiiMatrix<char>::iterator i = mat.begin();
       i += 4;
       QCOMPARE(i[-4], char(1));
-      QCOMPARE(i - mat.begin(), ptrdiff_t(4));
+      QCOMPARE(i - mat.begin(), std::ptrdiff_t(4));
 
       i -= 3;
       QCOMPARE(*i, char(2));
-      QCOMPARE(i - mat.begin(), ptrdiff_t(1));
+      QCOMPARE(i - mat.begin(), std::ptrdiff_t(1));
       QCOMPARE(i[4], char(6));
     }
 
-    QCOMPARE(mat.columnBegin(0) - mat.columnEnd(0), ptrdiff_t(-3));
+    QCOMPARE(mat.columnBegin(0) - mat.columnEnd(0), std::ptrdiff_t(-3));
 
     {
       for (PiiMatrix<char>::column_iterator i = mat.columnEnd(1); i-- != mat.columnBegin(1); )

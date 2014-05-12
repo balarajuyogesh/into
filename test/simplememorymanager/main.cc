@@ -69,7 +69,7 @@ void TestPiiSimpleMemoryManager::externalBuffer()
 {
   void* bfr = malloc(200); // Will not be freed if a test fails, but who cares?
   PiiSimpleMemoryManager manager(bfr, 200, 50);
-  QCOMPARE(manager.blockSize(), size_t(64 - sizeof(void*)));
+  QCOMPARE(manager.blockSize(), std::size_t(64 - sizeof(void*)));
   for (unsigned i=0; i<manager.blockCount(); ++i)
     QVERIFY(manager.allocate(50));
   QVERIFY(!manager.allocate(50));
@@ -87,7 +87,7 @@ class B : public A
 public:
   B(int value) : _iMember(value) {}
 
-  void* operator new (size_t size)
+  void* operator new (std::size_t size)
   {
     void* ptr = _manager.allocate(size);
     if (ptr != 0) return ptr;

@@ -21,9 +21,9 @@
 
 void TestPiiColor::size()
 {
-  QCOMPARE(sizeof(PiiColor<>), size_t(3));
+  QCOMPARE(sizeof(PiiColor<>), std::size_t(3));
   QCOMPARE(sizeof(PiiColor<int>), 3 * sizeof(int));
-  QCOMPARE(sizeof(PiiColor4<>), size_t(4));
+  QCOMPARE(sizeof(PiiColor4<>), std::size_t(4));
   QCOMPARE(sizeof(PiiColor4<int>), 4 * sizeof(int));
 }
 

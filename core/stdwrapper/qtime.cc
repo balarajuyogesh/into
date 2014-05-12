@@ -14,7 +14,12 @@
  */
 
 #include "qtime.h"
+
+#if defined(__TI_COMPILER_VERSION__)
+#include <ctime>
+#else
 #include <sys/timeb.h>
+#endif
 
 QTime::QTime() :
   _iMsecs(-1)
@@ -46,7 +51,14 @@ int QTime::msec() const { return isValid() ? _iMsecs % 1000 : -1; }
 
 QTime QTime::currentTime()
 {
+#ifdef __TI_COMPILER_VERSION__
+  /* TODO: this returns only 1 second accuracy
+   */
+  std::time_t t = std::time(0);
+  return QTime(t % (24 * 60 * 60));
+#else
   struct timeb t;
   ftime(&t);
   return QTime(t.time % (24 * 60 * 60) + t.millitm);
+#endif
 }
