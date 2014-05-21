@@ -117,13 +117,19 @@ namespace PiiCalibration
                      const PiiMatrix<double>& trans);
 
     /**
-     * Convert the rotation vector to a 3-by-3 rotation matrix.
+     * Converts the rotation vector to a 3-by-3 rotation matrix.
      */
     PiiMatrix<double> rotationMatrix() const;
     /**
-     * Return the translation vector as a 3-by-1 column matrix.
+     * Returns the translation vector as a 3-by-1 column matrix.
      */
     PiiMatrix<double> translationMatrix() const;
+    /**
+     * Returns a 4-by-4 transformation matrix that contains both
+     * rotation and translation for homogeneous coordinate
+     * transformations.
+     */
+    PiiMatrix<double> transformationMatrix() const;
 
     /**
      * The rotation vector. Defines the rotation between the world

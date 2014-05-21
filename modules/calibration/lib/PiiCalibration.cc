@@ -681,6 +681,17 @@ namespace PiiCalibration
     return PiiMatrix<double>(3, 1, translation.values);
   }
 
+  PiiMatrix<double> RelativePosition::transformationMatrix() const
+  {
+    PiiMatrix<double> matResult(4,4);
+    matResult(0,0,3,3) << rotationMatrix();
+    matResult(0,3) = translation[0];
+    matResult(1,3) = translation[1];
+    matResult(2,3) = translation[2];
+    matResult(3,3) = 1;
+    return matResult;
+  }
+
   /************************************************************************
    * Remapping functions
    ************************************************************************/
