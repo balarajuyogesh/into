@@ -925,10 +925,37 @@ namespace PiiImage
    * //              0 0 0
    * ~~~
    */
-  template <class T> PiiMatrix<T> crop(const PiiMatrix<T>& image,
-                                       int x, int y,
-                                       int width, int height,
-                                       const PiiMatrix<float>& transform);
+  template <class T, class U>
+  PiiMatrix<T> crop(const PiiMatrix<T>& image,
+                    int x, int y,
+                    int width, int height,
+                    const PiiMatrix<U>& transform);
+
+  /**
+   * Applies an arbitrary coordinate transformation. This function
+   * goes through all pixels in *result* and passes the (x,y)
+   * coordinates of each to *transform* that returns new coordinates.
+   * The input *image* is sampled at the given location using either
+   * bilinear interpolation or nearest neighbor "interpolation", and
+   * the received value is written to the result image.
+   *
+   * @param image input image
+   *
+   * @param transform a function object with either `void operator()
+   * (int inX, int inY, double* outX, double* outY)` or `void
+   * operator() (int inX, int inY, int* outX, int* outY)`. `Function`
+   * must also specify the type of the output coordinates using e.g.
+   * `typedef double CoordinateType`. If `CoordinateType` is `double`,
+   * bilinear interpolation will be used. Otherwise, nearest neighbor
+   * "interpolation" will be used.
+   *
+   * @param result transformed output image
+   */
+  template <class Matrix, class Function>
+  void coordinateTransform(const Matrix& image,
+                           Function transform,
+                           PiiMatrix<typename Matrix::value_type>& result);
+
   /**
    * Detects corners in *image* using the FAST corner detector.
    *

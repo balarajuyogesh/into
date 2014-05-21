@@ -378,6 +378,25 @@ namespace PiiFuncOpPrivate
     template <std::size_t I>
     const typename std::tuple_element<I,T>::type& at() const { return std::get<I>(*this); }
   };
+
+  // func returns void
+  template <class Function, class Args> bool callCustomInit(Function func, Args&& args,
+                                                            typename std::enable_if<
+                                                              std::is_same<typename std::result_of<Function(Args)>::type,
+                                                                           void>::value, int>::type = 0)
+  {
+    func(std::forward<Args>(args));
+    return true;
+  }
+
+  // func returns bool
+  template <class Function, class Args> bool callCustomInit(Function func, Args&& args,
+                                                            typename std::enable_if<
+                                                              std::is_same<typename std::result_of<Function(Args)>::type,
+                                                                           bool>::value, int>::type = 0)
+  {
+    return func(std::forward<Args>(args));
+  }
 }
 /// @endhide
 
@@ -720,6 +739,12 @@ protected:
     return typename ParamHolder<T>::Type(getter, name);
   }
 
+  template <class T, class Derived, class U>
+  typename ParamHolder<T>::Type fixed(U (Derived::* getter)() const) const
+  {
+    return typename ParamHolder<T>::Type(getter);
+  }
+
   /**
    * Returns the socket corresponding to the Ith function parameter.
    * If the function has a return value, it is regarded as the first
@@ -774,6 +799,13 @@ protected:
    *   SuperType::process(&MyDerivedOperation::init);
    * }
    * ~~~
+   *
+   * You can use [Pii::MemberFunction] to make a non-static member
+   * function callable.
+   *
+   * If the *customInit* function returns a `bool`, the wrapped
+   * function is called only if the return value is `true`. This makes
+   * it possible to do special processing based on input.
    */
   template <class InitFunc> void process(InitFunc customInit)
   {
@@ -789,16 +821,18 @@ protected:
     Pii::callWithTuples(std::bind(PiiFuncOpPrivate::Initializer(), this, _1, _2),
                         d->holderPack,
                         values);
-    customInit(values);
 
-    // Call the actual function and emit its return value (if any).
-    // TODO: const handling
-    Pii::callWithTuple(Pii::memberFunction(d, &Data::callAndEmit), values);
+    if (PiiFuncOpPrivate::callCustomInit(customInit, values))
+      {
+        // Call the actual function and emit its return value (if any).
+        // TODO: const handling
+        Pii::callWithTuple(Pii::memberFunction(d, &Data::callAndEmit), values);
 
-    // Emit all other output arguments.
-    Pii::callWithTuples(PiiFuncOpPrivate::ValueEmitter(),
-                        d->holderPack,
-                        values);
+        // Emit all other output arguments.
+        Pii::callWithTuples(PiiFuncOpPrivate::ValueEmitter(),
+                            d->holderPack,
+                            values);
+      }
   }
 
 private:

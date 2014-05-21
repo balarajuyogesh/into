@@ -408,30 +408,60 @@ namespace PiiImage
                      backgroundColor);
   }
 
-  template <class T> PiiMatrix<T> crop(const PiiMatrix<T>& image,
-                                       int x, int y,
-                                       int width, int height,
-                                       const PiiMatrix<float>& transform)
+  template <class Matrix, class Function>
+  void coordinateTransform(const Matrix& image,
+                           Function transform,
+                           PiiMatrix<typename Matrix::value_type>& result)
   {
-    PiiMatrix<T> matResult(PiiMatrix<T>::uninitialized(height, width));
-    if (matResult.isEmpty())
-      return matResult;
+    typedef typename Matrix::value_type T;
     const int iRows = image.rows(), iCols = image.columns();
-    float fX, fY;
+    const int iHeight = result.rows(), iWidth = result.columns();
+    typename Function::CoordinateType dX, dY;
 
-    for (int iY=0; iY<height; ++iY)
+    for (int iY=0; iY<iHeight; ++iY)
       {
-        T* pResultRow = matResult[iY];
-        for (int iX=0; iX<width; ++iX)
+        T* pResultRow = result[iY];
+        for (int iX=0; iX<iWidth; ++iX)
           {
-            transformHomogeneousPoint(transform, float(iX + x), float(iY + y), &fX, &fY);
-            if (fX >= 0 && fX <= iCols-1 &&
-                fY >= 0 && fY <= iRows-1)
-              pResultRow[iX] = T(Pii::valueAt(image, fY, fX));
+            transform(iX, iY, &dX, &dY);
+            if (dX >= 0 && dX <= iCols-1 &&
+                dY >= 0 && dY <= iRows-1)
+              pResultRow[iX] = T(Pii::valueAt(image, dY, dX));
             else
               pResultRow[iX] = T(0);
           }
       }
+  }
+
+  template <class T> class CropTransform
+  {
+  public:
+    typedef T CoordinateType;
+
+    CropTransform(T x, T y, const PiiMatrix<T>& t) :
+      _x(x), _y(y), _transform(t)
+    {}
+
+    void operator() (int x, int y, T* outX, T* outY) const
+    {
+      transformHomogeneousPoint(_transform, x + _x, y + _y, outX, outY);
+    }
+
+  private:
+    T _x, _y;
+    const PiiMatrix<T>& _transform;
+  };
+
+  template <class T, class U>
+  PiiMatrix<T> crop(const PiiMatrix<T>& image,
+                    int x, int y,
+                    int width, int height,
+                    const PiiMatrix<U>& transform)
+  {
+    PiiMatrix<T> matResult(PiiMatrix<T>::uninitialized(height, width));
+    if (matResult.isEmpty())
+      return matResult;
+    coordinateTransform(image, CropTransform<U>(x, y, transform), matResult);
     return matResult;
   }
 
@@ -874,7 +904,6 @@ namespace PiiImage
                                                 T lowThreshold, T highThreshold)
   {
     // Filter the source image if necessary
-    // PENDING filtterin ja tuloksen tyyppi?
     PiiMatrix<T> matSource(smoothWidth != 0 ?
                            filter<T>(image, GaussianFilter, Pii::ExtendReplicate, smoothWidth) :
                            image);

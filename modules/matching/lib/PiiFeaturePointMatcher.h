@@ -114,7 +114,7 @@ namespace PiiMatching
    * struct MyMerger
    * {
    *   bool operator() (const PiiMatching::Match& match1,
-   *                    PiiMatching::Match& match2);
+   *                    PiiMatching::Match& match2) const;
    * };
    * ~~~
    */
