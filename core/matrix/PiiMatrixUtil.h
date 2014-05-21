@@ -195,19 +195,22 @@ namespace Pii
    *  //a = 1.25 b = 1.5 c = 2.0
    * ~~~
    */
-  template <class T>
-  inline typename Pii::ToFloatingPoint<T>::Type valueAt(const PiiMatrix<T>& img, double dr, double dc)
+  template <class Matrix>
+  inline typename Pii::ToFloatingPoint<typename Matrix::value_type>::Type
+  valueAt(const Matrix& img, double dr, double dc)
   {
+    typedef typename Matrix::value_type T;
+    typedef typename Matrix::const_row_iterator R;
     typedef typename Pii::ToFloatingPoint<T>::Type Real;
     typedef typename Pii::ToFloatingPoint<T>::PrimitiveType RealScalar;
     int ir = (int)dr, ic = (int)dc;
     dr -= ir; dc -= ic;
     double d1dr = 1.0-dr, d1dc = 1.0-dc;
-    const T* row1 = img.row(ir);
+    R row1 = img.rowBegin(ir);
     Real result = Real(row1[ic])*RealScalar(d1dr*d1dc);
     if (dr > 0)
       {
-        const T* row2 = img.row(ir+1);
+        R row2 = img.row(ir+1);
         result += Real(row2[ic])*RealScalar(dr*d1dc);
         if (dc > 0)
           result += Real(row2[ic+1])*RealScalar(dc*dr);
