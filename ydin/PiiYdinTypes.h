@@ -971,45 +971,50 @@ public:
 
 }; // namespace PiiYdin
 
+// Declares both PiiVariant and QVariant
+#define PII_DECLARE_SHARED_VARIANT_BOTH(TYPE, ID, BUILDING_LIB) \
+  PII_DECLARE_SHARED_VARIANT_TYPE(TYPE, ID, BUILDING_LIB);      \
+  Q_DECLARE_METATYPE(TYPE)
+
 // complex numbers
-PII_DECLARE_SHARED_VARIANT_TYPE(std::complex<int>, PiiYdin::IntComplexType, PII_BUILDING_YDIN);
-PII_DECLARE_SHARED_VARIANT_TYPE(std::complex<float>, PiiYdin::FloatComplexType, PII_BUILDING_YDIN);
-PII_DECLARE_SHARED_VARIANT_TYPE(std::complex<double>, PiiYdin::DoubleComplexType, PII_BUILDING_YDIN);
-//PII_DECLARE_SHARED_VARIANT_TYPE(std::complex<long double>, PiiYdin::LongDoubleComplexType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(std::complex<int>, PiiYdin::IntComplexType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(std::complex<float>, PiiYdin::FloatComplexType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(std::complex<double>, PiiYdin::DoubleComplexType, PII_BUILDING_YDIN);
+//PII_DECLARE_SHARED_VARIANT_BOTH(std::complex<long double>, PiiYdin::LongDoubleComplexType, PII_BUILDING_YDIN);
 
 // matrices
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<char>, PiiYdin::CharMatrixType, PII_BUILDING_YDIN);
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<short>, PiiYdin::ShortMatrixType, PII_BUILDING_YDIN);
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<int>, PiiYdin::IntMatrixType, PII_BUILDING_YDIN);
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<qint64>, PiiYdin::Int64MatrixType, PII_BUILDING_YDIN);
-//PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<long long>, PiiYdin::LongLongMatrixType, PII_BUILDING_YDIN);
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<unsigned char>, PiiYdin::UnsignedCharMatrixType, PII_BUILDING_YDIN);
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<unsigned short>, PiiYdin::UnsignedShortMatrixType, PII_BUILDING_YDIN);
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<unsigned int>, PiiYdin::UnsignedIntMatrixType, PII_BUILDING_YDIN);
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<quint64>, PiiYdin::UnsignedInt64MatrixType, PII_BUILDING_YDIN);
-//PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<unsigned long long>, PiiYdin::UnsignedLongLongMatrixType, PII_BUILDING_YDIN);
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<float>, PiiYdin::FloatMatrixType, PII_BUILDING_YDIN);
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<double>, PiiYdin::DoubleMatrixType, PII_BUILDING_YDIN);
-//PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<long double>, PiiYdin::LongDoubleMatrixType, PII_BUILDING_YDIN);
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<bool>, PiiYdin::BoolMatrixType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<char>, PiiYdin::CharMatrixType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<short>, PiiYdin::ShortMatrixType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<int>, PiiYdin::IntMatrixType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<qint64>, PiiYdin::Int64MatrixType, PII_BUILDING_YDIN);
+//PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<long long>, PiiYdin::LongLongMatrixType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<unsigned char>, PiiYdin::UnsignedCharMatrixType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<unsigned short>, PiiYdin::UnsignedShortMatrixType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<unsigned int>, PiiYdin::UnsignedIntMatrixType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<quint64>, PiiYdin::UnsignedInt64MatrixType, PII_BUILDING_YDIN);
+//PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<unsigned long long>, PiiYdin::UnsignedLongLongMatrixType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<float>, PiiYdin::FloatMatrixType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<double>, PiiYdin::DoubleMatrixType, PII_BUILDING_YDIN);
+//PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<long double>, PiiYdin::LongDoubleMatrixType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<bool>, PiiYdin::BoolMatrixType, PII_BUILDING_YDIN);
 
 // colors
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiColor<unsigned char>, PiiYdin::UnsignedCharColorType, PII_BUILDING_YDIN);
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiColor4<unsigned char>, PiiYdin::UnsignedCharColor4Type, PII_BUILDING_YDIN);
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiColor<unsigned short>, PiiYdin::UnsignedShortColorType, PII_BUILDING_YDIN);
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiColor<float>, PiiYdin::FloatColorType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiColor<unsigned char>, PiiYdin::UnsignedCharColorType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiColor4<unsigned char>, PiiYdin::UnsignedCharColor4Type, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiColor<unsigned short>, PiiYdin::UnsignedShortColorType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiColor<float>, PiiYdin::FloatColorType, PII_BUILDING_YDIN);
 
 // color images
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<PiiColor<unsigned char> >, PiiYdin::UnsignedCharColorMatrixType, PII_BUILDING_YDIN);
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<PiiColor4<unsigned char> >, PiiYdin::UnsignedCharColor4MatrixType, PII_BUILDING_YDIN);
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<PiiColor<unsigned short> >, PiiYdin::UnsignedShortColorMatrixType, PII_BUILDING_YDIN);
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<PiiColor<float> >, PiiYdin::FloatColorMatrixType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<PiiColor<unsigned char> >, PiiYdin::UnsignedCharColorMatrixType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<PiiColor4<unsigned char> >, PiiYdin::UnsignedCharColor4MatrixType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<PiiColor<unsigned short> >, PiiYdin::UnsignedShortColorMatrixType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<PiiColor<float> >, PiiYdin::FloatColorMatrixType, PII_BUILDING_YDIN);
 
 // complex matrices
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<std::complex<int> >, PiiYdin::IntComplexMatrixType, PII_BUILDING_YDIN);
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<std::complex<float> >, PiiYdin::FloatComplexMatrixType, PII_BUILDING_YDIN);
-PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<std::complex<double> >, PiiYdin::DoubleComplexMatrixType, PII_BUILDING_YDIN);
-//PII_DECLARE_SHARED_VARIANT_TYPE(PiiMatrix<std::complex<long double> >, PiiYdin::LongDoubleComplexMatrixType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<std::complex<int> >, PiiYdin::IntComplexMatrixType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<std::complex<float> >, PiiYdin::FloatComplexMatrixType, PII_BUILDING_YDIN);
+PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<std::complex<double> >, PiiYdin::DoubleComplexMatrixType, PII_BUILDING_YDIN);
+//PII_DECLARE_SHARED_VARIANT_BOTH(PiiMatrix<std::complex<long double> >, PiiYdin::LongDoubleComplexMatrixType, PII_BUILDING_YDIN);
 
 // Qt classes
 PII_DECLARE_SHARED_VARIANT_TYPE(QString, PiiYdin::QStringType, PII_BUILDING_YDIN);

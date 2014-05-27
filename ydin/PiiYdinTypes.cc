@@ -24,45 +24,49 @@
 #include <QTime>
 #include <QStringList>
 
+#define PII_REGISTER_VARIANT_BOTH(TYPE) \
+  PII_REGISTER_VARIANT_TYPE(TYPE); \
+  static int PII_JOIN(_qVariantId, __LINE__) = qRegisterMetaType<TYPE >()
+
 // matrices
-PII_REGISTER_VARIANT_TYPE(PiiMatrix<char>);
-PII_REGISTER_VARIANT_TYPE(PiiMatrix<short>);
-PII_REGISTER_VARIANT_TYPE(PiiMatrix<int>);
-PII_REGISTER_VARIANT_TYPE(PiiMatrix<qint64>);
-//PII_REGISTER_VARIANT_TYPE(PiiMatrix<long long>);
-PII_REGISTER_VARIANT_TYPE(PiiMatrix<unsigned char>);
-PII_REGISTER_VARIANT_TYPE(PiiMatrix<unsigned short>);
-PII_REGISTER_VARIANT_TYPE(PiiMatrix<unsigned int>);
-PII_REGISTER_VARIANT_TYPE(PiiMatrix<quint64>);
-//PII_REGISTER_VARIANT_TYPE(PiiMatrix<unsigned long long>);
-PII_REGISTER_VARIANT_TYPE(PiiMatrix<float>);
-PII_REGISTER_VARIANT_TYPE(PiiMatrix<double>);
-//PII_REGISTER_VARIANT_TYPE(PiiMatrix<long double>);
-PII_REGISTER_VARIANT_TYPE(PiiMatrix<bool>);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<char>);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<short>);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<int>);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<qint64>);
+//PII_REGISTER_VARIANT_BOTH(PiiMatrix<long long>);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<unsigned char>);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<unsigned short>);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<unsigned int>);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<quint64>);
+//PII_REGISTER_VARIANT_BOTH(PiiMatrix<unsigned long long>);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<float>);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<double>);
+//PII_REGISTER_VARIANT_BOTH(PiiMatrix<long double>);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<bool>);
 
 // color images
-PII_REGISTER_VARIANT_TYPE(PiiMatrix<PiiColor<unsigned char> >);
-PII_REGISTER_VARIANT_TYPE(PiiMatrix<PiiColor4<unsigned char> >);
-PII_REGISTER_VARIANT_TYPE(PiiMatrix<PiiColor<unsigned short> >);
-PII_REGISTER_VARIANT_TYPE(PiiMatrix<PiiColor<float> >);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<PiiColor<unsigned char> >);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<PiiColor4<unsigned char> >);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<PiiColor<unsigned short> >);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<PiiColor<float> >);
 
 // complex matrices
-PII_REGISTER_VARIANT_TYPE(PiiMatrix<std::complex<int> >);
-PII_REGISTER_VARIANT_TYPE(PiiMatrix<std::complex<float> >);
-PII_REGISTER_VARIANT_TYPE(PiiMatrix<std::complex<double> >);
-//PII_REGISTER_VARIANT_TYPE(PiiMatrix<std::complex<long double> >);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<std::complex<int> >);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<std::complex<float> >);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<std::complex<double> >);
+//PII_REGISTER_VARIANT_BOTH(PiiMatrix<std::complex<long double> >);
 
 // colors
-PII_REGISTER_VARIANT_TYPE(PiiColor<unsigned char>);
-PII_REGISTER_VARIANT_TYPE(PiiColor4<unsigned char>);
-PII_REGISTER_VARIANT_TYPE(PiiColor<unsigned short>);
-PII_REGISTER_VARIANT_TYPE(PiiColor<float>);
+PII_REGISTER_VARIANT_BOTH(PiiColor<unsigned char>);
+PII_REGISTER_VARIANT_BOTH(PiiColor4<unsigned char>);
+PII_REGISTER_VARIANT_BOTH(PiiColor<unsigned short>);
+PII_REGISTER_VARIANT_BOTH(PiiColor<float>);
 
 // complex numbers
-PII_REGISTER_VARIANT_TYPE(std::complex<int>);
-PII_REGISTER_VARIANT_TYPE(std::complex<float>);
-PII_REGISTER_VARIANT_TYPE(std::complex<double>);
-//PII_REGISTER_VARIANT_TYPE(std::complex<long double>);
+PII_REGISTER_VARIANT_BOTH(std::complex<int>);
+PII_REGISTER_VARIANT_BOTH(std::complex<float>);
+PII_REGISTER_VARIANT_BOTH(std::complex<double>);
+//PII_REGISTER_VARIANT_BOTH(std::complex<long double>);
 
 // Qt classes
 PII_REGISTER_VARIANT_TYPE(QString);
