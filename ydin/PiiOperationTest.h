@@ -270,6 +270,7 @@ private slots:
   void emitObject(const PiiVariant& obj, PiiProbeInput* sender);
   void deleteOutput(QObject* input);
   void deleteProbe(QObject* output);
+  void showError(PiiOperation* sender, const QString& message);
 
 private:
   typedef QMap<QString,PiiProbeInput*> ProbeMapType;

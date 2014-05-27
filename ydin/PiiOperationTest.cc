@@ -55,7 +55,7 @@ bool PiiOperationTest::createOperation(const char* plugin,
   d->pOperation = PiiSerializationFactory::create<PiiOperation>(operation);
   if (d->pOperation == 0)
     return false;
-  d->pOperation->setParent(this);
+  setOperation(d->pOperation);
 
   return true;
 }
@@ -64,7 +64,11 @@ void PiiOperationTest::setOperation(PiiOperation* operation)
 {
   d->pOperation = operation;
   if (d->pOperation != 0)
-    d->pOperation->setParent(this);
+    {
+      d->pOperation->setParent(this);
+      connect(operation, SIGNAL(errorOccured(PiiOperation*,QString)),
+              SLOT(showError(PiiOperation*,QString)));
+    }
 }
 
 PiiOperation* PiiOperationTest::operation() const
@@ -313,4 +317,9 @@ void PiiOperationTest::clearAllOutputValues()
   for (ProbeMapType::const_iterator i=d->mapProbes.begin();
        i != d->mapProbes.end(); ++i)
     i.value()->setSavedObject(PiiVariant());
+}
+
+void PiiOperationTest::showError(PiiOperation*, const QString& message)
+{
+  qDebug("%s", qPrintable(message));
 }
