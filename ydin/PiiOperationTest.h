@@ -253,6 +253,14 @@ protected:
    */
   void clearAllOutputValues();
 
+  /**
+   * Waits at most the given number of *milliseconds* for the output
+   * with *name* to receive an object. Returns `true` if the output
+   * has an object and `false` otherwise. One should usually call
+   * [clearOutputValue()] before this function.
+   */
+  bool waitOutput(const QString& name, int milliseconds) const;
+
 signals:
   /**
    * Emitted whenever an object is emitted through any of the output

@@ -297,6 +297,14 @@ bool PiiOperationTest::hasOutputValue(const QString& name) const
   return d->mapProbes.contains(name) && d->mapProbes[name]->hasSavedObject();
 }
 
+bool PiiOperationTest::waitOutput(const QString& name, int milliseconds) const
+{
+  PiiTimer timer;
+  while (!hasOutputValue(name) && timer.milliseconds() < milliseconds)
+    QCoreApplication::processEvents();
+  return hasOutputValue(name);
+}
+
 bool PiiOperationTest::hasOutputValue() const
 {
   for (ProbeMapType::const_iterator i=d->mapProbes.begin();
