@@ -62,17 +62,17 @@ namespace PiiImage
       }
   }
 
+  struct RecursiveCall
+  {
+    int rowIndex;
+    int start;
+    int end;
+  };
+
   // On row rowIndex, find all runs that overlap with the range
   // start-end.
   void connectRuns(LabelInfo& info, int rowIndex, int start, int end)
   {
-    struct RecursiveCall
-    {
-      int rowIndex;
-      int start;
-      int end;
-    };
-
     QStack<RecursiveCall>  localStack;
     RecursiveCall currentCall = { rowIndex, start, end };
     localStack.push(currentCall);
@@ -101,8 +101,13 @@ namespace PiiImage
             pNode->seed = false;
             // Mark the run and push "recursion" calls to the stack
             markToBuffer(info, currentCall.rowIndex, pNode->start, end);
-            localStack.push(RecursiveCall{currentCall.rowIndex-1, pNode->start, end});
-            localStack.push(RecursiveCall{currentCall.rowIndex+1, pNode->start, end});
+            RecursiveCall call;
+            call.rowIndex = currentCall.rowIndex - 1;
+            call.start = pNode->start;
+            call.end = end;
+            localStack.push(call);
+            call.rowIndex = currentCall.rowIndex + 1;
+            localStack.push(call);
 
             // Destroy current node
             info.lstRuns[currentCall.rowIndex].remove(pNode);
