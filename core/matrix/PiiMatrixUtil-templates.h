@@ -348,7 +348,7 @@ namespace Pii
       {
         int rowLength = iCols*sizeof(T);
         for (int r=0; r<iRows; ++r)
-          memcpy(result.row(iRows-1-r), mat.row(r), rowLength);
+          std::memcpy(result.row(iRows-1-r), mat.row(r), rowLength);
       }
 
     return result;
@@ -370,7 +370,7 @@ namespace Pii
         iStartIndex = firstRow;
         iEndIndex = lastRow;
         // Take the last row as a pivot
-        memcpy(pivotRow, matrix.row(lastRow), iBytesPerRow);
+        std::memcpy(pivotRow, matrix.row(lastRow), iBytesPerRow);
         do
           {
             // Find first row that is not smaller than pivot.
@@ -394,8 +394,8 @@ namespace Pii
         // Now, rows above iStartIndex are smaller or equal than the
         // pivot, and rows below (or at iStartIndex) are greater or
         // equal.
-        memcpy(matrix.rowBegin(lastRow), matrix.constRowBegin(iStartIndex), iBytesPerRow);
-        memcpy(matrix.rowBegin(iStartIndex), pivotRow, iBytesPerRow);
+        std::memcpy(matrix.rowBegin(lastRow), matrix.constRowBegin(iStartIndex), iBytesPerRow);
+        std::memcpy(matrix.rowBegin(iStartIndex), pivotRow, iBytesPerRow);
 
         sortRows(matrix, column, pivotRow, firstRow, iStartIndex-1, lessThan);
         sortRows(matrix, column, pivotRow, iStartIndex+1, lastRow, lessThan);

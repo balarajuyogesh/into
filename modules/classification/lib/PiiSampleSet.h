@@ -112,7 +112,7 @@ namespace PiiSampleSet
    */
   template <class T> inline void setSampleAt(PiiMatrix<T>& samples, int index, const T* features)
   {
-    memcpy(samples[index], features, sizeof(T) * samples.columns());
+    std::memcpy(samples[index], features, sizeof(T) * samples.columns());
   }
 
   /**

@@ -49,6 +49,6 @@ PiiBinaryOutputArchive& PiiBinaryOutputArchive::operator<< (const QString& value
 PiiBinaryOutputArchive& PiiBinaryOutputArchive::operator<< (const char* value)
 {
   // Write also the null byte at the end
-  writeArray(value, strlen(value)+1);
+  writeArray(value, std::strlen(value)+1);
   return *this;
 }

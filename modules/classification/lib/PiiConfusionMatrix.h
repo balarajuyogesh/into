@@ -207,7 +207,7 @@ template <class Stream> void PiiConfusionMatrix::print(Stream& out, const QStrin
             strcpy(bfr,".");
           else
             sprintf(bfr,"%d",*ptr);
-          for (int k=0; k<space-(int)strlen(bfr)+1; k++)
+          for (int k=0; k<space-(int)std::strlen(bfr)+1; k++)
             out << ' ';
           out << bfr;
         }
@@ -241,7 +241,7 @@ template <class Stream> void PiiConfusionMatrix::print(Stream& out, const QStrin
         sprintf(bfr, "%.1f" , dMixup*100);
       else
         strcpy(bfr, "100");
-      for (int k=0; k<space-(int)strlen(bfr)+1; k++)
+      for (int k=0; k<space-(int)std::strlen(bfr)+1; k++)
         out << ' ';
       out << bfr;
     }

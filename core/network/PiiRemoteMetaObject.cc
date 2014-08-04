@@ -220,7 +220,7 @@ void PiiRemoteMetaObject::connectSignal(const char* signal)
 {
   PII_D;
   for (int i=0; i<d->lstSignals.size(); ++i)
-    if (!strcmp(d->lstSignals[i].aSignature, signal))
+    if (!std::strcmp(d->lstSignals[i].aSignature, signal))
       {
         try
           {
@@ -241,7 +241,7 @@ void PiiRemoteMetaObject::disconnectSignal(const char* signal)
 {
   PII_D;
   for (int i=0; i<d->lstSignals.size(); ++i)
-    if (!strcmp(d->lstSignals[i].aSignature, signal))
+    if (!std::strcmp(d->lstSignals[i].aSignature, signal))
       {
         try
           {

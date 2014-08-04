@@ -565,7 +565,7 @@ void PiiWebcamDriver::capture()
 
           //memcpy _pFrame
           void *pDestination = malloc(iBytes);
-          memcpy(pDestination, pSource, iBytes);
+          std::memcpy(pDestination, pSource, iBytes);
           listener()->frameCaptured(++_uiFrameIndex, pDestination, 0);
         }
       else

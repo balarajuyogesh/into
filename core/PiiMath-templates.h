@@ -577,7 +577,7 @@ namespace Pii
       {
         PiiMatrix<T> matResult(PiiMatrix<T>::uninitialized(1, iCols));
         T* pResultRow = matResult.row(0);
-        memcpy(pResultRow, mat[0], sizeof(T)*iCols);
+        std::memcpy(pResultRow, mat[0], sizeof(T)*iCols);
         for (int r=1; r<iRows; ++r)
           {
             const T* pSourceRow = mat.row(r);

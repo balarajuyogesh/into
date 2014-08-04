@@ -86,7 +86,7 @@ qint64 PiiMultipartDecoder::readData(char* data, qint64 maxSize)
           // start of the boundary.
           iTailLength = iBytesRead - i;
           iPeekLength = d->aBoundary.size()-iTailLength;
-          if (memcmp(d->aBoundary.constData(), data + i, iTailLength) == 0)
+          if (std::memcmp(d->aBoundary.constData(), data + i, iTailLength) == 0)
             {
               // either the boundary was fully matched ...
               if (iPeekLength == 0)
@@ -96,7 +96,7 @@ qint64 PiiMultipartDecoder::readData(char* data, qint64 maxSize)
                   // ... or the data to come next is the boundary
                   QByteArray aRest = d->pDevice->peek(iPeekLength);
                   if (aRest.size() == iPeekLength &&
-                      memcmp(aRest.constData(), d->aBoundary.constData() + iTailLength, iPeekLength) == 0)
+                      std::memcmp(aRest.constData(), d->aBoundary.constData() + iTailLength, iPeekLength) == 0)
                     break;
                 }
             }

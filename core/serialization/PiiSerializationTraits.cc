@@ -21,13 +21,13 @@ namespace PiiSerializationTraits
 {
   char* createTemplateName(const char* className, const char* typeName)
   {
-    const int iClassLen = strlen(className), iTypeLen = strlen(typeName);
+    const int iClassLen = std::strlen(className), iTypeLen = std::strlen(typeName);
     int iLocation = 0;
     char* pResult = new char[iClassLen + iTypeLen + 3];
-    memcpy(pResult, className, iClassLen);
+    std::memcpy(pResult, className, iClassLen);
     pResult[iClassLen] = '<';
     iLocation = iClassLen + 1;
-    memcpy(pResult + iLocation, typeName, iTypeLen);
+    std::memcpy(pResult + iLocation, typeName, iTypeLen);
     iLocation += iTypeLen;
     pResult[iLocation] = '>';
     pResult[++iLocation] = 0;

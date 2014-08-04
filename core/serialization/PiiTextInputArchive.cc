@@ -62,7 +62,7 @@ void PiiTextInputArchive::readRawData(void* ptr, unsigned int size)
   QByteArray decoded(QByteArray::fromBase64(strEncoded.toLatin1()));
   if (int(size) != decoded.size())
     PII_SERIALIZATION_ERROR(InvalidDataFormat);
-  memcpy(ptr, decoded.constData(), size);
+  std::memcpy(ptr, decoded.constData(), size);
 }
 
 PiiTextInputArchive& PiiTextInputArchive::operator>> (QString& value)

@@ -185,9 +185,9 @@ namespace PiiCalibration
         for (int r=0; r<imagePoints[view].rows(); ++r, ++pointIndex)
           {
             // Copy world coordinates
-            memcpy(pWorldPoints->data.db + pointIndex * 3, currentWorldPoints[r], 3*sizeof(double));
+            std::memcpy(pWorldPoints->data.db + pointIndex * 3, currentWorldPoints[r], 3*sizeof(double));
             // Copy image coordinates
-            memcpy(pImagePoints->data.db + pointIndex * 2, imagePoints[view][r], 2*sizeof(double));
+            std::memcpy(pImagePoints->data.db + pointIndex * 2, imagePoints[view][r], 2*sizeof(double));
           }
       }
 

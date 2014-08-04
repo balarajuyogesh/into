@@ -592,7 +592,7 @@ namespace Pii
 
   /**
    * Performs array copy of non-overlapping arrays. If used with
-   * primitive type, uses memcpy, else uses operator= one by one.
+   * primitive type, uses std::memcpy, else uses operator= one by one.
    *
    * @param to Pointer to destination array.
    * @param from Pointer to source array.
@@ -605,7 +605,7 @@ namespace Pii
   {
     // Using simple if instead of defining further template implementation.
     if (Pii::IsPrimitive<T>::boolValue)
-      memcpy(to, from, sizeof(T)*itemCount);
+      std::memcpy(to, from, sizeof(T)*itemCount);
     else
       {
         for(size_type i = 0; i<itemCount; ++i)

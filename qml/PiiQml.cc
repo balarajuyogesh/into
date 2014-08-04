@@ -128,7 +128,7 @@ namespace PiiQml
   {
     if (!meta)
       return false;
-    if (!strcmp(meta->className(), "PiiOperation"))
+    if (!std::strcmp(meta->className(), "PiiOperation"))
       return true;
     return isOperation(meta->superClass());
   }

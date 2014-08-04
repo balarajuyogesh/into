@@ -40,9 +40,9 @@ void TestPiiFifoBuffer::oneThread()
 
   r.wait();
   unsigned char* read = r.getArray();
-  QVERIFY(::memcmp(read, data, 10) == 0);
-  QVERIFY(::memcmp(read+10, data, 20) == 0);
-  QVERIFY(::memcmp(read+30, data, 30) == 0);
+  QVERIFY(std::memcmp(read, data, 10) == 0);
+  QVERIFY(std::memcmp(read+10, data, 20) == 0);
+  QVERIFY(std::memcmp(read+30, data, 30) == 0);
 
   char buffer[60];
 
@@ -53,7 +53,7 @@ void TestPiiFifoBuffer::oneThread()
   bfr.read(buffer+30, 30);
   w.wait();
 
-  /*if (::memcmp(buffer, data, 60))
+  /*if (std::memcmp(buffer, data, 60))
     {
       for (int i=0; i<60; i++)
         printf("%d ", (int)buffer[i]);
@@ -63,7 +63,7 @@ void TestPiiFifoBuffer::oneThread()
       printf("\n");
     }
   */
-  QVERIFY(::memcmp(buffer, data, 60) == 0);
+  QVERIFY(std::memcmp(buffer, data, 60) == 0);
 
 }
 
@@ -95,7 +95,7 @@ void TestPiiFifoBuffer::twoThreads()
   r.start();
   w.wait();
   r.wait();
-  QVERIFY(::memcmp(w.getArray(), r.getArray(), BUFFERSIZE) == 0);
+  QVERIFY(std::memcmp(w.getArray(), r.getArray(), BUFFERSIZE) == 0);
 }
 
 void TestPiiFifoBuffer::twoThreads_data()

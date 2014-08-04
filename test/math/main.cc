@@ -798,7 +798,7 @@ void TestPiiMath::multiply()
     int result[2];
     const int resultExpected[2] = {24, 24};
     Pii::multiply(mat, array, result);
-    QVERIFY( !memcmp(result, resultExpected, sizeof(result)) );
+    QVERIFY( !std::memcmp(result, resultExpected, sizeof(result)) );
   }
 
   {
@@ -2371,4 +2371,3 @@ void TestPiiMath::setDiagonal()
 }
 
 QTEST_MAIN(TestPiiMath)
-

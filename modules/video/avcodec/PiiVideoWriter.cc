@@ -141,7 +141,7 @@ bool PiiVideoWriter::allocateMediaContext()
   int len = sizeof(d->pOc->filename)-1;
   if (d->strFileName.size() < len)
     len = d->strFileName.size();
-  memcpy(d->pOc->filename, d->strFileName.toStdString().c_str(), len);
+  std::memcpy(d->pOc->filename, d->strFileName.toStdString().c_str(), len);
   d->pOc->filename[len] = 0;
 
   return true;
@@ -212,7 +212,7 @@ AVStream* PiiVideoWriter::add_video_stream(AVFormatContext *oc, CodecID codec_id
     c->mb_decision=2;
   }
   // some formats want stream headers to be seperate
-  if(!strcmp(oc->oformat->name, "mp4") || !strcmp(oc->oformat->name, "mov") || !strcmp(oc->oformat->name, "3gp"))
+  if(!std::strcmp(oc->oformat->name, "mp4") || !std::strcmp(oc->oformat->name, "mov") || !std::strcmp(oc->oformat->name, "3gp"))
     c->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
   return st;

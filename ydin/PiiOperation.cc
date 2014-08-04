@@ -493,7 +493,7 @@ void PiiOperation::disconnectAllOutputs()
 int PiiOperation::indexOf(const char* property) const
 {
   for (int i=0; i<d->lstProtectionLevels.size(); ++i)
-    if (!strcmp(d->lstProtectionLevels[i].first, property))
+    if (!std::strcmp(d->lstProtectionLevels[i].first, property))
       return i;
   return -1;
 }

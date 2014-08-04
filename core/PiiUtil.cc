@@ -82,7 +82,7 @@ namespace Pii
     const QMetaObject* pMeta = obj->metaObject();
     while (pMeta != 0)
       {
-        if (!strcmp(pMeta->className(), className))
+        if (!std::strcmp(pMeta->className(), className))
           return true;
         pMeta = pMeta->superClass();
       }

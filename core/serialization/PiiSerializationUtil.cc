@@ -38,7 +38,7 @@ namespace PiiSerialization
     // Find the version class info.
     for (int i=0; i<pQMetaObj->classInfoCount(); ++i)
       {
-        if (!strcmp(pQMetaObj->classInfo(i).name(), "version"))
+        if (!std::strcmp(pQMetaObj->classInfo(i).name(), "version"))
           {
             uiVersion = QString(pQMetaObj->classInfo(i).value()).toUInt();
             break;

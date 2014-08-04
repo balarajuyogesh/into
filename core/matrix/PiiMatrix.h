@@ -59,7 +59,7 @@ public:
 
   PiiMatrix(const PiiMatrix& other)
   {
-    memcpy(_data, other._data, byteCount());
+    std::memcpy(_data, other._data, byteCount());
   }
 
   template <class Matrix> PiiMatrix(const Matrix& other,
@@ -87,7 +87,7 @@ public:
 
   PiiMatrix& operator= (const PiiMatrix& other)
   {
-    memcpy(_data, other._data, byteCount());
+    std::memcpy(_data, other._data, byteCount());
     return *this;
   }
 
@@ -257,7 +257,7 @@ template <class T> struct PiiMatrixTraits<PiiMatrix<T,-1,-1> >
  * PiiMatrix only supports POD (plain old data) types as the content
  * type. It will call neither constructors nor destructors. The data of
  * a matrix is cleared by simply setting all bytes to zero, and
- * assignments may be performed with memcpy(). If matrix atrithmetic
+ * assignments may be performed with std::memcpy(). If matrix atrithmetic
  * is to be performed, the corresponding operators of the content type
  * must be defined. Furthermore, for some operations, there must be a
  * constructor for a single numeric argument. An example of a class

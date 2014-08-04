@@ -70,7 +70,7 @@ int PiiRemoteMetaObject::Data::StringData::add(const char* word, int len)
 
   QByteArrayData* pData = reinterpret_cast<QByteArrayData*>(_aHeader.data() + _iStringIndex * sizeof(QByteArrayData));
   pData->ref.atomic._q_value = -1;
-  if (len == -1) len = strlen(word);
+  if (len == -1) len = std::strlen(word);
   pData->size = len;
   pData->offset = sizeof(QByteArrayData) + _aStringData.size();
   _aStringData.append(word, len);

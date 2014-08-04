@@ -497,7 +497,7 @@ namespace PiiImage
             // fill in the neighborhood array
             T* ptr = neighborhood;
             for (int fr=windowRows; fr--; ptr+=windowColumns)
-              memcpy(ptr, rowPtrs[fr]+c, filterRowBytes);
+              std::memcpy(ptr, rowPtrs[fr]+c, filterRowBytes);
             // It is safe to store the result here because this pixel
             // won't be used again.
             rowPtrs[0][c] = Pii::medianN(neighborhood, neighborhoodSize);

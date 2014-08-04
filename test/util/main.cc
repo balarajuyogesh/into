@@ -52,17 +52,17 @@ void TestPiiUtil::arrayCopy()
     const std::size_t size = 5;
     const int arrayFrom[size] = {1,2,3,4,5};
     int arrayTo[size];
-    QVERIFY( memcmp(arrayFrom, arrayTo, sizeof(arrayFrom)) != 0 );
+    QVERIFY( std::memcmp(arrayFrom, arrayTo, sizeof(arrayFrom)) != 0 );
     Pii::arrayCopy(arrayTo, arrayFrom, size);
-    QVERIFY( memcmp(arrayFrom, arrayTo, sizeof(arrayFrom)) == 0 );
+    QVERIFY( std::memcmp(arrayFrom, arrayTo, sizeof(arrayFrom)) == 0 );
   }
 
   {
     const ArrayCopyTestClass lstFrom[3] = {{1},{1},{1}};
     ArrayCopyTestClass lstTo[3] = {{3},{3},{3}};
-    QVERIFY( memcmp(lstFrom, lstTo, sizeof(lstFrom)) != 0 );
+    QVERIFY( std::memcmp(lstFrom, lstTo, sizeof(lstFrom)) != 0 );
     Pii::arrayCopy(lstTo, lstFrom, 3);
-    QVERIFY( memcmp(lstFrom, lstTo, sizeof(lstFrom)) != 0 );
+    QVERIFY( std::memcmp(lstFrom, lstTo, sizeof(lstFrom)) != 0 );
     QVERIFY( lstFrom[0].val + 1 == lstTo[0].val );
     QVERIFY( lstFrom[1].val + 1 == lstTo[1].val );
     QVERIFY( lstFrom[2].val + 1 == lstTo[2].val );

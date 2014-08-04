@@ -234,7 +234,7 @@ void PiiOrientationEstimator::emitHistogram(PiiMatrix<float>& histogram)
       // Move the last elements in the histogram to the beginning.
       memmove(histogram[0], histogram[0] + shift, (d->iAngles - shift) * sizeof(float));
       // Copy the original data back to the end.
-      memcpy(histogram[0] + shift, firstPiece[0], shift * sizeof(float));
+      std::memcpy(histogram[0] + shift, firstPiece[0], shift * sizeof(float));
     }
   if (d->bNormalized)
     histogram /= Pii::sum<float>(histogram);

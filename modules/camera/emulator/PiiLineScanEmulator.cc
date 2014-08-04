@@ -678,7 +678,7 @@ void PiiLineScanEmulator::generateLine()
       // If there is no alpha mask, just copy image data to the frame
       // buffer.
       if (alphaMask.isNull())
-        memcpy(line+tempCoord.x(), tempImage.scanLine(tempCoord.ry()++), tempImage.width());
+        std::memcpy(line+tempCoord.x(), tempImage.scanLine(tempCoord.ry()++), tempImage.width());
       else // If there is an alpha channel, blend
         {
           uchar* pTarget = line+tempCoord.x();

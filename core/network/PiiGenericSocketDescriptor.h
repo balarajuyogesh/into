@@ -65,7 +65,10 @@ struct PII_NETWORK_EXPORT PiiGenericSocketDescriptor
     void* customDescriptor;
   };
 
-  inline bool operator== (PiiGenericSocketDescriptor other) { return memcmp(this, &other, sizeof(PiiGenericSocketDescriptor)) == 0; }
+  inline bool operator== (PiiGenericSocketDescriptor other)
+  {
+    return std::memcmp(this, &other, sizeof(PiiGenericSocketDescriptor)) == 0;
+  }
 };
 
 

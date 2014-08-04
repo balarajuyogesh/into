@@ -31,7 +31,7 @@ struct BigType
   template <class Archive> void serialize(Archive&, const unsigned int) {}
 
   BigType() { ++iCount; }
-  BigType(const BigType& other) { ++iCount; memcpy(bigBuffer, other.bigBuffer, sizeof(bigBuffer)); }
+  BigType(const BigType& other) { ++iCount; std::memcpy(bigBuffer, other.bigBuffer, sizeof(bigBuffer)); }
   ~BigType() { --iCount; }
   int bigBuffer[16];
   static int iCount;

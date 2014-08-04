@@ -286,7 +286,7 @@ private:
 
     // The class name for a null pointer is "0". We can end up here if
     // the pointer is not tracked.
-    if (strcmp(name, "0") == 0)
+    if (std::strcmp(name, "0") == 0)
       {
         value = 0;
         return;

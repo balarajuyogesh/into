@@ -415,7 +415,7 @@ template <class T> PiiMatrix<T> PiiLbpOperation::AnyLbp::createCompound()
   for (int i=0; i<vecResults.size(); ++i)
     {
       const PiiMatrix<T>& matVector = vecResults[i].valueAs<PiiMatrix<T> >();
-      memcpy(pData, matVector[0], matVector.columns()*sizeof(T));
+      std::memcpy(pData, matVector[0], matVector.columns()*sizeof(T));
       pData += matVector.columns();
     }
 

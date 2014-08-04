@@ -221,7 +221,7 @@ void TestPiiSerialization::anyArchive()
 
         char* resultPtr;
         ia >> resultPtr;
-        QCOMPARE(strcmp(sourcePtr, resultPtr), 0);
+        QCOMPARE(std::strcmp(sourcePtr, resultPtr), 0);
 
         int number;
         ia >> number;

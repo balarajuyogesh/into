@@ -50,7 +50,7 @@ namespace PiiYdin
   int pointerOffset(const char* superClass, const char* subClass)
   {
     // Superclass and subclass are the same.
-    if (!strcmp(superClass, subClass))
+    if (!std::strcmp(superClass, subClass))
       return 0;
 
     using namespace Pii;

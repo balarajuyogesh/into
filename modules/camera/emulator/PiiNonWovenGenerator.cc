@@ -68,7 +68,7 @@ void PiiNonWovenGenerator::generateTexture(PiiMatrix<unsigned char>& buffer,
 
   if (!first)
     {
-      memcpy(_matBuffer[0], _matBuffer[_matBuffer.rows()-1], columns);
+      std::memcpy(_matBuffer[0], _matBuffer[_matBuffer.rows()-1], columns);
       iFirstRow = 1;
     }
   else

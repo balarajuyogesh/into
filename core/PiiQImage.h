@@ -274,7 +274,7 @@ template <class T> struct PiiQImageTraits
 };
 template <class T> struct PiiCompatibleQImageTraits
 {
-  static inline void memcpy(uchar* to, const T* from, std::size_t pixels) { ::memcpy(to, from, pixels*sizeof(T)); }
+  static inline void memcpy(uchar* to, const T* from, std::size_t pixels) { std::memcpy(to, from, pixels*sizeof(T)); }
 };
 template <> struct PiiQImageTraits<char> : PiiCompatibleQImageTraits<char>
 {
