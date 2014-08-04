@@ -28,6 +28,7 @@
 #include "PiiColor.h"
 #include "PiiYdin.h"
 #include "PiiSocketState.h"
+#include <PiiQVariantWrapper.h>
 #include <complex>
 
 /**
@@ -39,6 +40,8 @@
  * between operations. Finally, registers the basic types as
  * serializable objects to PiiVariant.
  */
+
+#ifndef Q_MOC_RUN // moc fails
 
 /// @internal
 #define PII_DO_INTEGER_CASES(func, param) \
@@ -973,9 +976,11 @@ public:
 
 // Declares both PiiVariant and QVariant
 #define PII_DECLARE_SHARED_VARIANT_BOTH(TYPE, ID, BUILDING_LIB) \
-  PII_DECLARE_SHARED_VARIANT_TYPE(TYPE, ID, BUILDING_LIB);      \
+  PII_DECLARE_SHARED_VARIANT_TYPE(TYPE, ID, BUILDING_LIB); \
+  PII_SERIALIZATION_NAME_CUSTOM(PiiQVariantWrapper::Template<TYPE >, "PiiQVariantWrapper<" PII_STRINGIZE(TYPE) ">"); \
+  PII_DECLARE_EXPORTED_CLASS_TEMPLATE(class, PiiQVariantWrapper::Template<TYPE >, BUILDING_LIB); \
+  PII_DECLARE_FACTORY(PiiQVariantWrapper::Template<TYPE >, BUILDING_LIB); \
   Q_DECLARE_METATYPE(TYPE)
-
 // complex numbers
 PII_DECLARE_SHARED_VARIANT_BOTH(std::complex<int>, PiiYdin::IntComplexType, PII_BUILDING_YDIN);
 PII_DECLARE_SHARED_VARIANT_BOTH(std::complex<float>, PiiYdin::FloatComplexType, PII_BUILDING_YDIN);
@@ -1027,5 +1032,7 @@ PII_DECLARE_SHARED_VARIANT_TYPE(QImage, PiiYdin::QImageType, PII_BUILDING_YDIN);
 PII_DECLARE_SHARED_VARIANT_TYPE(PiiSocketState, PiiYdin::ResumeTagType, PII_BUILDING_YDIN);
 
 /// @endgroup
+
+#endif // #ifndef Q_MOC_RUN
 
 #endif //_PIIYDINTYPES_H

@@ -24,8 +24,18 @@
 #include <QTime>
 #include <QStringList>
 
+#include <PiiGenericInputArchive.h>
+#include <PiiGenericOutputArchive.h>
+
+#define PII_REGISTER_QVW(TYPE) \
+  PII_DEFINE_EXPORTED_CLASS_TEMPLATE(class, TYPE); \
+  PII_INSTANTIATE_SERIALIZER(PiiGenericInputArchive, TYPE); \
+  PII_INSTANTIATE_SERIALIZER(PiiGenericOutputArchive, TYPE); \
+  PII_INSTANTIATE_FACTORY(TYPE)
+
 #define PII_REGISTER_VARIANT_BOTH(TYPE) \
   PII_REGISTER_VARIANT_TYPE(TYPE); \
+  PII_REGISTER_QVW(PiiQVariantWrapper::Template<TYPE >); \
   static int PII_JOIN(_qVariantId, __LINE__) = qRegisterMetaType<TYPE >()
 
 // matrices
