@@ -31,6 +31,9 @@ public:
   QString() {}
   QString(const SuperType::value_type* str) : SuperType(str) {}
   QString(const SuperType& other) : SuperType(other) {}
+
+  QString(const QString& other) : SuperType(other) {}
+  ~QString() {}
 #ifdef PII_CXX11
   QString(SuperType&& other) : SuperType(other) {}
 #endif
