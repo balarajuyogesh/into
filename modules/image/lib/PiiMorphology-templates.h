@@ -45,16 +45,16 @@ namespace PiiImage
         return erode(image, mask, handleBorders);
       case Dilate:
          return dilate(image, mask);
-       case Open:
-         return open(image,mask);
-       case Close:
-         return close(image,mask);
-       case TopHat:
-         return topHat(image, mask);
-       case BottomHat:
-         return bottomHat(image, mask);
-       default:
-         return image;
+      case Open:
+        return open(image,mask);
+      case Close:
+        return close(image,mask);
+      case TopHat:
+        return topHat(image, mask);
+      case BottomHat:
+        return bottomHat(image, mask);
+      default:
+        return image;
        }
    }
 
