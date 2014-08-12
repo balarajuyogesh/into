@@ -32,9 +32,9 @@ struct PII_CORE_EXPORT PiiMatrixData
     iColumns(0),
     iStride(0),
     iCapacity(0),
+    bufferType(InternalBuffer),
     pSourceData(0),
-    pBuffer(0),
-    bufferType(InternalBuffer)
+    pBuffer(0)
   {}
 
   PiiMatrixData(int rows, int columns, std::size_t stride) :
@@ -44,7 +44,9 @@ struct PII_CORE_EXPORT PiiMatrixData
     iColumns(columns),
     iStride(stride),
     iCapacity(rows),
-    pSourceData(0)
+    bufferType(InternalBuffer),
+    pSourceData(0),
+    pBuffer(0)
   {}
 
   PiiAtomicInt iRefCount;
@@ -57,20 +59,22 @@ struct PII_CORE_EXPORT PiiMatrixData
   std::size_t iStride;
   // Size of allocated buffer in rows
   int iCapacity;
+  BufferType bufferType;
   // Points to the source data if this matrix is a subwindow of
   // another matrix.
   PiiMatrixData* pSourceData;
   // Points to the first element of the matrix.
   void* pBuffer;
-  BufferType bufferType;
 
   void* row(int index) { return static_cast<char*>(pBuffer) + iStride * index; }
   const void* row(int index) const { return static_cast<const char*>(pBuffer) + iStride * index; }
 
   // Aligns row width to a four-byte boundary
   static std::size_t alignedWidth(std::size_t bytes) { return (bytes + 3) & ~3; }
+  // Returns the size of this structure rounded up to closest multiple of 8.
+  static std::size_t headerSize() { return (sizeof(PiiMatrixData) + 7) & ~7; }
   // Returns a pointer to the beginning of an internally allocated buffer.
-  char* bufferAddress() { return reinterpret_cast<char*>(this) + sizeof(*this); }
+  char* bufferAddress() { return reinterpret_cast<char*>(this) + headerSize(); }
 
   void reserve() { iRefCount.ref(); }
   void release() { if (iRefCount-- == iLastRef) destroy(); }

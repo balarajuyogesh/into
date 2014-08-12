@@ -26,14 +26,14 @@ PiiMatrixData* PiiMatrixData::sharedNull()
 
 PiiMatrixData* PiiMatrixData::allocate(int rows, int columns, std::size_t stride)
 {
-  void* bfr = std::malloc(sizeof(PiiMatrixData) + rows * stride);
+  void* bfr = std::malloc(headerSize() + rows * stride);
   return new (bfr) PiiMatrixData(rows, columns, stride);
 }
 
 PiiMatrixData* PiiMatrixData::reallocate(PiiMatrixData* d, int rows)
 {
   // This may move the contents of d into a new memory location
-  d = static_cast<PiiMatrixData*>(std::realloc(d, sizeof(PiiMatrixData) + rows * d->iStride));
+  d = static_cast<PiiMatrixData*>(std::realloc(d, headerSize() + rows * d->iStride));
   // If the data buffer is internal, we need to fix the data pointer
   if (d->bufferType == InternalBuffer)
     d->pBuffer = d->bufferAddress();
