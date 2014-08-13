@@ -50,7 +50,7 @@ int QDate::gmtime(int field) const
   union { struct std::tm stm; int fields[sizeof(struct std::tm)/sizeof(int)]; } t;
 #ifdef _MSC_VER
   _gmtime_s(&t.stm, &_time);
-#elif defined(__TI_COMPILER_VERSION__) 
+#elif defined(__TI_COMPILER_VERSION__)
   struct std::tm* ptm;
   ptm = std::gmtime(&_time);
   t.stm = *ptm;

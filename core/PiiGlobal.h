@@ -29,7 +29,7 @@
 #elif defined(__GNUC__)
 #  define PII_DECL_EXPORT __attribute__ ((visibility("default")))
 #  define PII_DECL_IMPORT __attribute__ ((visibility("default")))
-#else 
+#else
 #  define PII_DECL_EXPORT
 #  define PII_DECL_IMPORT
 #endif

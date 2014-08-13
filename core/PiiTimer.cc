@@ -16,7 +16,7 @@
 #include "PiiTimer.h"
 #include <ctime>
 
-#if defined(Q_OS_WIN) 
+#if defined(Q_OS_WIN)
 #include <windows.h>
 
 #ifndef CLOCK_MONOTONIC
@@ -43,7 +43,7 @@ static LARGE_INTEGER getFILETIMEoffset()
   return t;
 }
 
-#if QT_VERSION < 0x050000 
+#if QT_VERSION < 0x050000
 
 struct timespec
 {
