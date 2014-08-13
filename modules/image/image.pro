@@ -11,4 +11,6 @@ qt {
   HEADERS += rawimage/*.h
   INCLUDEPATH += $$INTODIR/modules/camera/lib
   DEFINES += QT_STATICPLUGIN
+} else {
+  LIBS -= -lpiidsp
 }
