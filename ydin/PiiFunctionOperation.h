@@ -447,11 +447,10 @@ namespace PiiFuncOpPrivate
  *     or returned by a getter function. For pointers and references,
  *     the corresponding value type is used.
  *
- *      In the example above, the `gradient` parameter would point to
- *      a default-constructed [PiiMatrix<float>] on the stack.
- *      Similarly, `image` would refer to a [PiiMatrix<uchar>] whose
- *      value would be initialized with data read from an input
- *      socket.
+ *     In the example above, the `gradient` parameter would point to a
+ *     default-constructed [PiiMatrix<float>] on the stack. Similarly,
+ *     `image` would refer to a [PiiMatrix<uchar>] whose value would
+ *     be initialized with data read from an input socket.
  *
  * 2.  The temporary variables are initialized using
  *     `converter::initialize()`. The default converters do nothing
