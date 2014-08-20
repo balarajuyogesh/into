@@ -103,6 +103,21 @@ void TestPiiOperationCompound::fullName()
   delete pCompound1;
 }
 
+void TestPiiOperationCompound::proxyInnerSockets()
+{
+  PiiOperationCompound* pCompound1 = _compound.clone();
+  PiiOperationCompound* pCompound2 = _compound.clone();
+
+  pCompound1->addOperation(pCompound2);
+  pCompound2->setObjectName("compound2");
+
+  QCOMPARE(pCompound2->inputProxy("input")->output(), pCompound2->output(".input"));
+  QCOMPARE(pCompound2->outputProxy("output")->input(), pCompound2->input(".output"));
+
+  QCOMPARE(pCompound2->inputProxy("input")->output(), pCompound1->output("compound2..input"));
+  QCOMPARE(pCompound2->outputProxy("output")->input(), pCompound1->input("compound2..output"));
+}
+
 void TestPiiOperationCompound::disabledOperations()
 {
   PiiOperationCompound* pCompound = new PiiOperationCompound;
