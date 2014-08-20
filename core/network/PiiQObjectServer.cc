@@ -471,9 +471,9 @@ void PiiQObjectServer::listFunctions(QObject* object)
             d->lstSignals << method.QMETAMETHOD_SIGNATURE();
         }
       else if ((method.access() == QMetaMethod::Public ||
-    (method.access() == QMetaMethod::Protected && d->features & ExposeProtected) ||
-    (method.access() == QMetaMethod::Private && d->features & ExposePrivate))
-         &&
+                (method.access() == QMetaMethod::Protected && d->features & ExposeProtected) ||
+                (method.access() == QMetaMethod::Private && d->features & ExposePrivate))
+               &&
                ((method.methodType() == QMetaMethod::Method && (d->features & ExposeMethods)) ||
                 (method.methodType() == QMetaMethod::Slot && (d->features & ExposeSlots))))
         {
@@ -481,9 +481,11 @@ void PiiQObjectServer::listFunctions(QObject* object)
           addFunction(strSignature.left(strSignature.indexOf('(')), new MetaFunction(object, method));
         }
       else
-  {
-    piiDebug(QString("method: %0, type: %1, access: %2").arg(QString::fromLatin1(method.QMETAMETHOD_SIGNATURE())).arg(method.methodType()).arg(method.access()));
-  }
+        {
+          piiDebug(QString("method: %0, type: %1, access: %2")
+                   .arg(QString::fromLatin1(method.QMETAMETHOD_SIGNATURE()))
+                   .arg(method.methodType()).arg(method.access()));
+        }
     }
 }
 
