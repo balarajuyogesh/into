@@ -104,8 +104,8 @@ public:
    * - `Dilate` - dilation
    * - `Open` - dilation after erosion
    * - `Close` - erosion after dilation
-   * - `Tophat` - original minus opened
-   * - `Bottomhat` - closed minus original
+   * - `TopHat` - original minus opened
+   * - `BottomHat` - closed minus original
    */
   enum MorphologyOperation { Erode, Dilate, Open, Close, TopHat, BottomHat };
 

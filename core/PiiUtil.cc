@@ -405,7 +405,7 @@ namespace Pii
 
     return number.toDouble(ok);
   }
-  
+
   typedef QLinkedList<QPair<int,int> > RelationList;
 
   void joinNeighbors(int index, RelationList& pairs, QList<int>& indices)

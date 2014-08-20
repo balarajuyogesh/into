@@ -19,7 +19,7 @@ qt {
     PiiVersionNumber.cc
   SOURCES += stdwrapper/*.cc matrix/*.cc
   INCLUDEPATH += stdwapper
-  LIBS += -lrt
+  posix: LIBS += -lrt
 }
 
 INTODIR = ..

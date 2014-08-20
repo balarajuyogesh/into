@@ -14,7 +14,7 @@
  */
 
 #include "PiiVersionNumber.h"
-#include <QStringList> 
+#include <QStringList>
 
 const QStringList PiiVersionNumber::_lstGreekLetters = QStringList() <<
   "alpha" << "beta" << "gamma" << "delta" << "epsilon" <<

@@ -34,16 +34,6 @@ defineReplace(msvcForceDeps) {
   return($$incs)
 }
 
-# Get rid of a run-time dependency.
-defineTest(removeLib) {
-  win32: QMAKE_LFLAGS_RELEASE -= $$msvcForceDeps($$ARGS)
-  win32: QMAKE_LFLAGS_DEBUG -= $$msvcForceDeps($$ARGS)
-  for(module, $$ARGS) {
-    libs -= -lpii$$lower($$basename(module))
-  }
-  return(true)
-}
-
 !isEmpty(MODULEDEPS) {
   LIBS += $$moduleLibDep($$MODULEDEPS)
   #win32-msvc*:QMAKE_LFLAGS_RELEASE += $$msvcForceDeps($$MODULEDEPS)

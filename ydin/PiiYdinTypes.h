@@ -41,8 +41,6 @@
  * serializable objects to PiiVariant.
  */
 
-#ifndef Q_MOC_RUN // moc fails
-
 /// @internal
 #define PII_DO_INTEGER_CASES(func, param) \
   case PiiVariant::CharType:              \
@@ -974,6 +972,8 @@ public:
 
 }; // namespace PiiYdin
 
+#ifndef Q_MOC_RUN // moc fails
+
 // Declares both PiiVariant and QVariant
 #define PII_DECLARE_SHARED_VARIANT_BOTH(TYPE, ID, BUILDING_LIB) \
   PII_DECLARE_SHARED_VARIANT_TYPE(TYPE, ID, BUILDING_LIB); \
@@ -1033,6 +1033,6 @@ PII_DECLARE_SHARED_VARIANT_TYPE(PiiSocketState, PiiYdin::ResumeTagType, PII_BUIL
 
 /// @endgroup
 
-#endif // #ifndef Q_MOC_RUN
+#endif // Q_MOC_RUN
 
 #endif //_PIIYDINTYPES_H

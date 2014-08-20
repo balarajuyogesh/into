@@ -72,6 +72,8 @@ int PiiRemoteMetaObject::Data::StringData::add(const char* word, int len)
   pData->ref.atomic._q_value = -1;
   if (len == -1) len = std::strlen(word);
   pData->size = len;
+  pData->alloc = 0;
+  pData->capacityReserved = 0;
   pData->offset = sizeof(QByteArrayData) + _aStringData.size();
   _aStringData.append(word, len);
   _aStringData.append('\0');
@@ -276,6 +278,7 @@ void PiiRemoteMetaObject::collectFunctions(bool listSignals)
 
   for (int i=0; i<lstSignatures.size(); ++i)
     {
+      qDebug("%s", lstSignatures[i].constData());
       if (!funcExp.exactMatch(QString(lstSignatures[i])))
         {
           piiWarning(QString("Invalid function signature: %0").arg(QString(lstSignatures[i])));

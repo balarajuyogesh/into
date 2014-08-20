@@ -215,7 +215,7 @@ namespace Pii
   }
 
   /**
-   * a unary function adaptor that makes the result of one unary
+   * A unary function adaptor that makes the result of one unary
    * function the argument of another. If function 1 is f(x) and
    * function 2 is g(x), the composition returns f(g(x)).
    *
