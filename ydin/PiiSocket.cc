@@ -56,5 +56,9 @@ QString PiiSocket::fullName() const
 
 PiiOperation* PiiSocket::parentOperation() const
 {
-  return qobject_cast<PiiOperation*>(parent());
+  if (!isProxy())
+    return qobject_cast<PiiOperation*>(parent());
+  else if (parent())
+    return qobject_cast<PiiOperation*>(parent()->parent());
+  return 0;
 }

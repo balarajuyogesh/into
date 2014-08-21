@@ -100,6 +100,9 @@ void TestPiiOperationCompound::fullName()
   QCOMPARE(pTest->fullName(), QString("c2.test"));
   QCOMPARE(pTest->output("output")->fullName(), QString("c2.test.output"));
   QCOMPARE(pTest->input("input")->fullName(), QString("c2.test.input"));
+
+  QCOMPARE(pCompound2->input("input")->fullName(), QString("c2.input"));
+  QCOMPARE(pCompound2->output("output")->fullName(), QString("c2.output"));
   delete pCompound1;
 }
 
