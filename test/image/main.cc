@@ -2076,19 +2076,49 @@ void TestPiiImage::filter()
                                                                           21,27,33,
                                                                           39,45,51,
                                                                           57,63,69)));
+  PiiMatrix<int> matResult(3,3);
+  PiiImage::filter(input, filter, Pii::Identity<int>(), matResult, PiiImage::replicateBorder(input));
+  QVERIFY(Pii::equals(matResult, PiiMatrix<int>(3,3,
+                                                21,27,33,
+                                                39,45,51,
+                                                57,63,69)));
+
   QVERIFY(Pii::equals(PiiImage::filter<int>(input, filter, Pii::ExtendZeros),PiiMatrix<int>(3,3,
                                                                                             12,21,16,
                                                                                             27,45,33,
                                                                                             24,39,28)));
+
+  PiiImage::filter(input, filter, Pii::Identity<int>(), matResult, PiiImage::zeroBorder(input));
+  QVERIFY(Pii::equals(matResult, PiiMatrix<int>(3,3,
+                                                12,21,16,
+                                                27,45,33,
+                                                24,39,28)));
+
   QVERIFY(Pii::equals(PiiImage::filter<int>(input, filter, Pii::ExtendSymmetric),PiiMatrix<int>(3,3,
                                                                                                 21,27,33,
                                                                                                 39,45,51,
                                                                                                 57,63,69)));
+  PiiImage::filter(input, filter, Pii::Identity<int>(), matResult, PiiImage::reflectBorder(input));
+  QVERIFY(Pii::equals(matResult, PiiMatrix<int>(3,3,
+                                                21,27,33,
+                                                39,45,51,
+                                                57,63,69)));
+
   QVERIFY(Pii::equals(PiiImage::filter<int>(input, filter, Pii::ExtendPeriodic),PiiMatrix<int>(3,3,
                                                                                                45,45,45,
                                                                                                45,45,45,
                                                                                                45,45,45)));
+  PiiImage::filter(input, filter, Pii::Identity<int>(), matResult, PiiImage::periodicBorder(input));
+  QVERIFY(Pii::equals(matResult, PiiMatrix<int>(3,3,
+                                                45,45,45,
+                                                45,45,45,
+                                                45,45,45)));
+
   QVERIFY(Pii::equals(PiiImage::filter<int>(input, filter, Pii::ExtendNot),PiiMatrix<int>(1,1,45)));
+
+  PiiMatrix<int> matResult2(1,1);
+  PiiImage::filter(input, filter, Pii::Identity<int>(), matResult2);
+  QCOMPARE(matResult2(0,0), 45);
 
   filter = PiiImage::makeFilter<int>(PiiImage::SobelXFilter);
   {

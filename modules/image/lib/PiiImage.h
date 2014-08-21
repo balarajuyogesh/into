@@ -509,6 +509,238 @@ namespace PiiImage
     return PiiDsp::filter<ResultType>(Pii::extend(image, rows, rows, cols, cols, mode), filter, PiiDsp::FilterValidPart);
   }
 
+  template <class Input, class Filter, class UnaryFunction, class Output>
+  void filter(const Input& input,
+              const Filter& filter,
+              UnaryFunction convert,
+              Output& output)
+  {
+    typedef typename UnaryFunction::argument_type SumType;
+
+    const int
+      iOutRows = output.rows(),
+      iOutCols = output.columns(),
+      iFiltRows = filter.rows(),
+      iFiltCols = filter.columns();
+
+    for (int iOutR = 0; iOutR < iOutRows; ++iOutR)
+      {
+        typename Output::row_iterator outputRow = output[iOutR];
+        for (int iOutC = 0; iOutC < iOutCols; ++iOutC)
+          {
+            SumType sum(0);
+            for (int iFiltR = 0; iFiltR < iFiltRows; ++iFiltR)
+              sum += Pii::innerProductN(filter[iFiltR],
+                                        iFiltCols,
+                                        input[iOutR + iFiltR] + iOutC,
+                                        SumType(0));
+            outputRow[iOutC] = typename Output::value_type(convert(sum));
+          }
+      }
+  }
+
+  template <class Matrix> struct ZeroBorder
+  {
+    ZeroBorder(const Matrix& matrix) :
+      matrix(matrix)
+    {}
+
+    typename Matrix::value_type operator() (int row, int column) const
+    {
+      if (uint(row) >= uint(matrix.rows()) ||
+          uint(column) >= uint(matrix.columns()))
+        return typename Matrix::value_type(0);
+      return matrix(row, column);
+    }
+
+    const Matrix matrix;
+  };
+
+  template <class Matrix>
+  ZeroBorder<Matrix> zeroBorder(const Matrix& m) { return ZeroBorder<Matrix>(m); }
+
+  template <class Matrix> struct ReplicateBorder
+  {
+    ReplicateBorder(const Matrix& matrix) :
+      matrix(matrix)
+    {}
+
+    typename Matrix::value_type operator() (int row, int column) const
+    {
+      return matrix(qBound(0, row, matrix.rows()-1),
+                    qBound(0, column, matrix.columns()-1));
+    }
+
+    const Matrix matrix;
+  };
+
+  template <class Matrix>
+  ReplicateBorder<Matrix> replicateBorder(const Matrix& m) { return ReplicateBorder<Matrix>(m); }
+
+  template <class Matrix> struct ReflectBorder
+  {
+    ReflectBorder(const Matrix& matrix) :
+      matrix(matrix)
+    {}
+
+    typename Matrix::value_type operator() (int row, int column) const
+    {
+      if (row < 0)
+        row = -row - 1;
+      else if (row >= matrix.rows())
+        row = 2 * matrix.rows() - row - 1;
+      if (column < 0)
+        column = -column - 1;
+      else if (column >= matrix.columns())
+        column = 2 * matrix.columns() - column - 1;
+      return matrix(row, column);
+    }
+
+    const Matrix matrix;
+  };
+
+  template <class Matrix>
+  ReflectBorder<Matrix> reflectBorder(const Matrix& m) { return ReflectBorder<Matrix>(m); }
+
+  template <class Matrix> struct PeriodicBorder
+  {
+    PeriodicBorder(const Matrix& matrix) :
+      matrix(matrix)
+    {}
+
+    typename Matrix::value_type operator() (int row, int column) const
+    {
+      if (row < 0)
+        row += matrix.rows();
+      else if (row >= matrix.rows())
+        row -= matrix.rows();
+      if (column < 0)
+        column += matrix.columns();
+      else if (column >= matrix.columns())
+        column -= matrix.columns();
+      return matrix(row, column);
+    }
+
+    const Matrix matrix;
+  };
+
+  template <class Matrix>
+  PeriodicBorder<Matrix> periodicBorder(const Matrix& m) { return PeriodicBorder<Matrix>(m); }
+
+  template <class SumType, class BinaryFunction, class Filter>
+  SumType localFilterSum(BinaryFunction padded,
+                         const Filter& filter,
+                         int row, int column)
+  {
+    SumType sum(0);
+    for (int r = 0; r < filter.rows(); ++r)
+      {
+        typename Filter::const_row_iterator filterRow = filter[r];
+        for (int c = 0; c < filter.columns(); ++c)
+          sum += filterRow[c] * padded(r + row, c + column);
+      }
+    return sum;
+  }
+
+  /**
+   * Filters the *input* matrix with *filter*.
+   *
+   * @param input any matrix
+   *
+   * @param filter any matrix, must not be larger than *input*
+   *
+   * @param convert a conversion function that converts the local
+   * inner product of the filter and the image to the output type. The
+   * function must take one argument and return a value that can be
+   * assigned to the output matrix. The argument type of the function
+   * is used as an intermediate type in calculating the local inner
+   * product. If no conversion needs to be made, use e.g.
+   * Pii::Identity<int>().
+   *
+   * @param output a preallocated matrix to store the filtering
+   * result. Usually, the size of the output should be the same as
+   * that of the input.
+   *
+   * @param padded a binary function that returns the value of a pixel
+   * value, even if the coordinates are out of bounds. This function
+   * is used on image borders as a substitute for real data.
+   *
+   * ~~~(c++)
+   * PiiMatrix<int> matInput(128,128);
+   * PiiMatrix<int> matResult(128,128);
+   * PiiImage::filter(matInput,
+   *                  PiiImage::makeGaussian(5),
+   *                  Pii::Identity<int>(),
+   *                  matResult,
+   *                  PiiImage::replicateBorder(matInput));
+   * ~~~
+   */
+  template <class Input, class Filter, class UnaryFunction, class Output, class BinaryFunction>
+  void filter(const Input& input,
+              const Filter& filter,
+              UnaryFunction convert,
+              Output& output,
+              BinaryFunction padded)
+  {
+    typedef typename UnaryFunction::argument_type SumType;
+
+    const int
+      iOutRows = output.rows(),
+      iOutCols = output.columns(),
+      iFiltRows = filter.rows(),
+      iFiltCols = filter.columns(),
+      iTopRows = iFiltRows / 2,
+      iLeftCols = iFiltCols / 2;
+
+    // Top rows
+    for (int iOutR = 0; iOutR < iTopRows; ++iOutR)
+      {
+        typename Output::row_iterator outputRow = output[iOutR];
+        for (int iOutC = 0; iOutC < iOutCols; ++iOutC)
+          outputRow[iOutC] = convert(localFilterSum<SumType>(padded, filter,
+                                                             iOutR - iTopRows,
+                                                             iOutC - iLeftCols));
+      }
+
+    // Center rows
+    for (int iOutR = iTopRows; iOutR < iOutRows - iFiltRows; ++iOutR)
+      {
+        typename Output::row_iterator outputRow = output[iOutR];
+        // Left columns
+        for (int iOutC = 0; iOutC < iLeftCols; ++iOutC)
+          outputRow[iOutC] = convert(localFilterSum<SumType>(padded, filter,
+                                                             iOutR - iTopRows,
+                                                             iOutC - iLeftCols));
+        // Center columns
+        for (int iOutC = iLeftCols; iOutC < iOutCols - iFiltCols; ++iOutC)
+          {
+            SumType sum(0);
+            for (int iFiltR = 0; iFiltR < iFiltRows; ++iFiltR)
+              sum += Pii::innerProductN(filter[iFiltR],
+                                        iFiltCols,
+                                        input[iOutR + iFiltR - iTopRows] + iOutC + iLeftCols,
+                                        SumType(0));
+            outputRow[iOutC] = typename Output::value_type(convert(sum));
+          }
+        // Right columns
+        for (int iOutC = iOutCols - iFiltCols; iOutC < iOutCols; ++iOutC)
+          outputRow[iOutC] = convert(localFilterSum<SumType>(padded, filter,
+                                                             iOutR - iTopRows,
+                                                             iOutC - iLeftCols));
+
+      }
+
+    // Bottom rows
+    for (int iOutR = iOutRows - iFiltRows; iOutR < iOutRows; ++iOutR)
+      {
+        typename Output::row_iterator outputRow = output[iOutR];
+        for (int iOutC = 0; iOutC < iOutCols; ++iOutC)
+          outputRow[iOutC] = convert(localFilterSum<SumType>(padded, filter,
+                                                             iOutR - iTopRows,
+                                                             iOutC - iLeftCols));
+      }
+  }
+
   /**
    * Filter an image with two one-dimensional filters. If a
    * two-dimensional filter can be decomposed into two one-dimensional
@@ -540,7 +772,7 @@ namespace PiiImage
    * PiiMatrix<int> filtered = PiiImage::filter<int>(image, hFilter, vFilter);
    * ~~~
    *
-   * ! It is not a good idea to use `unsigned` `char` as the
+   * ! It is not a good idea to use `unsigned char` as the
    * result type. If the filters are `double`, use `double` as the
    * output type.
    */
