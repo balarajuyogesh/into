@@ -19,6 +19,8 @@
 #include <PiiFunctional.h>
 #include <functional>
 
+template <class T> struct PiiArithmeticTraits;
+
 /**
  * A template that adds support for arithmetic operators for any data
  * structure that can be iterated over. This class is intended to be
@@ -32,7 +34,7 @@
  * // Forward declaration for the rebinder in MyTraits.
  * template <class T> class MyClass;
  *
- * template <class T> struct MyTraits
+ * template <class T> struct PiiArithmeticTraits<MyClass<T> >
  * {
  *   // The element type
  *   typedef T Type;
@@ -44,10 +46,10 @@
  *   template <class U> struct Rebind { typedef MyClass<U> Type; };
  * };
  *
- * template <class T> class MyClass : public PiiArithmeticBase<MyClass<T>, MyTraits<T> >
+ * template <class T> class MyClass : public PiiArithmeticBase<MyClass<T> >
  * {
  * public:
- *   typedef PiiArithmeticBase<MyClass<T>, MyTraits<T> > BaseType;
+ *   typedef PiiArithmeticBase<MyClass<T> > BaseType;
  *
  *   // Required iterator functions
  *   typename BaseType::ConstIterator begin() const { return _pData; }   // const iterator to the beginning
@@ -79,7 +81,7 @@
  * best case) crash.
  *
  */
-template <class Derived, class Traits> class PiiArithmeticBase
+template <class Derived> class PiiArithmeticBase
 {
 public:
   /**
@@ -91,27 +93,28 @@ public:
    * PiiColor<double> clr2 = PiiColor<>::TraitsType::Rebind<double>::Type();
    * ~~~
    */
-  typedef Traits TraitsType;
+  typedef PiiArithmeticTraits<Derived> TraitsType;
   /**
    * A shorthand for the content type of the derived class.
    */
-  typedef typename Traits::Type T;
+  typedef typename TraitsType::Type T;
+  typedef typename TraitsType::Type value_type;
   /**
    * Qt-style iterator.
    */
-  typedef typename Traits::Iterator Iterator;
+  typedef typename TraitsType::Iterator Iterator;
   /**
    * Qt-style const iterator.
    */
-  typedef typename Traits::ConstIterator ConstIterator;
+  typedef typename TraitsType::ConstIterator ConstIterator;
   /**
    * Stl-style iterator.
    */
-  typedef typename Traits::Iterator iterator;
+  typedef typename TraitsType::Iterator iterator;
   /**
    * Stl-style const iterator.
    */
-  typedef typename Traits::ConstIterator const_iterator;
+  typedef typename TraitsType::ConstIterator const_iterator;
 
   /**
    * Returns an stl-style const iterator to the beginning of data.
@@ -123,90 +126,90 @@ public:
   inline const_iterator constEnd() const { return self()->end(); }
 
   /**
-   * Sum corresponding elements.
+   * Sums corresponding elements.
    */
-  Derived operator+ (const Derived& other) const { return binaryOp(std::plus<T>(), other); }
+  Derived operator+ (const Derived& other) const { return mapped(std::plus<T>(), other); }
   /**
-   * Subtract corresponding elements from each other.
+   * Subtracts corresponding elements from each other.
    */
-  Derived operator- (const Derived& other) const { return binaryOp(std::minus<T>(), other); }
+  Derived operator- (const Derived& other) const { return mapped(std::minus<T>(), other); }
   /**
-   * Divide corresponding elements by each other.
+   * Divides corresponding elements by each other.
    */
-  Derived operator/ (const Derived& other) const { return binaryOp(std::divides<T>(), other); }
+  Derived operator/ (const Derived& other) const { return mapped(std::divides<T>(), other); }
   /**
-   * Multiply corresponding elements by each other.
+   * Multiplies corresponding elements by each other.
    */
-  Derived operator* (const Derived& other) const { return binaryOp(std::multiplies<T>(), other); }
+  Derived operator* (const Derived& other) const { return mapped(std::multiplies<T>(), other); }
   /**
-   * Add corresponding elements in `other` to this.
+   * Adds corresponding elements in `other` to this.
    */
-  void operator+= (const Derived& other) { return binaryOp(std::plus<T>(), other); }
+  Derived& operator+= (const Derived& other) { return map(std::plus<T>(), other); }
   /**
-   * Subtract corresponding elements in `other` from this.
+   * Subtracts corresponding elements in `other` from this.
    */
-  void operator-= (const Derived& other) { return binaryOp(std::minus<T>(), other); }
+  Derived& operator-= (const Derived& other) { return map(std::minus<T>(), other); }
   /**
-   * Divide corresponding elements in this by `other`.
+   * Divides corresponding elements in this by `other`.
    */
-  void operator/= (const Derived& other) { return binaryOp(std::divides<T>(), other); }
+  Derived& operator/= (const Derived& other) { return map(std::divides<T>(), other); }
   /**
-   * Multiply corresponding elements in this by `other`.
+   * Multiplies corresponding elements in this by `other`.
    */
-  void operator*= (const Derived& other) { return binaryOp(std::multiplies<T>(), other); }
+  Derived& operator*= (const Derived& other) { return map(std::multiplies<T>(), other); }
   /**
-   * Add `value` to all elements.
+   * Adds `value` to all elements.
    */
-  Derived operator+ (T value) const { return binaryOp(std::plus<T>(), value); }
+  Derived operator+ (T value) const { return mapped(std::plus<T>(), value); }
   /**
-   * Subtract `value` from all elements.
+   * Subtracts `value` from all elements.
    */
-  Derived operator- (T value) const { return binaryOp(std::minus<T>(), value); }
+  Derived operator- (T value) const { return mapped(std::minus<T>(), value); }
   /**
-   * Divide all elements by `value`.
+   * Divides all elements by `value`.
    */
-  Derived operator/ (T value) const { return binaryOp(std::divides<T>(), value); }
+  Derived operator/ (T value) const { return mapped(std::divides<T>(), value); }
   /**
-   * Multiply all elements by `value`.
+   * Multiplies all elements by `value`.
    */
-  Derived operator* (T value) const { return binaryOp(std::multiplies<T>(), value); }
+  Derived operator* (T value) const { return mapped(std::multiplies<T>(), value); }
   /**
-   * Add `value` to all elements.
+   * Adds `value` to all elements.
    */
-  void operator+= (T value) { return binaryOp(std::plus<T>(), value); }
+  Derived& operator+= (T value) { return map(std::plus<T>(), value); }
   /**
-   * Subtract `value` from all elements.
+   * Subtracts `value` from all elements.
    */
-  void operator-= (T value) { return binaryOp(std::minus<T>(), value); }
+  Derived& operator-= (T value) { return map(std::minus<T>(), value); }
   /**
-   * Divide all elements by `value`.
+   * Divides all elements by `value`.
    */
-  void operator/= (T value) { return binaryOp(std::divides<T>(), value); }
+  Derived& operator/= (T value) { return map(std::divides<T>(), value); }
   /**
-   * Multiply all elements by `value`.
+   * Multiplies all elements by `value`.
    */
-  void operator*= (T value) { binaryOp(std::multiplies<T>(), value); }
+  Derived& operator*= (T value) { map(std::multiplies<T>(), value); }
   /**
-   * Create a negation of all elements.
+   * Creates a negation of all elements.
    */
-  Derived operator- () const { return unaryOp(std::negate<T>()); }
+  Derived operator- () const { return mapped(std::negate<T>()); }
   /**
-   * Assign the values in `other` to this.
+   * Assigns the values in `other` to this.
    */
-  Derived& operator= (const Derived& other) { binaryOp(Pii::SelectSecond<typename Traits::Type>(), other); return *self(); }
+  Derived& operator= (const Derived& other) { return map(Pii::SelectSecond<typename TraitsType::Type>(), other); }
   /**
-   * Set all elements to `value`.
+   * Sets all elements to `value`.
    */
-  Derived& operator= (T value) { binaryOp(Pii::SelectSecond<typename Traits::Type>(), value); return *self(); }
+  Derived& operator= (T value) { return map(Pii::SelectSecond<typename TraitsType::Type>(), value); }
 
   /**
    * Returns `true` if all elements in `this` and `other` are
    * equal, `false` otherwise.
    */
-  bool operator==(const Derived& other) const
+  bool operator== (const Derived& other) const
   {
-    typename Traits::ConstIterator myCurrent = self()->begin();
-    typename Traits::ConstIterator otherCurrent = other.begin();
+    typename TraitsType::ConstIterator myCurrent = self()->begin();
+    typename TraitsType::ConstIterator otherCurrent = other.begin();
     while (myCurrent != self()->end())
       if (*(myCurrent++) != *(otherCurrent++))
         return false;
@@ -216,10 +219,10 @@ public:
    * Returns `false` if all elements in `this` and `other` are
    * equal, `true` otherwise.
    */
-  bool operator!=(const Derived& other) const
+  bool operator!= (const Derived& other) const
   {
-    typename Traits::ConstIterator myCurrent = self()->begin();
-    typename Traits::ConstIterator otherCurrent = other.begin();
+    typename TraitsType::ConstIterator myCurrent = self()->begin();
+    typename TraitsType::ConstIterator otherCurrent = other.begin();
     while (myCurrent != self()->end())
       if (*(myCurrent++) != *(otherCurrent++))
         return true;
@@ -227,16 +230,16 @@ public:
   }
 
   /**
-   * Apply a unary function to all elements. Return a new object.
+   * Applies a unary function to all elements. Returns a new object.
    */
   template <class Operation>
-  typename Traits::template Rebind<typename Operation::result_type>::Type unaryOp(Operation op) const
+  typename TraitsType::template Rebind<typename Operation::result_type>::Type mapped(Operation op) const
   {
-    typedef typename Traits::template Rebind<typename Operation::result_type>::Type ResultType;
+    typedef typename TraitsType::template Rebind<typename Operation::result_type>::Type ResultType;
     ResultType result;
 
     // Take iterators to the beginning of both elements
-    typename Traits::ConstIterator myCurrent = self()->begin();
+    typename TraitsType::ConstIterator myCurrent = self()->begin();
     typename ResultType::Iterator resultCurrent = result.begin();
     while (myCurrent != self()->end())
       {
@@ -248,35 +251,38 @@ public:
   }
 
   /**
-   * Apply a unary function to all elements. Modify the elements in
+   * Applies a unary function to all elements. Modifies the elements in
    * place.
    */
-  template <class Operation> void unaryOp(Operation op)
+  template <class Operation>
+  Derived& map(Operation op)
   {
     // Take iterators to the beginning my elements
-    typename Traits::Iterator myCurrent = self()->begin();
-    // Apply unary function to all
+    typename TraitsType::Iterator myCurrent = self()->begin();
+    // Applies unary function to all
     while (myCurrent != self()->end())
       {
         *myCurrent = op(*myCurrent);
         ++myCurrent;
       }
+    return selfRef();
   }
 
   /**
-   * Apply a binary function to all elements using the corresponding
-   * elements in `this` and `other` as function parameters. Return a
+   * Applies a binary function to all elements using the corresponding
+   * elements in `this` and `other` as function parameters. Returns a
    * new object.
    */
-  template <class Operation> typename Traits::template Rebind<typename Operation::result_type>::Type
-  binaryOp(Operation op,
-           const typename Traits::template Rebind<typename Operation::second_argument_type>::Type& other) const
+  template <class Operation>
+  typename TraitsType::template Rebind<typename Operation::result_type>::Type
+  mapped(Operation op,
+         const typename TraitsType::template Rebind<typename Operation::second_argument_type>::Type& other) const
   {
-    typedef typename Traits::template Rebind<typename Operation::result_type>::Type ResultType;
-    typedef typename Traits::template Rebind<typename Operation::second_argument_type>::Type SecondType;
+    typedef typename TraitsType::template Rebind<typename Operation::result_type>::Type ResultType;
+    typedef typename TraitsType::template Rebind<typename Operation::second_argument_type>::Type SecondType;
     ResultType result;
     // Take iterators to the beginning of all elements
-    typename Traits::ConstIterator myCurrent = self()->begin();
+    typename TraitsType::ConstIterator myCurrent = self()->begin();
     typename SecondType::ConstIterator otherCurrent = other.begin();
     typename ResultType::Iterator resultCurrent = result.begin();
     while (myCurrent != self()->end())
@@ -290,19 +296,19 @@ public:
   }
 
   /**
-   * Apply a binary function to all elements using the corresponding
-   * elements in `this` and `other` as function parameters. Modify
+   * Applies a binary function to all elements using the corresponding
+   * elements in `this` and `other` as function parameters. Modifies
    * elements in place.
    */
   template <class Operation>
-  void binaryOp(Operation op,
-                const typename Traits::template Rebind<typename Operation::second_argument_type>::Type& other)
+  Derived& map(Operation op,
+               const typename TraitsType::template Rebind<typename Operation::second_argument_type>::Type& other)
 
   {
-    typedef typename Traits::template Rebind<typename Operation::second_argument_type>::Type SecondType;
+    typedef typename TraitsType::template Rebind<typename Operation::second_argument_type>::Type SecondType;
 
     // Take iterators to the beginning of both elements
-    typename Traits::Iterator myCurrent = self()->begin();
+    typename TraitsType::Iterator myCurrent = self()->begin();
     typename SecondType::ConstIterator otherCurrent = other.begin();
     while (myCurrent != self()->end())
       {
@@ -310,39 +316,72 @@ public:
         ++myCurrent;
         ++otherCurrent;
       }
+    return selfRef();
   }
 
   /**
-   * Apply a binary function to all elements using `value` as the
-   * second function parameter. Return a new object.
+   * Applies a binary function to all elements using `value` as the
+   * second function parameter. Returns a new object.
    */
-  template <class Operation> typename Traits::template Rebind<typename Operation::result_type>::Type
-  binaryOp(Operation op, typename Operation::second_argument_type value) const
+  template <class Operation> typename TraitsType::template Rebind<typename Operation::result_type>::Type
+  mapped(Operation op, typename Operation::second_argument_type value) const
   {
-    typedef typename Traits::template Rebind<typename Operation::result_type>::Type ResultType;
+    typedef typename TraitsType::template Rebind<typename Operation::result_type>::Type ResultType;
     ResultType result(*self());
-    result.binaryOp(op, value);
+    result.map(op, value);
     return result;
   }
 
   /**
-   * Apply a binary function to all elements using `value` as the
-   * second function parameter. Modify elements in place.
+   * Applies a binary function to all elements using `value` as the
+   * second function parameter. Modifies elements in place.
    */
-  template <class Operation> void binaryOp(Operation op, typename Operation::second_argument_type value)
+  template <class Operation>
+  Derived& map(Operation op, typename Operation::second_argument_type value)
   {
     // Take iterator to the beginning of my elements
-    typename Traits::Iterator myCurrent = self()->begin();
+    typename TraitsType::Iterator myCurrent = self()->begin();
     while (myCurrent != self()->end())
       {
         *myCurrent = op(*myCurrent, value);
         ++myCurrent;
       }
+    return selfRef();
   }
 
 private:
   Derived* self() { return static_cast<Derived*>(this); }
   const Derived* self() const { return static_cast<const Derived*>(this); }
+  Derived& selfRef() { return *self(); }
+  const Derived& selfRef() const { return *self(); }
 };
+
+template <class Derived>
+Derived operator+ (typename PiiArithmeticBase<Derived>::value_type x,
+                   const PiiArithmeticBase<Derived>& other)
+{
+  return other.mapped(std::bind1st(std::plus<typename Derived::value_type>(), x));
+}
+
+template <class Derived>
+Derived operator* (typename PiiArithmeticBase<Derived>::value_type x,
+                   const PiiArithmeticBase<Derived>& other)
+{
+  return other.mapped(std::bind1st(std::multiplies<typename Derived::value_type>(), x));
+}
+
+template <class Derived>
+Derived operator- (typename PiiArithmeticBase<Derived>::value_type x,
+                   const PiiArithmeticBase<Derived>& other)
+{
+  return other.mapped(std::bind1st(std::minus<typename Derived::value_type>(), x));
+}
+
+template <class Derived>
+Derived operator/ (typename PiiArithmeticBase<Derived>::value_type x,
+                   const PiiArithmeticBase<Derived>& other)
+{
+  return other.mapped(std::bind1st(std::divides<typename Derived::value_type>(), x));
+}
 
 #endif //_PIIARITHMETICBASE_H

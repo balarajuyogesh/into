@@ -96,6 +96,11 @@ void TestPiiColor::arithmetic()
     QVERIFY((a/b) == Clr(1,1,1,1));
     QVERIFY(a*2 == Clr(2,4,6,8));
     QVERIFY(a/2 == Clr(0,1,1,2));
+    QCOMPARE(a*2, 2*a);
+    QCOMPARE(a+2, 2+a);
+    QCOMPARE(1+a, Clr(2,3,4,5));
+    QCOMPARE(4-a, Clr(3,2,1,0));
+    QCOMPARE(12/a, Clr(12,6,4,3));
   }
   {
     typedef PiiColor<int> Clr;
@@ -108,6 +113,11 @@ void TestPiiColor::arithmetic()
     QVERIFY(a/2 == Clr(0,1,1));
     QVERIFY(a+2 == Clr(3,4,5));
     QVERIFY(a-2 == Clr(-1,0,1));
+    QCOMPARE(a*2, 2*a);
+    QCOMPARE(a+2, 2+a);
+    QCOMPARE(1+a, Clr(2,3,4));
+    QCOMPARE(3-a, Clr(2,1,0));
+    QCOMPARE(6/a, Clr(6,3,2));
   }
   {
     PiiMatrix<int> mat(PiiMatrix<int>::identity(3)*2);

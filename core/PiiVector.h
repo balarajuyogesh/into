@@ -30,7 +30,8 @@ template <class T, int D> class PiiVector;
  * more information.
  *
  */
-template <class T, int D> struct PiiVectorTraits
+template <class T, int D>
+struct PiiArithmeticTraits<PiiVector<T,D> >
 {
   typedef T Type;
   typedef T* Iterator;
@@ -59,13 +60,14 @@ template <class T, int D> struct PiiVectorTraits
  * ~~~
  *
  */
-template <class T, int D> class PiiVector : public PiiArithmeticBase<PiiVector<T,D>, PiiVectorTraits<T,D> >
+template <class T, int D> class PiiVector :
+  public PiiArithmeticBase<PiiVector<T,D> >
 {
 public:
   /**
    * Shorthand for the base class type.
    */
-  typedef PiiArithmeticBase<PiiVector<T,D>, PiiVectorTraits<T,D> > BaseType;
+  typedef PiiArithmeticBase<PiiVector<T,D> > BaseType;
 
   /**
    * Shorthand for variable argument type.

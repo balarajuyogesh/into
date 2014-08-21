@@ -30,7 +30,8 @@ namespace PiiSerialization { struct Accessor; }
  * more information.
  *
  */
-template <class T> struct PiiColorBaseTraits
+template <class T>
+struct PiiColorBaseTraits
 {
   typedef T Type;
   typedef T* Iterator;
@@ -42,7 +43,9 @@ template <class T> struct PiiColorBaseTraits
  * more information.
  *
  */
-template <class T> struct PiiColorTraits : public PiiColorBaseTraits<T>
+template <class T>
+struct PiiArithmeticTraits<PiiColor<T> > :
+  public PiiColorBaseTraits<T>
 {
   template <class U> struct Rebind { typedef PiiColor<U> Type; };
 };
@@ -52,7 +55,9 @@ template <class T> struct PiiColorTraits : public PiiColorBaseTraits<T>
  * more information.
  *
  */
-template <class T> struct PiiColor4Traits : public PiiColorBaseTraits<T>
+template <class T>
+struct PiiArithmeticTraits<PiiColor4<T> > :
+  public PiiColorBaseTraits<T>
 {
   template <class U> struct Rebind { typedef PiiColor4<U> Type; };
 };
@@ -106,11 +111,6 @@ template <class T> struct PiiColor4Traits : public PiiColorBaseTraits<T>
 template <class T> class PiiColorBase
 {
 public:
-  /**
-   * The content type.
-   */
-  typedef typename PiiColorBaseTraits<T>::Type Type;
-  typedef typename PiiColorBaseTraits<T>::Type value_type;
   /**
    * An stl-style const iterator to the first color channel. Note that
    * the first color channel in the RGB space is B.
@@ -219,7 +219,7 @@ public:
  */
 template <class T = unsigned char> class PiiColor :
   public PiiColorBase<T>,
-  public PiiArithmeticBase<PiiColor<T>, PiiColorTraits<T> >
+  public PiiArithmeticBase<PiiColor<T> >
 {
   friend struct PiiSerialization::Accessor;
   template <class Archive> inline void serialize(Archive& archive, const unsigned int /*version*/)
@@ -232,7 +232,7 @@ public:
   /**
    * Shorthand for the base class type.
    */
-  typedef PiiArithmeticBase<PiiColor<T>, PiiColorTraits<T> > BaseType;
+  typedef PiiArithmeticBase<PiiColor<T> > BaseType;
 
   enum { ChannelCount = 3 };
 
@@ -293,7 +293,7 @@ public:
  */
 template <class T = unsigned char> class PiiColor4 :
   public PiiColorBase<T>,
-  public PiiArithmeticBase<PiiColor4<T>, PiiColor4Traits<T> >
+  public PiiArithmeticBase<PiiColor4<T> >
 {
   friend struct PiiSerialization::Accessor;
   template <class Archive> inline void serialize(Archive& archive, const unsigned int /*version*/)
@@ -307,7 +307,7 @@ public:
   /**
    * Shorthand for the base class type.
    */
-  typedef PiiArithmeticBase<PiiColor4<T>, PiiColor4Traits<T> > BaseType;
+  typedef PiiArithmeticBase<PiiColor4<T> > BaseType;
 
   enum { ChannelCount = 4 };
 
