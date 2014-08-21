@@ -436,6 +436,33 @@ namespace Pii
   };
 
   /**
+   * A binary function that wraps another function and passes input
+   * arguments to it in reverse order.
+   */
+  template <class Function>
+  struct BinaryReverseArgs :
+    public BinaryFunction<typename Function::second_argument_type,
+                          typename Function::first_argument_type,
+                          typename Function::result_type>
+  {
+    BinaryReverseArgs(const Function& function) : function(function) {}
+
+    typename Function::result_type operator() (typename Function::second_argument_type a,
+                                               typename Function::first_argument_type b) const
+    {
+      return function(b, a);
+    }
+
+    Function function;
+  };
+
+  template <class Function>
+  inline BinaryReverseArgs<Function> binaryReverseArgs(const Function& function)
+  {
+    return BinaryReverseArgs<Function>(function);
+  }
+
+  /**
    * A unary function (predicate) that always returns `true`.
    */
   template <class T> struct YesFunction : public UnaryFunction<T,bool>
