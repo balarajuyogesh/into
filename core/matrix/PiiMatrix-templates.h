@@ -188,11 +188,21 @@ template <class T>
 template <class Matrix>
 PiiMatrix<T>& PiiMatrix<T,-1,-1>::operator= (const PiiConceptualMatrix<Matrix>& other)
 {
-  PiiMatrix matCopy(PiiMatrixData::createUninitializedData(other.self()->rows(), other.self()->columns(),
-                                                           other.self()->columns() * sizeof(T)));
-  Pii::transform(other.self()->begin(), other.self()->end(), matCopy.begin(),
-                 Pii::Cast<typename Matrix::value_type,T>());
-  return *this = matCopy;
+  // If sizes are different, need to create a copy
+  if (other.self()->rows() != rows() || other.self()->columns() != columns())
+    {
+      PiiMatrix matCopy(PiiMatrixData::createUninitializedData(other.self()->rows(), other.self()->columns(),
+                                                               other.self()->columns() * sizeof(T)));
+      Pii::transform(other.self()->begin(), other.self()->end(), matCopy.begin(),
+                     Pii::Cast<typename Matrix::value_type,T>());
+      *this = matCopy;
+    }
+  else
+    {
+      Pii::transform(other.self()->begin(), other.self()->end(), begin(),
+                     Pii::Cast<typename Matrix::value_type,T>());
+    }
+  return *this;
 }
 
 template <class T>
