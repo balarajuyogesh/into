@@ -98,6 +98,7 @@ public:
    * A shorthand for the content type of the derived class.
    */
   typedef typename TraitsType::Type T;
+  typedef typename TraitsType::Type Type;
   typedef typename TraitsType::Type value_type;
   /**
    * Qt-style iterator.
@@ -188,7 +189,7 @@ public:
   /**
    * Multiplies all elements by `value`.
    */
-  Derived& operator*= (T value) { map(std::multiplies<T>(), value); }
+  Derived& operator*= (T value) { return map(std::multiplies<T>(), value); }
   /**
    * Creates a negation of all elements.
    */
