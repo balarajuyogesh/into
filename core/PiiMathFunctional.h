@@ -74,7 +74,7 @@ namespace Pii
    * PiiMatrix<double> mat(...); // Initialize as you want
    *
    * // For each element, set m(i,j) = |m(i,j)|^n
-   * mat.binaryOp(Pii::AbsPow<double>(), n);
+   * mat.map(Pii::AbsPow<double>(), n);
    * ~~~
    */
   //template <class T, class U = T> struct AbsPow : public Pii::BinaryFunction<T,U>

@@ -140,7 +140,7 @@ namespace PiiImage
    *
    * ~~~(c++)
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
-   * mat.unaryOp(PiiImage::TwoLevelThresholdFunction<int>(5, 7));
+   * mat.map(PiiImage::TwoLevelThresholdFunction<int>(5, 7));
    *
    * // mat = 0 0 0 0 1 1 1 0 0
    * ~~~
@@ -168,7 +168,7 @@ namespace PiiImage
    *
    * ~~~(c++)
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
-   * mat.unaryOp(PiiImage::InverseTwoLevelThresholdFunction<int>(5, 7));
+   * mat.map(PiiImage::InverseTwoLevelThresholdFunction<int>(5, 7));
    *
    * // mat = 1 1 1 1 0 0 0 1 1
    * ~~~
@@ -194,12 +194,12 @@ namespace PiiImage
   /**
    * CutFunction compares `value` to a `threshold` and outputs either
    * `value` or `threshold` based on the comparison result. You can
-   * use this struct for example with PiiMatrix<T>::binaryOp():
+   * use this struct for example with PiiMatrix<T>::map():
    *
    * ~~~(c++)
    * int threshold = 5;
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
-   * mat.binaryOp(PiiImage::CutFunction<int>(), threshold);
+   * mat.map(PiiImage::CutFunction<int>(), threshold);
    *
    * // mat = 1 2 3 4 5 5 5 5 5
    * ~~~
@@ -213,12 +213,12 @@ namespace PiiImage
    * InverseCutFunction compares `value` to a `threshold` and
    * outputs either `value` or `threshold` based on the comparison
    * result. You can use this struct for example with
-   * PiiMatrix<T>::binaryOp():
+   * PiiMatrix<T>::map():
    *
    * ~~~(c++)
    * int threshold = 5;
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
-   * mat.binaryOp(PiiImage::InverseCutFunction<int>(), threshold);
+   * mat.map(PiiImage::InverseCutFunction<int>(), threshold);
    *
    * // mat = 5 5 5 5 5 6 7 8 9
    * ~~~
@@ -231,12 +231,12 @@ namespace PiiImage
   /**
    * ZeroBelowFunction compares `value` to a `threshold` and outputs
    * either `value` or 0 based on the comparison result. You can use
-   * this struct for example with PiiMatrix<T>::binaryOp():
+   * this struct for example with PiiMatrix<T>::map():
    *
    * ~~~(c++)
    * int threshold = 5;
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
-   * mat.binaryOp(PiiImage::ZeroBelowFunction<int>(), threshold);
+   * mat.map(PiiImage::ZeroBelowFunction<int>(), threshold);
    *
    * // mat = 0 0 0 0 5 6 7 8 9
    * ~~~
@@ -253,7 +253,7 @@ namespace PiiImage
    * ~~~(c++)
    * int threshold = 5;
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
-   * mat.binaryOp(PiiImage::ZeroAboveFunction<int>(), threshold);
+   * mat.map(PiiImage::ZeroAboveFunction<int>(), threshold);
    *
    * // mat = 1 0 1 2 3 4 0 0 0 0 0
    * ~~~
@@ -268,12 +268,12 @@ namespace PiiImage
    * either `value` - `threshold` or 0 based on the comparison
    * result. The function "drops" gray levels above a threshold to
    * zero. You can use this struct for example with
-   * PiiMatrix<T>::binaryOp():
+   * PiiMatrix<T>::map():
    *
    * ~~~(c++)
    * int threshold = 5;
    * PiiMatrix<int> mat(1,9,1,2,3,4,5,6,7,8,9);
-   * mat.binaryOp(PiiImage::DropFunction<int>(), threshold);
+   * mat.map(PiiImage::DropFunction<int>(), threshold);
    *
    * // mat = 0 0 0 0 0 1 2 3 4
    * ~~~
