@@ -71,7 +71,7 @@ namespace PiiTracking
         MeasurementType previous(trajectory->measurement());
         double currentTimeDiff = t - trajectory->time();
         MeasurementType movement(previous - firstEstNode->measurement());
-        movement.binaryOp(std::multiplies<double>(), currentTimeDiff / estTimeDiff);
+        movement.map(std::multiplies<double>(), currentTimeDiff / estTimeDiff);
         // Assume constant velocity
         return new MeasurementType(previous + // previous measurement
                                    movement); // plus previous velocity times time difference
