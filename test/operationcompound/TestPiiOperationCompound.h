@@ -29,6 +29,7 @@ private slots:
   void clone();
   void socketData();
   void fullName();
+  void childOperation();
   void proxyInnerSockets();
   void disabledOperations();
   void cleanupTestCase();

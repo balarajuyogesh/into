@@ -867,7 +867,7 @@ struct PiiOperationCompound::OperationFinder
   Type find(PiiOperation* op, const QString& path) const
   {
     if (op->isCompound())
-      return static_cast<PiiOperationCompound*>(op)->findChildOperation(path);
+      return static_cast<PiiOperationCompound*>(op)->childOperation(path);
     return 0;
   }
   Type get(const QString& name) const { return _pSelf->findChildOperation(name); }

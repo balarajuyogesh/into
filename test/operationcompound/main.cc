@@ -106,6 +106,23 @@ void TestPiiOperationCompound::fullName()
   delete pCompound1;
 }
 
+void TestPiiOperationCompound::childOperation()
+{
+  PiiOperationCompound* pCompound1 = _compound.clone();
+  PiiOperationCompound* pCompound2 = _compound.clone();
+  PiiOperationCompound* pCompound3 = _compound.clone();
+  pCompound1->setObjectName("c1");
+  pCompound2->setObjectName("c2");
+  pCompound3->setObjectName("c3");
+  TestOperation* pTest = new TestOperation;
+  pTest->setObjectName("test");
+  pCompound1->addOperation(pCompound2);
+  pCompound2->addOperation(pCompound3);
+  pCompound3->addOperation(pTest);
+  QCOMPARE(pCompound1->childOperation("c2.c3.test"), pTest);
+  delete pCompound1;
+}
+
 void TestPiiOperationCompound::proxyInnerSockets()
 {
   PiiOperationCompound* pCompound1 = _compound.clone();
