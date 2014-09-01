@@ -123,6 +123,44 @@ void TestPiiOperationCompound::childOperation()
   delete pCompound1;
 }
 
+void TestPiiOperationCompound::addRemoveDetachChild()
+{
+  PiiOperationCompound* pCompound = new PiiOperationCompound;
+  TestOperation* pTest = new TestOperation;
+  pTest->setObjectName("test");
+  TestOperation* pTest2 = new TestOperation;
+  pTest2->setObjectName("test2");
+  pCompound->addOperation(pTest);
+  pCompound->addOperation(pTest2);
+  pCompound->connectOutput("test.output", "test2.input");
+
+  QCOMPARE(pCompound->childCount(), 2);
+  pCompound->detachOperation(pTest2);
+  QCOMPARE(pCompound->childCount(), 1);
+  // Detach should retain connections
+  QCOMPARE(pTest2->input("input")->connectedOutput(), pTest->output("output"));
+
+  pCompound->addOperation(pTest2);
+  QCOMPARE(pCompound->childCount(), 2);
+
+  // Same with name
+  pCompound->detachOperation("test2");
+  QCOMPARE(pCompound->childCount(), 1);
+  QCOMPARE(pTest2->input("input")->connectedOutput(), pTest->output("output"));
+
+  pCompound->addOperation(pTest2);
+  QCOMPARE(pCompound->childCount(), 2);
+
+  // Remove should break connections
+  pCompound->removeOperation(pTest);
+  QCOMPARE(pCompound->childCount(), 1);
+  QVERIFY(!pTest->output("output")->isConnected());
+  QVERIFY(!pTest2->input("input")->isConnected());
+
+  delete pTest;
+  delete pCompound;
+}
+
 void TestPiiOperationCompound::proxyInnerSockets()
 {
   PiiOperationCompound* pCompound1 = _compound.clone();

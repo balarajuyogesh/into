@@ -797,25 +797,47 @@ bool PiiOperationCompound::replaceOperation(PiiOperation *oldOp, PiiOperation* n
   return true;
 }
 
+bool PiiOperationCompound::detach(PiiOperation* op)
+{
+  PII_D;
+  // Operations can only be removed when the operation is stopped or paused
+  if (op == 0 || !d->lstOperations.contains(op) || d->state not_member_of (Stopped, Paused))
+    return false;
+
+  d->lstOperations.removeAll(op);
+  op->disconnect(this);
+  op->setParent(0);
+  return true;
+}
+
 void PiiOperationCompound::removeOperation(PiiOperation* op)
 {
   PII_D;
   QMutexLocker lock(&d->stateMutex);
-  // Operations can only be removed when the operation is stopped or paused
-  if (op == 0 || !d->lstOperations.contains(op) || d->state not_member_of (Stopped, Paused))
-    return;
-
-  op->disconnectAllInputs();
-  op->disconnectAllOutputs();
-  d->lstOperations.removeAll(op);
-  op->disconnect(this);
-  op->setParent(0);
+  if (detach(op))
+    {
+      op->disconnectAllInputs();
+      op->disconnectAllOutputs();
+    }
 }
 
 PiiOperation* PiiOperationCompound::removeOperation(const QString& name)
 {
   PiiOperation* pOp = findChildOperation(name);
   removeOperation(pOp);
+  return pOp;
+}
+
+void PiiOperationCompound::detachOperation(PiiOperation* op)
+{
+  QMutexLocker lock(&_d()->stateMutex);
+  detach(op);
+}
+
+PiiOperation* PiiOperationCompound::detachOperation(const QString& name)
+{
+  PiiOperation* pOp = findChildOperation(name);
+  detachOperation(pOp);
   return pOp;
 }
 

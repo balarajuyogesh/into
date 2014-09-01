@@ -30,6 +30,7 @@ private slots:
   void socketData();
   void fullName();
   void childOperation();
+  void addRemoveDetachChild();
   void proxyInnerSockets();
   void disabledOperations();
   void cleanupTestCase();

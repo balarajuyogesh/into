@@ -344,9 +344,9 @@ public:
   Q_INVOKABLE virtual void addOperation(PiiOperation* op);
 
   /**
-   * Removes an operation from the compound's internal operation list.
-   * The operation no longer belongs to the children of the compound
-   * object.
+   * Removes an operation from the compound's internal operation list
+   * and breaks all of its connections. The operation no longer
+   * belongs to the children of the compound object.
    *
    * If the compound is neither stopped nor paused, this function has
    * no effect.
@@ -355,8 +355,22 @@ public:
    * connections will be disconnected.
    */
   Q_INVOKABLE virtual void removeOperation(PiiOperation* op);
-
   Q_INVOKABLE PiiOperation* removeOperation(const QString& name);
+
+  /**
+   * Detaches a child operation. The parent of the operation will be
+   * set to null, and all signals between it and this compound will be
+   * disconnected, but existing connections to the operation's sockets
+   * will be retained.
+   *
+   * If the compound is neither stopped nor paused, this function has
+   * no effect.
+   *
+   * @param op the operation to remove. All incoming and outgoing
+   * connections will be disconnected.
+   */
+  virtual void detachOperation(PiiOperation* op);
+  PiiOperation* detachOperation(const QString& name);
 
   /**
    * Returns all direct child operations of this compound as a list.
@@ -751,6 +765,7 @@ private:
   // One-level child lookup
   PiiOperation* findChildOperation(const QString& childName) const;
 
+  bool detach(PiiOperation* op);
   static bool dependsOnDisabled(PiiOperation* op);
 
   // State changing utilities
