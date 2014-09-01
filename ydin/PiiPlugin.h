@@ -30,10 +30,22 @@
 
 /// @internal
 typedef const char* (*pii_plugin_function)();
+/// @internal
+typedef int (*pii_plugin_init_function)();
 
 /**
- * The name of the plug-in name getter C function within a shared
+ * The name of the plug-in initialization function in a shared
  * library.
+ */
+#define PII_PLUGIN_INIT_FUNCTION pii_plugin_init
+/**
+ * The name of the plug-in initialization function as a character
+ * string.
+ */
+#define PII_PLUGIN_INIT_FUNCTION_STR PII_STRINGIZE(PII_PLUGIN_INIT_FUNCTION)
+
+/**
+ * The name of the plug-in name getter C function in a shared library.
  */
 #define PII_PLUGIN_NAME_FUNCTION pii_get_plugin_name
 /**
@@ -43,7 +55,7 @@ typedef const char* (*pii_plugin_function)();
 #define PII_PLUGIN_NAME_FUNCTION_STR PII_STRINGIZE(PII_PLUGIN_NAME_FUNCTION)
 
 /**
- * The name of the plug-in version getter C function within a shared
+ * The name of the plug-in version getter C function in a shared
  * library.
  */
 #define PII_PLUGIN_VERSION_FUNCTION pii_get_plugin_version

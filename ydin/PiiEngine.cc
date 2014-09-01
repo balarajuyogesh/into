@@ -145,8 +145,12 @@ PiiEngine::Plugin PiiEngine::loadPlugin(const QString& name)
     PII_THROW(PiiLoadException, tr("The shared library \"%1\" does not contain a valid plug-in. Missing plug-in name function.").arg(name));
 
   pii_plugin_function pVersionFunc = (pii_plugin_function)(unloader.pLib->resolve(PII_PLUGIN_VERSION_FUNCTION_STR));
-  if (pNameFunc == 0)
+  if (pVersionFunc == 0)
     PII_THROW(PiiLoadException, tr("The shared library \"%1\" does not contain a valid plug-in. Missing plug-in version function.").arg(name));
+
+  pii_plugin_init_function pInitFunc = (pii_plugin_init_function)(unloader.pLib->resolve(PII_PLUGIN_INIT_FUNCTION_STR));
+  if (pInitFunc && !(*pInitFunc)())
+    PII_THROW(PiiLoadException, tr("Initialization of the shared library \"%1\" failed.").arg(name));
 
   PiiVersionNumber pluginVersion((*pVersionFunc)());
   PiiVersionNumber intoVersion(INTO_VERSION_STR);
