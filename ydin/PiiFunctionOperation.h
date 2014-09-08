@@ -69,6 +69,9 @@
     };                                           \
   }
 
+#define PII_FUNCOP_IS_OUTPUT_TYPE(TYPE) \
+  namespace PiiFuncOpPrivate { template <> struct IsInput<TYPE> : Pii::False {}; }
+
 /// @hide
 namespace PiiFuncOpPrivate
 {
