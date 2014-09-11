@@ -162,40 +162,40 @@ public:
   /**
    * Return the average of all color channels as an `int`.
    */
-  explicit operator int() const { return (int(c0) + int(c1) + int(c2))/3; }
+  operator int() const { return (int(c0) + int(c1) + int(c2))/3; }
   /**
    * Return the average of all color channels as a `short`.
    */
-  explicit operator short() const { return short(operator int()); }
+  operator short() const { return short(operator int()); }
   /**
    * Return the average of all color channels as a `char`.
    */
-  explicit operator char() const { return char(operator int()); }
+  operator char() const { return char(operator int()); }
 
   /**
    * Return the average of all color channels as an `unsigned`
    * `int`.
    */
-  explicit operator unsigned int() const { return ((unsigned int)c0 + (unsigned int)c1 + (unsigned int)c2)/3; }
+  operator unsigned int() const { return ((unsigned int)c0 + (unsigned int)c1 + (unsigned int)c2)/3; }
   /**
    * Return the average of all color channels as an `unsigned`
    * `short`.
    */
-  explicit operator unsigned short() const { return (unsigned short)operator unsigned int(); }
+  operator unsigned short() const { return (unsigned short)operator unsigned int(); }
   /**
    * Return the average of all color channels as an `unsigned`
    * `char`.
    */
-  explicit operator unsigned char() const { return (unsigned char)operator unsigned int(); }
+  operator unsigned char() const { return (unsigned char)operator unsigned int(); }
 
   /**
    * Return the average of all color channels as a `float`.
    */
-  explicit operator float() const { return (float(c0) + float(c1) + float(c2))/3.0f; }
+  operator float() const { return (float(c0) + float(c1) + float(c2))/3.0f; }
   /**
    * Return the average of all color channels as a `double`.
    */
-  explicit operator double() const { return (double(c0) + double(c1) + double(c2))/3.0; }
+  operator double() const { return (double(c0) + double(c1) + double(c2))/3.0; }
 
   union
   {
