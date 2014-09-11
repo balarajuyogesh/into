@@ -934,7 +934,8 @@ namespace PiiImage
     int pixel[16];
     fast9_make_offsets(pixel, image.stride());
 
-    PiiMatrix<int> matCorners = fast9_detect(image, pixel, threshold);
+    PiiMatrix<int> matCorners(0,2);
+    fast9_detect(image, pixel, threshold, matCorners);
     QVector<int> vecScores = fast9_score(image, matCorners, pixel, threshold);
     return fast_suppress_nonmax(matCorners, vecScores);
   }

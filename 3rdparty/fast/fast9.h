@@ -9,9 +9,10 @@
 
 void fast9_make_offsets(int pixel[], int row_stride);
 
-template <class T> int fast9_corner_score(const T* p,
-                                          const int pixel[],
-                                          typename Pii::Combine<T,int>::Type bstart)
+template <class T>
+int fast9_corner_score(const T* p,
+                       const int pixel[],
+                       typename Pii::Combine<T,int>::Type bstart)
 {
   typedef typename Pii::Combine<T,int>::Type CalcType;
   CalcType bmin = bstart;
@@ -2943,30 +2944,35 @@ template <class T> int fast9_corner_score(const T* p,
 }
 
 
-template <class T> QVector<int> fast9_score(const PiiMatrix<T>& image,
-                                            const PiiMatrix<int>& corners,
-                                            const int pixel[],
-                                            typename Pii::Combine<T,int>::Type threshold)
+template <class T, class U>
+QVector<int> fast9_score(const PiiMatrix<T>& image,
+                         const PiiMatrix<U>& corners,
+                         const int pixel[],
+                         typename Pii::Combine<T,int>::Type threshold)
 {
   const int iRows = corners.rows();
   QVector<int> vecScores(iRows);
 
-  for (int n=0; n < iRows; n++)
-    vecScores[n] = fast9_corner_score(image[corners(n,1)] + corners(n,0), pixel, threshold);
+  for (int n = 0; n < iRows; ++n)
+    {
+      const U* pRow = corners[n];
+      vecScores[n] = fast9_corner_score(image[int(pRow[1])] + int(pRow[0]), pixel, threshold);
+    }
 
   return vecScores;
 }
 
 
-template <class T> PiiMatrix<int> fast9_detect(const PiiMatrix<T>& image,
-                                               const int pixel[],
-                                               typename Pii::Combine<T,int>::Type threshold)
+template <class T, class U>
+void fast9_detect(const PiiMatrix<T>& image,
+                  const int pixel[],
+                  typename Pii::Combine<T,int>::Type threshold,
+                  PiiMatrix<U>& coordinates)
 {
   typedef typename Pii::Combine<T,int>::Type CalcType;
   const int iRows = image.rows(), iCols = image.columns();
 
-  PiiMatrix<int> matCorners(0,2);
-  matCorners.reserve(512);
+  coordinates.reserve(512);
 
   for (int y=3; y < iRows - 3; y++)
     for (int x=3; x < iCols - 3; x++)
@@ -5876,8 +5882,8 @@ template <class T> PiiMatrix<int> fast9_detect(const PiiMatrix<T>& image,
               continue;
           else
             continue;
-        matCorners.appendRow(x,y);
+        U* pRow = coordinates.appendRow();
+        pRow[0] = x;
+        pRow[1] = y;
       }
-
-  return matCorners;
 }
