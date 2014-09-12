@@ -718,7 +718,7 @@ namespace PiiImage
             for (int iFiltR = 0; iFiltR < iFiltRows; ++iFiltR)
               sum += Pii::innerProductN(filter[iFiltR],
                                         iFiltCols,
-                                        input[iOutR + iFiltR - iTopRows] + iOutC + iLeftCols,
+                                        input[iOutR + iFiltR - iTopRows] + iOutC - iLeftCols,
                                         SumType(0));
             outputRow[iOutC] = typename Output::value_type(convert(sum));
           }
