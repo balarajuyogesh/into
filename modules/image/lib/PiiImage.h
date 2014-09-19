@@ -627,21 +627,6 @@ namespace PiiImage
   template <class Matrix>
   PeriodicBorder<Matrix> periodicBorder(const Matrix& m) { return PeriodicBorder<Matrix>(m); }
 
-  template <class SumType, class BinaryFunction, class Filter>
-  SumType localFilterSum(BinaryFunction padded,
-                         const Filter& filter,
-                         int row, int column)
-  {
-    SumType sum(0);
-    for (int r = 0; r < filter.rows(); ++r)
-      {
-        typename Filter::const_row_iterator filterRow = filter[r];
-        for (int c = 0; c < filter.columns(); ++c)
-          sum += filterRow[c] * padded(r + row, c + column);
-      }
-    return sum;
-  }
-
   /**
    * Filters the *input* matrix with *filter*.
    *
@@ -680,66 +665,7 @@ namespace PiiImage
               const Filter& filter,
               UnaryFunction convert,
               Output& output,
-              BinaryFunction padded)
-  {
-    typedef typename UnaryFunction::argument_type SumType;
-
-    const int
-      iOutRows = output.rows(),
-      iOutCols = output.columns(),
-      iFiltRows = filter.rows(),
-      iFiltCols = filter.columns(),
-      iTopRows = iFiltRows / 2,
-      iLeftCols = iFiltCols / 2;
-
-    // Top rows
-    for (int iOutR = 0; iOutR < iTopRows; ++iOutR)
-      {
-        typename Output::row_iterator outputRow = output[iOutR];
-        for (int iOutC = 0; iOutC < iOutCols; ++iOutC)
-          outputRow[iOutC] = convert(localFilterSum<SumType>(padded, filter,
-                                                             iOutR - iTopRows,
-                                                             iOutC - iLeftCols));
-      }
-
-    // Center rows
-    for (int iOutR = iTopRows; iOutR < iOutRows - iFiltRows; ++iOutR)
-      {
-        typename Output::row_iterator outputRow = output[iOutR];
-        // Left columns
-        for (int iOutC = 0; iOutC < iLeftCols; ++iOutC)
-          outputRow[iOutC] = convert(localFilterSum<SumType>(padded, filter,
-                                                             iOutR - iTopRows,
-                                                             iOutC - iLeftCols));
-        // Center columns
-        for (int iOutC = iLeftCols; iOutC < iOutCols - iFiltCols; ++iOutC)
-          {
-            SumType sum(0);
-            for (int iFiltR = 0; iFiltR < iFiltRows; ++iFiltR)
-              sum += Pii::innerProductN(filter[iFiltR],
-                                        iFiltCols,
-                                        input[iOutR + iFiltR - iTopRows] + iOutC - iLeftCols,
-                                        SumType(0));
-            outputRow[iOutC] = typename Output::value_type(convert(sum));
-          }
-        // Right columns
-        for (int iOutC = iOutCols - iFiltCols; iOutC < iOutCols; ++iOutC)
-          outputRow[iOutC] = convert(localFilterSum<SumType>(padded, filter,
-                                                             iOutR - iTopRows,
-                                                             iOutC - iLeftCols));
-
-      }
-
-    // Bottom rows
-    for (int iOutR = iOutRows - iFiltRows; iOutR < iOutRows; ++iOutR)
-      {
-        typename Output::row_iterator outputRow = output[iOutR];
-        for (int iOutC = 0; iOutC < iOutCols; ++iOutC)
-          outputRow[iOutC] = convert(localFilterSum<SumType>(padded, filter,
-                                                             iOutR - iTopRows,
-                                                             iOutC - iLeftCols));
-      }
-  }
+              BinaryFunction padded);
 
   /**
    * Filter an image with two one-dimensional filters. If a
@@ -882,6 +808,13 @@ namespace PiiImage
   template <class T> PiiMatrix<T> medianFilter(const PiiMatrix<T>& image,
                                                int windowRows = 3, int windowColumns = 0,
                                                Pii::ExtendMode mode = Pii::ExtendZeros);
+
+  template <class Input, class Output, class BinaryFunction>
+  void medianFilter(const Input& image,
+                    int windowRows,
+                    int windowColumns,
+                    Output& output,
+                    BinaryFunction padded);
 
   /**
    * Filters *image* with a maximum filter. The maximum filter is a

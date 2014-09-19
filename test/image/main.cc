@@ -1123,13 +1123,33 @@ void TestPiiImage::medianFilter()
                         1.0, 2.0, 3.0, 4.0, 5.0,
                         1.0, 2.0, 3.0, 4.0, 5.0,
                         1.0, 2.0, 3.0, 4.0, 5.0);
+  PiiMatrix<double> matOutput(5,5);
 
-  QVERIFY(Pii::equals(PiiImage::medianFilter(mat, 5, 5),PiiMatrix<double>(5,5,
-                                                                          0.0, 0.0, 1.0, 0.0, 0.0,
-                                                                          0.0, 1.0, 2.0, 2.0, 0.0,
-                                                                          1.0, 2.0, 3.0, 3.0, 3.0,
-                                                                          0.0, 1.0, 2.0, 2.0, 0.0,
-                                                                          0.0, 0.0, 1.0, 0.0, 0.0)));
+  QVERIFY(Pii::equals(PiiImage::medianFilter(mat, 5, 5),
+                      PiiMatrix<double>(5,5,
+                                        0.0, 0.0, 1.0, 0.0, 0.0,
+                                        0.0, 1.0, 2.0, 2.0, 0.0,
+                                        1.0, 2.0, 3.0, 3.0, 3.0,
+                                        0.0, 1.0, 2.0, 2.0, 0.0,
+                                        0.0, 0.0, 1.0, 0.0, 0.0)));
+  PiiImage::medianFilter(mat, 5, 5, matOutput, PiiImage::zeroBorder(mat));
+  QVERIFY(Pii::equals(matOutput,
+                      PiiMatrix<double>(5,5,
+                                        0.0, 0.0, 1.0, 0.0, 0.0,
+                                        0.0, 1.0, 2.0, 2.0, 0.0,
+                                        1.0, 2.0, 3.0, 3.0, 3.0,
+                                        0.0, 1.0, 2.0, 2.0, 0.0,
+                                        0.0, 0.0, 1.0, 0.0, 0.0)));
+  PiiImage::medianFilter(mat, 3, 3, matOutput, PiiImage::zeroBorder(mat));
+
+  QVERIFY(Pii::equals(matOutput,
+                      PiiMatrix<double>(5,5,
+                                        0.0, 1.0, 2.0, 3.0, 0.0,
+                                        1.0, 2.0, 3.0, 4.0, 4.0,
+                                        1.0, 2.0, 3.0, 4.0, 4.0,
+                                        1.0, 2.0, 3.0, 4.0, 4.0,
+                                        0.0, 1.0, 2.0, 3.0, 0.0)));
+
   QVERIFY(Pii::equals(PiiImage::medianFilter(mat, 5, 5, Pii::ExtendNot),
                       PiiMatrix<double>(1,1,3.0)));
 

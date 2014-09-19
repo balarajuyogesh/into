@@ -511,13 +511,185 @@ namespace PiiImage
       return result(0, 0, -windowRows, -windowColumns);
   }
 
+
+  /* A generic filter routine that can be used to scan an image with
+     any "filter" by supplying a proper helper. This function
+     abstracts out the handling of image borders.
+   */
+  template <class Input, class Helper, class UnaryFunction,
+            class Output, class BinaryFunction>
+  void genericFilter(const Input& input,
+                     Helper helper,
+                     UnaryFunction convert,
+                     Output& output,
+                     BinaryFunction padded)
+  {
+    const int
+      iOutRows = output.rows(),
+      iOutCols = output.columns(),
+      iFiltRows = helper.rows(),
+      iFiltCols = helper.columns(),
+      iTopRows = iFiltRows / 2,
+      iLeftCols = iFiltCols / 2;
+
+    // Top rows
+    for (int iOutR = 0; iOutR < iTopRows; ++iOutR)
+      {
+        typename Output::row_iterator outputRow = output[iOutR];
+        for (int iOutC = 0; iOutC < iOutCols; ++iOutC)
+          outputRow[iOutC] = convert(helper.border(padded,
+                                                   iOutR - iTopRows,
+                                                   iOutC - iLeftCols));
+      }
+
+    // Center rows
+    for (int iOutR = iTopRows; iOutR < iOutRows - iFiltRows; ++iOutR)
+      {
+        typename Output::row_iterator outputRow = output[iOutR];
+        // Left columns
+        for (int iOutC = 0; iOutC < iLeftCols; ++iOutC)
+          outputRow[iOutC] = convert(helper.border(padded,
+                                                   iOutR - iTopRows,
+                                                   iOutC - iLeftCols));
+        // Center columns
+        for (int iOutC = iLeftCols; iOutC < iOutCols - iFiltCols; ++iOutC)
+          outputRow[iOutC] = convert(helper.center(input,
+                                                   iOutR - iTopRows,
+                                                   iOutC - iLeftCols));
+
+        // Right columns
+        for (int iOutC = iOutCols - iFiltCols; iOutC < iOutCols; ++iOutC)
+          outputRow[iOutC] = convert(helper.border(padded,
+                                                   iOutR - iTopRows,
+                                                   iOutC - iLeftCols));
+
+      }
+
+    // Bottom rows
+    for (int iOutR = iOutRows - iFiltRows; iOutR < iOutRows; ++iOutR)
+      {
+        typename Output::row_iterator outputRow = output[iOutR];
+        for (int iOutC = 0; iOutC < iOutCols; ++iOutC)
+          outputRow[iOutC] = convert(helper.border(padded,
+                                                   iOutR - iTopRows,
+                                                   iOutC - iLeftCols));
+      }
+  }
+
+
+  template <class SumType, class Filter>
+  struct LinearFilterHelper
+  {
+    LinearFilterHelper(const Filter& filter) : filter(filter) {}
+
+    int rows() const { return filter.rows(); }
+    int columns() const { return filter.columns(); }
+
+    template <class BinaryFunction>
+    SumType border(const BinaryFunction& padded,
+                   int row, int column)
+    {
+      SumType sum(0);
+      for (int r = 0; r < filter.rows(); ++r)
+        {
+          typename Filter::const_row_iterator filterRow = filter[r];
+          for (int c = 0; c < filter.columns(); ++c)
+            sum += filterRow[c] * padded(r + row, c + column);
+        }
+      return sum;
+    }
+
+    template <class Matrix>
+    SumType center(const Matrix& input,
+                   int row, int column)
+    {
+      SumType sum(0);
+      for (int iFiltR = 0; iFiltR < filter.rows(); ++iFiltR)
+        sum += Pii::innerProductN(filter[iFiltR],
+                                  filter.columns(),
+                                  input[row + iFiltR] + column,
+                                  SumType(0));
+      return sum;
+    }
+
+    const Filter& filter;
+  };
+
+  template <class Input, class Filter, class UnaryFunction, class Output, class BinaryFunction>
+  void filter(const Input& input,
+              const Filter& filter,
+              UnaryFunction convert,
+              Output& output,
+              BinaryFunction padded)
+  {
+    typedef typename UnaryFunction::argument_type SumType;
+    genericFilter(input,
+                  LinearFilterHelper<SumType,Filter>(filter),
+                  convert,
+                  output,
+                  padded);
+  }
+
+  template <class PixelType>
+  struct MedianFilterHelper
+  {
+    MedianFilterHelper(int rows, int columns) :
+      iRows(rows), iColumns(columns),
+      iLength(rows * columns),
+      pBuffer(new PixelType[iLength])
+    {}
+
+    ~MedianFilterHelper() { delete[] pBuffer; }
+
+    int rows() const { return iRows; }
+    int columns() const { return iColumns; }
+
+    template <class BinaryFunction>
+    PixelType border(const BinaryFunction& padded, int row, int column)
+    {
+      int i = 0;
+      for (int r = 0; r < iRows; ++r)
+        for (int c = 0; c < iColumns; ++c, ++i)
+          pBuffer[i] = padded(r + row, c + column);
+      return Pii::fastMedian(pBuffer, iLength);
+    }
+
+    template <class Matrix>
+    PixelType center(const Matrix& input, int row, int column)
+    {
+      PixelType* ptr = pBuffer;
+      for (int r = 0; r < iRows; ++r)
+        ptr = Pii::copyN(input[row + r] + column, iColumns, ptr);
+      return Pii::fastMedian(pBuffer, iLength);
+    }
+
+    int iRows, iColumns, iLength;
+    PixelType* pBuffer;
+  };
+
+  template <class Input, class Output, class BinaryFunction>
+  void medianFilter(const Input& image,
+                    int windowRows,
+                    int windowColumns,
+                    Output& output,
+                    BinaryFunction padded)
+  {
+    typedef typename Input::value_type T;
+    genericFilter(image,
+                  MedianFilterHelper<T>(windowRows, windowColumns),
+                  Pii::Identity<T>(),
+                  output,
+                  padded);
+  }
+
   template <class GreaterThan, class T, class U>
   inline void takeExtremum(GreaterThan greater, T& a, U b) { if (greater(b, a)) a = b; }
 
-  template <class T, class GreaterThan> PiiMatrix<T> extremumFilter(const PiiMatrix<T>& image,
-                                                                    int windowRows, int windowColumns,
-                                                                    GreaterThan greater,
-                                                                    T initialValue)
+  template <class T, class GreaterThan>
+  PiiMatrix<T> extremumFilter(const PiiMatrix<T>& image,
+                              int windowRows, int windowColumns,
+                              GreaterThan greater,
+                              T initialValue)
   {
     const int iRows = image.rows(), iCols = image.columns();
     PiiMatrix<T> matResult(PiiMatrix<T>::constant(iRows, iCols, initialValue));
