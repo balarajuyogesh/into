@@ -286,6 +286,20 @@ namespace Pii
     return output;
   }
 
+  template <class T>
+  T* copyN(const T* begin, std::size_t n, T* output)
+  {
+    std::size_t cnt = n * sizeof(T);
+    std::memcpy(output, begin, cnt);
+    return output + n;
+  }
+
+  template <class T>
+  T* copyN(T* begin, std::size_t n, T* output)
+  {
+    return copyN(const_cast<const T*>(begin), n, output);
+  }
+
   /**
    * Copies a variable argument list to a range of elements. This
    * function is for [copyVaArgs()] what vprintf() is for printf(). The
