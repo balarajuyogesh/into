@@ -123,7 +123,7 @@ namespace PiiNetwork
    * @exception PiiIOException& if *uri* refers to a local file that
    * cannot be read.
    *
-   * @exception PiiException& if the file is too big
+   * @exception PiiException& if the file is too big
    */
   PII_NETWORK_EXPORT QByteArray readFile(const QString& uri,
                                          qint64 maxSize = 0,
