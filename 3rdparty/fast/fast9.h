@@ -4,6 +4,7 @@
  */
 
 #include <PiiImageTraits.h>
+#include <QVector>
 
 #define FAST_PIXEL_AT(INDEX) (*reinterpret_cast<const T*>(reinterpret_cast<const char*>(p) + pixel[INDEX]))
 
