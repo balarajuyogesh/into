@@ -207,6 +207,9 @@ namespace PiiNetwork
                                         PiiHttpResponseHeader* header = 0);
   PII_NETWORK_EXPORT void makeDirectory(const QString& uri);
 
+  PII_NETWORK_EXPORT QString uriToPath(const QString& path);
+  PII_NETWORK_EXPORT bool isLocalFile(const QString& uri);
+
   /// @hide
   extern PII_NETWORK_EXPORT const char* pFormContentType;
   extern PII_NETWORK_EXPORT const char* pDeviceIsNotConnectedMessage;
