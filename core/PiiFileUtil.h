@@ -59,6 +59,12 @@ namespace Pii
    * to delete everything even when some files cannot be removed.
    */
   PII_CORE_EXPORT bool deleteDirectory(const QString& dirName);
+
+  /**
+   * Creates *dirName* and all missing parent directories. Returns
+   * `true` on success and `false` on failure.
+   */
+  PII_CORE_EXPORT bool createDirectory(const QString& dirName);
 }
 
 #endif //_PIIFILEUTIL_H

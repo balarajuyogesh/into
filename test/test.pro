@@ -16,6 +16,7 @@ SUBDIRS = algorithm \
           featurecombiner \
           fifo \
           filesystemscanner \
+          fileutil \
           functional \
           functionoperation \
           fraction \

@@ -71,6 +71,13 @@ namespace Pii
     return dir.rmdir(strThisDir);
   }
 
+  bool createDirectory(const QString& dirName)
+  {
+    // Remove slash at end.
+    QFileInfo info(dirName.endsWith("/") ? dirName.left(dirName.size() - 1) : dirName);
+    return info.dir().mkpath(info.fileName());
+  }
+
   QString fixPath(const QString& path)
   {
     return path.endsWith("/") ? path : path + '/';
