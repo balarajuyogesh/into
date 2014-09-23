@@ -48,6 +48,8 @@ private:
     bool bExists;
     QDateTime lastModifiedTime;
   } *d;
+
+  static QString fixUri(const QString& uri);
 };
 
 #endif //_PIIFILEINFO_H
