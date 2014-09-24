@@ -18,6 +18,7 @@
 #include "PiiHttpResponseHeader.h"
 
 #include <QFileInfo>
+#include <QUrl>
 #include <PiiException.h>
 
 PiiFileInfo::Data::Data() :
@@ -36,7 +37,7 @@ PiiFileInfo::PiiFileInfo() :
 {}
 
 PiiFileInfo::PiiFileInfo(const QString& uri) :
-  d(new Data(uri))
+  d(new Data(fixUri(uri)))
 {
   refresh();
 }
@@ -68,9 +69,17 @@ QDateTime PiiFileInfo::lastModified() const
   return d->lastModifiedTime;
 }
 
+QString PiiFileInfo::fixUri(const QString& uri)
+{
+  if (QUrl(uri).isRelative())
+    return "file://" + QFileInfo(uri).absoluteFilePath();
+  else
+    return uri;
+}
+
 void PiiFileInfo::setUri(const QString& uri)
 {
-  d->strUri = uri;
+  d->strUri = fixUri(uri);
   refresh();
 }
 

@@ -214,6 +214,11 @@ namespace PiiNetwork
       {
         if (device)
           readLocalFile(uri, device, maxSize, controller);
+        if (header)
+          {
+            QDateTime modTime(QFileInfo(uriToPath(uri)).lastModified());
+            header->setValue("Last-Modified", PiiHttpProtocol::timeToString(modTime));
+          }
         return;
       }
 
