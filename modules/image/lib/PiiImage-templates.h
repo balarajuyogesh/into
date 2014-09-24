@@ -1104,7 +1104,7 @@ namespace PiiImage
   template <class T> PiiMatrix<int> detectFastCorners(const PiiMatrix<T>& image, T threshold)
   {
     int pixel[16];
-    fast9_make_offsets(pixel, image.stride());
+    fast9_make_offsets<T>(pixel, image.stride());
 
     PiiMatrix<int> matCorners(0,2);
     fast9_detect(image, pixel, threshold, matCorners);
