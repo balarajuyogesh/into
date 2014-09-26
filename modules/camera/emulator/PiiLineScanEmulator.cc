@@ -19,6 +19,7 @@
 #include <PiiDelay.h>
 #include <PiiRandom.h>
 #include <PiiBits.h>
+#include <PiiYdinResources.h>
 
 #include <QMutexLocker>
 #include <QDir>

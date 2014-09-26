@@ -43,7 +43,7 @@ calibration.depends += classification optimization
 
 # Camera drivers
 qt {
-  CAMERADRIVERS = emulator webcam
+  CAMERADRIVERS = emulator webcam pylon
   for(driver, CAMERADRIVERS) {
     !enabled($$driver):!equals(driver,emulator) {
       warning($$driver camera driver will not be built)

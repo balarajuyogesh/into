@@ -1,0 +1,23 @@
+# Load this file with
+# . pylonvars
+# to configure the Pylon driver
+#
+
+export PYLON_ROOT=$HOME/pylon4
+export GENICAM_ROOT_V2_3=$PYLON_ROOT/genicam
+libdir=`ls -d $PYLON_ROOT/genicam/bin/Linux*`
+export LD_LIBRARY_PATH=`ls -d $PYLON_ROOT/lib*`:$libdir:$libdir/GenApi/Generic${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
+export GENICAM_CACHE_V2_3=/tmp
+
+: <<'EOF'
+To configure the Pylon environment in Emacs, type C-x C-e just after the last closing brace.
+
+(let* ((pylon-root (expand-file-name "~/pylon4"))
+       (genicam-root (concat pylon-root "/genicam"))
+       (lib-dir (concat genicam-root "/bin/Linux64_x64")))
+  (setenv "PYLON_ROOT" pylon-root)
+  (setenv "GENICAM_ROOT_V2_3" genicam-root)
+  (setenv "GENICAM_CACHE_V2_3" "/tmp")
+  (setenv "LD_LIBRARY_PATH" (concat (getenv "LD_LIBRARY_PATH") ":"
+    pylon-root "/lib64:" lib-dir ":" lib-dir "/GenApi/Generic")))
+EOF

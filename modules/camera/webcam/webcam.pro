@@ -14,7 +14,7 @@ linux {
 }
 
 !isEmpty(SUBFOLDER) {
-    HEADERS       += $$SUBFOLDER/*.h
-    SOURCES       += *.cc $$SUBFOLDER/*.cc
-    INCLUDEPATH   += $$SUBFOLDER
+  HEADERS       += $$SUBFOLDER/*.h
+  SOURCES       += $$SUBFOLDER/*.cc
+  INCLUDEPATH   += $$SUBFOLDER
 }

@@ -26,10 +26,17 @@ exists($$OUT_PWD/lib) {
   INCLUDEPATH += $$INTODIR/modules/$$LOCASE_NAME/lib
 }
 
-# Qt builds include operations and the plugin
-qt:exists($$OUT_PWD/plugin) {
-  HEADERS += plugin/*.h
-  SOURCES += plugin/*.cc
+# Qt builds include operations, the plugin and possibly other stuff
+# outside of the lib directory.
+qt {
+  exists($$OUT_PWD/plugin) {
+    HEADERS += plugin/*.h
+    SOURCES += plugin/*.cc
+    INCLUDEPATH += $$INTODIR/modules/$$LOCASE_NAME/plugin
+  }
+  exists($$OUT_PWD/*.h): HEADERS += *.h
+  exists($$OUT_PWD/*.cc): SOURCES += *.cc
+  INCLUDEPATH += $$INTODIR/modules/$$LOCASE_NAME
   LIBS += -lpiiydin$$INTO_LIBV
 }
 
