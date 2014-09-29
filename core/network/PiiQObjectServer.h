@@ -183,6 +183,13 @@ class PiiConfigurable;
  * PiiObjectServer and PiiQObjectServer work around this by allowing
  * one to set thread safety levels to functions and properties.
  *
+ * If the safety level of an object or a property is set to
+ * `AccessPropertyFromMainThread`, both reads and writes to the
+ * property will go through the main event loop. To avoid making the
+ * main thread a major bottleneck, the default behaviour is
+ * `WritePropertyFromMainThread` that reads the property from multiple
+ * threads, taking care of mutual exclusion.
+ *
  * To avoid manually setting the safety levels, PiiQObjectServer
  * provides a way of marking unsafe properties and functions with
  * class info fields:
@@ -191,11 +198,16 @@ class PiiConfigurable;
  * class MyClass : public QObject
  * {
  *   Q_OBJECT
- *   Q_CLASSINFO("unsafeProperties", "unsafeProperty1 unsafeProperty2");
- *   Q_CLASSINFO("unsafeFunctions", "unsafeSlot1(int) unsafeSlot2(QString)");
+ *   // WritePropertyFromMainThread for unsafeProperty1 and unsafeProperty2,
+ *   // AccessPropertyFromMainThread for fragileProperty
+ *   Q_CLASSINFO("propertySafetyLevel",
+ *               "unsafeProperty1:1 unsafeProperty2:1 fragileProperty:0");
+ *   // AccessFromMainThread
+ *   Q_CLASSINFO("functionSafetyLevel", "unsafeSlot1(int):0 unsafeSlot2(QString):0");
  *
  *   Q_PROPERTY(int unsafeProperty1 READ unsafeProperty1 WRITE setUnsafeProperty1);
  *   Q_PROPERTY(bool unsafeProperty2 READ unsafeProperty2 WRITE setUnsafeProperty2);
+ *   Q_PROPERTY(double fragileProperty READ fragileProperty WRITE setFragileProperty);
  *
  * public slots:
  *   int unsafeSlot1(int value);
@@ -206,11 +218,9 @@ class PiiConfigurable;
  * ~~~
  *
  * Property names and function signatures are both separated with a
- * single space. Use the normalized function signature for functions.
- * The listed properties and functions will be accessed through the
- * event loop of the main thread. QObjects can also set the
- * [default safety level](PiiObjectServer::setSafetyLevel()) using
- * Q_CLASSINFO:
+ * single space. Safety levels can be set using their integer values
+ * or names. Use the normalized function signature for functions. The
+ * default safety can also be set using Q_CLASSINFO:
  *
  * ~~~(c++)
  * class MyClass : public QObject
@@ -243,6 +253,14 @@ public:
     ExposePrivate = 64,
     ExposeDefault = -1 & ~ExposeProtected & ~ExposePrivate,
     ExposeAll = -1
+  };
+
+  enum PropertySafetyLevel
+  {
+    AccessPropertyFromMainThread,
+    WritePropertyFromMainThread,
+    AccessPropertyFromAnyThread,
+    AccessPropertyConcurrently
   };
 
   Q_DECLARE_FLAGS(ExposedFeatures, ExposedFeature);
@@ -287,13 +305,13 @@ public:
    * Sets the safety level of an individual property, identified by
    * *propertyName*.
    */
-  void setPropertySafetyLevel(const QString& propertyName, ThreadSafetyLevel safetyLevel);
+  void setPropertySafetyLevel(const QString& propertyName, PropertySafetyLevel safetyLevel);
   /**
    * Returns the safety level of the given property. If no
    * property-specific safety level is set, returns the default safety
    * level.
    */
-  ThreadSafetyLevel propertySafetyLevel(const QString& propertyName) const;
+  PropertySafetyLevel propertySafetyLevel(const QString& propertyName) const;
   /**
    * Removes a previously set property-specific safety level.
    */
@@ -351,8 +369,8 @@ protected:
     QStringList lstEnums;
     QHash<QString,QStringList> hashEnums;
     QHash<QString,int> hashEnumValues;
-    ThreadSafetyLevel propertySafetyLevel;
-    SafetyLevelMap mapPropertySafetyLevels;
+    PropertySafetyLevel minPropertySafetyLevel;
+    QMap<QString,PropertySafetyLevel> mapPropertySafetyLevels;
   };
   PII_D_FUNC;
 
@@ -363,13 +381,15 @@ protected:
 
 private slots:
   bool setPropertiesFromMainThread(const QVariantMap& props);
+  QVariant readPropertyFromMainThread(const QString& name);
 
 private:
   void init();
-  inline ThreadSafetyLevel propertySafetyLevel() const
+  inline PropertySafetyLevel minPropertySafetyLevel() const
   {
     const PII_D;
-    return qMin(d->safetyLevel, d->propertySafetyLevel);
+    return qMin(PropertySafetyLevel(d->safetyLevel + 1),
+                d->minPropertySafetyLevel);
   }
   void listFunctions(QObject* object);
   void addToEnums(const QString& name, const QMetaEnum& enumerator);
@@ -377,10 +397,11 @@ private:
   void listProperties(PiiHttpDevice* dev) const;
   template <class T> static inline T makeProperty(int type, const QString& name);
   template <class T> QList<T> properties() const;
-  QVariant objectProperty(const QString& name) const;
+  QVariant objectProperty(const QString& name);
   bool setObjectProperties(const QVariantMap& props);
   bool setObjectProperty(const QString& name, const QVariant& value);
   ChannelSlot* findSlot(const QString& signal) const;
+  template <class Enum> Enum stringToEnum(const char* enumName, const QString& str) const;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PiiQObjectServer::ExposedFeatures)

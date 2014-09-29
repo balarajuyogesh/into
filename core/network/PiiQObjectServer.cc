@@ -32,7 +32,8 @@ static const int iQObjectFunctionCount = QObject::staticMetaObject.methodCount()
 PiiQObjectServer::Data::Data(QObject* object, ExposedFeatures features) :
   pObject(object),
   pConfigurable(qobject_cast<PiiConfigurable*>(object)),
-  features(features)
+  features(features),
+  minPropertySafetyLevel(AccessPropertyFromAnyThread)
 {}
 
 PiiQObjectServer::Data::~Data()
@@ -89,6 +90,17 @@ PiiQObjectServer::PiiQObjectServer(Data* data) :
   init();
 }
 
+template <class Enum>
+Enum PiiQObjectServer::stringToEnum(const char* enumName, const QString& str) const
+{
+  bool bSuccess = false;
+  int iValue = str.toInt(&bSuccess);
+  if (bSuccess)
+    return static_cast<Enum>(iValue);
+  QMetaEnum safetyLevelEnum = metaObject()->enumerator(metaObject()->indexOfEnumerator(enumName));
+  return static_cast<Enum>(qMax(0, safetyLevelEnum.keyToValue(qPrintable(str))));
+}
+
 void PiiQObjectServer::init()
 {
   PII_D;
@@ -102,34 +114,39 @@ void PiiQObjectServer::init()
 
   const QMetaObject* pMetaObj = d->pObject->metaObject();
 
-  /* HACK. The properties listed in unsafeProperties class info field
-   * can be set from the main thread only. This is required due to
-   * deficiencies in Qt's threading architecture.
-   */
-  int index = pMetaObj->indexOfClassInfo("unsafeProperties");
+  int index = pMetaObj->indexOfClassInfo("propertySafetyLevel");
   if (index != -1)
     {
       QMetaClassInfo info(pMetaObj->classInfo(index));
       QStringList lstProps(QString(info.value()).split(' '));
-      foreach (QString strProp, lstProps)
-        setPropertySafetyLevel(strProp, PiiObjectServer::AccessFromMainThread);
+      foreach (const QString& strProp, lstProps)
+        {
+          QStringList lstParts(strProp.split(':'));
+          if (lstParts.size() == 2)
+            setPropertySafetyLevel(lstParts[0],
+                                   stringToEnum<PropertySafetyLevel>("PropertySafetyLevel",
+                                                                     lstParts[1]));
+        }
     }
-  index = pMetaObj->indexOfClassInfo("unsafeFunctions");
+  index = pMetaObj->indexOfClassInfo("functionSafetyLevel");
   if (index != -1)
     {
       QMetaClassInfo info(pMetaObj->classInfo(index));
       QStringList lstSignatures(QString(info.value()).split(' '));
-      foreach (QString strSignature, lstSignatures)
-        setFunctionSafetyLevel(strSignature, PiiObjectServer::AccessFromMainThread);
+      foreach (const QString& strSignature, lstSignatures)
+        {
+          QStringList lstParts(strSignature.split(':'));
+          if (lstParts.size() == 2)
+            setFunctionSafetyLevel(lstParts[0],
+                                   stringToEnum<ThreadSafetyLevel>("ThreadSafetyLevel",
+                                                                   lstParts[1]));
+        }
     }
   index = pMetaObj->indexOfClassInfo("safetyLevel");
   if (index != -1)
     {
       QMetaClassInfo info(pMetaObj->classInfo(index));
-      QMetaEnum safetyLevelEnum = metaObject()->enumerator(metaObject()->indexOfEnumerator("ThreadSafetyLevel"));
-      int iValue = safetyLevelEnum.keyToValue(info.value());
-      if (iValue != -1)
-        setSafetyLevel(static_cast<ThreadSafetyLevel>(iValue));
+      setSafetyLevel(stringToEnum<ThreadSafetyLevel>("ThreadSafetyLevel", info.value()));
     }
 }
 
@@ -192,7 +209,8 @@ void PiiQObjectServer::jsonProperties(PiiHttpDevice* dev, const QStringList& fie
 
 void PiiQObjectServer::listProperties(PiiHttpDevice* dev) const
 {
-  if (propertySafetyLevel() != AccessConcurrently)
+  PropertySafetyLevel level = minPropertySafetyLevel();
+  if (level != AccessPropertyConcurrently)
     d->accessMutex.lock();
 
   if (dev->queryValue("format").toString() == "json")
@@ -204,51 +222,85 @@ void PiiQObjectServer::listProperties(PiiHttpDevice* dev) const
     // Default format is a plain text list
     dev->print(propertyDeclarations().join("\n"));
 
-  if (propertySafetyLevel() != AccessConcurrently)
+  if (level != AccessPropertyConcurrently)
     d->accessMutex.unlock();
 }
 
-QVariant PiiQObjectServer::objectProperty(const QString& name) const
+QVariant PiiQObjectServer::readPropertyFromMainThread(const QString& name)
 {
-  const PII_D;
-  ThreadSafetyLevel level = propertySafetyLevel(name);
-  if (level != AccessConcurrently)
-    d->accessMutex.lock();
-  QVariant varResult = d->pConfigurable ?
+  PII_D;
+  QMutexLocker lock(&d->accessMutex);
+  return d->pConfigurable ?
     d->pConfigurable->property(qPrintable(name)) :
     d->pObject->property(qPrintable(name));
-  if (level != AccessConcurrently)
-    d->accessMutex.unlock();
-  return varResult;
+}
+
+QVariant PiiQObjectServer::objectProperty(const QString& name)
+{
+  const PII_D;
+  switch (propertySafetyLevel(name))
+    {
+    case AccessPropertyFromMainThread:
+      {
+        Q_ASSERT(thread() == qApp->thread());
+        QVariant varResult;
+        QMetaObject::invokeMethod(this, "readPropertyFromMainThread",
+                                  QThread::currentThread() != qApp->thread() ?
+                                  Qt::BlockingQueuedConnection :
+                                  Qt::DirectConnection,
+                                  Q_RETURN_ARG(QVariant, varResult));
+        return varResult;
+      }
+    case WritePropertyFromMainThread:
+    case AccessPropertyFromAnyThread:
+      synchronized (d->accessMutex)
+        return d->pConfigurable ?
+        d->pConfigurable->property(qPrintable(name)) :
+        d->pObject->property(qPrintable(name));
+    case AccessPropertyConcurrently:
+      return d->pConfigurable ?
+        d->pConfigurable->property(qPrintable(name)) :
+        d->pObject->property(qPrintable(name));
+    }
+  return QVariant();
 }
 
 bool PiiQObjectServer::setPropertiesFromMainThread(const QVariantMap& props)
 {
-  return Pii::setProperties(_d()->pObject, props);
+  PII_D;
+  QMutexLocker lock(&d->accessMutex);
+  return d->pConfigurable ?
+    Pii::setProperties(d->pConfigurable, props) :
+    Pii::setProperties(d->pObject, props);
 }
 
 bool PiiQObjectServer::setObjectProperties(const QVariantMap& props)
 {
   PII_D;
-  switch (propertySafetyLevel())
+  switch (minPropertySafetyLevel())
     {
-    case AccessFromMainThread:
+    case AccessPropertyFromMainThread:
+    case WritePropertyFromMainThread:
+      {
+        Q_ASSERT(thread() == qApp->thread());
+        bool bResult = true;
+        QMetaObject::invokeMethod(this, "setPropertiesFromMainThread",
+                                  QThread::currentThread() != qApp->thread() ?
+                                  Qt::BlockingQueuedConnection :
+                                  Qt::DirectConnection,
+                                  Q_RETURN_ARG(bool, bResult),
+                                  Q_ARG(QVariantMap, props));
+        return bResult;
+      }
+    case AccessPropertyFromAnyThread:
       synchronized (d->accessMutex)
-        {
-          Q_ASSERT(thread() == qApp->thread());
-          bool bResult = true;
-          QMetaObject::invokeMethod(this, "setPropertiesFromMainThread",
-                                    Qt::BlockingQueuedConnection,
-#if (QT_VERSION >= 0x040800)
-                                    Q_RETURN_ARG(bool, bResult),
-#endif
-                                    Q_ARG(QVariantMap, props));
-          return bResult;
-        }
-    case AccessFromAnyThread:
-      synchronized (d->accessMutex) return Pii::setProperties(d->pObject, props);
-    case AccessConcurrently:
-      return Pii::setProperties(d->pObject, props);
+        return d->pConfigurable ?
+        Pii::setProperties(d->pConfigurable, props) :
+        Pii::setProperties(d->pObject, props);
+    case AccessPropertyConcurrently:
+      return d->pConfigurable ?
+        Pii::setProperties(d->pConfigurable, props) :
+        Pii::setProperties(d->pObject, props);
     }
   return false;
 }
@@ -258,28 +310,29 @@ bool PiiQObjectServer::setObjectProperty(const QString& name, const QVariant& va
   PII_D;
   switch (propertySafetyLevel(name))
     {
-    case AccessFromMainThread:
+    case AccessPropertyFromMainThread:
+    case WritePropertyFromMainThread:
       {
         Q_ASSERT(thread() == qApp->thread());
         bool bResult = true;
         QVariantMap mapProps;
         mapProps[name] = value;
         QMetaObject::invokeMethod(this, "setPropertiesFromMainThread",
-                                  Qt::BlockingQueuedConnection,
-#if (QT_VERSION >= 0x040800)
+                                  QThread::currentThread() != qApp->thread() ?
+                                  Qt::BlockingQueuedConnection :
+                                  Qt::DirectConnection,
                                   Q_RETURN_ARG(bool, bResult),
-#endif
                                   Q_ARG(QVariantMap, mapProps));
         return bResult;
       }
-    case AccessFromAnyThread:
+    case AccessPropertyFromAnyThread:
       synchronized (d->accessMutex)
         {
           return d->pConfigurable ?
             d->pConfigurable->setProperty(qPrintable(name), value) :
             d->pObject->setProperty(qPrintable(name), value);
         }
-    case AccessConcurrently:
+    case AccessPropertyConcurrently:
       return d->pConfigurable ?
         d->pConfigurable->setProperty(qPrintable(name), value) :
         d->pObject->setProperty(qPrintable(name), value);
@@ -598,20 +651,20 @@ void PiiQObjectServer::moveToMainThread()
   _d()->pObject->moveToThread(qApp->thread());
 }
 
-void PiiQObjectServer::setPropertySafetyLevel(const QString& propertyName, ThreadSafetyLevel safetyLevel)
+void PiiQObjectServer::setPropertySafetyLevel(const QString& propertyName, PropertySafetyLevel safetyLevel)
 {
   PII_D;
   d->mapPropertySafetyLevels.insert(propertyName, safetyLevel);
-  if (safetyLevel < d->propertySafetyLevel)
-    d->propertySafetyLevel = safetyLevel;
+  if (safetyLevel < d->minPropertySafetyLevel)
+    d->minPropertySafetyLevel = safetyLevel;
 }
 
-PiiObjectServer::ThreadSafetyLevel PiiQObjectServer::propertySafetyLevel(const QString& propertyName) const
+PiiQObjectServer::PropertySafetyLevel PiiQObjectServer::propertySafetyLevel(const QString& propertyName) const
 {
   const PII_D;
-  SafetyLevelMap::const_iterator it = d->mapPropertySafetyLevels.find(propertyName);
+  QMap<QString, PropertySafetyLevel>::const_iterator it = d->mapPropertySafetyLevels.find(propertyName);
   return it == d->mapPropertySafetyLevels.end() ?
-    d->safetyLevel :
+    PropertySafetyLevel(d->safetyLevel + 1) :
     *it;
 }
 
@@ -620,9 +673,9 @@ void PiiQObjectServer::removePropertySafetyLevel(const QString& propertyName)
   PII_D;
   d->mapPropertySafetyLevels.remove(propertyName);
   // Find the minimum access level of all properties.
-  d->propertySafetyLevel = AccessConcurrently;
-  for (SafetyLevelMap::const_iterator it = d->mapPropertySafetyLevels.constBegin();
+  d->minPropertySafetyLevel = AccessPropertyConcurrently;
+  for (QMap<QString, PropertySafetyLevel>::const_iterator it = d->mapPropertySafetyLevels.constBegin();
        it != d->mapPropertySafetyLevels.constEnd(); ++it)
-    if (*it < d->propertySafetyLevel)
-      d->propertySafetyLevel = *it;
+    if (*it < d->minPropertySafetyLevel)
+      d->minPropertySafetyLevel = *it;
 }

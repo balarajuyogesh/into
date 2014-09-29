@@ -355,11 +355,16 @@ QVariant PiiObjectServer::call(const QString& function, QVariantList& params)
           {
             Q_ASSERT(thread() == qApp->thread());
             QVariant varResult;
+            // Normally, this function will not be called from the
+            // main thread, so BlockingQueuedConnection is our choice.
+            // But someone may want to use PiiHttpProtocol without
+            // PiiNetworkServer directly from the main thread, so we
+            // must avoid a deadlock.
             QMetaObject::invokeMethod(this, "callFromMainThread",
-                                      Qt::BlockingQueuedConnection,
-#if (QT_VERSION >= 0x040800)
+                                      QThread::currentThread() != qApp->thread() ?
+                                      Qt::BlockingQueuedConnection :
+                                      Qt::DirectConnection,
                                       Q_RETURN_ARG(QVariant, varResult),
-#endif
                                       Q_ARG(void*, pFunction),
                                       Q_ARG(void*, &params));
             return varResult;
