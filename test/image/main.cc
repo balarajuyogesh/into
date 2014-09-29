@@ -1159,6 +1159,23 @@ void TestPiiImage::medianFilter()
                       0, 0, 0);
   QVERIFY(Pii::equals(PiiImage::medianFilter(mat2, 3, 3, Pii::ExtendNot),
                       PiiMatrix<int>(1,1,0)));
+
+  PiiMatrix<PiiColor<> > clrImg(2, 3);
+  clrImg(0, 0) = PiiColor<>(0, 1, 2);
+  clrImg(0, 1) = PiiColor<>(1, 2, 3);
+  clrImg(0, 2) = PiiColor<>(2, 3, 4);
+  clrImg(1, 0) = PiiColor<>(3, 4, 5);
+  clrImg(1, 1) = PiiColor<>(4, 5, 6);
+  clrImg(1, 2) = PiiColor<>(5, 6, 7);
+
+  PiiMatrix<PiiColor<> > matClrOut(2, 3);
+  PiiImage::medianFilter(clrImg, 1, 3, matClrOut, PiiImage::replicateBorder(clrImg));
+  QCOMPARE(matClrOut(0, 0), PiiColor<>(0, 1, 2));
+  QCOMPARE(matClrOut(0, 1), PiiColor<>(1, 2, 3));
+  QCOMPARE(matClrOut(0, 2), PiiColor<>(2, 3, 4));
+  QCOMPARE(matClrOut(1, 0), PiiColor<>(3, 4, 5));
+  QCOMPARE(matClrOut(1, 1), PiiColor<>(4, 5, 6));
+  QCOMPARE(matClrOut(1, 2), PiiColor<>(5, 6, 7));
 }
 
 void TestPiiImage::backProject()

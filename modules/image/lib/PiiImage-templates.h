@@ -647,10 +647,9 @@ namespace PiiImage
     template <class BinaryFunction>
     PixelType border(const BinaryFunction& padded, int row, int column)
     {
-      int i = 0;
-      for (int r = 0; r < iRows; ++r)
-        for (int c = 0; c < iColumns; ++c, ++i)
-          pBuffer[i] = padded(r + row, c + column);
+      for (int r = row, i = 0; r < row + iRows; ++r)
+        for (int c = column; c < column + iColumns; ++c, ++i)
+          pBuffer[i] = padded(r, c);
       return Pii::fastMedian(pBuffer, iLength);
     }
 
@@ -658,13 +657,86 @@ namespace PiiImage
     PixelType center(const Matrix& input, int row, int column)
     {
       PixelType* ptr = pBuffer;
-      for (int r = 0; r < iRows; ++r)
-        ptr = Pii::copyN(input[row + r] + column, iColumns, ptr);
+      for (int r = row; r < row + iRows; ++r)
+        ptr = Pii::copyN(input[r] + column, iColumns, ptr);
       return Pii::fastMedian(pBuffer, iLength);
     }
 
     int iRows, iColumns, iLength;
     PixelType* pBuffer;
+  };
+
+  template <class ColorType>
+  struct ColorMedianFilterHelper
+  {
+    typedef typename ColorType::value_type T;
+
+    ColorMedianFilterHelper(int rows, int columns) :
+      iRows(rows), iColumns(columns),
+      iLength(rows * columns),
+      pBuffer(new T[iLength * 3])
+    {}
+
+    ~ColorMedianFilterHelper() { delete[] pBuffer; }
+
+    int rows() const { return iRows; }
+    int columns() const { return iColumns; }
+
+    template <class BinaryFunction>
+    ColorType border(const BinaryFunction& padded, int row, int column)
+    {
+      for (int r = row, i = 0; r < row + iRows; ++r)
+        for (int c = column; c < column + iColumns; ++c, ++i)
+          {
+            ColorType clr(padded(r, c));
+            pBuffer[i] = clr.rgbR;
+            pBuffer[i + iLength] = clr.rgbG;
+            pBuffer[i + 2 * iLength] = clr.rgbB;
+          }
+      return ColorType(Pii::fastMedian(pBuffer, iLength),
+                       Pii::fastMedian(pBuffer + iLength, iLength),
+                       Pii::fastMedian(pBuffer + 2 * iLength, iLength));
+    }
+
+    template <class Matrix>
+    ColorType center(const Matrix& input, int row, int column)
+    {
+      for (int r = row, i = 0; r < row + iRows; ++r)
+        {
+          typename Matrix::const_row_iterator row = input[r];
+          for (int c = column; c < column + iColumns; ++c, ++i)
+            {
+              ColorType clr(row[c]);
+              pBuffer[i] = clr.rgbR;
+              pBuffer[i + iLength] = clr.rgbG;
+              pBuffer[i + 2 * iLength] = clr.rgbB;
+            }
+        }
+      return ColorType(Pii::fastMedian(pBuffer, iLength),
+                       Pii::fastMedian(pBuffer + iLength, iLength),
+                       Pii::fastMedian(pBuffer + 2 * iLength, iLength));
+    }
+
+    int iRows, iColumns, iLength;
+    T* pBuffer;
+  };
+
+  template <class T>
+  struct MedianFilterHelper<PiiColor<T> > : public ColorMedianFilterHelper<PiiColor<T> >
+  {
+  public:
+    MedianFilterHelper(int rows, int columns) :
+      ColorMedianFilterHelper<PiiColor<T> >(rows, columns)
+    {}
+  };
+
+  template <class T>
+  struct MedianFilterHelper<PiiColor4<T> > : public ColorMedianFilterHelper<PiiColor4<T> >
+  {
+  public:
+    MedianFilterHelper(int rows, int columns) :
+      ColorMedianFilterHelper<PiiColor4<T> >(rows, columns)
+    {}
   };
 
   template <class Input, class Output, class BinaryFunction>
