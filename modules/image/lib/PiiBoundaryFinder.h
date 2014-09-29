@@ -32,17 +32,17 @@ class PII_IMAGE_EXPORT PiiBoundaryFinder
 {
 public:
   /**
-   * Constructs a new boundary finder.
+   * Initializes a new boundary finder.
    *
-   * @param objects find boundaries in this image. The image is only
-   * used for initializing the parameters of the algorithm and will
-   * not be stored.
+   * @param rows the number of rows in the input image
+   *
+   * @param columns the number of columns in the input image
    *
    * @param boundaryMask draw boundaries to this mask as they are
    * traversed. Right and bottom edges will be marked with ones, left
    * and top edges with twos and double edges with three.
    */
-  PiiBoundaryFinder(const PiiTypelessMatrix& objects,
+  PiiBoundaryFinder(int rows, int columns,
                     PiiMatrix<unsigned char>* boundaryMask = 0);
 
   ~PiiBoundaryFinder();
@@ -64,16 +64,16 @@ public:
    * the difference between successive rows. If no more boundaries can
    * be found, an empty matrix will be returned.
    */
-  template <class T, class UnaryOp>
-  PiiMatrix<int> findNextBoundary(const PiiMatrix<T>& objects, UnaryOp rule);
+  template <class T, class Matrix, class UnaryOp>
+  PiiMatrix<T> findNextBoundary(const Matrix& objects, UnaryOp rule);
 
   /**
    * Finds the next unhandled boundary and stores its coordinates to
    * *points*. Returns the number of boundary points appended to
    * *points*, or zero if no more boundaries can be found.
    */
-  template <class T, class UnaryOp>
-  int findNextBoundary(const PiiMatrix<T>& objects, UnaryOp rule, PiiMatrix<int>& points);
+  template <class Matrix, class UnaryOp, class T>
+  int findNextBoundary(const Matrix& objects, UnaryOp rule, PiiMatrix<T>& points);
 
   /**
    * Returns the boundary mask. After each iteration
@@ -109,10 +109,11 @@ public:
    *
    * @return the number of boundary points found
    */
-  template <class T, class UnaryOp> int findBoundary(const PiiMatrix<T>& objects,
-                                                     UnaryOp rule,
-                                                     int startR, int startC,
-                                                     PiiMatrix<int>& points);
+  template <class Matrix, class UnaryOp, class T>
+  int findBoundary(const Matrix& objects,
+                   UnaryOp rule,
+                   int startR, int startC,
+                   PiiMatrix<T>& points);
 
   /**
    * A convenience function that returns the outer boundary of a
@@ -128,8 +129,9 @@ public:
    * @return the boundary coordinates, or an empty matrix if the label
    * is not found.
    */
-  template <class T> static PiiMatrix<int> findBoundary(const PiiMatrix<T>& objects, T label,
-                                                        PiiMatrix<unsigned char>* boundaryMask = 0);
+  template <class T, class Matrix>
+  static PiiMatrix<T> findBoundary(const Matrix& objects, typename Matrix::value_type label,
+                                   PiiMatrix<unsigned char>* boundaryMask = 0);
 
 
   /**
@@ -173,17 +175,17 @@ public:
    * // square of ones.
    * ~~~
    */
-  template <class T, class UnaryOp>
-  static QList<PiiMatrix<int> > findBoundaries(const PiiMatrix<T>& objects,
-                                               UnaryOp rule,
-                                               PiiMatrix<unsigned char>* boundaryMask = 0);
+  template <class T, class Matrix, class UnaryOp>
+  static QList<PiiMatrix<T> > findBoundaries(const Matrix& objects,
+                                             UnaryOp rule,
+                                             PiiMatrix<unsigned char>* boundaryMask = 0);
 
 private:
   /// @internal
   class Data
   {
   public:
-    Data(const PiiTypelessMatrix& objects, PiiMatrix<unsigned char>* mask);
+    Data(int rows, int columns, PiiMatrix<unsigned char>* mask);
     PiiMatrix<unsigned char> matBoundaryMask;
     PiiMatrix<unsigned char>* pmatBoundaryMask;
     int iRow, iColumn, iRightEdge;
@@ -198,8 +200,9 @@ private:
    *
    * @param rule the decision rule to match object pixels.
    */
-  template <class T, class UnaryOp> void findNextUnhandledPoint(const PiiMatrix<T>& objects,
-                                                                UnaryOp rule);
+  template <class Matrix, class UnaryOp>
+  void findNextUnhandledPoint(const Matrix& objects,
+                              UnaryOp rule);
 };
 
 #include "PiiBoundaryFinder-templates.h"

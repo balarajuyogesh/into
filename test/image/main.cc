@@ -1695,7 +1695,7 @@ void TestPiiImage::findBoundary()
                             1,6,
                             2,7);
 
-    PiiMatrix<int> extracted = PiiBoundaryFinder::findBoundary(objects, 1);
+    PiiMatrix<int> extracted = PiiBoundaryFinder::findBoundary<int>(objects, 1);
 
     QVERIFY(Pii::equals(extracted,boundary));
   }
@@ -1724,7 +1724,7 @@ void TestPiiImage::findBoundary()
                             5,4,
                             4,5);
 
-    PiiMatrix<int> extracted = PiiBoundaryFinder::findBoundary(objects, 1);
+    PiiMatrix<int> extracted = PiiBoundaryFinder::findBoundary<int>(objects, 1);
 
     QVERIFY(Pii::equals(extracted,boundary));
   }
@@ -1750,41 +1750,41 @@ void TestPiiImage::findNextBoundary()
     PiiMatrix<int> result;
 
     PiiMatrix<unsigned char> mask(9,9);
-    PiiBoundaryFinder finder(objects, &mask);
+    PiiBoundaryFinder finder(9, 9, &mask);
 
-    result = finder.findNextBoundary(objects, std::bind2nd(std::greater<int>(), 0));
+    result = finder.findNextBoundary<int>(objects, std::bind2nd(std::greater<int>(), 0));
     QCOMPARE(result(0,0), 8);
     QCOMPARE(result(0,1), 8);
 
-    result = finder.findNextBoundary(objects, std::bind2nd(std::greater<int>(), 0));
+    result = finder.findNextBoundary<int>(objects, std::bind2nd(std::greater<int>(), 0));
     QCOMPARE(result(0,0), 0);
     QCOMPARE(result(0,1), 7);
 
-    result = finder.findNextBoundary(objects, std::bind2nd(std::greater<int>(), 0));
+    result = finder.findNextBoundary<int>(objects, std::bind2nd(std::greater<int>(), 0));
     QCOMPARE(result(0,0), 2);
     QCOMPARE(result(0,1), 5);
 
-    result = finder.findNextBoundary(objects, std::bind2nd(std::greater<int>(), 0));
+    result = finder.findNextBoundary<int>(objects, std::bind2nd(std::greater<int>(), 0));
     QCOMPARE(result(0,0), 4);
     QCOMPARE(result(0,1), 4);
 
-    result = finder.findNextBoundary(objects, std::bind2nd(std::greater<int>(), 0));
+    result = finder.findNextBoundary<int>(objects, std::bind2nd(std::greater<int>(), 0));
     QVERIFY(result.isEmpty());
 
     //QDebug d = qDebug();
     //Pii::matlabPrint(d, mask);
 
-    QVERIFY(Pii::equals(mask,PiiMatrix<unsigned char>(9,9,
-                                                      2,3,3,3,3,3,3,3,1,
-                                                      3,0,0,0,0,0,0,0,3,
-                                                      3,0,2,3,3,3,1,0,3,
-                                                      3,0,3,0,0,0,3,0,3,
-                                                      2,0,1,0,3,0,3,0,3,
-                                                      3,0,3,0,0,0,3,0,3,
-                                                      3,0,2,3,3,3,1,0,3,
-                                                      3,0,0,0,0,0,0,0,3,
-                                                      2,3,3,3,3,3,3,3,1)));
-
+    QVERIFY(Pii::equals(mask,
+                        PiiMatrix<unsigned char>(9,9,
+                                                 2,3,3,3,3,3,3,3,1,
+                                                 3,0,0,0,0,0,0,0,3,
+                                                 3,0,2,3,3,3,1,0,3,
+                                                 3,0,3,0,0,0,3,0,3,
+                                                 2,0,1,0,3,0,3,0,3,
+                                                 3,0,3,0,0,0,3,0,3,
+                                                 3,0,2,3,3,3,1,0,3,
+                                                 3,0,0,0,0,0,0,0,3,
+                                                 2,3,3,3,3,3,3,3,1)));
   }
   {
     PiiMatrix<int> objects(9,9,
@@ -1798,33 +1798,34 @@ void TestPiiImage::findNextBoundary()
                            1,0,0,0,0,0,0,0,1,
                            1,1,1,1,1,1,1,0,0);
 
-    PiiBoundaryFinder finder(objects);
+    PiiBoundaryFinder finder(9, 9);
     PiiMatrix<int> result;
 
-    result = finder.findNextBoundary(objects, std::bind2nd(std::greater<int>(), 0));
+    result = finder.findNextBoundary<int>(objects, std::bind2nd(std::greater<int>(), 0));
     QCOMPARE(result(0,0), 6);
     QCOMPARE(result(0,1), 8);
 
-    result = finder.findNextBoundary(objects, std::bind2nd(std::greater<int>(), 0));
+    result = finder.findNextBoundary<int>(objects, std::bind2nd(std::greater<int>(), 0));
     QCOMPARE(result(0,0), 2);
     QCOMPARE(result(0,1), 5);
 
-    result = finder.findNextBoundary(objects, std::bind2nd(std::greater<int>(), 0));
+    result = finder.findNextBoundary<int>(objects, std::bind2nd(std::greater<int>(), 0));
     QVERIFY(result.isEmpty());
 
     //QDebug d = qDebug();
     //Pii::matlabPrint(d, finder.boundaryMask());
 
-    QVERIFY(Pii::equals(finder.boundaryMask(),PiiMatrix<unsigned char>(9,9,
-                                                                       2,3,3,3,3,3,3,3,1,
-                                                                       3,0,0,0,0,0,0,0,3,
-                                                                       3,0,2,3,3,3,1,1,1,
-                                                                       3,0,3,0,0,0,2,0,1,
-                                                                       3,0,2,3,1,0,2,0,1,
-                                                                       3,0,3,0,0,0,2,0,1,
-                                                                       3,0,2,3,3,3,2,2,1,
-                                                                       3,0,0,0,0,0,0,0,3,
-                                                                       2,3,3,3,3,3,1,0,0)));
+    QVERIFY(Pii::equals(finder.boundaryMask(),
+                        PiiMatrix<unsigned char>(9,9,
+                                                 2,3,3,3,3,3,3,3,1,
+                                                 3,0,0,0,0,0,0,0,3,
+                                                 3,0,2,3,3,3,1,1,1,
+                                                 3,0,3,0,0,0,2,0,1,
+                                                 3,0,2,3,1,0,2,0,1,
+                                                 3,0,3,0,0,0,2,0,1,
+                                                 3,0,2,3,3,3,2,2,1,
+                                                 3,0,0,0,0,0,0,0,3,
+                                                 2,3,3,3,3,3,1,0,0)));
   }
   {
     PiiMatrix<int> objects(6,8,
@@ -1835,8 +1836,8 @@ void TestPiiImage::findNextBoundary()
                            1,0,1,1,0,1,0,1,
                            0,0,0,0,0,0,0,0);
 
-    PiiBoundaryFinder finder(objects);
-    finder.findNextBoundary(objects, std::bind2nd(std::not_equal_to<int>(), 0));
+    PiiBoundaryFinder finder(6, 8);
+    finder.findNextBoundary<int>(objects, std::bind2nd(std::not_equal_to<int>(), 0));
     //QDebug d = qDebug();
     //Pii::matlabPrint(d, finder.boundaryMask());
     QVERIFY(Pii::equals(finder.boundaryMask(),PiiMatrix<unsigned char>(6,8,
@@ -1854,8 +1855,8 @@ void TestPiiImage::findNextBoundary()
                            0,1,0,
                            1,0,1);
 
-    PiiBoundaryFinder finder(objects);
-    finder.findNextBoundary(objects, std::bind2nd(std::not_equal_to<int>(), 0));
+    PiiBoundaryFinder finder(4, 3);
+    finder.findNextBoundary<int>(objects, std::bind2nd(std::not_equal_to<int>(), 0));
     QVERIFY(Pii::equals(finder.boundaryMask(),PiiMatrix<unsigned char>(4,3,
                                                                        0,3,0,
                                                                        2,0,1,
@@ -1868,8 +1869,8 @@ void TestPiiImage::findNextBoundary()
                            1,0,1,0,
                            0,1,0,1);
 
-    PiiBoundaryFinder finder(objects);
-    finder.findNextBoundary(objects, std::bind2nd(std::not_equal_to<int>(), 0));
+    PiiBoundaryFinder finder(3, 4);
+    finder.findNextBoundary<int>(objects, std::bind2nd(std::not_equal_to<int>(), 0));
     QVERIFY(Pii::equals(finder.boundaryMask(),PiiMatrix<unsigned char>(3,4,
                                                                        0,3,0,3,
                                                                        2,0,1,0,
@@ -1881,8 +1882,8 @@ void TestPiiImage::findNextBoundary()
                            0,1,0,
                            1,0,1);
 
-    PiiBoundaryFinder finder(objects);
-    finder.findNextBoundary(objects, std::bind2nd(std::not_equal_to<int>(), 0));
+    PiiBoundaryFinder finder(3, 3);
+    finder.findNextBoundary<int>(objects, std::bind2nd(std::not_equal_to<int>(), 0));
     QVERIFY(Pii::equals(finder.boundaryMask(),PiiMatrix<unsigned char>(3,3,
                                                                        3,0,3,
                                                                        0,3,0,
@@ -1894,8 +1895,8 @@ void TestPiiImage::findNextBoundary()
                            1,0,1,
                            0,1,0);
 
-    PiiBoundaryFinder finder(objects);
-    finder.findNextBoundary(objects, std::bind2nd(std::not_equal_to<int>(), 0));
+    PiiBoundaryFinder finder(3, 3);
+    finder.findNextBoundary<int>(objects, std::bind2nd(std::not_equal_to<int>(), 0));
     QVERIFY(Pii::equals(finder.boundaryMask(),PiiMatrix<unsigned char>(3,3,
                                                                        0,3,0,
                                                                        2,0,1,
@@ -1908,9 +1909,9 @@ void TestPiiImage::findNextBoundary()
                            1,0,1,0,1,
                            1,1,0,1,1);
 
-    PiiBoundaryFinder finder(objects);
-    finder.findNextBoundary(objects, std::bind2nd(std::not_equal_to<int>(), 0));
-    finder.findNextBoundary(objects, std::bind2nd(std::not_equal_to<int>(), 0));
+    PiiBoundaryFinder finder(4, 5);
+    finder.findNextBoundary<int>(objects, std::bind2nd(std::not_equal_to<int>(), 0));
+    finder.findNextBoundary<int>(objects, std::bind2nd(std::not_equal_to<int>(), 0));
     QVERIFY(Pii::equals(finder.boundaryMask(),PiiMatrix<unsigned char>(4,5,
                                                                        2,3,3,3,1,
                                                                        3,0,0,0,3,
@@ -1932,7 +1933,9 @@ void TestPiiImage::findBoundaries()
                          0,0,0,0,0,0,0,0);
 
   // Everything other than zero is an object
-  QList<PiiMatrix<int> > coordinates(PiiBoundaryFinder::findBoundaries(objects, std::bind2nd(std::not_equal_to<int>(), 0)));
+  QList<PiiMatrix<int> > coordinates(
+    PiiBoundaryFinder::findBoundaries<int>(objects,
+                                           std::bind2nd(std::not_equal_to<int>(), 0)));
   QCOMPARE(coordinates.size(), 3);
 
   QVERIFY(Pii::equals(coordinates[0],PiiMatrix<int>(20,2,
@@ -1975,16 +1978,16 @@ void TestPiiImage::findBoundaries()
 
   // Repeat with a boundary mask
   PiiMatrix<unsigned char> mask;
-  PiiBoundaryFinder::findBoundaries(objects, std::bind2nd(std::greater_equal<int>(), 1), &mask);
-  QVERIFY(Pii::equals(mask,PiiMatrix<unsigned char>(8,8,
-                                                    0,2,1,0,2,1,0,0,
-                                                    0,2,1,0,2,1,0,0,
-                                                    0,2,1,0,0,0,0,0,
-                                                    0,2,0,3,3,3,1,0,
-                                                    0,2,1,0,0,0,3,0,
-                                                    0,2,2,3,3,3,1,0,
-                                                    0,0,0,0,0,0,0,0,
-                                                    0,0,0,0,0,0,0,0)));
+  PiiBoundaryFinder::findBoundaries<int>(objects, std::bind2nd(std::greater_equal<int>(), 1), &mask);
+  QVERIFY(Pii::equals(mask, PiiMatrix<unsigned char>(8,8,
+                                                     0,2,1,0,2,1,0,0,
+                                                     0,2,1,0,2,1,0,0,
+                                                     0,2,1,0,0,0,0,0,
+                                                     0,2,0,3,3,3,1,0,
+                                                     0,2,1,0,0,0,3,0,
+                                                     0,2,2,3,3,3,1,0,
+                                                     0,0,0,0,0,0,0,0,
+                                                     0,0,0,0,0,0,0,0)));
 }
 
 void TestPiiImage::threshold()

@@ -19,19 +19,19 @@
 
 #include <PiiMatrixUtil.h>
 
-template <class T, class UnaryOp>
-QList<PiiMatrix<int> > PiiBoundaryFinder::findBoundaries(const PiiMatrix<T>& objects,
-                                                         UnaryOp rule,
-                                                         PiiMatrix<unsigned char>* boundaryMask)
+template <class T, class Matrix, class UnaryOp>
+QList<PiiMatrix<T> > PiiBoundaryFinder::findBoundaries(const Matrix& objects,
+                                                       UnaryOp rule,
+                                                       PiiMatrix<unsigned char>* boundaryMask)
 {
-  PiiBoundaryFinder finder(objects, boundaryMask);
+  PiiBoundaryFinder finder(objects.rows(), objects.columns(), boundaryMask);
 
-  QList<PiiMatrix<int> > result;
+  QList<PiiMatrix<T> > result;
   for (;;)
     {
       // Find last boundary that has not been handled yet
-      PiiMatrix<int> boundary = finder.findNextBoundary(objects, rule);
-      // No more boundariesx
+      PiiMatrix<T> boundary = finder.findNextBoundary<T>(objects, rule);
+      // No more boundaries
       if (boundary.isEmpty())
         break;
       result.push_back(boundary);
@@ -40,44 +40,47 @@ QList<PiiMatrix<int> > PiiBoundaryFinder::findBoundaries(const PiiMatrix<T>& obj
   return result;
 }
 
-template <class T> PiiMatrix<int> PiiBoundaryFinder::findBoundary(const PiiMatrix<T>& objects, T label,
-                                                                  PiiMatrix<unsigned char>* boundaryMask)
+template <class T, class Matrix>
+PiiMatrix<T> PiiBoundaryFinder::findBoundary(const Matrix& objects, typename Matrix::value_type label,
+                                             PiiMatrix<unsigned char>* boundaryMask)
 {
   int row = 0, col = 0;
   Pii::findLast(objects, label, row, col);
   if (row != -1)
     {
-      PiiBoundaryFinder finder(objects, boundaryMask);
+      PiiBoundaryFinder finder(objects.rows(), objects.columns(), boundaryMask);
       // Coordinate matrix
-      PiiMatrix<int> matResult(0,2);
+      PiiMatrix<T> matResult(0,2);
       matResult.reserve(256);
       finder.findBoundary(objects, std::bind2nd(std::equal_to<int>(), label), row, col, matResult);
       return matResult;
     }
   // No boundaries found
-  return PiiMatrix<int>(0,2);
+  return PiiMatrix<T>(0,2);
 }
 
-template <class T, class UnaryOp> PiiMatrix<int> PiiBoundaryFinder::findNextBoundary(const PiiMatrix<T>& objects,
-                                                                                     UnaryOp rule)
+template <class T, class Matrix, class UnaryOp>
+PiiMatrix<T> PiiBoundaryFinder::findNextBoundary(const Matrix& objects,
+                                                 UnaryOp rule)
 {
   findNextUnhandledPoint(objects, rule);
 
   if (d->iRow >= 0)
     {
       // Coordinate matrix
-      PiiMatrix<int> matResult(0,2);
+      PiiMatrix<T> matResult(0,2);
       matResult.reserve(256);
       findBoundary(objects, rule, d->iRow, d->iRightEdge, matResult);
       return matResult;
     }
 
-  return PiiMatrix<int>(0,2);
+  return PiiMatrix<T>(0,2);
 }
 
-template <class T, class UnaryOp> int PiiBoundaryFinder::findNextBoundary(const PiiMatrix<T>& objects,
-                                                                          UnaryOp rule,
-                                                                          PiiMatrix<int>& points)
+template <class Matrix, class UnaryOp, class T>
+int PiiBoundaryFinder::findNextBoundary(const Matrix& objects,
+                                        UnaryOp rule,
+                                        PiiMatrix<T>& points)
 {
   findNextUnhandledPoint(objects, rule);
 
@@ -88,8 +91,9 @@ template <class T, class UnaryOp> int PiiBoundaryFinder::findNextBoundary(const 
 }
 
 
-template <class T, class UnaryOp> void PiiBoundaryFinder::findNextUnhandledPoint(const PiiMatrix<T>& objects,
-                                                                                 UnaryOp rule)
+template <class Matrix, class UnaryOp>
+void PiiBoundaryFinder::findNextUnhandledPoint(const Matrix& objects,
+                                               UnaryOp rule)
 {
   // If we reached the beginning of a row, next iteration must start
   // at the end of the previous one.
@@ -101,7 +105,7 @@ template <class T, class UnaryOp> void PiiBoundaryFinder::findNextUnhandledPoint
   // After the first row we always start at the end.
   for ( ;d->iRow >= 0; --d->iRow, d->iColumn = objects.columns()-1)
     {
-      const T* objectsRow = objects.row(d->iRow);
+      typename Matrix::const_row_iterator objectsRow = objects.rowBegin(d->iRow);
       const unsigned char* maskRow = d->pmatBoundaryMask->row(d->iRow);
 
       while (d->iColumn >= 0)
@@ -129,10 +133,11 @@ template <class T, class UnaryOp> void PiiBoundaryFinder::findNextUnhandledPoint
     }
 }
 
-template <class T, class UnaryOp> int PiiBoundaryFinder::findBoundary(const PiiMatrix<T>& objects,
-                                                                      UnaryOp rule,
-                                                                      int startR, int startC,
-                                                                      PiiMatrix<int>& points)
+template <class Matrix, class UnaryOp, class T>
+int PiiBoundaryFinder::findBoundary(const Matrix& objects,
+                                    UnaryOp rule,
+                                    int startR, int startC,
+                                    PiiMatrix<T>& points)
 {
   // Directions to go along the boundary. The last number is the
   // minimum number of turns (clockwise) at a given direction that
@@ -190,7 +195,7 @@ template <class T, class UnaryOp> int PiiBoundaryFinder::findBoundary(const PiiM
               rule(objects(testR, testC)))
             {
               // Add to the list of boundary points
-              points.appendRow(c, r);
+              points.appendRow(T(c), T(r));
               ++iPoints;
 
               int turns = dirIndex - firstPossibleDir;
@@ -241,9 +246,10 @@ template <class T, class UnaryOp> int PiiBoundaryFinder::findBoundary(const PiiM
               break;
             }
         }
-    } while (r != startR || c != startC);
+    }
+  while (r != startR || c != startC);
 
-  points.appendRow(startC, startR);
+  points.appendRow(T(startC), T(startR));
   ++iPoints;
 
   // Special case: only one pixel

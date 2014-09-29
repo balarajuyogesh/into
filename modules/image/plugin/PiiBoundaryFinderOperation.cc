@@ -53,7 +53,7 @@ template <class T> void PiiBoundaryFinderOperation::findBoundaries(const PiiVari
   PII_D;
   const PiiMatrix<T> image(obj.valueAs<PiiMatrix<T> >());
   PiiMatrix<unsigned char> matBoundaryMask;
-  PiiBoundaryFinder finder(image, &matBoundaryMask);
+  PiiBoundaryFinder finder(image.rows(), image.columns(), &matBoundaryMask);
   PiiMatrix<int> matPoints(0,2);
   matPoints.reserve(256);
   PiiMatrix<int> matLimits(1,32);

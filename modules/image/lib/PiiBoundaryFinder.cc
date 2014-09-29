@@ -15,25 +15,25 @@
 
 #include "PiiBoundaryFinder.h"
 
-PiiBoundaryFinder::Data::Data(const PiiTypelessMatrix& objects,
+PiiBoundaryFinder::Data::Data(int rows, int columns,
                               PiiMatrix<unsigned char>* boundaryMask) :
   pmatBoundaryMask(boundaryMask),
-  iRow(objects.rows()-1),
-  iColumn(objects.columns()-1),
+  iRow(rows-1),
+  iColumn(columns-1),
   iRightEdge(iColumn)
 {
   if (boundaryMask != 0)
-    pmatBoundaryMask->resize(objects.rows(), objects.columns());
+    pmatBoundaryMask->resize(rows, columns);
   else
     {
-      matBoundaryMask.resize(objects.rows(), objects.columns());
+      matBoundaryMask.resize(rows, columns);
       pmatBoundaryMask = &matBoundaryMask;
     }
 }
 
-PiiBoundaryFinder::PiiBoundaryFinder(const PiiTypelessMatrix& objects,
+PiiBoundaryFinder::PiiBoundaryFinder(int rows, int columns,
                                      PiiMatrix<unsigned char>* boundaryMask) :
-  d(new Data(objects, boundaryMask))
+  d(new Data(rows, columns, boundaryMask))
 {
 }
 
