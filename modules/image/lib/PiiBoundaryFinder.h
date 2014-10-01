@@ -15,6 +15,7 @@
 
 #include "PiiImageGlobal.h"
 #include <PiiMatrix.h>
+#include <QList>
 
 #ifndef _PIIBOUNDARYFINDER_H
 #define _PIIBOUNDARYFINDER_H
