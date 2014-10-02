@@ -18,3 +18,8 @@
 PiiProgressController::~PiiProgressController()
 {
 }
+
+bool PiiProgressController::canContinue(double) const
+{
+  return true;
+}

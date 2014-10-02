@@ -32,13 +32,14 @@ public:
   /**
    * Check if the slow operation is still allowed to continue. The
    * implementation should return `true` if the operation is still
-   * allowed to run and `false` otherwise.
+   * allowed to run and `false` otherwise. The default implementation
+   * returns true.
    *
    * @param progressPercentage an estimate of the current state of
    * progress as a percentage (0.0 - 1.0). If the value is `NaN`, the
    * current state of progress is not known to the caller.
    */
-  virtual bool canContinue(double progressPercentage = NAN) const = 0;
+  virtual bool canContinue(double progressPercentage = NAN) const;
 };
 
 
