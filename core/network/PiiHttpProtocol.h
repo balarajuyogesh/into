@@ -105,16 +105,15 @@ public:
   class PII_NETWORK_EXPORT TimeLimiter : public PiiProgressController
   {
   public:
+    TimeLimiter(PiiProgressController* controller, int maxTime);
+    ~TimeLimiter();
+
     bool canContinue(double progressPercentage = NAN) const;
 
     void setMaxTime(int maxTime);
     int maxTime() const;
 
   private:
-    friend class PiiHttpProtocol;
-    ~TimeLimiter();
-    TimeLimiter(PiiProgressController* controller, int maxTime);
-
     class Data;
     Data* d;
 
