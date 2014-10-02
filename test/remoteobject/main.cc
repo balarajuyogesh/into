@@ -27,8 +27,10 @@
 TestPiiRemoteObject::TestPiiRemoteObject() :
   _pServerThread(0),
   _pHttpServer(0),
-  _pObjectServer(0),
-  _pClient(0),
+  _pObjectServer1(0),
+  _pObjectServer2(0),
+  _pClient1(0),
+  _pClient2(0),
   _bServerStarted(false),
   _iNumber(0)
 {}
@@ -36,8 +38,10 @@ TestPiiRemoteObject::TestPiiRemoteObject() :
 void TestPiiRemoteObject::serverThread()
 {
   _pHttpServer = PiiHttpServer::addServer("PiiObjectServer", "tcp://0.0.0.0:3142");
-  _pObjectServer = new PiiQObjectServer(&_serverObject);
-  _pHttpServer->protocol()->registerUriHandler("/", _pObjectServer);
+  _pObjectServer1 = new PiiQObjectServer(&_serverObject1);
+  _pObjectServer2 = new PiiQObjectServer(&_serverObject2);
+  _pHttpServer->protocol()->registerUriHandler("/1/", _pObjectServer1);
+  _pHttpServer->protocol()->registerUriHandler("/2/", _pObjectServer2);
 
   _bServerStarted = _pHttpServer->start();
 
@@ -48,7 +52,8 @@ void TestPiiRemoteObject::serverThread()
     }
 
   _pHttpServer->stop(PiiNetwork::InterruptClients);
-  delete _pObjectServer;
+  delete _pObjectServer1;
+  delete _pObjectServer2;
 }
 
 void TestPiiRemoteObject::initTestCase()
@@ -65,27 +70,24 @@ void TestPiiRemoteObject::initTestCase()
 
   try
     {
-      //_pClient = new PiiRemoteQObject<QObject>("tcp://256.0.0.1/");
-      //QFAIL("Client shouldn't be able to connect to 256.0.0.1");
-    }
-  catch (...) {}
-
-  try
-    {
-      _pClient = new PiiRemoteQObject<QObject>("tcp://127.0.0.1:3142/");
+      _pClient1 = new PiiRemoteQObject<QObject>("tcp://127.0.0.1:3142/1/");
+      _pClient2 = new PiiRemoteQObject<QObject>("tcp://127.0.0.1:3142/2/");
     }
   catch (PiiException& ex)
     {
       piiWarning(ex.location("", ": ") + ex.message());
       QFAIL("Could not connect to tcp://127.0.0.1:3142/");
     }
+
+  QCOMPARE(_pClient1->id(), _pObjectServer1->id());
+  QCOMPARE(_pClient2->id(), _pObjectServer2->id());
 }
 
 void TestPiiRemoteObject::cleanupTestCase()
 {
   try
     {
-      delete _pClient;
+      delete _pClient1;
 
       _pServerThread->quit();
       _pServerThread->wait();
@@ -96,32 +98,50 @@ void TestPiiRemoteObject::cleanupTestCase()
     }
 }
 
+void TestPiiRemoteObject::safetyLevels()
+{
+  QCOMPARE(_pObjectServer1->strictestSafetyLevel(), PiiObjectServer::AccessFromAnyThread);
+  QCOMPARE(_pObjectServer1->strictestPropertySafetyLevel(), PiiQObjectServer::AccessPropertyFromAnyThread);
+  QCOMPARE(_pObjectServer2->strictestSafetyLevel(), PiiObjectServer::AccessFromMainThread);
+  QCOMPARE(_pObjectServer2->strictestPropertySafetyLevel(), PiiQObjectServer::AccessPropertyFromMainThread);
+  QCOMPARE(_pObjectServer2->functionSafetyLevel("test1()"), PiiObjectServer::AccessFromMainThread);
+  QCOMPARE(_pObjectServer2->functionSafetyLevel("test2()"), PiiObjectServer::AccessConcurrently);
+  QCOMPARE(_pObjectServer2->propertySafetyLevel("number"), PiiQObjectServer::AccessPropertyFromMainThread);
+  QCOMPARE(_pObjectServer2->propertySafetyLevel("floatingPoint"), PiiQObjectServer::AccessPropertyConcurrently);
+}
+
 void TestPiiRemoteObject::properties()
 {
-  const QMetaObject* pMetaObject = _pClient->metaObject();
+  const QMetaObject* pMetaObject = _pClient1->metaObject();
   QCOMPARE(pMetaObject->propertyCount(), 4);
   QCOMPARE(pMetaObject->property(1).name(), "number");
 
   //qDebug("setting number");
-  QVERIFY(_pClient->setProperty("number", 314));
-  QCOMPARE(_serverObject.iNumber, 314);
-  QCOMPARE(_pClient->property("number").toInt(), 314);
-  QCOMPARE(_pClient->property("floatingPoint").toDouble(), 3.14159);
+  QVERIFY(_pClient1->setProperty("number", 314));
+  QVERIFY(_serverObject1.pCallingThread != 0);
+  QVERIFY(_serverObject1.pCallingThread != QThread::currentThread());
+  QCOMPARE(_serverObject1.iNumber, 314);
+  QVERIFY(_serverObject1.pCallingThread != QThread::currentThread());
+  QCOMPARE(_pClient1->property("number").toInt(), 314);
+  QVERIFY(_serverObject1.pCallingThread != QThread::currentThread());
+  QCOMPARE(_pClient1->property("floatingPoint").toDouble(), 3.14159);
+  QVERIFY(_serverObject1.pCallingThread != QThread::currentThread());
   //qDebug("setting matrix");
   PiiMatrix<int> testMat(1,3,1,2,3);
-  QVERIFY(_pClient->setProperty("variant", Pii::createQVariant(testMat)));
-  QCOMPARE(_serverObject.varValue.type(), unsigned(PiiYdin::IntMatrixType));
-  QVERIFY(Pii::equals(_serverObject.varValue.valueAs<PiiMatrix<int> >(),
+  QVERIFY(_pClient1->setProperty("variant", Pii::createQVariant(testMat)));
+  QCOMPARE(_serverObject1.varValue.type(), unsigned(PiiYdin::IntMatrixType));
+  QVERIFY(Pii::equals(_serverObject1.varValue.valueAs<PiiMatrix<int> >(),
                       testMat));
   //qDebug("getting variant");
-  PiiVariant varProp = _pClient->property("variant").value<PiiVariant>();
+  PiiVariant varProp = _pClient1->property("variant").value<PiiVariant>();
   QCOMPARE(varProp.type(), unsigned(PiiYdin::IntMatrixType));
   QVERIFY(Pii::equals(varProp.valueAs<PiiMatrix<int> >(), testMat));
+  QVERIFY(_serverObject1.pCallingThread != QThread::currentThread());
 }
 
 void TestPiiRemoteObject::functionSignatures()
 {
-  const QMetaObject* pMetaObject = _pClient->metaObject();
+  const QMetaObject* pMetaObject = _pClient1->metaObject();
   QStringList lstMethods;
   // Discard destroyed() (two overloads), deleteLater(), and _q_reregisterTimers()
   for (int i = pMetaObject->methodOffset(); i < pMetaObject->methodCount(); ++i)
@@ -161,24 +181,26 @@ void TestPiiRemoteObject::functionSignatures()
 
 void TestPiiRemoteObject::remoteSlots()
 {
-  QVERIFY(connect(this, SIGNAL(test1()), _pClient, SLOT(test1())));
-  QVERIFY(connect(this, SIGNAL(test1(int)), _pClient, SLOT(test1(int))));
+  QVERIFY(connect(this, SIGNAL(test1()), _pClient1, SLOT(test1())));
+  QVERIFY(connect(this, SIGNAL(test1(int)), _pClient1, SLOT(test1(int))));
 
   emit test1();
-  QVERIFY(_serverObject.bTest1Called);
+  QVERIFY(_serverObject1.bTest1Called);
+  QVERIFY(_serverObject1.pCallingThread != QThread::currentThread());
   emit test1(-123);
-  QCOMPARE(_serverObject.iTest1Value, -123);
+  QCOMPARE(_serverObject1.iTest1Value, -123);
+  QVERIFY(_serverObject1.pCallingThread != QThread::currentThread());
 }
 
 void TestPiiRemoteObject::remoteSignals()
 {
   //qApp->exec();
   //exit(1);
-  QVERIFY(connect(_pClient, SIGNAL(numberChanged(int)), this, SLOT(storeNumber(int)), Qt::DirectConnection));
-  QVERIFY(connect(_pClient, SIGNAL(variantChanged(PiiVariant)), this, SLOT(storeVariant(PiiVariant)), Qt::DirectConnection));
-  QVERIFY(_pClient->setProperty("number", 314));
-  QCOMPARE(_serverObject.iNumber, 314);
-  QVERIFY(_pClient->setProperty("variant", Pii::createQVariant(PiiMatrix<double>())));
+  QVERIFY(connect(_pClient1, SIGNAL(numberChanged(int)), this, SLOT(storeNumber(int)), Qt::DirectConnection));
+  QVERIFY(connect(_pClient1, SIGNAL(variantChanged(PiiVariant)), this, SLOT(storeVariant(PiiVariant)), Qt::DirectConnection));
+  QVERIFY(_pClient1->setProperty("number", 314));
+  QCOMPARE(_serverObject1.iNumber, 314);
+  QVERIFY(_pClient1->setProperty("variant", Pii::createQVariant(PiiMatrix<double>())));
   PiiDelay::msleep(100);
   QCOMPARE(_iNumber, 314);
   QCOMPARE(_variant.type(), unsigned(PiiYdin::DoubleMatrixType));
@@ -188,23 +210,23 @@ void TestPiiRemoteObject::remoteSignals()
 void TestPiiRemoteObject::functionCalls()
 {
   QString strReturn;
-  QVERIFY(_pClient->metaObject()->method(_pClient->metaObject()->methodOffset() + 4)
-          .invoke(_pClient, Qt::DirectConnection, QGenericReturnArgument()));
-  QVERIFY(QMetaObject::invokeMethod(_pClient, "test2", Qt::DirectConnection,
+  QVERIFY(_pClient1->metaObject()->method(_pClient1->metaObject()->methodOffset() + 4)
+          .invoke(_pClient1, Qt::DirectConnection, QGenericReturnArgument()));
+  QVERIFY(QMetaObject::invokeMethod(_pClient1, "test2", Qt::DirectConnection,
                                     Q_RETURN_ARG(QString, strReturn)));
   QCOMPARE(strReturn, QString("test2"));
-  QVERIFY(QMetaObject::invokeMethod(_pClient, "test2", Qt::DirectConnection,
+  QVERIFY(QMetaObject::invokeMethod(_pClient1, "test2", Qt::DirectConnection,
                                     Q_RETURN_ARG(QString, strReturn),
                                     Q_ARG(QString, "foobar")));
   QCOMPARE(strReturn, QString("foobar"));
-  QCOMPARE(_pClient->call<int>("functions/plus", 1, 2), 3);
+  QCOMPARE(_pClient1->call<int>("functions/plus", 1, 2), 3);
 }
 
 void TestPiiRemoteObject::exceptions()
 {
   try
     {
-      _pClient->call<void>("functions/thrower", 0);
+      _pClient1->call<void>("functions/thrower", 0);
       QFAIL("Call should have caused an exception.");
     }
   catch (PiiInvalidArgumentException& ex)
@@ -218,7 +240,7 @@ void TestPiiRemoteObject::exceptions()
 
   try
     {
-      _pClient->call<void>("functions/thrower", 1);
+      _pClient1->call<void>("functions/thrower", 1);
       QFAIL("Call should have caused an exception.");
     }
   catch (PiiMimeException& ex)
@@ -232,7 +254,7 @@ void TestPiiRemoteObject::exceptions()
 
   try
     {
-      _pClient->call<void>("functions/thrower", 2);
+      _pClient1->call<void>("functions/thrower", 2);
       QFAIL("Call should have caused an exception.");
     }
   catch (PiiNetworkException& ex)
@@ -243,6 +265,17 @@ void TestPiiRemoteObject::exceptions()
     {
       QFAIL("Should have caught a PiiNetworkException.");
     }
+}
+
+void TestPiiRemoteObject::singleThreaded()
+{
+  QCOMPARE(_pClient2->property("number").toInt(), 0);
+  QVERIFY(_serverObject2.pCallingThread == QThread::currentThread());
+  QVERIFY(_pClient2->setProperty("number", -123));
+  QVERIFY(_serverObject2.pCallingThread == QThread::currentThread());
+  _pClient2->call<void>("functions/test1");
+  QVERIFY(_serverObject2.bTest1Called);
+  QVERIFY(_serverObject2.pCallingThread == QThread::currentThread());
 }
 
 void ServerObject::thrower(int type)
@@ -257,5 +290,6 @@ void ServerObject::thrower(int type)
       throw PiiNetworkException("Network");
     }
 }
+
 
 QTEST_MAIN(TestPiiRemoteObject)

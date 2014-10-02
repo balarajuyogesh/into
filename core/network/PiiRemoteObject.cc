@@ -29,6 +29,7 @@
 #include <QUrl>
 
 #include "PiiNetworkEncoding.h"
+#include "PiiQObjectServer.h"
 
 PiiRemoteObject::Data::Data() :
   pHttpDevice(0),
@@ -36,13 +37,12 @@ PiiRemoteObject::Data::Data() :
   bChannelRunning(false),
   iRetryCount(3),
   iRetryDelay(2000),
-  iMaxFailureCount(-1)
-{
-}
+  iMaxFailureCount(-1),
+  pLocalServer(0)
+{}
 
 PiiRemoteObject::PiiRemoteObject() : d(new Data)
-{
-}
+{}
 
 PiiRemoteObject::PiiRemoteObject(const QString& serverUri) : d(new Data)
 {
@@ -50,8 +50,7 @@ PiiRemoteObject::PiiRemoteObject(const QString& serverUri) : d(new Data)
 }
 
 PiiRemoteObject::PiiRemoteObject(Data* data) : d(data)
-{
-}
+{}
 
 PiiRemoteObject::PiiRemoteObject(Data* data, const QString& serverUri) : d(data)
 {
@@ -69,7 +68,7 @@ PiiRemoteObject::~PiiRemoteObject()
       }
 
   delete d->pHttpDevice;
-  for (int i=0; i<d->lstCallbacks.size(); ++i)
+  for (int i = 0; i < d->lstCallbacks.size(); ++i)
     delete d->lstCallbacks[i].second;
   delete d;
 }
@@ -79,12 +78,22 @@ PiiRemoteObject::~PiiRemoteObject()
 PiiRemoteObject::HttpDevicePtr PiiRemoteObject::openConnection()
 {
   HttpDevicePtr pDev(&d->deviceMutex);
+  // If the server is in the same process and this call is being made
+  // from the main thread, we could deadlock otherwise...
+  if (d->pLocalServer &&
+      QThread::currentThread() == qApp->thread())
+    {
+      d->buffer.close();
+      d->buffer.setData(QByteArray());
+      d->buffer.open(QIODevice::ReadWrite);
+      return pDev = new PiiHttpDevice(&d->buffer, PiiHttpDevice::Client);
+    }
 
   if (unsigned(d->iFailureCount.load()) > unsigned(d->iMaxFailureCount))
     PII_THROW(PiiNetworkException, tr("Maximum number of failures reached."));
 
   QIODevice* pSocket = 0;
-  for (int iTry=0; iTry<=d->iRetryCount; ++iTry)
+  for (int iTry = 0; iTry <= d->iRetryCount; ++iTry)
     {
       pSocket = d->networkClient.openConnection();
       if (pSocket != 0)
@@ -113,15 +122,40 @@ void PiiRemoteObject::closeConnection()
   d->networkClient.closeConnection();
 }
 
+void PiiRemoteObject::finishRequest(PiiHttpDevice* dev)
+{
+  dev->finish();
+  // If the server is actually in the same process and we are in the
+  // main thread, avoid a deadlock by letting it handle the request
+  // directly.
+  if (d->pLocalServer &&
+      QThread::currentThread() == qApp->thread())
+    {
+      // This is the size of the request in bytes.
+      qint64 iPos = d->buffer.pos();
+      // Position the buffer at the start of the HTTP request.
+      d->buffer.seek(0);
+      // Create a http device for the server's side of the protocol.
+      PiiProgressController controller;
+      PiiHttpProtocol::TimeLimiter limiter(&controller, INT_MAX);
+      PiiHttpDevice serverDevice(&d->buffer, PiiHttpDevice::Server);
+      serverDevice.readHeader(); // Should be OK, since we formatted the header.
+      d->pLocalServer->handleRequest(d->strPath, &serverDevice, &limiter);
+      serverDevice.finish();
+      // Position the buffer at the start of the server's response.
+      d->buffer.seek(iPos);
+    }
+}
+
 QList<QByteArray> PiiRemoteObject::readDirectoryList(const QString& path)
 {
   // Try twice
-  for (int iTry=0; iTry<2; ++iTry)
+  for (int iTry = 0; iTry < 2; ++iTry)
     {
       HttpDevicePtr pDev = openConnection();
 
       pDev->setRequest("GET", d->strPath + path);
-      pDev->finish();
+      finishRequest(pDev);
 
       if (!pDev->isReadable())
         continue;
@@ -160,7 +194,7 @@ QString PiiRemoteObject::addCallback(const QString& name, PiiGenericFunction* fu
 
 void PiiRemoteObject::removeCallback(const QString& signature)
 {
-  for (int i=0; i<d->lstCallbacks.size(); ++i)
+  for (int i = 0; i < d->lstCallbacks.size(); ++i)
     if (d->lstCallbacks[i].second->signature(d->lstCallbacks[i].first) == signature)
       {
         try { disconnectFromChannel("callbacks/" + signature); }
@@ -178,7 +212,7 @@ void PiiRemoteObject::removeCallback(const QString& signature)
 
 void PiiRemoteObject::removeCallbacks()
 {
-  for (int i=0; i<d->lstCallbacks.size(); ++i)
+  for (int i = 0; i < d->lstCallbacks.size(); ++i)
     {
       try { disconnectFromChannel("callbacks/" + d->lstCallbacks[i].second->signature(d->lstCallbacks[i].first)); }
       catch (PiiException& ex)
@@ -360,7 +394,7 @@ void PiiRemoteObject::readChannel()
         {
           piiWarning("Lost connection to server's return channel. Trying to reconnect.");
           // Try to reconnect
-          for (int iTry=0; iTry<=d->iRetryCount; ++iTry)
+          for (int iTry = 0; iTry <= d->iRetryCount; ++iTry)
             {
               if (iTry != 0)
                 PiiDelay::msleep(d->iRetryDelay);
@@ -458,6 +492,38 @@ void PiiRemoteObject::setServerUriImpl(const QString& uri)
   d->strPath = uriExp.cap(2);
   if (d->strPath[d->strPath.size()-1] != '/')
     d->strPath.append('/');
+
+  HttpDevicePtr pDev = openConnection();
+  pDev->setRequest("GET", d->strPath + "id");
+  pDev->finish();
+  if (!pDev->readHeader() || pDev->status() != PiiHttpProtocol::OkStatus)
+    {
+      addFailure();
+      PII_THROW(PiiNetworkException, tr("Unable to read remote object ID."));
+    }
+  QString strId(pDev->readBody());
+  if (!d->strId.isEmpty() && strId != d->strId)
+    PII_THROW(PiiNetworkException,
+              tr("Remote object ID changed (was %1, now %2).").arg(d->strId, strId));
+  d->strId = strId;
+
+  /* You may call this either a stupid hack, a necessary work-around
+     or just an optimization. The problem is that certain things in Qt
+     can only be done in the main thread. If we called a remote
+     function through the network stack, the request would be served
+     by an arbitrary thread, which may need to pass the call to the
+     main thread and wait for the result. But we may be in the main
+     thread already. Deadlock, anyone?
+   */
+  PiiObjectServer* pServer = PiiObjectServer::server(strId);
+  if (pServer)
+    {
+      if (pServer->strictestSafetyLevel() == PiiObjectServer::AccessFromMainThread ||
+          (qobject_cast<PiiQObjectServer*>(pServer) &&
+           static_cast<PiiQObjectServer*>(pServer)->strictestPropertySafetyLevel() ==
+           PiiQObjectServer::AccessPropertyFromMainThread))
+        d->pLocalServer = pServer;
+    }
 }
 
 void PiiRemoteObject::setServerUri(const QString& uri)
@@ -493,14 +559,14 @@ QVariant PiiRemoteObject::callList(const QString& uri, const QVariantList& param
       pDev->setRequest("POST", d->strPath + uri);
       pDev->startOutputFiltering(new PiiStreamBuffer);
       try { pDev->write(PiiNetwork::toByteArray(params, PiiNetwork::BinaryFormat)); }
-      catch (...) { pDev->finish(); throw; }
+      catch (...) { finishRequest(pDev); throw; }
     }
   else
     {
       pDev->setRequest("GET", d->strPath + uri);
     }
 
-  pDev->finish();
+  finishRequest(pDev);
 
   PII_THROW_IF_NOT_CONNECTED;
   if (!pDev->readHeader())
@@ -534,3 +600,5 @@ void PiiRemoteObject::addFailure() { d->iFailureCount.ref(); }
 
 void PiiRemoteObject::setMaxFailureCount(int maxFailureCount) { d->iMaxFailureCount = maxFailureCount; }
 int PiiRemoteObject::maxFailureCount() const { return d->iMaxFailureCount; }
+
+QString PiiRemoteObject::id() const { return d->strId; }

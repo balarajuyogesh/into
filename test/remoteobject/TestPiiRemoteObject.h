@@ -17,6 +17,7 @@
 #define _TESTPIIREMOTEOBJECT_H
 
 #include <QObject>
+#include <QThread>
 
 #include <PiiVariant.h>
 #include <PiiHttpServer.h>
@@ -32,30 +33,86 @@ class ServerObject : public QObject
   Q_PROPERTY(PiiVariant variant READ variant WRITE setVariant);
 
 public:
-  ServerObject() : iNumber(0), dNumber(3.14159), bTest1Called(false), iTest1Value(0) {}
+  ServerObject() :
+    iNumber(0),
+    dNumber(3.14159),
+    bTest1Called(false),
+    iTest1Value(0),
+    pCallingThread(0)
+  {}
 
-  void setNumber(int number) { iNumber = number; emit numberChanged(number); }
-  int number() const { return iNumber; }
-  double floatingPoint() const { return dNumber; }
-  void setVariant(const PiiVariant& var) { varValue = var; emit variantChanged(var); }
-  PiiVariant variant() const { return varValue; }
+  void setNumber(int number)
+  {
+    pCallingThread = QThread::currentThread();
+    iNumber = number;
+    emit numberChanged(number);
+  }
+  int number() const
+  {
+    pCallingThread = QThread::currentThread();
+    return iNumber;
+  }
+  double floatingPoint() const
+  {
+    pCallingThread = QThread::currentThread();
+    return dNumber;
+  }
+  void setVariant(const PiiVariant& var)
+  {
+    pCallingThread = QThread::currentThread();
+    varValue = var;
+    emit variantChanged(var);
+  }
+  PiiVariant variant() const
+  {
+    pCallingThread = QThread::currentThread();
+    return varValue;
+  }
 
   int iNumber;
   double dNumber;
   bool bTest1Called;
   int iTest1Value;
   PiiVariant varValue;
+  mutable QThread* pCallingThread;
 
 public slots:
-  void test1() { bTest1Called = true; }
-  void test1(int value) { iTest1Value = value; }
-  QString test2() { return "test2"; }
-  QString test2(const QString& str) { return str; }
-  int plus(int a, int b) { return a+b; }
+  void test1()
+  {
+    pCallingThread = QThread::currentThread();
+    bTest1Called = true;
+  }
+  void test1(int value)
+  {
+    pCallingThread = QThread::currentThread();
+    iTest1Value = value;
+  }
+  QString test2()
+  {
+    pCallingThread = QThread::currentThread();
+    return "test2";
+  }
+  QString test2(const QString& str)
+  {
+    pCallingThread = QThread::currentThread();
+    return str;
+  }
+  int plus(int a, int b)
+  {
+    pCallingThread = QThread::currentThread();
+    return a+b;
+  }
   void thrower(int type);
 signals:
   void numberChanged(int);
   void variantChanged(const PiiVariant&);
+};
+
+class ServerObject2 : public ServerObject
+{
+  Q_OBJECT
+  Q_CLASSINFO("functionSafetyLevel", "test1():0 test2():AccessConcurrently");
+  Q_CLASSINFO("propertySafetyLevel", "number:0 floatingPoint:AccessPropertyConcurrently");
 };
 
 class TestPiiRemoteObject : public QObject
@@ -71,6 +128,7 @@ public slots:
 
 private slots:
   void initTestCase();
+  void safetyLevels();
   void properties();
   void functionSignatures();
   void remoteSlots();
@@ -78,6 +136,7 @@ private slots:
   void functionCalls();
   void cleanupTestCase();
   void exceptions();
+  void singleThreaded();
 
 signals:
   void test1();
@@ -88,9 +147,12 @@ private:
 
   QThread* _pServerThread;
   PiiHttpServer* _pHttpServer;
-  PiiQObjectServer* _pObjectServer;
-  PiiRemoteQObject<QObject>* _pClient;
-  ServerObject _serverObject;
+  PiiQObjectServer* _pObjectServer1;
+  PiiQObjectServer* _pObjectServer2;
+  PiiRemoteQObject<QObject>* _pClient1;
+  PiiRemoteQObject<QObject>* _pClient2;
+  ServerObject _serverObject1;
+  ServerObject2 _serverObject2;
   bool _bServerStarted;
   int _iNumber;
   PiiVariant _variant;

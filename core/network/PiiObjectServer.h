@@ -28,6 +28,7 @@
 #include <QQueue>
 #include <QStringList>
 #include <QHash>
+#include <QMap>
 
 /**
  * A URI handler for PiiHttpProtocol that maps HTTP requests to member
@@ -85,11 +86,12 @@
  * ~~~
  * HTTP/1.1 200 OK
  * Content-Type: text/plain
- * Content-Length: 25
+ * Content-Length: 28
  *
  * functions/
  * channels/
  * ping
+ * id
  * ~~~
  *
  *
@@ -221,11 +223,19 @@
  * ----
  *
  * PiiObjectServer provides "ping" functionality, which is mainly
- * provides a a non-intrusive availability check. Requesting "/ping"
+ * provided a a non-intrusive availability check. Requesting "/ping"
  * only returns a "200 OK" status code. If PiiObjectServer is used
  * with PiiInstantiableObjectServer, pinging can be used to indicate
  * the server that the client is still alive.
  *
+ * ID
+ * --
+ *
+ * Each remote object instance has an automatically generated unique
+ * identifier (UUID). The identifier can be used by the client to make
+ * sure it is talking to the right object instance even after lost or
+ * rerouted connection. Making a GET request to /id will return the ID
+ * of the remote object.
  */
 class PII_NETWORK_EXPORT PiiObjectServer :
   public QObject,
@@ -261,6 +271,8 @@ public:
   PiiObjectServer();
   ~PiiObjectServer();
 
+  QString id() const;
+
   /**
    * Sets the default safety level for the served object. If no
    * function-specific levels are set, this level will be used for all
@@ -278,6 +290,10 @@ public:
    */
   void setSafetyLevel(ThreadSafetyLevel safetyLevel);
   ThreadSafetyLevel safetyLevel() const;
+  /**
+   * Returns the strictest safety level of any function.
+   */
+  ThreadSafetyLevel strictestSafetyLevel() const;
 
   /**
    * Sets the safety level of an individual function, identified by
@@ -437,6 +453,18 @@ public:
 
   QVariant callBackList(const QString& function, QVariantList& params);
 
+  /**
+   * Returns the server object identified by *id*, or null if there is
+   * no such server. Each instance of PiiObjectServer is automatically
+   * assigned a unique id, which can be used to look up server objects
+   * locally using this function.
+   */
+  static PiiObjectServer* server(const QString& id);
+  /**
+   * Returns the IDs of all server objects.
+   */
+  static QStringList serverIds();
+
 protected:
   /**
    * A return channel used to push data from pushable sources to the
@@ -517,6 +545,7 @@ protected:
     int iChannelTimeout;
     ThreadSafetyLevel safetyLevel;
     SafetyLevelMap mapFunctionSafetyLevels;
+    QString strId;
     mutable QMutex accessMutex;
   } *d;
 
@@ -623,6 +652,9 @@ private:
   int indexOf(const QString& signature, const FunctionList& lst) const;
   void removeFunction(const QString& signature, FunctionList& lst);
   void removeFunctions(FunctionList& lst);
+
+  static QMutex* serverMapMutex();
+  static QMap<QString, PiiObjectServer*>* serverMap();
 
   PII_DISABLE_COPY(PiiObjectServer);
 };

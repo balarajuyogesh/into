@@ -26,12 +26,15 @@
 #include <QCoreApplication>
 #include <QMutex>
 #include <QWaitCondition>
+#include <QBuffer>
+#include <QPointer>
 
 #include <PiiProgressController.h>
 #include <PiiGenericFunction.h>
 
 #include "PiiNetworkClient.h"
 #include "PiiHttpDevice.h"
+#include "PiiObjectServer.h"
 
 /**
  * PiiRemoteObject is a client for PiiObjectServer. It is used to call
@@ -93,18 +96,17 @@ public:
    * client.setServerUri("tcp://intopii.com:3142/valuesetter/");
    * ~~~
    *
-   * ! Reassigning signals and slots makes all previously
-   * requested meta objects invalid. You can no longer call the
-   * functions or slots that were previously available, and no old
-   * properties can be read or written to. If you had connected a
-   * sender to a dynamic slot and the meta information changed,
-   * invoking the slot later would crash your application. Therefore,
-   * changing the server URI will not recreate the meta-object. It is
-   * assumed that the same object is present in the new URI. This
-   * makes it possible to move remote objects.
+   * ! This function can only be used to change the address of a
+   * remote object if it has moved or routing between the caller and
+   * the server changes. It cannot be used to connect to another
+   * remote object instance. To ensure this, the ID of the remote
+   * object is checked each time the server URI changes.
    *
    * @exception PiiNetworkException& if the server cannot be connected
-   * @exception PiiInvalidArgumentException& if *uri* is incorrecly formatted
+   * or the new object is not the same as the old one.
+   *
+   * @exception PiiInvalidArgumentException& if *uri* is incorrecly
+   * formatted
    */
   void setServerUri(const QString& uri);
 
@@ -112,6 +114,12 @@ public:
    * Returns the URI of the server object.
    */
   QString serverUri() const;
+
+  /**
+   * Returns the ID of the remote object instance. The ID is available
+   * only after setServerUri() has been called.
+   */
+  QString id() const;
 
   /**
    * Sets the number of times the class will try to connect to a
@@ -238,6 +246,9 @@ protected:
     PiiAtomicInt iFailureCount;
     QStringList lstConnectedSources;
     int iMaxFailureCount;
+    QString strId;
+    QPointer<PiiObjectServer> pLocalServer;
+    QBuffer buffer;
   } *d;
   /// @internal
   PiiRemoteObject(Data*);
@@ -296,6 +307,12 @@ protected:
    * from errors.
    */
   void closeConnection();
+
+  /**
+   * Writes out the client's HTTP request. If the server is in the
+   * same process, calls it to handle the request directly.
+   */
+  void finishRequest(PiiHttpDevice* dev);
 
   void addFailure();
 

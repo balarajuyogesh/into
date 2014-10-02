@@ -233,12 +233,12 @@ class PiiConfigurable;
  * **NOTE:** If the safety level of the whole object or any of its
  * members is set to AccessFromMainThread, the PiiQObjectServer
  * instance must be created in the main thread.
- *
  */
 class PII_NETWORK_EXPORT PiiQObjectServer :
   public PiiObjectServer
 {
   Q_OBJECT
+  Q_ENUMS(PropertySafetyLevel)
   Q_FLAGS(ExposedFeatures)
 public:
   enum ExposedFeature
@@ -317,6 +317,13 @@ public:
    */
   void removePropertySafetyLevel(const QString& propertyName);
 
+  PropertySafetyLevel strictestPropertySafetyLevel() const
+  {
+    const PII_D;
+    return qMin(PropertySafetyLevel(d->safetyLevel + 1),
+                d->minPropertySafetyLevel);
+  }
+
 protected:
   void connectToChannel(Channel* channel, const QString& sourceId);
   void disconnectFromChannel(Channel* channel, const QString& sourceId);
@@ -385,12 +392,6 @@ private slots:
 
 private:
   void init();
-  inline PropertySafetyLevel minPropertySafetyLevel() const
-  {
-    const PII_D;
-    return qMin(PropertySafetyLevel(d->safetyLevel + 1),
-                d->minPropertySafetyLevel);
-  }
   void listFunctions(QObject* object);
   void addToEnums(const QString& name, const QMetaEnum& enumerator);
   void jsonProperties(PiiHttpDevice* dev, const QStringList& fields) const;

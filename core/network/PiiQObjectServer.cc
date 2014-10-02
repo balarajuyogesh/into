@@ -209,7 +209,7 @@ void PiiQObjectServer::jsonProperties(PiiHttpDevice* dev, const QStringList& fie
 
 void PiiQObjectServer::listProperties(PiiHttpDevice* dev) const
 {
-  PropertySafetyLevel level = minPropertySafetyLevel();
+  PropertySafetyLevel level = strictestPropertySafetyLevel();
   if (level != AccessPropertyConcurrently)
     d->accessMutex.lock();
 
@@ -242,13 +242,14 @@ QVariant PiiQObjectServer::objectProperty(const QString& name)
     {
     case AccessPropertyFromMainThread:
       {
-        Q_ASSERT(thread() == qApp->thread());
+        Q_ASSERT(d->pObject->thread() == qApp->thread());
         QVariant varResult;
         QMetaObject::invokeMethod(this, "readPropertyFromMainThread",
                                   QThread::currentThread() != qApp->thread() ?
                                   Qt::BlockingQueuedConnection :
                                   Qt::DirectConnection,
-                                  Q_RETURN_ARG(QVariant, varResult));
+                                  Q_RETURN_ARG(QVariant, varResult),
+                                  Q_ARG(QString, name));
         return varResult;
       }
     case WritePropertyFromMainThread:
@@ -277,12 +278,12 @@ bool PiiQObjectServer::setPropertiesFromMainThread(const QVariantMap& props)
 bool PiiQObjectServer::setObjectProperties(const QVariantMap& props)
 {
   PII_D;
-  switch (minPropertySafetyLevel())
+  switch (strictestPropertySafetyLevel())
     {
     case AccessPropertyFromMainThread:
     case WritePropertyFromMainThread:
       {
-        Q_ASSERT(thread() == qApp->thread());
+        Q_ASSERT(d->pObject->thread() == qApp->thread());
         bool bResult = true;
         QMetaObject::invokeMethod(this, "setPropertiesFromMainThread",
                                   QThread::currentThread() != qApp->thread() ?
@@ -313,7 +314,7 @@ bool PiiQObjectServer::setObjectProperty(const QString& name, const QVariant& va
     case AccessPropertyFromMainThread:
     case WritePropertyFromMainThread:
       {
-        Q_ASSERT(thread() == qApp->thread());
+        Q_ASSERT(d->pObject->thread() == qApp->thread());
         bool bResult = true;
         QVariantMap mapProps;
         mapProps[name] = value;

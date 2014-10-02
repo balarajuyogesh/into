@@ -31,9 +31,11 @@
 
 #include "PiiNetworkEncoding.h"
 
+
 PiiObjectServer::Data::Data() :
   iChannelTimeout(10000),
-  safetyLevel(AccessFromAnyThread)
+  safetyLevel(AccessFromAnyThread),
+  strId(QUuid::createUuid().toString())
 {}
 
 PiiObjectServer::Data::~Data()
@@ -54,6 +56,7 @@ PiiObjectServer::PiiObjectServer(Data* data) :
 
 void PiiObjectServer::init()
 {
+  synchronized (serverMapMutex()) serverMap()->insert(id(), this);
   QTimer* pTimer = new QTimer(this);
   connect(pTimer, SIGNAL(timeout()), this, SLOT(collectGarbage()));
   pTimer->start(1000);
@@ -61,11 +64,14 @@ void PiiObjectServer::init()
 
 PiiObjectServer::~PiiObjectServer()
 {
+  synchronized (serverMapMutex()) serverMap()->remove(id());
   removeFunctions();
   removeCallbacks();
   killChannels();
   delete d;
 }
+
+QString PiiObjectServer::id() const { return d->strId; }
 
 void PiiObjectServer::killChannels()
 {
@@ -112,7 +118,7 @@ void PiiObjectServer::removeFunctions(FunctionList& lst)
 
 QStringList PiiObjectServer::listRoot() const
 {
-  return QStringList() << "functions/" << "callbacks/" << "channels/" << "ping";
+  return QStringList() << "functions/" << "callbacks/" << "channels/" << "ping" << "id";
 }
 
 // handles requests to /channels/
@@ -215,6 +221,12 @@ void PiiObjectServer::handleRequest(const QString& uri, PiiHttpDevice* dev,
         // Do nothing. "new" allows the client to always request a new
         // object even if the server provides just a single instance.
         return;
+      if (strRequestPath == "id")
+        {
+          PII_REQUIRE_HTTP_METHOD("GET");
+          dev->print(id());
+          return;
+        }
       PII_THROW_HTTP_ERROR(NotFoundStatus);
     }
 
@@ -353,13 +365,12 @@ QVariant PiiObjectServer::call(const QString& function, QVariantList& params)
         {
         case AccessFromMainThread:
           {
-            Q_ASSERT(thread() == qApp->thread());
             QVariant varResult;
             // Normally, this function will not be called from the
             // main thread, so BlockingQueuedConnection is our choice.
-            // But someone may want to use PiiHttpProtocol without
-            // PiiNetworkServer directly from the main thread, so we
-            // must avoid a deadlock.
+            // But it is also possible that this function is called
+            // directly from the main thread. Therefore, we must avoid
+            // a deadlock by using DirectConnection.
             QMetaObject::invokeMethod(this, "callFromMainThread",
                                       QThread::currentThread() != qApp->thread() ?
                                       Qt::BlockingQueuedConnection :
@@ -665,6 +676,17 @@ PiiObjectServer::ThreadSafetyLevel PiiObjectServer::safetyLevel() const
   return d->safetyLevel;
 }
 
+PiiObjectServer::ThreadSafetyLevel PiiObjectServer::strictestSafetyLevel() const
+{
+  if (d->safetyLevel == AccessFromMainThread)
+    return AccessFromMainThread;
+  ThreadSafetyLevel minLevel = d->safetyLevel;
+  foreach (ThreadSafetyLevel level, d->mapFunctionSafetyLevels)
+    if (level < minLevel)
+      minLevel = level;
+  return minLevel;
+}
+
 void PiiObjectServer::setFunctionSafetyLevel(const QString& functionSignature, ThreadSafetyLevel safetyLevel)
 {
   d->mapFunctionSafetyLevels.insert(functionSignature, safetyLevel);
@@ -686,4 +708,29 @@ void PiiObjectServer::removeFunctionSafetyLevel(const QString& functionSignature
 void PiiObjectServer::moveToMainThread()
 {
   moveToThread(qApp->thread());
+}
+
+
+QMutex* PiiObjectServer::serverMapMutex()
+{
+  static QMutex mutex;
+  return &mutex;
+}
+
+QMap<QString, PiiObjectServer*>* PiiObjectServer::serverMap()
+{
+  static QMap<QString, PiiObjectServer*> map;
+  return &map;
+}
+
+QStringList PiiObjectServer::serverIds()
+{
+  QMutexLocker lock(serverMapMutex());
+  return serverMap()->keys();
+}
+
+PiiObjectServer* PiiObjectServer::server(const QString& id)
+{
+  QMutexLocker lock(serverMapMutex());
+  return serverMap()->value(id);
 }

@@ -97,7 +97,7 @@ int PiiRemoteMetaObject::qt_metacall(QMetaObject::Call call, int id, void** args
 
   // Try three times. First two with no delays, third time after a
   // while.
-  for (int iTry=0; iTry<3; ++iTry)
+  for (int iTry = 0; iTry < 3; ++iTry)
     {
       try
         {
@@ -122,7 +122,7 @@ int PiiRemoteMetaObject::metaCall(QMetaObject::Call callType, int id, void** arg
   PII_D;
   if (callType == QMetaObject::InvokeMetaMethod)
     {
-      // The fist ids are signals, which we stored in another list.
+      // The first ids are signals, which we stored in another list.
       id -= d->lstSignals.size();
 
       const QList<int>& lstTypes = d->lstFunctions[id].lstParamTypes;
@@ -145,7 +145,7 @@ int PiiRemoteMetaObject::metaCall(QMetaObject::Call callType, int id, void** arg
 
       //pDev->startOutputFiltering(new PiiStreamBuffer);
       pDev->setRequest("GET", d->strPath + "properties/" + d->lstProperties[id].strName);
-      pDev->finish();
+      finishRequest(pDev);
 
       PII_CHECK_SERVER_RESPONSE;
 
@@ -164,7 +164,7 @@ int PiiRemoteMetaObject::metaCall(QMetaObject::Call callType, int id, void** arg
       pDev->setRequest("POST", d->strPath + "properties/" + d->lstProperties[id].strName);
       pDev->startOutputFiltering(new PiiStreamBuffer);
       pDev->write(pDev->encode(Pii::argsToVariant(args, d->lstProperties[id].type)));
-      pDev->finish();
+      finishRequest(pDev);
 
       PII_CHECK_SERVER_RESPONSE;
 
