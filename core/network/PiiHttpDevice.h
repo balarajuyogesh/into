@@ -122,9 +122,7 @@ public:
   /**
    * Initialize a HTTP device with the given low-level device.
    *
-   * @param device the communication device. Typically, *device* is a
-   * PiiWaitingIODevice. The pointer must remain valid during the
-   * lifetime of the HTTP device.
+   * @param device the communication device.
    *
    * @param mode communication mode
    */
