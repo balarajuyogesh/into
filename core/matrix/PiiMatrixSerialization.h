@@ -28,7 +28,10 @@
 
 namespace PiiSerialization
 {
-  template <class Archive, class T> void save(Archive& archive, const PiiMatrix<T>& mat, const unsigned int /*version*/)
+  /**** Variable-size matrices ****/
+
+  template <class Archive, class T>
+  void save(Archive& archive, const PiiMatrix<T>& mat, const unsigned int /*version*/)
   {
     int iRows = mat.rows(), iCols = mat.columns();
     archive << PII_NVP("rows", iRows);
@@ -38,7 +41,8 @@ namespace PiiSerialization
       archive.writeRawData(mat[r], uiBytes);
   }
 
-  template <class Archive, class T> void load(Archive& archive, PiiMatrix<T>& mat, const unsigned int /*version*/)
+  template <class Archive, class T>
+  void load(Archive& archive, PiiMatrix<T>& mat, const unsigned int /*version*/)
   {
     int iRows, iCols;
     archive >> PII_NVP("rows", iRows);
@@ -54,13 +58,38 @@ namespace PiiSerialization
       archive.readRawData(mat[r], uiBytes);
   }
 
-  template <class Archive, class T> inline void serialize(Archive& archive, PiiMatrix<T>& mat, const unsigned int version)
+  template <class Archive, class T>
+  inline void serialize(Archive& archive, PiiMatrix<T>& mat, const unsigned int version)
+  {
+    separateFunctions(archive, mat, version);
+  }
+
+  /**** Fixed-size matrices ****/
+
+  template <class Archive, class T, int rowCount, int columnCount>
+  void save(Archive& archive,
+            const PiiMatrix<T, rowCount, columnCount>& mat,
+            const unsigned int /*version*/)
+  {
+    archive.writeRawData(mat.begin(), sizeof(T) * rowCount * columnCount);
+  }
+
+  template <class Archive, class T, int rowCount, int columnCount>
+  void load(Archive& archive,
+            PiiMatrix<T, rowCount, columnCount>& mat,
+            const unsigned int /*version*/)
+  {
+    archive.readRawData(mat.begin(), sizeof(T) * rowCount * columnCount);
+  }
+
+  template <class Archive, class T, int rowCount, int columnCount>
+  inline void serialize(Archive& archive,
+                        PiiMatrix<T, rowCount, columnCount>& mat,
+                        const unsigned int version)
   {
     separateFunctions(archive, mat, version);
   }
 }
-
-PII_SERIALIZATION_TRACKING_TEMPLATE(PiiMatrix, false);
 
 /// @endhide
 
