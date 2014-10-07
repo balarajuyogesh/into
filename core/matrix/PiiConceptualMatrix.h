@@ -21,10 +21,8 @@
 #include "PiiFunctional.h"
 #include "PiiAlgorithm.h"
 #include "PiiIterator.h"
-#include "PiiMathException.h"
 #include "PiiTypeTraits.h"
 #include "PiiMetaTemplate.h"
-#include "PiiInvalidArgumentException.h"
 
 /**
  * Throws a PiiInvalidArgumentException due to invalid matrix sizes.
@@ -59,23 +57,27 @@ template <class Matrix1, class Matrix2, class BinaryFunction> class PiiBinaryMat
 #define PII_MATRIX_SCALAR_ASSIGNMENT_OPERATOR(OPERATOR, FUNCTION) \
 Derived& operator OPERATOR ## = (typename PiiMatrixTraits<Derived>::value_type value) \
 { \
-  Pii::map(self()->begin(), self()->end(),                              \
+  Pii::map(self()->begin(), self()->end(), \
            std::bind2nd(FUNCTION<typename PiiMatrixTraits<Derived>::value_type>(), value)); \
   return selfRef(); \
 }
 
-#define PII_MATRIX_MATRIX_ASSIGNMENT_OPERATOR(OPERATOR, FUNCTION) \
+#define PII_MATRIX_MATRIX_ASSIGNMENT_OPERATOR_DECL(OPERATOR) \
 template <class Matrix> \
-Derived& operator OPERATOR ## = (const PiiConceptualMatrix<Matrix>& other) \
+Derived& operator OPERATOR ## = (const PiiConceptualMatrix<Matrix>& other);
+
+#define PII_MATRIX_MATRIX_ASSIGNMENT_OPERATOR_DEF(OPERATOR, FUNCTION) \
+template <class Derived> template <class Matrix> \
+Derived& PiiConceptualMatrix<Derived>::operator OPERATOR ## = (const PiiConceptualMatrix<Matrix>& other) \
 { \
   PII_MATRIX_CHECK_EQUAL_SIZE(*this, other); \
-  Pii::map(self()->begin(), self()->end(), other.self()->begin(),        \
+  Pii::map(self()->begin(), self()->end(), other.self()->begin(), \
            FUNCTION<typename PiiMatrixTraits<Derived>::value_type>()); \
   return selfRef(); \
 }
 
 #define PII_BOTH_MATRIX_ASSIGNMENT_OPERATORS(OPERATOR, FUNCTION) \
-  PII_MATRIX_MATRIX_ASSIGNMENT_OPERATOR(OPERATOR, FUNCTION) \
+  PII_MATRIX_MATRIX_ASSIGNMENT_OPERATOR_DECL(OPERATOR) \
   PII_MATRIX_SCALAR_ASSIGNMENT_OPERATOR(OPERATOR, FUNCTION)
 
 template <class Matrix> class PiiSubmatrix;
@@ -231,14 +233,14 @@ public:
     return selfRef();
   }
 
+  /**
+   * Moves the contents of *other* to this matrix element-by-element.
+   *
+   * @exception PiiInvalidArgumentException& if this matrix is not
+   * equal to *other* in size.
+   */
   template <class Matrix>
-  Derived& operator<< (const Matrix& other)
-  {
-    PII_MATRIX_CHECK_EQUAL_SIZE(*this, other);
-    std::transform(other.begin(), other.end(), self()->begin(),
-                   Pii::Cast<typename Matrix::value_type, value_type>());
-    return selfRef();
-  }
+  Derived& operator<< (const Matrix& other);
 
   /**
    * Applies the *adaptable binary function* to all elements of
@@ -252,16 +254,11 @@ public:
    * a.map(std::minus<int>(), b);
    * ~~~
    *
-   * @exception PiiMathException& if this matrix is not equal to
-   * *other* in size.
+   * @exception PiiInvalidArgumentException& if this matrix is not
+   * equal to *other* in size.
    */
   template <class BinaryFunc, class Matrix>
-  Derived& map(BinaryFunc op, const PiiConceptualMatrix<Matrix>& other)
-  {
-    PII_MATRIX_CHECK_EQUAL_SIZE(other, *this);
-    Pii::map(self()->begin(), self()->end(), other.self()->begin(), op);
-    return selfRef();
-  }
+  Derived& map(BinaryFunc op, const PiiConceptualMatrix<Matrix>& other);
 
   /**
    * Applies a binary function to all elements of this matrix and the
@@ -310,8 +307,8 @@ public:
    * PiiMatrix<int> c(a.mapped(std::plus<int>(), b));
    * ~~~
    *
-   * @exception PiiMathException& if this matrix is not equal to
-   * *other* in size.
+   * @exception PiiInvalidArgumentException& if this matrix is not
+   * equal to *other* in size.
    */
   template <class BinaryFunc, class Matrix>
   PiiBinaryMatrixTransform<Derived, Matrix, BinaryFunc>
@@ -591,7 +588,40 @@ namespace Pii
 
 }
 
+namespace Pii
+{
+  /**
+   * Compares two matrices. Matrices are equal if all of their entries
+   * are equal.
+   */
+  template <class Matrix1, class Matrix2>
+  bool equals(const PiiConceptualMatrix<Matrix1>& mat1,
+              const PiiConceptualMatrix<Matrix2>& mat2)
+  {
+    if (mat1.self()->rows() != mat2.self()->rows() ||
+        mat1.self()->columns() != mat2.self()->columns())
+      return false;
+    return std::equal(mat1.self()->begin(), mat1.self()->end(), mat2.self()->begin());
+  }
+}
+
 /// @hide
+#include "PiiInvalidArgumentException.h"
+
+PII_MATRIX_MATRIX_ASSIGNMENT_OPERATOR_DEF(+, std::plus)
+PII_MATRIX_MATRIX_ASSIGNMENT_OPERATOR_DEF(-, std::minus)
+PII_MATRIX_MATRIX_ASSIGNMENT_OPERATOR_DEF(|, Pii::BinaryOr)
+PII_MATRIX_MATRIX_ASSIGNMENT_OPERATOR_DEF(&, Pii::BinaryAnd)
+
+template <class Derived> template <class Matrix>
+Derived& PiiConceptualMatrix<Derived>::operator<< (const Matrix& other)
+{
+  PII_MATRIX_CHECK_EQUAL_SIZE(*this, other);
+  std::transform(other.begin(), other.end(), self()->begin(),
+                 Pii::Cast<typename Matrix::value_type, value_type>());
+  return selfRef();
+}
+
 template <class Derived> template <class UnaryFunc>
 PiiUnaryMatrixTransform<Derived, UnaryFunc>
 PiiConceptualMatrix<Derived>::mapped(UnaryFunc func) const
@@ -604,6 +634,14 @@ PiiUnaryMatrixTransform<Derived, std::binder2nd<BinaryFunc> >
 PiiConceptualMatrix<Derived>::mapped(BinaryFunc func, typename BinaryFunc::second_argument_type value) const
 {
   return Pii::unaryMatrixTransform(selfRef(), std::bind2nd(func, value));
+}
+
+template <class Derived> template <class BinaryFunc, class Matrix>
+Derived& PiiConceptualMatrix<Derived>::map(BinaryFunc op, const PiiConceptualMatrix<Matrix>& other)
+{
+  PII_MATRIX_CHECK_EQUAL_SIZE(other, *this);
+  Pii::map(self()->begin(), self()->end(), other.self()->begin(), op);
+  return selfRef();
 }
 
 template <class Derived> template <class BinaryFunc, class Matrix>
@@ -702,22 +740,5 @@ operator* (typename Matrix::value_type value, const PiiConceptualMatrix<Matrix>&
 }
 
 /// @endhide
-
-namespace Pii
-{
-  /**
-   * Compare two matrices. Matrices are equal if all of their entries
-   * are equal. All entries are equal if the memory allocated by them
-   * matches byte-by-byte.
-   */
-  template <class Matrix1, class Matrix2> bool equals(const PiiConceptualMatrix<Matrix1>& mat1,
-                                                      const PiiConceptualMatrix<Matrix2>& mat2)
-  {
-    if (mat1.self()->rows() != mat2.self()->rows() ||
-        mat1.self()->columns() != mat2.self()->columns())
-      return false;
-    return std::equal(mat1.self()->begin(), mat1.self()->end(), mat2.self()->begin());
-  }
-}
 
 #endif //_PIICONCEPTUALMATRIX_H
