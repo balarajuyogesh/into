@@ -79,11 +79,13 @@
 
 #ifdef PII_CXX11
 #  define PII_MOVE std::move
+#include <utility>
 #else
 #  define PII_MOVE
 #  define constexpr
 #  define static_assert(EXPR,MSG) typedef typename ::Pii::StaticAssert<(EXPR)>::Type _PiiStaticAssert_
 #  define nullptr 0
+namespace std { template <class T> T declval(); }
 #endif
 
 #define PII_TYPEMAP(NAME) namespace NAME
