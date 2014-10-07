@@ -45,11 +45,13 @@ struct PiiAtomicIntImpl
   int operator-- () { return --i; }
   int operator-- (int) { return i--; }
   int operator-= (int val) { return i -= val; }
+  bool operator== (const PiiAtomicIntImpl& other) const { return i == other.i; }
+  bool operator!= (const PiiAtomicIntImpl& other) const { return i != other.i; }
   int i;
 };
 #  else
 // If C++11 support is not available, you need to have another class
-// that implements the same interface as std::atomi_int and let us
+// that implements the same interface as std::atomic_int and let us
 // know the type name by setting the PII_ATOMIC_INT_IMPL preprocessor
 // variable.
 typedef PII_ATOMIC_INT_IMPL PiiAtomicIntImpl;
@@ -72,6 +74,8 @@ public:
   int operator+= (int value) { return _value += value; }
   int operator-= (int value) { return _value -= value; }
 
+  bool operator== (const PiiAtomicInt& other) const { return _value.load() == other.load(); }
+  bool operator!= (const PiiAtomicInt& other) const { return _value.load() != other.load(); }
   bool operator== (int value) const { return _value.load() == value; }
   bool operator!= (int value) const { return _value.load() != value; }
   int operator= (int value) { return _value.operator= (value); }
@@ -115,6 +119,8 @@ public:
   int operator+= (int value) { return _value.fetchAndAddOrdered(value) + value; }
   int operator-= (int value) { return _value.fetchAndAddOrdered(value) - value; }
 
+  bool operator== (const PiiAtomicInt& other) const { return load() == other.load(); }
+  bool operator!= (const PiiAtomicInt& other) const { return load() != other.load(); }
   bool operator== (int value) const { return load() == value; }
   bool operator!= (int value) const { return load() != value; }
   int operator= (int value) { store(value); return value; }
