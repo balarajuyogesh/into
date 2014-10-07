@@ -141,7 +141,7 @@ public:
    *
    * @return a MIME header or an invalid header if there is no such level.
    */
-  PiiMimeHeader header(int level=0);
+  PiiMimeHeader header(int level = 0);
 
   /**
    * Reads headers from the input stream until an ordinary
