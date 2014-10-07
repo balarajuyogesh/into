@@ -40,6 +40,11 @@ struct PII_YDIN_EXPORT PiiSocketState
   /// The number of delayed objects.
   PiiAtomicInt delay;
 
+  bool operator== (const PiiSocketState& other) const
+  {
+    return flowLevel == other.flowLevel && delay == other.delay;
+  }
+
 private:
   friend struct PiiSerialization::Accessor;
   PII_SEPARATE_SAVE_LOAD_MEMBERS
