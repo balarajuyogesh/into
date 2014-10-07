@@ -43,40 +43,35 @@ PII_REGISTER_VARIANT_BOTH(PiiMatrix<char>);
 PII_REGISTER_VARIANT_BOTH(PiiMatrix<short>);
 PII_REGISTER_VARIANT_BOTH(PiiMatrix<int>);
 PII_REGISTER_VARIANT_BOTH(PiiMatrix<qint64>);
-//PII_REGISTER_VARIANT_BOTH(PiiMatrix<long long>);
-PII_REGISTER_VARIANT_BOTH(PiiMatrix<unsigned char>);
-PII_REGISTER_VARIANT_BOTH(PiiMatrix<unsigned short>);
-PII_REGISTER_VARIANT_BOTH(PiiMatrix<unsigned int>);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<uchar>);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<ushort>);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<uint>);
 PII_REGISTER_VARIANT_BOTH(PiiMatrix<quint64>);
-//PII_REGISTER_VARIANT_BOTH(PiiMatrix<unsigned long long>);
 PII_REGISTER_VARIANT_BOTH(PiiMatrix<float>);
 PII_REGISTER_VARIANT_BOTH(PiiMatrix<double>);
-//PII_REGISTER_VARIANT_BOTH(PiiMatrix<long double>);
 PII_REGISTER_VARIANT_BOTH(PiiMatrix<bool>);
 
 // color images
-PII_REGISTER_VARIANT_BOTH(PiiMatrix<PiiColor<unsigned char> >);
-PII_REGISTER_VARIANT_BOTH(PiiMatrix<PiiColor4<unsigned char> >);
-PII_REGISTER_VARIANT_BOTH(PiiMatrix<PiiColor<unsigned short> >);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<PiiColor<uchar> >);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<PiiColor4<uchar> >);
+PII_REGISTER_VARIANT_BOTH(PiiMatrix<PiiColor<ushort> >);
 PII_REGISTER_VARIANT_BOTH(PiiMatrix<PiiColor<float> >);
 
 // complex matrices
 PII_REGISTER_VARIANT_BOTH(PiiMatrix<std::complex<int> >);
 PII_REGISTER_VARIANT_BOTH(PiiMatrix<std::complex<float> >);
 PII_REGISTER_VARIANT_BOTH(PiiMatrix<std::complex<double> >);
-//PII_REGISTER_VARIANT_BOTH(PiiMatrix<std::complex<long double> >);
 
 // colors
-PII_REGISTER_VARIANT_BOTH(PiiColor<unsigned char>);
-PII_REGISTER_VARIANT_BOTH(PiiColor4<unsigned char>);
-PII_REGISTER_VARIANT_BOTH(PiiColor<unsigned short>);
+PII_REGISTER_VARIANT_BOTH(PiiColor<uchar>);
+PII_REGISTER_VARIANT_BOTH(PiiColor4<uchar>);
+PII_REGISTER_VARIANT_BOTH(PiiColor<ushort>);
 PII_REGISTER_VARIANT_BOTH(PiiColor<float>);
 
 // complex numbers
 PII_REGISTER_VARIANT_BOTH(std::complex<int>);
 PII_REGISTER_VARIANT_BOTH(std::complex<float>);
 PII_REGISTER_VARIANT_BOTH(std::complex<double>);
-//PII_REGISTER_VARIANT_BOTH(std::complex<long double>);
 
 // Qt classes
 PII_REGISTER_VARIANT_TYPE(QString);
