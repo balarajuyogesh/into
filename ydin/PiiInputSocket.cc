@@ -198,7 +198,9 @@ namespace PiiYdin
 {
   QString unknownTypeErrorMessage(PiiInputSocket* input)
   {
-    return QCoreApplication::translate("PiiInputSocket", "An object of an unknown type (0x%1) was received in \"%2\" input.")
+    return QCoreApplication::translate("PiiInputSocket",
+                                       "An object of an unsupported type (%1, 0x%2) was received in \"%2\" input.")
+      .arg(input->firstObject().typeName())
       .arg(input->firstObject().type(), 0, 16)
       .arg(input->objectName());
   }
