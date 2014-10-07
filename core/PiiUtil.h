@@ -51,6 +51,14 @@ namespace Pii
   }
 
   /**
+   * Returns `true` if *var1* and *var2* are equal and `false`
+   * otherwise. Unlike QVariant::operator==, this function works with
+   * user types, provided that they have been registered as serialized
+   * types using PiiQVariantWrapper.
+   */
+  PII_CORE_EXPORT bool equals(const QVariant& var1, const QVariant& var2);
+
+  /**
    * Find the intersection of two lists. The result contains the
    * elements that are present in both lists, or an empty list if the
    * intersection is empty. Any collection defining `size`(),

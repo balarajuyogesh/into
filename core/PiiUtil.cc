@@ -16,6 +16,8 @@
 #include "PiiUtil.h"
 
 #include "PiiFunctional.h"
+#include <PiiQVariantWrapper.h>
+#include <PiiSerializationFactory.h>
 
 #include <QtDebug>
 #include <QLinkedList>
@@ -723,5 +725,21 @@ namespace Pii
     if (value.size() >= 2 && value[0] == '"' && value[iSize-1] == '"')
       return unescapeString(value.mid(1, iSize-2));
     return unescapeString(value);
+  }
+
+  bool equals(const QVariant& var1, const QVariant& var2)
+  {
+    if (var1.userType() < int(QVariant::UserType) && var2.userType() < int(QVariant::UserType))
+      return var1 == var2;
+    if (var1.userType() != var2.userType())
+      return false;
+
+    QString strWrapperName = QString("PiiQVariantWrapper<%1>").arg(var1.typeName());
+    PiiSmartPtr<PiiQVariantWrapper> pWrapper(
+      PiiSerializationFactory::create<PiiQVariantWrapper>(qPrintable(strWrapperName)));
+    if (pWrapper == 0)
+      return false;
+    pWrapper->setVariant(var1);
+    return pWrapper->equals(var2);
   }
 }
