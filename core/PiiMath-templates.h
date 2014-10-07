@@ -23,6 +23,7 @@
 #include <QCoreApplication>
 #include "PiiIeeeFloat.h"
 #include "PiiTransposedMatrix.h"
+#include "PiiMathException.h"
 
 namespace Pii
 {
