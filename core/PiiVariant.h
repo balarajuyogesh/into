@@ -19,16 +19,21 @@
 #include "PiiSharedPtr.h"
 #include "PiiTypeTraits.h"
 #include "PiiTemplateExport.h"
+#include "PiiPreprocessor.h"
+
 #include <QHash>
 #include <QMap>
 #include <QList>
 
 #ifndef PII_NO_QT
+class QVariant;
 #  include <PiiSerialization.h>
 #  include <PiiSerializationException.h>
 #  include <PiiSerializer.h>
 #  include <PiiNameValuePair.h>
 #endif
+
+#include "PiiEquals.h"
 
 class PiiGenericOutputArchive;
 class PiiGenericInputArchive;
@@ -48,7 +53,7 @@ class PiiGenericInputArchive;
  *
  * @relates PiiVariant
  */
-#define PII_DECLARE_SHARED_VARIANT_TYPE(TYPE, ID, BUILDING_LIB)         \
+#define PII_DECLARE_SHARED_VARIANT_TYPE(TYPE, ID, BUILDING_LIB) \
   PII_DECLARE_EXPORTED_CLASS_TEMPLATE(struct, PiiVariant::VTableImpl<TYPE >, BUILDING_LIB); \
   PII_DECLARE_VARIANT_TYPE(TYPE, ID)
 
@@ -58,10 +63,10 @@ class PiiGenericInputArchive;
  *
  * @relates PiiVariant
  */
-#define PII_REGISTER_VARIANT_TYPE(TYPE)                                 \
+#define PII_REGISTER_VARIANT_TYPE(TYPE) \
   PII_DEFINE_EXPORTED_CLASS_TEMPLATE(struct, PiiVariant::VTableImpl<TYPE >); \
-  template <> PiiVariant::VTableImpl<TYPE >                             \
-    PiiVariant::VTableImpl<TYPE >::instance(Pii::typeId<TYPE >())
+  template <> PiiVariant::VTableImpl<TYPE > \
+  PiiVariant::VTableImpl<TYPE >::instance(Pii::typeId<TYPE >(), PII_STRINGIZE(TYPE))
 
 /**
  * Registers *ID* as an alternative type id for *TYPE*. You must
@@ -83,18 +88,32 @@ class PiiGenericInputArchive;
   template <> PiiVariant::TypeIdMapper<ID> PiiVariant::TypeIdMapper<ID>::instance(Pii::typeId<TYPE>())
 
 /// @hide
-#define PII_MAP_PUT_NTH(N,TYPE) PII_MAP_PUT_SELF(TYPE);
+#define PII_VARIANT_PRIMITIVE_CNT 12
+#define PII_VARIANT_PRIMITIVE_TYPES \
+  ((char, c, Char),                 \
+   (short, s, Short),               \
+   (int, i, Int),                   \
+   (qint64, l, Int64),              \
+   (uchar,  uc, UnsignedChar),      \
+   (ushort, us, UnsignedShort),     \
+   (uint, ui, UnsignedInt),         \
+   (quint64, ul, UnsignedInt64),    \
+   (float, f, Float),               \
+   (double, d, Double),             \
+   (bool, b, Bool),                 \
+   (void*, p, VoidPtr))
 
+#define PII_VARIANT_MAP_PUT_TYPE(TYPE, PREFIX, NAME) PII_MAP_PUT_SELF(TYPE);
+#define PII_VARIANT_MAP_PUT_NTH(N, PARAMS) PII_VARIANT_MAP_PUT_TYPE PARAMS
 
 // A type map that maps primitive types to themselves and other types
 // to const references.
 PII_TYPEMAP(PiiVariantValueMap)
 {
   PII_MAP_PUT_DEFAULT(const _T_&);
-  PII_FOR_N(PII_MAP_PUT_NTH, 12,
-            (char, short, int, qint64,
-             unsigned char, unsigned short, unsigned int, quint64,
-             float, double, bool, void*));
+  PII_FOR_N(PII_VARIANT_MAP_PUT_NTH,
+            PII_VARIANT_PRIMITIVE_CNT,
+            PII_VARIANT_PRIMITIVE_TYPES);
 };
 /// @endhide
 
@@ -148,10 +167,12 @@ PII_TYPEMAP(PiiVariantValueMap)
  * PiiVariant fits into it.
  *
  * All this means that PiiVariant is faster than QVariant. It also
- * offers an extensible type conversion system. Just like QVariant,
- * PiiVariant can automatically convert between some core types,
- * although the number of such types is smaller. But it provides a
- * mechanism for registering custom type conversion functions.
+ * offers an extensible type conversion system and a possibility to
+ * compare all registered types, not just the hard-coded ones like
+ * QVariant. PiiVariant can automatically convert between some core
+ * types, although the number of such types is smaller. But it
+ * provides a mechanism for registering custom type conversion
+ * functions.
  */
 class PII_CORE_EXPORT PiiVariant
 {
@@ -276,18 +297,9 @@ public:
    */
   PiiVariant();
 
-  explicit inline PiiVariant(char);
-  explicit inline PiiVariant(short);
-  explicit inline PiiVariant(int);
-  explicit inline PiiVariant(qint64);
-  explicit inline PiiVariant(unsigned char);
-  explicit inline PiiVariant(unsigned short);
-  explicit inline PiiVariant(unsigned int);
-  explicit inline PiiVariant(quint64);
-  explicit inline PiiVariant(float);
-  explicit inline PiiVariant(double);
-  explicit inline PiiVariant(bool);
-  explicit inline PiiVariant(void*);
+#define PII_DECL_VARIANT_CONSTRUCTOR(TYPE, PREFIX, NAME) explicit inline PiiVariant(TYPE);
+#define PII_VARIANT_CONSTR_WITH_TYPE(N, PARAMS) PII_DECL_VARIANT_CONSTRUCTOR PARAMS
+  PII_FOR_N(PII_VARIANT_CONSTR_WITH_TYPE, PII_VARIANT_PRIMITIVE_CNT, PII_VARIANT_PRIMITIVE_TYPES)
 
   /**
    * Creates a variant that stores *value*. The type `T` must be
@@ -326,6 +338,15 @@ public:
    * Destroys the variant.
    */
   ~PiiVariant();
+
+  /**
+   * Returns `true` if *this* and *other* are equal, and `false`
+   * otherwise. Two variants are equal if and only if their type IDs
+   * are equal and the values of the actual types are equal. This
+   * function works with all registed types.
+   */
+  bool operator== (const PiiVariant& other) const;
+  bool operator!= (const PiiVariant& other) const;
 
   /**
    * Returns `true` if this variant is a primitive type, `false`
@@ -426,6 +447,20 @@ public:
   }
 
   /**
+   * Returns the name of the wrapped type.
+   */
+  const char* typeName() const;
+  static const char* typeName(uint type);
+
+#ifndef PII_NO_QT
+  /**
+   * Converts this object to a QVariant. If the conversion cannot be
+   * done, returns an invalid variant.
+   */
+  QVariant toQVariant() const;
+#endif
+
+  /**
    * Converts this variant to the given type *T*. If there is no
    * registered conversion function from the type of the variant to
    * *T*, returns a default-constructed value.
@@ -481,6 +516,11 @@ public:
    */
   static ConverterFunction converter(uint fromType, uint toType);
 
+  /// @internal
+  const void* data() const;
+  /// @internal
+  void* data();
+
 private:
   /* This class plays chicken with binary compatibility. There is no
      d-pointer because PiiVariant is the most common data type used in
@@ -496,7 +536,7 @@ private:
   template <class T> friend struct VTableImpl;
   template <unsigned int typeId> struct TypeIdMapper;
   template <unsigned int typeId> friend struct TypeIdMapper;
-  typedef QMap<quint64,ConverterFunction> ConverterMap;
+  typedef QMap<quint64, ConverterFunction> ConverterMap;
   struct ConvertInit { ConvertInit(); };
   static ConvertInit _convertInit;
 
@@ -510,8 +550,11 @@ private:
     void (*constructCopy)(PiiVariant&, const PiiVariant&);
     void (*destruct)(PiiVariant&);
     void (*copy)(PiiVariant&, const PiiVariant&);
+    void* (*data)(const PiiVariant&);
     void (*save)(PiiGenericOutputArchive&, const PiiVariant&);
     void (*load)(PiiGenericInputArchive&, PiiVariant&);
+    bool (*equals)(const PiiVariant&, const PiiVariant&);
+    const char* typeName;
   } *_pVTable;
 
   unsigned int _uiType;
@@ -641,6 +684,16 @@ template <class T> struct PiiVariant::SmallObjectFunctions
     *to.ptrAs<T>() = *from.ptrAs<T>();
   }
 
+  static void* dataImpl(const PiiVariant& from)
+  {
+    return (void*)from.ptrAs<T>();
+  }
+
+  static bool equalsImpl(const PiiVariant& a, const PiiVariant& b)
+  {
+    return Pii::ptrEquals<T>(a.ptrAs<T>(), b.ptrAs<T>());
+  }
+
 #ifndef PII_NO_QT
   static void saveImpl(PiiGenericOutputArchive& archive, const PiiVariant& var)
   {
@@ -672,6 +725,16 @@ template <class T> struct PiiVariant::LargeObjectFunctions
     *to.ptrAs<T>() = *from.ptrAs<T>();
   }
 
+  static void* dataImpl(const PiiVariant& from)
+  {
+    return (void*)from.ptrAs<T>();
+  }
+
+  static bool equalsImpl(const PiiVariant& a, const PiiVariant& b)
+  {
+    return Pii::ptrEquals<T>(a.ptrAs<T>(), b.ptrAs<T>());
+  }
+
 #ifndef PII_NO_QT
   static void saveImpl(PiiGenericOutputArchive& archive, const PiiVariant& var)
   {
@@ -695,16 +758,19 @@ template <class T> struct PiiVariant::VTableImpl :
   typedef typename Pii::If<sizeof(T) <= PiiVariant::InternalBufferSize,
                            PiiVariant::SmallObjectFunctions<T>,
                            PiiVariant::LargeObjectFunctions<T> >::Type ParentType;
-  VTableImpl(unsigned int type)
+  VTableImpl(unsigned int type, const char* name)
   {
     this->constructCopy = ParentType::constructCopyImpl;
     this->destruct = ParentType::destructImpl;
     this->copy = ParentType::copyImpl;
+    this->data = ParentType::dataImpl;
+    this->equals = ParentType::equalsImpl;
 #ifndef PII_NO_QT
     this->save = ParentType::saveImpl;
     this->load = ParentType::loadImpl;
 #endif
 
+    this->typeName = name;
     PiiVariant::hashVTables()->insert(type, this);
   }
   // PENDING this may trigger static initialization order fiasco with TypeIdMapper
@@ -720,27 +786,16 @@ template <unsigned int typeId> struct PiiVariant::TypeIdMapper
   static TypeIdMapper instance;
 };
 
-#define PII_PRIMITIVE_VARIANT_DECL(TYPE, PREFIX, NAME)                  \
+// Generates a definition for a primitive variant type
+#define PII_PRIMITIVE_VARIANT_DEF(TYPE, PREFIX, NAME) \
   PII_DECLARE_SHARED_VARIANT_TYPE(TYPE, PiiVariant::NAME ## Type, PII_BUILDING_CORE); \
   inline PiiVariant::PiiVariant(TYPE val) : _pVTable(0), _uiType(NAME ## Type) { _value.PREFIX ## Value = val; } \
   template <> inline PII_MAP_TYPE(PiiVariantValueMap, TYPE) PiiVariant::valueAs<TYPE>() const { return _value.PREFIX ## Value; } \
   template <> inline TYPE& PiiVariant::valueAs<TYPE>() { return _value.PREFIX ## Value; } \
   namespace Dummy {}
 
-
-PII_PRIMITIVE_VARIANT_DECL(char, c, Char);
-PII_PRIMITIVE_VARIANT_DECL(short, s, Short);
-PII_PRIMITIVE_VARIANT_DECL(int, i, Int);
-PII_PRIMITIVE_VARIANT_DECL(qint64, l, Int64);
-PII_PRIMITIVE_VARIANT_DECL(unsigned char,  uc, UnsignedChar);
-PII_PRIMITIVE_VARIANT_DECL(unsigned short, us, UnsignedShort);
-PII_PRIMITIVE_VARIANT_DECL(unsigned int, ui, UnsignedInt);
-PII_PRIMITIVE_VARIANT_DECL(quint64, ul, UnsignedInt64);
-PII_PRIMITIVE_VARIANT_DECL(float, f, Float);
-PII_PRIMITIVE_VARIANT_DECL(double, d, Double);
-//PII_PRIMITIVE_VARIANT_DECL(long double, ld, LongDouble);
-PII_PRIMITIVE_VARIANT_DECL(bool, b, Bool);
-PII_PRIMITIVE_VARIANT_DECL(void*, p, VoidPtr);
+#define PII_VARIANT_NTH_PRIMITIVE_DEF(N, PARAMS) PII_PRIMITIVE_VARIANT_DEF PARAMS
+PII_FOR_N(PII_VARIANT_NTH_PRIMITIVE_DEF, PII_VARIANT_PRIMITIVE_CNT, PII_VARIANT_PRIMITIVE_TYPES)
 
 typedef QList<PiiVariant> PiiVariantList;
 

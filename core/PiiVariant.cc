@@ -22,20 +22,9 @@
 #  include <PiiQVariantWrapper.h>
 #endif
 
-PII_REGISTER_VARIANT_TYPE(char);
-PII_REGISTER_VARIANT_TYPE(bool);
-PII_REGISTER_VARIANT_TYPE(short);
-PII_REGISTER_VARIANT_TYPE(int);
-PII_REGISTER_VARIANT_TYPE(qint64);
-//PII_REGISTER_VARIANT_TYPE(long long);
-PII_REGISTER_VARIANT_TYPE(float);
-PII_REGISTER_VARIANT_TYPE(double);
-//PII_REGISTER_VARIANT_TYPE(long double);
-PII_REGISTER_VARIANT_TYPE(unsigned char);
-PII_REGISTER_VARIANT_TYPE(unsigned short);
-PII_REGISTER_VARIANT_TYPE(unsigned int);
-PII_REGISTER_VARIANT_TYPE(quint64);
-//PII_REGISTER_VARIANT_TYPE(unsigned long long);
+//PII_VARIANT_REGISTER_PRIMITIVE(TYPE, PREFIX, NAME) PII_REGISTER_VARIANT_TYPE(TYPE)
+//PII_VARIANT_REGISTER_NTH_PRIMITIVE(N, PARAMS) PII_VARIANT_REGISTER_PRIMITIVE PARAMS
+//PII_FOR_N(PII_VARIANT_REGISTER_NTH_PRIMITIVE, PII_VARIANT_PRIMITIVE_CNT, PII_VARIANT_PRIMITIVE_TYPES)
 
 #ifndef PII_NO_QT
 // Register PiiVariant as a Qt metatype.
@@ -102,6 +91,32 @@ PiiVariant& PiiVariant::operator= (const PiiVariant& other)
   return *this;
 }
 
+bool PiiVariant::operator== (const PiiVariant& other) const
+{
+  if (_uiType != other._uiType)
+    return false;
+  if (_pVTable == 0)
+    {
+      switch (_uiType)
+        {
+#define PII_VARIANT_EQUALS(TYPE, PREFIX, NAME) \
+        case NAME ## Type: \
+          return _value.PREFIX ## Value == other._value.PREFIX ## Value;
+#define PII_VARIANT_NTH_PRIMITIVE_EQUALS(N, PARAMS) PII_VARIANT_EQUALS PARAMS
+          PII_FOR_N(PII_VARIANT_NTH_PRIMITIVE_EQUALS,
+                    PII_VARIANT_PRIMITIVE_CNT,
+                    PII_VARIANT_PRIMITIVE_TYPES);
+        }
+      return true;
+    }
+  return _pVTable->equals(*this, other);
+}
+
+bool PiiVariant::operator!= (const PiiVariant& other) const
+{
+  return !operator== (other);
+}
+
 PiiVariant::~PiiVariant()
 {
   if (_pVTable != 0)
@@ -111,6 +126,27 @@ PiiVariant::~PiiVariant()
 PiiVariant::VTable* PiiVariant::vTableByType(unsigned int type)
 {
   return hashVTables()->value(type);
+}
+
+const char* PiiVariant::typeName() const
+{
+  return typeName(_uiType);
+}
+
+const char* PiiVariant::typeName(uint type)
+{
+  if (type <= LastPrimitiveType)
+    {
+      switch (type)
+        {
+#define PII_VARIANT_PRIMITIVE_TYPENAME_CASE(TYPE, PREFIX, NAME) \
+        case NAME ## Type: return PII_STRINGIZE(TYPE);
+#define PII_VARIANT_NTH_PRIMITIVE_TYPENAME_CASE(N, PARAMS) PII_VARIANT_PRIMITIVE_TYPENAME_CASE PARAMS
+        PII_FOR_N(PII_VARIANT_NTH_PRIMITIVE_TYPENAME_CASE, PII_VARIANT_PRIMITIVE_CNT, PII_VARIANT_PRIMITIVE_TYPES)
+        }
+    }
+  VTable* pVTable = vTableByType(type);
+  return pVTable ? pVTable->typeName : 0;
 }
 
 PiiVariant::ConverterMap* PiiVariant::converterMap()
@@ -170,3 +206,50 @@ PiiVariant::ConvertInit::ConvertInit()
   ADD_CONVERTERS(double, 8, (short, int, qint64, ushort, uint, quint64, float, bool));
   ADD_CONVERTERS(bool, 10, (char, short, int, qint64, uchar, ushort, uint, quint64, float, double));
 }
+
+const void* PiiVariant::data() const
+{
+  if (!_pVTable)
+    return _buffer;
+  return _pVTable->data(*this);
+}
+
+void* PiiVariant::data()
+{
+  if (!_pVTable)
+    return _buffer;
+  return _pVTable->data(*this);
+}
+
+#ifndef PII_NO_QT
+#  include <QVariant>
+
+template <class T> static QVariant primitiveToQVariant(T primitive) { return QVariant(primitive); }
+static QVariant primitiveToQVariant(void*) { return QVariant(); }
+
+QVariant PiiVariant::toQVariant() const
+{
+  // All primitive PiiVariant types can be directly converted to QVariants
+  if (_uiType <= LastPrimitiveType)
+    {
+      switch (_uiType)
+        {
+#define PII_VARIANT_TO_PRIMITIVE_QVARIANT_CASE(TYPE, PREFIX, NAME) \
+        case NAME ## Type: \
+          return primitiveToQVariant(_value.PREFIX ## Value);
+#define PII_VARIANT_NTH_PRIMITIVE_QVARIANT_CASE(N, PARAMS) PII_VARIANT_TO_PRIMITIVE_QVARIANT_CASE PARAMS
+        PII_FOR_N(PII_VARIANT_NTH_PRIMITIVE_QVARIANT_CASE, PII_VARIANT_PRIMITIVE_CNT, PII_VARIANT_PRIMITIVE_TYPES)
+        }
+    }
+
+  QVariant varResult;
+
+  if (_pVTable)
+    {
+      int iType = QMetaType::type(typeName());
+      if (iType != QMetaType::UnknownType)
+        varResult = QVariant(iType, data());
+    }
+  return varResult;
+}
+#endif
