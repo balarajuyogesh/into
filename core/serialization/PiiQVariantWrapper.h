@@ -17,8 +17,11 @@
 #define _PIIQVARIANTWRAPPER_H
 
 #include <QVariant>
+
 #include "PiiSerialization.h"
 #include "PiiVirtualMetaObject.h"
+
+#include <PiiEquals.h>
 
 /**
  * A serialization wrapper for user types in [QVariant]
@@ -59,6 +62,8 @@ public:
    */
   virtual void moveTo(QVariant& variant) = 0;
 
+  virtual bool equals(const QVariant& other) const = 0;
+
   /**
    * Set the variant to `v`, which stores a user type. Subclasses
    * reimplement this function to store the value inside the variant.
@@ -84,7 +89,6 @@ public:
  * #define PII_SERIALIZABLE_CLASS_NAME "PiiQVariantWrapper<MyType>"
  * #include <PiiSerializableRegistration.h>
  * ~~~
- *
  */
 template <class T> class PiiQVariantWrapper::Template : public PiiQVariantWrapper
 {
@@ -106,6 +110,13 @@ public:
   void moveTo(QVariant& v)
   {
     v = QVariant::fromValue(_value);
+  }
+
+  bool equals(const QVariant& other) const
+  {
+    if (other.userType() != qMetaTypeId<T>())
+      return false;
+    return Pii::ptrEquals<T>(_pValue, reinterpret_cast<const T*>(other.constData()));
   }
 
   void setVariant(QVariant& v)
