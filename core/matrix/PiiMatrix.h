@@ -87,7 +87,8 @@ public:
 
   PiiMatrix& operator= (const PiiMatrix& other)
   {
-    std::memcpy(_data, other._data, byteCount());
+    if (&other != this)
+      std::memcpy(_data, other._data, byteCount());
     return *this;
   }
 
