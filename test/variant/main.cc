@@ -33,6 +33,7 @@ struct BigType
   BigType() { ++iCount; }
   BigType(const BigType& other) { ++iCount; std::memcpy(bigBuffer, other.bigBuffer, sizeof(bigBuffer)); }
   ~BigType() { --iCount; }
+  bool operator== (const BigType&) const { return true; }
   int bigBuffer[16];
   static int iCount;
 };
@@ -216,6 +217,60 @@ void TestPiiVariant::convertTo()
   QCOMPARE(c.type(), uint(PiiVariant::CharType));
   QCOMPARE(c.convertTo<double>(&bOk), 0.0);
   QVERIFY(!bOk);
+}
+
+void TestPiiVariant::typeName()
+{
+  BigType t;
+  PiiVariant
+    v1(1),
+    v2((void*)&v1),
+    v3(PiiMatrix<uchar>(0,0)),
+    v4(t);
+  QCOMPARE(v1.typeName(), "int");
+  QCOMPARE(v2.typeName(), "void*");
+  QCOMPARE(v3.typeName(), "PiiMatrix<uchar>");
+  QCOMPARE(v4.typeName(), "BigType");
+}
+
+void TestPiiVariant::equals()
+{
+  PiiVariant
+    v1(123),
+    v2(123),
+    v3(QString("abc")),
+    v4(PiiMatrix<int>(1, 2, 1, 2)),
+    v5(PiiMatrix<int>(1, 2, 1, 2)),
+    v6(PiiMatrix<int>(1, 2, 2, 2));
+
+  QVERIFY(v1 == v1);
+  QVERIFY(v1 == v2);
+  QVERIFY(v1 != v3);
+  QVERIFY(v3 != v4);
+  QVERIFY(v4 == v4);
+  QVERIFY(v4 == v5);
+  QVERIFY(v4 != v6);
+}
+
+void TestPiiVariant::toQVariant()
+{
+  PiiVariant
+    v1(123),
+    v2(QString("abc")),
+    v3(PiiMatrix<int>(1, 2, 2, 2));
+
+  QVariant qv1(v1.toQVariant());
+  QVariant qv2(v2.toQVariant());
+  QVariant qv3(v3.toQVariant());
+
+  QCOMPARE(qv1.userType(), qMetaTypeId<int>());
+  QCOMPARE(qv1.toInt(), 123);
+
+  QCOMPARE(qv2.userType(), qMetaTypeId<QString>());
+  QCOMPARE(qv2.toString(), QString("abc"));
+
+  QCOMPARE(qv3.userType(), qMetaTypeId<PiiMatrix<int> >());
+  QVERIFY(Pii::equals(qv3.value<PiiMatrix<int> >(), PiiMatrix<int>(1, 2, 2, 2)));
 }
 
 QTEST_MAIN(TestPiiVariant)

@@ -29,6 +29,9 @@ private slots:
   void mapType();
   void canConvert();
   void convertTo();
+  void typeName();
+  void equals();
+  void toQVariant();
 };
 
 #endif //_TESTPIIVARIANT_H
