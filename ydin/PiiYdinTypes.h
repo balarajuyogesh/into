@@ -16,18 +16,17 @@
 #ifndef _PIIYDINTYPES_H
 #define _PIIYDINTYPES_H
 
+#include "PiiColor.h"
 #include <PiiMatrixSerialization.h>
 #include <PiiSerializationUtil.h>
-#include "PiiVariant.h"
 #include <QVariant>
 #include <QDateTime>
 #include <QStringList>
-#include <PiiMatrix.h>
 #include <PiiUtil.h>
 #include "PiiInputSocket.h"
-#include "PiiColor.h"
 #include "PiiYdin.h"
 #include "PiiSocketState.h"
+#include "PiiVariant.h"
 #include <PiiQVariantWrapper.h>
 #include <complex>
 
