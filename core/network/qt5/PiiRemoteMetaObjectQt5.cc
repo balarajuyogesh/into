@@ -18,6 +18,11 @@ class PiiRemoteMetaObject::Data : public PiiRemoteObject::Data
 public:
   Data(QObject*);
 
+  ~Data()
+  {
+    qDeleteAll(lstProperties);
+  }
+
   int typeIndex(int typeId)
   {
     if (typeId < int(QVariant::UserType))
@@ -60,7 +65,7 @@ public:
   bool bMetaCreated;
   QList<Function> lstFunctions;
   QList<Signal> lstSignals;
-  QList<Property> lstProperties;
+  QList<Property*> lstProperties;
 };
 
 int PiiRemoteMetaObject::Data::StringData::add(const char* word, int len)
@@ -140,7 +145,7 @@ template <class T> int PiiRemoteMetaObject::Data::addFunctionData(const QList<T>
 
 template <class T> void PiiRemoteMetaObject::Data::addFunctionParams(const QList<T>& functions)
 {
-  for (int i=0; i<functions.size(); ++i)
+  for (int i = 0; i < functions.size(); ++i)
     {
       vecMetaData << typeIndex(functions[i].returnType);
       int iParamCnt = functions[i].lstParamTypes.size();
@@ -155,13 +160,15 @@ template <class T> void PiiRemoteMetaObject::Data::addFunctionParams(const QList
 void PiiRemoteMetaObject::Data::addPropertyData()
 {
   using namespace PiiNetworkPrivate;
-  uint uiPropertyFlags =  Readable | Writable | StdCppSet | Designable | Scriptable | Stored;
-  for (int i=0; i<lstProperties.size(); ++i)
+  for (int i = 0; i < lstProperties.size(); ++i)
     {
       // Add Name to string data and its index to meta data
-      vecMetaData << stringData.add(lstProperties[i].strName);
-      vecMetaData << typeIndex(lstProperties[i].type);
+      vecMetaData << stringData.add(lstProperties[i]->strName);
+      vecMetaData << typeIndex(lstProperties[i]->type);
       // PENDING EnumOrFlag
+      uint uiPropertyFlags = Readable | StdCppSet | Designable | Scriptable | Stored;
+      if (!lstProperties[i]->bReadOnly)
+        uiPropertyFlags |= Writable;
       vecMetaData << uiPropertyFlags;
     }
 }
@@ -239,29 +246,49 @@ void PiiRemoteMetaObject::collectProperties()
 {
   PII_D;
   QList<QByteArray> lstProperties = readDirectoryList("properties/");
-  // Properties are encoded as "type name", e.g. "int value"
-  QRegExp propExp("[^ ]+ [^ ]+");
+  // Properties are encoded as "flags type name" e.g. "int value" or
+  // "const float number".
+  QRegExp propExp("([a-zA-Z_][^ ]* )+[a-zA-Z_][^ ]*");
 
   d->lstProperties.clear();
 
-  for (int i=0; i<lstProperties.size(); ++i)
+  for (int i = 0; i < lstProperties.size(); ++i)
     {
       // This also catches the special case of no properties (one empty entry in the list).
       if (!propExp.exactMatch(QString(lstProperties[i])))
         continue;
 
-      int iSpaceIndex = lstProperties[i].indexOf(' ');
-      lstProperties[i][iSpaceIndex] = 0;
+      int iSpaceCount = lstProperties[i].count(' ');
+
+      // Interpret flags
+      int iBegin = 0, iNextSpaceIndex = 0;
+      int iFlags = 0;
+      for (int j = 0; j < iSpaceCount - 1; ++j)
+        {
+          int iNextSpaceIndex = lstProperties[i].indexOf(' ', iBegin);
+          lstProperties[i][iNextSpaceIndex] = 0;
+          if (!std::strcmp(lstProperties[i].constData() + iBegin, "const"))
+            iFlags |= PiiNetwork::ConstProperty;
+          else if (!std::strcmp(lstProperties[i].constData() + iBegin, "volatile"))
+            iFlags |= PiiNetwork::VolatileProperty;
+          else
+            piiWarning(QString("Unsupported remote property type flag: ") +
+                       QString(lstProperties[i].constData() + iBegin));
+          iBegin = iNextSpaceIndex + 1;
+        }
+
+      iNextSpaceIndex = lstProperties[i].indexOf(' ', iBegin);
+      lstProperties[i][iNextSpaceIndex] = 0;
 
       // Check that the variant type is correctly specified
-      int type = QMetaType::type(lstProperties[i].constData());
-      if (type == 0)
+      int iType = QMetaType::type(lstProperties[i].constData() + iBegin);
+      if (iType == 0)
         {
           piiWarning(QString("Unsupported remote property type: ") + QString(lstProperties[i]));
           continue;
         }
 
-      d->lstProperties << Property(type, lstProperties[i].constData() + iSpaceIndex + 1);
+      d->lstProperties << new Property(iType, lstProperties[i].constData() + iNextSpaceIndex + 1, iFlags);
    }
 }
 
@@ -276,7 +303,7 @@ void PiiRemoteMetaObject::collectFunctions(bool listSignals)
   else
     d->lstFunctions.clear();
 
-  for (int i=0; i<lstSignatures.size(); ++i)
+  for (int i = 0; i < lstSignatures.size(); ++i)
     {
       qDebug("%s", lstSignatures[i].constData());
       if (!funcExp.exactMatch(QString(lstSignatures[i])))
@@ -300,7 +327,7 @@ void PiiRemoteMetaObject::collectFunctions(bool listSignals)
       QList<int> lstParamTypes;
       const char* pSignature = lstSignatures[i].constData() + iSpaceIndex + 1;
 
-      for (int j=0; j<lstParams.size(); ++j)
+      for (int j = 0; j < lstParams.size(); ++j)
         {
           int type = QMetaType::type(lstParams[j].constData());
           if (type == 0)

@@ -154,6 +154,32 @@ class PiiConfigurable;
  * interval=1000&singleShot=false
  * ~~~
  *
+ * A property setter function doesn't necessary accept the value as
+ * such. Therefore, PiiQObjectServer checks the value after a
+ * setProperty() call. If the returned value differs from what was
+ * intended, the actual value will be returned. For example, if you
+ * try to assign a negative number to a property that only accepts
+ * non-negative values:
+ *
+ * ~~~
+ * GET /timer/properties/interval?-1 HTTP/1.1
+ * ~~~
+ *
+ * The server could respond with this:
+ *
+ * ~~~
+ * HTTP/1.1 200 OK
+ * Content-Type: text/plain
+ * Content-Length: 1
+ *
+ * 0
+ * ~~~
+ *
+ * If the provided value cannot be converted to the target type (e.g.
+ * when assigning a string to an integer property), the server
+ * responds with a bad request (400) status code.
+ *
+ *
  * Signals
  * -------
  *
@@ -172,6 +198,29 @@ class PiiConfigurable;
  *
  * When a signal is emitted, its function parameters will be encoded
  * as a QVariantList using Into's [Serialization] mechanism.
+ *
+ *
+ * Property Change Notification
+ * ----------------------------
+ *
+ * Qt uses notification signals as a way to inform interested parties
+ * about changes to properties. This technique can be used to inspect
+ * changes to properties over the network as well, provided that such
+ * signals have been implemented. This is however not the case with
+ * all properties.
+ *
+ * Since performance on client side relies on property caching,
+ * PiiQObjectServer generates property change signals to all
+ * properties that are set through the network interface. It doesn't
+ * however keep an eye on locally changed properties. Such changes
+ * must be informed using the normal notification mechanism.
+ *
+ * If a property has a native property change signal whose signature
+ * follows the naming pattern "<propertyName>Changed(<propertyType>)",
+ * implicit property change signals will not be generated. Instead, it
+ * is assumed that the native implementation of the property setter
+ * generates the signal when needed.
+ *
  *
  * Thread-safety issues
  * --------------------
@@ -362,6 +411,7 @@ protected:
   };
 
   typedef QList<ChannelSlot*> SlotList;
+  typedef QMap<QString, QList<Channel*> > ImplicitSignalMap;
 
   class PII_NETWORK_EXPORT Data : public PiiObjectServer::Data
   {
@@ -374,10 +424,14 @@ protected:
     QStringList lstSignals;
     SlotList lstSlots;
     QStringList lstEnums;
-    QHash<QString,QStringList> hashEnums;
-    QHash<QString,int> hashEnumValues;
+    QHash<QString, QStringList> hashEnums;
+    QHash<QString, int> hashEnumValues;
     PropertySafetyLevel minPropertySafetyLevel;
-    QMap<QString,PropertySafetyLevel> mapPropertySafetyLevels;
+    QMap<QString, PropertySafetyLevel> mapPropertySafetyLevels;
+    // Notifier signal name -> connected channels
+    ImplicitSignalMap mapImplicitNotifiers;
+    // Property name -> notifier signal name
+    QMap<QString, QString> mapNotifiedProps;
   };
   PII_D_FUNC;
 
@@ -387,8 +441,9 @@ protected:
   /// @endhide
 
 private slots:
-  bool setPropertiesFromMainThread(const QVariantMap& props);
-  QVariant readPropertyFromMainThread(const QString& name);
+  bool setProperties(const QVariantMap& props, bool lock);
+  QVariant setSingleProperty(const QString& name, const QVariant& value, bool lock);
+  QVariant readProperty(const QString& name, bool lock);
 
 private:
   void init();
@@ -396,11 +451,10 @@ private:
   void addToEnums(const QString& name, const QMetaEnum& enumerator);
   void jsonProperties(PiiHttpDevice* dev, const QStringList& fields) const;
   void listProperties(PiiHttpDevice* dev) const;
-  template <class T> static inline T makeProperty(int type, const QString& name);
   template <class T> QList<T> properties() const;
   QVariant objectProperty(const QString& name);
   bool setObjectProperties(const QVariantMap& props);
-  bool setObjectProperty(const QString& name, const QVariant& value);
+  QVariant setObjectProperty(const QString& name, const QVariant& value);
   ChannelSlot* findSlot(const QString& signal) const;
   template <class Enum> Enum stringToEnum(const char* enumName, const QString& str) const;
 };

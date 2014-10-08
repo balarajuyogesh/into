@@ -22,6 +22,11 @@ class PiiRemoteMetaObject::Data : public PiiRemoteObject::Data
 public:
   Data(QObject*);
 
+  ~Data()
+  {
+    qDeleteAll(lstProperties);
+  }
+
   QObject* pObject;
 
   QByteArray stringData;
@@ -31,7 +36,7 @@ public:
   bool bMetaCreated;
   QList<Function> lstFunctions;
   QList<Signal> lstSignals;
-  QList<Property> lstProperties;
+  QList<Property*> lstProperties;
 };
 
 PiiRemoteMetaObject::Data::Data(QObject* object) :
@@ -98,7 +103,7 @@ void PiiRemoteMetaObject::collectProperties()
   int iFirstPropertyIndex = d->vecMetaData.size();
   d->lstProperties.clear();
 
-  for (int i=0; i<lstProperties.size(); ++i)
+  for (int i = 0; i < lstProperties.size(); ++i)
     {
       // This also catches the special case of no properties (one empty entry in the list).
       if (!propExp.exactMatch(QString(lstProperties[i])))
@@ -131,7 +136,7 @@ void PiiRemoteMetaObject::collectProperties()
         uiFlags |= type << 24;
       d->vecMetaData << uiFlags;
 
-      d->lstProperties << Property(type, lstProperties[i].constData() + iSpaceIndex + 1);
+      d->lstProperties << new Property(type, lstProperties[i].constData() + iSpaceIndex + 1);
    }
 
   // Add EOD marker back
@@ -215,4 +220,3 @@ void PiiRemoteMetaObject::collectFunctions(bool listSignals)
   // Add EOD marker back
   d->vecMetaData << 0;
 }
-

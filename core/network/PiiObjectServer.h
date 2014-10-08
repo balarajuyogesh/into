@@ -484,11 +484,19 @@ protected:
      */
     bool enqueuePushData(const QString& sourceId, const QByteArray& data);
 
+    /**
+     * Returns the ID of the client connected to this channel. If the
+     * client didn't provide an ID, returns an empty string.
+     */
+    QString clientId() const;
+
   protected:
     /// @hide
+    Channel(const QString& clientId);
     mutable QMutex _queueMutex;
     QWaitCondition _queueCondition, _pushEndCondition;
     QQueue<QPair<QString,QByteArray> > _dataQueue;
+    QString _strClientId;
     /// @endhide
   };
 
@@ -496,7 +504,7 @@ protected:
   class PII_NETWORK_EXPORT ChannelImpl : public Channel
   {
   public:
-    ChannelImpl();
+    ChannelImpl(const QString& clientId);
 
     void push(PiiHttpDevice* dev, PiiHttpProtocol::TimeLimiter* controller, QMutexLocker* lock);
     void removeObjectsQueuedTo(const QString& uri);
@@ -629,19 +637,35 @@ protected:
   virtual void channelDeleted(Channel* channel);
 
   /// @internal
-  virtual ChannelImpl* createChannel() const;
+  virtual ChannelImpl* createChannel(const QString& clientId) const;
 
   /// @internal
   virtual void moveToMainThread();
 
-private slots:
+  /**
+   * Sends encoded data to all listening clients except the one
+   * identified by *sendingClientId*.
+   *
+   * @param sendingClientId the UUID of the client that initiated the
+   * request
+   *
+   * @param sourceId the identifier of the resource to be pushed to
+   * all return channels.
+   *
+   * @param encodedValue binary data to be pushed
+   */
+  void sendToOtherClients(const QString& sendingClientId,
+                          const QString& sourceId,
+                          const QByteArray& encodedValue);
+
+ private slots:
   void collectGarbage();
   QVariant callFromMainThread(void* function, void* params);
 
 private:
   void init();
   void createExceptionResponse(PiiHttpDevice* dev, const PiiException& ex);
-  QString createNewChannel();
+  QString createNewChannel(const QString& clientId);
   inline ChannelImpl* channelById(const QString& id);
   void killChannels();
   void disconnectChannel(Channel* channel);

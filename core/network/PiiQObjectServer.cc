@@ -62,7 +62,7 @@ PiiQObjectServer::MetaFunction::MetaFunction(QObject* o, const QMetaMethod& m) :
       d->strSignature += ' ';
     }
   d->strSignature += "%1(";
-  for (int i=0; i<lstParams.size(); ++i)
+  for (int i = 0; i < lstParams.size(); ++i)
     {
       if (i > 0)
         d->strSignature += ',';
@@ -159,6 +159,39 @@ QObject* PiiQObjectServer::object() const
   return _d()->pObject;
 }
 
+/******* Property listing helper functions *******/
+template <class T>
+static T makeProperty(int type, const QString& name, int flags);
+
+template <>
+QString makeProperty<QString>(int type, const QString& name, int flags)
+{
+  QString strDecl(QString("%1 %2").arg(QMetaType::typeName(type)).arg(name));
+  if (flags & PiiNetwork::VolatileProperty)
+    strDecl.prepend("volatile ");
+  if (flags & PiiNetwork::ConstProperty)
+    strDecl.prepend("const ");
+  return strDecl;
+}
+
+struct PropertyInfo
+{
+  PropertyInfo(int t, const QString& n, int f) :
+    type(t), name(n), flags(f)
+  {}
+
+  int type;
+  QString name;
+  int flags;
+};
+
+template <>
+PropertyInfo makeProperty<PropertyInfo>(int type, const QString& name, int flags)
+{
+  return PropertyInfo(type, name, flags);
+}
+/*************************************************/
+
 void PiiQObjectServer::jsonProperties(PiiHttpDevice* dev, const QStringList& fields) const
 {
   enum { Type = 1, Name = 2, Value = 4 };
@@ -171,20 +204,31 @@ void PiiQObjectServer::jsonProperties(PiiHttpDevice* dev, const QStringList& fie
     }
 
   const PII_D;
-  typedef QPair<int,QString> PropPair;
-  QList<PropPair> lstProperties(properties<PropPair>());
+  QList<PropertyInfo> lstProperties(properties<PropertyInfo>());
   dev->print("[");
-  // objectName is always a local property.
-  for (int i=1; i<lstProperties.size(); ++i)
+  // objectName is always a local property -> start at 1
+  for (int i = 1; i < lstProperties.size(); ++i)
     {
       QVariantMap mapValues;
+      const PropertyInfo& prop = lstProperties[i];
       if (iFields & Type)
-        mapValues["type"] = QMetaType::typeName(lstProperties[i].first);
+        {
+          mapValues["type"] = QMetaType::typeName(prop.type);
+          if (prop.flags != 0)
+            {
+              QVariantList lstFlags;
+              if (prop.flags & PiiNetwork::ConstProperty)
+                lstFlags << "const";
+              if (prop.flags & PiiNetwork::VolatileProperty)
+                lstFlags << "volatile";
+              mapValues["flags"] = lstFlags;
+            }
+        }
       if (iFields & Name)
-        mapValues["name"] = lstProperties[i].second;
+        mapValues["name"] = prop.name;
       if (iFields & Value)
         {
-          QVariant varValue = d->pObject->property(qPrintable(lstProperties[i].second));
+          QVariant varValue = d->pObject->property(qPrintable(prop.name));
           if (int(varValue.type()) member_of<int> (QVariant::String,
                                                    QVariant::Int,
                                                    QVariant::Double,
@@ -195,10 +239,10 @@ void PiiQObjectServer::jsonProperties(PiiHttpDevice* dev, const QStringList& fie
             mapValues["value"] = varValue;
           else
             mapValues["value"] = QString::fromUtf8(dev->encode(varValue));
-
         }
 
-      if (i) dev->print(" ");
+      if (i)
+        dev->print(" ");
       dev->print(PiiNetwork::toJson(mapValues));
       if (i != lstProperties.size()-1)
         dev->print(",");
@@ -226,13 +270,17 @@ void PiiQObjectServer::listProperties(PiiHttpDevice* dev) const
     d->accessMutex.unlock();
 }
 
-QVariant PiiQObjectServer::readPropertyFromMainThread(const QString& name)
+QVariant PiiQObjectServer::readProperty(const QString& name, bool lock)
 {
   PII_D;
-  QMutexLocker lock(&d->accessMutex);
-  return d->pConfigurable ?
+  if (lock)
+    d->accessMutex.lock();
+  QVariant varResult = d->pConfigurable ?
     d->pConfigurable->property(qPrintable(name)) :
     d->pObject->property(qPrintable(name));
+  if (lock)
+    d->accessMutex.unlock();
+  return varResult;
 }
 
 QVariant PiiQObjectServer::objectProperty(const QString& name)
@@ -244,35 +292,58 @@ QVariant PiiQObjectServer::objectProperty(const QString& name)
       {
         Q_ASSERT(d->pObject->thread() == qApp->thread());
         QVariant varResult;
-        QMetaObject::invokeMethod(this, "readPropertyFromMainThread",
-                                  QThread::currentThread() != qApp->thread() ?
-                                  Qt::BlockingQueuedConnection :
-                                  Qt::DirectConnection,
-                                  Q_RETURN_ARG(QVariant, varResult),
-                                  Q_ARG(QString, name));
+        if (QThread::currentThread() != qApp->thread())
+          QMetaObject::invokeMethod(this, "readProperty",
+                                    Qt::BlockingQueuedConnection,
+                                    Q_RETURN_ARG(QVariant, varResult),
+                                    Q_ARG(QString, name),
+                                    Q_ARG(bool, true));
+        else
+          varResult = readProperty(name, true);
         return varResult;
       }
     case WritePropertyFromMainThread:
     case AccessPropertyFromAnyThread:
-      synchronized (d->accessMutex)
-        return d->pConfigurable ?
-        d->pConfigurable->property(qPrintable(name)) :
-        d->pObject->property(qPrintable(name));
+      return readProperty(name, true);
     case AccessPropertyConcurrently:
-      return d->pConfigurable ?
-        d->pConfigurable->property(qPrintable(name)) :
-        d->pObject->property(qPrintable(name));
+      return readProperty(name, false);
     }
   return QVariant();
 }
 
-bool PiiQObjectServer::setPropertiesFromMainThread(const QVariantMap& props)
+bool PiiQObjectServer::setProperties(const QVariantMap& props, bool lock)
 {
   PII_D;
-  QMutexLocker lock(&d->accessMutex);
-  return d->pConfigurable ?
+  if (lock)
+    d->accessMutex.lock();
+  bool bResult = d->pConfigurable ?
     Pii::setProperties(d->pConfigurable, props) :
     Pii::setProperties(d->pObject, props);
+  if (lock)
+    d->accessMutex.unlock();
+  return bResult;
+}
+
+QVariant PiiQObjectServer::setSingleProperty(const QString& name, const QVariant& value, bool lock)
+{
+  PII_D;
+  if (lock)
+    d->accessMutex.lock();
+  QVariant varFinalValue;
+  if (d->pConfigurable)
+    {
+      if (d->pConfigurable->setProperty(qPrintable(name), value))
+        varFinalValue = d->pConfigurable->property(qPrintable(name));
+    }
+  else
+    {
+      if (d->pObject->setProperty(qPrintable(name), value))
+        varFinalValue = d->pObject->property(qPrintable(name));
+    }
+  if (lock)
+    d->accessMutex.unlock();
+
+  return varFinalValue;
 }
 
 bool PiiQObjectServer::setObjectProperties(const QVariantMap& props)
@@ -285,28 +356,25 @@ bool PiiQObjectServer::setObjectProperties(const QVariantMap& props)
       {
         Q_ASSERT(d->pObject->thread() == qApp->thread());
         bool bResult = true;
-        QMetaObject::invokeMethod(this, "setPropertiesFromMainThread",
-                                  QThread::currentThread() != qApp->thread() ?
-                                  Qt::BlockingQueuedConnection :
-                                  Qt::DirectConnection,
-                                  Q_RETURN_ARG(bool, bResult),
-                                  Q_ARG(QVariantMap, props));
+        if (QThread::currentThread() != qApp->thread())
+          QMetaObject::invokeMethod(this, "setProperties",
+                                    Qt::BlockingQueuedConnection,
+                                    Q_RETURN_ARG(bool, bResult),
+                                    Q_ARG(QVariantMap, props),
+                                    Q_ARG(bool, true));
+        else
+          bResult = setProperties(props, true);
         return bResult;
       }
     case AccessPropertyFromAnyThread:
-      synchronized (d->accessMutex)
-        return d->pConfigurable ?
-        Pii::setProperties(d->pConfigurable, props) :
-        Pii::setProperties(d->pObject, props);
+      return setProperties(props, true);
     case AccessPropertyConcurrently:
-      return d->pConfigurable ?
-        Pii::setProperties(d->pConfigurable, props) :
-        Pii::setProperties(d->pObject, props);
+      return setProperties(props, false);
     }
   return false;
 }
 
-bool PiiQObjectServer::setObjectProperty(const QString& name, const QVariant& value)
+QVariant PiiQObjectServer::setObjectProperty(const QString& name, const QVariant& value)
 {
   PII_D;
   switch (propertySafetyLevel(name))
@@ -315,30 +383,24 @@ bool PiiQObjectServer::setObjectProperty(const QString& name, const QVariant& va
     case WritePropertyFromMainThread:
       {
         Q_ASSERT(d->pObject->thread() == qApp->thread());
-        bool bResult = true;
-        QVariantMap mapProps;
-        mapProps[name] = value;
-        QMetaObject::invokeMethod(this, "setPropertiesFromMainThread",
-                                  QThread::currentThread() != qApp->thread() ?
-                                  Qt::BlockingQueuedConnection :
-                                  Qt::DirectConnection,
-                                  Q_RETURN_ARG(bool, bResult),
-                                  Q_ARG(QVariantMap, mapProps));
-        return bResult;
+        QVariant varResult;
+        if (QThread::currentThread() != qApp->thread())
+          QMetaObject::invokeMethod(this, "setSingleProperty",
+                                    Qt::BlockingQueuedConnection,
+                                    Q_RETURN_ARG(QVariant, varResult),
+                                    Q_ARG(QString, name),
+                                    Q_ARG(QVariant, value),
+                                    Q_ARG(bool, true));
+        else
+          varResult = setSingleProperty(name, value, true);
+        return varResult;
       }
     case AccessPropertyFromAnyThread:
-      synchronized (d->accessMutex)
-        {
-          return d->pConfigurable ?
-            d->pConfigurable->setProperty(qPrintable(name), value) :
-            d->pObject->setProperty(qPrintable(name), value);
-        }
+      return setSingleProperty(name, value, true);
     case AccessPropertyConcurrently:
-      return d->pConfigurable ?
-        d->pConfigurable->setProperty(qPrintable(name), value) :
-        d->pObject->setProperty(qPrintable(name), value);
+      return setSingleProperty(name, value, false);
     }
-  return false;
+  return QVariant();
 }
 
 void PiiQObjectServer::handleRequest(const QString& uri, PiiHttpDevice* dev,
@@ -370,7 +432,10 @@ void PiiQObjectServer::handleRequest(const QString& uri, PiiHttpDevice* dev,
         {
           // Set many properties at once
           if (bPostRequest)
-            setObjectProperties(dev->requestValues());
+            {
+              if (!setObjectProperties(dev->requestValues()))
+                PII_THROW_HTTP_ERROR(BadRequestStatus);
+            }
           // List all properties
           else
             listProperties(dev);
@@ -384,15 +449,29 @@ void PiiQObjectServer::handleRequest(const QString& uri, PiiHttpDevice* dev,
       // Set property
       else
         {
-          bool bSuccess = false;
-          if (bPostRequest)
-            bSuccess = setObjectProperty(strPropName,
-                                         dev->decodeVariant(dev->readBody()));
-          else
-            bSuccess = setObjectProperty(strPropName,
-                                         dev->decodeVariant(QUrl::fromPercentEncoding(dev->queryString().toUtf8())));
-          if (!bSuccess)
+          QVariant varInputValue = bPostRequest ?
+            dev->decodeVariant(dev->readBody()) :
+            dev->decodeVariant(QUrl::fromPercentEncoding(dev->queryString().toUtf8()));
+
+          QVariant varFinalValue = setObjectProperty(strPropName, varInputValue);
+          // TODO volatile property values don't need to be sent back
+          if (!varFinalValue.isValid())
             PII_THROW_HTTP_ERROR(BadRequestStatus);
+
+          // If the value wasn't set to the received value, tell the
+          // client the real value.
+          if (!Pii::equals(varInputValue, varFinalValue))
+            dev->write(dev->encode(varFinalValue)); // TODO: check if we could use binary format
+
+          // Inform all other clients about the change, if the
+          // property is implicity notified (has no native
+          // notification signal).
+          QMap<QString, QString>::const_iterator it = d->mapNotifiedProps.constFind(strPropName);
+          if (it != d->mapNotifiedProps.constEnd())
+            sendToOtherClients(dev->requestHeader().value("X-Client-ID"),
+                               "signals/" + *it,
+                               PiiNetwork::toByteArray(QVariantList() << varFinalValue,
+                                                       PiiNetwork::BinaryFormat));
         }
     }
   else if (strRequestPath.startsWith("signals/"))
@@ -425,7 +504,7 @@ void PiiQObjectServer::handleRequest(const QString& uri, PiiHttpDevice* dev,
           if (!d->hashEnums.contains(strEnum))
             PII_THROW_HTTP_ERROR(NotFoundStatus);
           QStringList lstEnums = d->hashEnums[strEnum];
-          for (int i=0; i<lstEnums.size(); ++i)
+          for (int i = 0; i < lstEnums.size(); ++i)
             {
               dev->print(lstEnums[i]);
               dev->putChar(' ');
@@ -449,12 +528,18 @@ QStringList PiiQObjectServer::listRoot() const
 void PiiQObjectServer::channelDeleted(Channel* channel)
 {
   PII_D;
+  // Destroy connections to all dynamic slots
   for (SlotList::const_iterator it = d->lstSlots.constBegin(); it != d->lstSlots.constEnd(); ++it)
     {
       (*it)->lstChannels.removeOne(channel);
       if ((*it)->lstChannels.isEmpty())
         (*it)->dynamicDisconnect(d->pObject);
     }
+  // Destroy connections to implicit change notifiers
+  for (ImplicitSignalMap::iterator it = d->mapImplicitNotifiers.begin();
+       it != d->mapImplicitNotifiers.end(); ++it)
+    it->removeOne(channel);
+
   PiiObjectServer::channelDeleted(channel);
 }
 
@@ -464,13 +549,24 @@ void PiiQObjectServer::disconnectFromChannel(Channel* channel, const QString& so
     {
       PII_D;
       QString strSignal = sourceId.mid(8);
-      ChannelSlot* pSlot = findSlot(strSignal);
-      if (pSlot != 0)
+
+      // Implicit property change signal
+      ImplicitSignalMap::iterator it = d->mapImplicitNotifiers.find(strSignal);
+      if (it != d->mapImplicitNotifiers.end())
+          it->removeOne(channel);
+      else
         {
-          pSlot->lstChannels.removeOne(channel);
-          if (pSlot->lstChannels.isEmpty() &&
-              !pSlot->dynamicDisconnect(d->pObject))
-            PII_THROW_HTTP_ERROR_MSG(BadRequestStatus, tr("The signal called \"%1\" is not connected.").arg(strSignal));
+          ChannelSlot* pSlot = findSlot(strSignal);
+          if (pSlot != 0)
+            {
+              pSlot->lstChannels.removeOne(channel);
+              // If this was the last channel interested in the
+              // signal, disconnect the signal-slot connection.
+              if (pSlot->lstChannels.isEmpty() &&
+                  !pSlot->dynamicDisconnect(d->pObject))
+                PII_THROW_HTTP_ERROR_MSG(BadRequestStatus,
+                                         tr("The signal called \"%1\" is not connected.").arg(strSignal));
+            }
         }
     }
   else
@@ -480,7 +576,7 @@ void PiiQObjectServer::disconnectFromChannel(Channel* channel, const QString& so
 PiiQObjectServer::ChannelSlot* PiiQObjectServer::findSlot(const QString& signal) const
 {
   const PII_D;
-  for (int i=0; i<d->lstSlots.size(); ++i)
+  for (int i = 0; i < d->lstSlots.size(); ++i)
     if (d->lstSlots[i]->signal() == signal)
       return d->lstSlots[i];
   return 0;
@@ -492,21 +588,34 @@ void PiiQObjectServer::connectToChannel(Channel* channel, const QString& sourceI
   if (sourceId.startsWith("signals/"))
     {
       QString strSignal = sourceId.mid(8);
-      if (!d->lstSignals.contains(strSignal))
-        PII_THROW_HTTP_ERROR_MSG(BadRequestStatus, tr("There is no signal called \"%1\".").arg(strSignal));
 
-      ChannelSlot* pSlot = findSlot(strSignal);
-      if (pSlot == 0)
+      // Implicit property change signal
+      ImplicitSignalMap::iterator it = d->mapImplicitNotifiers.find(strSignal);
+      if (it != d->mapImplicitNotifiers.end())
         {
-          pSlot = new ChannelSlot(&d->channelMutex);
-          d->lstSlots << pSlot;
+          if (!it->contains(channel))
+            it->append(channel);
         }
-      if (pSlot->lstChannels.isEmpty() &&
-          pSlot->dynamicConnect(_d()->pObject,
-                                qPrintable(strSignal), 0,
-                                Qt::DirectConnection) == -1)
-        PII_THROW_HTTP_ERROR_MSG(InternalServerErrorStatus, tr("Cannot connect to \"%1\".").arg(strSignal));
-      pSlot->lstChannels << channel;
+      else
+        {
+          if (!d->lstSignals.contains(strSignal))
+            PII_THROW_HTTP_ERROR_MSG(BadRequestStatus, tr("There is no signal called \"%1\".").arg(strSignal));
+
+          ChannelSlot* pSlot = findSlot(strSignal);
+          if (pSlot == 0)
+            {
+              pSlot = new ChannelSlot(&d->channelMutex);
+              d->lstSlots << pSlot;
+            }
+          // If the slot isn't currently connected to any channel, there
+          // is no signal-slot connection either. It must be established.
+          if (pSlot->lstChannels.isEmpty() &&
+              pSlot->dynamicConnect(_d()->pObject,
+                                    qPrintable(strSignal), 0,
+                                    Qt::DirectConnection) == -1)
+            PII_THROW_HTTP_ERROR_MSG(InternalServerErrorStatus, tr("Cannot connect to \"%1\".").arg(strSignal));
+          pSlot->lstChannels << channel;
+        }
     }
   else
     PiiObjectServer::connectToChannel(channel, sourceId);
@@ -541,11 +650,32 @@ void PiiQObjectServer::listFunctions(QObject* object)
                    .arg(method.methodType()).arg(method.access()));
         }
     }
+
+  // Implicit property change signals.
+  if (d->features & ExposeProperties)
+    {
+      foreach (const PropertyInfo& info, properties<PropertyInfo>())
+        {
+          // Check if there is a notification signal that follows the
+          // naming pattern.
+          QString strSignalSignature(QString("%1Changed(%2)")
+                                     .arg(info.name).arg(QMetaType::typeName(info.type)));
+          int iSignalIndex = pMetaObject->indexOfMethod(qPrintable(strSignalSignature));
+          // There is no notification signal and the property can be
+          // set -> need to create an implicit change signal.
+          if (iSignalIndex == -1 && !(info.flags & PiiNetwork::ConstProperty))
+            {
+              d->mapImplicitNotifiers[strSignalSignature] = QList<Channel*>();
+              d->mapNotifiedProps[info.name] = strSignalSignature;
+            }
+        }
+    }
 }
 
 QStringList PiiQObjectServer::signalSignatures() const
 {
-  return _d()->lstSignals;
+  const PII_D;
+  return d->lstSignals + d->mapImplicitNotifiers.keys();
 }
 
 void PiiQObjectServer::addToEnums(const QString& name, const QMetaEnum& enumerator)
@@ -555,23 +685,11 @@ void PiiQObjectServer::addToEnums(const QString& name, const QMetaEnum& enumerat
     return;
   d->lstEnums << name;
   QStringList lstKeys;
-  for (int i=0; i<enumerator.keyCount(); ++i)
+  for (int i = 0; i < enumerator.keyCount(); ++i)
     {
       lstKeys << enumerator.key(i);
       d->hashEnumValues.insert(name, enumerator.value(i));
     }
-}
-
-template <>
-QString PiiQObjectServer::makeProperty<QString>(int type, const QString& name)
-{
-  return QString("%1 %2").arg(QMetaType::typeName(type)).arg(name);
-}
-
-template <>
-QPair<int,QString> PiiQObjectServer::makeProperty<QPair<int,QString> >(int type, const QString& name)
-{
-  return qMakePair(type, name);
 }
 
 QStringList PiiQObjectServer::propertyDeclarations() const
@@ -588,12 +706,27 @@ template <class T> QList<T> PiiQObjectServer::properties() const
   if (d->features & ExposeProperties)
     {
       // objectName is always a local property.
-      for (int i=1; i<pMetaObject->propertyCount(); ++i)
+      for (int i = 1; i < pMetaObject->propertyCount(); ++i)
         {
           QMetaProperty prop = pMetaObject->property(i);
+          if (!prop.isValid())
+            continue;
+
+          int iFlags = 0;
+          if (!prop.isWritable())
+            iFlags |= PiiNetwork::ConstProperty;
+
+          // Q_PROPERTY provides no way to mark volatile properties.
+          // We need to use Q_CLASSINFO.
+          int iVolatileIndex = pMetaObject->indexOfClassInfo(qPrintable(QString(prop.name()) + ".volatile"));
+          if (iVolatileIndex != -1 &&
+              QString(pMetaObject->classInfo(iVolatileIndex).value()) == "true")
+            iFlags |= PiiNetwork::VolatileProperty;
+
           if (prop.isEnumType())
-            lstResult << makeProperty<T>(QVariant::Int, prop.name());
-          /*  {
+            lstResult << makeProperty<T>(QVariant::Int, prop.name(), iFlags);
+          /*  TODO
+              {
               strPrefix = prop.isFlagType() ? "flag " : "enum ";
               addToEnums(prop.typeName(), prop.enumerator());
               }
@@ -603,7 +736,7 @@ template <class T> QList<T> PiiQObjectServer::properties() const
               int iType = prop.type();
               if (iType == QVariant::UserType)
                 iType = prop.userType();
-              lstResult << makeProperty<T>(iType, prop.name());
+              lstResult << makeProperty<T>(iType, prop.name(), iFlags);
             }
         }
     }
@@ -611,13 +744,13 @@ template <class T> QList<T> PiiQObjectServer::properties() const
   if (d->features & ExposeDynamicProperties)
     {
       QList<QByteArray> lstDynamicPropertyNames = d->pObject->dynamicPropertyNames();
-      for (int i=0; i<lstDynamicPropertyNames.size(); ++i)
+      for (int i = 0; i < lstDynamicPropertyNames.size(); ++i)
         {
           QVariant prop = d->pObject->property(lstDynamicPropertyNames[i]);
           int iType = prop.type();
           if (iType == QVariant::UserType)
             iType = prop.userType();
-          lstResult << makeProperty<T>(iType, lstDynamicPropertyNames[i]);
+          lstResult << makeProperty<T>(iType, lstDynamicPropertyNames[i], 0);
         }
     }
 
@@ -635,7 +768,7 @@ bool PiiQObjectServer::ChannelSlot::invokeSlot(int id, void** args)
       if (argumentCount(id) > 0)
         aBody = PiiNetwork::toByteArray(argsToList(id, args), PiiNetwork::BinaryFormat);
       //piiDebug("Sending %d bytes to %s.", aBody.size(), signatureOf(id).constData());
-      for (int i=0; i<lstChannels.size(); ++i)
+      for (int i = 0; i < lstChannels.size(); ++i)
         lstChannels[i]->enqueuePushData("signals/" + signatureOf(id), aBody);
     }
   catch (PiiSerializationException& ex)

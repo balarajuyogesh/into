@@ -27,6 +27,7 @@
 #include <PiiInvalidArgumentException.h>
 
 #include <QUrl>
+#include <QUuid>
 
 #include "PiiNetworkEncoding.h"
 #include "PiiQObjectServer.h"
@@ -38,6 +39,7 @@ PiiRemoteObject::Data::Data() :
   iRetryCount(3),
   iRetryDelay(2000),
   iMaxFailureCount(-1),
+  strClientId(QUuid::createUuid().toString()),
   pLocalServer(0)
 {}
 
@@ -86,34 +88,45 @@ PiiRemoteObject::HttpDevicePtr PiiRemoteObject::openConnection()
       d->buffer.close();
       d->buffer.setData(QByteArray());
       d->buffer.open(QIODevice::ReadWrite);
-      return pDev = new PiiHttpDevice(&d->buffer, PiiHttpDevice::Client);
+      // This isn't actually possible currently because we can't know
+      // if the server is local before contacting it through the
+      // network first. But if we later add support e.g. for saving
+      // and restoring client state, we may be able to contact a local
+      // server directly at the first attempt.
+      if (!d->pHttpDevice)
+        d->pHttpDevice = new PiiHttpDevice(&d->buffer, PiiHttpDevice::Client);
+      else if (d->pHttpDevice->device() != &d->buffer)
+        d->pHttpDevice->setDevice(&d->buffer);
     }
-
-  if (unsigned(d->iFailureCount.load()) > unsigned(d->iMaxFailureCount))
-    PII_THROW(PiiNetworkException, tr("Maximum number of failures reached."));
-
-  QIODevice* pSocket = 0;
-  for (int iTry = 0; iTry <= d->iRetryCount; ++iTry)
+  else
     {
-      pSocket = d->networkClient.openConnection();
-      if (pSocket != 0)
-        break;
-      else if (iTry != d->iRetryCount)
-        PiiDelay::msleep(d->iRetryDelay);
-    }
-  if (pSocket == 0)
-    {
-      addFailure();
-      PII_THROW(PiiNetworkException,
-                tr("Connection to the server object at %1 could not be established.").arg(serverUri()));
-    }
-  if (d->pHttpDevice == 0)
-    d->pHttpDevice = new PiiHttpDevice(pSocket, PiiHttpDevice::Client);
-  else if (d->pHttpDevice->device() != pSocket)
-    d->pHttpDevice->setDevice(pSocket);
+      if (unsigned(d->iFailureCount.load()) > unsigned(d->iMaxFailureCount))
+        PII_THROW(PiiNetworkException, tr("Maximum number of failures reached."));
 
-  pDev = d->pHttpDevice;
-  return pDev;
+      QIODevice* pSocket = 0;
+      for (int iTry = 0; iTry <= d->iRetryCount; ++iTry)
+        {
+          pSocket = d->networkClient.openConnection();
+          if (pSocket != 0)
+            break;
+          else if (iTry != d->iRetryCount)
+            PiiDelay::msleep(d->iRetryDelay);
+        }
+      if (pSocket == 0)
+        {
+          addFailure();
+          PII_THROW(PiiNetworkException,
+                    tr("Connection to the server object at %1 could not be established.").arg(serverUri()));
+        }
+      if (d->pHttpDevice == 0)
+        d->pHttpDevice = new PiiHttpDevice(pSocket, PiiHttpDevice::Client);
+      else if (d->pHttpDevice->device() != pSocket)
+        d->pHttpDevice->setDevice(pSocket);
+    }
+
+  // Add an X-Client-ID header to all outgoing requests.
+  d->pHttpDevice->setHeader("X-Client-ID", d->strClientId);
+  return pDev = d->pHttpDevice;
 }
 
 void PiiRemoteObject::closeConnection()
@@ -227,8 +240,11 @@ void PiiRemoteObject::removeCallbacks()
 
 void PiiRemoteObject::connectToChannel(const QString& sourceId)
 {
-  manageChannel("connect", sourceId); // may throw
-  d->lstConnectedSources << sourceId;
+  if (!d->lstConnectedSources.contains(sourceId))
+    {
+      manageChannel("connect", sourceId); // may throw
+      d->lstConnectedSources << sourceId;
+    }
 }
 
 void PiiRemoteObject::disconnectFromChannel(const QString& sourceId)
@@ -249,7 +265,7 @@ void PiiRemoteObject::openChannel()
 {
   QMutexLocker lock(&d->channelMutex);
 
-  if (d->bChannelRunning)
+  if (d->pChannelThread)
     return;
 
   closeChannel();
@@ -257,7 +273,6 @@ void PiiRemoteObject::openChannel()
 
   d->pChannelThread = Pii::createAsyncCall(this, &PiiRemoteObject::readChannel);
   d->pChannelThread->start();
-  // PENDING tämä aukaisee channelMutexin, jolloin openChannel() voi tulla päälle.
   d->channelUpCondition.wait(&d->channelMutex);
   if (!d->bChannelRunning)
     {
@@ -501,11 +516,11 @@ void PiiRemoteObject::setServerUriImpl(const QString& uri)
       addFailure();
       PII_THROW(PiiNetworkException, tr("Unable to read remote object ID."));
     }
-  QString strId(pDev->readBody());
-  if (!d->strId.isEmpty() && strId != d->strId)
+  QString strServerId(pDev->readBody());
+  if (!d->strServerId.isEmpty() && strServerId != d->strServerId)
     PII_THROW(PiiNetworkException,
-              tr("Remote object ID changed (was %1, now %2).").arg(d->strId, strId));
-  d->strId = strId;
+              tr("Remote object ID changed (was %1, now %2).").arg(d->strServerId, strServerId));
+  d->strServerId = strServerId;
 
   /* You may call this either a stupid hack, a necessary work-around
      or just an optimization. The problem is that certain things in Qt
@@ -515,7 +530,7 @@ void PiiRemoteObject::setServerUriImpl(const QString& uri)
      main thread and wait for the result. But we may be in the main
      thread already. Deadlock, anyone?
    */
-  PiiObjectServer* pServer = PiiObjectServer::server(strId);
+  PiiObjectServer* pServer = PiiObjectServer::server(strServerId);
   if (pServer)
     {
       if (pServer->strictestSafetyLevel() == PiiObjectServer::AccessFromMainThread ||
@@ -601,4 +616,4 @@ void PiiRemoteObject::addFailure() { d->iFailureCount.ref(); }
 void PiiRemoteObject::setMaxFailureCount(int maxFailureCount) { d->iMaxFailureCount = maxFailureCount; }
 int PiiRemoteObject::maxFailureCount() const { return d->iMaxFailureCount; }
 
-QString PiiRemoteObject::id() const { return d->strId; }
+QString PiiRemoteObject::serverId() const { return d->strServerId; }

@@ -50,7 +50,7 @@ protected:
   void disconnectFromChannel(Channel* channel, const QString& sourceId);
 
   /// @internal
-  ChannelImpl* createChannel() const;
+  ChannelImpl* createChannel(const QString& clientId) const;
 
 private:
   class Data : public PiiQObjectServer::Data
@@ -68,6 +68,7 @@ private:
     public PiiInputController
   {
   public:
+    ChannelImpl(const QString& clientId);
     ~ChannelImpl();
 
     PiiAbstractInputSocket* createInput(const QString& outputName);

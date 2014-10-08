@@ -49,9 +49,20 @@ public:
 
   ~PiiRemoteMetaObject();
 
+  /**
+   * Clears all cached properties.
+   */
+  void clearPropertyCache();
+  /**
+   * Clears cached property (if any) from the given property.
+   */
+  void clearPropertyCache(const QString& propertyName);
+
   /// @hide
   void connectSignal(const char* signal);
+  void connectSignal(int index);
   void disconnectSignal(const char* signal);
+  void disconnectSignal(int index);
 
   const QMetaObject* metaObject() const;
   int qt_metacall(QMetaObject::Call call, int id, void** arguments);
@@ -72,16 +83,33 @@ protected:
   {
     Signal(const char* sig, int r, const QString& n, const QList<int>& t) :
       Function(sig,r,n,t),
-      iConnectionCount(0)
+      iConnectionCount(0),
+      iPropertyIndex(-1)
     {}
     int iConnectionCount;
+    // If the signal is a property change notifier, this is the index
+    // of the property.
+    int iPropertyIndex;
   };
 
   struct Property
   {
-    Property(int t, const QString& n) : type(t), strName(n) {}
+    Property(int t, const QString& n, int flags = 0) :
+      type(t),
+      strName(n),
+      bVolatile(flags & PiiNetwork::VolatileProperty),
+      bReadOnly(flags & PiiNetwork::ConstProperty),
+      bListening(false),
+      iNotifierIndex(-1)
+    {}
     int type;
     QString strName;
+    QMutex mutex;
+    QVariant cachedValue;
+    bool bVolatile;
+    bool bReadOnly;
+    bool bListening;
+    int iNotifierIndex;
   };
 
   QList<Signal>& signalList();
@@ -102,6 +130,9 @@ private:
   void collectFunctions(bool listSignals);
   void emitSignal(int id, const QByteArray& data);
   void buildArrayData();
+  void findPropertyChangeNotifiers();
+  int indexOfSignal(const QByteArray& signature) const;
+  void clearPropertyCache(Property& prop);
 };
 
 

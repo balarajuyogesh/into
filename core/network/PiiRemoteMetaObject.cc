@@ -77,6 +77,7 @@ PiiRemoteMetaObject::PiiRemoteMetaObject(QObject* object, const QString& serverU
   PiiRemoteObject(new Data(object), serverUri)
 {
   createMetaObject(); // may throw
+  findPropertyChangeNotifiers();
 }
 
 PiiRemoteMetaObject::~PiiRemoteMetaObject()
@@ -141,34 +142,100 @@ int PiiRemoteMetaObject::metaCall(QMetaObject::Call callType, int id, void** arg
     }
   else if (callType == QMetaObject::ReadProperty)
     {
-      HttpDevicePtr pDev = openConnection();
+      Property& prop = *d->lstProperties[id];
+      bool bStartListening = false;
+      QMutexLocker lock(&prop.mutex);
 
-      //pDev->startOutputFiltering(new PiiStreamBuffer);
-      pDev->setRequest("GET", d->strPath + "properties/" + d->lstProperties[id].strName);
-      finishRequest(pDev);
+      QVariant varValue = prop.cachedValue;
 
-      PII_CHECK_SERVER_RESPONSE;
+      // If cached property value isn't valid or the property is
+      // volatile, need to fetch from server.
+      if (prop.bVolatile || !varValue.isValid())
+        {
+          HttpDevicePtr pDev = openConnection();
 
-      QByteArray aBody(pDev->readBody());
-      QVariant varReply = pDev->decodeVariant(aBody);
+          //pDev->startOutputFiltering(new PiiStreamBuffer);
+          pDev->setRequest("GET", d->strPath + "properties/" + prop.strName);
+          finishRequest(pDev);
+
+          PII_CHECK_SERVER_RESPONSE;
+
+          QByteArray aBody(pDev->readBody());
+          prop.cachedValue = pDev->decodeVariant(aBody);
+
+          bStartListening = true;
+        }
       //piiDebug(QString("%1 = %2 (%3)").arg(d->lstProperties[id].strName).arg(QString(aBody)).arg(varReply.toString()));
-      if (!Pii::copyMetaType(varReply, d->lstProperties[id].type, args))
-        PII_THROW(PiiNetworkException, tr("Server returned a QVariant with type id %1, but %2 was expected for %3.")
-                  .arg(varReply.type()).arg(d->lstProperties[id].type).arg(d->lstProperties[id].strName));
+      if (!Pii::copyMetaType(prop.cachedValue, prop.type, args))
+        {
+          int iCachedType = prop.cachedValue.userType();
+          prop.cachedValue = QVariant();
+          PII_THROW(PiiNetworkException,
+                    tr("Server returned a QVariant with type id %1, but %2 was expected for %3.")
+                    .arg(iCachedType).arg(prop.type).arg(prop.strName));
+        }
+
+      // We need to listen changes to this property to keep the cache
+      // up to date.
+      if (!prop.bVolatile && !prop.bListening && bStartListening)
+        {
+          prop.bListening = true;
+          connectSignal(prop.iNotifierIndex);
+        }
+
       id -= d->lstProperties.size();
     }
   else if (callType == QMetaObject::WriteProperty)
     {
-      HttpDevicePtr pDev = openConnection();
+      Property& prop = *d->lstProperties[id];
+      QVariant varResult;
 
-      pDev->setRequest("POST", d->strPath + "properties/" + d->lstProperties[id].strName);
-      pDev->startOutputFiltering(new PiiStreamBuffer);
-      pDev->write(pDev->encode(Pii::argsToVariant(args, d->lstProperties[id].type)));
-      finishRequest(pDev);
+      { // This scope locks pDev
+        HttpDevicePtr pDev = openConnection();
 
-      PII_CHECK_SERVER_RESPONSE;
+        pDev->setRequest("POST", d->strPath + "properties/" + prop.strName);
+        pDev->startOutputFiltering(new PiiStreamBuffer);
+        QVariant varValue(Pii::argsToVariant(args, prop.type));
+        pDev->write(pDev->encode(varValue));
+        finishRequest(pDev);
 
-      pDev->discardBody();
+        PII_CHECK_SERVER_RESPONSE;
+
+        // If the server responds with a non-null body, the final
+        // value of the property is different from varInput. But we
+        // don't care if the property is volatile and needs to be
+        // fetched each time anyway.
+        if (prop.bVolatile)
+          pDev->discardBody();
+        else
+          {
+            if (pDev->bodyLength() > 0)
+              varResult = pDev->decodeVariant(pDev->readBody());
+            else
+              {
+                varResult = varValue;
+                pDev->discardBody();
+              }
+          }
+      }
+
+      int iSignalToConnect = -1;
+      synchronized (prop.mutex)
+        {
+          if (varResult.isValid())
+            {
+              prop.cachedValue = varResult;
+              // Now that we have cached the result we must listen to
+              // changes.
+              if (!prop.bListening)
+                {
+                  prop.bListening = true;
+                  iSignalToConnect = prop.iNotifierIndex;
+                }
+            }
+        }
+      if (iSignalToConnect != -1)
+        connectSignal(iSignalToConnect);
 
       id -= d->lstProperties.size();
     }
@@ -189,13 +256,32 @@ void PiiRemoteMetaObject::emitSignal(int id, const QByteArray& data)
               .arg(QString::fromLatin1(d->lstSignals[id].aSignature)));
   void* args[11];
   args[0] = 0;
-  for (int i=0; i<lstArgs.size(); ++i)
+  for (int i = 0; i < lstArgs.size(); ++i)
     {
       if (d->lstSignals[id].lstParamTypes[i] < int(QVariant::UserType))
         lstArgs[i].convert(QVariant::Type(d->lstSignals[id].lstParamTypes[i]));
-      args[i+1] = const_cast<void*>(lstArgs[i].constData());
+      args[i + 1] = const_cast<void*>(lstArgs[i].constData());
     }
+
+  // If this is a property change notifier, update property cache.
+  int iPropertyIndex = d->lstSignals[id].iPropertyIndex;
+  if (iPropertyIndex != -1)
+    {
+      Property& prop = *d->lstProperties[iPropertyIndex];
+      synchronized (prop.mutex)
+        prop.cachedValue = QVariant(prop.type, args[1]);
+    }
+
   QMetaObject::activate(d->pObject, &d->metaObject, id, args);
+}
+
+int PiiRemoteMetaObject::indexOfSignal(const QByteArray& signature) const
+{
+  const PII_D;
+  for (int i = 0; i < d->lstSignals.size(); ++i)
+    if (d->lstSignals[i].aSignature == signature)
+      return i;
+  return -1;
 }
 
 void PiiRemoteMetaObject::decodePushedData(const QString& sourceId, const QByteArray& data)
@@ -203,14 +289,9 @@ void PiiRemoteMetaObject::decodePushedData(const QString& sourceId, const QByteA
   //piiDebug(QString("Received %1 bytes to %2.").arg(data.size()).arg(strId));
   if (sourceId.startsWith("signals/"))
     {
-      PII_D;
-      QByteArray aSignature = sourceId.mid(8).toLatin1();
-      for (int i=0; i<d->lstSignals.size(); ++i)
-        if (d->lstSignals[i].aSignature == aSignature)
-          {
-            emitSignal(i, data);
-            return;
-          }
+      int iSignalIndex = indexOfSignal(sourceId.mid(8).toLatin1());
+      if (iSignalIndex != -1)
+        emitSignal(iSignalIndex, data);
     }
   else
     PiiRemoteObject::decodePushedData(sourceId, data);
@@ -218,51 +299,115 @@ void PiiRemoteMetaObject::decodePushedData(const QString& sourceId, const QByteA
 
 void PiiRemoteMetaObject::connectSignal(const char* signal)
 {
-  PII_D;
-  for (int i=0; i<d->lstSignals.size(); ++i)
-    if (!std::strcmp(d->lstSignals[i].aSignature, signal))
-      {
-        try
-          {
-            if (d->lstSignals[i].iConnectionCount == 0)
-              connectToChannel("signals/" + d->lstSignals[i].aSignature);
-            ++d->lstSignals[i].iConnectionCount;
-          }
-        catch (PiiException& ex)
-          {
-            addFailure();
-            piiWarning(ex.message());
-          }
-        break;
-      }
+  connectSignal(indexOfSignal(signal));
+}
+
+void PiiRemoteMetaObject::connectSignal(int index)
+{
+  if (index != -1)
+    {
+      PII_D;
+      try
+        {
+          Signal& signal = d->lstSignals[index];
+          if (signal.iConnectionCount == 0)
+            connectToChannel("signals/" + signal.aSignature);
+          ++signal.iConnectionCount;
+        }
+      catch (PiiException& ex)
+        {
+          addFailure();
+          piiWarning(ex.message());
+        }
+    }
+}
+
+void PiiRemoteMetaObject::disconnectSignal(int index)
+{
+  if (index != -1)
+    {
+      PII_D;
+      try
+        {
+          Signal& signal = d->lstSignals[index];
+          if (--signal.iConnectionCount == 0)
+            disconnectFromChannel("signals/" + signal.aSignature);
+        }
+      catch (PiiException& ex)
+        {
+          addFailure();
+          piiWarning(ex.message());
+        }
+    }
 }
 
 void PiiRemoteMetaObject::disconnectSignal(const char* signal)
 {
-  PII_D;
-  for (int i=0; i<d->lstSignals.size(); ++i)
-    if (!std::strcmp(d->lstSignals[i].aSignature, signal))
-      {
-        try
-          {
-            if (--d->lstSignals[i].iConnectionCount == 0)
-              disconnectFromChannel("signals/" + d->lstSignals[i].aSignature);
-          }
-        catch (PiiException& ex)
-          {
-            addFailure();
-            piiWarning(ex.message());
-          }
-        break;
-      }
+  disconnectSignal(indexOfSignal(signal));
 }
 
 void PiiRemoteMetaObject::serverUriChanged(const QString&)
 {
   createMetaObject();
+  findPropertyChangeNotifiers();
 }
 
 QList<PiiRemoteMetaObject::Signal>& PiiRemoteMetaObject::signalList()
 {
   return _d()->lstSignals;
+}
+
+void PiiRemoteMetaObject::findPropertyChangeNotifiers()
+{
+  PII_D;
+  // Scan all properties and see if they have a change notifier.
+  for (int i = 0; i < d->lstProperties.size(); ++i)
+    {
+      const Property& prop = *d->lstProperties[i];
+      QString strNotifierSignature(QString("%1Changed(%2)")
+                                   .arg(prop.strName)
+                                   .arg(QMetaType::typeName(prop.type)));
+
+      int iNotifierIndex = indexOfSignal(strNotifierSignature.toLatin1());
+      // Notifier found -> store the indices for fast run-time access
+      if (iNotifierIndex != -1)
+        {
+          d->lstSignals[iNotifierIndex].iPropertyIndex = i;
+          d->lstProperties[i]->iNotifierIndex = iNotifierIndex;
+        }
+    }
+}
+
+void PiiRemoteMetaObject::clearPropertyCache()
+{
+  PII_D;
+  for (int i = 0; i < d->lstProperties.size(); ++i)
+    clearPropertyCache(*d->lstProperties[i]);
+}
+
+void PiiRemoteMetaObject::clearPropertyCache(const QString& propertyName)
+{
+  PII_D;
+  for (int i = 0; i < d->lstProperties.size(); ++i)
+    {
+      Property& prop = *d->lstProperties[i];
+      if (prop.strName == propertyName)
+        {
+          clearPropertyCache(prop);
+          return;
+        }
+    }
+}
+
+void PiiRemoteMetaObject::clearPropertyCache(Property& prop)
+{
+  synchronized (prop.mutex)
+    {
+      prop.cachedValue = QVariant();
+      if (prop.bListening)
+        {
+          disconnectSignal(prop.iNotifierIndex);
+          prop.bListening = false;
+        }
+    }
 }

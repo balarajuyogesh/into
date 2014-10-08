@@ -85,6 +85,9 @@ namespace PiiNetwork
   enum StopMode { InterruptClients, WaitClients };
   enum { RemoteExceptionStatus = 666 };
 
+  /// @internal
+  enum PropertyFlag { ConstProperty = 1, VolatileProperty = 2 };
+
 #if QT_VERSION < 0x050000
   typedef int SocketDescriptorType;
 #else

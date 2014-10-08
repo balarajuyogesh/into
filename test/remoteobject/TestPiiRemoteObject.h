@@ -29,17 +29,23 @@ class ServerObject : public QObject
   Q_OBJECT
 
   Q_PROPERTY(int number READ number WRITE setNumber);
-  Q_PROPERTY(double floatingPoint READ floatingPoint);
+  Q_PROPERTY(double floatingPoint READ floatingPoint WRITE setFloatingPoint);
   Q_PROPERTY(PiiVariant variant READ variant WRITE setVariant);
+  Q_PROPERTY(int readOnly READ readOnly);
 
 public:
   ServerObject() :
     iNumber(0),
     dNumber(3.14159),
     bTest1Called(false),
+    bFloatingPointCalled(false),
+    bSetFloatingPointCalled(false),
+    bNumberCalled(false),
     iTest1Value(0),
     pCallingThread(0)
   {}
+
+  int readOnly() const { return -1; }
 
   void setNumber(int number)
   {
@@ -50,12 +56,20 @@ public:
   int number() const
   {
     pCallingThread = QThread::currentThread();
+    bNumberCalled = true;
     return iNumber;
   }
   double floatingPoint() const
   {
     pCallingThread = QThread::currentThread();
+    bFloatingPointCalled = true;
     return dNumber;
+  }
+  void setFloatingPoint(double value)
+  {
+    pCallingThread = QThread::currentThread();
+    Q_UNUSED(value); // no effect
+    bSetFloatingPointCalled = true;
   }
   void setVariant(const PiiVariant& var)
   {
@@ -71,7 +85,7 @@ public:
 
   int iNumber;
   double dNumber;
-  bool bTest1Called;
+  mutable bool bTest1Called, bFloatingPointCalled, bSetFloatingPointCalled, bNumberCalled;
   int iTest1Value;
   PiiVariant varValue;
   mutable QThread* pCallingThread;
@@ -137,6 +151,7 @@ private slots:
   void cleanupTestCase();
   void exceptions();
   void singleThreaded();
+  void propertyCache();
 
 signals:
   void test1();

@@ -119,7 +119,8 @@ public:
    * Returns the ID of the remote object instance. The ID is available
    * only after setServerUri() has been called.
    */
-  QString id() const;
+  QString serverId() const;
+  QString clientId() const;
 
   /**
    * Sets the number of times the class will try to connect to a
@@ -246,7 +247,8 @@ protected:
     PiiAtomicInt iFailureCount;
     QStringList lstConnectedSources;
     int iMaxFailureCount;
-    QString strId;
+    QString strClientId;
+    QString strServerId;
     QPointer<PiiObjectServer> pLocalServer;
     QBuffer buffer;
   } *d;

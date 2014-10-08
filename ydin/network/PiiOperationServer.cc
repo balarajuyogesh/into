@@ -150,6 +150,10 @@ void PiiOperationServer::handleRequest(const QString& uri, PiiHttpDevice* dev,
     PiiQObjectServer::handleRequest(uri, dev, controller);
 }
 
+PiiOperationServer::ChannelImpl::ChannelImpl(const QString& clientId) :
+  PiiQObjectServer::ChannelImpl(clientId)
+{}
+
 PiiOperationServer::ChannelImpl::~ChannelImpl()
 {
   qDeleteAll(_hashInputs);
@@ -182,7 +186,7 @@ bool PiiOperationServer::ChannelImpl::tryToReceive(PiiAbstractInputSocket* sende
   return false;
 }
 
-PiiQObjectServer::ChannelImpl* PiiOperationServer::createChannel() const
+PiiQObjectServer::ChannelImpl* PiiOperationServer::createChannel(const QString& clientId) const
 {
-  return new ChannelImpl;
+  return new ChannelImpl(clientId);
 }

@@ -79,8 +79,8 @@ void TestPiiRemoteObject::initTestCase()
       QFAIL("Could not connect to tcp://127.0.0.1:3142/");
     }
 
-  QCOMPARE(_pClient1->id(), _pObjectServer1->id());
-  QCOMPARE(_pClient2->id(), _pObjectServer2->id());
+  QCOMPARE(_pClient1->serverId(), _pObjectServer1->id());
+  QCOMPARE(_pClient2->serverId(), _pObjectServer2->id());
 }
 
 void TestPiiRemoteObject::cleanupTestCase()
@@ -113,8 +113,14 @@ void TestPiiRemoteObject::safetyLevels()
 void TestPiiRemoteObject::properties()
 {
   const QMetaObject* pMetaObject = _pClient1->metaObject();
-  QCOMPARE(pMetaObject->propertyCount(), 4);
+  QCOMPARE(pMetaObject->propertyCount(), 5);
   QCOMPARE(pMetaObject->property(1).name(), "number");
+  QCOMPARE(pMetaObject->property(2).name(), "floatingPoint");
+  QCOMPARE(pMetaObject->property(3).name(), "variant");
+  QCOMPARE(pMetaObject->property(4).name(), "readOnly");
+
+  QVERIFY(!pMetaObject->property(4).isWritable());
+  QVERIFY(!_pClient1->setProperty("readOnly", 123));
 
   //qDebug("setting number");
   QVERIFY(_pClient1->setProperty("number", 314));
@@ -163,6 +169,7 @@ void TestPiiRemoteObject::functionSignatures()
            QStringList()
            << "numberChanged(int)"
            << "variantChanged(PiiVariant)"
+           << "floatingPointChanged(double)"
            << "test1()"
            << "test1(int)"
            << "QString test2()"
@@ -170,7 +177,8 @@ void TestPiiRemoteObject::functionSignatures()
            << "int plus(int,int)"
            << "thrower(int)");
 
-  int iFirstSlotIndex = pMetaObject->methodOffset() + 2;
+
+  int iFirstSlotIndex = pMetaObject->methodOffset() + 3;
   QCOMPARE(pMetaObject->indexOfMethod("test1()"), iFirstSlotIndex);
   QCOMPARE(pMetaObject->indexOfMethod("test1(int)"), iFirstSlotIndex + 1);
   QCOMPARE(pMetaObject->indexOfMethod("test2()"), iFirstSlotIndex + 2);
@@ -210,7 +218,7 @@ void TestPiiRemoteObject::remoteSignals()
 void TestPiiRemoteObject::functionCalls()
 {
   QString strReturn;
-  QVERIFY(_pClient1->metaObject()->method(_pClient1->metaObject()->methodOffset() + 4)
+  QVERIFY(_pClient1->metaObject()->method(_pClient1->metaObject()->methodOffset() + 5)
           .invoke(_pClient1, Qt::DirectConnection, QGenericReturnArgument()));
   QVERIFY(QMetaObject::invokeMethod(_pClient1, "test2", Qt::DirectConnection,
                                     Q_RETURN_ARG(QString, strReturn)));
@@ -276,6 +284,71 @@ void TestPiiRemoteObject::singleThreaded()
   _pClient2->call<void>("functions/test1");
   QVERIFY(_serverObject2.bTest1Called);
   QVERIFY(_serverObject2.pCallingThread == QThread::currentThread());
+
+  QVERIFY(connect(this, SIGNAL(test1()), _pClient2, SLOT(test1())));
+  QVERIFY(connect(this, SIGNAL(test1(int)), _pClient2, SLOT(test1(int))));
+
+  emit test1();
+  QVERIFY(_serverObject2.bTest1Called);
+  QVERIFY(_serverObject2.pCallingThread == QThread::currentThread());
+  emit test1(-123);
+  QCOMPARE(_serverObject2.iTest1Value, -123);
+  QVERIFY(_serverObject2.pCallingThread == QThread::currentThread());
+
+  QVERIFY(connect(_pClient2, SIGNAL(numberChanged(int)), this, SLOT(storeNumber(int)), Qt::DirectConnection));
+  QVERIFY(connect(_pClient2, SIGNAL(variantChanged(PiiVariant)), this, SLOT(storeVariant(PiiVariant)), Qt::DirectConnection));
+  QVERIFY(_pClient2->setProperty("number", 315));
+  QCOMPARE(_serverObject2.iNumber, 315);
+  QVERIFY(_pClient2->setProperty("variant", Pii::createQVariant(PiiMatrix<double>(2,2))));
+  PiiDelay::msleep(100);
+  QCOMPARE(_iNumber, 315);
+  QCOMPARE(_variant.type(), unsigned(PiiYdin::DoubleMatrixType));
+  QVERIFY(Pii::equals(_variant.valueAs<PiiMatrix<double> >(), PiiMatrix<double>(2, 2)));
+}
+
+void TestPiiRemoteObject::propertyCache()
+{
+  _pClient1->clearPropertyCache();
+  _serverObject1.bFloatingPointCalled =
+    _serverObject1.bSetFloatingPointCalled = false;
+  // This property has an implicit change notifier. It won't change
+  // value to 0.0, but the cache mechanism should still have valid
+  // data (3.14159).
+  QVERIFY(_pClient1->setProperty("floatingPoint", 0.0));
+  // Setting a property should check its value after change.
+  QVERIFY(_serverObject1.bFloatingPointCalled);
+  QVERIFY(_serverObject1.bSetFloatingPointCalled);
+
+  _serverObject1.bFloatingPointCalled = false;
+  // The property should now be in cache. This shouldn't therefore
+  // call the accessor on server.
+  QCOMPARE(_pClient1->property("floatingPoint").toDouble(), 3.14159);
+  QVERIFY(!_serverObject1.bFloatingPointCalled);
+
+  // Same again from empty cache
+  _pClient1->clearPropertyCache("floatingPoint");
+  _serverObject1.bFloatingPointCalled =
+    _serverObject1.bSetFloatingPointCalled = false;
+  QVERIFY(_pClient1->setProperty("floatingPoint", 0.0));
+  QVERIFY(_serverObject1.bFloatingPointCalled);
+  QVERIFY(_serverObject1.bSetFloatingPointCalled);
+  _serverObject1.bFloatingPointCalled = false;
+  QCOMPARE(_pClient1->property("floatingPoint").toDouble(), 3.14159);
+  QVERIFY(!_serverObject1.bFloatingPointCalled);
+
+  _serverObject1.bNumberCalled = false;
+  QVERIFY(_pClient1->setProperty("number", 999999));
+  QVERIFY(_serverObject1.bNumberCalled);
+  _serverObject1.bNumberCalled = false;
+  QCOMPARE(_pClient1->property("number").toInt(), 999999);
+  QVERIFY(!_serverObject1.bNumberCalled);
+
+  // Sends notification signal, which should automatically update
+  // client's cache.
+  _serverObject1.setNumber(111111);
+  PiiDelay::msleep(100);
+  QCOMPARE(_pClient1->property("number").toInt(), 111111);
+  QVERIFY(!_serverObject1.bNumberCalled);
 }
 
 void ServerObject::thrower(int type)

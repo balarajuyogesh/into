@@ -301,10 +301,10 @@ void PiiObjectServer::handleRequest(const QString& uri, PiiHttpDevice* dev,
           if (strFunction == "new")
             {
               PII_REQUIRE_HTTP_METHOD("GET");
-              QString strId = createNewChannel();
-              dev->print(strId);
+              QString strChannelId = createNewChannel(dev->requestHeader().value("X-Client-ID"));
+              dev->print(strChannelId);
               dev->putChar('\n');
-              channelById(strId)->push(dev, controller, &lock); // may throw
+              channelById(strChannelId)->push(dev, controller, &lock); // may throw
             }
           else
             // strFunction must be of the form channel-id/action
@@ -416,18 +416,18 @@ void PiiObjectServer::collectGarbage()
 }
 
 // channelMutex must be held when calling this function
-QString PiiObjectServer::createNewChannel()
+QString PiiObjectServer::createNewChannel(const QString& clientId)
 {
   // Remove curly braces around the uuid
   QString strId = QUuid::createUuid().toString().mid(1);
   strId.chop(1);
-  d->hashChannelsById.insert(strId, createChannel());
+  d->hashChannelsById.insert(strId, createChannel(clientId));
   return strId;
 }
 
-PiiObjectServer::ChannelImpl* PiiObjectServer::createChannel() const
+PiiObjectServer::ChannelImpl* PiiObjectServer::createChannel(const QString& clientId) const
 {
-  return new ChannelImpl;
+  return new ChannelImpl(clientId);
 }
 
 int PiiObjectServer::indexOf(const QString& signature, const FunctionList& lst) const
@@ -465,6 +465,17 @@ void PiiObjectServer::channelDeleted(Channel* channel)
   for (FunctionList::const_iterator i=d->lstCallbacks.constBegin(); i != d->lstCallbacks.constEnd(); ++i)
     static_cast<CallbackFunction*>(i->second)->lstChannels.removeOne(channel);
 }
+
+void PiiObjectServer::sendToOtherClients(const QString& sendingClientId,
+                                         const QString& sourceId,
+                                         const QByteArray& encodedValue)
+{
+  for (QHash<QString, ChannelImpl*>::const_iterator it = d->hashChannelsById.constBegin();
+       it != d->hashChannelsById.constEnd(); ++it)
+    if (sendingClientId.isEmpty() || (*it)->clientId() != sendingClientId)
+      (*it)->enqueuePushData(sourceId, encodedValue);
+}
+
 
 void PiiObjectServer::setChannelTimeout(int channelTimeout) { d->iChannelTimeout = channelTimeout; }
 int PiiObjectServer::channelTimeout() const { return d->iChannelTimeout; }
@@ -510,17 +521,22 @@ QVariant PiiObjectServer::callBackList(const QString& function, QVariantList& pa
   PII_THROW(PiiInvalidArgumentException, tr("No acceptable overload found."));
 }
 
+PiiObjectServer::Channel::Channel(const QString& clientId) :
+  _strClientId(clientId)
+{}
 
 PiiObjectServer::Channel::~Channel()
 {}
 
-bool PiiObjectServer::Channel::enqueuePushData(const QString& uri, const QByteArray& data)
+QString PiiObjectServer::Channel::clientId() const { return _strClientId; }
+
+bool PiiObjectServer::Channel::enqueuePushData(const QString& sourceId, const QByteArray& data)
 {
   QMutexLocker lock(&_queueMutex);
   if (_dataQueue.size() >= 20)
     return false;
 
-  _dataQueue.enqueue(qMakePair(uri, data));
+  _dataQueue.enqueue(qMakePair(sourceId, data));
   if (_dataQueue.size() == 20)
     piiWarning("Maximum size of channel buffer reached.");
 
@@ -530,7 +546,8 @@ bool PiiObjectServer::Channel::enqueuePushData(const QString& uri, const QByteAr
   return true;
 }
 
-PiiObjectServer::ChannelImpl::ChannelImpl() :
+PiiObjectServer::ChannelImpl::ChannelImpl(const QString& clientId) :
+  Channel(clientId),
   _bPushing(false),
   _bKilled(false)
 {
