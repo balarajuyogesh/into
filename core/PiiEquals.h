@@ -19,6 +19,20 @@
 /// @hide
 namespace Pii
 {
+  /* The ptrEquals() function allows one to compare two objects, given
+     their addresses. It uses the SFNIAE trick to implement priority
+     order:
+
+     1. If there is a function "equals()" that can be called with two
+        objects of the type being compared, it will be called.
+
+     2. If there is an operator==() overload that can be called with
+        two objects of the type being compared, it will be selected next.
+
+     3. If neither can be done, the objects are deemed to be equal if
+        and only if they are in the same address.
+   */
+
   void equals(void*, void*);
 
   // Used in a SFINAE
@@ -27,6 +41,24 @@ namespace Pii
   {
     typedef int Type;
   };
+
+  // Selected when there is an operator== () overload that can be
+  // called with the input parameters.
+  template <class T>
+  bool ptrEquals2(const T* a, const T* b,
+                  typename EqualsHelper<sizeof(std::declval<T>() ==
+                                               std::declval<T>())>::Type = 0)
+  {
+    return *a == *b;
+  }
+
+  // Selected otherwise. This function will be called if and only if
+  // there is no equals() or operator==() overload for the type T.
+  template <class T>
+  bool ptrEquals2(const void* a, const void* b)
+  {
+    return a == b;
+  }
 
   // Selected when there is an equals() overload that can be called
   // with the input parameters.
@@ -42,9 +74,10 @@ namespace Pii
   template <class T>
   bool ptrEquals(const void* a, const void* b)
   {
-    return *reinterpret_cast<const T*>(a) == *reinterpret_cast<const T*>(b);
+    // Repeat the trick to operator==
+    return ptrEquals2<T>(reinterpret_cast<const T*>(a), reinterpret_cast<const T*>(b));
   }
 }
-  /// @endhide
+/// @endhide
 
 #endif //_PIIEQUALS_H
