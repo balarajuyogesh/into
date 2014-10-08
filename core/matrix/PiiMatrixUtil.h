@@ -364,7 +364,7 @@ namespace Pii
    * be added to the right side of `mat1`. In this case the number of
    * rows must be equal in both matrices.
    *
-   * @exception PiiMathException& if matrix sizes don't match
+   * @exception PiiInvalidArgumentException& if matrix sizes don't match
    */
   template <class Matrix1, class Matrix2>
   PiiMatrix<typename Matrix1::value_type> concatenate(const Matrix1& mat1,

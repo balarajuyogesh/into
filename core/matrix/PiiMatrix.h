@@ -295,9 +295,9 @@ template <class T> struct PiiMatrixTraits<PiiMatrix<T,-1,-1> >
  * checking. Thus, make sure you don't reference memory outside of the
  * matrix.
  *
- * Most routines that perform matrix math may throw a
- * PiiMathException. Such an exception may be thrown if the sizes of
- * two matrices do not match for calculation.
+ * Most routines that perform matrix throw a
+ * PiiInvalidArgumentException if the sizes of two matrices do not
+ * match for calculation.
  *
  * The data within a matrix is organized so that the items in a row
  * (scan line) always occupy adjacent memory locations. The pointer to
