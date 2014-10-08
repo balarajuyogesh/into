@@ -70,7 +70,7 @@ template <class T> void PiiDiffOperation::diff(const PiiVariant& obj)
         {
           emitObject(obj.valueAs<T>() - d->lastObject.valueAs<T>());
         }
-      catch (PiiMathException&)
+      catch (PiiException&)
         {
           PII_THROW(PiiExecutionException, tr("Cannot calculate the difference between matrices of different size."));
         }

@@ -131,7 +131,7 @@ template <class T, class U> void PiiComparisonOperation::compare(const T& op1, c
           PII_THROW(PiiExecutionException, tr("Unknown comparison function."));
         }
     }
-  catch (PiiMathException& ex)
+  catch (PiiException& ex)
     {
       PII_THROW(PiiExecutionException, ex.message());
     }
