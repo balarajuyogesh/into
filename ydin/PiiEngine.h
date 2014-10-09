@@ -112,6 +112,14 @@ public:
   ~PiiEngine();
 
   /**
+   * Sets the plug-in load path. If the load path is non-empty,
+   * loadPlugin() will load plugins with no path only from the
+   * specified path.
+   */
+  static void setPluginPath(const QString& path);
+  static QString pluginPath();
+
+  /**
    * Loads a plug-in into the engine. The name of the plug-in is the
    * name of the plug-in library file without a file name extension.
    * For example, to load the flow control plug-in
@@ -130,6 +138,10 @@ public:
    * Windows). Note that in this case you need to use the full file
    * name (preferably without the extension, though).
    *
+   * If the name of the plug-in is not an absolute path and
+   * [pluginPath()] is set, the plug-in will be searched only in the
+   * plug-in path.
+   *
    * ~~~(c++)
    * PiiEngine::loadPlugin("relative/path/to/libmyplugin");
    * PiiEngine::loadPlugin("/absolute/path/to/libmyotherplugin");
@@ -142,7 +154,9 @@ public:
    *
    * Successive calls to loadPlugin() with the same plug-in name are
    * OK. To really unload the plug-in one needs to issue the same
-   * number of [unloadPlugin()] calls.
+   * number of [unloadPlugin()] calls. Note that the name is used as a
+   * key. If you load the same file using two different paths, there
+   * will be two plug-in instances.
    *
    * This function is thread-safe.
    *

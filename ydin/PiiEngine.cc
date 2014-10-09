@@ -17,6 +17,7 @@
 #include "PiiEngine.h"
 #include <PiiSerializableExport.h>
 #include <PiiUtil.h>
+#include <PiiFileUtil.h>
 #include "PiiPlugin.h"
 #include <PiiGenericTextOutputArchive.h>
 #include <PiiGenericBinaryOutputArchive.h>
@@ -98,6 +99,13 @@ void PiiEngine::loadPlugins(const QStringList& plugins)
     loadPlugin(plugins[i]);
 }
 
+static QString pluginNameToPath(const QString& name)
+{
+  if (PiiEngine::pluginPath().isEmpty() || QFileInfo(name).isAbsolute())
+    return name;
+  return Pii::fixPath(PiiEngine::pluginPath()) + name;
+}
+
 PiiEngine::Plugin PiiEngine::loadPlugin(const QString& name)
 {
   QMutexLocker lock(&_pluginLock);
@@ -132,7 +140,7 @@ PiiEngine::Plugin PiiEngine::loadPlugin(const QString& name)
   };
 
   // Load library
-  Unloader unloader(new QLibrary(name));
+  Unloader unloader(new QLibrary(pluginNameToPath(name)));
 
   unloader.pLib->setLoadHints(QLibrary::ExportExternalSymbolsHint);
   if (!unloader.pLib->load())
@@ -310,6 +318,21 @@ PiiEngine* PiiEngine::load(const QString& fileName,
   return pEngine;
 }
 
+static QString* pluginPathPtr()
+{
+  static QString strPluginPath;
+  return &strPluginPath;
+}
+
+void PiiEngine::setPluginPath(const QString& path)
+{
+  *pluginPathPtr() = path;
+}
+
+QString PiiEngine::pluginPath()
+{
+  return *pluginPathPtr();
+}
 
 PiiEngine::Plugin::Data::Data() : pLibrary(0), iRefCount(0)
 {
