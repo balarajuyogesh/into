@@ -28,7 +28,7 @@ struct genicam_device
                PylonGrabberType* g) :
     camera(c), grabber(g)
   {}
-               
+
   PylonCameraType *camera;
   PylonGrabberType *grabber;
   std::vector<void*> vecHandles;
@@ -57,7 +57,7 @@ static void print_values(genicam_device* device)
   std::cout << "ExposureMode: " << device->camera->ExposureMode.ToString() << std::endl;
 
   if (device->camera->DeviceScanType.GetValue() != DeviceScanType_Areascan)
-    { 
+    {
       // ShaftEncoderModuleMode
       std::cout << std::endl;
       std::cout << "ShaftEncoderModuleMode: "
@@ -68,7 +68,7 @@ static void print_values(genicam_device* device)
                 << device->camera->ShaftEncoderModuleCounterMax.ToString() << std::endl;
       std::cout << "ShaftEncoderModuleReverseCounterMax: "
                 << device->camera->ShaftEncoderModuleReverseCounterMax.ToString() << std::endl;
-  
+
       // FrequencyConverter
       std::cout << std::endl;
       std::cout << "FrequencyConverterSignalAlignment: "
@@ -143,7 +143,7 @@ GENICAM_WAPI(int) genicam_terminate(void)
               retValue = 1;
             }
         }
-      
+
       try
         {
           CTlFactory::GetInstance().ReleaseTl(pTransportLayer);
@@ -220,7 +220,7 @@ GENICAM_WAPI(const char*) genicam_next_camera(const char* camera)
 GENICAM_WAPI(int) genicam_open_device(const char* serial, genicam_device** device)
 {
   *device = 0;
-  
+
   // Get all attached cameras and throw exception if no camera is found
   DeviceInfoList_t devices;
   try
@@ -249,7 +249,7 @@ GENICAM_WAPI(int) genicam_open_device(const char* serial, genicam_device** devic
             {
               IPylonDevice *pDevice = pTransportLayer->CreateDevice(*i);
               CDeviceInfo info = pDevice->GetDeviceInfo();
-              
+
               // Create camera object
               pCamera = new PylonCameraType(pDevice);
               break;
@@ -279,14 +279,14 @@ GENICAM_WAPI(int) genicam_open_device(const char* serial, genicam_device** devic
       delete pCamera;
       return 1;
     }
-  
+
   if (uiGrabbers <= 0)
     {
       delete pCamera;
       set_error("Couldn't find any stream grabbers.");
       return 1;
     }
-      
+
   // Get the first stream grabber object of the selected camera
   PylonGrabberType* pGrabber = new PylonGrabberType(pCamera->GetStreamGrabber(0));
 
@@ -298,9 +298,9 @@ GENICAM_WAPI(int) genicam_open_device(const char* serial, genicam_device** devic
       // Initialize default values for all trigger modes
       pCamera->AcquisitionMode.SetValue(AcquisitionMode_Continuous);
       pCamera->ExposureMode.SetValue(ExposureMode_Timed);
-		
+
 	  if (pCamera->DeviceScanType.GetValue() != DeviceScanType_Areascan)
-	 { 
+	 {
       // Initialize ShaftEncoderModule
       pCamera->ShaftEncoderModuleLineSelector.SetValue(ShaftEncoderModuleLineSelector_PhaseA);
       pCamera->ShaftEncoderModuleLineSource.SetValue(ShaftEncoderModuleLineSource_Line1);
@@ -321,7 +321,7 @@ GENICAM_WAPI(int) genicam_open_device(const char* serial, genicam_device** devic
       delete pCamera;
       return 1;
     }
-      
+
   try
     {
       // Open the stream grabber
@@ -356,7 +356,7 @@ GENICAM_WAPI(int) genicam_close_device(genicam_device* device)
   try
     {
       genicam_deregister_framebuffers(device);
-      
+
       // Free all resources used for grabbing
       device->grabber->Close();
       device->camera->Close();
@@ -366,11 +366,11 @@ GENICAM_WAPI(int) genicam_close_device(genicam_device* device)
       set_error("Failed to close device.", e);
       retValue = 1;
     }
-  
+
   delete device->grabber;
   delete device->camera;
   delete device;
-  
+
   vecDevices.erase(std::find(vecDevices.begin(), vecDevices.end(), device));
 
   return retValue;
@@ -386,18 +386,18 @@ GENICAM_WAPI(int) genicam_register_framebuffers(genicam_device* device, unsigned
   try
     {
       device->vecHandles.resize(count,0);
-      
+
       // Create an image buffer
       unsigned uiImageSize = (unsigned)device->camera->PayloadSize();
-      
+
       // Init grabber parameters
       device->grabber->MaxBufferSize.SetValue(uiImageSize);
       device->grabber->MaxNumBuffer.SetValue(count);
-      
+
       // Allocate all resources for grabbing. Critical parameters like
       // image size must not be changed until FinishGrab() is called.
       device->grabber->PrepareGrab();
-      
+
       // Buffers used for grabbing must be registered at the stream
       // grabber. The registration returns a handle to be used for
       // queuing the buffer
@@ -421,17 +421,17 @@ GENICAM_WAPI(int) genicam_deregister_framebuffers(genicam_device* device)
   try
     {
       device->grabber->CancelGrab();
-      
+
       // Get all buffers back
       for (GrabResult r; device->grabber->RetrieveResult(r););
-      
+
       // Deregister handles
       for (unsigned int i=0; i<device->vecHandles.size(); ++i)
         {
           if (device->vecHandles[i] != 0)
             device->grabber->DeregisterBuffer(device->vecHandles[i]);
         }
-      
+
       device->vecHandles.clear();
       device->vecReservedHandles.clear();
 
@@ -459,14 +459,14 @@ GENICAM_WAPI(int) genicam_grab_frame(genicam_device* device, unsigned char** buf
         {
           // First we 'trig' the camera
           device->camera->TriggerSoftware.Execute();
-          
+
           // Then calculate timeout
           if (device->camera->DeviceScanType.GetValue() == DeviceScanType_Areascan)
             {
               int expTime = 0;
               if (genicam_get_property(device, "exposureTime", &expTime) != 0)
                 return 1;
-              
+
               timeout = expTime * 1000 + 500; //expTime + 500ms
             }
           else //LineScan
@@ -476,11 +476,11 @@ GENICAM_WAPI(int) genicam_grab_frame(genicam_device* device, unsigned char** buf
               if (genicam_get_property(device, "exposurePeriod", &linePeriod) != 0 ||
                   genicam_get_property(device, "height", &height) != 0)
                 return 1;
-              
+
               timeout = linePeriod * height + 500;
             }
         }
-  
+
       if (device->grabber->GetWaitObject().Wait(timeout))
         {
           //Get an item from the grabber's output queue
@@ -489,7 +489,7 @@ GENICAM_WAPI(int) genicam_grab_frame(genicam_device* device, unsigned char** buf
               device->vecReservedHandles.push_back(grabResult.Handle());
               if (!grabResult.Succeeded())
                 {
-                  set_error(std::string("Failed to grab frame. ") + 
+                  set_error(std::string("Failed to grab frame. ") +
                             grabResult.GetErrorDescription().c_str());
                   return 2;
                 }
@@ -553,7 +553,7 @@ GENICAM_WAPI(int) genicam_start_capture(genicam_device* device)
       set_error("Failed to start capture.", e);
       return 1;
     }
-  
+
   return 0;
 }
 
@@ -677,7 +677,7 @@ GENICAM_WAPI(int) genicam_set_property(genicam_device* device, const char* name,
                     {
                       double dError = double(iMultiplier)/iDivider - dRatio;
                       if (dError < 0) dError = -dError; // no fabs() to reduce dependencies
-                      
+
                       if (dError < dSmallestError)
                         {
                           dSmallestError = dError;
@@ -688,7 +688,7 @@ GENICAM_WAPI(int) genicam_set_property(genicam_device* device, const char* name,
                 }
               std::cout << "Requested ratio: " << dRatio << ", got " << double(iBestMultiplier)/iBestDivider
                         << " (" << iBestMultiplier << '/' << iBestDivider << ")\n";
-              
+
               device->camera->FrequencyConverterPreventOvertrigger.SetValue(1);
               device->camera->FrequencyConverterMultiplier.SetValue(iBestMultiplier);
               device->camera->FrequencyConverterPostDivider.SetValue(iBestDivider);
@@ -738,7 +738,7 @@ GENICAM_WAPI(int) genicam_set_property(genicam_device* device, const char* name,
 
           if (value < min) value = min;
           if (value > max) value = max;
-          
+
           device->camera->ExposureTimeRaw.SetValue(value);
         }
       else if (!strcmp(name, "exposurePeriod"))
@@ -820,7 +820,7 @@ GENICAM_WAPI(int) genicam_get_property(genicam_device* device, const char* name,
              RgbFormat = 16,
              BgrFormat
           */
-          
+
           int format = device->camera->PixelFormat.GetValue();
           switch (format)
             {
