@@ -23,6 +23,7 @@
 #include "PiiIterator.h"
 #include "PiiTypeTraits.h"
 #include "PiiMetaTemplate.h"
+#include <QString>
 
 /**
  * Throws a PiiInvalidArgumentException due to invalid matrix sizes.
