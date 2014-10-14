@@ -94,14 +94,23 @@ namespace Pii
         copyMetaType(expectedType, source.constData(), args[0]);
         return true;
       }
-    else if (source.type() == QVariant::UserType &&
-       source.userType() == expectedType)
+    else if (expectedType == QMetaType::QVariant)
       {
+        copyMetaType(expectedType, &source, args[0]);
+      }
+    else if (source.type() == QVariant::UserType &&
+             source.userType() == expectedType)
+      {
+#if QT_VERSION >= 0x050000
+        QMetaType::construct(expectedType, args[0], source.constData());
+#else
         *reinterpret_cast<QVariant*>(args[1]) = source;
         *reinterpret_cast<int*>(args[2]) = 1;
+#endif
         return true;
       }
-    else if (expectedType < int(QVariant::UserType) && source.canConvert(QVariant::Type(expectedType)))
+    else if (expectedType < int(QVariant::UserType) &&
+             source.canConvert(QVariant::Type(expectedType)))
       {
         QVariant varConverted(source);
         varConverted.convert(QVariant::Type(expectedType));
