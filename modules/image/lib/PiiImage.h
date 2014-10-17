@@ -273,7 +273,7 @@ namespace PiiImage
 
   /**
    * Create a size-by-size Gaussian low-pass filter. Size must be odd.
-   * The filter is cut at approximately \(3\sigma\) and normalized
+   * The filter is cut at approximately \(2\sigma\) and normalized
    * so that it sums up to unity.
    */
   PII_IMAGE_EXPORT PiiMatrix<double> makeGaussian(unsigned int size);

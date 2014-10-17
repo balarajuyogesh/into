@@ -46,45 +46,46 @@ namespace PiiImage
   PiiMatrix<double> makeGaussian(unsigned int size)
   {
     size |= 1; // make odd
-    PiiMatrix<double> result(PiiMatrix<double>::uninitialized(size,size));
-    int center = size/2;
-    // Cut the filter at 3 times std
-    double sigma = (double)center/3.0;
-    double exponentScale = -0.5/(sigma*sigma);
-    double scale = 0.5 / (M_PI*sigma*sigma);
-    double sum = 0;
-    for (int r=-center; r<=center; r++)
-      for (int c=-center; c<=center; c++ )
+    PiiMatrix<double> matResult(PiiMatrix<double>::uninitialized(size,size));
+    int iCenter = size / 2;
+    // Cut the filter at 2 times std
+    double dSigma = double(iCenter) / 2.0;
+    double dExponentScale = -0.5 / (dSigma * dSigma);
+    double dSum = 0;
+    for (int r = -iCenter; r <= iCenter; ++r)
+      for (int c = -iCenter; c <= iCenter; ++c)
         {
-          double val = scale * exp((r*r + c*c) * exponentScale);
-          sum += val;
-          result(r+center,c+center) = val;
+          double dVal = exp((r * r + c * c) * dExponentScale);
+          dSum += dVal;
+          matResult(r + iCenter, c + iCenter) = dVal;
         }
-    result /= sum;
-    return result;
+    matResult /= dSum;
+    return matResult;
   }
 
   PiiMatrix<double> makeLoGaussian(unsigned int size)
   {
     size |= 1; // make odd
-    PiiMatrix<double> result(PiiMatrix<double>::uninitialized(size,size));
-    int center = size/2;
+    PiiMatrix<double> matResult(PiiMatrix<double>::uninitialized(size,size));
+    int iCenter = size / 2;
     // Cut the filter at 3 times std
-    double sigma = (double)center/3.0;
-    double exponentScale = -0.5/(sigma*sigma);
-    double scale = -1.0 / (M_PI*std::pow(sigma,4));
-    double mean = 0;
-    for (int r=-center; r<=center; r++)
-      for (int c=-center; c<=center; c++ )
+    double dSigma = double(iCenter) / 3.0;
+    double dExponentScale = -0.5 / (dSigma * dSigma);
+    double dMean = 0;
+    for (int r = -iCenter; r <= iCenter; ++r)
+      for (int c = -iCenter; c <= iCenter; ++c)
         {
-          double sqDist = c*c + r*r;
-          double val = scale * (1 + sqDist*exponentScale) * exp(sqDist * exponentScale);
-          mean += val;
-          result(r+center,c+center) = val;
+          double dExponent = dExponentScale * (c * c + r * r);
+          double dVal = (1 + dExponent) * exp(dExponent);
+          dMean += dVal;
+          matResult(r + iCenter, c + iCenter) = dVal;
         }
-
-    result -= mean/(size*size);
-    return result;
+    dMean /= size * size;
+    // The maximum value is now 1 at the center.
+    matResult -= dMean;
+    // Max is now 1 - dMean -> scale so that the center is -4.
+    matResult *= -4.0 / (1.0 - dMean);
+    return matResult;
   }
 
   static inline bool nonZeroSums(int iSum, double dSum)
