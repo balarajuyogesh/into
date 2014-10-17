@@ -133,7 +133,7 @@ int PiiRemoteMetaObject::metaCall(QMetaObject::Call callType, int id, void** arg
         callList("functions/" + d->lstFunctions[id].strName,
                  QVariantList());
 
-      if (args[0] != 0 && d->lstFunctions[id].returnType != 0 &&
+      if (args[0] != 0 && d->lstFunctions[id].returnType != QMetaType::Void &&
           !Pii::copyMetaType(varReturnValue, d->lstFunctions[id].returnType, args))
         PII_THROW(PiiNetworkException, tr("Unexpected return value from %1.")
                   .arg(QString::fromLatin1(d->lstFunctions[id].aSignature)));
