@@ -285,12 +285,11 @@ QVariant PiiQObjectServer::readProperty(const QString& name, bool lock)
 
 QVariant PiiQObjectServer::objectProperty(const QString& name)
 {
-  const PII_D;
   switch (propertySafetyLevel(name))
     {
     case AccessPropertyFromMainThread:
       {
-        Q_ASSERT(d->pObject->thread() == qApp->thread());
+        Q_ASSERT(_d()->pObject->thread() == qApp->thread());
         QVariant varResult;
         if (QThread::currentThread() != qApp->thread())
           QMetaObject::invokeMethod(this, "readProperty",
@@ -348,13 +347,12 @@ QVariant PiiQObjectServer::setSingleProperty(const QString& name, const QVariant
 
 bool PiiQObjectServer::setObjectProperties(const QVariantMap& props)
 {
-  PII_D;
   switch (strictestPropertySafetyLevel())
     {
     case AccessPropertyFromMainThread:
     case WritePropertyFromMainThread:
       {
-        Q_ASSERT(d->pObject->thread() == qApp->thread());
+        Q_ASSERT(_d()->pObject->thread() == qApp->thread());
         bool bResult = true;
         if (QThread::currentThread() != qApp->thread())
           QMetaObject::invokeMethod(this, "setProperties",
@@ -376,13 +374,12 @@ bool PiiQObjectServer::setObjectProperties(const QVariantMap& props)
 
 QVariant PiiQObjectServer::setObjectProperty(const QString& name, const QVariant& value)
 {
-  PII_D;
   switch (propertySafetyLevel(name))
     {
     case AccessPropertyFromMainThread:
     case WritePropertyFromMainThread:
       {
-        Q_ASSERT(d->pObject->thread() == qApp->thread());
+        Q_ASSERT(_d()->pObject->thread() == qApp->thread());
         QVariant varResult;
         if (QThread::currentThread() != qApp->thread())
           QMetaObject::invokeMethod(this, "setSingleProperty",
