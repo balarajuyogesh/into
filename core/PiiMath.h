@@ -22,6 +22,8 @@
 #include "PiiFunctional.h"
 #include "PiiHeap.h"
 #include "PiiMatrixValue.h"
+#include "PiiPreprocessor.h"
+
 #include <cstdlib>
 #include <complex>
 
@@ -611,6 +613,25 @@ namespace Pii
   }
 
   /**
+   * Rounds a float argument to the closest integer. Uses the C99
+   * standard roundf() function if available.
+   */
+  inline float round(float value)
+  {
+#ifdef __USE_ISOC99
+    return ::roundf(value);
+#else
+    return static_cast<int>(value + (value >= 0 ? 0.5 : -0.5));
+#endif
+  }
+
+#define PII_ROUND_INT(N, TYPE) \
+  inline unsigned TYPE round(unsigned TYPE value) { return value; } \
+  inline TYPE round(TYPE value) { return value; }
+  PII_FOR_N(PII_ROUND_INT, 4, (char, short, int, long));
+#undef PII_ROUND_INT
+
+  /**
    * Rounds *value* (of type `T`) to the closest integer and returns
    * the result as another type (`U`).
    *
@@ -620,7 +641,7 @@ namespace Pii
    */
   template <class U, class T> inline U round(T value, typename OnlyNumeric<T>::Type = 0)
   {
-    return static_cast<U>(round(double(value)));
+    return static_cast<U>(round(value));
   }
 
   /**
