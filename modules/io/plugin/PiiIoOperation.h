@@ -55,7 +55,7 @@ class PiiIoOperation : public PiiDefaultOperation
    * in this list is a QVariantMap that contains channels-specific
    * configuration. Each map must specify at least "channel", which
    * tells the I/O driver the index of the physical I/O channel in
-   * question. Other propertis vary depending on channel type
+   * question. Other properties vary depending on channel type
    * (input/output) and the I/O driver.
    *
    * ~~~(c++)
