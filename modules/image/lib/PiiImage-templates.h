@@ -594,7 +594,7 @@ namespace PiiImage
         {
           typename Filter::const_row_iterator filterRow = filter[r];
           for (int c = 0; c < filter.columns(); ++c)
-            sum += filterRow[c] * padded(r + row, c + column);
+            sum += SumType(padded(r + row, c + column)) * filterRow[c];
         }
       return sum;
     }
