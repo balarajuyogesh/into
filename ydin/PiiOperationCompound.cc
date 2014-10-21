@@ -678,17 +678,17 @@ void PiiOperationCompound::addOperation(PiiOperation* op)
 
   if (!d->lstOperations.contains(op))
     {
+      QString strOriginalName = op->objectName();
       // Don't allow empty names
-      if (op->objectName().isEmpty())
-        {
-          QString className(op->metaObject()->className());
-          int i = 1;
-          QString name = className;
-          // Find a unique objectName
-          while (findChildOperation(name))
-            name = className + QString::number(i++);
-          op->setObjectName(name);
-        }
+      if (strOriginalName.isEmpty())
+        strOriginalName = op->metaObject()->className();
+      // Make sure the added operation gets an unique name
+      int i = 0;
+      QString strName = strOriginalName;
+      // Find a unique objectName
+      while (findChildOperation(strName))
+        strName = strOriginalName + QString::number(++i);
+      op->setObjectName(strName);
 
       d->lstOperations.append(op);
       op->setParent(this);

@@ -334,10 +334,10 @@ public:
    * the old parent.
    *
    * PiiOperationCompound does its best to ensure that its children do
-   * not have duplicate object names. If you don't set the object
-   * names manually, addOperation() creates a unique name by
-   * concatenating the object's class name and an arbitrary number. If
-   * the operation already has a name, it will not be modified.
+   * not have duplicate object names. This function always creates a
+   * unique name by adding an arbitrary number to the end of the
+   * operation's `objectName`. If the `objectName` property is not
+   * set, class name will be used instead.
    *
    * @param op the operation
    */
