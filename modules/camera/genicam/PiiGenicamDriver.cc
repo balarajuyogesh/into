@@ -173,16 +173,6 @@ void PiiGenicamDriver::initializeGenicamDevice(const QString& camId)
     {
       if (genicamOpenDevice(piiPrintable(camId), &_pDevice) != 0 || _pDevice == 0)
         PII_THROW(PiiCameraDriverException, tr("Could not open camera device: %1").arg(lastError()));
-
-      if (!setTriggerMode(mapProperties.contains("triggerMode") ?
-                          (PiiCameraDriver::TriggerMode)mapProperties.take("triggerMode").toInt() :
-                          PiiCameraDriver::FreeRun))
-        PII_THROW(PiiCameraDriverException, tr("Could not set triggerMode."));
-
-      if (!setImageFormat(mapProperties.contains("imageFormat") ?
-                          mapProperties.take("imageFormat").toInt() :
-                          (int)PiiCamera::MonoFormat))
-        PII_THROW(PiiCameraDriverException, tr("Could not set imageFormat."));
     }
   else
     {
@@ -190,8 +180,17 @@ void PiiGenicamDriver::initializeGenicamDevice(const QString& camId)
         PII_THROW(PiiCameraDriverException, tr("Could not deregister frame buffers: %1").arg(lastError()));
     }
 
-  // Write all configuration values from the map
-  for (QVariantMap::iterator i=mapProperties.begin(); i != mapProperties.end(); ++i)
+  // triggerMode and imageFormat must be set first
+  if (mapProperties.contains("triggerMode") &&
+      !setTriggerMode((PiiCameraDriver::TriggerMode)mapProperties.take("triggerMode").toInt()))
+    PII_THROW(PiiCameraDriverException, tr("Could not set trigger mode."));
+
+  if (mapProperties.contains("imageFormat") &&
+      !setImageFormat(mapProperties.take("imageFormat").toInt()))
+    PII_THROW(PiiCameraDriverException, tr("Could not set image format."));
+
+  // Write the rest of the configuration values from the map
+  for (QVariantMap::iterator i = mapProperties.begin(); i != mapProperties.end(); ++i)
     {
       if (!QObject::setProperty(qPrintable(i.key()), i.value()))
         PII_THROW(PiiCameraDriverException, tr("Could not write the configuration value '%1'").arg(i.key()));

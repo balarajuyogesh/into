@@ -296,24 +296,24 @@ GENICAM_WAPI(int) genicam_open_device(const char* serial, genicam_device** devic
       pCamera->Open();
 
       // Initialize default values for all trigger modes
-      pCamera->AcquisitionMode.SetValue(AcquisitionMode_Continuous);
-      pCamera->ExposureMode.SetValue(ExposureMode_Timed);
+      //pCamera->AcquisitionMode.SetValue(AcquisitionMode_Continuous);
+      //pCamera->ExposureMode.SetValue(ExposureMode_Timed);
 
-	  if (pCamera->DeviceScanType.GetValue() != DeviceScanType_Areascan)
-	 {
-      // Initialize ShaftEncoderModule
-      pCamera->ShaftEncoderModuleLineSelector.SetValue(ShaftEncoderModuleLineSelector_PhaseA);
-      pCamera->ShaftEncoderModuleLineSource.SetValue(ShaftEncoderModuleLineSource_Line1);
-      pCamera->ShaftEncoderModuleLineSelector.SetValue(ShaftEncoderModuleLineSelector_PhaseB);
-      pCamera->ShaftEncoderModuleLineSource.SetValue(ShaftEncoderModuleLineSource_Line2);
-      pCamera->ShaftEncoderModuleCounterMode.SetValue(ShaftEncoderModuleCounterMode_FollowDirection);
-      pCamera->ShaftEncoderModuleMode.SetValue(ShaftEncoderModuleMode_ForwardOnly);
-      pCamera->ShaftEncoderModuleCounterMax.SetValue(32767);
-      pCamera->ShaftEncoderModuleReverseCounterMax.SetValue(0);
+      if (pCamera->DeviceScanType.GetValue() != DeviceScanType_Areascan)
+        {
+          // Initialize ShaftEncoderModule
+          pCamera->ShaftEncoderModuleLineSelector.SetValue(ShaftEncoderModuleLineSelector_PhaseA);
+          pCamera->ShaftEncoderModuleLineSource.SetValue(ShaftEncoderModuleLineSource_Line1);
+          pCamera->ShaftEncoderModuleLineSelector.SetValue(ShaftEncoderModuleLineSelector_PhaseB);
+          pCamera->ShaftEncoderModuleLineSource.SetValue(ShaftEncoderModuleLineSource_Line2);
+          pCamera->ShaftEncoderModuleCounterMode.SetValue(ShaftEncoderModuleCounterMode_FollowDirection);
+          pCamera->ShaftEncoderModuleMode.SetValue(ShaftEncoderModuleMode_ForwardOnly);
+          pCamera->ShaftEncoderModuleCounterMax.SetValue(32767);
+          pCamera->ShaftEncoderModuleReverseCounterMax.SetValue(0);
 
-      // Initialize FrequencyConverter
-      pCamera->FrequencyConverterSignalAlignment.SetValue(FrequencyConverterSignalAlignment_RisingEdge);
-	  }
+          // Initialize FrequencyConverter
+          pCamera->FrequencyConverterSignalAlignment.SetValue(FrequencyConverterSignalAlignment_RisingEdge);
+        }
     }
   catch (GenICam::GenericException& e)
     {
@@ -337,9 +337,9 @@ GENICAM_WAPI(int) genicam_open_device(const char* serial, genicam_device** devic
 
 
   *device = new genicam_device(pCamera, pGrabber);
-  genicam_set_property(*device, "triggerMode", 2);
-  genicam_set_property(*device, "triggerLine", 0);
-  genicam_set_property(*device, "triggerRate", 1);
+  //genicam_set_property(*device, "triggerMode", 2);
+  //genicam_set_property(*device, "triggerLine", 0);
+  //genicam_set_property(*device, "triggerRate", 1);
   vecDevices.push_back(*device);
   return 0;
 }
@@ -591,7 +591,6 @@ GENICAM_WAPI(int) genicam_set_property(genicam_device* device, const char* name,
         }
       else if (!strcmp(name, "triggerMode"))
         {
-          std::cout << "triggerMode " << value << std::endl;
           /**
            * SoftwareTrigger = 0,
            * HardwareTrigger,
@@ -600,9 +599,7 @@ GENICAM_WAPI(int) genicam_set_property(genicam_device* device, const char* name,
           switch(value)
             {
             case 0: //SoftwareTrigger
-              std::cout << "Set TriggerSelector_FrameStart = " << (int)TriggerSelector_FrameStart << std::endl;
               device->camera->TriggerSelector.SetValue(TriggerSelector_FrameStart);
-              std::cout << "TriggerSelector.GetValue() = " << device->camera->TriggerSelector.GetValue() << std::endl;
               device->camera->TriggerMode.SetValue(TriggerMode_On);
               device->camera->TriggerSource.SetValue(TriggerSource_Software);
               device->triggerMode = 0;
@@ -624,7 +621,6 @@ GENICAM_WAPI(int) genicam_set_property(genicam_device* device, const char* name,
         }
       else if (!strcmp(name, "triggerLine"))
         {
-          std::cout << "triggerLine " << value << std::endl;
           switch (value)
             {
             case 0:
@@ -658,7 +654,6 @@ GENICAM_WAPI(int) genicam_set_property(genicam_device* device, const char* name,
         }
       else if (!strcmp(name, "triggerRate"))
         {
-          std::cout << "triggerRate " << value << std::endl;
           device->camera->FrequencyConverterPreDivider.SetValue(1);
           if (value == 1)
             {
