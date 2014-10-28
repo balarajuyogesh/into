@@ -9,11 +9,12 @@ contains(CONFIG,qt) {
              modules \
              script \
              test \
-             demos
+             demos \
+             3rdparty
 
   ydin.depends += core
   gui.depends += ydin
-  modules.depends += ydin
+  modules.depends += ydin 3rdparty
   script.depends += ydin
   test.depends += modules
   demos.depends += modules

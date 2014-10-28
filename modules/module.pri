@@ -48,16 +48,6 @@ DEFINES         += PII_LOG_MODULE=$$basename(MODULE)
 win32-msvc*: QMAKE_LFLAGS_WINDOWS_DLL += /OPT:NOREF
 
 include(../moduledeps.pri)
-
-defined(MODULE_INSTALL_PATH, var) {
-  INSTALL_PATH = $$MODULE_INSTALL_PATH
-} else {
-  !defined(INSTALL_PATH, var) {
-    INSTALL_PATH = /usr/lib/into/modules
-  } else {
-    INSTALL_PATH = $$INSTALL_PATH/modules
-  }
-}
-include(../libinstall.pri)
+include(../moduleinstall.pri)
 
 LIBS += -lpiicore$$INTO_LIBV

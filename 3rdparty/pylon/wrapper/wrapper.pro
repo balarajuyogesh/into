@@ -42,3 +42,5 @@ win32 {
   msvc2mingw.target = $$MINGWLIB_TARGET
   mingw.depends = $$MINGWLIB_TARGET
 }
+
+include($$INTODIR/moduleinstall.pri)
