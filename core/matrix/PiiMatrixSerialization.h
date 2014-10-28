@@ -91,6 +91,7 @@ namespace PiiSerialization
   }
 }
 
+PII_SERIALIZATION_TRACKING_TEMPLATE(PiiMatrix, false);
 /// @endhide
 
 #endif //_PIIMATRIXSERIALIZATION_H
