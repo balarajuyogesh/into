@@ -315,7 +315,8 @@ namespace PiiColors
   }
 
   template <class Clr> Clr xyzToLab(const Clr& xyzColor,
-                                    const Clr& whitePoint)
+                                    const Clr& whitePoint,
+                                    typename Pii::OnlyFloatingPoint<typename Clr::Type>::Type)
   {
     typedef typename Clr::Type T;
     T xPerXn = xyzColor.xyzX/whitePoint.xyzX;
@@ -334,7 +335,8 @@ namespace PiiColors
   }
 
   template <class Clr> Clr labToXyz(const Clr& labColor,
-                                    const Clr& whitePoint)
+                                    const Clr& whitePoint,
+                                    typename Pii::OnlyFloatingPoint<typename Clr::Type>::Type)
   {
     typedef typename Clr::Type T;
     T fy = (labColor.labL + 16) / 116;

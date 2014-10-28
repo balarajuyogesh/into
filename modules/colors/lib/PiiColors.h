@@ -21,6 +21,7 @@
 #include <PiiMath.h>
 #include <PiiFunctional.h>
 #include <PiiImageTraits.h>
+#include <PiiTypeTraits.h>
 
 #include "PiiColorsGlobal.h"
 
@@ -298,9 +299,8 @@ namespace PiiColors
    * @return gamma-adjusted value of the color channel
    */
   template <class T> inline T correctGamma(T value, double gamma,
-                                           typename Pii::OnlyFloatingPoint<T>::Type dummy = 0)
+                                           typename Pii::OnlyFloatingPoint<T>::Type = 0)
   {
-    Q_UNUSED(dummy);
     return Pii::pow(value, T(gamma));
   }
 
@@ -445,7 +445,7 @@ namespace PiiColors
    * channel is often scaled into [0,100]. This convention has a
    * couple of problems:
    *
-   * - `unsigned` `char` can only store values up to 255.
+   * - `unsigned char` can only store values up to 255.
    *
    * - Scaling *value* down from 255 to 100 degrades accuracy.
    *
@@ -455,7 +455,7 @@ namespace PiiColors
    * For these reasons, this function scales the color channels
    * depending on the input type as follows:
    *
-   * - `unsigned` `char` - H, S, and V are all in [0,255]
+   * - `unsigned char` - H, S, and V are all in [0,255]
    *
    * - Other integer types - H is [0,359], S and V in [0,255]
    *
@@ -575,7 +575,8 @@ namespace PiiColors
    * values.
    */
   template <class Clr> Clr xyzToLab(const Clr& xyzColor,
-                                    const Clr& whitePoint);
+                                    const Clr& whitePoint,
+                                    typename Pii::OnlyFloatingPoint<typename Clr::Type>::Type = 0);
 
   /**
    * Convert a color in the CIE 1976 L*a*b* color space into the CIE
@@ -591,7 +592,8 @@ namespace PiiColors
    * values.
    */
   template <class Clr> Clr labToXyz(const Clr& labColor,
-                                    const Clr& whitePoint);
+                                    const Clr& whitePoint,
+                                    typename Pii::OnlyFloatingPoint<typename Clr::Type>::Type = 0);
 
   /**
    * An adaptable binary function that converts an XYZ color to an
