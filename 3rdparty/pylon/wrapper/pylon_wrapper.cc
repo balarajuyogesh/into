@@ -14,23 +14,23 @@
 #include <pylon/PylonIncludes.h>
 #include <pylon/gige/BaslerGigECamera.h>
 
-typedef Pylon::CBaslerGigECamera PylonCameraType;
-typedef PylonCameraType::StreamGrabber_t PylonGrabberType;
-
 using namespace Pylon;
 using namespace Basler_GigECameraParams;
 using namespace Basler_GigEStreamParams;
-using namespace std;
+
+typedef CBaslerGigECamera PylonCameraType;
+typedef PylonCameraType::StreamGrabber_t PylonGrabberType;
 
 struct genicam_device
 {
   genicam_device(PylonCameraType* c,
-               PylonGrabberType* g) :
-    camera(c), grabber(g)
+                 PylonGrabberType* g,
+                 int t) :
+    camera(c), grabber(g), triggerMode(t)
   {}
 
-  PylonCameraType *camera;
-  PylonGrabberType *grabber;
+  PylonCameraType* camera;
+  PylonGrabberType* grabber;
   std::vector<void*> vecHandles;
   std::vector<void*> vecReservedHandles;
   int triggerMode;
@@ -41,6 +41,17 @@ static std::vector<genicam_device*> vecDevices;
 static std::mutex errorMutex;
 static std::string strLastError;
 static ITransportLayer* pTransportLayer = 0;
+static std::string strTransportLayerNotCreated("Transport layer has not been created.");
+
+#define CHECK_TRANSPORT_LAYER \
+  do { \
+    if (!pTransportLayer) \
+      { \
+        set_error(strTransportLayerNotCreated); \
+        return 1; \
+      } \
+  } while (0)
+
 
 static void print_values(genicam_device* device)
 {
@@ -91,13 +102,22 @@ static void set_error(const std::string& msg)
   errorMutex.unlock();
 }
 
-static void set_error(const std::string& msg, const GenICam::GenericException e)
+static void set_error(const std::string& msg, const GenICam::GenericException& e)
 {
   errorMutex.lock();
   strLastError = msg;
   if (e.GetDescription())
     strLastError += std::string(" ") + e.GetDescription();
   errorMutex.unlock();
+}
+
+static int trigger_mode(PylonCameraType* camera)
+{
+  if (camera->TriggerMode.GetValue() == TriggerMode_Off)
+    return 2; // FreeRun
+  else if (camera->TriggerSource.GetValue() == TriggerSource_Software)
+    return 0; // SoftwareTrigger
+  return 1; //HardwareTrigger
 }
 
 GENICAM_WAPI(void) genicam_last_error(char* bfr)
@@ -114,7 +134,7 @@ GENICAM_WAPI(int) genicam_initialize(void)
     {
       try
         {
-          Pylon::PylonInitialize();
+          PylonInitialize();
           pTransportLayer = CTlFactory::GetInstance().CreateTl(PylonCameraType::DeviceClass());
         }
       catch (GenICam::GenericException& e)
@@ -148,7 +168,7 @@ GENICAM_WAPI(int) genicam_terminate(void)
         {
           CTlFactory::GetInstance().ReleaseTl(pTransportLayer);
           pTransportLayer = 0;
-          Pylon::PylonTerminate();
+          PylonTerminate();
         }
       catch (GenICam::GenericException& e)
         {
@@ -178,11 +198,12 @@ static void append_string(char** names, const char* name, int* len, int* bufferS
   (*names)[*len-1] = 0;
 }
 
-
-GENICAM_WAPI(int) genicam_list_cameras(char **names, int* count)
+GENICAM_WAPI(int) genicam_list_cameras(char** names, int* count)
 {
   *names = 0;
   *count = 0;
+
+  CHECK_TRANSPORT_LAYER;
 
   int iLen = 0, iBufferSize = 0;
   try
@@ -192,9 +213,9 @@ GENICAM_WAPI(int) genicam_list_cameras(char **names, int* count)
       if (pTransportLayer->EnumerateDevices(lstDevices) != 0)
         {
           DeviceInfoList_t::iterator it;
-          for (it=lstDevices.begin(); it!=lstDevices.end(); ++it )
+          for (it = lstDevices.begin(); it != lstDevices.end(); ++it)
             {
-              append_string(names, it->GetSerialNumber().c_str(), &iLen, &iBufferSize);
+              append_string(names, it->GetFullName().c_str(), &iLen, &iBufferSize);
               ++*count;
             }
         }
@@ -203,6 +224,7 @@ GENICAM_WAPI(int) genicam_list_cameras(char **names, int* count)
     {
       set_error("Failed to list cameras.", e);
       *count = 0;
+      free(*names);
       *names = 0;
       return 1;
     }
@@ -220,6 +242,8 @@ GENICAM_WAPI(const char*) genicam_next_camera(const char* camera)
 GENICAM_WAPI(int) genicam_open_device(const char* serial, genicam_device** device)
 {
   *device = 0;
+
+  CHECK_TRANSPORT_LAYER;
 
   // Get all attached cameras and throw exception if no camera is found
   DeviceInfoList_t devices;
@@ -245,7 +269,7 @@ GENICAM_WAPI(int) genicam_open_device(const char* serial, genicam_device** devic
     {
       for (DeviceInfoList_t::iterator i = devices.begin(); i != devices.end(); ++i)
         {
-          if (!strcmp(i->GetSerialNumber().c_str(), serial))
+          if (!strcmp(i->GetFullName().c_str(), serial))
             {
               IPylonDevice *pDevice = pTransportLayer->CreateDevice(*i);
               CDeviceInfo info = pDevice->GetDeviceInfo();
@@ -280,7 +304,7 @@ GENICAM_WAPI(int) genicam_open_device(const char* serial, genicam_device** devic
       return 1;
     }
 
-  if (uiGrabbers <= 0)
+  if (!uiGrabbers)
     {
       delete pCamera;
       set_error("Couldn't find any stream grabbers.");
@@ -294,10 +318,6 @@ GENICAM_WAPI(int) genicam_open_device(const char* serial, genicam_device** devic
     {
       // Open the camera
       pCamera->Open();
-
-      // Initialize default values for all trigger modes
-      //pCamera->AcquisitionMode.SetValue(AcquisitionMode_Continuous);
-      //pCamera->ExposureMode.SetValue(ExposureMode_Timed);
 
       if (pCamera->DeviceScanType.GetValue() != DeviceScanType_Areascan)
         {
@@ -336,17 +356,14 @@ GENICAM_WAPI(int) genicam_open_device(const char* serial, genicam_device** devic
     }
 
 
-  *device = new genicam_device(pCamera, pGrabber);
-  //genicam_set_property(*device, "triggerMode", 2);
-  //genicam_set_property(*device, "triggerLine", 0);
-  //genicam_set_property(*device, "triggerRate", 1);
+  *device = new genicam_device(pCamera, pGrabber, trigger_mode(pCamera));
   vecDevices.push_back(*device);
   return 0;
 }
 
 GENICAM_WAPI(int) genicam_free(void* data)
 {
-	free(data);
+  free(data);
   return 0;
 }
 
@@ -401,7 +418,7 @@ GENICAM_WAPI(int) genicam_register_framebuffers(genicam_device* device, unsigned
       // Buffers used for grabbing must be registered at the stream
       // grabber. The registration returns a handle to be used for
       // queuing the buffer
-      for (int i=0; i<count; ++i)
+      for (int i = 0; i < count; ++i)
         {
           device->vecHandles[i] = device->grabber->RegisterBuffer(buffer + i*uiImageSize, uiImageSize);
           device->grabber->QueueBuffer(device->vecHandles[i], 0);
@@ -426,7 +443,7 @@ GENICAM_WAPI(int) genicam_deregister_framebuffers(genicam_device* device)
       for (GrabResult r; device->grabber->RetrieveResult(r););
 
       // Deregister handles
-      for (unsigned int i=0; i<device->vecHandles.size(); ++i)
+      for (unsigned int i = 0; i < device->vecHandles.size(); ++i)
         {
           if (device->vecHandles[i] != 0)
             device->grabber->DeregisterBuffer(device->vecHandles[i]);
@@ -437,11 +454,11 @@ GENICAM_WAPI(int) genicam_deregister_framebuffers(genicam_device* device)
 
       device->grabber->FinishGrab();
     }
-    catch (GenICam::GenericException& e)
-      {
-        set_error("Failed to deregister frame buffers.", e);
-        return 1;
-      }
+  catch (GenICam::GenericException& e)
+    {
+      set_error("Failed to deregister frame buffers.", e);
+      return 1;
+    }
 
   return 0;
 }
@@ -513,14 +530,14 @@ GENICAM_WAPI(int) genicam_grab_frame(genicam_device* device, unsigned char** buf
     }
 
   *buffer = (unsigned char*)grabResult.Buffer();
-  return 0; //(unsigned char*)grabResult.Buffer();
+  return 0;
 }
 
 GENICAM_WAPI(int) genicam_requeue_buffers(genicam_device* device)
 {
   try
     {
-      for (unsigned int i=0; i<device->vecReservedHandles.size(); ++i)
+      for (unsigned int i = 0; i < device->vecReservedHandles.size(); ++i)
         device->grabber->QueueBuffer(device->vecReservedHandles[i], 0);
       device->vecReservedHandles.clear();
     }
@@ -540,7 +557,8 @@ GENICAM_WAPI(int) genicam_start_capture(genicam_device* device)
     {
       // Reset the shaft encoder module counter and the shaft encoder
       // module reverse counter if the triggerMode == HardwareTrigger
-      if (device->triggerMode == 1)
+      if (device->camera->DeviceScanType.GetValue() == DeviceScanType_Linescan &&
+          device->triggerMode == 1)
         {
           device->camera->ShaftEncoderModuleCounterReset.Execute();
           device->camera->ShaftEncoderModuleReverseCounterReset.Execute();
@@ -572,6 +590,20 @@ GENICAM_WAPI(int) genicam_stop_capture(genicam_device* device)
   return 0;
 }
 
+enum
+  {
+    InvalidFormat = 0,
+    MonoFormat = 1,
+    BayerRGGBFormat,
+    BayerBGGRFormat,
+    BayerGBRGFormat,
+    BayerGRBGFormat,
+    Yuv411Format,
+    Yuv422Format,
+    RgbFormat = 16,
+    BgrFormat
+  };
+
 GENICAM_WAPI(int) genicam_set_property(genicam_device* device, const char* name, int value)
 {
   try
@@ -584,15 +616,14 @@ GENICAM_WAPI(int) genicam_set_property(genicam_device* device, const char* name,
         {
           if (device->camera->DeviceScanType.GetValue() == DeviceScanType_Areascan)
             {
-              device->camera->AcquisitionFrameRateEnable.SetValue(value <= 0 ? false : true);
+              device->camera->AcquisitionFrameRateEnable.SetValue(value > 0);
               if (value > 0)
                 device->camera->AcquisitionFrameRateAbs.SetValue(double(value) / 1000.0);
             }
         }
       else if (!strcmp(name, "triggerMode"))
         {
-          /**
-           * SoftwareTrigger = 0,
+          /* SoftwareTrigger = 0,
            * HardwareTrigger,
            * FreeRun
            */
@@ -666,12 +697,13 @@ GENICAM_WAPI(int) genicam_set_property(genicam_device* device, const char* name,
               double dSmallestError = dRatio;
               int iBestDivider = 1, iBestMultiplier = 1;
               // Scan the whole allowable range for best divider/multiplier combination.
-              for (int iDivider=1; iDivider<=128; ++iDivider)
+              for (int iDivider = 1; iDivider <= 128; ++iDivider)
                 {
-                  for (int iMultiplier=1; iMultiplier<=32; ++iMultiplier)
+                  for (int iMultiplier = 1; iMultiplier <= 32; ++iMultiplier)
                     {
                       double dError = double(iMultiplier)/iDivider - dRatio;
-                      if (dError < 0) dError = -dError; // no fabs() to reduce dependencies
+                      if (dError < 0)
+                        dError = -dError; // no fabs() to reduce dependencies
 
                       if (dError < dSmallestError)
                         {
@@ -692,24 +724,19 @@ GENICAM_WAPI(int) genicam_set_property(genicam_device* device, const char* name,
         }
       else if (!strcmp(name, "imageFormat"))
         {
-          /**
-             InvalidFormat = 0,
-             MonoFormat = 1,
-             BayerRGGBFormat,
-             BayerBGGRFormat,
-             BayerGBRGFormat,
-             BayerGRBGFormat,
-             RgbFormat = 16,
-             BgrFormat
-          */
           int format;
-          switch(value)
+          switch (value)
             {
-            case 2: format = PixelFormat_BayerRG8; break;
-            case 3: format = PixelFormat_BayerBG8; break;
-            case 4: format = PixelFormat_BayerGB8; break;
-            case 5: format = PixelFormat_BayerGR8; break;
-            default: format = PixelFormat_Mono8; break;
+            default:
+            case MonoFormat: format = PixelFormat_Mono8; break;
+            case BayerRGGBFormat: format = PixelFormat_BayerRG8; break;
+            case BayerBGGRFormat: format = PixelFormat_BayerBG8; break;
+            case BayerGBRGFormat: format = PixelFormat_BayerGB8; break;
+            case BayerGRBGFormat: format = PixelFormat_BayerGR8; break;
+            case Yuv411Format: format = PixelFormat_YUV411Packed; break;
+            case Yuv422Format: format = PixelFormat_YUV422Packed; break;
+            case RgbFormat: format = PixelFormat_RGB12Packed; break;
+            case BgrFormat: format = PixelFormat_BGR12Packed; break;
             }
           device->camera->PixelFormat.SetValue((PixelFormatEnums)format);
         }
@@ -749,7 +776,7 @@ GENICAM_WAPI(int) genicam_set_property(genicam_device* device, const char* name,
       else if (!strcmp(name, "packetSize"))
         device->camera->GevSCPSPacketSize.SetValue(value);
       else if (!strcmp(name, "flipHorizontally"))
-        device->camera->ReverseX.SetValue(value == 0 ? false : true);
+        device->camera->ReverseX.SetValue(value != 0);
       else if (!strcmp(name, "autoExposureTarget"))
         {
           if (value > 0)
@@ -805,32 +832,23 @@ GENICAM_WAPI(int) genicam_get_property(genicam_device* device, const char* name,
         }
       else if (!strcmp(name, "imageFormat"))
         {
-          /**
-             InvalidFormat = 0,
-             MonoFormat = 1,
-             BayerRGGBFormat,
-             BayerBGGRFormat,
-             BayerGBRGFormat,
-             BayerGRBGFormat,
-             RgbFormat = 16,
-             BgrFormat
-          */
-
-          int format = device->camera->PixelFormat.GetValue();
-          switch (format)
+          switch (device->camera->PixelFormat.GetValue())
             {
-            case PixelFormat_BayerRG8: *value = 2; break;
-            case PixelFormat_BayerBG8: *value = 3; break;
-            case PixelFormat_BayerGB8: *value = 4; break;
-            case PixelFormat_BayerGR8: *value = 5; break;
-            case PixelFormat_Mono8: *value = 1; break;
-            default :*value = 0; break;
+            case PixelFormat_Mono8: *value = MonoFormat; break;
+            case PixelFormat_BayerRG8: *value = BayerRGGBFormat; break;
+            case PixelFormat_BayerBG8: *value = BayerBGGRFormat; break;
+            case PixelFormat_BayerGB8: *value = BayerGBRGFormat; break;
+            case PixelFormat_BayerGR8: *value = BayerGRBGFormat; break;
+            case PixelFormat_YUV411Packed: *value = Yuv411Format; break;
+            case PixelFormat_YUV422Packed: *value = Yuv422Format; break;
+            case PixelFormat_RGB12Packed: *value = RgbFormat; break;
+            case PixelFormat_BGR12Packed: *value = BgrFormat; break;
+            default: *value = InvalidFormat; break;
             }
         }
       else if (!strcmp(name, "bitsPerPixel"))
         {
-          int pixelSize = device->camera->PixelSize.GetValue();
-          switch(pixelSize)
+          switch (device->camera->PixelSize.GetValue())
             {
             case PixelSize_Bpp8: *value = 8; break;
             case PixelSize_Bpp12: *value = 12; break;
@@ -845,27 +863,27 @@ GENICAM_WAPI(int) genicam_get_property(genicam_device* device, const char* name,
             }
         }
       else if (!strcmp(name, "triggerMode"))
-        return device->triggerMode;
+        *value = device->triggerMode;
       else if (!strcmp(name, "triggerLine"))
         {
           switch (device->camera->FrequencyConverterInputSource.GetValue())
             {
-            case FrequencyConverterInputSource_Line1: *value=0; break;
-            case FrequencyConverterInputSource_Line2: *value=0; break;
-            case FrequencyConverterInputSource_Line3: *value=0; break;
-            case FrequencyConverterInputSource_Line4: *value=0; break;
-            case FrequencyConverterInputSource_Line5: *value=0; break;
-            case FrequencyConverterInputSource_Line6: *value=0; break;
-            case FrequencyConverterInputSource_Line7: *value=0; break;
-            case FrequencyConverterInputSource_Line8: *value=0; break;
-            case FrequencyConverterInputSource_ShaftEncoderModuleOut: *value=-1; break;
-            default: *value=-2; break;
+            case FrequencyConverterInputSource_Line1: *value = 0; break;
+            case FrequencyConverterInputSource_Line2: *value = 0; break;
+            case FrequencyConverterInputSource_Line3: *value = 0; break;
+            case FrequencyConverterInputSource_Line4: *value = 0; break;
+            case FrequencyConverterInputSource_Line5: *value = 0; break;
+            case FrequencyConverterInputSource_Line6: *value = 0; break;
+            case FrequencyConverterInputSource_Line7: *value = 0; break;
+            case FrequencyConverterInputSource_Line8: *value = 0; break;
+            case FrequencyConverterInputSource_ShaftEncoderModuleOut: *value = -1; break;
+            default: *value = -2; break;
             }
         }
       else if (!strcmp(name, "triggerRate"))
         {
-          return int(double(device->camera->FrequencyConverterMultiplier.GetValue()) /
-                     device->camera->FrequencyConverterPostDivider.GetValue() * 10000 + 0.5);
+          *value= int(double(device->camera->FrequencyConverterMultiplier.GetValue()) /
+                      device->camera->FrequencyConverterPostDivider.GetValue() * 10000 + 0.5);
         }
       else if (!strcmp(name, "inputPulseFrequency"))
         {

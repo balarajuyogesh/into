@@ -22,6 +22,7 @@ PiiGenicamDriver::PiiGenicamDriver(const QString& wrapperLibrary) :
   _iFrameIndex(-1),
   _iMaxFrames(0),
   _iHandledFrameCount(0),
+  _triggerMode(FreeRun),
   _iFrameBufferCount(10)
 {
   _lstCriticalProperties << "frameBufferCount"
@@ -37,7 +38,7 @@ PiiGenicamDriver::~PiiGenicamDriver()
   if (_bOpen)
     close();
 
-  if (_bWrapperFunctionsInitialized && genicamTerminate != 0)
+  if (_bWrapperFunctionsInitialized)
     genicamTerminate();
 
   delete[] _pBuffer;
@@ -181,9 +182,13 @@ void PiiGenicamDriver::initializeGenicamDevice(const QString& camId)
     }
 
   // triggerMode and imageFormat must be set first
-  if (mapProperties.contains("triggerMode") &&
-      !setTriggerMode((PiiCameraDriver::TriggerMode)mapProperties.take("triggerMode").toInt()))
-    PII_THROW(PiiCameraDriverException, tr("Could not set trigger mode."));
+  if (mapProperties.contains("triggerMode"))
+    {
+      if (setTriggerMode((TriggerMode)mapProperties.take("triggerMode").toInt()))
+        PII_THROW(PiiCameraDriverException, tr("Could not set trigger mode."));
+    }
+  else
+    _triggerMode = (TriggerMode)readIntValue("triggerMode");
 
   if (mapProperties.contains("imageFormat") &&
       !setImageFormat(mapProperties.take("imageFormat").toInt()))
@@ -256,6 +261,7 @@ bool PiiGenicamDriver::close()
 {
   if (!_bOpen)
     return false;
+  stopCapture();
 
   if (_pDevice != 0)
     {
@@ -268,7 +274,7 @@ bool PiiGenicamDriver::close()
   return true;
 }
 
-bool PiiGenicamDriver::setTriggerMode(PiiCameraDriver::TriggerMode mode)
+bool PiiGenicamDriver::setTriggerMode(TriggerMode mode)
 {
   if (writeIntValue("triggerMode", (int)mode))
     {
@@ -302,7 +308,7 @@ bool PiiGenicamDriver::startCapture(int frames)
   _bCapturingRunning = true;
   _iFrameIndex = -1;
   _iHandledFrameCount = 0;
-  _iMaxFrames = _triggerMode == PiiCameraDriver::SoftwareTrigger ? 0 : frames;
+  _iMaxFrames = _triggerMode == SoftwareTrigger ? 0 : frames;
 
   // Let the camera acquire
   if (genicamStartCapture(_pDevice) != 0)
@@ -322,16 +328,11 @@ bool PiiGenicamDriver::stopCapture()
     return false;
 
   // Stop the capturing thread
-  stopCapturing();
-
-  return true;
-}
-
-void PiiGenicamDriver::stopCapturing()
-{
   _bCapturingRunning = false;
   _triggerWaitCondition.wakeAll();
   _pCapturingThread->wait();
+
+  return true;
 }
 
 bool PiiGenicamDriver::reconnect()
@@ -357,7 +358,7 @@ void PiiGenicamDriver::capture()
   lstBuffers.reserve(_iFrameBufferCount);
 
   int iHandledFrames = 0;
-  bool bSoftwareTrigger = _triggerMode == PiiCameraDriver::SoftwareTrigger;
+  bool bSoftwareTrigger = _triggerMode == SoftwareTrigger;
   while (_bCapturingRunning)
     {
       if (bSoftwareTrigger)
@@ -496,7 +497,7 @@ int PiiGenicamDriver::exposurePeriod() const
 }
 double PiiGenicamDriver::inputPulseFrequency() const
 {
-  return (double)readIntValue("inputPulseFrequency",0) / 1000.0;
+  return (double)readIntValue("inputPulseFrequency", 0) / 1000.0;
 }
 int PiiGenicamDriver::autoExposureTarget() const
 {
@@ -504,11 +505,11 @@ int PiiGenicamDriver::autoExposureTarget() const
 }
 bool PiiGenicamDriver::flipHorizontally() const
 {
-  return readIntValue("flipHorizontally",0) != 0;
+  return readIntValue("flipHorizontally", 0) != 0;
 }
 int PiiGenicamDriver::maxHeight() const
 {
-  return readIntValue("offsetY", 0) + readIntValue("height$max",0);
+  return readIntValue("offsetY", 0) + readIntValue("height$max", 0);
 }
 QSize PiiGenicamDriver::sensorSize() const
 {

@@ -151,7 +151,6 @@ protected:
   GenicamIntDevicepFunc genicamStopCapture;
 
   void capture();
-  void stopCapturing();
   bool reconnect();
 
   genicam_device* _pDevice;
@@ -167,7 +166,7 @@ protected:
   unsigned int _iFrameIndex;
   int _iMaxFrames, _iHandledFrameCount;
   PiiWaitCondition _triggerWaitCondition;
-  PiiCameraDriver::TriggerMode _triggerMode;
+  TriggerMode _triggerMode;
   int _iFrameBufferCount;
   mutable QMutex _reconnectMutex;
 
