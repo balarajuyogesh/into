@@ -92,7 +92,7 @@ void PiiOperationCompound::check(bool reset)
   d->vecChildStates.resize(d->lstOperations.size());
   bool bError = false;
   // Reset enabled/disabled states and check all child operations.
-  for (int i=0; i<d->lstOperations.size(); ++i)
+  for (int i = 0; i < d->lstOperations.size(); ++i)
     {
       PiiOperation* pOperation = d->lstOperations[i];
       pOperation->setErrorString("");
@@ -300,6 +300,9 @@ void PiiOperationCompound::updateChildStates(PiiOperation::State state)
 
   int iIndex = d->lstOperations.indexOf(static_cast<PiiOperation*>(sender()));
   d->vecChildStates[iIndex].state = state;
+  // Ignore state changes in disabled children.
+  if (!d->vecChildStates[iIndex].bEnabled)
+    return;
   if (state == Running)
     d->vecChildStates[iIndex].bWasRunning = true;
 
@@ -316,7 +319,7 @@ void PiiOperationCompound::updateChildStates(PiiOperation::State state)
           setState(Running);
           // Now, if any of the operations already stopped, we must
           // change state.
-          for (int i=d->vecChildStates.size(); i--; )
+          for (int i = d->vecChildStates.size(); i--; )
             if (d->vecChildStates[i].bEnabled &&
                 d->vecChildStates[i].state member_of (Stopping, Stopped))
               {
