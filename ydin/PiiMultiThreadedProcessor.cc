@@ -25,8 +25,7 @@ public:
     _threadId(0),
     _iGroupId(0),
     _bFreeRun(false)
-  {
-  }
+  {}
 
   void process(int groupId)
   {
@@ -255,6 +254,7 @@ PiiMultiProcessorThread* PiiMultiThreadedProcessor::reserveThread()
   if (_lstAllThreads.size() < _pParentOp->threadCount())
     {
       PiiMultiProcessorThread* pThread = new PiiMultiProcessorThread(this);
+      pThread->setObjectName(_pParentOp->objectName());
       _lstAllThreads << pThread;
       // If there is no flow controller, let the thread run freely
       pThread->start(_priority, _pFlowController == 0);

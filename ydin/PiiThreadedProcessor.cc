@@ -61,6 +61,7 @@ void PiiThreadedProcessor::check(bool reset)
 void PiiThreadedProcessor::start()
 {
   QMutexLocker lock(_pStateMutex);
+  setObjectName(_pParentOp->objectName());
 
   // If the state is Stopped, the thread must be started again. Once
   // it starts, the state will be changed to Running.
@@ -149,9 +150,9 @@ void PiiThreadedProcessor::prepareAndProcess()
   while (true)
     {
       _inputCondition.wakeAll();
-      //qDebug("%s: calling flow controller", qPrintable(_pParentOp->objectName()));
+      //qDebug("%s: calling flow controller", qPrintable(objectName()));
       PiiFlowController::FlowState state = _pFlowController->prepareProcess(); // may throw
-      //qDebug("%s: flow controller returned %d", qPrintable(_pParentOp->objectName()), int(state));
+      //qDebug("%s: flow controller returned %d", qPrintable(objectName()), int(state));
       if (state == PiiFlowController::IncompleteState)
         return;
 
