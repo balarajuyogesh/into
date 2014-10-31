@@ -810,6 +810,7 @@ bool PiiOperationCompound::detach(PiiOperation* op)
   d->lstOperations.removeAll(op);
   op->disconnect(this);
   op->setParent(0);
+  op->stop();
   return true;
 }
 

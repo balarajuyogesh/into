@@ -364,7 +364,7 @@ public:
    * will be retained.
    *
    * If the compound is neither stopped nor paused, this function has
-   * no effect.
+   * no effect. The detached operation will be stopped.
    *
    * @param op the operation to remove. All incoming and outgoing
    * connections will be disconnected.
