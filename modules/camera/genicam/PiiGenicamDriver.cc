@@ -372,7 +372,7 @@ void PiiGenicamDriver::capture()
       do
         {
           unsigned char* pBuffer = 0;
-          int iRetValue = genicamGrabFrame(_pDevice,&pBuffer,0);
+          int iRetValue = genicamGrabFrame(_pDevice, &pBuffer, 10);
 
           if (iRetValue != 0)
             {
