@@ -246,8 +246,8 @@ protected:
   void interruptOutputs();
 
   /**
-   * Signals that this operation has finished execution for example
-   * due to end of data. This function informs all connected
+   * Signals that this operation has finished execution cleanly for
+   * example due to end of data. This function informs all connected
    * operations that the operation has finished by sending a stop tag
    * to all outputs. It finally throws an exception
    * (PiiExecutionException::Finished).
@@ -256,9 +256,11 @@ protected:
    * stopping. The difference in this and the [aboutToChangeState()]
    * function is that this function will be called before the
    * operation passes stop tags to output sockets. It is therefore
-   * possible to send objects to outputs, if needed. If the default
-   * implementation is not called, the overridden function must throw
-   * a `Finished` exception.
+   * possible to send objects to outputs, if needed. This function
+   * will not be called if the operation is interrupted.
+   *
+   * If the default implementation is not called, the overridden
+   * function must throw a `Finished` exception.
    */
   virtual void operationStopped();
 
