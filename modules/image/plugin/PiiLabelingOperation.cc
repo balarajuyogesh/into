@@ -86,6 +86,7 @@ template <class T> void PiiLabelingOperation::operate(const PiiVariant& obj)
                                                                          T(d->dThreshold)),
                                                             d->connectivity,
                                                             1,
+                                                            0,
                                                             &iLabels));
   else
     d->pLabeledImageOutput->emitObject(PiiImage::labelImage(image,
@@ -96,6 +97,7 @@ template <class T> void PiiLabelingOperation::operate(const PiiVariant& obj)
                                                                          T(d->dThreshold)),
                                                             d->connectivity,
                                                             1,
+                                                            0,
                                                             &iLabels));
   d->pLabelsOutput->emitObject(iLabels);
 }

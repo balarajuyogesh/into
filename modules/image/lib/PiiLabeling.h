@@ -500,9 +500,15 @@ namespace PiiImage
     int iConnectivityShift;
   };
 
-  PII_IMAGE_EXPORT void connectRunsRecursively(LabelInfo& info, int rowIndex, int start, int end);
-  PII_IMAGE_EXPORT void connectRuns(LabelInfo& info, int rowIndex, int start, int end);
-  PII_IMAGE_EXPORT void markToBuffer(LabelInfo& info, int rowIndex, int start, int end);
+  struct BoundingBox
+  {
+    int minRow, maxRow, minCol, maxCol;
+  };
+
+  PII_IMAGE_EXPORT int connectRuns(LabelInfo& info, int rowIndex, int start, int end,
+                                   BoundingBox& box);
+  PII_IMAGE_EXPORT int markToBuffer(LabelInfo& info, int rowIndex, int start, int end);
+  PII_IMAGE_EXPORT void clearLabel(LabelInfo& info, const BoundingBox& box);
 
   template <class Matrix, class UnaryOp1, class UnaryOp2>
   void labelImage(const Matrix& mat,
@@ -529,13 +535,18 @@ namespace PiiImage
    * @param rule2 a unary predicate that each connected component must
    * meet at least once. If a connected component only has pixels that
    * match `rule1`, it won't be labeled. If any of the pixels matches
-   * `rule2`, the whole component will be labeled.
+   * `rule2`, the whole component will be labeled. `rule2` will be
+   * tested only if `rule1` matches.
    *
    * @param connectivity the connectivity type
    *
    * @param labelIncrement increment the label counter this much every
    * time a new connected component is found. Set to zero to just mark
    * all found objects with ones.
+   *
+   * @param minSize the minimum number of pixels in a connected
+   * component. If a component has less than this many pixels, it
+   * will be discarded.
    *
    * @param labelCount an optional output value parameter that stores
    * the maximum label. If `labelIncrement` is one, this value equals
@@ -545,9 +556,11 @@ namespace PiiImage
    * PiiMatrix<bool> binaryImg;
    * PiiMatrix<int> labels;
    * // Label all 8-connected non-zero pixels
+   * // Identity returns the pixel value itself (true/false).
+   * // YesFunction returns always true.
    * labels = PiiImage::labelImage(binaryImg,
-   *                               std::bind2nd(std::equal_to<bool>(), true),
-   *                               std::bind2nd(std::equal_to<bool>(), true),
+   *                               Pii::Identity<bool>(),
+   *                               Pii::YesFunction<bool>(),
    *                               PiiImage::Connect8);
    *
    * // Hysteresis thresholding:
@@ -568,12 +581,18 @@ namespace PiiImage
                             UnaryOp1 rule1, UnaryOp2 rule2,
                             Connectivity connectivity,
                             int labelIncrement = 1,
+                            int minSize = 0,
                             int* labelCount = 0)
   {
     PiiMatrix<int> matLabels(mat.rows(), mat.columns());
-    labelImage(mat, matLabels, rule1, rule2, connectivity, labelIncrement, labelCount);
+    labelImage(mat, matLabels, rule1, rule2, connectivity, labelIncrement, minSize, labelCount);
     return matLabels;
   }
+
+  /* TODO: Change this so that labels can be either int or bool
+   * matrix. If int, labelIncrement = 1. If bool, labelIncrement = 0.
+   * And make size limitation work with the bool version.
+   */
 
   /**
    * This version writes the labels to a preallocated output image
@@ -586,6 +605,7 @@ namespace PiiImage
                   UnaryOp1 rule1, UnaryOp2 rule2,
                   Connectivity connectivity,
                   int labelIncrement = 1,
+                  int minSize = 0,
                   int* labelCount = 0)
   {
     QVector<RunList> lstRuns(mat.rows());
@@ -596,10 +616,10 @@ namespace PiiImage
 
     const int iRows = mat.rows(), iCols = mat.columns();
 
-    for (int r=0; r<iRows; ++r)
+    for (int r = 0; r < iRows; ++r)
       {
         typename Matrix::const_row_iterator sourceRow = mat.rowBegin(r);
-        for (int c=0; c<iCols; ++c)
+        for (int c = 0; c < iCols; ++c)
           {
             // A sequence of possible object pixels starts (left edge)
             if (rule1(sourceRow[c]))
@@ -610,8 +630,8 @@ namespace PiiImage
                 while (c < iCols && rule1(sourceRow[c]))
                   {
                     // If any of the pixels within the sequence meets
-                    // the second rule, the sequence can
-                    // work as a "seed" for hysteresis.
+                    // the second rule, the sequence can work as a
+                    // "seed" for hysteresis.
                     if (rule2(sourceRow[c])) pRun->seed = true;
                     ++c;
                   }
@@ -626,7 +646,7 @@ namespace PiiImage
       }
 
     // Now we have a list of runs for each row. Connect.
-    for (int rowIndex=0; rowIndex<lstRuns.size(); ++rowIndex)
+    for (int rowIndex = 0; rowIndex < lstRuns.size(); ++rowIndex)
       {
         // Go through all connected runs on this row
         for (RunNode* pNode = lstRuns[rowIndex].first; pNode != 0;)
@@ -637,18 +657,26 @@ namespace PiiImage
                 // Next label...
                 iLabelIndex += labelIncrement;
                 // Invalidate the node to prevent loops in recursion
-                int end = pNode->end;
+                const int iEnd = pNode->end;
                 pNode->end = -1;
                 pNode->seed = false;
+                const int iStart = pNode->start;
                 // Mark and connect recursively
-                markToBuffer(info, rowIndex, pNode->start, end);
-                connectRuns(info, rowIndex - 1, pNode->start, end);
-                connectRuns(info, rowIndex + 1, pNode->start, end);
+                int iSize = markToBuffer(info, rowIndex, iStart, iEnd);
+                BoundingBox box = { rowIndex, rowIndex, iStart, iEnd };
+                iSize += connectRuns(info, rowIndex - 1, pNode->start, iEnd, box);
+                iSize += connectRuns(info, rowIndex + 1, pNode->start, iEnd, box);
                 // This run has been handled now. Get rid of it.
                 lstRuns[rowIndex].remove(pNode);
                 RunNode* pNodeToDelete = pNode;
                 pNode = pNode->next;
                 delete pNodeToDelete;
+
+                if (iSize < minSize)
+                  {
+                    clearLabel(info, box);
+                    iLabelIndex -= labelIncrement;
+                  }
               }
             else
               pNode = pNode->next;
