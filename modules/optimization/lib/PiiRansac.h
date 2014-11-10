@@ -112,8 +112,8 @@ public:
    */
   void setMinInliers(int minInliers);
   /**
-   * Returns the minimum number of inliers required for an accepted
-   * match.
+   * Returns the default minimum number of inliers required for an
+   * accepted match.
    */
   int minInliers() const;
   /**
@@ -125,9 +125,10 @@ public:
    */
   void setFittingThreshold(double fittingThreshold);
   /**
-   * Returns the current fitting threshold.
+   * Returns the default fitting threshold.
    */
   double fittingThreshold() const;
+
   /**
    * Set the probability of choosing a model that fits the data well
    * enough. Provided that the model can be fitted to the data, the
@@ -149,6 +150,7 @@ protected:
   {
   public:
     Data();
+    virtual ~Data();
 
     int iMaxIterations;
     int iMaxSamplings;
@@ -228,6 +230,22 @@ protected:
    * @see setFittingThreshold()
    */
   virtual double fitToModel(int dataIndex, const double* model) = 0;
+
+  /**
+   * Returns the minimum number of inliers required to match the given
+   * *model*. Subclasses may override this function to return a
+   * different number for different models. The default implementation
+   * returns the value set by setMinInliers().
+   */
+  virtual int minInliers(const double* model) const;
+
+  /**
+   * Returns a fitting threshold for the given model. Subclasses may
+   * override this function to return a different number depending on
+   * the *model*. The default implementation returns the value set by
+   * setFittingThreshold().
+   */
+  virtual double fittingThreshold(const double* model) const;
 
   PII_DISABLE_COPY(PiiRansac);
 };

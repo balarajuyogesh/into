@@ -55,8 +55,7 @@
  * fit.
  */
 template <class T> class PiiRigidPlaneRansac :
-  public PiiRansac,
-  private PiiOptimization::ResidualFunction<double>
+  public PiiRansac
 {
 public:
   /**
@@ -220,7 +219,9 @@ protected:
   double fitToModel(int dataIndex, const double* model);
 
 private:
-  class Data : public PiiRansac::Data
+  class Data :
+    public PiiRansac::Data,
+    public PiiOptimization::ResidualFunction<double>
   {
   public:
     Data() :
@@ -243,6 +244,10 @@ private:
       piInliers(0)
     {}
 
+    // Interface for LM minimization
+    int functionCount() const;
+    void residualValues(const double* params, double* residuals) const;
+
     PiiMatrix<T> matPoints1, matPoints2;
     bool bAutoRefine;
     double dMaxRotationAngle;
@@ -255,11 +260,7 @@ private:
   };
   PII_D_FUNC;
 
-  static PiiVector<double,2> transform(const T* point, const double* model);
-
-  // Interface for LM minimization
-  int functionCount() const;
-  void residualValues(const double* params, double* residuals) const;
+  static PiiVector<double, 2> transform(const T* point, const double* model);
 };
 
 namespace PiiOptimization
@@ -317,7 +318,7 @@ template <class T> PiiMatrix<double> PiiRigidPlaneRansac<T>::refineModel() const
     return PiiMatrix<double>();
   d->piInliers = inlyingPoints().constData();
   d->iInlierCount = inlierCount();
-  return PiiOptimization::lmMinimize(this, matBestModel);
+  return PiiOptimization::lmMinimize(d, matBestModel);
 }
 
 template <class T> bool PiiRigidPlaneRansac<T>::autoRefine() const { return _d()->bAutoRefine; }
@@ -419,22 +420,22 @@ template <class T> PiiMatrix<double> PiiRigidPlaneRansac<T>::transform(const Pii
   return matResult;
 }
 
-template <class T> int PiiRigidPlaneRansac<T>::functionCount() const
+template <class T>
+int PiiRigidPlaneRansac<T>::Data::functionCount() const
 {
-  return _d()->iInlierCount;
+  return iInlierCount;
 }
 
-
-template <class T> void PiiRigidPlaneRansac<T>::residualValues(const double* params, double* residuals) const
+template <class T>
+void PiiRigidPlaneRansac<T>::Data::residualValues(const double* params, double* residuals) const
 {
-  const PII_D;
-  for (int i=0; i<d->iInlierCount; ++i)
+  for (int i = 0; i < iInlierCount; ++i)
     {
-      int iPoint = d->piInliers[i];
+      int iPoint = piInliers[i];
       // "Ground truth" is in point set 2
-      PiiVector<double,2> vecPt2(double(d->matPoints2(iPoint,0)), double(d->matPoints2(iPoint,1)));
+      PiiVector<double, 2> vecPt2(double(matPoints2(iPoint, 0)), double(matPoints2(iPoint, 1)));
       // Calculate squared distance to the transformation result.
-      residuals[i] = vecPt2.squaredDistance(transform(d->matPoints1[iPoint], params));
+      residuals[i] = vecPt2.squaredDistance(transform(matPoints1[iPoint], params));
     }
 }
 

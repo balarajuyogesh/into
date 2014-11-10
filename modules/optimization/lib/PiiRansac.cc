@@ -30,6 +30,9 @@ PiiRansac::Data::Data() :
 {
 }
 
+PiiRansac::Data::~Data()
+{}
+
 PiiRansac::PiiRansac() : d(new Data)
 {
 }
@@ -97,17 +100,19 @@ bool PiiRansac::findBestModel()
       vecInliers.reserve(iSamples);
 
       // Test all possible models
-      for (int iModel=0; iModel<matModels.rows(); ++iModel)
+      for (int iModel = 0; iModel < matModels.rows(); ++iModel)
         {
           // Clear the inlier list at the beginning of each round.
           vecInliers.resize(0);
 
+          const double* pModel = matModels.constRowBegin(iModel);
+          double dFittingThreshold = fittingThreshold(pModel);
           // Match all points against the current model
-          for (int iPoint=0; iPoint<iSamples; ++iPoint)
+          for (int iPoint = 0; iPoint < iSamples; ++iPoint)
             {
               // Store points that match to the model with an error
               // less than the threshold.
-              if (fitToModel(iPoint, matModels.constRowBegin(iModel)) < d->dFittingThreshold)
+              if (fitToModel(iPoint, pModel) < dFittingThreshold)
                 vecInliers << iPoint;
             }
 
@@ -117,10 +122,10 @@ bool PiiRansac::findBestModel()
           if (iInlierCount > d->vecBestInliers.size())
             {
               //piiDebug("Inliers: %d", iInlierCount);
-              if (iInlierCount > d->iMinInliers)
+              if (iInlierCount > minInliers(pModel))
                 {
                   d->vecBestInliers = vecInliers;
-                  d->matBestModel = matModels(iModel,0,1,-1);
+                  d->matBestModel = matModels(iModel, 0, 1, -1);
                 }
 
               // The fraction of inliers
@@ -147,7 +152,9 @@ void PiiRansac::setMaxSamplings(int maxSamplings) { d->iMaxSamplings = maxSampli
 int PiiRansac::maxSamplings() const { return d->iMaxSamplings; }
 void PiiRansac::setMinInliers(int minInliers) { d->iMinInliers = minInliers; }
 int PiiRansac::minInliers() const { return d->iMinInliers; }
+int PiiRansac::minInliers(const double*) const { return d->iMinInliers; }
 void PiiRansac::setFittingThreshold(double fittingThreshold) { d->dFittingThreshold = fittingThreshold; }
 double PiiRansac::fittingThreshold() const { return d->dFittingThreshold; }
+double PiiRansac::fittingThreshold(const double*) const { return d->dFittingThreshold; }
 void PiiRansac::setSelectionProbability(double selectionProbability) { d->dSelectionProbability = selectionProbability; }
 double PiiRansac::selectionProbability() const { return d->dSelectionProbability; }
