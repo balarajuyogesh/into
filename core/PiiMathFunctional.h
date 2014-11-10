@@ -181,6 +181,15 @@ namespace Pii
   };
 
   /**
+   * A unary function that returns the square root of its argument
+   * using a fast approximation.
+   */
+  struct FastSqrt : public Pii::UnaryFunction<float, float>
+  {
+    float operator() (float value) const { return fastSqrt(value); }
+  };
+
+  /**
    * A unary function that returns `sin`(x).
    */
   template <class T> struct Sin : public Pii::UnaryFunction<T,double>

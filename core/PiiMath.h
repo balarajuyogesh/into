@@ -506,6 +506,19 @@ namespace Pii
 #endif
   }
 
+  inline float fastSqrt(float x)
+  {
+    union
+    {
+      float x;
+      int i;
+    } u;
+    u.x = x;
+    u.i = 0x5f3759df - (u.i >> 1);  // initial guess
+    float xux = x * u.x;
+    return xux * (1.5f - .5f * xux * u.x); // Newton step
+  }
+
   /**
    * Returns `sin`(*value*).
    */
@@ -2147,6 +2160,7 @@ namespace Pii
    * @return \(\sqrt{a^2 + b^2}\)
    */
   template <class T> inline T hypotenuse(T a, T b) { return T(sqrt(a*a + b*b)); }
+  template <class T> inline T fastHypotenuse(T a, T b) { return T(fastSqrt(a*a + b*b)); }
 
   /**
    * Calculates the length of the third side of a triangle, given the
@@ -2860,6 +2874,16 @@ namespace Pii
    * Calculates the square root of all elements in a matrix.
    */
   PII_MATH_MATRIX_TRANSFORM(sqrt, Sqrt);
+  /**
+   * Calculates the square root of all elements in a matrix using a
+   * fast approximation.
+   */
+  template <class Matrix>
+  inline PiiUnaryMatrixTransform<Matrix, FastSqrt>
+  fastSqrt(const PiiConceptualMatrix<Matrix>& mat)
+  {
+    return unaryMatrixTransform(mat.selfRef(), FastSqrt());
+  }
 
   /**
    * Calculates the sine of all elements in a matrix.

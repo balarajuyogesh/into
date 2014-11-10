@@ -105,12 +105,14 @@ private slots:
   void Pow();
   void Round();
   void Sqrt();
+  void FastSqrt();
   void Square();
   void Mean();
   void Exp();
   void Sin();
   void Cos();
   void Tan();
+  void fastSqrt();
   void kthSmallest();
   void partition();
   void insertionSort();

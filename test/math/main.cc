@@ -1388,6 +1388,18 @@ void TestPiiMath::Sqrt()
   QVERIFY(Pii::equals(m, PiiMatrix<int>(1,2, 3, 4)));
 }
 
+void TestPiiMath::fastSqrt()
+{
+  for (float f = 0; f < 1000; ++f)
+    QVERIFY(Pii::abs(Pii::fastSqrt(f) - Pii::sqrt(f)) < 0.1f);
+}
+
+void TestPiiMath::FastSqrt()
+{
+  PiiMatrix<int> m(1,2, 9, 16);
+  m.map(Pii::unaryCompose(Pii::Round<float, int>(), Pii::FastSqrt()));
+  QVERIFY(Pii::equals(m, PiiMatrix<int>(1,2, 3, 4)));
+}
 
 void TestPiiMath::Square()
 {
