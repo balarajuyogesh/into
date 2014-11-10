@@ -2318,4 +2318,45 @@ void TestPiiImage::minFilter()
   QVERIFY(Pii::equals(PiiImage::minFilter(img,3,5), res));
 }
 
+struct GradientPicker
+{
+  GradientPicker(QList<QPair<int, int> >* coords) :
+    _plstCoords(coords)
+  {}
+
+  void operator() (int y, int x, int yGrad, int /*xGrad*/)
+  {
+    if (yGrad < 0)
+      _plstCoords->append(qMakePair(y, x));
+  }
+
+  QList<QPair<int, int> >* _plstCoords;
+};
+
+void TestPiiImage::fastGradient()
+{
+  PiiMatrix<uchar> img(4, 5,
+                       1, 2, 3, 4, 5,
+                       5, 4, 3, 2, 1,
+                       2, 3, 4, 5, 6,
+                       4, 3, 2, 1, 0);
+  {
+    PiiMatrix<uint> res(PiiMatrix<uint>::uninitialized(4, 5));
+    PiiImage::fastGradient(img, PiiImage::PackedGradientFunction<uint>(), res);
+    QCOMPARE(res(1, 1), uint(((-1 - 4 - 3 + 2 + 6 + 4) << 16) | (-1 - 10 - 2 + 3 + 6 + 4)));
+    QCOMPARE(res(1, 2), uint(((-2 - 6 - 4 + 3 + 8 + 5) << 16) | (-2 - 8 - 3 + 4 + 4 + 5)));
+    QCOMPARE(res(1, 3), uint(((-3 - 8 - 5 + 4 + 10 + 6) << 16) | (-3 - 6 - 4 + 5 + 2 + 6)));
+    QCOMPARE(res(2, 1), uint(((-5 - 8 - 3 + 4 + 6 + 2) << 16) | (-5 - 4 - 4 + 3 + 8 + 2)));
+    QCOMPARE(res(2, 2), uint(((-4 - 6 - 2 + 3 + 4 + 1) << 16) | (-4 - 6 - 3 + 2 + 10 + 1)));
+    QCOMPARE(res(2, 3), uint(((-3 - 4 - 1 + 2 + 2 + 0) << 16) | (-3 - 8 - 2 + 1 + 12 + 0)));
+  }
+  {
+    QList<QPair<int,int > > lstPicked;
+    // 4,0  4,0  4,0
+    // -4,0  -4,0  -4,0
+    PiiImage::fastGradient(img, GradientPicker(&lstPicked));
+    QCOMPARE(lstPicked, (QList<QPair<int, int > >() << qMakePair(2, 1) << qMakePair(2, 2) << qMakePair(2, 3)));
+  }
+}
+
 QTEST_MAIN(TestPiiImage)

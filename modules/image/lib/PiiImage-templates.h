@@ -1091,9 +1091,9 @@ namespace PiiImage
       {
 #define PII_CHECK_EXTREMA_WITH_POINT \
         transformHomogeneousPoint(transform, float(x), float(y), &fX, &fY); \
-        if (fX < iMinX) iMinX = int(floor(fX));  \
-        if (fX > iMaxX) iMaxX = int(ceil(fX));   \
-        if (fY < iMinY) iMinY = int(floor(fY));    \
+        if (fX < iMinX) iMinX = int(floor(fX)); \
+        if (fX > iMaxX) iMaxX = int(ceil(fX)); \
+        if (fY < iMinY) iMinY = int(floor(fY)); \
         if (fY > iMaxY) iMaxY = int(ceil(fY))
         // Find extrema by transforming old corner coordinates.
         // Origin first (initially, x and y are zeros)
@@ -1320,5 +1320,80 @@ namespace PiiImage
           }
       }
     return matResult;
+  }
+
+  template <class Matrix, class BinaryFunction>
+  void fastGradient(const Matrix& input,
+                    BinaryFunction function,
+                    PiiMatrix<typename BinaryFunction::result_type>& output)
+  {
+    const int iRows = input.rows(), iCols = input.columns();
+    if (iRows < 3 || iCols < 3)
+      {
+        output = 0;
+        return;
+      }
+
+    typename Matrix::const_row_iterator
+      r0 = input[0],
+      r1 = input[1],
+      r2;
+
+    uint* pOutRow = output[0];
+    // Clear first row
+    for (int c = 0; c < iCols; ++c)
+      pOutRow = 0;
+
+    for (int r = 1; r < iRows - 1; ++r)
+      {
+        r2 = input[r + 1];
+        pOutRow = output[r];
+        // Clear first pixel
+        pOutRow[0] = 0;
+        int c = 1;
+        for (; c < iCols - 1; ++c)
+          pOutRow[c] = function(r2[c - 1] + 2 * r2[c] + r2[c + 1] -
+                                r0[c - 1] - 2 * r0[c] - r0[c + 1],
+                                r0[c + 1] - r0[c - 1] +
+                                2 * (r1[c + 1] - r1[c - 1]) +
+                                r2[c + 1] - r2[c - 1]);
+        // Clear last pixel
+        pOutRow[c] = 0;
+        r0 = r1;
+        r1 = r2;
+      }
+
+    pOutRow = output[iRows - 1];
+    // Clear last row
+    for (int c = 0; c < iCols; ++c)
+      pOutRow = 0;
+  }
+
+  template <class Matrix, class GradientFunction>
+  void fastGradient(const Matrix& input, GradientFunction function)
+  {
+    const int iRows = input.rows(), iCols = input.columns();
+    if (iRows < 3 || iCols < 3)
+      return;
+
+    typename Matrix::const_row_iterator
+      r0 = input[0],
+      r1 = input[1],
+      r2;
+
+    for (int r = 1; r < iRows - 1; ++r)
+      {
+        r2 = input[r + 1];
+        int c = 1;
+        for (; c < iCols - 1; ++c)
+          function(r, c,
+                   r2[c - 1] + 2 * r2[c] + r2[c + 1] -
+                   r0[c - 1] - 2 * r0[c] - r0[c + 1],
+                   r0[c + 1] - r0[c - 1] +
+                   2 * (r1[c + 1] - r1[c - 1]) +
+                   r2[c + 1] - r2[c - 1]);
+        r0 = r1;
+        r1 = r2;
+      }
   }
 }

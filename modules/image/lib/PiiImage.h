@@ -1209,13 +1209,47 @@ namespace PiiImage
   {
     typedef typename UnaryFunction::result_type R;
     R map[256];
-    for (int i=0; i<256; ++i)
+    for (int i = 0; i < 256; ++i)
       map[i] = function(uchar(i));
 
     Pii::transform(input.begin(), input.end(), output.begin(),
                    Pii::arrayLookup(map));
   }
 
+  /**
+   * Packs x and y gradients to an integer type T so that the LSBs
+   * contain horizontal gradient magnitude as a (signed) number, and
+   * the MSBs the vertical gradient magnitude.
+   */
+  template <class T>
+  struct PackedGradientFunction : public Pii::BinaryFunction<int, int, T>
+  {
+    T operator() (int vert, int horz) const
+    {
+      return T(horz | (vert << (sizeof(T) * 4)));
+    }
+  };
+
+  /**
+   * Calculates the x and y gradient vectors of an image in one pass
+   * using Sobel filters. The vertical and horizontal gradient
+   * directions are calculated as integers and passed to the given
+   * *function* as in `function(gradY, gradX)`. The output buffer must
+   * be preallocated and the same size as the input image. The value
+   * returned by *function* will be written to the corresponding pixel
+   * in *output*.
+   */
+  template <class Matrix, class BinaryFunction>
+  void fastGradient(const Matrix& input,
+                    BinaryFunction function,
+                    PiiMatrix<typename BinaryFunction::result_type>& output);
+
+  /**
+   * Calculates the x and y gradient of *image* and calls `function(row, column,
+   * yGradient, xGradient)` for each pixel.
+   */
+  template <class Matrix, class GradientFunction>
+  void fastGradient(const Matrix& input, GradientFunction function);
 }
 
 #include "PiiImage-templates.h"

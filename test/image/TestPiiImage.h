@@ -92,6 +92,7 @@ private slots:
   void sweepLine();
   void crop();
   void xorMatch();
+  void fastGradient();
 
 private:
   template <class TernaryFunction, class T>
