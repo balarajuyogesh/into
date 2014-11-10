@@ -20,6 +20,7 @@
 #include <PiiMatrix.h>
 #include <QVector>
 #include <QPair>
+#include <QStack>
 #include <functional>
 
 namespace PiiImage
@@ -437,7 +438,7 @@ namespace PiiImage
   // The entry point for a linked list of nodes.
   struct RunList
   {
-    RunList() : first(0), last(0) {}
+    RunList() : first(0), last(0), iSize(0) {}
 
     ~RunList()
     {
@@ -462,6 +463,7 @@ namespace PiiImage
         node->next->previous = node->previous;
       else
         last = node->previous;
+      --iSize;
     }
 
     RunList& operator<< (RunNode* node)
@@ -473,29 +475,27 @@ namespace PiiImage
 
       node->previous = last;
       last = node;
+      ++iSize;
       return *this;
     }
 
-    int size() const
-    {
-      int iCount = 0;
-      for (RunNode* ptr = first; ptr != 0; ptr = ptr->next, ++iCount) ;
-      return iCount;
-    }
+    int size() const { return iSize; }
 
     RunNode* first, *last;
+    int iSize;
   };
 
   // Keeps track of the current state of the labeling algorithm in
   // recursive calls.
+  template <class T>
   struct LabelInfo
   {
-    LabelInfo(QVector<RunList>& runs, PiiMatrix<int>& labels, int& index, int connectivityShift) :
+    LabelInfo(QVector<RunList>& runs, PiiMatrix<T>& labels, int& index, int connectivityShift) :
       lstRuns(runs), matLabels(labels), iLabelIndex(index), iConnectivityShift(connectivityShift)
     {}
 
     QVector<RunList>& lstRuns;
-    PiiMatrix<int>& matLabels;
+    PiiMatrix<T>& matLabels;
     int& iLabelIndex;
     int iConnectivityShift;
   };
@@ -505,18 +505,103 @@ namespace PiiImage
     int minRow, maxRow, minCol, maxCol;
   };
 
-  PII_IMAGE_EXPORT int connectRuns(LabelInfo& info, int rowIndex, int start, int end,
-                                   BoundingBox& box);
-  PII_IMAGE_EXPORT int markToBuffer(LabelInfo& info, int rowIndex, int start, int end);
-  PII_IMAGE_EXPORT void clearLabel(LabelInfo& info, const BoundingBox& box);
+  // Marks a sequence of detected object pixels into the label buffer.
+  // Returns the length of the run.
+  template <class T>
+  int markToBuffer(LabelInfo<T>& info, int rowIndex, int start, int end)
+  {
+    // Mark the run into the label buffer
+    T* pRunRow = info.matLabels[rowIndex];
+    const int iEnd = end + info.iConnectivityShift;
+    const int iLabel = info.iLabelIndex;
+    for (int c = start; c < iEnd; ++c)
+      pRunRow[c] = T(iLabel);
+    return iEnd - start;
+  }
 
-  template <class Matrix, class UnaryOp1, class UnaryOp2>
-  void labelImage(const Matrix& mat,
-                  PiiMatrix<int>& labels,
-                  UnaryOp1 rule1, UnaryOp2 rule2,
-                  Connectivity connectivity,
-                  int labelIncrement = 1,
-                  int* labelCount = 0);
+  // Clears the current label out of existence.
+  template <class T>
+  void overwriteLabel(LabelInfo<T>& info, const BoundingBox& box, T label)
+  {
+    for (int r = box.minRow; r <= box.maxRow; ++r)
+      {
+        T* pRow = info.matLabels[r];
+        const int iLabel = info.iLabelIndex;
+        for (int c = box.minCol; c < box.maxCol + info.iConnectivityShift; ++c)
+          if (pRow[c] == iLabel)
+            pRow[c] = label;
+      }
+  }
+
+  struct RecursiveCall
+  {
+    int rowIndex;
+    int start;
+    int end;
+  };
+
+  // On row rowIndex, find all runs that overlap with the range
+  // start-end.
+  template <class T>
+  int connectRuns(LabelInfo<T>& info, int rowIndex, int start, int end, BoundingBox& box)
+  {
+    QStack<RecursiveCall> localStack;
+    RecursiveCall currentCall = { rowIndex, start, end };
+    localStack.push(currentCall);
+
+    int iSize = 0;
+
+    while (!localStack.isEmpty())
+      {
+        currentCall = localStack.pop();
+        // Out of image boundaries...
+        if (currentCall.rowIndex < 0 || currentCall.rowIndex >= info.lstRuns.size())
+          continue; // to next item in the local stack
+
+        if (currentCall.rowIndex < box.minRow)
+          box.minRow = currentCall.rowIndex;
+        else if (currentCall.rowIndex > box.maxRow)
+          box.maxRow = currentCall.rowIndex;
+
+        // Go through all runs on this row and find the overlapping ones
+        for (RunNode* pNode = info.lstRuns[currentCall.rowIndex].first; pNode != 0; )
+          {
+            // No overlap
+            if (currentCall.start > pNode->end ||
+                currentCall.end < pNode->start)
+              {
+                pNode = pNode->next;
+                continue; // to the next node
+              }
+
+            // Invalidate the current run to prevent loops in "recursion"
+            const int iEnd = pNode->end;
+            pNode->end = -1;
+            pNode->seed = false;
+            const int iStart = pNode->start;
+            if (iStart < box.minCol)
+              box.minCol = iStart;
+            if (iEnd > box.maxCol)
+              box.maxCol = iEnd;
+            // Mark the run and push "recursion" calls to the stack
+            iSize += markToBuffer(info, currentCall.rowIndex, iStart, iEnd);
+            RecursiveCall call;
+            call.rowIndex = currentCall.rowIndex - 1;
+            call.start = iStart;
+            call.end = iEnd;
+            localStack.push(call);
+            call.rowIndex = currentCall.rowIndex + 1;
+            localStack.push(call);
+
+            // Destroy current node
+            info.lstRuns[currentCall.rowIndex].remove(pNode);
+            RunNode* pNodeToDelete = pNode;
+            pNode = pNode->next;
+            delete pNodeToDelete;
+          }
+      }
+    return iSize;
+  }
   /// @endhide
 
   /**
@@ -547,6 +632,10 @@ namespace PiiImage
    * @param minSize the minimum number of pixels in a connected
    * component. If a component has less than this many pixels, it
    * will be discarded.
+   *
+   * @param maxSize the maximum number of pixels in a connected
+   * component. If a component has more than this many pixels, it will
+   * be discarded.
    *
    * @param labelCount an optional output value parameter that stores
    * the maximum label. If `labelIncrement` is one, this value equals
@@ -580,39 +669,43 @@ namespace PiiImage
   PiiMatrix<int> labelImage(const Matrix& mat,
                             UnaryOp1 rule1, UnaryOp2 rule2,
                             Connectivity connectivity,
-                            int labelIncrement = 1,
+                            bool thresholdOnly = false,
                             int minSize = 0,
+                            int maxSize = INT_MAX,
                             int* labelCount = 0)
   {
     PiiMatrix<int> matLabels(mat.rows(), mat.columns());
-    labelImage(mat, matLabels, rule1, rule2, connectivity, labelIncrement, minSize, labelCount);
+    labelImage(mat, matLabels, rule1, rule2, connectivity,
+               thresholdOnly, minSize, maxSize, labelCount);
     return matLabels;
   }
-
-  /* TODO: Change this so that labels can be either int or bool
-   * matrix. If int, labelIncrement = 1. If bool, labelIncrement = 0.
-   * And make size limitation work with the bool version.
-   */
 
   /**
    * This version writes the labels to a preallocated output image
    * *labels*. The size of the output image must be the same as the
    * input, and it must be initialized to zeros.
    */
-  template <class Matrix, class UnaryOp1, class UnaryOp2>
+  template <class Matrix, class T, class UnaryOp1, class UnaryOp2>
   void labelImage(const Matrix& mat,
-                  PiiMatrix<int>& labels,
+                  PiiMatrix<T>& labels,
                   UnaryOp1 rule1, UnaryOp2 rule2,
                   Connectivity connectivity,
-                  int labelIncrement = 1,
+                  bool thresholdOnly = false,
                   int minSize = 0,
+                  int maxSize = INT_MAX,
                   int* labelCount = 0)
   {
     QVector<RunList> lstRuns(mat.rows());
-    int iLabelIndex = labelIncrement == 0 ? 1 : 0;
     int iConnectivityShift = connectivity == Connect8 ? 0 : 1;
+    // If we are going to threshold only and there is a possibility
+    // that a labeled object is cancelled out, we need to first mark
+    // each new blob with a temporary label to be able to cancel it
+    // out.
+    bool bTempLabel = thresholdOnly && (minSize > 0 || maxSize < mat.rows() * mat.columns());
+    int iFixedLabel = bTempLabel ? 2 : 1;
+    int iLabelIndex = 0;
 
-    LabelInfo info(lstRuns, labels, iLabelIndex, iConnectivityShift);
+    LabelInfo<T> info(lstRuns, labels, iLabelIndex, iConnectivityShift);
 
     const int iRows = mat.rows(), iCols = mat.columns();
 
@@ -655,7 +748,11 @@ namespace PiiImage
             if (pNode->seed)
               {
                 // Next label...
-                iLabelIndex += labelIncrement;
+                if (thresholdOnly)
+                  iLabelIndex = iFixedLabel;
+                else
+                  ++iLabelIndex;
+
                 // Invalidate the node to prevent loops in recursion
                 const int iEnd = pNode->end;
                 pNode->end = -1;
@@ -672,11 +769,17 @@ namespace PiiImage
                 pNode = pNode->next;
                 delete pNodeToDelete;
 
-                if (iSize < minSize)
+                // If the object size is out of bounds, clear it and
+                // restore the previous label.
+                if (iSize < minSize || iSize > maxSize)
                   {
-                    clearLabel(info, box);
-                    iLabelIndex -= labelIncrement;
+                    overwriteLabel(info, box, 0);
+                    --iLabelIndex;
                   }
+                // If it is within bounds, but we were using a
+                // temporary label, restore the label to 1.
+                else if (bTempLabel)
+                  overwriteLabel(info, box, 1);
               }
             else
               pNode = pNode->next;
@@ -685,7 +788,7 @@ namespace PiiImage
 
     // Store return-value parameter if needed
     if (labelCount != 0)
-      *labelCount = iLabelIndex;
+      *labelCount = thresholdOnly ? 1 : iLabelIndex;
   }
 }
 

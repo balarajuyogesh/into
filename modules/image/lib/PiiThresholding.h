@@ -428,7 +428,7 @@ namespace PiiImage
                       std::bind2nd(std::greater_equal<T>(), lowThreshold),
                       std::bind2nd(std::greater_equal<T>(), highThreshold),
                       connectivity,
-                      0);
+                      true);
   }
 
   /**
