@@ -919,6 +919,31 @@ public:
   }
 
   /**
+   * Removes *count* rows, whose indices are given by *iterator*. The
+   * indices must be in increasing order and contain no duplicates.
+   */
+  template <class SortedIntIterator>
+  void removeRows(SortedIntIterator begin, int count)
+  {
+    detach();
+    int iRemoved = 1;
+    size_t szRowLength = sizeof(T) * d->iColumns;
+    --count;
+    for (int r = *(begin++) + 1; r < d->iRows; ++r)
+      {
+        if (count && r == *begin)
+          {
+            ++begin;
+            ++iRemoved;
+            --count;
+          }
+        else
+          memcpy(row(r - iRemoved), row(r), szRowLength);
+      }
+    d->iRows -= iRemoved;
+  }
+
+  /**
    * Removes a column from the matrix. All data right of *index* will
    * be moved left. The stride of the matrix will not change. If you
    * later add a column to the matrix, the data will not be

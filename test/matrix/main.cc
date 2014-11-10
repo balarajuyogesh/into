@@ -255,6 +255,13 @@ void TestPiiMatrix::submatrix()
     PiiMatrix<int> mat(3,3);
     QVERIFY(mat(0,0,0,0).isEmpty());
   }
+  {
+    PiiMatrix<int> matSource(100, 4);
+    PiiMatrix<int> matPiece;
+    matPiece = matSource(3, 0, 1, -1);
+    matPiece = matSource(99, 0, 1, -1);
+    PiiMatrix<int> matPieceCopy(matPiece);
+  }
 }
 
 void TestPiiMatrix::transpose()
@@ -445,6 +452,37 @@ void TestPiiMatrix::rowHandling()
     a.appendRow(2);
     a.appendRow(3);
     QVERIFY(Pii::equals(a, PiiMatrix<int>(3,1, 1,2,3)));
+  }
+  {
+    PiiMatrix<int> a(8, 2,
+                     1, 2,
+                     3, 4,
+                     5, 6,
+                     7, 8,
+                     9, 10,
+                     11, 12,
+                     13, 14,
+                     15, 16);
+    int aRows[] = { 1, 3, 4, 6, 7 };
+    a.removeRows(aRows, 5);
+    QVERIFY(Pii::equals(a, PiiMatrix<int>(3, 2,
+                                          1, 2,
+                                          5, 6,
+                                          11, 12)));
+  }
+  {
+    PiiMatrix<int> a(8, 2,
+                     1, 2,
+                     3, 4,
+                     5, 6,
+                     7, 8,
+                     9, 10,
+                     11, 12,
+                     13, 14,
+                     15, 16);
+    int aRows[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
+    a.removeRows(aRows, 8);
+    QVERIFY(a.isEmpty());
   }
 }
 
