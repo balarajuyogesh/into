@@ -17,6 +17,7 @@
 
 #include <PiiRansac.h>
 #include <PiiRigidPlaneRansac.h>
+#include <PiiCircleRansac.h>
 #include <QtTest>
 #include <PiiMatrixUtil.h>
 #include <PiiTimer.h>
@@ -33,6 +34,7 @@ void TestPiiRansac::RigidPlaneRansac()
     PiiRigidPlaneRansac<int> ransac(matPoints1, matPoints2);
     ransac.setFittingThreshold(0.1);
     ransac.setSelectionProbability(0.999);
+    ransac.findBestModel();
     QVERIFY(ransac.findBestModel());
     PiiMatrix<double> matEstModel(ransac.refineModel());
     //Pii::matlabPrint(std::cout, matEstModel);
@@ -89,6 +91,49 @@ void TestPiiRansac::RigidPlaneRansac()
     qDebug("Time: %d", timer.milliSeconds());
   }
 #endif
+}
+
+void TestPiiRansac::CircleRansac()
+{
+  Pii::seedRandom();
+  {
+    // Unit circle
+    PiiMatrix<int> matPoints(3, 2,
+                             -1, 0,
+                             0, 1,
+                             1, 0);
+    PiiCircleRansac<int> ransac(matPoints);
+    QVERIFY(ransac.findBestModel());
+    // The algorithm uses a fast sqrt approximation, so the model
+    // isn't exactly correct.
+    QVERIFY(Pii::max(Pii::abs(ransac.bestModel() - PiiMatrix<double>(1, 3, 0.0, 0.0, 1.0))) < 0.01);
+  }
+  {
+    double dCx = Pii::uniformRandom(-10.0, 10.0);
+    double dCy = Pii::uniformRandom(-10.0, 10.0);
+    double dR = Pii::uniformRandom(10.0, 20.0);
+    PiiMatrix<double> matPoints(0, 2);
+    matPoints.reserve(256);
+    for (double a = 0; a < 2 * M_PI; a += M_PI / 128)
+      matPoints.appendRow(dCx + dR * cos(a) + Pii::uniformRandom(-1.0, 1.0),
+                          dCy + dR * sin(a) + Pii::uniformRandom(-1.0, 1.0));
+    PiiCircleRansac<double> ransac(matPoints);
+    ransac.setFittingThreshold(1.5);
+    QVERIFY(ransac.findBestModel());
+    PiiMatrix<double> matModel(ransac.bestModel());
+    double dCenterDiff1 = Pii::hypotenuse(matModel(0, 0) - dCx, matModel(0, 1) - dCy);
+    double dRadiusDiff1 = Pii::abs(matModel(0, 2) - dR);
+
+    QVERIFY(dCenterDiff1 < 1);
+    QVERIFY(dRadiusDiff1 < 2);
+
+    PiiMatrix<double> matRefined(ransac.refineModel());
+    double dCenterDiff2 = Pii::hypotenuse(matRefined(0, 0) - dCx, matRefined(0, 1) - dCy);
+    double dRadiusDiff2 = Pii::abs(matRefined(0, 2) - dR);
+
+    QVERIFY(dCenterDiff2 < 0.2);
+    QVERIFY(dRadiusDiff2 < 0.1);
+  }
 }
 
 QTEST_MAIN(TestPiiRansac)

@@ -24,6 +24,7 @@ class TestPiiRansac : public QObject
 
 private slots:
   void RigidPlaneRansac();
+  void CircleRansac();
 };
 
 
