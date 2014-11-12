@@ -20,6 +20,7 @@
 #include "PiiMultipartDecoder.h"
 #include "PiiStreamBuffer.h"
 
+#include <PiiTimer.h>
 #include <PiiAsyncCall.h>
 #include <PiiSerializationUtil.h>
 #include <PiiGenericTextInputArchive.h>
@@ -412,7 +413,17 @@ void PiiRemoteObject::readChannel()
           for (int iTry = 0; iTry <= d->iRetryCount; ++iTry)
             {
               if (iTry != 0)
-                PiiDelay::msleep(d->iRetryDelay);
+                {
+                  // Granular sleep
+                  PiiTimer timer;
+                  int iElapsed = 0;
+                  while ((iElapsed = timer.milliseconds()) < d->iRetryDelay)
+                    {
+                      PiiDelay::msleep(qMin(50, (d->iRetryDelay - iElapsed)));
+                      if (!d->bChannelRunning)
+                        goto stopTrying;
+                    }
+                }
 
               QMutexLocker channelLock(&d->channelMutex);
               networkClient.setServerAddress(d->networkClient.serverAddress());
@@ -464,8 +475,7 @@ void PiiRemoteObject::readChannel()
             }
         }
     }
-
-  synchronized (d->channelMutex) d->bChannelRunning = false;
+ stopTrying: synchronized (d->channelMutex) d->bChannelRunning = false;
 }
 
 bool PiiRemoteObject::checkChannelResponse(PiiHttpDevice& dev)
