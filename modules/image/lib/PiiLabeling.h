@@ -22,6 +22,7 @@
 #include <QPair>
 #include <QStack>
 #include <functional>
+#include <climits>
 
 namespace PiiImage
 {
