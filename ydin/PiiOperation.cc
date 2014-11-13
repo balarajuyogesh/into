@@ -347,10 +347,42 @@ void PiiOperation::parseProperty(QVariantMap& map, const QString& metaPropertyNa
 
 QVariant PiiOperation::readDynamicMetaProperty(const QVariant& var) const
 {
-  QVariant varReturn;
-  var.value<QMetaMethod>().invoke(const_cast<PiiOperation*>(this),
-                                  Q_RETURN_ARG(QVariant, varReturn));
-  return varReturn;
+  QMetaMethod method(var.value<QMetaMethod>());
+  PiiOperation* pOp = const_cast<PiiOperation*>(this);
+  switch (method.returnType())
+    {
+    case QMetaType::QVariant:
+      {
+        QVariant varRet;
+        method.invoke(pOp, Q_RETURN_ARG(QVariant, varRet));
+        return varRet;
+      }
+    case QMetaType::Int:
+      {
+        int iRet;
+        method.invoke(pOp, Q_RETURN_ARG(int, iRet));
+        return iRet;
+      }
+    case QMetaType::Double:
+      {
+        double dRet;
+        method.invoke(pOp, Q_RETURN_ARG(double, dRet));
+        return dRet;
+      }
+    case QMetaType::Bool:
+      {
+        bool bRet;
+        method.invoke(pOp, Q_RETURN_ARG(bool, bRet));
+        return bRet;
+      }
+    case QMetaType::QString:
+      {
+        QString strRet;
+        method.invoke(pOp, Q_RETURN_ARG(QString, strRet));
+        return strRet;
+      }
+    }
+  return QVariant();
 }
 
 QVariant PiiOperation::metaProperty(const QString& propertyName, const QString& metaPropertyName) const
@@ -413,7 +445,7 @@ const QMap<QString,QVariantMap>* PiiOperation::createMetaPropertyCache(const QMe
   // Otherwise create a new cache.
   QMap<QString,QVariantMap> mapCache;
   // Parse all class info fields
-  for (int i=0; i<metaObj->classInfoCount(); ++i)
+  for (int i = 0; i < metaObj->classInfoCount(); ++i)
     {
       QMetaClassInfo info = metaObj->classInfo(i);
       QStringList lstParts(QString(info.name()).split('.'));
@@ -428,10 +460,15 @@ const QMap<QString,QVariantMap>* PiiOperation::createMetaPropertyCache(const QMe
 
   // Parse all registered functions and see if they can be matched to
   // properties using the propname_metapropname convention.
-  for (int i=0; i<metaObj->methodCount(); ++i)
+  for (int i = 0; i < metaObj->methodCount(); ++i)
     {
       QMetaMethod method = metaObj->method(i);
-      if (method.parameterCount() > 0 || method.returnType() != qMetaTypeId<QVariant>())
+      if (method.parameterCount() > 0 ||
+          method.returnType() not_member_of<int> (QMetaType::QVariant,
+                                                  QMetaType::Int,
+                                                  QMetaType::Double,
+                                                  QMetaType::Bool,
+                                                  QMetaType::QString))
         continue;
       QByteArray aMethodName(method.name()); // TODO Qt4 support
       int iUnderScoreIndex = aMethodName.indexOf('_');
