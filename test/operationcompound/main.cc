@@ -96,6 +96,10 @@ void TestPiiOperationCompound::fullName()
   pTest->setObjectName("test");
   pCompound2->addOperation(pTest);
   pCompound1->addOperation(pCompound2);
+  PiiProxySocket* pProxyIn1 = pCompound1->createInputProxy("proxy");
+  PiiProxySocket* pProxyIn2 = pCompound2->createInputProxy("proxy");
+  PiiProxySocket* pProxyOut1 = pCompound1->createOutputProxy("proxy");
+  PiiProxySocket* pProxyOut2 = pCompound2->createOutputProxy("proxy");
 
   QCOMPARE(pTest->fullName(), QString("c2.test"));
   QCOMPARE(pTest->output("output")->fullName(), QString("c2.test.output"));
@@ -103,6 +107,15 @@ void TestPiiOperationCompound::fullName()
 
   QCOMPARE(pCompound2->input("input")->fullName(), QString("c2.input"));
   QCOMPARE(pCompound2->output("output")->fullName(), QString("c2.output"));
+
+  QCOMPARE(pProxyIn1->input()->fullName(), QString("proxy"));
+  QCOMPARE(pProxyIn1->output()->fullName(), QString(".proxy"));
+  QCOMPARE(pProxyIn2->input()->fullName(), QString("c2.proxy"));
+  QCOMPARE(pProxyIn2->output()->fullName(), QString("c2..proxy"));
+  QCOMPARE(pProxyOut1->input()->fullName(), QString(".proxy"));
+  QCOMPARE(pProxyOut1->output()->fullName(), QString("proxy"));
+  QCOMPARE(pProxyOut2->input()->fullName(), QString("c2..proxy"));
+  QCOMPARE(pProxyOut2->output()->fullName(), QString("c2.proxy"));
   delete pCompound1;
 }
 

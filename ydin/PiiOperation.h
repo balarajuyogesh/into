@@ -350,6 +350,9 @@ public:
    * as separators. The FQN can be passed to the childOperation()
    * function of the topmost enclosing operation (usually a PiiEngine)
    * to get a pointer to this operation.
+   *
+   * Calling this function on a top-level compound returns
+   * objectName().
    */
   Q_INVOKABLE QString fullName() const;
 

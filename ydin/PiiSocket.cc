@@ -49,7 +49,7 @@ bool PiiSocket::isOutput() const
 QString PiiSocket::fullName() const
 {
   PiiOperation* pParent = parentOperation();
-  if (pParent)
+  if (pParent && pParent->parentOperation())
     return pParent->fullName() + '.' + objectName();
   return objectName();
 }
