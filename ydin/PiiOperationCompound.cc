@@ -121,7 +121,7 @@ void PiiOperationCompound::check(bool reset)
   do
     {
       bDisabledSome = false;
-      for (int i=0; i<d->lstOperations.size(); ++i)
+      for (int i = 0; i < d->lstOperations.size(); ++i)
         {
           PiiOperation* pOperation = d->lstOperations[i];
           if (pOperation->activityMode() == Enabled &&
@@ -139,7 +139,7 @@ void PiiOperationCompound::check(bool reset)
   // one to change their activity mode while the parent is running. We
   // must know what the activity mode was when the operation was
   // started.
-  for (int i=0; i<d->lstOperations.size(); ++i)
+  for (int i = 0; i < d->lstOperations.size(); ++i)
     d->vecChildStates[i].bEnabled = d->lstOperations[i]->activityMode() == Enabled;
 
   if (reset)

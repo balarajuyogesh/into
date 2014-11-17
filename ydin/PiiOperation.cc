@@ -571,15 +571,20 @@ QVariant PiiOperation::socketData(PiiSocket*, int) const { return QVariant(); }
 
 void PiiOperation::setActivityMode(ActivityMode activityMode)
 {
-  QMutexLocker lock(&d->stateMutex);
-  if (state() member_of (Stopped, Paused))
+  bool bMustUpdate = false;
+  synchronized (&d->stateMutex)
     {
-      if (activityMode != d->activityMode)
+      if (state() member_of (Stopped, Paused) &&
+          activityMode != d->activityMode)
         {
           d->activityMode = activityMode;
-          emit activityModeChanged(activityMode);
+          bMustUpdate = true;
         }
+    }
+  if (bMustUpdate)
+    {
       updateActivityMode(activityMode);
+      emit activityModeChanged(activityMode);
     }
 }
 

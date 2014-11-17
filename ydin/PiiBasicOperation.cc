@@ -70,9 +70,11 @@ void PiiBasicOperation::updateActivityMode(ActivityMode mode)
   if (mode != Enabled)
     {
       PII_D;
-      for (int i=0; i<d->lstInputs.size(); ++i)
+      interrupt();
+      if (!wait(1000))
+        piiCritical(tr("%1 was disabled but didn't stop running.").arg(objectName()));
+      for (int i = 0; i < d->lstInputs.size(); ++i)
         d->lstInputs[i]->setController(PiiNullInputController::instance());
-      setState(Stopped);
     }
 }
 

@@ -40,7 +40,6 @@ QThread::Priority PiiThreadedProcessor::processingPriority() const
 
 void PiiThreadedProcessor::setStopped()
 {
-  //qDebug("%s: Thread stopped. State is now %s. Signalling.", _pParentOp->metaObject()->className(), PiiOperation::stateName(_pParentOp->state()));
   // The runner has finished. Our state is (or at least should be)
   // Stopping now
   synchronized (_pStateMutex)
@@ -184,10 +183,6 @@ void PiiThreadedProcessor::prepareAndProcess()
 
 void PiiThreadedProcessor::run()
 {
-  //qDebug("%s running in thread %d",
-  //       _pParentOp->metaObject()->className(),
-  //       static_cast<int>(currentThreadId()));
-
   synchronized (_pStateMutex)
     {
       // State may have changed before we could even start. In such a

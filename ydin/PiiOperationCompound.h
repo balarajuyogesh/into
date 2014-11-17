@@ -702,7 +702,7 @@ protected:
   {
     QList<PiiOperation*> lstOperations = childOperations();
     int iEnabledCount = 0;
-    for (int i=0; i<lstOperations.size(); ++i)
+    for (int i = 0; i < lstOperations.size(); ++i)
       {
         if (lstOperations[i]->activityMode() == Enabled)
           {
