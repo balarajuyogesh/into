@@ -262,7 +262,7 @@ PiiMatrix<double> PiiCircleRansac<T>::refineModel() const
    * pseudoinverse: X = A⁺Y. (Transposed: X' = Y'A⁺')
    */
 
-  const int iCnt = d->matPoints.template rows();
+  const int iCnt = d->matPoints.rows();
   PiiMatrix<double> matA(0, 3), matY(1, iCnt);
   matA.reserve(iCnt);
   double cxi = matBestModel(0, 0), cyi = matBestModel(0, 1), ri = matBestModel(0, 2);

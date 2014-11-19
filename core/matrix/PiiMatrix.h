@@ -938,7 +938,7 @@ public:
             --count;
           }
         else
-          memcpy(row(r - iRemoved), row(r), szRowLength);
+          std::memcpy(row(r - iRemoved), row(r), szRowLength);
       }
     d->iRows -= iRemoved;
   }
