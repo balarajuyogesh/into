@@ -60,6 +60,7 @@ public:
 
   T* data() { return &(*this->begin()); }
   const T* data() const { return &(*this->begin()); }
+  const T* constData() const { return data(); }
 
   void fill(const T& value, int size = -1)
   {
