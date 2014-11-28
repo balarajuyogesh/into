@@ -661,7 +661,7 @@ protected:
    * MyOperation::MyOperation()
    * {
    *   // Disallow changing of the processing mode
-   *   setProtectionLevel("processingMode", WriteNever);
+   *   setProtectionLevel("processingMode", WriteNotAllowed);
    * }
    * ~~~
    *
