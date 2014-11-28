@@ -13,6 +13,7 @@ SUBDIRS = algorithm \
           databasewriter \
           defaultoperation \
           dsp \
+          engine \
           featurecombiner \
           fifo \
           filesystemscanner \

@@ -184,11 +184,11 @@ int PiiEngine::unloadPlugin(const QString& name, bool force)
   QMutexLocker lock(&_pluginLock);
 
   // Cannot unload a non-loaded plug-in.
-  // Still some references left...
   if (!_pluginMap.contains(name))
     return 0;
   if (!force &&
       --_pluginMap[name].d->iRefCount > 0)
+    // Still some references left...
     return _pluginMap[name].d->iRefCount;
 
   // Remove the plug-in from our map.
@@ -228,6 +228,77 @@ QStringList PiiEngine::pluginResourceNames()
   for (PluginMap::const_iterator i = _pluginMap.constBegin(); i != _pluginMap.constEnd(); ++i)
     lstResult << i.value().resourceName();
   return lstResult;
+}
+
+QStringList PiiEngine::usedPluginLibraryNames()
+{
+  return usedPluginLibraryNames(this);
+}
+
+QStringList PiiEngine::usedPluginLibraryNames(PiiOperation* operation)
+{
+  QMutexLocker lock(&_pluginLock);
+
+  QStringList lstPlugins;
+  foreach (QString strResourceName, usedPluginResourceNames(operation))
+    {
+      for (PluginMap::const_iterator i = _pluginMap.constBegin(); i != _pluginMap.constEnd(); ++i)
+        {
+          if (i.value().resourceName() == strResourceName)
+            {
+              lstPlugins << i.key();
+              break;
+            }
+        }
+    }
+  return lstPlugins;
+}
+
+QStringList PiiEngine::usedPluginResourceNames()
+{
+  return usedPluginResourceNames(this);
+}
+
+QString PiiEngine::operationsUsedPlugin(PiiOperation* operation)
+{
+  // In the resource database, the parent resource of an operation
+  // is the plugin it came from.
+  // Find all objects that satisfy <"OperationName", "pii::parent", object>
+  QList<QString> lstPlugins = PiiYdin::resourceDatabase()->
+    select(Pii::object,
+           Pii::subject == PiiYdin::resourceName(operation) &&
+           Pii::predicate == PiiYdin::parentPredicate);
+  if (!lstPlugins.isEmpty())
+    return lstPlugins[0];
+  return QString();
+}
+
+
+QStringList PiiEngine::compoundsUsedPlugins(PiiOperationCompound* compound)
+{
+  // Scan all child operations...
+  QList<PiiOperation*> lstOperations(compound->findChildren<PiiOperation*>());
+  // ... and the compound itself.
+  lstOperations.append(compound);
+  QStringList lstPlugins;
+  for (int i = 0; i < lstOperations.size(); ++i)
+    {
+      QString strPlugin(operationsUsedPlugin(lstOperations[i]));
+      if (!strPlugin.isEmpty() && !lstPlugins.contains(strPlugin))
+        lstPlugins.append(strPlugin);
+    }
+  return lstPlugins;
+}
+
+QStringList PiiEngine::usedPluginResourceNames(PiiOperation* operation)
+{
+  if (operation->isCompound())
+    return compoundsUsedPlugins(static_cast<PiiOperationCompound*>(operation));
+  QString strPlugin(operationsUsedPlugin(operation));
+  QStringList lstPlugins;
+  if (!strPlugin.isEmpty())
+    lstPlugins.append(strPlugin);
+  return lstPlugins;
 }
 
 PiiEngine* PiiEngine::clone() const

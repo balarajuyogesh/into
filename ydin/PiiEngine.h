@@ -245,6 +245,22 @@ public:
   static QStringList pluginResourceNames();
 
   /**
+   * Returns the library names of the plug-ins that are needed by this
+   * engine, including all of its child operations. This is generally
+   * a subset of [pluginLibraryNames()].
+   */
+  QStringList usedPluginLibraryNames();
+  static QStringList usedPluginLibraryNames(PiiOperation* operation);
+
+  /**
+   * Returns the resource names of the plug-ins that are needed by
+   * this engine, including all of its child operations. This is
+   * generally a subset of [pluginResourceNames()].
+   */
+  QStringList usedPluginResourceNames();
+  static QStringList usedPluginResourceNames(PiiOperation* operation);
+
+  /**
    * Checks and executes all child operations. This function first
    * calls [PiiOperation::check()] for all child operations. If
    * none of them throws an exception, [PiiOperation::start()] will
@@ -339,6 +355,8 @@ protected:
 
 private:
   typedef QHash<QString,Plugin> PluginMap;
+  static QStringList compoundsUsedPlugins(PiiOperationCompound* compound);
+  static QString operationsUsedPlugin(PiiOperation* operation);
 
   static PluginMap _pluginMap;
   static QMutex _pluginLock;
