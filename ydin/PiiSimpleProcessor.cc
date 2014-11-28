@@ -223,10 +223,6 @@ void PiiSimpleProcessor::stop(PiiOperation::State finalState)
           _pStateMutex->unlock();
           return;
         }
-      else
-        // Otherwise, turn directly to the final state
-        _pParentOp->setState(finalState);
-
       _pStateMutex->unlock();
 
       try
@@ -237,7 +233,10 @@ void PiiSimpleProcessor::stop(PiiOperation::State finalState)
             _pParentOp->operationStopped(); // throws
         }
       catch (...)
-        {}
+        {
+          // Otherwise, turn directly to the final state
+          synchronized (_pStateMutex) _pParentOp->setState(finalState);
+        }
     }
   else
     _pStateMutex->unlock();
