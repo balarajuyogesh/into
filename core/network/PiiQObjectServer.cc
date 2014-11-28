@@ -642,9 +642,9 @@ void PiiQObjectServer::listFunctions(QObject* object)
         }
       else
         {
-          piiDebug(QString("method: %0, type: %1, access: %2")
+          /*piiDebug(QString("method: %0, type: %1, access: %2")
                    .arg(QString::fromLatin1(method.QMETAMETHOD_SIGNATURE()))
-                   .arg(method.methodType()).arg(method.access()));
+                   .arg(method.methodType()).arg(method.access()));*/
         }
     }
 
