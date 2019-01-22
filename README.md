@@ -3,6 +3,13 @@ Into
 
 A real-time execution platform for building intelligent applications.
 
+DISCONTINUED
+------------
+
+This project is not being actively developed. The code has been
+acquired by and incorporated to
+[VisionAppster](https://visionappster.com).
+
 Intelligent decisions in real time
 ----------------------------------
 
